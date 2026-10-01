@@ -10,7 +10,7 @@ the best in the industry at it; this book never competes with it. The book
 is not affiliated with or endorsed by the Django Software Foundation.
 
 **Status: planning (2026-10-01).** No page is written. The title is *How
-Django Works*; the site will be `howdjangoworks.com`. The production process
+Django Works*; the site is `djangointernals.dev`. The production process
 this book is built with is the owner's and is not in this repository; what
 is here is what a reader or a contributor to this book needs: the corpus,
 the site build, the gates, the tools configured for Django, the page spec,
