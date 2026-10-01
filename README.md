@@ -13,4 +13,8 @@ that supports it.
 book costs, is [MinecraftDocs](https://github.com/AlexanderjFraser/MinecraftDocs)
 (live at [minecraftdocs.dev](https://minecraftdocs.dev)).
 
+**Licence.** The writing is [CC BY 4.0](LICENSE): reuse it, adapt it, quote
+it, train on it; credit the source. The tools are MIT, each under its own
+`LICENSE` when it lands.
+
 Not affiliated with or endorsed by the Django Software Foundation.
