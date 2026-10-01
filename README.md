@@ -8,8 +8,9 @@ agent that reads the whole corpus and needs to know how everything fits.
 Every name checked against a pinned commit; every claim pointing at the line
 that supports it.
 
-**Status: planning.** No page is written. The book's rules are in
-[CLAUDE.md](CLAUDE.md). Its predecessor, and the record of what one such
+**Status: planning.** No page is written; [djangointernals.dev](https://djangointernals.dev)
+holds a placeholder until the first department is published. The book's
+rules are in [CLAUDE.md](CLAUDE.md). Its predecessor, and the record of what one such
 book costs, is [MinecraftDocs](https://github.com/AlexanderjFraser/MinecraftDocs)
 (live at [minecraftdocs.dev](https://minecraftdocs.dev)).
 

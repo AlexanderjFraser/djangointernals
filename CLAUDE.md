@@ -1,4 +1,4 @@
-# How Django Works — DjangoDocs
+# How Django Works — djangointernals.dev
 
 **What this is.** A textbook of *how Django works* — the codebase, not the
 API: what each part owns, when it runs, how a request becomes a response and
