@@ -1,0 +1,60 @@
+{
+  "name": "slices",
+  "unit": "slice",
+  "about": "A slice is a unit of reading: a part of Django's source cut where the fewest imports cross, to be read whole in one sitting. The book's first pass reads the source a slice at a time. A slice is not a department of the book; those are assigned in their own file, in the same grammar.",
+  "complete": ["django"],
+  "parts": [
+    {
+      "id": "1",
+      "slug": "request",
+      "title": "the request path and the runtime",
+      "paths": ["django/.", "django/core/.", "django/core/handlers", "django/core/servers", "django/http", "django/urls", "django/middleware", "django/views", "django/conf", "django/apps", "django/dispatch", "django/test"]
+    },
+    {
+      "id": "2",
+      "slug": "orm-models",
+      "title": "the ORM's model side",
+      "paths": ["django/db/models", "-django/db/models/query.py", "-django/db/models/query_utils.py", "-django/db/models/expressions.py", "-django/db/models/lookups.py", "-django/db/models/aggregates.py", "-django/db/models/fetch_modes.py", "-django/db/models/constants.py", "-django/db/models/sql", "-django/db/models/functions"]
+    },
+    {
+      "id": "3",
+      "slug": "orm-queries",
+      "title": "the ORM's query side",
+      "paths": ["django/db/models/query.py", "django/db/models/query_utils.py", "django/db/models/expressions.py", "django/db/models/lookups.py", "django/db/models/aggregates.py", "django/db/models/fetch_modes.py", "django/db/models/constants.py", "django/db/models/sql", "django/db/models/functions"]
+    },
+    {
+      "id": "4",
+      "slug": "database",
+      "title": "the database underneath",
+      "paths": ["django/db/.", "django/db/backends", "django/db/migrations"]
+    },
+    {
+      "id": "5",
+      "slug": "presentation",
+      "title": "presentation",
+      "paths": ["django/template", "django/templatetags", "django/forms", "django/contrib/admin", "django/contrib/admindocs"]
+    },
+    {
+      "id": "6",
+      "slug": "services",
+      "title": "services and tooling",
+      "paths": ["django/core/management", "django/core/checks", "django/core/cache", "django/core/mail", "django/core/files", "django/core/serializers", "django/tasks", "django/utils"]
+    },
+    {
+      "id": "7",
+      "slug": "contrib",
+      "title": "the contrib apps and the ORM's extensions",
+      "paths": ["django/contrib", "-django/contrib/admin", "-django/contrib/admindocs"],
+      "skim": {
+        "paths": ["django/contrib/gis/gdal", "django/contrib/gis/geos", "django/contrib/gis/utils"],
+        "why": "these wrap C libraries (GDAL, GEOS) through ctypes: what they are matters to a reader of the tree, and how each wrapper is written does not."
+      }
+    },
+    {
+      "id": "8",
+      "slug": "deltas",
+      "title": "the deltas and the incumbent",
+      "paths": ["docs/releases/5.*.txt", "docs/releases/6.*.txt", "docs/internals/deprecation.txt"]
+    }
+  ]
+}

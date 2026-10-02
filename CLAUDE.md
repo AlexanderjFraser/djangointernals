@@ -66,16 +66,41 @@ are assumed here until a ruling replaces one.
 
 ## The source
 
-`reference/django/` is a shallow clone of `main` at
-`4fab678a0739d54401ccee7eb587553657c9f76e` (2026-09-26; 6.2 alpha, 6.1 the
-current release), gitignored; refetch with
-`git clone --depth 1 https://github.com/django/django reference/django`.
-Django is BSD-licensed: its source may be quoted, linked at a commit and
-redistributed, so a claim can point at the line. Measured 2026-09-16 at
-`8cbdd4a`: `django/` without contrib 121k lines, of which `django/db` 55k in
-123 files; contrib 44k; `tests/` 357k in 2,010 files; `docs/` 173k lines of
-reStructuredText. The whole codebase is about 1.5M tokens; `django/db`
-alone, about half a million, fits one context and is the pilot's unit.
+**The pin.** `pin.json` names what the book is verified against, and every
+tool reads it: Django's `main` at
+`4fab678a0739d54401ccee7eb587553657c9f76e` (2026-09-26; on its way to 6.2,
+the next long-term-support release; 6.1.1 is the newest release at that
+commit), and beside it the two libraries Django's own `pyproject.toml`
+requires, `asgiref` 3.12.1 and `sqlparse` 0.6.0, each at its release's
+commit. The trees live under `reference/`, gitignored.
+`python tools/pin.py fetch` fetches each at its commit, never a branch as
+it stands that day, and as the commit's own bytes (no line-ending
+conversion, a symbolic link as the file git stores), so that sizes and
+fingerprints are the same on every machine. `python tools/pin.py check`
+fails unless every file on disk is the commit's, byte for byte, and this
+file names the pin. Django is BSD-licensed: its source may be quoted,
+linked at a commit and redistributed, so a claim can point at the line.
+
+**The tools** are in `tools/` (MIT), each with a `--probe` that proves it
+fails on what it should. They need Python 3.12 or later, because Django at
+the pin does: run them with the project's virtual environment, `.venv`
+(Python 3.14, with Django installed from the pinned clone).
+
+**The map.** `map/map.json` (what is mapped and how it is counted) and
+`map/slices.json` (which paths make which slice) are written by hand.
+`map/generated/` is written by `python tools/map_source.py` and
+`map/inventory/` by `python tools/inventory.py`; each is checked by its
+tool's `--check` and never edited, and each has a `README.md`. In the
+first: sizes by package and the imports between packages (`packages.md`);
+every file with what it defines and imports (`files.json`); the slices the
+first pass reads the source in, each with its files in reading order
+(`slices.md`, `slices/`). In the second: every comment and string that
+cites a ticket, and every place a deprecation warning class is named, by
+slice. At the pin, `django/` holds 736 Python files outside locale
+directories, 162k lines; as an agent reads it, it is about 2.4M tokens, of
+which `django/db` is 0.8M, so no one context holds the ORM, let alone the
+tree. Those numbers are the generated tables'; where this paragraph and
+the tables differ, the tables are right.
 
 ## The site
 
@@ -98,4 +123,6 @@ pointer that shows the claim false.
   numbers.
 - On this machine: never edit files through PowerShell; a script with
   backslashes in it, or over about a hundred lines, goes through the Write
-  tool and runs from a file.
+  tool and runs from a file. Run the tools as
+  `.venv/Scripts/python.exe tools/<tool>.py`: the `python` on PATH is 3.11,
+  which cannot parse the pin.

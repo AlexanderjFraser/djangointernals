@@ -1,0 +1,69 @@
+{
+  "about": "What tools/map_source.py maps and how it counts, and what tools/inventory.py looks for; each tool's head describes its keys. The tree and its commit are in pin.json.",
+  "source": ["django"],
+  "locale_dir": "locale",
+  "tokens": {
+    "bytes_per_token": 2.45,
+    "measured": "2026-10-01, at the pinned commit. A token here is a token of Claude Fable 5.1 reading a file through Claude Code's Read tool, which prefixes every line with its number; another model, or the bare text, counts differently. Each stratum below is one of the slices as it stood that day: a simple random sample of its files (30% to 41% of its bytes) was read that way, and the sample's bytes divided by the tokens the reading cost. Two independent samples of the first, fourth, fifth, sixth and seventh agreed within 4%. The ratio above is the whole of django/ at the strata's ratios, and is what a file in no stratum is estimated at; of files that are not Python, only the release notes were measured.",
+    "strata": [
+      {
+        "measured_on": "slice 1, the request path and the runtime",
+        "bytes_per_token": 2.42,
+        "paths": ["django/.", "django/core/.", "django/core/handlers", "django/core/servers", "django/http", "django/urls", "django/middleware", "django/views", "django/conf", "django/apps", "django/dispatch", "django/test"]
+      },
+      {
+        "measured_on": "slice 2, the ORM's model side",
+        "bytes_per_token": 2.59,
+        "paths": ["django/db/models", "-django/db/models/query.py", "-django/db/models/query_utils.py", "-django/db/models/expressions.py", "-django/db/models/lookups.py", "-django/db/models/aggregates.py", "-django/db/models/fetch_modes.py", "-django/db/models/constants.py", "-django/db/models/sql", "-django/db/models/functions"]
+      },
+      {
+        "measured_on": "slice 3, the ORM's query side",
+        "bytes_per_token": 2.53,
+        "paths": ["django/db/models/query.py", "django/db/models/query_utils.py", "django/db/models/expressions.py", "django/db/models/lookups.py", "django/db/models/aggregates.py", "django/db/models/fetch_modes.py", "django/db/models/constants.py", "django/db/models/sql", "django/db/models/functions"]
+      },
+      {
+        "measured_on": "slice 4, the database underneath",
+        "bytes_per_token": 2.61,
+        "paths": ["django/db/.", "django/db/backends", "django/db/migrations"]
+      },
+      {
+        "measured_on": "slice 5, presentation",
+        "bytes_per_token": 2.5,
+        "paths": ["django/template", "django/templatetags", "django/forms", "django/contrib/admin", "django/contrib/admindocs"]
+      },
+      {
+        "measured_on": "slice 6, services and tooling",
+        "bytes_per_token": 2.41,
+        "paths": ["django/core/management", "django/core/checks", "django/core/cache", "django/core/mail", "django/core/files", "django/core/serializers", "django/tasks", "django/utils"]
+      },
+      {
+        "measured_on": "slice 7, the contrib apps and the ORM's extensions",
+        "bytes_per_token": 2.27,
+        "paths": ["django/contrib", "-django/contrib/admin", "-django/contrib/admindocs"]
+      },
+      {
+        "measured_on": "slice 8, the release notes from 5.0 and the deprecation timeline (reStructuredText)",
+        "bytes_per_token": 2.12,
+        "paths": ["docs/releases/5.*.txt", "docs/releases/6.*.txt", "docs/internals/deprecation.txt"]
+      }
+    ]
+  },
+  "standard_library": ["annotationlib"],
+  "standard_library_why": "annotationlib joined the standard library in Python 3.14, and django/utils/inspect.py imports it under a version guard. Named here, it is not called a third party by a tool run on 3.12 or 3.13.",
+  "assignments": ["slices.json"],
+  "inventories": {
+    "about": "A ticket pattern's first group is the ticket's id. The patterns are tried in order, and text one has matched is not offered to the next: a bare #1234 is Django's own tracker unless an earlier pattern claims it.",
+    "tickets": [
+      {"tracker": "mysql", "pattern": "\\bMySQL #(\\d+)\\b"},
+      {"tracker": "django", "pattern": "(?<![&\\w])#([1-9]\\d{3,4})\\b"},
+      {"tracker": "django", "pattern": "\\b[Tt]ickets? ([1-9]\\d{3,4})\\b"},
+      {"tracker": "django", "pattern": "code\\.djangoproject\\.com/ticket/(\\d+)"},
+      {"tracker": "cpython", "pattern": "bugs\\.python\\.org/issue(\\d+)"},
+      {"tracker": "cpython", "pattern": "github\\.com/python/cpython/(?:issues|pull)/(\\d+)"},
+      {"tracker": "cve", "pattern": "\\b(CVE-\\d{4}-\\d+)\\b"},
+      {"tracker": "mariadb", "pattern": "\\b(MDEV-\\d+)\\b"},
+      {"tracker": "other", "pattern": "(https?://[^\\s)>\\]\"'`]*(?:/issues/\\d+|/pull/\\d+|/ticket/\\d+|bug\\.php\\?id=\\d+|show_bug\\.cgi\\?id=\\d+|/worklog/task/\\?id=\\d+|/bugs/index\\.php\\?\\d+)[^\\s)>\\]\"'`]*)"}
+    ],
+    "deprecations": "Removed(In|After)\\w+Warning"
+  }
+}
