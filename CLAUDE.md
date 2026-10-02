@@ -41,13 +41,27 @@ are assumed here until a ruling replaces one.
 4. **Every section stands alone.** A section answers one question; its
    heading says which; its first sentence names its subject; it never leans
    on the section before it.
-5. **Verified names.** Every backticked identifier exists in the pinned
-   clone, written `Class.member` on the declaring class; a page that fails
-   does not publish.
-6. **Every claim carries a pointer**: file and symbol at the pinned commit,
-   as a link into GitHub at that commit. The gate checks that the pointer
-   resolves and the symbol is where it says; line numbers are derived at
-   build, never written by hand. Django's licence permits quoting its source;
+5. **Verified names.** Every name in a code span exists in the pinned
+   trees, written `Class.member` on the class whose own body declares the
+   member, never on a subclass that inherits it. A name that exists only at
+   runtime (made by a metaclass, a descriptor, `setattr`, a module's
+   `__getattr__`) is admitted only where it is declared with the pointer to
+   the code in the clone that makes it: in the page, or in
+   `map/runtime-names.md`. A name more than one module defines is given
+   with its module first. `python tools/names.py` is the gate; a page that
+   fails does not publish.
+6. **Every claim carries a pointer**, written in a code span as
+   `path:Symbol`: the path from the clone's root, a colon, the symbol dotted
+   from module level, as in `django/db/models/query.py:QuerySet._fetch_all`.
+   A bare path is a whole file; a final slash, a directory; a library's
+   tree is named first (`asgiref:asgiref/sync.py:SyncToAsync`). The commit
+   is named once, at the head of the page, and never inside a pointer.
+   `python tools/pointers.py` is the gate: it resolves every pointer by the
+   syntax tree at the pinned commit and writes, for each, the lines it
+   lands on and a fingerprint of them, so that a re-pin can tell a symbol
+   whose body changed from one that only kept its name. Line numbers are
+   derived, never written by hand. On the site a pointer becomes a link
+   into GitHub at the commit. Django's licence permits quoting its source;
    whether the corpus quotes or only points is to be ruled, and until then
    pages point.
 7. **Trace-driven, and recorded.** A trace page's spine is a recording from
@@ -102,6 +116,15 @@ which `django/db` is 0.8M, so no one context holds the ORM, let alone the
 tree. Those numbers are the generated tables'; where this paragraph and
 the tables differ, the tables are right.
 
+**The gates.** `python tools/pointers.py DOC` and `python tools/names.py
+DOC` check a markdown document against the pinned trees (rules 6 and 5);
+each tool's head says exactly what is a pointer, what is a name, and what
+the gate does not check. The pointer gate writes `DOC.pointers.json` beside
+the document, or under `--report DIR`: generated, never edited, and checked
+by `--check`. `map/map.json`'s `names` says which file holds the settings'
+defaults, and names `map/runtime-names.md`, the book's list of names made
+at runtime, each with the pointer to the code that makes it.
+
 ## The site
 
 To be built; the stack is ruled, the skeleton is not. Django as the
@@ -119,6 +142,9 @@ pointer that shows the claim false.
 
 - Django's own names throughout, as the source spells them; `Class.member`
   for every member, on the declaring class, never a bare member.
+- A code span holds a pointer, a name of the source, or code. A string or
+  other literal text keeps its quotes inside the span (`"text/html"`,
+  `"_meta"`): without them the gates take it for a pointer or a name.
 - A page states no count a tool can derive; generated tables own the
   numbers.
 - On this machine: never edit files through PowerShell; a script with

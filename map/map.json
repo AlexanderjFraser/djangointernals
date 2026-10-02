@@ -1,7 +1,12 @@
 {
-  "about": "What tools/map_source.py maps and how it counts, and what tools/inventory.py looks for; each tool's head describes its keys. The tree and its commit are in pin.json.",
+  "about": "What tools/map_source.py maps and how it counts, what tools/inventory.py looks for, and what tools/names.py indexes; each tool's head describes its keys. The tree and its commit are in pin.json.",
   "source": ["django"],
   "locale_dir": "locale",
+  "names": {
+    "about": "For tools/names.py. `runtime` is the book's list of names that exist only at runtime, each with the pointer to the code that makes it. `stand_for` gives a first name that stands for a module's file or a class: `settings.X` is looked for among the defaults, and then on the two classes the settings object is made of.",
+    "runtime": "runtime-names.md",
+    "stand_for": {"settings": ["django/conf/global_settings.py", "django/conf/__init__.py:LazySettings", "django/conf/__init__.py:Settings"]}
+  },
   "tokens": {
     "bytes_per_token": 2.45,
     "measured": "2026-10-01, at the pinned commit. A token here is a token of Claude Fable 5.1 reading a file through Claude Code's Read tool, which prefixes every line with its number; another model, or the bare text, counts differently. Each stratum below is one of the slices as it stood that day: a simple random sample of its files (30% to 41% of its bytes) was read that way, and the sample's bytes divided by the tokens the reading cost. Two independent samples of the first, fourth, fifth, sixth and seventh agreed within 4%. The ratio above is the whole of django/ at the strata's ratios, and is what a file in no stratum is estimated at; of files that are not Python, only the release notes were measured.",

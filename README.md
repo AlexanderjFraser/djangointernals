@@ -22,7 +22,11 @@ by package, every file with what it defines and imports, and the slices
 the source is first read in ([map/generated/](map/generated/README.md));
 and where the source cites a ticket or names a deprecation
 ([map/inventory/](map/inventory/README.md)). Both are generated, and
-neither is edited.
+neither is edited. Two gates check a markdown page against the pinned
+tree: `tools/pointers.py`, that every pointer (`path:Symbol`) resolves by
+the syntax tree, and `tools/names.py`, that every name in a code span
+exists, on the class that declares it. [map/runtime-names.md](map/runtime-names.md)
+will list the names Django makes only as it runs.
 
 **Licence.** The writing is [CC BY 4.0](LICENSE): reuse it, adapt it, quote
 it, train on it; credit the source. The tools are [MIT](tools/LICENSE).
