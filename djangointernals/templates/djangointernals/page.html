@@ -1,0 +1,45 @@
+{% extends "djangointernals/base.html" %}
+{% block title %}{% if page.id %}{{ page.title_text }} · {% endif %}{{ book.index.title_text }}{% endblock %}
+{% block meta %}<meta name="description" content="{{ page.lede_text }}">
+{% if indexable %}<link rel="canonical" href="{{ site_url }}{{ page.url }}">
+{% endif %}{% endblock %}
+{% block main %}
+<header class="head">
+{% if page.parent and page.parent.id %}<p class="kicker"><a href="{{ page.parent.url }}">{{ page.parent.title_text }}</a></p>{% endif %}
+<h1>{{ page.title_html|safe }}</h1>
+<p class="lede">{{ page.lede_html|safe }}</p>
+<dl class="apparatus">
+<div><dt>Verified against</dt><dd>Django {{ verified_against }}</dd></div>
+<div><dt>Status</dt><dd>{% include "djangointernals/status.html" with level=page.level word=page.status_word %}. {{ page.status_meaning }}{% if page.tally %} Of the {{ page.tally.all }} page{{ page.tally.all|pluralize }} under it, {{ page.tally.written }} {{ page.tally.written|pluralize:"is,are" }} written{% if page.tally.outline %} and {{ page.tally.outline }} {{ page.tally.outline|pluralize:"is,are" }} in outline{% endif %}.{% endif %}</dd></div>
+{% if page.owns %}<div><dt>The home of</dt><dd>{% for name in page.owns %}<code>{{ name }}</code>{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>{% endif %}
+</dl>
+</header>
+{% if page.brief_html %}<div class="brief section">
+{{ page.brief_html|safe }}
+</div>{% endif %}
+{% if page.sections %}<nav class="answers" aria-label="The sections of this page">
+<h2>{% if page.children %}On this page{% else %}This page answers{% endif %}</h2>
+<ol>{% for section in page.sections %}
+<li><a href="#{{ section.id }}">{{ section.title_html|safe }}</a></li>{% endfor %}
+</ol>
+</nav>{% endif %}
+{% for section in page.sections %}
+<section class="section" aria-labelledby="{{ section.id }}">
+<h2 id="{{ section.id }}"><a class="anchor" href="#{{ section.id }}" aria-label="A link to this section">§</a>{{ section.title_html|safe }}</h2>
+{{ section.html|safe }}
+</section>
+{% endfor %}
+{% if page.children %}
+<section class="contents" aria-labelledby="contents">
+<h2 id="contents">{% if page.id %}The pages of this part{% else %}Contents{% endif %}</h2>
+{% include "djangointernals/contents.html" with pages=page.children %}
+<dl class="key">{% for status, words in statuses %}
+<div><dt>{% include "djangointernals/status.html" with level=forloop.counter word=words.0 %}</dt><dd>{{ words.1 }}</dd></div>{% endfor %}
+</dl>
+</section>
+{% endif %}
+<nav class="turn" aria-label="The pages before and after this one">
+{% if before %}<a class="before" href="{{ before.url }}"><span>Before</span>{{ before.title_text }}</a>{% else %}<span></span>{% endif %}
+{% if after %}<a class="after" href="{{ after.url }}"><span>Next</span>{{ after.title_text }}</a>{% endif %}
+</nav>
+{% endblock %}

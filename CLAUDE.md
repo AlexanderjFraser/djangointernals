@@ -34,8 +34,8 @@ are assumed here until a ruling replaces one.
    rendering. Every page is also served at its `.md` URL; `llms.txt` maps the
    book for routing; a JSON index and a reverse index by name are built from
    the same files.
-3. **Every page names its version.** The first line of a page states the
-   release and the commit it was verified against. Newest version only; the
+3. **Every page names its version.** The first entry of a page's head
+   states the release and the commit it was verified against. Newest version only; the
    one place the past appears is the delta chapter — what a reader, or a
    model, probably believes that is no longer true.
 4. **Every section stands alone.** A section answers one question; its
@@ -48,8 +48,8 @@ are assumed here until a ruling replaces one.
    `__getattr__`) is admitted only where it is declared with the pointer to
    the code in the clone that makes it: in the page, or in
    `map/runtime-names.md`. A name more than one module defines is given
-   with its module first. `python tools/names.py` is the gate; a page that
-   fails does not publish.
+   with its module first, in the section that uses it. `python
+   tools/names.py` is the gate; a page that fails does not publish.
 6. **Every claim carries a pointer**, written in a code span as
    `path:Symbol`: the path from the clone's root, a colon, the symbol dotted
    from module level, as in `django/db/models/query.py:QuerySet._fetch_all`.
@@ -61,16 +61,18 @@ are assumed here until a ruling replaces one.
    lands on and a fingerprint of them, so that a re-pin can tell a symbol
    whose body changed from one that only kept its name. Line numbers are
    derived, never written by hand. On the site a pointer becomes a link
-   into GitHub at the commit. Django's licence permits quoting its source;
-   whether the corpus quotes or only points is to be ruled, and until then
-   pages point.
+   into GitHub at the commit. Django's licence permits quoting its source,
+   and the book does not: a page points, and carries no excerpt of the
+   source (`SPEC.md`, section 6).
 7. **Trace-driven, and recorded.** A trace page's spine is a recording from
    a running system — Django's test suite under a tracer, a request through
    the test client — explained against the code, never a trace inferred from
    reading.
 8. **Figures render and are legible where they stand**, and a figure never
    carries a fact the text does not: the figure's source (the mermaid, the
-   table an SVG was drawn from) is in the markdown.
+   table an SVG was drawn from) is in the markdown. A figure is drawn
+   before the build and put into the page as SVG; nothing is drawn in the
+   reader's browser.
 9. **Links resolve.**
 10. **Every rule has a gate, every gate has a `--probe`** that proves it
     fails on the construct it should, and the build refuses to publish on a
@@ -127,9 +129,21 @@ at runtime, each with the pointer to the code that makes it.
 
 ## The site
 
-To be built; the stack is ruled, the skeleton is not. Django as the
-generator, baked to static files and hosted on Cloudflare Pages; `pagefind`
-for the human's search; figures as SVG; the gates before every build. Four
+**The repository is a Django project**, and the site is that project baked
+to static files for Cloudflare Pages. `manage.py` is at the root; the
+package `djangointernals/` is the whole site (its `__init__.py` says what
+each file is); the corpus is `pages/`, of which `pages/index.md` is the
+contents; `SPEC.md` is the page spec: what a page's head holds, the three
+statuses and what each publishes, what a section is, how a figure is
+written. `python manage.py bake` reads the book whole, refuses it whole
+with each problem as `file:line: what is wrong`, and otherwise writes it
+to `dist/` (ignored); `python manage.py bake --probe` proves the refusals.
+`specimen/` is a small book that follows the spec and is never part of the
+book: `python manage.py bake --book specimen`. The site needs
+`requirements.txt` beside Django.
+
+**Still to be built**: `pagefind` for the human's search; the gates before
+every build; the deploy. Four
 doors for an agent, all built from the one corpus: the `.md` URL and
 `llms.txt`; a pip package that ships the corpus beside Django in
 `site-packages` with a CLI; the same package serving MCP tools (`search`,
@@ -150,5 +164,6 @@ pointer that shows the claim false.
 - On this machine: never edit files through PowerShell; a script with
   backslashes in it, or over about a hundred lines, goes through the Write
   tool and runs from a file. Run the tools as
-  `.venv/Scripts/python.exe tools/<tool>.py`: the `python` on PATH is 3.11,
-  which cannot parse the pin.
+  `.venv/Scripts/python.exe tools/<tool>.py`, and the site as
+  `.venv/Scripts/python.exe manage.py <command>`: the `python` on PATH is
+  3.11, which cannot parse the pin.

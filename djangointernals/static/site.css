@@ -1,0 +1,225 @@
+/* How Django Works: the one stylesheet.
+
+   A book, not a documentation site: one column of text at a reading measure,
+   a serif for the text, a sans for the apparatus (everything the site says
+   about a page: where it is, what it was verified against, its status, its
+   captions), a mono for the names of the source. One accent, a rubric red,
+   for links and for the section mark. Tables and figures may be wider than
+   the text. Light and dark follow the reader's system; nothing here needs a
+   script.
+
+   Every colour is a custom property of :root, so a figure, which carries
+   classes and never a colour, follows the theme with the page. A department
+   adds its own figure classes in figures/figures.css in its own directory of
+   the book, which the site puts on that department's pages only; it does not
+   restyle the apparatus. */
+
+@font-face { font-family: "Source Serif 4"; font-style: normal; font-weight: 200 900; font-display: swap;
+  src: url("fonts/source-serif-4-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Source Serif 4"; font-style: italic; font-weight: 200 900; font-display: swap;
+  src: url("fonts/source-serif-4-latin-wght-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Source Serif 4"; font-style: normal; font-weight: 200 900; font-display: swap;
+  src: url("fonts/source-serif-4-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Source Serif 4"; font-style: italic; font-weight: 200 900; font-display: swap;
+  src: url("fonts/source-serif-4-latin-ext-wght-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 200 900; font-display: swap;
+  src: url("fonts/source-sans-3-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weight: 200 900; font-display: swap;
+  src: url("fonts/source-code-pro-latin-wght-normal.woff2") format("woff2"); }
+
+:root {
+  color-scheme: light dark;
+  --paper: #fbf9f4;
+  --paper-2: #f2eee5;
+  --ink: #1e1c19;
+  --ink-2: #5e594f;
+  --rule: #dcd6c9;
+  --accent: #a3301a;
+  --serif: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
+  --sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Source Code Pro", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --measure: 34em;
+  --wide: 52em;
+  --gutter: 1.25rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #181613;
+    --paper-2: #23201b;
+    --ink: #e6e1d7;
+    --ink-2: #a8a195;
+    --rule: #3d3931;
+    --accent: #e9866c;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 1.5rem; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+}
+@media (min-width: 46em) { body { font-size: 1.1875rem; } }
+
+a { color: var(--accent); text-decoration-thickness: 0.06em; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 0.12em; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 1px; }
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+
+/* The column: text at the measure; a table or a wide figure may take the margins too. */
+.column, .section, .head, .contents { display: grid; grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--measure)) minmax(var(--gutter), 1fr); }
+.column > *, .section > *, .head > *, .contents > * { grid-column: 2; min-width: 0; }
+.column > .section, .column > .head, .column > .contents { grid-column: 1 / -1; }
+.section > .table, .section > .wide, .contents > .wide {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: max-content;
+  min-width: min(var(--measure), 100% - 2 * var(--gutter));
+  max-width: min(var(--wide), 100% - 2 * var(--gutter));
+}
+
+/* The running head: where this page is in the book. */
+.running { font-family: var(--sans); font-size: 0.8em; border-bottom: 1px solid var(--rule); }
+.running nav { max-width: calc(var(--wide) * 1.25 + 2 * var(--gutter)); margin: 0 auto; padding: 0.7em var(--gutter); display: flex; flex-wrap: wrap; gap: 0.1em 0.55em; align-items: baseline; }
+.running a { color: var(--ink-2); text-decoration: none; }
+.running a:hover { color: var(--ink); text-decoration: underline; }
+.running .book { color: var(--ink); font-weight: 600; letter-spacing: 0.01em; }
+.running .mark { color: var(--accent); font-family: var(--serif); font-weight: 600; }
+.running .sep { color: var(--rule); }
+
+/* The head of a page: its title, its lede, and what the site says about it. */
+.head { padding-top: 3.2em; }
+.kicker { margin: 0 0 0.5em; font-family: var(--sans); font-size: 0.78em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
+.kicker a { color: var(--ink-2); text-decoration: none; }
+.kicker a:hover { color: var(--accent); }
+h1 { margin: 0; font-size: 2.3em; line-height: 1.12; font-weight: 600; letter-spacing: -0.012em; text-wrap: balance; }
+.lede { margin: 0.7em 0 0; font-size: 1.24em; line-height: 1.4; font-style: italic; color: var(--ink-2); text-wrap: pretty; }
+.lede code { font-style: normal; }
+.apparatus { margin: 1.9em 0 0; padding: 0.75em 0; border-block: 1px solid var(--rule); font-family: var(--sans); font-size: 0.8em; line-height: 1.45; color: var(--ink-2); }
+.apparatus div { display: grid; grid-template-columns: 8.4em 1fr; gap: 0 0.8em; padding: 0.16em 0; }
+.apparatus dt { font-weight: 600; letter-spacing: 0.04em; font-size: 0.92em; text-transform: uppercase; padding-top: 0.08em; }
+.apparatus dd { margin: 0; }
+.apparatus a { color: inherit; }
+.apparatus code { font-size: 0.92em; color: var(--ink); }
+@media (max-width: 30em) { .apparatus div { grid-template-columns: 1fr; } }
+
+/* A status: three pips, filled as far as the page has come, and the word. */
+.status { font-family: var(--sans); font-weight: 600; white-space: nowrap; color: var(--ink); }
+.pips { display: inline-flex; gap: 2px; margin-right: 0.45em; vertical-align: 0.06em; }
+.pips i { width: 0.5em; height: 0.5em; border: 1px solid var(--ink-2); border-radius: 50%; }
+.level-1 .pips i:nth-child(-n+1), .level-2 .pips i:nth-child(-n+2), .level-3 .pips i:nth-child(-n+3) { background: var(--accent); border-color: var(--accent); }
+
+/* What the page asserts in brief, and the questions it answers. */
+.brief { padding-top: 1.7em; }
+.answers { margin-top: 1.6em; padding: 0.9em 0 0.2em; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 0.86em; line-height: 1.4; }
+.answers h2 { margin: 0 0 0.5em; font: inherit; font-size: 0.86em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
+.answers ol { margin: 0; padding: 0; list-style: none; counter-reset: answer; }
+.answers li { counter-increment: answer; display: grid; grid-template-columns: 1.7em 1fr; padding: 0.2em 0; }
+.answers li::before { content: counter(answer); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.answers a { color: var(--ink); text-decoration-color: var(--rule); }
+.answers a:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+/* The text. */
+p { margin: 0 0 0.85em; text-wrap: pretty; hanging-punctuation: first; }
+.section h2 { position: relative; margin: 2.5em 0 0.6em; font-size: 1.42em; line-height: 1.22; font-weight: 600; letter-spacing: -0.006em; text-wrap: balance; }
+.section h3 { margin: 1.9em 0 0.45em; font-size: 1.08em; line-height: 1.3; font-weight: 600; font-style: italic; }
+.anchor { position: absolute; right: 100%; padding-right: 0.45em; color: var(--accent); font-weight: 400; text-decoration: none; opacity: 0.55; }
+.anchor:hover, h2:target .anchor { opacity: 1; }
+@media (max-width: 46em) { .anchor { position: static; float: right; padding: 0 0 0 0.4em; } }
+strong { font-weight: 600; }
+code, pre { font-family: var(--mono); font-variant-ligatures: none; }
+code { font-size: 0.86em; }
+h1 code, h2 code, h3 code { font-size: 0.9em; font-weight: 500; letter-spacing: -0.01em; }
+pre { margin: 0 0 1em; padding: 0.85em 1em; background: var(--paper-2); border-radius: 3px; font-size: 0.82em; line-height: 1.5; overflow-x: auto; overflow-wrap: normal; }
+pre code { font-size: 1em; }
+pre[data-kind="runtime-names"] { border-left: 2px solid var(--accent); border-radius: 0; }
+pre[data-kind="runtime-names"]::before { content: "Names Django makes as it runs, each with the code that makes it"; display: block; margin-bottom: 0.6em; font-family: var(--sans); font-size: 0.92em; color: var(--ink-2); }
+ul, ol { margin: 0 0 0.85em; padding-left: 1.5em; }
+li { margin: 0.25em 0; }
+li > p { margin-bottom: 0.4em; }
+blockquote { margin: 1.1em 0; padding: 0.05em 0 0.05em 1.1em; border-left: 2px solid var(--accent); color: var(--ink-2); }
+blockquote > :last-child { margin-bottom: 0; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.2em 0; }
+.unwritten { text-decoration: underline dotted var(--ink-2); text-underline-offset: 0.18em; cursor: help; }
+
+/* Tables: ruled above and below, a hairline between rows, no boxes. */
+.table { margin: 1.3em 0 1.5em; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9em; line-height: 1.42; border-block: 1.5px solid var(--ink); }
+th, td { padding: 0.5em 0.9em 0.5em 0; vertical-align: top; text-align: left; }
+th:last-child, td:last-child { padding-right: 0; }
+th { font-family: var(--sans); font-size: 0.86em; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); border-bottom: 1px solid var(--ink); white-space: nowrap; }
+tbody tr + tr td { border-top: 1px solid var(--rule); }
+td code { font-size: 0.9em; }
+
+/* Figures: drawn before the bake, inlined here, numbered by the stylesheet. */
+.column { counter-reset: figure; }
+/* A figure is shown at the size it was drawn (--natural, its viewBox's width) where there is
+   room. Where there is not, it shrinks to three quarters of that and then scrolls sideways:
+   a figure too small to read is worse than one that has to be scrolled. */
+.figure { margin: 1.6em 0 1.7em; counter-increment: figure; }
+.figure.wide { grid-column: 1 / -1; justify-self: center; width: 100%; max-width: min(var(--natural), 100% - 2 * var(--gutter)); }
+.figure .art { overflow-x: auto; }
+.figure svg { display: block; width: 100%; max-width: var(--natural); min-width: calc(var(--natural) * 0.75); height: auto; margin: 0 auto; }
+figcaption { margin-top: 0.7em; font-family: var(--sans); font-size: 0.84em; line-height: 1.42; color: var(--ink-2); }
+figcaption::before { content: "Figure " counter(figure) ". "; font-weight: 600; color: var(--ink); }
+.figure .source { margin-top: 0.5em; font-family: var(--sans); font-size: 0.8em; color: var(--ink-2); }
+.figure .source summary { cursor: pointer; width: fit-content; }
+.figure .source pre { margin: 0.6em 0 0; font-size: 0.95em; }
+
+/* What a figure is drawn with. A figure names these classes and no colour. */
+.fig text { font-family: var(--sans); font-size: 14px; fill: var(--ink); }
+.fig .name { font-family: var(--mono); font-size: 13px; }
+.fig .quiet { fill: var(--ink-2); }
+.fig .box { fill: var(--paper-2); stroke: var(--ink-2); stroke-width: 1; }
+.fig .line { fill: none; stroke: var(--ink-2); stroke-width: 1.25; }
+.fig .head { fill: var(--ink-2); stroke: none; }
+.fig .mark { fill: var(--accent); }
+.fig .mark-line { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+
+/* The contents: every page under this one, with its lede and how far it has come. */
+.contents > h2 { margin: 2.8em 0 0.2em; padding-top: 1em; border-top: 1.5px solid var(--ink); font-family: var(--sans); font-size: 0.8em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
+.toc { margin: 0; padding: 0; list-style: none; }
+.toc li { margin: 0; padding: 0.85em 0 0.75em; border-bottom: 1px solid var(--rule); }
+.toc .toc { margin: 0.75em 0 -0.75em; padding-left: 1.4em; border-top: 1px solid var(--rule); }
+.toc .toc li:last-child { border-bottom: 0; }
+.toc .entry { display: flex; justify-content: space-between; align-items: baseline; gap: 1em; margin: 0; font-size: 1.12em; font-weight: 600; line-height: 1.3; }
+.toc .toc .entry { font-size: 1em; }
+.toc .entry a { color: var(--ink); text-decoration: none; }
+.toc .entry a:hover { color: var(--accent); text-decoration: underline; }
+.toc .status { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-2); }
+.toc .about { margin: 0.25em 0 0; font-size: 0.92em; line-height: 1.45; color: var(--ink-2); max-width: 46ch; }
+.toc .outlined > .entry .title { color: var(--ink-2); font-weight: 500; }
+.key { margin: 1.4em 0 0; font-family: var(--sans); font-size: 0.78em; line-height: 1.45; color: var(--ink-2); }
+.key div { display: grid; grid-template-columns: 8.2em 1fr; gap: 0 0.8em; padding: 0.14em 0; }
+.key dd { margin: 0; }
+.key .status { font-size: 1em; color: var(--ink-2); }
+
+/* Turning the page. */
+.turn { display: flex; justify-content: space-between; gap: 2em; margin-top: 3.4em; padding-top: 1.1em; border-top: 1px solid var(--rule); font-size: 1.02em; line-height: 1.3; }
+.turn a { color: var(--ink); text-decoration: none; font-weight: 600; max-width: 46%; }
+.turn a:hover { color: var(--accent); }
+.turn a span { display: block; margin-bottom: 0.2em; font-family: var(--sans); font-size: 0.7em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
+.turn .after { margin-left: auto; text-align: right; }
+
+/* The colophon. */
+.colophon { margin-top: 4em; padding: 1.3em 0 2.4em; border-top: 1px solid var(--rule); }
+.colophon div { font-family: var(--sans); font-size: 0.78em; line-height: 1.5; color: var(--ink-2); }
+.colophon p { margin: 0 0 0.45em; }
+.colophon a { color: inherit; }
+
+@media print {
+  :root { --paper: #fff; --paper-2: #f4f4f4; --ink: #000; --ink-2: #444; --rule: #bbb; --accent: #7a1f10; }
+  .running, .turn, .anchor, .figure .source { display: none; }
+  body { font-size: 10.5pt; }
+}

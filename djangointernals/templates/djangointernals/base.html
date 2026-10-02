@@ -1,0 +1,32 @@
+{% load static %}<!doctype html>
+<html lang="en"{% if page.department %} data-department="{{ page.department.id }}"{% endif %}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ book.index.title_text }}{% endblock %}</title>
+{% block meta %}{% endblock %}
+{% if not indexable %}<meta name="robots" content="noindex">
+{% endif %}<link rel="preload" href="{% static 'fonts/source-serif-4-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{% static 'site.css' %}">
+{% if figure_grammar %}<style>
+{{ figure_grammar }}</style>
+{% endif %}<link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+</head>
+<body>
+<header class="running">
+<nav aria-label="Where this page is in the book">
+<a class="book" href="/"><span class="mark" aria-hidden="true">§</span> {{ book.index.title_text }}</a>{% for above in page.ancestors %}{% if above.id %}<span class="sep" aria-hidden="true">/</span><a href="{{ above.url }}">{{ above.title_text }}</a>{% endif %}{% endfor %}
+</nav>
+</header>
+<main class="column">
+{% block main %}{% endblock %}
+</main>
+<footer class="colophon column">
+<div>
+<p>{{ book.index.title_text }}{% if indexable %} · <a href="{{ site_url }}">djangointernals.dev</a>{% endif %}. Not affiliated with or endorsed by the Django Software Foundation.</p>
+<p>The writing is licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: reuse it, adapt it, quote it, train on it; credit the source. Every page is markdown in <a href="{{ repository_url }}">the repository</a>, with the tools that check it.</p>
+<p>Found something false? <a href="{{ repository_url }}/issues">Open an issue</a> with the pointer that shows it.</p>
+</div>
+</footer>
+</body>
+</html>

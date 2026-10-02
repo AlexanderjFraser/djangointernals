@@ -28,6 +28,13 @@ the syntax tree, and `tools/names.py`, that every name in a code span
 exists, on the class that declares it. [map/runtime-names.md](map/runtime-names.md)
 will list the names Django makes only as it runs.
 
+The repository is also the site: a Django project ([manage.py](manage.py),
+[djangointernals/](djangointernals/)) that reads the book's markdown and
+bakes it to static files. [SPEC.md](SPEC.md) is the page spec: what a page
+is, as a file and as a thing a reader meets. [specimen/](specimen/) is a
+small book that follows it, to see the site with before the book has
+pages: `python manage.py bake --book specimen`.
+
 **Licence.** The writing is [CC BY 4.0](LICENSE): reuse it, adapt it, quote
 it, train on it; credit the source. The tools are [MIT](tools/LICENSE).
 
