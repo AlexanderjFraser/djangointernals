@@ -87,8 +87,8 @@ module's `__getattr__`; or a setting the defaults do not define) exists in no sy
 It is declared, with the pointer to the code that makes it, in a fenced block:
 
     ```runtime-names
-    Model.objects    django/db/models/base.py:ModelBase._prepare
-    ROOT_URLCONF     django/urls/resolvers.py:get_resolver      # read there, defined nowhere
+    Model.objects    django/db/models/manager.py:BaseManager.contribute_to_class
+    ROOT_URLCONF     django/conf/__init__.py:Settings.__init__    # the defaults do not define it
     ```
 
 One entry a line: the name, the pointer, and after `#` anything. A block in a document
