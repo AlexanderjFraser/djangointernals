@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{{ book.index.title_text }}{% endblock %}</title>
 {% block meta %}{% endblock %}
-{% if not indexable %}<meta name="robots" content="noindex">
+{% if twin %}<link rel="alternate" type="text/markdown" href="{{ twin }}" title="This page as markdown">
+{% endif %}{% if not indexable %}<meta name="robots" content="noindex">
 {% endif %}<link rel="preload" href="{% static 'fonts/source-serif-4-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{% static 'site.css' %}">
 {% if figure_grammar %}<style>

@@ -8,17 +8,21 @@ above the first H2), and the sections (each H2 and what is under it).
 What is refused here, each with its file and line: a page that does not
 open with its H1 and a lede; a second H1; a heading below H3, or one
 written by underlining; two headings on a page that come to the same
-anchor; raw HTML, a comment included; an image; a link to another page that
-is not the relative path of its `.md` file, or that names no page of the
-book; a figure with no SVG beside it or no caption under it; an empty
+anchor, or a heading whose anchor begins `figure-`; raw HTML, a comment
+included; an image; a link to another page that is not the relative path
+of its `.md` file, that names no page of the book, or that names the book
+by any of its hosts; a figure with no SVG beside it or no caption under
+it, or whose SVG scripts, loads, moves or links out of itself; an empty
 section on a page that says it is written.
 
 What is changed on the way to HTML and nowhere else: straight quotes in
 prose become curly; a long name or pointer in a code span may break after a
-slash or a colon and before a dot; a link to `other.md` becomes that page's
-URL, and a link to a page still in outline becomes plain text marked as
-unwritten; a figure's fenced source becomes the SVG drawn from it, with the
-source folded away under it.
+slash or a colon and before a dot; a pointer becomes a link to the lines it
+lands on at the pinned commit (gates.py), in prose and in a `runtime-names`
+block alike; a link to `other.md` becomes that page's URL, and a link to a
+page still in outline becomes plain text marked as unwritten; a figure's
+fenced source becomes the SVG drawn from it, with the source folded away
+under it.
 """
 from __future__ import annotations
 
@@ -26,6 +30,7 @@ import re
 import xml.etree.ElementTree as ET
 from html import escape
 from pathlib import PurePosixPath
+from urllib.parse import urlsplit
 
 from django.conf import settings
 from django.utils.text import slugify
@@ -35,8 +40,9 @@ from markdown_it.token import Token
 FIGURE = re.compile(r"\bfigure=(\S+)")
 FIGURE_NAME = re.compile(r"[a-z0-9]+(-[a-z0-9]+)*")
 SCHEME = re.compile(r"[A-Za-z][A-Za-z0-9+.-]*:")
-UNDRAWN = {"script", "style", "foreignObject", "image", "iframe"}
+UNDRAWN = {"script", "style", "foreignObject", "image", "iframe", "feImage", "animate", "animateTransform", "animateMotion", "set"}
 PAINTED = {"style", "fill", "stroke", "color", "font", "font-family", "font-size", "font-weight"}
+ANCHOR_TAG = re.compile(r"</?a\b[^>]*>")
 PROLOG = re.compile(r"\A\s*(?:(?:<\?xml.*?\?>|<!DOCTYPE.*?>|<!--.*?-->)\s*)*", re.S)
 COLUMN = 646  # the text column in CSS pixels at the size the stylesheet sets: a wider figure uses the margins
 
@@ -46,6 +52,19 @@ def breakable(code: str) -> str:
     text = escape(code, quote=False)
     text = re.sub(r"([/:])(?=[^\s/:])", r"\1<wbr>", text)
     return re.sub(r"(?<=\w)\.(?=\w)", "<wbr>.", text)
+
+
+def unlinked(html: str) -> str:
+    """Inline HTML with its links' tags removed, for a place that is itself a link: a heading
+    with a pointer in it inside the list of a page's questions, a title inside the contents."""
+    return ANCHOR_TAG.sub("", html)
+
+
+def book_host(href: str) -> bool:
+    """Does a URL name the book's own site, by any of its hosts and either scheme?"""
+    host = (urlsplit(href).hostname or "").lower()
+    own = (urlsplit(settings.SITE_URL).hostname or "").lower()
+    return bool(host) and host in {own, f"www.{own}", f"{settings.PAGES_PROJECT}.pages.dev"}
 
 
 def plain(inline: Token) -> str:
@@ -63,18 +82,44 @@ def is_figure(token: Token) -> bool:
     return token.type == "fence" and bool(FIGURE.search(token.info))
 
 
+def pointer(body: str, gates) -> str:
+    """A code span's HTML: a pointer is a link to the lines it lands on at the pin (gates.py);
+    anything else, and a pointer that does not resolve (the gate refuses the page), is code."""
+    linked = gates.link(body) if gates is not None and gates.is_pointer(body) else None
+    if linked is None:
+        return f"<code>{breakable(body)}</code>"
+    href, title = linked
+    return f'<a class="pointer" href="{escape(href, quote=True)}" title="{escape(title, quote=True)}"><code>{breakable(body)}</code></a>'
+
+
+def entry(line: str, gates) -> str:
+    """A line of a `runtime-names` block, escaped, with its pointer (the second word) linked."""
+    code, hash_, remark = line.partition("#")
+    words = code.split()
+    if len(words) >= 2 and gates is not None and gates.is_pointer(words[1]) and gates.link(words[1]):
+        at = code.index(words[1], code.index(words[0]) + len(words[0]))
+        href, title = gates.link(words[1])
+        return (escape(code[:at], quote=False) + f'<a class="pointer" href="{escape(href, quote=True)}" title="{escape(title, quote=True)}">'
+                + escape(words[1], quote=False) + "</a>" + escape(code[at + len(words[1]):] + hash_ + remark, quote=False))
+    return escape(line, quote=False)
+
+
 class Rules:
     """The render rules that differ from CommonMark's defaults. `env` carries the page being
     rendered, the book it is in, the line of the block being rendered, and the problems so far."""
 
     def code_inline(self, tokens, idx, options, env):
-        return f"<code>{breakable(tokens[idx].content)}</code>"
+        return pointer(tokens[idx].content, env.get("gates"))
 
     def fence(self, tokens, idx, options, env):
         token = tokens[idx]
         words = token.info.split()
         kind = f' data-kind="{escape(words[0])}"' if words else ""
-        return f"<pre{kind}><code>{escape(token.content, quote=False)}</code></pre>\n"
+        if words and words[0] == "runtime-names":
+            content = "\n".join(entry(line, env.get("gates")) for line in token.content.split("\n"))
+        else:
+            content = escape(token.content, quote=False)
+        return f"<pre{kind}><code>{content}</code></pre>\n"
 
     def table_open(self, tokens, idx, options, env):
         return '<div class="table"><table>\n'
@@ -94,10 +139,10 @@ class Rules:
         opened = env.setdefault("links", [])
         page, book = env["page"], env["book"]
         where = f"{page.where}:{env['line']}"
-        if SCHEME.match(href) or href.startswith("#"):
+        if SCHEME.match(href) or href.startswith("#") or href.startswith("//"):
             if href.startswith("#"):
                 env["fragments"].append((where, href, page, href[1:]))
-            elif href.startswith(settings.SITE_URL):
+            elif book_host(href):
                 env["problems"].append(f"{where}: the link `{href}`: a link to a page of the book is the relative path of "
                                        f"its .md file, not its address on the site")
             opened.append("a")
@@ -182,13 +227,15 @@ def drawn(svg: str) -> tuple[str | None, float | None]:
     for element in root.iter():
         tag = element.tag.rsplit("}", 1)[-1]
         if tag in UNDRAWN:
-            return f"a figure carries no script and loads nothing: <{tag}>", None
-        for attribute in element.attrib:
+            return f"a figure carries no script, loads nothing and does not move: <{tag}>", None
+        for attribute, value in element.attrib.items():
             attribute = attribute.rsplit("}", 1)[-1]
             if attribute.startswith("on"):
                 return f"a figure carries no script and loads nothing: `{attribute}` on <{tag}>", None
             if attribute in PAINTED:
                 return f"a figure carries classes and no colour or font of its own: `{attribute}` on <{tag}>", None
+            if attribute == "href" and not value.startswith("#"):
+                return f"a figure links nowhere outside itself: `href` on <{tag}> is `{value}`, not `#id`", None
     try:
         return None, float(box[2])
     except ValueError:
@@ -255,7 +302,8 @@ def body(page, tokens: list[Token], spans: list[tuple[int, int]], env) -> str:
 def render(page, book, problems: list[str]) -> None:
     """Fill in `page` from its markdown: its title, lede, brief, sections, anchors and
     figures. What is wrong with it is added to `problems`."""
-    env = {"page": page, "book": book, "problems": problems, "figures": [], "fragments": [], "line": page.line + 1}
+    env = {"page": page, "book": book, "problems": problems, "figures": [], "fragments": [], "line": page.line + 1,
+           "gates": getattr(book, "gates", None)}
     tokens = MD.parse(page.body, env)
 
     def at(token: Token) -> str:
@@ -281,18 +329,22 @@ def render(page, book, problems: list[str]) -> None:
                     problems.append(f"{at(token)}: a heading with no words in it has no anchor")
                 elif anchor in anchors:
                     problems.append(f"{at(token)}: two headings on this page come to the anchor `{anchor}`")
+                elif anchor.startswith("figure-"):
+                    problems.append(f"{at(token)}: a heading whose address begins `figure-`: that is a figure's address")
                 anchors.add(anchor)
                 token.meta["id"] = anchor
 
     spans = blocks(tokens)
     kinds = [(tokens[a].type, tokens[a].tag) for a, _ in spans]
-    page.title_html = page.title_text = page.lede_html = page.lede_text = page.brief_html = ""
+    page.title_html = page.title_html_unlinked = page.title_text = page.title_md = page.brief_html = ""
+    page.lede_html = page.lede_text = page.lede_md = ""
     page.sections, page.anchors, page.figures, page.fragments = [], anchors, env["figures"], env["fragments"]
     if not kinds or kinds[0] != ("heading_open", "h1"):
         problems.append(f"{page.where}:{page.line + 1}: a page opens with its title, the one # heading")
         return
     title = tokens[spans[0][0] + 1]
-    page.title_html, page.title_text = inline(title, env), plain(title)
+    page.title_html, page.title_text, page.title_md = inline(title, env), plain(title), " ".join(title.content.split())
+    page.title_html_unlinked = unlinked(page.title_html)
     for kind, (a, _) in zip(kinds[1:], spans[1:]):
         if kind == ("heading_open", "h1"):
             problems.append(f"{at(tokens[a])}: a second # heading: a page has one title")
@@ -301,7 +353,7 @@ def render(page, book, problems: list[str]) -> None:
         return
     lede = tokens[spans[1][0] + 1]
     env["line"] = page.line + lede.map[0] + 1
-    page.lede_html, page.lede_text = inline(lede, env), plain(lede)
+    page.lede_html, page.lede_text, page.lede_md = inline(lede, env), plain(lede), " ".join(lede.content.split())
 
     starts = [i for i, kind in enumerate(kinds) if kind == ("heading_open", "h2")]
     page.brief_html = body(page, tokens, spans[2:starts[0] if starts else len(spans)], env)
@@ -313,4 +365,6 @@ def render(page, book, problems: list[str]) -> None:
         html = body(page, tokens, spans[start + 1:end], env)
         if not html.strip() and page.published:
             problems.append(f"{at(heading)}: a section with nothing under it, on a page whose status is `{page.status}`")
-        page.sections.append({"id": heading.meta.get("id", ""), "title_html": title_html, "title_text": plain(words), "html": html})
+        # `line` is the heading's line in the file, which is how a code span is placed in its section (doors.py)
+        page.sections.append({"id": heading.meta.get("id", ""), "title_html": title_html, "title_html_unlinked": unlinked(title_html),
+                              "title_text": plain(words), "html": html, "line": page.line + heading.map[0] + 1})

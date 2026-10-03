@@ -174,6 +174,7 @@ RUN = re.compile("`+")
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
 HEADING = re.compile(r"^\s*#{1,6}\s")
+SECTION = re.compile(r"^ {0,3}##(?!#)\s")  # a top-level `##` heading: where a page's section begins (tools/names.py --sections)
 QUOTED = re.compile(r"^\s*(?:>\s?)+")
 ENDS = re.compile(r"[.!?][\"')\]*_]*\s+(?=[A-Z0-9`*_\[(])")
 ABBREVIATED = re.compile(r"(?:\b(?:e\.g|i\.e|cf|vs|etc|viz|approx)|\s[A-Za-z])\.[\"')\]*_]*\s+$")
@@ -683,6 +684,7 @@ class Span:
     def __init__(self, line: int, body: str, sentence: str, block: bool = False, before: str = ""):
         self.line, self.body, self.sentence, self.block = line, body, sentence, block
         self.before = before  # what its own line holds before it
+        self.section = 0  # the line of the `##` heading the span stands under; 0 above the first
 
 
 def code_spans(text: str) -> list[tuple[int, int, str]]:
@@ -730,11 +732,16 @@ def sentence(text: str, start: int, end: int, spans: list[tuple[int, int, str]])
 
 def read(path: str) -> tuple[list[Span], list[str]]:
     """Every code span of a markdown file outside its fenced blocks, and every entry of its
-    `runtime-names` blocks; and the file's lines."""
+    `runtime-names` blocks; and the file's lines. Each span knows the line of the `##`
+    heading it stands under (`section`; 0 above the first): tools/names.py --sections binds
+    a name within its section. A section begins at a top-level `##`, indented three spaces
+    at most: one in a quotation or a list item, or indented four spaces, begins none, as the
+    site's sections are the top-level headings alone."""
     with open(path, encoding="utf-8", newline="") as f:
         lines = f.read().replace("\r\n", "\n").replace("\r", "\n").split("\n")
     spans: list[Span] = []
     items: list[tuple[int, list[str], bool]] = []  # (first line, lines, is a table row)
+    sections: list[int] = []  # the lines of the `##` headings outside fences
     fence, label, current, fence_quoted, fence_indent = None, "", None, False, 0
     for number, raw in enumerate(lines, 1):
         quoted = bool(QUOTED.match(raw))
@@ -765,6 +772,8 @@ def read(path: str) -> tuple[list[Span], list[str]]:
         current[1].append(line)
         if HEADING.match(line):
             current = None
+            if SECTION.match(raw):  # on the raw line: a `##` in a quotation or a list item, or indented four spaces, begins none
+                sections.append(number)
     for first, held, row in items:
         text = "\n".join(held)
         found = code_spans(text)
@@ -774,6 +783,8 @@ def read(path: str) -> tuple[list[Span], list[str]]:
             spans.append(Span(first + text.count("\n", 0, start), body, whole,
                               before=text[text.rfind("\n", 0, start) + 1:start]))
     spans.sort(key=lambda s: s.line)
+    for span in spans:
+        span.section = max((at for at in sections if at <= span.line), default=0)
     return spans, lines
 
 
@@ -1351,6 +1362,15 @@ def probe() -> int:
             expect(label, reads(body), want)
         pin._write(scrap, "## A heading\nText `pkg/a.py:LIMIT`.\n")
         expect("a heading does not run into the next line", [s.sentence for s in read(scrap)[0]], ["Text `pkg/a.py:LIMIT`."])
+        pin._write(scrap, "`pkg/a.py` above.\n\n## One `pkg/a.py:A`\n\n`pkg/b.py`\n\n### Deeper\n\n`pkg/a.py:LIMIT`\n\n"
+                          "```\n## not a heading\n```\n\n`pkg/a.py:where`\n\n## Two\n\n```runtime-names\nA.x  pkg/a.py:A.one\n```\n\n"
+                          "> ## quoted\n\n`pkg/a.py:A.size`\n\n- ## in a list\n\n`pkg/b.py:B`\n\n    ## indented four\n\n`pkg/a.py:where`\n\n"
+                          "   ## Three, indented three\n\n`pkg/a.py:LIMIT`\n")
+        expect("the section each span stands under: a top-level `##`, not a `###`, a fenced, quoted, listed or indented one",
+               [(s.body, s.section) for s in read(scrap)[0]],
+               [("pkg/a.py", 0), ("pkg/a.py:A", 3), ("pkg/b.py", 3), ("pkg/a.py:LIMIT", 3), ("pkg/a.py:where", 3),
+                ("A.x", 17), ("pkg/a.py:A.one", 17), ("pkg/a.py:A.size", 17), ("pkg/b.py:B", 17), ("pkg/a.py:where", 17),
+                ("pkg/a.py:LIMIT", 35)])
 
         # a document: its spans, their lines and sentences; fenced blocks; the head
         doc = os.path.join(work, "docs", "report.md")

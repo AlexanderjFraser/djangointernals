@@ -9,10 +9,10 @@ Which class does a sentence mean when it says `django/db/backends/postgresql/bas
 
 More than one module under `django/` defines a class named `DatabaseWrapper` at its top: the PostgreSQL backend's is `django/db/backends/postgresql/base.py:DatabaseWrapper`, and the SQLite backend's is `django/db/backends/sqlite3/base.py:DatabaseWrapper`.
 
-## Which classes are named `DatabaseWrapper`?
+## Which classes are named `"DatabaseWrapper"`?
 
 The PostgreSQL backend's connection class is `django/db/backends/postgresql/base.py:DatabaseWrapper`, and the SQLite backend's is `django/db/backends/sqlite3/base.py:DatabaseWrapper`. The search that finds every module with a class of that name at its top is `^class DatabaseWrapper` over `django/`: its hits are under `django/db/backends/` and under `django/contrib/gis/db/backends/`.
 
-## What does the PostgreSQL `DatabaseWrapper` declare itself?
+## What does `django.db.backends.postgresql.base.DatabaseWrapper` declare itself?
 
 The PostgreSQL backend's class is `django/db/backends/postgresql/base.py:DatabaseWrapper`, and it declares `DatabaseWrapper.get_new_connection` in its own body. It declares no method named `"cursor"`: that is `BaseDatabaseWrapper.cursor`, in `django/db/backends/base/base.py`.

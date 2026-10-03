@@ -2,6 +2,7 @@
 """The name gate: every name in a document's code spans exists in the pinned trees.
 
     python tools/names.py DOC [DOC ...]       check each document
+    python tools/names.py --sections DOC ...  the same, binding a name only within its section (below)
     python tools/names.py --spans DOC ...     list every code span, what the gate took it for, and for
                                               a name where it was found
     python tools/names.py --tree NAME=DIR ... check against the tree at DIR in place of NAME's pinned one
@@ -44,7 +45,10 @@ How a name is written, and where it is looked for, in this order:
    tree: after a pointer into a file that has `from django.db import models`,
    `models.Model` is a name. Unbound, it fails, and the files that define it are listed. A
    name the index does not hold (a test's) is found the same way, in a file a pointer has
-   named.
+   named. With `--sections` the pointer must stand in the same section as the name: from one
+   `##` heading to the next, the text above the first heading being a section of its own.
+   That is a page's rule (every section stands alone: SPEC.md); the site's build checks a
+   page so. A survey's sections are not the book's, and a survey runs the gate without it.
 4. As Python's own: a keyword, a builtin and its members (`len`, `dict.get`,
    `type.__call__`), a special method or attribute name the language defines (`__init__`,
    `__traceback__`; the list is in this file), `self`, `cls`, `args`, `kwargs`. A bare
@@ -304,14 +308,15 @@ class Gate:
             raise Unresolved(f"{found[1]} defines `{parts[-1]}` and deletes it again (`del`): it is no name when the code runs")
         return found
 
-    def bind(self, name: str, line: int, pointed: list) -> tuple[str, str] | None:
+    def bind(self, name: str, line: int, pointed: list, since: int = 0) -> tuple[str, str] | None:
         """The file whose module-level `name` is meant on this line: the one file of the index
         that defines it, else the nearest file named in full that binds it, by a definition or
-        by an import (which the walk then follows to what it imports)."""
+        by an import (which the walk then follows to what it imports). A pointer above the
+        line `since` (the name's section's heading, with --sections) does not bind."""
         files = self.index.top.get(name, [])
         if len(files) == 1:
             return files[0]
-        nearest = [p for p in pointed if p[0] == line] + sorted((p for p in pointed if p[0] < line), key=lambda p: -p[0])
+        nearest = [p for p in pointed if p[0] == line] + sorted((p for p in pointed if since <= p[0] < line), key=lambda p: -p[0])
         for _line, tree, path in nearest:
             if path.endswith(".py") and path in self.world.tree(tree).files:
                 with contextlib.suppress(Unresolved):
@@ -323,7 +328,7 @@ class Gate:
         if files:
             shown = ", ".join(path for _tree, path in files[:SHOWN]) + (", ..." if len(files) > SHOWN else "")
             raise Unresolved(f"{len(files)} files define `{name}` ({shown}): name one in full first, by a pointer "
-                             f"on this line or above it, or by its module")
+                             f"on this line or above it{' in this section' if since else ''}, or by its module")
         return None
 
     def standard(self, parts: list[str]) -> str:
@@ -385,9 +390,9 @@ class Gate:
             return "unchecked", "a library that is not pinned, through an import"
         return None
 
-    def resolve(self, name: str, line: int, pointed: list, declared: dict) -> tuple[str, str]:
+    def resolve(self, name: str, line: int, pointed: list, declared: dict, since: int = 0) -> tuple[str, str]:
         """-> what the name is ("tree", "runtime", "standard", "python" or "unchecked") and where
-        it was found. Raises Unresolved."""
+        it was found. Raises Unresolved. `since` is bind's."""
         parts = name.split(".")
         first = parts[0]
         version = ".".join(str(x) for x in sys.version_info[:2])
@@ -414,7 +419,7 @@ class Gate:
             raise Unresolved(f"an attribute is written on the class that declares it{self.declarers(parts[1])}")
         refusal = home = None
         try:
-            home = self.bind(first, line, pointed)
+            home = self.bind(first, line, pointed, since)
             if home:
                 return self.told(self.inside(self.world.tree(home[0]), home[1], parts, declared))
         except Unresolved as why:
@@ -451,17 +456,20 @@ class Gate:
 
     # -- declarations --------------------------------------------------------
 
-    def declarations(self, path: str, spans: list, pointed: list) -> tuple[dict, list[str]]:
+    def declarations(self, path: str, spans: list, pointed: list, sections: bool = False) -> tuple[dict, list[str]]:
         """The entries of a document's runtime-names blocks, as {key: the pointer}, and what is
-        wrong with them. A key is (tree, path, the class's dotted name, the member), or (name,)."""
+        wrong with them. A key is (tree, path, the class's dotted name, the member), or (name,).
+        With `sections`, an entry's class is bound within the entry's section."""
         shown = os.path.basename(path)
         entries: dict[int, list[str]] = {}
+        since_of: dict[int, int] = {}
         for span in spans:
             if span.block:
                 entries.setdefault(span.line, []).append(span.body)
+                since_of[span.line] = span.section if sections else 0
         out, problems = {}, []
         for line, words in sorted(entries.items()):
-            name = words[0]
+            name, since = words[0], since_of[line]
 
             def refuse(why: str) -> None:
                 problems.append(f"{shown}:{line}: `{name}`: {why}")
@@ -475,7 +483,7 @@ class Gate:
                 refuse(f"its pointer `{words[1]}` does not resolve: {why}")
                 continue
             try:
-                if self.resolve(name, line, pointed, {})[0] != "runtime":  # runtime: the book's list has it already
+                if self.resolve(name, line, pointed, {}, since)[0] != "runtime":  # runtime: the book's list has it already
                     refuse("it resolves without a declaration: it is not made at runtime")
                 continue
             except Unresolved:
@@ -485,7 +493,7 @@ class Gate:
                 out[(name,)] = words[1]
                 continue
             try:
-                owner, cls = self.owner(parts[:-1], line, pointed)
+                owner, cls = self.owner(parts[:-1], line, pointed, since)
             except Unresolved as why:
                 refuse(f"`{'.'.join(parts[:-1])}` must be a class the trees hold: {why}")
                 continue
@@ -496,12 +504,12 @@ class Gate:
             out[owner + (parts[-1],)] = words[1]
         return out, problems
 
-    def owner(self, parts: list[str], line: int, pointed: list) -> tuple[tuple[str, str, str], ast.ClassDef]:
+    def owner(self, parts: list[str], line: int, pointed: list, since: int = 0) -> tuple[tuple[str, str, str], ast.ClassDef]:
         """The class a declared member is made on: (tree, path, its dotted name in that file), and its node."""
         if parts[0] in self.index.packages:
             found = self.from_module(parts, {})
         else:
-            home = self.bind(parts[0], line, pointed)
+            home = self.bind(parts[0], line, pointed, since)
             if not home:
                 raise Unresolved(f"no module defines `{parts[0]}` at its top")
             found = self.world.walk(self.world.tree(home[0]), home[1], parts, through=True)
@@ -512,13 +520,14 @@ class Gate:
 
     # -- a document ----------------------------------------------------------
 
-    def examine(self, path: str, told: list | None = None) -> tuple[list[str], dict]:
+    def examine(self, path: str, told: list | None = None, sections: bool = False) -> tuple[list[str], dict]:
         """What is wrong with a document's names, and how many of its spans were what. `told`
-        is given what each name was found to be."""
+        is given what each name was found to be. With `sections`, a pointer binds a name only
+        within its own section (--sections)."""
         spans, _lines = pt.read(path)
         shown = os.path.basename(path)
         pointed = self.pointed(spans)
-        declared, problems = self.declarations(path, spans, pointed)
+        declared, problems = self.declarations(path, spans, pointed, sections)
         if self.list_path and os.path.abspath(path) == os.path.abspath(self.list_path):
             declared, problems = {}, []  # the book's own list: its entries are checked once, below
         counts = dict.fromkeys(("names", "standard", "unchecked", "runtime", "pointers", "other"), 0)
@@ -537,7 +546,7 @@ class Gate:
                 problems.append(f"{shown}:{span.line}: `{span.body}`: a member is written on the class that declares it")
                 continue
             try:
-                what, where = self.resolve(name, span.line, pointed, declared)
+                what, where = self.resolve(name, span.line, pointed, declared, span.section if sections else 0)
             except Unresolved as why:
                 problems.append(f"{shown}:{span.line}: `{span.body}`: {why}")
                 continue
@@ -564,7 +573,7 @@ def summary(counts: dict, documents: int, failed: int) -> str:
               f"checked here" + (f"; {pt.count(failed, 'name')} or declaration{'s' if failed != 1 else ''} refused" if failed else ""))
 
 
-def run(book: str | None, arguments: list[str], swap: dict[str, str] | None = None) -> int:
+def run(book: str | None, arguments: list[str], swap: dict[str, str] | None = None, sections: bool = False) -> int:
     gate = Gate(book, swap)
     found = pt.documents(arguments)
     total = dict.fromkeys(("names", "standard", "unchecked", "runtime", "pointers", "other"), 0)
@@ -572,7 +581,7 @@ def run(book: str | None, arguments: list[str], swap: dict[str, str] | None = No
     for line in gate.list_problems:
         print(line)
     for full, _relative in found:
-        problems, counts = gate.examine(full)
+        problems, counts = gate.examine(full, sections=sections)
         for line in problems:
             print(line)
         failed += len(problems)
@@ -582,12 +591,12 @@ def run(book: str | None, arguments: list[str], swap: dict[str, str] | None = No
     return 1 if failed else 0
 
 
-def show_spans(book: str | None, arguments: list[str], swap: dict[str, str] | None = None) -> int:
+def show_spans(book: str | None, arguments: list[str], swap: dict[str, str] | None = None, sections: bool = False) -> int:
     """Every code span, what it was taken for, and for a name where it was found."""
     gate = Gate(book, swap)
     for full, _relative in pt.documents(arguments):
         told: list = []
-        problems, _counts = gate.examine(full, told)
+        problems, _counts = gate.examine(full, told, sections)
         found = {(line, body): f"{what}: {where}" for line, body, what, where in told}
         found.update({(int(p.split(":")[1]), p.split("`")[1]): "REFUSED" for p in problems})
         for span in pt.read(full)[0]:
@@ -823,6 +832,22 @@ def probe() -> int:
         expect("a declaration bound by its own pointer",
                refusals(f"```runtime-names\nWrapper.live  pkg/backends/two/base.py:Wrapper.close\n```\n\n{two}\n\n`Wrapper.live`"
                         f"\n\n{one}\n\n`Wrapper.live`"), ["11: `Wrapper.live`"])
+        # with sections, a pointer binds only from its own `##` heading on; the text above the first is a section
+        paged = f"{one} in the head.\n\n## One\n\n`Wrapper.open`\n\n## Two\n\n`Wrapper.open`\n\n{two} and `Wrapper.close`\n\n### Deeper\n\n`Wrapper.close`\n"
+        pin._write(doc, paged)
+        expect("without --sections the head's pointer binds everywhere", gate.examine(doc)[0], [])
+        with_sections = gate.examine(doc, sections=True)[0]
+        expect("with --sections it binds in no section below", [p.split(": ", 2)[0].split(":")[1] + ": " + p.split(": ", 2)[1] for p in with_sections],
+               ["5: `Wrapper.open`", "9: `Wrapper.open`"])
+        expect("and the refusal says so", ["in this section" in p for p in with_sections], [True, True])
+        pin._write(doc, f"## One {one}\n\n`Wrapper.open`\n\n## Two\n\n`Wrapper.close` and {two}\n")
+        expect("a pointer on the heading's own line binds the section under it, and one later on a line binds that line",
+               gate.examine(doc, sections=True)[0], [])
+        pin._write(doc, f"## One\n\n{two}\n\n```runtime-names\nWrapper.live  pkg/models.py:ModelBase.__new__\n```\n\n"
+                        f"## Two\n\n```runtime-names\nWrapper.gone  pkg/models.py:ModelBase.__new__\n```\n")
+        expect("a declaration's class is bound within the entry's section",
+               [p.split("`")[1] for p in gate.examine(doc, sections=True)[0]], ["Wrapper.gone"])
+        expect("and across sections without the flag", gate.examine(doc)[0], [])
         # a name the index does not hold is found in a file a pointer has named
         expect("a test's name", refusals("`tests/test_models.py` has `ModelTests.test_save`\n\n`ModelTests.nope`"),
                ["3: `ModelTests.nope`"])
@@ -999,11 +1024,11 @@ def main(argv: list[str]) -> int:
     pin.require_python(book)
     flags = {a for a in args if a.startswith("--")}
     docs = [a for a in args if not a.startswith("--")]
-    if flags - {"--spans"} or not docs:
+    if flags - {"--spans", "--sections"} or not docs:
         raise SystemExit(__doc__)
-    if flags:
-        return show_spans(book, docs, swap)
-    return run(book, docs, swap)
+    if "--spans" in flags:
+        return show_spans(book, docs, swap, "--sections" in flags)
+    return run(book, docs, swap, "--sections" in flags)
 
 
 if __name__ == "__main__":

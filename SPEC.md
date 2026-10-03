@@ -7,8 +7,9 @@ site's build refuses a page that breaks what a program can read
 (`python manage.py bake`; each such rule is marked* **baked** *below,
 section 12 lists them, and `python manage.py bake --probe` proves each
 refusal). The two gates check its pointers and its names
-(`tools/pointers.py`, `tools/names.py`). The rest is the writer's and the
-checker's: no program refuses a sentence for what it says.
+(`tools/pointers.py`, `tools/names.py`), and the build runs them. The
+rest is the writer's and the checker's: no program refuses a sentence for
+what it says.
 [specimen/](specimen/) is a small book written to these rules, with its
 statuses set to show each one; bake it to see them. Section 13 has the
 commands.*
@@ -38,7 +39,7 @@ page's id is empty.
 |---|---|
 | id | `orm/queries` |
 | address | `/orm/queries` |
-| the same page as markdown (not yet built) | `/orm/queries.md` |
+| the same page as markdown, the file itself | `/orm/queries.md` |
 | a section of it | `/orm/queries#how-is-a-lookup-compiled` |
 
 A page that lists children is an **index**: `contents: queries, compiler`
@@ -49,9 +50,10 @@ else lists it. The pages directly under the contents page are the book's
 front pages and its **departments**; a department's index is its landing
 page. Every `.md` under `pages/` is a page and is named by exactly one
 `contents` (**baked**). A page's name is lower-case letters and digits in
-words joined by hyphens, and directly under the contents page it is not
-`index`, `static` or `404` (**baked**). A name is permanent: an address is
-a promise.
+words joined by hyphens; it is never `index` or `404`, which the host
+gives a meaning of its own at every depth, and directly under the
+contents page it is not `static` (**baked**). A name is permanent: an
+address is a promise.
 
 ## 3 · The head
 
@@ -217,11 +219,25 @@ a page takes the shape of what it explains.
   editing a sentence in place. A name, a pointer or a spelling is
   corrected where it stands.
 
-On the site a pointer will be a link to the lines it lands on at the
-pinned commit. That is not yet built: for now it is shown as it is
-written. The pointer gate writes a report of every pointer on a page,
-`<page>.pointers.json`; it is generated, never edited, and where the
-pages' reports are kept is not yet ruled.
+**On the site a pointer is a link to the lines it lands on** at the
+pinned commit, in the tree's own repository:
+`.../blob/<commit>/<path>#L<first>-L<last>`, from a definition's first
+decorator to its last line; a whole file links to the file, a directory
+to the tree, and a name bound more than once (a property and its setter,
+overloads before a definition) to the span from its first binding to its
+last, each named in the link's title. The range is the pointer gate's
+resolution, derived at the bake and written by hand nowhere. The
+pointers in a `runtime-names` block are linked the same way. **In the
+page's markdown twin a pointer stands as it is written**: the file is the
+artefact, and an agent with the tree resolves a pointer in one step.
+
+**The pointer gate's report of a page**, `<page>.pointers.json`, is
+written beside the page by `python tools/pointers.py pages/` and
+committed with it: generated, never edited. It is what a re-pin compares
+(`python tools/pointers.py --check pages/`) to tell a symbol whose body
+changed from one that only kept its name. The build reads the `.md` files,
+the figures' `.svg` and a department's `figures/figures.css`, and nothing
+else, so the reports do not disturb the book.
 
 ## 7 · Names and code spans
 
@@ -248,9 +264,16 @@ page:
   `tools/names.py --spans` shows what each name was taken for.
 - **A name that more than one module defines** is given with its module
   first, by a pointer or by writing it from its module, **in the section
-  that uses it**. (The name gate does not yet stop at a heading: it
-  accepts a pointer from an earlier section. Until it does, this half of
-  the rule is the writer's.)
+  that uses it**: a pointer in another section does not bind it, and
+  what stands above the first `##` is a section of its own. The build
+  runs the name gate so (`tools/names.py --sections`; **baked**). A
+  heading cannot be bound by what is under it, so such a name in a
+  heading is written from its module
+  (`django.db.backends.postgresql.base.DatabaseWrapper`), which the
+  gate checks; only where the heading asks about the spelling itself is
+  it quoted as a string (`"DatabaseWrapper"`), which no gate checks. A
+  section is a top-level `##`: one inside a quotation or a list begins
+  none.
 - **A name made at runtime** is in no file's syntax tree: a metaclass, a
   descriptor or `setattr` makes it as the code runs, or it is a setting
   the defaults do not define. It is declared, with the pointer to code
@@ -266,10 +289,12 @@ page:
   pointer; then a remark. A block in `map/runtime-names.md` declares for
   the whole book. A block on a page declares for that page only, so while
   the book's list does not hold a name, every page that uses it declares
-  it; the block may stand anywhere on the page. Where more than one place
-  makes the name, the entry points at one and its remark says so. Nothing
-  can be checked after such a name: a member reached through it is
-  written on its own class.
+  it; the block may stand anywhere on the page, except that an entry on a
+  class several modules define stands where that class is bound: in the
+  section of a pointer into its file, or written from its module. Where
+  more than one place makes the name, the entry points at one and its
+  remark says so. Nothing can be checked after such a name: a member
+  reached through it is written on its own class.
 - **Names go in headings, ledes and first sentences**, not only in the
   body. Exact names are what an agent searches with.
 
@@ -301,7 +326,9 @@ WSGIHandler.__init__, when an instance of WSGIHandler itself is made
   source folded away under it. Its address is `#figure-<name>`.
 - **The file is one well-formed `<svg>` element** with a `viewBox` and
   `class="fig"`, and it is held to what a page is held to: no script, no
-  event handler, no `<style>`, `<image>` or `<foreignObject>`
+  event handler, no `<style>`, `<image>`, `<iframe>` or `<foreignObject>`;
+  nothing that moves (`<animate>` and its kin, `<set>`); no `href` that
+  leaves the file, so a `<use>` or an `<a>` points at `#id` within it
   (**baked**).
 - **A figure carries classes and no colour**: no `style`, `fill`,
   `stroke`, `color` or font attribute anywhere in the file (**baked**).
@@ -406,26 +433,41 @@ each problem as `file:line: what is wrong`.
   the three; `owns` that is not names in code spans; a name with two
   homes.
 - *The tree*: no contents page, or one in outline; a child in `contents`
-  with no file, named twice, or with a name that is not lower-case words
-  or is `index`, `static` or `404` at the top; a file in no `contents`; a
-  written page under an outlined index.
+  with no file, named twice, or with a name that is not lower-case words,
+  is `index` or `404` anywhere, or is `static` at the top; a file in no
+  `contents`; a written page under an outlined index; a department's
+  `figures/figures.css` that holds anything but classes (`<`, `url(`,
+  `@import`).
 - *The body*: no title, no lede, or two titles; a heading below `###`,
   written by underlining, or with no words; two headings with one
-  address; raw HTML, a comment included; an image; an empty section on a
-  written page.
+  address, or a heading whose address begins `figure-`; raw HTML, a
+  comment included; an image; an empty section on a written page.
 - *Links*: to a page that is not there; not by the path of its file; to
-  the book by its address on the site; to a section or a figure its
-  target lacks.
+  the book by its address on the site, under any of the site's hosts; to
+  a section or a figure its target lacks.
 - *Figures*: no SVG; an SVG that is not one well-formed element with a
-  `viewBox` and `class="fig"`; a script, a handler or something that
-  loads; a colour or a font of its own; no caption, or one that is not
-  one italic run; a name that is not lower-case words, or used twice on a
-  page; a figure inside a list or a quotation.
+  `viewBox` and `class="fig"`; a script, a handler, something that loads
+  or moves, or an `href` that leaves the file; a colour or a font of its
+  own; no caption, or one that is not one italic run; a name that is not
+  lower-case words, or used twice on a page; a figure inside a list or a
+  quotation.
+- *The gates*, run on every page, outlined pages included, each refusal
+  in the gate's own words: a pointer that is not well formed or does not
+  resolve at the pin (`tools/pointers.py`); a name no pinned tree
+  declares, written on a class that does not declare it, or defined by
+  several modules and bound by no pointer in its section; a declaration
+  of a runtime-made name whose pointer does not resolve, or of a name
+  the source declares (`tools/names.py --sections`).
+- *What was written*, after the pages are baked: a link in a page, a
+  twin, `llms.txt`, `llms-full.txt` or `sitemap.xml` that resolves to no
+  file as the host serves the directory, or to no id, heading or figure
+  in its target (`tools/links.py`). The bake fails after writing.
 
-It does not check that a pointer resolves or a name exists (the gates
-do), nor anything about what a sentence means: a page's status, a
-section's first sentence, a count, a quoted excerpt of source, an order
-left in a written section. Those are the writer's and the checker's.
+It does not check anything about what a sentence means: a page's
+status, a section's first sentence, a count, a quoted excerpt of source,
+an order left in a written section, or whether a pointer names the place
+that does what the sentence says. Those are the writer's and the
+checker's.
 
 ## 13 · Checking a page
 
@@ -433,15 +475,30 @@ With the project's Python (`.venv`; on this book's machine
 `.venv/Scripts/python.exe` in place of `python`):
 
 ```
-python manage.py bake --book specimen        the build: refuses, or bakes to dist/
+python manage.py bake --book specimen        the build: refuses, or bakes to dist/ the pages, their twins,
+                                             llms.txt, index.json, names.json, 404.html, robots.txt, _headers
+                                             and the static files (for pages/ also llms-full.txt and
+                                             sitemap.xml), then runs the link gate over what it wrote
 python manage.py bake --book DIR --out DIR   another book, to another place
-python tools/pointers.py PAGE.md             every pointer resolves at the pin
-python tools/names.py PAGE.md                every name in a code span exists
+python manage.py preview                     dist/ served on this machine as Cloudflare Pages serves it
+python manage.py deploy [--book DIR] [--branch B] [--dry-run]
+                                             the committed reports checked, the bake, the upload, and every
+                                             file fetched back and compared; it stops at the first failure
+python tools/pointers.py pages/              every pointer resolves at the pin; a report written beside each page
+python tools/pointers.py --check pages/      the committed reports are what the gate writes now
+python tools/names.py --sections pages/      every name in a code span exists, bound within its section
 python tools/names.py --spans PAGE.md        what each code span was taken for
-python manage.py runserver                   the book as it stands, read again at each save
+python tools/links.py --site https://djangointernals.dev dist
+                                             every link in the baked site resolves (the bake runs it; by hand,
+                                             give it the site's address, which the specimen's pages do not carry)
+python manage.py runserver                   the book as it stands, read again at each save: the pages, the
+                                             twins and the agent's files alike
 ```
 
 `python manage.py bake` with no `--book` bakes `pages/`, and refuses until
 `pages/index.md` exists. `runserver` serves `pages/` too; to serve another
-book, set `BOOK` in the environment to its directory (`BOOK=specimen`). The baked site is static files, laid out for a
-host that serves `orm/queries.html` at `/orm/queries`.
+book, set `BOOK` in the environment to its directory (`BOOK=specimen`).
+Both need the pinned trees on disk (`python tools/pin.py fetch`): the
+gates run inside the build. The baked site is static files, laid out for a
+host that serves `orm/queries.html` at `/orm/queries` and
+`orm/queries.md` beside it, which is what `preview` does on this machine.

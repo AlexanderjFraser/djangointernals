@@ -73,7 +73,12 @@ are assumed here until a ruling replaces one.
    table an SVG was drawn from) is in the markdown. A figure is drawn
    before the build and put into the page as SVG; nothing is drawn in the
    reader's browser.
-9. **Links resolve.**
+9. **Links resolve.** A link between pages is the path of the target's
+   `.md` file from the page it is written in, and the build refuses one
+   that lands on no page, section or figure. `python tools/links.py dist`
+   is the gate over what the build wrote: every address, fragment and
+   twin link in the baked site resolves as the host serves it, and the
+   build fails if one does not.
 10. **Every rule has a gate, every gate has a `--probe`** that proves it
     fails on the construct it should, and the build refuses to publish on a
     failure.
@@ -122,10 +127,14 @@ the tables differ, the tables are right.
 DOC` check a markdown document against the pinned trees (rules 6 and 5);
 each tool's head says exactly what is a pointer, what is a name, and what
 the gate does not check. The pointer gate writes `DOC.pointers.json` beside
-the document, or under `--report DIR`: generated, never edited, and checked
-by `--check`. `map/map.json`'s `names` says which file holds the settings'
-defaults, and names `map/runtime-names.md`, the book's list of names made
-at runtime, each with the pointer to the code that makes it.
+the document (a page's report is committed beside the page), or under
+`--report DIR`: generated, never edited, and checked by `--check`, which
+after a re-pin says which pointers land on changed bytes. The name gate
+run with `--sections`, as the build runs it on a page, binds a name
+several modules define only within the section that uses it.
+`map/map.json`'s `names` says which file holds the settings' defaults,
+and names `map/runtime-names.md`, the book's list of names made at
+runtime, each with the pointer to the code that makes it.
 
 ## The site
 
@@ -135,22 +144,30 @@ package `djangointernals/` is the whole site (its `__init__.py` says what
 each file is); the corpus is `pages/`, of which `pages/index.md` is the
 contents; `SPEC.md` is the page spec: what a page's head holds, the three
 statuses and what each publishes, what a section is, how a figure is
-written. `python manage.py bake` reads the book whole, refuses it whole
-with each problem as `file:line: what is wrong`, and otherwise writes it
-to `dist/` (ignored); `python manage.py bake --probe` proves the refusals.
-`specimen/` is a small book that follows the spec and is never part of the
-book: `python manage.py bake --book specimen`. The site needs
-`requirements.txt` beside Django.
+written. **`python manage.py bake` is the whole build**: it reads the book
+whole, runs both gates on every page, refuses it whole with each problem
+as `file:line: what is wrong`, and otherwise writes to `dist/` (ignored)
+every page with its `.md` twin, `llms.txt`, `index.json` (the book as
+data), `names.json` (every name and where it is explained), and for the
+book itself `llms-full.txt` and `sitemap.xml`, then runs the link gate
+over what it wrote; `python manage.py bake --probe` proves the refusals.
+On the site a pointer is a link to its lines at the pinned commit; in the
+twin it is as written. `python manage.py preview` serves `dist/` on this
+machine as Cloudflare Pages serves it; `python manage.py deploy` runs the
+gates, bakes, uploads to Pages and fetches every file back, stopping at
+the first failure. `specimen/` is a small book that follows the spec and
+is never part of the book: `python manage.py bake --book specimen`. The
+site needs `requirements.txt` beside Django, and the pinned trees on disk.
 
-**Still to be built**: `pagefind` for the human's search; the gates before
-every build; the deploy. Four
-doors for an agent, all built from the one corpus: the `.md` URL and
-`llms.txt`; a pip package that ships the corpus beside Django in
-`site-packages` with a CLI; the same package serving MCP tools (`search`,
-`section`, `names`, `report`) over stdio; a Claude Code skill and an
-`AGENTS.md` line that say when to consult it. `robots.txt` allows the AI
-crawlers. A reader's correction arrives as a GitHub issue carrying the
-pointer that shows the claim false.
+**The site is live as it is built** (the owner's word, 2026-10-02):
+djangointernals.dev serves what exists, `noindex` until the book is
+published; today that is the specimen. **Still to be built**: `pagefind`
+for the human's search; a pip package that ships the corpus beside Django
+in `site-packages` with a CLI; the same package serving MCP tools
+(`search`, `section`, `names`, `report`) over stdio; a Claude Code skill
+and an `AGENTS.md` line that say when to consult it. `robots.txt` allows
+the AI crawlers. A reader's correction arrives as a GitHub issue carrying
+the pointer that shows the claim false.
 
 ## Conventions
 

@@ -8,11 +8,14 @@ agent that reads the whole corpus and needs to know how everything fits.
 Every name checked against a pinned commit; every claim pointing at the line
 that supports it.
 
-**Status: planning.** No page is written; [djangointernals.dev](https://djangointernals.dev)
-holds a placeholder until the first department is published. The book's
-rules are in [CLAUDE.md](CLAUDE.md). Its predecessor, and the record of what one such
-book costs, is [MinecraftDocs](https://github.com/AlexanderjFraser/MinecraftDocs)
-(live at [minecraftdocs.dev](https://minecraftdocs.dev)).
+**Status: being built.** No page of the book is written yet.
+[djangointernals.dev](https://djangointernals.dev) serves what exists as
+it is built: today a specimen, a handful of pages that show the site and
+the page spec and say of themselves that they are not the book. The
+book's rules are in [CLAUDE.md](CLAUDE.md). Its predecessor, and the
+record of what one such book costs, is
+[MinecraftDocs](https://github.com/AlexanderjFraser/MinecraftDocs) (live
+at [minecraftdocs.dev](https://minecraftdocs.dev)).
 
 **What is here so far.** [pin.json](pin.json) names the commit of Django
 the book is verified against. [tools/](tools/) holds the tools that fetch
@@ -29,11 +32,16 @@ exists, on the class that declares it. [map/runtime-names.md](map/runtime-names.
 will list the names Django makes only as it runs.
 
 The repository is also the site: a Django project ([manage.py](manage.py),
-[djangointernals/](djangointernals/)) that reads the book's markdown and
-bakes it to static files. [SPEC.md](SPEC.md) is the page spec: what a page
-is, as a file and as a thing a reader meets. [specimen/](specimen/) is a
-small book that follows it, to see the site with before the book has
-pages: `python manage.py bake --book specimen`.
+[djangointernals/](djangointernals/)) that reads the book's markdown,
+runs the gates on every page, and bakes it to static files: each page
+with its markdown twin at the same address with `.md` after it, every
+pointer a link to its lines at the pinned commit, and the files an agent
+reads (`llms.txt`, `index.json`, `names.json`). `tools/links.py` then
+checks that every link in what was baked resolves. [SPEC.md](SPEC.md) is
+the page spec: what a page is, as a file and as a thing a reader meets.
+[specimen/](specimen/) is a small book that follows it, to see the site
+with before the book has pages: `python manage.py bake --book specimen`,
+then `python manage.py preview`.
 
 **Licence.** The writing is [CC BY 4.0](LICENSE): reuse it, adapt it, quote
 it, train on it; credit the source. The tools are [MIT](tools/LICENSE).

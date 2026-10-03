@@ -26,10 +26,13 @@ that is not as above; a status that is not one of the three; a `django`
 line without the pinned commit; a child named in `contents` with no file,
 and a markdown file no `contents` names; a written page under an index
 that is still in outline; a link to an anchor its target does not have.
+And what the two gates refuse (gates.py: tools/pointers.py and
+tools/names.py, run on every page, the name gate binding within a section):
+a pointer that does not resolve at the pin, a name that does not exist.
 
-What it does not check is what the gates do (tools/pointers.py,
-tools/names.py: that a pointer resolves and a name exists) and what only a
-reader can: that a page has earned the status it claims.
+What it does not check is what only a reader can: that a page has earned
+the status it claims, and that a pointer names the place that does what its
+sentence says.
 """
 from __future__ import annotations
 
@@ -40,6 +43,7 @@ from pathlib import Path
 
 from django.conf import settings
 
+from . import gates as gating
 from . import render
 
 STATUSES = {
@@ -51,7 +55,9 @@ KEYS = ("django", "status", "owns", "contents")
 ENTRY = re.compile(r"([a-z]+): (.*)")
 PLAIN = re.compile(r"[A-Za-z0-9]((?!: | #).)*(?<![:\s])|[A-Za-z0-9]")
 NAME = re.compile(r"[a-z0-9]+(-[a-z0-9]+)*")
-RESERVED = {"index", "static", "404"}
+RESERVED = {"index", "404"}  # at every depth: Pages serves a/index.html at /a/ and a/404.html for everything missing under /a/
+RESERVED_AT_TOP = {"static"}
+UNSTYLED = ("<", "url(", "@import", "expression(")  # none of these in a department's figure stylesheet
 COMMIT = re.compile(r"(?<![0-9a-f])[0-9a-f]{12,40}(?![0-9a-f])")
 SPAN = re.compile(r"`([^`]+)`")
 
@@ -141,6 +147,7 @@ class Book:
     root: Path
     pin: dict
     pages: dict[str, Page]
+    gates: object = None  # gates.Gates: the trees at the pin, for the renderer's links
 
     @property
     def index(self) -> Page:
@@ -226,7 +233,12 @@ def load(root: Path | None = None) -> Book:
     tree = pin["trees"][pin["subject"]]
     if not (root / "index.md").is_file():
         raise Refused([f"{shown(root)}: there is no index.md here: a book begins at its contents page"])
-    book = Book(root, tree, {})
+    try:
+        gates = gating.current()
+    except gating.Unavailable as why:
+        raise Refused([f"{shown(root)}: no pointer can be checked or linked until the pinned trees are on disk "
+                       f"(`python tools/pin.py fetch`): {why}"]) from None
+    book = Book(root, tree, {}, gates)
 
     def read(id: str, parent: Page | None) -> Page:
         source = root / f"{id or 'index'}.md"
@@ -250,9 +262,9 @@ def load(root: Path | None = None) -> Book:
             problems.append(f"{where}:1: a written page under an index that is still in outline ({parent.where})")
         for name in [n.strip() for n in meta.get("contents", "").split(",") if n.strip()]:
             child = f"{id}/{name}" if id else name
-            if not NAME.fullmatch(name) or (not id and name in RESERVED):
+            if not NAME.fullmatch(name) or name in RESERVED or (not id and name in RESERVED_AT_TOP):
                 problems.append(f"{where}:1: `contents` names `{name}`: a page's name is lower-case words joined by hyphens, "
-                                f"and at the top of a book not one of {', '.join(sorted(RESERVED))}")
+                                f"never {' or '.join(sorted(RESERVED))}, and at the top of a book not {', '.join(sorted(RESERVED_AT_TOP))}")
             elif child in book.pages:
                 problems.append(f"{where}:1: `contents` names `{name}` twice")
             elif not (root / f"{child}.md").is_file():
@@ -274,10 +286,22 @@ def load(root: Path | None = None) -> Book:
             home.setdefault(name, page)
     for page in book.pages.values():
         render.render(page, book, problems)
+    for department in book.index.children:
+        stylesheet = root / department.id / "figures" / "figures.css"
+        if stylesheet.is_file():
+            text = stylesheet.read_bytes().decode("utf-8", "replace")
+            held = [token for token in UNSTYLED if token in text]
+            if held:
+                problems.append(f"{shown(stylesheet)}:1: a department's figure stylesheet is classes and nothing else: it holds "
+                                + ", ".join(f"`{token}`" for token in held))
     for page in book.pages.values():
         for where, href, target, fragment in page.fragments:
             if fragment not in target.anchors and not (fragment.startswith("figure-") and fragment[7:] in target.figures):
                 problems.append(f"{where}: the link `{href}`: {target.where} has no heading or figure that comes to `#{fragment}`")
+    # the two gates, on every page: a pointer that does not resolve, a name that does not exist
+    problems += gates.list_problems
+    for page in book.order:
+        problems += gates.problems(page)
     if not book.index.published:
         problems.append(f"{book.index.where}:1: the contents page is in outline: there is nothing to publish")
     if problems:
