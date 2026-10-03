@@ -72,12 +72,16 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other slice | this slice imports from it | naming most | it imports from this slice | naming most, of this slice |
 |---|---|---|---|---|
-| [1 · the request path and the runtime](1-request.md) | 22+1 | `django/core/exceptions.py` (11) `django/conf/__init__.py` (5) `django/apps/__init__.py` (4) `django/__init__.py` (1) and 3 more | 4 | `django/db/models/__init__.py` (3) `django/db/models/options.py` (1) |
+| [1 · the request path and the runtime](1-request.md) | 22+1 | `django/core/exceptions.py` (11) `django/conf/__init__.py` (5) `django/apps/__init__.py` (4) `django/__init__.py` (1) and 3 more | 3 | `django/db/models/__init__.py` (3) |
 | [3 · the ORM's query side](3-orm-queries.md) | 47+9 | `django/db/models/expressions.py` (16) `django/db/models/query_utils.py` (9) `django/db/models/lookups.py` (7) `django/db/models/functions/__init__.py` (6) and 7 more | 17+5 | `django/db/models/fields/__init__.py` (12) `django/db/models/__init__.py` (6) `django/db/models/deletion.py` (1) `django/db/models/fields/composite.py` (1) and 3 more |
-| [4 · the database underneath](4-database.md) | 15+2 | `django/db/__init__.py` (12) `django/db/backends/utils.py` (3) `django/db/transaction.py` (3) `django/db/utils.py` (2) | 29+1 | `django/db/models/__init__.py` (22) `django/db/models/fields/composite.py` (2) `django/db/models/fields/related.py` (2) `django/db/models/options.py` (2) and 2 more |
-| [5 · presentation](5-presentation.md) | 4 | `django/forms/__init__.py` (4) | 18+5 | `django/db/models/__init__.py` (17) `django/db/models/utils.py` (3) `django/db/models/base.py` (1) `django/db/models/deletion.py` (1) and 1 more |
-| [6 · services and tooling](6-services.md) | 49 | `django/core/checks/__init__.py` (10) `django/utils/functional.py` (10) `django/utils/translation/__init__.py` (7) `django/utils/text.py` (3) and 15 more | 9+3 | `django/db/models/__init__.py` (8) `django/db/models/enums.py` (2) `django/db/models/deletion.py` (1) `django/db/models/signals.py` (1) |
-| [7 · the contrib apps and the ORM's extensions](7-contrib.md) | 0 |  | 82 | `django/db/models/__init__.py` (65) `django/db/models/signals.py` (4) `django/db/models/fields/mixins.py` (3) `django/db/models/deletion.py` (2) and 7 more |
+| [4a · the database backends](4a-backends.md) | 15+2 | `django/db/__init__.py` (12) `django/db/backends/utils.py` (3) `django/db/transaction.py` (3) `django/db/utils.py` (2) | 15+1 | `django/db/models/__init__.py` (14) `django/db/models/fields/composite.py` (2) |
+| [4b · migrations](4b-migrations.md) | 0 |  | 14 | `django/db/models/__init__.py` (8) `django/db/models/fields/related.py` (2) `django/db/models/options.py` (2) `django/db/models/deletion.py` (1) and 1 more |
+| [5a · templates and forms](5a-templates-forms.md) | 4 | `django/forms/__init__.py` (4) | 2+5 | `django/db/models/__init__.py` (5) `django/db/models/utils.py` (2) |
+| [5b · the admin](5b-admin.md) | 0 |  | 16 | `django/db/models/__init__.py` (12) `django/db/models/base.py` (1) `django/db/models/deletion.py` (1) `django/db/models/fields/related.py` (1) and 1 more |
+| [6a · services and tooling](6a-services.md) | 14 | `django/core/checks/__init__.py` (10) `django/core/files/base.py` (1) `django/core/files/images.py` (1) `django/core/files/storage/__init__.py` (1) and 1 more | 9+2 | `django/db/models/__init__.py` (8) `django/db/models/deletion.py` (1) `django/db/models/enums.py` (1) `django/db/models/signals.py` (1) |
+| [6b · the utilities and the test framework](6b-utils-test.md) | 35 | `django/utils/functional.py` (10) `django/utils/translation/__init__.py` (7) `django/utils/text.py` (3) `django/utils/datastructures.py` (2) and 10 more | 1+1 | `django/db/models/enums.py` (1) `django/db/models/options.py` (1) |
+| [7a · the contrib apps](7a-contrib.md) | 0 |  | 45 | `django/db/models/__init__.py` (33) `django/db/models/signals.py` (4) `django/db/models/deletion.py` (2) `django/db/models/base.py` (1) and 5 more |
+| [7b · the ORM's extensions](7b-orm-extensions.md) | 0 |  | 37 | `django/db/models/__init__.py` (32) `django/db/models/fields/mixins.py` (2) `django/db/models/indexes.py` (2) `django/db/models/constraints.py` (1) |
 
 ## Imports from outside the tree
 

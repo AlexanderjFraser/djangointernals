@@ -30,10 +30,14 @@ Sites by kind: `warn`, passed to a call named `warn` or `warn_explicit`; `passed
 
 | # | slice | ticket citations | deprecation sites, imports aside |
 |---|---|---:|---:|
-| 1 | [the request path and the runtime](slices/1-request.md) | 13 | 53 |
+| 1 | [the request path and the runtime](slices/1-request.md) | 9 | 51 |
 | 2 | [the ORM's model side](slices/2-orm-models.md) | 9 | 9 |
 | 3 | [the ORM's query side](slices/3-orm-queries.md) | 6 | 22 |
-| 4 | [the database underneath](slices/4-database.md) | 30 | 3 |
-| 5 | [presentation](slices/5-presentation.md) | 25 | 24 |
-| 6 | [services and tooling](slices/6-services.md) | 42 | 93 |
-| 7 | [the contrib apps and the ORM's extensions](slices/7-contrib.md) | 35 | 13 |
+| 4a | [the database backends](slices/4a-backends.md) | 21 | 3 |
+| 4b | [migrations](slices/4b-migrations.md) | 9 | 0 |
+| 5a | [templates and forms](slices/5a-templates-forms.md) | 19 | 2 |
+| 5b | [the admin](slices/5b-admin.md) | 6 | 22 |
+| 6a | [services and tooling](slices/6a-services.md) | 23 | 73 |
+| 6b | [the utilities and the test framework](slices/6b-utils-test.md) | 23 | 22 |
+| 7a | [the contrib apps](slices/7a-contrib.md) | 25 | 0 |
+| 7b | [the ORM's extensions](slices/7b-orm-extensions.md) | 10 | 13 |

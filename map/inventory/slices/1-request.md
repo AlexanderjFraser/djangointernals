@@ -15,10 +15,6 @@ Every comment and string that cites a ticket in a form `map/map.json` describes,
 | `django/conf/__init__.py` | 311 | `Settings.__init__` | django 2315 | Move the time zone info into os.environ. See ticket #2315 for why we don't do this unconditionally (breaks Windows). |
 | `django/core/handlers/wsgi.py` | 177 | `get_script_name` | django 17133 | mod_wsgi squashes multiple successive slashes in PATH_INFO, do the same with script_url before manipulating paths (#17133). |
 | `django/http/cookie.py` | 17 | `parse_cookie` | https://bugzilla.mozilla.org/show_bug.cgi?id=169091 | Assume an empty name per https://bugzilla.mozilla.org/show_bug.cgi?id=169091 |
-| `django/test/client.py` | 410 | `RequestFactory._base_environ` | django 8551 | This is a minimal valid WSGI environ dictionary, plus: - HTTP_COOKIE: for cookie support, - REMOTE_ADDR: often useful, see #8551. See https://www.python.org/dev/peps/pep-3333/#environ-variables |
-| `django/test/client.py` | 696 | `AsyncRequestFactory._base_scope` | django 8551 | This is a minimal valid ASGI scope, plus: - headers['cookie'] for cookie support, - 'client' often useful, see #8551. |
-| `django/test/client.py` | 781 | `AsyncRequestFactory.generic` | CVE-2026-3902 | Avoid breaking test clients that just want to supply normalized ASGI names, regardless of the fact that ASGIRequest drops headers with underscores (CVE-2026-3902). |
-| `django/test/signals.py` | 24 |  | django 19031 | Settings that may not work well when using 'override_settings' (#19031) |
 | `django/views/debug.py` | 51 | `CallableSettingWrapper` | django 21345 | Object to wrap callable appearing in settings. * Not to call in the debug page (#21345). * Not to break the debug page if the callable forbidding to set attributes (#23070). |
 | `django/views/debug.py` | 53 | `CallableSettingWrapper` | django 23070 | Object to wrap callable appearing in settings. * Not to call in the debug page (#21345). * Not to break the debug page if the callable forbidding to set attributes (#23070). |
 | `django/views/debug.py` | 203 | `SafeExceptionReporterFilter.get_cleansed_multivaluedict` | django 21098 | Replace the keys in a MultiValueDict marked as sensitive with stars. This mitigates leaking sensitive POST parameters if something like request.POST['nonexistent_key'] throws an exception (#21098). |
@@ -30,7 +26,7 @@ Every place the name of a deprecation warning class appears, imports aside. One 
 
 ### `RemovedInDjango2028Warning`
 
-42 sites: 5 passed to a call named `warn` or `warn_explicit`; 7 passed to another call, most often a helper that warns in its turn; 30 in comments.
+40 sites: 5 passed to a call named `warn` or `warn_explicit`; 7 passed to another call, most often a helper that warns in its turn; 28 in comments.
 
 | file | line | in | how | what it says |
 |---|---:|---|---|---|
@@ -74,8 +70,6 @@ Every place the name of a deprecation warning class appears, imports aside. One 
 | `django/core/signing.py` | 128 |  | comment | RemovedInDjango2028Warning: When the deprecation ends, remove. → `def _cookie_signer_legacy_salt(cookie_name, salt=""):` |
 | `django/core/signing.py` | 135 | `_unsign_cookie` | comment | RemovedInDjango2028Warning: When the deprecation ends, replace the whole function body with this single return statement. → `return get_cookie_signer(salt=_cookie_signer_salt(cookie_name, salt)).unsign(` |
 | `django/middleware/common.py` | 152 | `BrokenLinkEmailsMiddleware.send_mail` | comment | RemovedInDjango2028Warning. → `if not mailers._is_configured:` |
-| `django/test/utils.py` | 145 | `setup_test_environment` | comment | RemovedInDjango2028Warning: Override MAILERS unconditionally; remove EMAIL_BACKEND override. → `if hasattr(settings, "MAILERS"):` |
-| `django/test/utils.py` | 176 | `teardown_test_environment` | comment | RemovedInDjango2028Warning: Restore MAILERS unconditionally; remove EMAIL_BACKEND support. → `if hasattr(saved_data, "mailers"):` |
 
 ### `RemovedInDjango2029Warning`
 

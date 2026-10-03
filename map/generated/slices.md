@@ -6,13 +6,17 @@ A slice is a unit of reading: a part of Django's source cut where the fewest imp
 
 | # | slice | what is in it | Python files | lines | bytes | ~tokens | ~tokens read whole | other files | locale files | files beside the source |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|---|
-| 1 | [the request path and the runtime](slices/1-request.md) | `django` (the files directly in it), `django/core` (the files directly in it), `django/core/handlers`, `django/core/servers`, `django/http`, `django/urls`, `django/middleware`, `django/views`, `django/conf`, `django/apps`, `django/dispatch`, `django/test` | 79 | 21,693 | 757,297 | 312,935 |  | 21 | 367 |  |
+| 1 | [the request path and the runtime](slices/1-request.md) | `django` (the files directly in it), `django/core` (the files directly in it), `django/core/handlers`, `django/core/servers`, `django/http`, `django/urls`, `django/middleware`, `django/views`, `django/conf`, `django/apps`, `django/dispatch` | 72 | 15,078 | 533,359 | 220,398 |  | 21 | 367 |  |
 | 2 | [the ORM's model side](slices/2-orm-models.md) | `django/db/models`, minus `django/db/models/query.py`, `django/db/models/query_utils.py`, `django/db/models/expressions.py`, `django/db/models/lookups.py`, `django/db/models/aggregates.py`, `django/db/models/fetch_modes.py`, `django/db/models/constants.py`, `django/db/models/sql` and `django/db/models/functions` | 22 | 15,489 | 580,211 | 224,019 |  |  |  |  |
 | 3 | [the ORM's query side](slices/3-orm-queries.md) | `django/db/models/query.py`, `django/db/models/query_utils.py`, `django/db/models/expressions.py`, `django/db/models/lookups.py`, `django/db/models/aggregates.py`, `django/db/models/fetch_modes.py`, `django/db/models/constants.py`, `django/db/models/sql`, `django/db/models/functions` | 23 | 15,055 | 568,382 | 224,658 |  |  |  |  |
-| 4 | [the database underneath](slices/4-database.md) | `django/db` (the files directly in it), `django/db/backends`, `django/db/migrations` | 78 | 24,393 | 943,034 | 361,314 |  |  |  |  |
-| 5 | [presentation](slices/5-presentation.md) | `django/template`, `django/templatetags`, `django/forms`, `django/contrib/admin`, `django/contrib/admindocs` | 78 | 24,879 | 868,802 | 347,518 |  | 287 | 576 |  |
-| 6 | [services and tooling](slices/6-services.md) | `django/core/management`, `django/core/checks`, `django/core/cache`, `django/core/mail`, `django/core/files`, `django/core/serializers`, `django/tasks`, `django/utils` | 154 | 26,977 | 937,442 | 388,985 |  |  |  |  |
-| 7 | [the contrib apps and the ORM's extensions](slices/7-contrib.md) | `django/contrib`, minus `django/contrib/admin` and `django/contrib/admindocs` | 302 | 33,620 | 1,154,848 | 508,747 | 372,260 | 20 | 1680 |  |
+| 4a | [the database backends](slices/4a-backends.md) | `django/db` (the files directly in it), `django/db/backends` | 59 | 16,347 | 624,312 | 239,199 |  |  |  |  |
+| 4b | [migrations](slices/4b-migrations.md) | `django/db/migrations` | 19 | 8,046 | 318,722 | 122,115 |  |  |  |  |
+| 5a | [templates and forms](slices/5a-templates-forms.md) | `django/template`, `django/templatetags`, `django/forms` | 42 | 14,188 | 476,060 | 190,421 |  | 96 |  |  |
+| 5b | [the admin](slices/5b-admin.md) | `django/contrib/admin`, `django/contrib/admindocs` | 36 | 10,691 | 392,742 | 157,097 |  | 191 | 576 |  |
+| 6a | [services and tooling](slices/6a-services.md) | `django/core/management`, `django/core/checks`, `django/core/cache`, `django/core/mail`, `django/core/files`, `django/core/serializers`, `django/tasks` | 106 | 16,311 | 581,416 | 241,258 |  |  |  |  |
+| 6b | [the utilities and the test framework](slices/6b-utils-test.md) | `django/utils`, `django/test` | 55 | 17,281 | 579,964 | 240,264 |  |  |  |  |
+| 7a | [the contrib apps](slices/7a-contrib.md) | `django/contrib`, minus `django/contrib/admin`, `django/contrib/admindocs`, `django/contrib/postgres` and `django/contrib/gis` | 148 | 14,139 | 498,717 | 219,700 |  | 5 | 1348 |  |
+| 7b | [the ORM's extensions](slices/7b-orm-extensions.md) | `django/contrib/postgres`, `django/contrib/gis` | 154 | 19,481 | 656,131 | 289,047 | 152,560 | 15 | 332 |  |
 | 8 | [the deltas and the incumbent](slices/8-deltas.md) | `docs/releases/5.*.txt`, `docs/releases/6.*.txt`, `docs/internals/deprecation.txt` | 0 | 0 | 0 | 0 |  |  |  | 65 (296,231 bytes, ~139,734 tokens) |
 
 Python files are those outside locale directories; the other files and the locale data of the same directories belong to the slice and are listed on its page.
@@ -21,12 +25,16 @@ Python files are those outside locale directories; the other files and the local
 
 Import statements: the slice in the row imports from the slice in the column, statements inside function bodies included.
 
-| imports → | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| 1 |  | 4 |  | 9 | 19 | 157 | 19 |
-| 2 | 23 |  | 56 | 17 | 4 | 49 |  |
-| 3 | 14 | 22 |  | 11 |  | 30 |  |
-| 4 | 44 | 30 | 17 |  |  | 83 |  |
-| 5 | 100 | 23 | 10 | 6 |  | 167 | 22 |
-| 6 | 130 | 12 | 1 | 49 | 4 |  |  |
-| 7 | 196 | 82 | 21 | 85 | 33 | 189 |  |
+| imports → | 1 | 2 | 3 | 4a | 4b | 5a | 5b | 6a | 6b | 7a | 7b |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 |  | 3 |  | 2 |  | 11 |  | 8 | 118 |  |  |
+| 2 | 23 |  | 56 | 17 |  | 4 |  | 14 | 35 |  |  |
+| 3 | 14 | 22 |  | 11 |  |  |  |  | 30 |  |  |
+| 4a | 29 | 16 | 17 |  | 1 |  |  | 4 | 56 |  |  |
+| 4b | 15 | 14 |  | 6 |  |  |  | 3 | 20 |  |  |
+| 5a | 33 | 7 | 1 | 1 |  |  |  | 3 | 94 | 1 |  |
+| 5b | 67 | 16 | 9 | 2 | 3 | 31 |  | 2 | 68 | 21 |  |
+| 6a | 91 | 11 | 1 | 22 | 27 | 2 |  |  | 91 |  |  |
+| 6b | 67 | 2 |  | 7 |  | 10 |  | 17 |  | 19 |  |
+| 7a | 156 | 45 | 6 | 11 | 22 | 15 | 8 | 32 | 93 |  |  |
+| 7b | 39 | 37 | 15 | 51 | 4 | 8 | 2 | 7 | 58 | 2 |  |

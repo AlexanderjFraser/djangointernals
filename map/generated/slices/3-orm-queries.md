@@ -75,10 +75,13 @@ The map sees only import statements. What crosses an edge through a registry, a 
 |---|---|---|---|---|
 | [1 · the request path and the runtime](1-request.md) | 14 | `django/core/exceptions.py` (11) `django/conf/__init__.py` (2) `django/__init__.py` (1) | 0 |  |
 | [2 · the ORM's model side](2-orm-models.md) | 17+5 | `django/db/models/fields/__init__.py` (12) `django/db/models/__init__.py` (6) `django/db/models/deletion.py` (1) `django/db/models/fields/composite.py` (1) and 3 more | 47+9 | `django/db/models/expressions.py` (16) `django/db/models/query_utils.py` (9) `django/db/models/lookups.py` (7) `django/db/models/functions/__init__.py` (6) and 7 more |
-| [4 · the database underneath](4-database.md) | 10+1 | `django/db/__init__.py` (9) `django/db/transaction.py` (3) `django/db/backends/oracle/functions.py` (1) | 15+2 | `django/db/models/expressions.py` (5) `django/db/models/sql/compiler.py` (5) `django/db/models/constants.py` (4) `django/db/models/functions/__init__.py` (1) and 2 more |
-| [5 · presentation](5-presentation.md) | 0 |  | 7+3 | `django/db/models/constants.py` (5) `django/db/models/expressions.py` (5) |
-| [6 · services and tooling](6-services.md) | 30 | `django/utils/functional.py` (7) `django/utils/deprecation.py` (4) `django/utils/hashable.py` (4) `django/utils/regex_helper.py` (3) and 6 more | 1 | `django/db/models/constants.py` (1) |
-| [7 · the contrib apps and the ORM's extensions](7-contrib.md) | 0 |  | 21 | `django/db/models/functions/__init__.py` (4) `django/db/models/lookups.py` (4) `django/db/models/expressions.py` (3) `django/db/models/query_utils.py` (3) and 4 more |
+| [4a · the database backends](4a-backends.md) | 10+1 | `django/db/__init__.py` (9) `django/db/transaction.py` (3) `django/db/backends/oracle/functions.py` (1) | 15+2 | `django/db/models/expressions.py` (5) `django/db/models/sql/compiler.py` (5) `django/db/models/constants.py` (4) `django/db/models/functions/__init__.py` (1) and 2 more |
+| [5a · templates and forms](5a-templates-forms.md) | 0 |  | 0+1 | `django/db/models/expressions.py` (1) |
+| [5b · the admin](5b-admin.md) | 0 |  | 7+2 | `django/db/models/constants.py` (5) `django/db/models/expressions.py` (4) |
+| [6a · services and tooling](6a-services.md) | 0 |  | 1 | `django/db/models/constants.py` (1) |
+| [6b · the utilities and the test framework](6b-utils-test.md) | 30 | `django/utils/functional.py` (7) `django/utils/deprecation.py` (4) `django/utils/hashable.py` (4) `django/utils/regex_helper.py` (3) and 6 more | 0 |  |
+| [7a · the contrib apps](7a-contrib.md) | 0 |  | 6 | `django/db/models/query.py` (2) `django/db/models/query_utils.py` (2) `django/db/models/sql/__init__.py` (1) `django/db/models/sql/where.py` (1) |
+| [7b · the ORM's extensions](7b-orm-extensions.md) | 0 |  | 15 | `django/db/models/functions/__init__.py` (4) `django/db/models/lookups.py` (4) `django/db/models/expressions.py` (3) `django/db/models/sql/query.py` (2) and 2 more |
 
 ## Imports from outside the tree
 
