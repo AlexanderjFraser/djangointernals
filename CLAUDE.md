@@ -9,7 +9,8 @@ everything fits. The official documentation owns *how to use Django* and is
 the best in the industry at it; this book never competes with it. The book
 is not affiliated with or endorsed by the Django Software Foundation.
 
-**Status: planning (2026-10-01).** No page is written. The title is *How
+**Status: being built.** No page of the book is written yet: Django's
+source is surveyed whole first. The title is *How
 Django Works*; the site is `djangointernals.dev`. The production process
 this book is built with is the owner's and is not in this repository; what
 is here is what a reader or a contributor to this book needs: the corpus,
@@ -158,6 +159,10 @@ gates, bakes, uploads to Pages and fetches every file back, stopping at
 the first failure. `specimen/` is a small book that follows the spec and
 is never part of the book: `python manage.py bake --book specimen`. The
 site needs `requirements.txt` beside Django, and the pinned trees on disk.
+Beside every page the site puts the book's contents, derived from the
+heads, and it offers the reader a choice among five palettes, kept in
+their browser by the site's one script (`djangointernals/static/site.js`):
+both are the site's apparatus, never a page's (`SPEC.md`, section 11).
 
 **The site is live as it is built** (the owner's word, 2026-10-02):
 djangointernals.dev serves what exists, `noindex` until the book is

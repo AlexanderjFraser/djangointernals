@@ -16,7 +16,9 @@ no file: it is an entry in the contents. Then the agent's files (doors.py):
 `llms.txt`, `index.json`, `names.json`, and for the book itself (never the
 specimen) `llms-full.txt` and `sitemap.xml`; `404.html`; `robots.txt`;
 Cloudflare Pages's `_headers`; and the static files (an editor's backup, a
-hidden file and `CVS` left out, as `collectstatic` leaves them). Last, the
+hidden file and `CVS` left out, as `collectstatic` leaves them). Every page
+carries the book's contents beside it and the choice of colours (views.py),
+which the probe checks as it checks the rest of what a bake writes. Last, the
 link gate (tools/links.py) runs over everything written, and the bake
 fails if a link in it does not resolve.
 
@@ -29,6 +31,7 @@ What a page's file is called is what Cloudflare Pages serves at the page's
 URL: `orm/queries.html` at `/orm/queries`, `orm/queries.md` at `/orm/queries.md`.
 """
 import json
+import re
 import shutil
 import tempfile
 from pathlib import Path
@@ -48,6 +51,7 @@ MARKER = ".baked"
 AGENT_FILES = ("llms.txt", "index.json", "names.json")
 INDEXABLE_FILES = ("llms-full.txt", "sitemap.xml")
 IGNORED_STATIC = ["CVS", ".*", "*~"]  # what collectstatic leaves out
+PALETTE = re.compile(r':root\[data-colours="([a-z]+)"\]')  # a palette of the stylesheet, by the choice that puts it on
 
 
 class Command(BaseCommand):
@@ -336,6 +340,36 @@ class Command(BaseCommand):
             answers = (written / "p/c.html").read_text(encoding="utf-8").split('<nav class="answers"', 1)[-1].split("</nav>", 1)[0]
             if answers.count("<a ") != 1:
                 fail("a heading with a link in it nests a link inside the list of a page's questions")
+            # the book's contents beside every page: the page shown marked, its branch open and no other
+            def beside(html: str) -> str:
+                return html.split('<nav class="booknav"', 1)[-1].split("</nav>", 1)[0] if '<nav class="booknav"' in html else ""
+            nav_a, nav_c = beside(page), beside((written / "p/c.html").read_text(encoding="utf-8"))
+            if ('<a href="/a" aria-current="page">' not in nav_a or '<a href="/p">' not in nav_a or 'href="/p/c"' in nav_a
+                    or '<a href="#first">' not in nav_a or nav_a.count("aria-current") != 1):
+                fail("the navigation beside a page does not mark that page and no other, list its sections, and keep the other branches closed")
+            if '<a href="/p/c" aria-current="page">' not in nav_c or '<a href="/p">' not in nav_c or "#first" in nav_c:
+                fail("the navigation beside a page under a department does not open that department's branch, or lists another page's sections")
+            if 'class="outlined"' not in nav_a or 'href="/b"' in nav_a:
+                fail("the navigation gives a page in outline an address, or leaves it out")
+            if '<a href="/" aria-current="page">Contents</a>' not in beside(index_html):
+                fail("the navigation beside the contents page does not mark it")
+            missing = (written / "404.html").read_text(encoding="utf-8")
+            if '<a href="/a">' not in beside(missing) or "aria-current" in missing:
+                fail("the page for a missing address carries no navigation, or marks a page as the one shown")
+            # the reader's colours: put on before the stylesheet is read, and a palette in the stylesheet for each one offered
+            head_html = page.split("</head>", 1)[0]
+            if not 0 <= head_html.find('localStorage.getItem("colours")') < head_html.find('rel="stylesheet"'):
+                fail("a page does not put on the reader's colours before its stylesheet is read")
+            if not (written / "static" / "site.js").is_file() or 'src="/static/site.js"' not in head_html:
+                fail("the script that keeps the reader's colours is not written, or a page does not load it")
+            stylesheet = (written / "static" / "site.css").read_text(encoding="utf-8")
+            offered = {value for value, _word in views.COLOURS if value}
+            for value, word in views.COLOURS:
+                if f'<option value="{value}">{word}</option>' not in page:
+                    fail(f"the colours a page offers do not include {word}")
+            if offered != set(PALETTE.findall(stylesheet)) or "" not in dict(views.COLOURS):
+                fail(f"the colours offered and the stylesheet's palettes are not the same set: {sorted(offered)} against "
+                     f"{sorted(set(PALETTE.findall(stylesheet)))}; or the reader's system is not among the choices")
             llms = (written / "llms.txt").read_text(encoding="utf-8")
             if (f"- [A]({settings.SITE_URL}/a.md): Lede." not in llms or "\n## A\n" not in llms or "b.md" in llms or "\n## P\n" not in llms
                     or f"- [C]({settings.SITE_URL}/p/c.md): Lede of C." not in llms or f"> Its lede, which links [A]({settings.SITE_URL}/a.md)." not in llms):
@@ -404,7 +438,9 @@ class Command(BaseCommand):
                           f"are each refused for it and for nothing else, with the page's path, a pointer that does not resolve, a name that "
                           f"does not exist and a name bound only in another section among them; a bake writes the pages, their twins (the "
                           f"files themselves), llms.txt, index.json and names.json as the head says, links each pointer (a symbol, a file, a "
-                          f"directory, a library's) to the pin, names the twin on the page, nests no link in the list of questions, and "
+                          f"directory, a library's) to the pin, names the twin on the page, nests no link in the list of questions, puts "
+                          f"the book's contents beside every page (the page shown marked, its branch open, a page in outline without an "
+                          f"address) and offers the colours the stylesheet has palettes for, put on before it is read; it "
                           f"writes the sitemap, the whole and a canonical URL for the book alone; the link gate stops a bake with a link to "
                           f"nowhere and the command reports its count; a directory the bake did not make is not emptied.")
 

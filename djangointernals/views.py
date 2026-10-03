@@ -5,6 +5,10 @@ a page, a department's landing page and the contents is in the page itself:
 an index page has children, and the template lists them under its text. The
 twin and the agent's files (doors.py) are views too, so `runserver` serves
 them live and the bake writes what they answer.
+
+Two things stand beside every page and are the site's, never a page's: the
+book's contents as a navigation (`contents`), and the reader's choice of
+colours (`COLOURS`, which names the palettes the stylesheet has).
 """
 from django.conf import settings
 from django.http import Http404, HttpResponse
@@ -35,6 +39,36 @@ def verified_against(page, tree) -> str:
     return mark_safe(books.COMMIT.sub(link, escape(page.meta.get("django", ""))))
 
 
+COLOURS = (
+    # (the value kept in the reader's browser and set on the root element, the word shown).
+    # The stylesheet has a palette for each value; the first is no value: the reader's system decides.
+    ("", "Auto"),
+    ("paper", "Paper"),
+    ("white", "White"),
+    ("sepia", "Sepia"),
+    ("dusk", "Dusk"),
+    ("night", "Night"),
+)
+
+
+def contents(book, here=None) -> list[dict]:
+    """The book's tree as the navigation beside a page shows it, from the contents page down:
+    every page directly under the contents page, and below each only the branch that leads to
+    `here`, the page being shown, with that page's own pages and its sections under it. A page
+    in outline is an entry with no address: it has none."""
+    branch = {book.index, *here.ancestors, here} if here is not None else {book.index}
+
+    def entry(page) -> dict:
+        return {
+            "page": page,
+            "here": page is here,
+            "children": [entry(child) for child in page.children] if page in branch else [],
+            "sections": page.sections if page is here else [],
+        }
+
+    return [entry(book.index)]
+
+
 def published(id: str):
     book = books.current()
     found = book.pages.get(id)
@@ -50,6 +84,8 @@ def page(request, id):
     return render(request, "djangointernals/page.html", {
         "book": book,
         "page": found,
+        "nav": contents(book, found),
+        "colours": COLOURS,
         "verified_against": verified_against(found, book.pin),
         "twin": doors.twin_url(found),
         "before": before,
@@ -94,7 +130,8 @@ def sitemap(request):
 
 
 def not_found(request, exception=None):
-    return render(request, "djangointernals/404.html", {"book": books.current()}, status=404)
+    book = books.current()
+    return render(request, "djangointernals/404.html", {"book": book, "nav": contents(book), "colours": COLOURS}, status=404)
 
 
 def robots(request):

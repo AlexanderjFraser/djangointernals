@@ -1,0 +1,7 @@
+<ol>{% for entry in entries %}
+<li>{% if entry.page.published %}<a href="{{ entry.page.url }}"{% if entry.here %} aria-current="page"{% endif %}>{% if entry.page.id %}{{ entry.page.title_html_unlinked|safe }}{% else %}Contents{% endif %}</a>{% else %}<span class="outlined" title="This page is outlined and not yet written.">{{ entry.page.title_html_unlinked|safe }}</span>{% endif %}{% if entry.sections %}
+<ol class="sections">{% for section in entry.sections %}
+<li><a href="#{{ section.id }}">{{ section.title_html_unlinked|safe }}</a></li>{% endfor %}
+</ol>{% endif %}{% if entry.children %}
+{% include "djangointernals/nav.html" with entries=entry.children %}{% endif %}</li>{% endfor %}
+</ol>

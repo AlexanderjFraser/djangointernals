@@ -5,11 +5,17 @@
    about a page: where it is, what it was verified against, its status, its
    captions), a mono for the names of the source. One accent, a rubric red,
    for links and for the section mark. Tables and figures may be wider than
-   the text. Light and dark follow the reader's system; nothing here needs a
-   script.
+   the text. Beside the column, where there is room, the book's contents; on
+   a narrow screen they open under the running head when asked for.
+
+   The colours are five palettes: Paper and Dusk, which follow the reader's
+   system unless the reader chooses, and White, Sepia and Night, which are
+   chosen. The choice is the root element's data-colours, set by the page's
+   one script (site.js) from what the reader last picked; with no script the
+   system decides, and nothing else here needs one.
 
    Every colour is a custom property of :root, so a figure, which carries
-   classes and never a colour, follows the theme with the page. A department
+   classes and never a colour, follows the palette with the page. A department
    adds its own figure classes in figures/figures.css in its own directory of
    the book, which the site puts on that department's pages only; it does not
    restyle the apparatus. */
@@ -45,9 +51,13 @@
   --measure: 34em;
   --wide: 52em;
   --gutter: 1.25rem;
+  --beside: 17rem;
 }
+/* The palettes. :root above is Paper. With no choice made, a system that asks for dark gets Dusk;
+   a choice (data-colours on the root element) outranks the system. Each text colour is at least
+   5 to 1 against both grounds of its palette. views.COLOURS names the choices the control offers. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-colours]) {
     --paper: #181613;
     --paper-2: #23201b;
     --ink: #e6e1d7;
@@ -56,10 +66,49 @@
     --accent: #e9866c;
   }
 }
+:root[data-colours="paper"], :root[data-colours="white"], :root[data-colours="sepia"] { color-scheme: light; }
+:root[data-colours="dusk"], :root[data-colours="night"] { color-scheme: dark; }
+:root[data-colours="white"] {
+  --paper: #ffffff;
+  --paper-2: #f4f4f1;
+  --ink: #1b1b1a;
+  --ink-2: #5c5c58;
+  --rule: #dededa;
+}
+:root[data-colours="sepia"] {
+  --paper: #f2e8d3;
+  --paper-2: #e8dcc1;
+  --ink: #2f261a;
+  --ink-2: #65563f;
+  --rule: #d2c3a3;
+  --accent: #8c2a12;
+}
+:root[data-colours="dusk"] {
+  --paper: #181613;
+  --paper-2: #23201b;
+  --ink: #e6e1d7;
+  --ink-2: #a8a195;
+  --rule: #3d3931;
+  --accent: #e9866c;
+}
+:root[data-colours="night"] {
+  --paper: #000000;
+  --paper-2: #141311;
+  --ink: #d9d4ca;
+  --ink-2: #9c968b;
+  --rule: #302d28;
+  --accent: #e9866c;
+}
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 1.5rem; }
 body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas: "running" "beside" "main" "colophon";
+  min-height: 100vh;
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -77,6 +126,8 @@ a:hover { text-decoration-thickness: 0.12em; }
 a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 1px; }
 ::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
 
+main { grid-area: main; min-width: 0; align-content: start; }
+
 /* The column: text at the measure; a table or a wide figure may take the margins too. */
 .column, .section, .head, .contents { display: grid; grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--measure)) minmax(var(--gutter), 1fr); }
 .column > *, .section > *, .head > *, .contents > * { grid-column: 2; min-width: 0; }
@@ -89,14 +140,51 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
   max-width: min(var(--wide), 100% - 2 * var(--gutter));
 }
 
-/* The running head: where this page is in the book. */
-.running { font-family: var(--sans); font-size: 0.8em; border-bottom: 1px solid var(--rule); }
-.running nav { max-width: calc(var(--wide) * 1.25 + 2 * var(--gutter)); margin: 0 auto; padding: 0.7em var(--gutter); display: flex; flex-wrap: wrap; gap: 0.1em 0.55em; align-items: baseline; }
+/* The running head: where this page is in the book, and at its end what the reader can set:
+   the contents opened (on a narrow screen, where they are not beside the page) and the colours. */
+.running { grid-area: running; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.3em 1.4em; padding: 0.7em var(--gutter); font-family: var(--sans); font-size: 0.8em; border-bottom: 1px solid var(--rule); }
+.running .crumbs { display: flex; flex-wrap: wrap; gap: 0.1em 0.55em; align-items: baseline; }
 .running a { color: var(--ink-2); text-decoration: none; }
 .running a:hover { color: var(--ink); text-decoration: underline; }
 .running .book { color: var(--ink); font-weight: 600; letter-spacing: 0.01em; }
 .running .mark { color: var(--accent); font-family: var(--serif); font-weight: 600; }
 .running .sep { color: var(--rule); }
+.running .controls { display: flex; align-items: baseline; gap: 1.2em; margin-left: auto; color: var(--ink-2); }
+.open-contents { position: relative; cursor: pointer; font-weight: 600; color: var(--ink); user-select: none; }
+.open-contents input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.open-contents::after { content: " +"; color: var(--accent); }
+.open-contents:has(input:checked)::after { content: " \2212"; }
+.open-contents:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 1px; }
+.colours select { margin-left: 0.25em; padding: 0.05em 0.2em; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; }
+.colours select:hover { border-color: var(--ink-2); }
+.colours select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* The book's contents, beside the page: every page under the contents page, the branch that
+   leads to this page opened, and this page's own sections under it. On a narrow screen they
+   are closed until the running head's Contents is pressed, and then stand above the page. */
+.booknav { grid-area: beside; display: none; padding: 0.9rem var(--gutter) 1.1rem; border-bottom: 1px solid var(--rule); font-family: var(--sans); font-size: 0.875rem; line-height: 1.35; }
+body:has(#_contents-open:checked) .booknav { display: block; }
+.booknav ol { margin: 0; padding: 0; list-style: none; }
+.booknav li { margin: 0; }
+.booknav a, .booknav .outlined { display: block; padding: 0.3em 0; color: var(--ink-2); text-decoration: none; }
+.booknav a:hover { color: var(--accent); }
+.booknav code { font-size: 0.9em; }
+.booknav .outlined { text-decoration: underline dotted var(--rule); text-underline-offset: 0.2em; cursor: help; }
+.booknav > ol > li > a { margin-bottom: 0.35em; font-size: 0.82em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
+.booknav > ol > li > ol > li > a, .booknav > ol > li > ol > li > .outlined { font-weight: 600; color: var(--ink); }
+.booknav > ol > li > ol > li > .outlined { font-weight: 500; color: var(--ink-2); }
+.booknav > ol > li > ol > li ol { margin: 0.1em 0 0.45em 0.2em; padding-left: 0.85em; border-left: 1px solid var(--rule); }
+.booknav a[aria-current] { color: var(--accent); font-weight: 600; }
+.booknav .sections { font-size: 0.93em; }
+.booknav .sections a { padding: 0.22em 0; font-weight: 400; }
+.booknav > ol > li > .sections { margin: 0 0 0.6em 0.2em; padding-left: 0.85em; border-left: 1px solid var(--rule); }
+
+@media (min-width: 62em) {
+  body { grid-template-columns: var(--beside) minmax(0, 1fr); grid-template-rows: auto 1fr auto; grid-template-areas: "running running" "beside main" "beside colophon"; }
+  body::before { content: ""; grid-area: beside; border-right: 1px solid var(--rule); }
+  .booknav, body:has(#_contents-open:checked) .booknav { display: block; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 1.9rem 1.1rem 2rem var(--gutter); border-bottom: 0; }
+  .open-contents { display: none; }
+}
 
 /* The head of a page: its title, its lede, and what the site says about it. */
 .head { padding-top: 3.2em; }
@@ -221,13 +309,15 @@ figcaption::before { content: "Figure " counter(figure) ". "; font-weight: 600; 
 .turn .after { margin-left: auto; text-align: right; }
 
 /* The colophon. */
-.colophon { margin-top: 4em; padding: 1.3em 0 2.4em; border-top: 1px solid var(--rule); }
+.colophon { grid-area: colophon; margin-top: 4em; padding: 1.3em 0 2.4em; border-top: 1px solid var(--rule); }
 .colophon div { font-family: var(--sans); font-size: 0.78em; line-height: 1.5; color: var(--ink-2); }
 .colophon p { margin: 0 0 0.45em; }
 .colophon a { color: inherit; }
 
+/* On paper: the page alone, in black on white whatever the reader chose on the screen. */
 @media print {
-  :root { --paper: #fff; --paper-2: #f4f4f4; --ink: #000; --ink-2: #444; --rule: #bbb; --accent: #7a1f10; }
-  .running, .turn, .anchor, .figure .source { display: none; }
-  body { font-size: 10.5pt; }
+  :root, :root[data-colours] { --paper: #fff; --paper-2: #f4f4f4; --ink: #000; --ink-2: #444; --rule: #bbb; --accent: #7a1f10; }
+  body { display: block; font-size: 10.5pt; }
+  body::before { content: none; }
+  .running, .booknav, .turn, .anchor, .figure .source { display: none !important; }
 }

@@ -333,8 +333,10 @@ WSGIHandler.__init__, when an instance of WSGIHandler itself is made
 - **A figure carries classes and no colour**: no `style`, `fill`,
   `stroke`, `color` or font attribute anywhere in the file (**baked**).
   The book's classes are in the site's stylesheet (`box`, `line`, `head`,
-  `name`, `quiet`, `mark`, `mark-line`), so a figure follows the reader's
-  light or dark theme. A department adds its own classes (section 11).
+  `name`, `quiet`, `mark`, `mark-line`), so a figure follows the colours
+  the reader has chosen, as the page does: the site has five palettes, and
+  a figure is looked at in a light one and a dark one before its page is
+  called written. A department adds its own classes (section 11).
 - **The caption** is the paragraph directly under the block, one italic
   run from end to end (**baked**). It says what the picture shows, in the
   present tense, and never points at its own figure. A name in it is in a
@@ -385,10 +387,17 @@ is prose.
 ## 11 · What is the same everywhere, and what is a department's own
 
 **The apparatus is the site's, and identical on every page**: where the
-page is in the book; the title and the lede; what it was verified against;
-its status, in the site's words; what it is the home of; the questions it
-answers; and at the foot, the pages before and after, the licence, the
-disclaimer, and where to report an error. No page writes any of it.
+page is in the book; the book's contents beside the page, with the page
+marked and its own sections under it; the title and the lede; what it was
+verified against; its status, in the site's words; what it is the home
+of; the questions it answers; and at the foot, the pages before and
+after, the licence, the disclaimer, and where to report an error. No page
+writes any of it. The contents beside a page are derived from the heads,
+like the contents page itself: a page in outline is there by its title,
+with no address. The colours are the reader's choice among the site's
+palettes (the reader's system decides until they choose), kept in their
+browser by the site's one script; nothing a page says may depend on a
+colour.
 
 **A department has its own voice and its own figures.** Each part of
 Django reads as a discipline a reader may already know: a database, a

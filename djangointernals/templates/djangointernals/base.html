@@ -7,21 +7,32 @@
 {% block meta %}{% endblock %}
 {% if twin %}<link rel="alternate" type="text/markdown" href="{{ twin }}" title="This page as markdown">
 {% endif %}{% if not indexable %}<meta name="robots" content="noindex">
-{% endif %}<link rel="preload" href="{% static 'fonts/source-serif-4-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+{% endif %}<script>try{var c=localStorage.getItem("colours");if(c)document.documentElement.setAttribute("data-colours",c)}catch(e){}</script>
+<link rel="preload" href="{% static 'fonts/source-serif-4-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{% static 'site.css' %}">
 {% if figure_grammar %}<style>
 {{ figure_grammar }}</style>
 {% endif %}<link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+<script src="{% static 'site.js' %}" defer></script>
 </head>
 <body>
 <header class="running">
-<nav aria-label="Where this page is in the book">
+<nav class="crumbs" aria-label="Where this page is in the book">
 <a class="book" href="/"><span class="mark" aria-hidden="true">§</span> {{ book.index.title_text }}</a>{% for above in page.ancestors %}{% if above.id %}<span class="sep" aria-hidden="true">/</span><a href="{{ above.url }}">{{ above.title_text }}</a>{% endif %}{% endfor %}
 </nav>
+<div class="controls">
+<label class="open-contents"><input type="checkbox" id="_contents-open"> Contents</label>
+<label class="colours" hidden>Colours <select id="_colours">{% for value, word in colours %}
+<option value="{{ value }}">{{ word }}</option>{% endfor %}
+</select></label>
+</div>
 </header>
 <main class="column">
 {% block main %}{% endblock %}
 </main>
+<nav class="booknav" aria-label="The book's contents">
+{% include "djangointernals/nav.html" with entries=nav %}
+</nav>
 <footer class="colophon column">
 <div>
 <p>{{ book.index.title_text }}{% if indexable %} · <a href="{{ site_url }}">djangointernals.dev</a>{% endif %}. Not affiliated with or endorsed by the Django Software Foundation.</p>
