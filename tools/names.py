@@ -57,8 +57,11 @@ How a name is written, and where it is looked for, in this order:
 5. From the standard library, with its module: `asyncio.Lock`, `threading.local`. The
    standard library is not pinned: the name is checked by importing it, in the Python that
    runs the gate, so a verdict can differ between machines and Python versions; where the
-   module cannot be imported (`fcntl` on Windows) the name is counted as not checked. The
-   last line of a run says which Python it was.
+   module cannot be imported (`fcntl` on Windows) the name is counted as not checked. A
+   member that the module lacks on the machine (`time.tzset` on Windows) is refused, and
+   the refusal says which Python and which platform; where an indexed file also defines
+   the first name (Django has a function `time`), the refusal gives both answers, the
+   file's and the library's. The last line of a run says which Python it was.
 6. From a library the subject imports that the book does not pin: accepted on its first
    name alone, and counted as not checked.
 
@@ -347,7 +350,8 @@ class Gate:
         for at in range(length, len(parts)):
             if not hasattr(found, parts[at]):
                 version = ".".join(str(x) for x in sys.version_info[:2])
-                raise Unresolved(f"the standard library's `{'.'.join(parts[:at])}` has no `{parts[at]}` (Python {version})")
+                raise Unresolved(f"the standard library's `{'.'.join(parts[:at])}` has no `{parts[at]}` (Python {version} on "
+                                 f"{sys.platform}: a member another platform alone has is refused here, and is written in quotes)")
             found = getattr(found, parts[at])
         return "standard"
 
@@ -440,7 +444,8 @@ class Gate:
             try:
                 return self.standard(parts), f"the standard library, Python {version}"
             except Unresolved as why:
-                refusal = refusal or why
+                # a first name the trees and the standard library both have, and the rest in neither: both answers
+                refusal = Unresolved(f"{refusal}; and {why}") if refusal else why
         if refusal:
             raise refusal
         if (name,) in declared or (name,) in self.listed:
@@ -899,6 +904,9 @@ def probe() -> int:
         # a first name the trees and the standard library both have: the trees first, then the library
         passes("string", "string.ascii_letters")
         refused("string.nope", "`string` in pkg/messages.py is an assignment")
+        # ... and where neither has the rest, the refusal gives both answers, and the library's says where it was asked
+        refused("string.nope", "nothing can be named inside it; and the standard library's `string` has no `nope`")
+        refused("asyncio.Lok", f"(Python {sys.version_info[0]}.{sys.version_info[1]} on {sys.platform}: a member another platform")
         refused("__html__", "no module of")
         refused("unknownlib.Client", "no module of")
         # calls, decorators, bare members, and what is not a name at all
