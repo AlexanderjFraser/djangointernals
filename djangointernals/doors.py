@@ -1,8 +1,8 @@
 """The doors for an agent, each derived from the pages and nothing else.
 
     /<id>.md         the twin: the page's markdown file, byte for byte (`/index.md` for the contents)
-    /llms.txt        the book on one screen, llmstxt.org's index form: one line per written page,
-                     linking its twin, with its lede
+    /llms.txt        the book's map, llmstxt.org's index form: one line per written page, linking
+                     its twin, with its lede
     /llms-full.txt   every written page in reading order, in one file (only when the book is indexable)
     /index.json      the book as data: the pin, the doors, every page's head, outlined pages included
                      (an outlined page: its title, lede, status, `owns`, and its sections, which are
@@ -89,8 +89,9 @@ def llms(book, indexable: bool) -> str:
     lines.append(
         f"Verified against Django {index.meta.get('django', '')}: every name in a code span exists in the source at "
         f"that commit, and every claim carries a pointer, `path:Symbol`, that resolves there. Every link below is a "
-        f"page as markdown, the page's address with `.md` after it; drop the `.md` for the rendered page. The book as "
-        f"data, outlined pages included: {site}/index.json. Every name and where it is explained: {site}/names.json."
+        f"page as markdown, the page's address with `.md` after it; drop the `.md` for the rendered page, where each "
+        f"pointer is a link to its lines at that commit. The book as data, outlined pages included: {site}/index.json. "
+        f"Every name, where it is explained, and for a pointer the link to its lines: {site}/names.json."
         + (f" The whole book in one file: {site}/llms-full.txt." if indexable else ""))
     lines.append("")
     for top in book.index.children:
@@ -105,7 +106,7 @@ def whole(book) -> str:
     """llms-full.txt: every written page's file, in reading order."""
     site = site_url()
     parts = [f"# {book.index.title_md}\n\nOne file, every written page of the book in reading order, each as its "
-             f"markdown twin. The book on one screen: {site}/llms.txt\n"]
+             f"markdown twin. The book's map, a line a page: {site}/llms.txt\n"]
     for page in book.order:
         if page.published:
             parts.append(f"\n\n<!-- {site}{twin_url(page)} -->\n\n" + page.source.read_bytes().decode("utf-8").replace("\r\n", "\n").rstrip("\n") + "\n")
@@ -171,7 +172,11 @@ def names(book) -> dict:
                 paths.setdefault(shown_path, set()).add(where)
                 if symbol:
                     found.setdefault(symbol, {"home": None, "where": set()})["where"].add(where)
-                    found.setdefault(f"{shown_path}:{symbol}", {"home": None, "where": set()})["where"].add(where)
+                    whole = found.setdefault(f"{shown_path}:{symbol}", {"home": None, "where": set()})
+                    whole["where"].add(where)
+                    linked = gates.link(span.body)
+                    if linked:
+                        whole["url"] = linked[0]  # the lines it lands on at the pin, which a twin does not carry
             else:
                 kind, name = gating.names.take(span.body)
                 if kind in ("name", "call") and name:
@@ -184,10 +189,13 @@ def names(book) -> dict:
         "generated": GENERATED,
         "site": site_url(),
         "about": "For a name, `home` is the page that explains it in full (its head's `owns`), and `where` every "
-                 "section that mentions it. A name is keyed as written, so one that several modules define merges "
-                 "its mentions; a pointer is keyed whole too (`path:Symbol`), which tells them apart. Under `paths`, "
-                 "for a file of the source, the sections that point into it.",
-        "names": {name: {"home": entry["home"], "where": sorted(entry["where"])} for name, entry in sorted(found.items())},
+                 "section that mentions it, as the page's address and the section's anchor; an address with no anchor "
+                 "is the page's head, its lede and what it asserts in brief. A name is keyed as written, so one that "
+                 "several modules define merges its mentions; a pointer is keyed whole too (`path:Symbol`), which tells "
+                 "them apart, and that entry's `url` is the lines it lands on at the pinned commit, which the markdown "
+                 "twins do not carry. Under `paths`, for a file of the source, the sections that point into it.",
+        "names": {name: {"home": entry["home"], "where": sorted(entry["where"]), **({"url": entry["url"]} if "url" in entry else {})}
+                  for name, entry in sorted(found.items())},
         "paths": {path: sorted(where) for path, where in sorted(paths.items())},
     }
 

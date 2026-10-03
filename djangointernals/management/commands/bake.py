@@ -353,8 +353,9 @@ class Command(BaseCommand):
             if entry != {"home": "/a", "where": ["/a#first"]} or names["paths"].get("django/core/handlers/base.py") != ["/a#first", c_section]:
                 fail(f"names.json does not say where a name is explained and where it is mentioned: {entry}, {names['paths'].get('django/core/handlers/base.py')}")
             if ("import_string" not in names["names"] or "asgiref:asgiref/sync.py" not in names["paths"]
-                    or f"{pointer}" not in names["names"] or "QuerySet._fetch_all" in names["names"]):
-                fail("names.json does not index a call, a library's path and a whole pointer, or indexes an outlined page")
+                    or f"{pointer}" not in names["names"] or "QuerySet._fetch_all" in names["names"]
+                    or not names["names"][pointer].get("url", "").endswith(f"/django/core/handlers/base.py#L{lines[0]}-L{lines[1]}")):
+                fail("names.json does not index a call, a library's path and a whole pointer with the link to its lines, or indexes an outlined page")
             headers = (written / "_headers").read_text(encoding="utf-8")
             if "X-Robots-Tag: noindex" not in headers or "/*.md\n  Content-Type: text/markdown" not in headers:
                 fail("the headers do not keep a book that is not indexable out of the index, or do not give the twins their type")
