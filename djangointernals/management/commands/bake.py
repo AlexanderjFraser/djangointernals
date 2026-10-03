@@ -356,6 +356,11 @@ class Command(BaseCommand):
             missing = (written / "404.html").read_text(encoding="utf-8")
             if '<a href="/a">' not in beside(missing) or "aria-current" in missing:
                 fail("the page for a missing address carries no navigation, or marks a page as the one shown")
+            # what the site itself gives an id begins with an underscore, which no heading's address can
+            # (a heading's address is its slug, and a slug never begins with one): `## Contents` cannot collide
+            own_ids = set(re.findall(r'\bid="([^"]*)"', index_html)) - {"one"}
+            if not own_ids or any(not i.startswith("_") for i in own_ids):
+                fail(f"the site gives an element of a page an id a heading could also come to: {sorted(own_ids)}")
             # the reader's colours: put on before the stylesheet is read, and a palette in the stylesheet for each one offered
             head_html = page.split("</head>", 1)[0]
             if not 0 <= head_html.find('localStorage.getItem("colours")') < head_html.find('rel="stylesheet"'):
