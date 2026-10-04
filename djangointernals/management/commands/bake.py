@@ -178,7 +178,8 @@ class Command(BaseCommand):
         figure = good["a.md"] + "\n```text figure=one\nx\n```\n\n*A caption.*\n"
         svg = '<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 10 10"><rect class="box" width="5" height="5"/></svg>'
         drawn = "a/figures/one.svg"
-        with_figure = {**good, "a.md": figure + "\n| x | y |\n|---|---|\n| 1 | 2 |\n\n*What the table shows.*\n", drawn: svg}
+        with_figure = {**good, "a.md": figure + "\n| x | y |\n|---|---|\n| 1 | 2 |\n\n*What the table shows.*\n\n> **Why.** A reason.\n\n> Somebody's words.\n",
+                       drawn: svg}
         plain = head + "# A\n\nLede.\n\n## First\n\nText.\n"
         cases = [
             ("a page with no front matter", {"a.md": "# A\n\nLede.\n\n## First\n\nText.\n"}, "begins with its front matter"),
@@ -439,6 +440,8 @@ class Command(BaseCommand):
                 fail("a figure or a captioned table is not numbered by its chapter and its place in it")
             if '<figure class="figure" id="figure-one"' not in with_numbers or "<svg" not in with_numbers or "figure=one" in with_numbers:
                 fail("a figure is not put into the page as its SVG, or its source is shown beside it")
+            if with_numbers.count('<aside class="note">') != 1 or with_numbers.count("<blockquote>") != 1:
+                fail("a quotation that opens with a label in bold is not a note, or one that does not is")
             # the book published: indexable, with its sitemap and its whole
             settings.INDEXABLE = True
             try:

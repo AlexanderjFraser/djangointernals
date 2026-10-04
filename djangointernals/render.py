@@ -198,7 +198,8 @@ class Rules:
     def blockquote_open(self, tokens, idx, options, env):
         """A quotation that opens with a phrase in bold is a note, and the phrase its label."""
         first = tokens[idx + 2] if idx + 2 < len(tokens) and tokens[idx + 1].type == "paragraph_open" else None
-        note = first is not None and bool(first.children) and first.children[0].type == "strong_open"
+        opening = [child for child in (first.children or []) if not (child.type == "text" and not child.content)] if first is not None else []
+        note = bool(opening) and opening[0].type == "strong_open"
         env.setdefault("quotes", []).append("aside" if note else "blockquote")
         return '<aside class="note">\n' if note else "<blockquote>\n"
 
