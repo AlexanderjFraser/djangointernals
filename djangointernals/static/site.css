@@ -192,6 +192,9 @@ body:has(#_contents-open:checked) .booknav { display: block; }
   .flow > .sources .src { margin-bottom: 0.6em; }
   .flow > .sources .src code, .flow > .sources .src .in { display: block; }
   .flow > .table, .flow > .tabular, .flow > .figure.wide { grid-column: 2 / 5; }
+  /* A block of code is as wide as the text, and wider, into the margin, when its lines need it
+     (0.8 is the size a block of code is set at: its own em is that much smaller than the text's). */
+  .flow > pre { grid-column: 2 / 5; justify-self: start; width: max-content; min-width: calc(var(--measure) / 0.8); max-width: 100%; }
 }
 
 /* The head of a page. */
