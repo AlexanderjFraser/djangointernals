@@ -41,7 +41,9 @@ A page lists its children in its front matter: `contents: entry, chain` in
 `pages/handlers/chain.md` its sections, in that order. Adding a page is
 writing its file and adding its name there; nothing else lists it. A name
 is lower-case words joined by hyphens, and once a page is published its
-name is permanent: an address is a promise.
+name is permanent: an address is a promise. Where a page has to move all
+the same, its old address is listed in `pages/_redirects` with the new one,
+and the site answers the old with a redirect.
 
 **A page that is only its title and one paragraph is planned, not
 written.** It has a line in the contents, and no page and no address until

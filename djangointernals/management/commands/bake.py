@@ -15,7 +15,9 @@ it its twin, `<id>.md`, the page's file as it is. A planned page (a title
 and a line) gets no file: it is a line in the contents. Then the agent's
 files (doors.py): `llms.txt`, `index.json`, `names.json`, and when the book
 is indexable `llms-full.txt` and `sitemap.xml`; `404.html`; `robots.txt`;
-Cloudflare Pages's `_headers`; and the static files (an editor's backup, a
+Cloudflare Pages's `_headers`, and its `_redirects` when the book has a
+file of that name (each address in it must lead to a page that was
+written); and the static files (an editor's backup, a
 hidden file and `CVS` left out, as `collectstatic` leaves them). Every page
 carries the book's contents beside it and the choice of colours (views.py),
 which the probe checks as it checks the rest of what a bake writes. Last, the
@@ -130,6 +132,15 @@ class Command(BaseCommand):
         # Not requested like the pages: with DEBUG on, Django answers a missing page itself.
         (out / "404.html").write_bytes(views.not_found(RequestFactory().get("/404")).content)
         (out / "_headers").write_text(doors.headers(views.indexable()), encoding="utf-8", newline="\n")
+        # The addresses that have moved: each must lead to a page or a twin that was just written.
+        moved = doors.redirects(book)
+        for old, new in moved:
+            target = out / (new.lstrip("/") if new.endswith(".md") else f"{new.strip('/') or 'index'}.html")
+            if not old.startswith("/") or not new.startswith("/") or not target.is_file():
+                raise CommandError(f"bake: {books.shown(book.root / '_redirects')}: `{old}` is sent to `{new}`, and "
+                                   f"that is no page of this book (a line is `/old /new 301`)")
+        if moved:
+            shutil.copyfile(book.root / "_redirects", out / "_redirects")
         # The static files, found as `runserver` finds them and copied beside the pages.
         # Not `collectstatic`: that writes to one directory fixed in the settings, not to `out`.
         for finder in finders.get_finders():
@@ -174,6 +185,7 @@ class Command(BaseCommand):
             "b.md": head + "# B\n\nLede of B.\n",
             "p.md": headed(part="Second", contents="c") + "# P\n\nLede of P.\n\n## Only\n\nText.\n",
             "p/c.md": head + "# C\n\nLede of C.\n\n## What `django/core/handlers/base.py:BaseHandler.get_response` does, and [A](../a.md)?\n\nText.\n",
+            "_redirects": "# addresses that have moved\n/old /a 301\n/old.md /a.md 301\n/old/* /p/c 301\n/first / 301\n",
         }
         figure = good["a.md"] + "\n```text figure=one\nx\n```\n\n*A caption.*\n"
         svg = '<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 10 10"><rect class="box" width="5" height="5"/></svg>'
@@ -425,6 +437,17 @@ class Command(BaseCommand):
                 fail("the headers do not keep a book that is not indexable out of the index, or do not give the twins their type")
             if self.faults(written):
                 fail("the link gate failed on a good bake: " + "; ".join(self.faults(written)))
+            # the addresses that have moved: copied for the host as they are, and refused when one leads nowhere
+            if not (written / "_redirects").is_file() or (written / "_redirects").read_bytes() != (good_root / "_redirects").read_bytes():
+                fail("the book's _redirects was not written beside the pages as it is")
+            astray = Path(scratch) / "astray"
+            put(astray, {**good, "_redirects": "/old /nowhere 301\n"})
+            try:
+                self.write(books.load(astray), Path(scratch) / "astray-out")
+                fail("a redirect that leads to no page of the book was let through")
+            except CommandError as refused:
+                if "is no page of this book" not in str(refused) or (Path(scratch) / "astray-out").exists():
+                    fail(f"a redirect that leads nowhere was refused in other words, or something was written: {refused}")
             # the link gate stops a bake whose output holds a link that does not resolve
             (written / "stray.html").write_text('<a href="/nowhere">x</a>', encoding="utf-8")
             try:
@@ -487,8 +510,9 @@ class Command(BaseCommand):
                           f"chapters, sections, parts, figures and captioned tables carry their numbers; no page prints a section sign or "
                           f"a block about itself; the book's contents stand beside every page (the page shown marked, its chapter open) "
                           f"with the colours the stylesheet has palettes for, put on before it is read; the sitemap, the whole and a "
-                          f"canonical URL are written for an indexable book alone; the link gate stops a bake with a link to nowhere and "
-                          f"the command reports its count; a directory the bake did not make is not emptied.")
+                          f"canonical URL are written for an indexable book alone; the book's list of addresses that have moved is "
+                          f"copied for the host, and refused when one leads to no page; the link gate stops a bake with a link to "
+                          f"nowhere and the command reports its count; a directory the bake did not make is not emptied.")
 
     @staticmethod
     def faults(out: Path) -> list[str]:

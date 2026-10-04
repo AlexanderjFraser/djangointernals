@@ -13,6 +13,10 @@
                      (`path:Symbol`), which tells them apart
     /sitemap.xml     every written page's address (only when the book is indexable)
 
+And two files for the host, Cloudflare Pages: `_headers` (the twins' media type; `noindex`
+while the book is not indexable) and `_redirects` (the addresses that have moved, which the
+book lists in a file of that name at its root).
+
 One fact, one home: the title, the lede, the sections and the numbers are
 read from the pages, so nothing here can drift from them. No dates and no
 machine paths, so a bake is the same bytes on every machine. The views in
@@ -218,6 +222,23 @@ def headers(indexable: bool) -> str:
     if not indexable:
         out += "\n/*\n  X-Robots-Tag: noindex\n"
     return out
+
+
+def redirects(book) -> list[tuple[str, str]]:
+    """The addresses that have moved, as (the old address, where its page is now): the lines of
+    the book's own `_redirects` file, which is Cloudflare Pages's format (`/old /new 301`, a
+    `#` beginning a comment, an old address ending in `/*` taking everything under it). An
+    address is a promise, and this is how one is kept when a page is renamed. The bake checks
+    that each leads to a page it wrote, and copies the file beside the pages."""
+    file = book.root / "_redirects"
+    if not file.is_file():
+        return []
+    moved = []
+    for line in file.read_text(encoding="utf-8").splitlines():
+        words = line.split("#", 1)[0].split()
+        if words:
+            moved.append((words[0], words[1] if len(words) > 1 else ""))
+    return moved
 
 
 def dumps(data: dict) -> str:
