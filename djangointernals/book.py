@@ -1,38 +1,51 @@
-"""The corpus as the site sees it: every page's head, the tree of pages, the reading order.
+"""The book as the site sees it: every page's head, the tree of pages, the reading order, the numbers.
 
-A book is a directory of markdown. `index.md` is its contents page, and
-every other page is reached from it: a page whose front matter has
-`contents: a, b` is an index, and its children are `a.md` and `b.md` in the
+A book is a directory of markdown. `index.md` is its front page, and every
+other page is reached from it: a page whose front matter has
+`contents: a, b` has the children `a.md` and `b.md`, in that order, in the
 directory named after it (for `index.md`, the book's own directory). A
-page's id is its path without `.md`; the index's id is the empty string.
+page's id is its path without `.md`; the front page's id is the empty
+string. The pages directly under the front page are the **chapters**; the
+pages under a chapter are its **sections**.
 
 A page begins with its front matter, between two lines of three hyphens: a
 strict subset of YAML, one `key: value` to a line.
 
-    django      required: the release and the commit the page was verified against, in the
-                page's own words; it must spell out the pinned commit, twelve hex digits or more
-    status      required: outline | verified | read
-    owns        optional: the names this page is the home of, each in a code span
-    contents    optional: the children of an index page, in reading order
+    django      required: the release and the commit the page describes, in the page's own
+                words; it must spell out the pinned commit, twelve hex digits or more
+    part        optional, on a chapter: the part of the book it is in. Chapters that follow
+                one another with the same part are shown under it
+    contents    optional: the children of the page, in reading order
 
 A value is plain text, or in double quotes when it begins with anything but
 a letter or a digit, or holds a colon and a space, or a space and a `#`:
-what a YAML reader would trip on. So `owns` is always quoted.
+what a YAML reader would trip on.
+
+**A page that is only its title and one paragraph is planned, not written**
+(`Page.stub`): it has a line in the contents and no page of its own, and a
+link to it is shown as plain text. Everything else is published.
+
+The numbers are derived here and written nowhere: a chapter's is its place
+under the front page, a section's is its chapter's and its place in it
+(`4.2`), a figure's or a captioned table's is its chapter's and its place in
+the chapter's reading order (`Figure 4.3`), a part's is its place among the
+parts (`Part II`).
 
 `load` reads a book whole and refuses it whole: it raises Refused with every
 problem found, each as `file:line: what is wrong`, or returns a Book in
 which every page is rendered. Beyond what render.py refuses: front matter
-that is not as above; a status that is not one of the three; a `django`
-line without the pinned commit; a child named in `contents` with no file,
-and a markdown file no `contents` names; a written page under an index
-that is still in outline; a link to an anchor its target does not have.
-And what the two gates refuse (gates.py: tools/pointers.py and
-tools/names.py, run on every page, the name gate binding within a section):
-a pointer that does not resolve at the pin, a name that does not exist.
+that is not as above; a `django` line without the pinned commit; `part` on a
+page that is not a chapter; a page under a section (the book is two levels
+deep); a child named in `contents` with no file, and a
+markdown file no `contents` names; a written page under one that is only
+planned; a front page with nothing on it; a link to an anchor its target
+does not have. And what the two gates refuse (gates.py: tools/pointers.py
+and tools/names.py, run on every page, the name gate binding within a
+section): a pointer that does not resolve at the pin, a name that does not
+exist.
 
-What it does not check is what only a reader can: that a page has earned
-the status it claims, and that a pointer names the place that does what its
-sentence says.
+What it does not check is what only a reader can: that a page is right, and
+that a pointer names the place that does what its sentence says.
 """
 from __future__ import annotations
 
@@ -46,20 +59,16 @@ from django.conf import settings
 from . import gates as gating
 from . import render
 
-STATUSES = {
-    "outline": ("Outlined", "Its questions are fixed; it is not yet written."),
-    "verified": ("Verified", "Written from claims that were each checked against the source at this commit."),
-    "read": ("Read", "Verified, then read together with the pages around it and revised after a reader's read."),
-}
-KEYS = ("django", "status", "owns", "contents")
+KEYS = ("django", "part", "contents")
 ENTRY = re.compile(r"([a-z]+): (.*)")
 PLAIN = re.compile(r"[A-Za-z0-9]((?!: | #).)*(?<![:\s])|[A-Za-z0-9]")
 NAME = re.compile(r"[a-z0-9]+(-[a-z0-9]+)*")
 RESERVED = {"index", "404"}  # at every depth: Pages serves a/index.html at /a/ and a/404.html for everything missing under /a/
 RESERVED_AT_TOP = {"static"}
-UNSTYLED = ("<", "url(", "@import", "expression(")  # none of these in a department's figure stylesheet
+UNSTYLED = ("<", "url(", "@import", "expression(")  # none of these in a chapter's figure stylesheet
 COMMIT = re.compile(r"(?<![0-9a-f])[0-9a-f]{12,40}(?![0-9a-f])")
-SPAN = re.compile(r"`([^`]+)`")
+NUMBERED = re.compile("\x02([FT])(\\d+)\x03")  # render.py's mark for the number of a figure or a table
+ROMAN = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII")
 
 
 class Refused(Exception):
@@ -80,35 +89,21 @@ class Page:
     line: int  # how many lines of the file come before the body
     parent: Page | None = None
     children: list[Page] = field(default_factory=list)
+    stub: bool = False  # only a title and one paragraph: planned, with no page of its own
+    number: str = ""  # "4" for a chapter, "4.2" for a section; none for the front page
+    part_label: str = ""  # on a chapter in a part: "Part II · The request cycle"
 
     @property
     def url(self) -> str:
         return "/" + self.id
 
     @property
-    def status(self) -> str:
-        return self.meta.get("status", "")
-
-    @property
     def published(self) -> bool:
-        """An outlined page is an entry in the contents, never a page."""
-        return self.status in ("verified", "read")
-
-    @property
-    def status_word(self) -> str:
-        return STATUSES[self.status][0]
-
-    @property
-    def status_meaning(self) -> str:
-        return STATUSES[self.status][1]
-
-    @property
-    def level(self) -> int:
-        return ("outline", "verified", "read").index(self.status) + 1
+        return not self.stub
 
     @property
     def ancestors(self) -> list[Page]:
-        """From the book's index down to this page's parent."""
+        """From the front page down to this page's parent."""
         out, page = [], self.parent
         while page is not None:
             out.insert(0, page)
@@ -116,10 +111,18 @@ class Page:
         return out
 
     @property
-    def department(self) -> Page | None:
-        """The page directly under the book's index that this page is, or is under."""
+    def chapter(self) -> Page | None:
+        """The page directly under the front page that this page is, or is under."""
         chain = self.ancestors + [self]
         return chain[1] if len(chain) > 1 else None
+
+    @property
+    def is_chapter(self) -> bool:
+        return self.parent is not None and self.parent.parent is None
+
+    @property
+    def part(self) -> str:
+        return self.meta.get("part", "")
 
     @property
     def descendants(self) -> list[Page]:
@@ -127,19 +130,6 @@ class Page:
         for child in self.children:
             out += [child] + child.descendants
         return out
-
-    @property
-    def owns(self) -> list[str]:
-        return SPAN.findall(self.meta.get("owns", ""))
-
-    @property
-    def tally(self) -> dict | None:
-        """For an index: how many of the pages under it are at each status."""
-        under = self.descendants
-        if not under:
-            return None
-        count = {status: sum(1 for page in under if page.status == status) for status in STATUSES}
-        return {**count, "all": len(under), "written": len(under) - count["outline"]}
 
 
 @dataclass
@@ -155,8 +145,18 @@ class Book:
 
     @property
     def order(self) -> list[Page]:
-        """Every page in reading order: an index, then what is under it."""
+        """Every page in reading order: a page, then what is under it."""
         return [self.index] + self.index.descendants
+
+    @property
+    def parts(self) -> list[dict]:
+        """The chapters as the contents show them: runs of chapters that name the same part."""
+        out: list[dict] = []
+        for chapter in self.index.children:
+            if not out or out[-1]["title"] != chapter.part:
+                out.append({"title": chapter.part, "label": chapter.part_label, "chapters": []})
+            out[-1]["chapters"].append(chapter)
+        return out
 
     def neighbours(self, page: Page) -> tuple[Page | None, Page | None]:
         """The written pages before and after this one in reading order."""
@@ -232,7 +232,7 @@ def load(root: Path | None = None) -> Book:
     pin = json.loads(Path(settings.PIN_FILE).read_text(encoding="utf-8"))
     tree = pin["trees"][pin["subject"]]
     if not (root / "index.md").is_file():
-        raise Refused([f"{shown(root)}: there is no index.md here: a book begins at its contents page"])
+        raise Refused([f"{shown(root)}: there is no index.md here: a book begins at its front page"])
     try:
         gates = gating.current()
     except gating.Unavailable as why:
@@ -245,21 +245,18 @@ def load(root: Path | None = None) -> Book:
         where = shown(source)
         text = source.read_bytes().decode("utf-8").replace("\r\n", "\n")
         meta, body, line = front_matter(text, where, problems)
-        page = Page(id, source, where, meta, body, line, parent)
+        page = Page(id, source, where, meta, body, line, parent, stub=render.stub(body))
         book.pages[id] = page
-        for key in ("django", "status"):
-            if key not in meta and line:
-                problems.append(f"{where}:1: the front matter has no `{key}`")
-        if meta.get("status") and meta["status"] not in STATUSES:
-            problems.append(f"{where}:1: the status `{meta['status']}` is not one of {', '.join(STATUSES)}")
-        if meta.get("status") not in STATUSES:
-            meta["status"] = "outline"
+        if "django" not in meta and line:
+            problems.append(f"{where}:1: the front matter has no `django`")
         if meta.get("django") and not any(tree["commit"].startswith(run) for run in COMMIT.findall(meta["django"])):
             problems.append(f"{where}:1: `django` does not spell out the pinned commit, twelve hex digits or more: {tree['commit']}")
-        if meta.get("owns") and (SPAN.sub("", meta["owns"]).replace(",", "").strip() or not page.owns):
-            problems.append(f"{where}:1: `owns` is names, each in a code span, with commas between")
+        if "part" in meta and not page.is_chapter:
+            problems.append(f"{where}:1: `part` is a chapter's: a page directly under the front page")
+        if len(page.ancestors) > 2:
+            problems.append(f"{where}:1: a page under a section: the book is chapters and their sections, and nothing deeper")
         if parent is not None and page.published and not parent.published:
-            problems.append(f"{where}:1: a written page under an index that is still in outline ({parent.where})")
+            problems.append(f"{where}:1: a written page under one that is only a title and a line ({parent.where})")
         for name in [n.strip() for n in meta.get("contents", "").split(",") if n.strip()]:
             child = f"{id}/{name}" if id else name
             if not NAME.fullmatch(name) or name in RESERVED or (not id and name in RESERVED_AT_TOP):
@@ -273,26 +270,44 @@ def load(root: Path | None = None) -> Book:
                 page.children.append(read(child, page))
         return page
 
+    def number(page: Page, prefix: str) -> None:
+        for n, child in enumerate(page.children, start=1):
+            child.number = f"{prefix}{n}"
+            number(child, f"{child.number}.")
+
     read("", None)
+    number(book.index, "")
+    named = [part for part in book.parts if part["title"]]
+    for n, part in enumerate(named):
+        for chapter in part["chapters"]:
+            chapter.part_label = f"Part {ROMAN[n] if n < len(ROMAN) else n + 1} · {part['title']}"
     for source in sorted(root.rglob("*.md")):
         id = source.relative_to(root).with_suffix("").as_posix()
         if id != "index" and id not in book.pages:
             problems.append(f"{shown(source)}:1: no page's `contents` names this file")
-    home: dict[str, Page] = {}
-    for page in book.order:
-        for name in page.owns:
-            if name in home:
-                problems.append(f"{page.where}:1: `owns` names `{name}`, which {home[name].where} is already the home of")
-            home.setdefault(name, page)
     for page in book.pages.values():
         render.render(page, book, problems)
-    for department in book.index.children:
-        stylesheet = root / department.id / "figures" / "figures.css"
+    # the numbers of the figures and the captioned tables: through a chapter, in reading order
+    for top in [book.index] + book.index.children:
+        count = {"F": 0, "T": 0}
+        for page in [top] + (top.descendants if top is not book.index else []):
+            base = dict(count)
+
+            def numbered(match, base=base):
+                return (f"{top.number}." if top.number else "") + str(base[match.group(1)] + int(match.group(2)))
+
+            page.brief_html = NUMBERED.sub(numbered, page.brief_html)
+            for section in page.sections:
+                section["html"] = NUMBERED.sub(numbered, section["html"])
+            count["F"] += len(page.figures)
+            count["T"] += page.tables
+    for chapter in book.index.children:
+        stylesheet = root / chapter.id / "figures" / "figures.css"
         if stylesheet.is_file():
             text = stylesheet.read_bytes().decode("utf-8", "replace")
             held = [token for token in UNSTYLED if token in text]
             if held:
-                problems.append(f"{shown(stylesheet)}:1: a department's figure stylesheet is classes and nothing else: it holds "
+                problems.append(f"{shown(stylesheet)}:1: a chapter's figure stylesheet is classes and nothing else: it holds "
                                 + ", ".join(f"`{token}`" for token in held))
     for page in book.pages.values():
         for where, href, target, fragment in page.fragments:
@@ -303,7 +318,7 @@ def load(root: Path | None = None) -> Book:
     for page in book.order:
         problems += gates.problems(page)
     if not book.index.published:
-        problems.append(f"{book.index.where}:1: the contents page is in outline: there is nothing to publish")
+        problems.append(f"{book.index.where}:1: the front page is only a title and a line: there is nothing to publish")
     if problems:
         raise Refused(problems)
     return book
@@ -315,7 +330,7 @@ _cache: dict = {}
 def current() -> Book:
     """The book at settings.BOOK_DIR, read again whenever one of its files has changed."""
     root = Path(settings.BOOK_DIR)
-    stamp = tuple(sorted((str(p), p.stat().st_mtime_ns) for p in root.rglob("*") if p.suffix in (".md", ".svg")))
+    stamp = tuple(sorted((str(p), p.stat().st_mtime_ns) for p in root.rglob("*") if p.suffix in (".md", ".svg", ".css")))
     if _cache.get("key") != (root, stamp):
         _cache.update(key=(root, stamp), book=load(root))
     return _cache["book"]

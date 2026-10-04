@@ -4,43 +4,57 @@
 {% if indexable %}<link rel="canonical" href="{{ site_url }}{{ page.url }}">
 {% endif %}{% endblock %}
 {% block main %}
-<header class="head">
-{% if page.parent and page.parent.id %}<p class="kicker"><a href="{{ page.parent.url }}">{{ page.parent.title_text }}</a></p>{% endif %}
+{% if front %}<header class="head title-page flow">
 <h1>{{ page.title_html|safe }}</h1>
 <p class="lede">{{ page.lede_html|safe }}</p>
-<dl class="apparatus">
-<div><dt>Verified against</dt><dd>Django {{ verified_against }}</dd></div>
-<div><dt>Status</dt><dd>{% include "djangointernals/status.html" with level=page.level word=page.status_word %}. {{ page.status_meaning }}{% if page.tally %} Of the {{ page.tally.all }} page{{ page.tally.all|pluralize }} under it, {{ page.tally.written }} {{ page.tally.written|pluralize:"is,are" }} written{% if page.tally.outline %} and {{ page.tally.outline }} {{ page.tally.outline|pluralize:"is,are" }} in outline{% endif %}.{% endif %}</dd></div>
-{% if page.owns %}<div><dt>The home of</dt><dd>{% for name in page.owns %}<code>{{ name }}</code>{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>{% endif %}
-<div><dt>For an agent</dt><dd>This page as markdown: <a href="{{ twin }}"><code>{{ twin }}</code></a>. The book's map, a line a page: <a href="/llms.txt"><code>/llms.txt</code></a>; every name, where it is explained, and a pointer's lines: <a href="/names.json"><code>/names.json</code></a>.</dd></div>
-</dl>
+<p class="edition">Django {{ edition }}</p>
 </header>
-{% if page.brief_html %}<div class="brief section">
+{% elif page.is_chapter %}<header class="head opener flow">
+<p class="kicker">{% if page.part_label %}{{ page.part_label }}{% else %}Chapter{% endif %}</p>
+<p class="numeral" aria-hidden="true">{{ page.number }}</p>
+<h1><span class="spoken">Chapter {{ page.number }}: </span>{{ page.title_html|safe }}</h1>
+<p class="lede">{{ page.lede_html|safe }}</p>
+</header>
+{% else %}<header class="head flow">
+<p class="kicker"><a href="{{ page.chapter.url }}">Chapter {{ page.chapter.number }} · {{ page.chapter.title_text }}</a></p>
+<h1><span class="no">{{ page.number }}</span> {{ page.title_html|safe }}</h1>
+<p class="lede">{{ page.lede_html|safe }}</p>
+</header>
+{% endif %}
+{% if page.brief_html %}<div class="brief flow">
 {{ page.brief_html|safe }}
 </div>{% endif %}
-{% if page.sections %}<nav class="answers" aria-label="The sections of this page">
-<h2>{% if page.children %}On this page{% else %}This page answers{% endif %}</h2>
-<ol>{% for section in page.sections %}
-<li><a href="#{{ section.id }}">{{ section.title_html_unlinked|safe }}</a></li>{% endfor %}
+{% if page.is_chapter and page.children %}<nav class="outline flow" aria-labelledby="_outline">
+<h2 id="_outline">In this chapter</h2>
+<ol>{% for child in page.children %}
+<li>{% if child.published %}<a href="{{ child.url }}"><span class="no">{{ child.number }}</span> <span class="title">{{ child.title_html_unlinked|safe }}</span></a>{% else %}<span class="planned"><span class="no">{{ child.number }}</span> <span class="title">{{ child.title_html_unlinked|safe }}</span></span>{% endif %}
+<span class="about">{{ child.lede_html|safe }}</span></li>{% endfor %}
 </ol>
 </nav>{% endif %}
 {% for section in page.sections %}
-<section class="section" aria-labelledby="{{ section.id }}">
-<h2 id="{{ section.id }}"><a class="anchor" href="#{{ section.id }}" aria-label="A link to this section">§</a>{{ section.title_html|safe }}</h2>
+<section class="section flow" aria-labelledby="{{ section.id }}">
+<h2 id="{{ section.id }}">{{ section.title_html|safe }}</h2>
 {{ section.html|safe }}
 </section>
 {% endfor %}
-{% if page.children %}
-<section class="contents" aria-labelledby="_contents">
-<h2 id="_contents">{% if page.id %}The pages of this part{% else %}Contents{% endif %}</h2>
-{% include "djangointernals/contents.html" with pages=page.children %}
-<dl class="key">{% for status, words in statuses %}
-<div><dt>{% include "djangointernals/status.html" with level=forloop.counter word=words.0 %}</dt><dd>{{ words.1 }}</dd></div>{% endfor %}
-</dl>
-</section>
+{% if front %}<section class="contents flow" aria-labelledby="_contents">
+<h2 id="_contents">Contents</h2>
+{% for part in book.parts %}{% if part.label %}<h3 class="part">{{ part.label }}</h3>{% endif %}
+<ol class="toc">{% for chapter in part.chapters %}
+<li>
+<p class="entry">{% if chapter.published %}<a href="{{ chapter.url }}"><span class="no">{{ chapter.number }}</span> <span class="title">{{ chapter.title_html_unlinked|safe }}</span></a>{% else %}<span class="planned"><span class="no">{{ chapter.number }}</span> <span class="title">{{ chapter.title_html_unlinked|safe }}</span></span>{% endif %}</p>
+<p class="about">{{ chapter.lede_html|safe }}</p>{% if chapter.published and chapter.children %}
+<ol class="under">{% for child in chapter.children %}
+<li>{% if child.published %}<a href="{{ child.url }}"><span class="no">{{ child.number }}</span> {{ child.title_html_unlinked|safe }}</a>{% else %}<span class="planned"><span class="no">{{ child.number }}</span> {{ child.title_html_unlinked|safe }}</span>{% endif %}</li>{% endfor %}
+</ol>{% endif %}
+</li>{% endfor %}
+</ol>
+{% endfor %}</section>
 {% endif %}
-<nav class="turn" aria-label="The pages before and after this one">
-{% if before %}<a class="before" href="{{ before.url }}"><span>Before</span>{{ before.title_text }}</a>{% else %}<span></span>{% endif %}
-{% if after %}<a class="after" href="{{ after.url }}"><span>Next</span>{{ after.title_text }}</a>{% endif %}
+<nav class="turn flow" aria-label="The pages before and after this one">
+<div>
+{% if before %}<a class="before" href="{{ before.url }}"><span>Previous</span>{% if before.number %}<b class="no">{{ before.number }}</b> {% endif %}{{ before.title_text }}</a>{% else %}<span></span>{% endif %}
+{% if after %}<a class="after" href="{{ after.url }}"><span>Next</span>{% if after.number %}<b class="no">{{ after.number }}</b> {% endif %}{{ after.title_text }}</a>{% endif %}
+</div>
 </nav>
 {% endblock %}

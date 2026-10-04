@@ -1,0 +1,4 @@
+{% if entry.page.published %}<a href="{{ entry.page.url }}"{% if entry.here %} aria-current="page"{% endif %}><span class="no">{{ entry.page.number }}</span> {{ entry.page.title_html_unlinked|safe }}</a>{% else %}<span class="planned"><span class="no">{{ entry.page.number }}</span> {{ entry.page.title_html_unlinked|safe }}</span>{% endif %}{% if entry.sections %}
+<ol class="headings">{% for section in entry.sections %}
+<li><a href="#{{ section.id }}">{{ section.title_html_unlinked|safe }}</a></li>{% endfor %}
+</ol>{% endif %}

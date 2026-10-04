@@ -29,10 +29,10 @@ under DIST and checks each link in them:
   every `<loc>`. A URL under the site's own address resolves as an address does; one with
   another host is external. The site's address is `--site`, or the `<link rel="canonical">`
   of `index.html` with its path cut, or else none.
-- A link to a page in outline is counted apart and is no fault, though nothing answers at its
-  address: the page spec allows the link and gives the page no file, and the site's 404 page
-  says what an outlined page is. Which pages are in outline the gate reads from `index.json`
-  beside the pages, where the bake lists every page with its status.
+- A link to a planned page is counted apart and is no fault, though nothing answers at its
+  address: the page spec allows the link and gives the page no file until it is written. Which
+  pages are planned the gate reads from `index.json` beside the pages, where the bake lists
+  every page and says of each whether it is written.
 
 External links (another host, a protocol-relative `//host`, or `mailto:` and the like) are
 counted and not fetched: the build must work without the network. A stylesheet's own `url()`
@@ -155,13 +155,13 @@ class Site:
         return None
 
     def in_outline(self) -> set[str]:
-        """The ids of the pages index.json says are in outline: entries in the contents, with no file."""
+        """The ids of the pages index.json says are not written: lines in the contents, with no file."""
         index = os.path.join(self.dist, "index.json")
         if not os.path.isfile(index):
             return set()
         try:
             pages = json.loads(read(index)).get("pages", [])
-            return {page["id"] for page in pages if page.get("status") == "outline"}
+            return {page["id"] for page in pages if page.get("written") is False}
         except (ValueError, TypeError, KeyError, AttributeError):
             return set()
 
@@ -263,7 +263,7 @@ def check(dist: str, site: str | None = None) -> tuple[list[str], dict]:
     counts = {"files": 0, "links": 0, "external": 0, "outlined": 0}
 
     def missing(address: str) -> str | None:
-        """Why nothing answers at an address, or None when a page in outline is linked."""
+        """Why nothing answers at an address, or None when a planned page is linked."""
         if held.outlined_at(address):
             counts["outlined"] += 1
             return None
@@ -350,7 +350,7 @@ def run(dist: str, site: str | None) -> int:
         print(line)
     print(f"links: {'FAILED' if faults else 'ok'}, {count(counts['links'], 'link')} in {count(counts['files'], 'file')}; "
           f"{counts['external']} external not fetched"
-          + (f"; {counts['outlined']} to a page in outline, which has an entry in the contents and no file" if counts["outlined"] else "")
+          + (f"; {counts['outlined']} to a planned page, which has a line in the contents and no file" if counts["outlined"] else "")
           + (f"; {count(len(faults), 'link')} did not resolve" if faults else ""))
     return 1 if faults else 0
 
@@ -381,8 +381,8 @@ PROBE_GOOD = {  # a baked site whose every link resolves
                   "[s](#see-the-index) [d](#where-is-_meta-kept) [f](#figure-lone)\n\n```text figure=lone\nx\n```\n\n*A caption.*\n",
     "d/index.html": "<html><body>d</body></html>\n",
     "index.md": "# Index\n\n## What does each status publish?\n\n[in outline](a/d.md) [a section's id, which only the page beside the twin has](a/b.md#one)\n",
-    "index.json": '{"pages": [{"id": "", "status": "verified"}, {"id": "a/b", "status": "verified"}, {"id": "a/d", "status": "outline"}, '
-                  '{"id": "a/gone", "status": "verified"}]}\n',
+    "index.json": '{"pages": [{"id": "", "written": true}, {"id": "a/b", "written": true}, {"id": "a/d", "written": false}, '
+                  '{"id": "a/gone", "written": true}]}\n',
     "static/site.css": "@import url(nope.css);\n",
     "llms.txt": "# Index\n\n> A lede.\n\nThe data: https://example.test/index.json. And https://example.test/a/b#one, with a fragment.\n\n"
                 "## B\n\n- [B](https://example.test/a/b.md): lede\n- [ext](https://other.test/x.md): external\n",
@@ -440,7 +440,7 @@ def probe() -> int:
         good_faults, good_counts = check(good, "https://example.test")
         expect("a site whose every link resolves passes", good_faults, [])
         expect("external links counted, not fetched", good_counts["external"], 6)  # example.org three times, the mail, the protocol-relative, other.test
-        expect("links to a page in outline counted apart", good_counts["outlined"], 3)  # from index.html, a/b.md and index.md
+        expect("links to a planned page counted apart", good_counts["outlined"], 3)  # from index.html, a/b.md and index.md
         expect("files read", good_counts["files"], 10)  # four pages, three twins, llms.txt, llms-full.txt, sitemap.xml; not the css or .baked
         faults, counts = check(dist, "https://example.test")
         found = {(line.split(": the link `", 1)[0], line.split("`")[1]) for line in faults}
@@ -473,8 +473,8 @@ def probe() -> int:
           "string set aside); a fragment must be an id in the page it names, or an anchor of the twin, taken from the page "
           "baked beside it or made as the site makes them; a twin's links are read outside its fences and code spans, in angle "
           "brackets too; llms.txt's links are full URLs, its and llms-full.txt's bare URLs (sentence punctuation set aside) and "
-          "the sitemap's locations resolve under the site's address, read from the flag or the canonical link; a link to a page "
-          "in outline is counted apart; external links are counted and not fetched; a link cannot leave the site; a site whose "
+          "the sitemap's locations resolve under the site's address, read from the flag or the canonical link; a link to a "
+          "planned page is counted apart; external links are counted and not fetched; a link cannot leave the site; a site whose "
           "every link resolves passes")
     return 0
 

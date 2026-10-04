@@ -1,10 +1,10 @@
 """The views: a page, its twin, the agent's files, robots.txt, and what stands in for a page that is not there.
 
 Every page of the book is one view and one template. What differs between
-a page, a department's landing page and the contents is in the page itself:
-an index page has children, and the template lists them under its text. The
-twin and the agent's files (doors.py) are views too, so `runserver` serves
-them live and the bake writes what they answer.
+the front page, a chapter's opening page and a section is in the page
+itself: where it stands in the tree and whether it has children, which the
+template lists. The twin and the agent's files (doors.py) are views too, so
+`runserver` serves them live and the bake writes what they answer.
 
 Two things stand beside every page and are the site's, never a page's: the
 book's contents as a navigation (`contents`), and the reader's choice of
@@ -21,8 +21,9 @@ from . import doors
 
 
 def indexable() -> bool:
-    """Only the book itself may be indexed and carries canonical URLs: never the specimen."""
-    return settings.BOOK_DIR.name == "pages"
+    """May what is baked be indexed, and does it carry canonical URLs, a sitemap and the
+    book in one file? Not until the book is published: settings.INDEXABLE."""
+    return bool(settings.INDEXABLE)
 
 
 def site(request):
@@ -30,11 +31,11 @@ def site(request):
     return {"site_url": settings.SITE_URL, "repository_url": settings.REPOSITORY_URL, "indexable": indexable()}
 
 
-def verified_against(page, tree) -> str:
+def edition(page, tree) -> str:
     """The page's own `django` line, with the commit in it shortened and linked to the tree
-    at that commit."""
+    at that commit: which Django the page describes."""
     def link(match):
-        return format_html('<a href="{}/tree/{}">{}</a>', tree["repository"], tree["commit"], match.group(0)[:12])
+        return format_html('<a href="{}/tree/{}">{}</a>', tree["repository"], tree["commit"], match.group(0)[:7])
     # escaping leaves a run of hex digits as it was, so the commit is still there to be found
     return mark_safe(books.COMMIT.sub(link, escape(page.meta.get("django", ""))))
 
@@ -52,11 +53,10 @@ COLOURS = (
 
 
 def contents(book, here=None) -> list[dict]:
-    """The book's tree as the navigation beside a page shows it, from the contents page down:
-    every page directly under the contents page, and below each only the branch that leads to
-    `here`, the page being shown, with that page's own pages and its sections under it. A page
-    in outline is an entry with no address: it has none."""
-    branch = {book.index, *here.ancestors, here} if here is not None else {book.index}
+    """The book's contents as the navigation beside a page shows them: the parts, each with
+    its chapters, and under the chapter that `here` is in, that chapter's sections, with the
+    headings of the page being shown under it. A planned page is a line with no address."""
+    branch = {*here.ancestors, here} if here is not None else set()
 
     def entry(page) -> dict:
         return {
@@ -66,7 +66,7 @@ def contents(book, here=None) -> list[dict]:
             "sections": page.sections if page is here else [],
         }
 
-    return [entry(book.index)]
+    return [{"label": part["label"], "chapters": [entry(chapter) for chapter in part["chapters"]]} for part in book.parts]
 
 
 def published(id: str):
@@ -80,18 +80,18 @@ def published(id: str):
 def page(request, id):
     book, found = published(id)
     before, after = book.neighbours(found)
-    grammar = book.root / found.department.id / "figures" / "figures.css" if found.department else None
+    grammar = book.root / found.chapter.id / "figures" / "figures.css" if found.chapter else None
     return render(request, "djangointernals/page.html", {
         "book": book,
         "page": found,
         "nav": contents(book, found),
+        "front": found is book.index,
         "colours": COLOURS,
-        "verified_against": verified_against(found, book.pin),
+        "edition": edition(found, book.pin),
         "twin": doors.twin_url(found),
         "before": before,
         "after": after,
         "figure_grammar": mark_safe(grammar.read_text(encoding="utf-8")) if grammar and grammar.is_file() else "",
-        "statuses": books.STATUSES.items(),
     })
 
 

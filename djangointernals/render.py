@@ -2,8 +2,8 @@
 
 A page's body is read as CommonMark with tables. What comes out is the
 page in the parts the templates lay out: the title (the one H1), the lede
-(the first paragraph), what the page asserts in brief (whatever else stands
-above the first H2), and the sections (each H2 and what is under it).
+(the first paragraph), the introduction (whatever else stands above the
+first H2), and the sections (each H2 and what is under it).
 
 What is refused here, each with its file and line: a page that does not
 open with its H1 and a lede; a second H1; a heading below H3, or one
@@ -13,16 +13,29 @@ included; an image; a link to another page that is not the relative path
 of its `.md` file, that names no page of the book, or that names the book
 by any of its hosts; a figure with no SVG beside it or no caption under
 it, or whose SVG scripts, loads, moves or links out of itself; an empty
-section on a page that says it is written.
+section on a written page.
 
-What is changed on the way to HTML and nowhere else: straight quotes in
-prose become curly; a long name or pointer in a code span may break after a
-slash or a colon and before a dot; a pointer becomes a link to the lines it
-lands on at the pinned commit (gates.py), in prose and in a `runtime-names`
-block alike; a link to `other.md` becomes that page's URL, and a link to a
-page still in outline becomes plain text marked as unwritten; a figure's
-fenced source becomes the SVG drawn from it, with the source folded away
-under it.
+What is changed on the way to HTML and nowhere else:
+
+- Straight quotes in prose become curly, and a long name in a code span may
+  break after a slash or a colon and before a dot.
+- **A pointer becomes a link to the lines it lands on** at the pinned commit
+  (gates.py), and is shown by its symbol, the file in the link's title. In a
+  table it is shown with its file under it.
+- **Pointers in parentheses leave the sentence.** A parenthesis that holds
+  nothing but pointers, `(…)` after the words they support, is taken out of
+  the paragraph and set beside it as its sources: in the margin where there
+  is one, under the paragraph where there is not. The markdown keeps them
+  where they were written, which is where an agent wants them.
+- A quotation that opens with a phrase in bold is a note with that phrase
+  as its label (`> **Why.** …`).
+- A link to `other.md` becomes that page's address; a link to a page that
+  is only planned becomes plain text.
+- A figure's fenced source becomes the SVG drawn from it, numbered, with
+  its caption; a table with an italic paragraph directly under it becomes a
+  numbered table with that caption. The numbers are the book's (book.py).
+- A `runtime-names` block is not shown: it declares names for the name
+  gate, and a reader of the page has no use for it.
 """
 from __future__ import annotations
 
@@ -44,7 +57,9 @@ UNDRAWN = {"script", "style", "foreignObject", "image", "iframe", "feImage", "an
 PAINTED = {"style", "fill", "stroke", "color", "font", "font-family", "font-size", "font-weight"}
 ANCHOR_TAG = re.compile(r"</?a\b[^>]*>")
 PROLOG = re.compile(r"\A\s*(?:(?:<\?xml.*?\?>|<!DOCTYPE.*?>|<!--.*?-->)\s*)*", re.S)
-COLUMN = 646  # the text column in CSS pixels at the size the stylesheet sets: a wider figure uses the margins
+COLUMN = 646  # the text column in CSS pixels at the size the stylesheet sets: a wider figure uses the margin
+BETWEEN = re.compile(r"\s*(?:[,;]|,?\s*and)?\s*")  # what may stand between two pointers of one parenthesis
+SOURCED = {"paragraph_open", "bullet_list_open", "ordered_list_open", "blockquote_open"}  # blocks whose sources are set beside them
 
 
 def breakable(code: str) -> str:
@@ -56,7 +71,7 @@ def breakable(code: str) -> str:
 
 def unlinked(html: str) -> str:
     """Inline HTML with its links' tags removed, for a place that is itself a link: a heading
-    with a pointer in it inside the list of a page's questions, a title inside the contents."""
+    with a pointer in it inside the navigation, a title inside the contents."""
     return ANCHOR_TAG.sub("", html)
 
 
@@ -82,26 +97,79 @@ def is_figure(token: Token) -> bool:
     return token.type == "fence" and bool(FIGURE.search(token.info))
 
 
-def pointer(body: str, gates) -> str:
-    """A code span's HTML: a pointer is a link to the lines it lands on at the pin (gates.py);
-    anything else, and a pointer that does not resolve (the gate refuses the page), is code."""
+def shown(body: str, gates) -> tuple[str, str]:
+    """A pointer as a reader is shown it: (what it names, where that is). A symbol and its
+    file; a file and its directory; a directory and what it is in. A library's tree is named."""
+    tree, path, symbol = gates.world.parse(body)
+    prefix = "" if tree == gates.world.subject else f"{tree}: "
+    if symbol:
+        return symbol, prefix + path
+    head, _, tail = path.rstrip("/").rpartition("/")
+    return tail + ("/" if path.endswith("/") else ""), prefix + (head + "/" if head else "")
+
+
+def pointer(body: str, gates, full: bool = False) -> str:
+    """A code span's HTML. A pointer is a link to the lines it lands on at the pin (gates.py),
+    shown by its symbol; `full` adds the file under it, as the margin and a table show it.
+    Anything else, and a pointer that does not resolve (the gate refuses the page), is code."""
     linked = gates.link(body) if gates is not None and gates.is_pointer(body) else None
     if linked is None:
         return f"<code>{breakable(body)}</code>"
     href, title = linked
-    return f'<a class="pointer" href="{escape(href, quote=True)}" title="{escape(title, quote=True)}"><code>{breakable(body)}</code></a>'
+    what, where = shown(body, gates)
+    link = f'href="{escape(href, quote=True)}" title="{escape(title, quote=True)}"'
+    if full:
+        return f'<a class="src" {link}><code>{breakable(what)}</code> <span class="in">{breakable(where)}</span></a>'
+    symbol = gates.world.parse(body)[2]
+    return f'<a class="pointer" {link}><code>{breakable(what if symbol else where + what)}</code></a>'
 
 
-def entry(line: str, gates) -> str:
-    """A line of a `runtime-names` block, escaped, with its pointer (the second word) linked."""
-    code, hash_, remark = line.partition("#")
-    words = code.split()
-    if len(words) >= 2 and gates is not None and gates.is_pointer(words[1]) and gates.link(words[1]):
-        at = code.index(words[1], code.index(words[0]) + len(words[0]))
-        href, title = gates.link(words[1])
-        return (escape(code[:at], quote=False) + f'<a class="pointer" href="{escape(href, quote=True)}" title="{escape(title, quote=True)}">'
-                + escape(words[1], quote=False) + "</a>" + escape(code[at + len(words[1]):] + hash_ + remark, quote=False))
-    return escape(line, quote=False)
+def sources(tokens: list[Token], gates) -> list[str]:
+    """Take out of a block's inline text every parenthesis that holds only pointers, and
+    return the pointers, each once, in the order they were written."""
+    found: list[str] = []
+    if gates is None:
+        return found
+    for token in tokens:
+        kids = token.children if token.type == "inline" else None
+        if not kids:
+            continue
+        kept, i = [], 0
+        while i < len(kids):
+            kid = kids[i]
+            kept.append(kid)
+            if kid.type != "text" or not kid.content.endswith("("):
+                i += 1
+                continue
+            group, j = [], i + 1
+            while j < len(kids):
+                if kids[j].type == "code_inline" and gates.is_pointer(kids[j].content) and gates.link(kids[j].content):
+                    group.append(kids[j].content)
+                    j += 1
+                    if j < len(kids) and kids[j].type == "text" and kids[j].content.startswith(")"):
+                        break
+                    while j < len(kids) and (kids[j].type == "softbreak" or (kids[j].type == "text" and BETWEEN.fullmatch(kids[j].content))):
+                        j += 1
+                    continue
+                group = []
+                break
+            closes = j < len(kids) and kids[j].type == "text" and kids[j].content.startswith(")")
+            if group and closes:
+                kid.content = kid.content[:-1].rstrip()
+                kids[j].content = kids[j].content[1:]
+                found += [body for body in group if body not in found]
+                i = j
+            else:
+                i += 1
+        token.children = kept
+    return found
+
+
+def beside(found: list[str], gates) -> str:
+    """A block's sources, set beside it."""
+    if not found:
+        return ""
+    return '<aside class="sources" aria-label="In the source">' + "".join(pointer(body, gates, full=True) for body in found) + "</aside>\n"
 
 
 class Rules:
@@ -109,23 +177,33 @@ class Rules:
     rendered, the book it is in, the line of the block being rendered, and the problems so far."""
 
     def code_inline(self, tokens, idx, options, env):
-        return pointer(tokens[idx].content, env.get("gates"))
+        return pointer(tokens[idx].content, env.get("gates"), full=bool(env.get("in_table")))
 
     def fence(self, tokens, idx, options, env):
         token = tokens[idx]
         words = token.info.split()
-        kind = f' data-kind="{escape(words[0])}"' if words else ""
         if words and words[0] == "runtime-names":
-            content = "\n".join(entry(line, env.get("gates")) for line in token.content.split("\n"))
-        else:
-            content = escape(token.content, quote=False)
-        return f"<pre{kind}><code>{content}</code></pre>\n"
+            return ""
+        kind = f' data-kind="{escape(words[0])}"' if words else ""
+        return f"<pre{kind}><code>{escape(token.content, quote=False)}</code></pre>\n"
 
     def table_open(self, tokens, idx, options, env):
+        env["in_table"] = True
         return '<div class="table"><table>\n'
 
     def table_close(self, tokens, idx, options, env):
+        env["in_table"] = False
         return "</table></div>\n"
+
+    def blockquote_open(self, tokens, idx, options, env):
+        """A quotation that opens with a phrase in bold is a note, and the phrase its label."""
+        first = tokens[idx + 2] if idx + 2 < len(tokens) and tokens[idx + 1].type == "paragraph_open" else None
+        note = first is not None and bool(first.children) and first.children[0].type == "strong_open"
+        env.setdefault("quotes", []).append("aside" if note else "blockquote")
+        return '<aside class="note">\n' if note else "<blockquote>\n"
+
+    def blockquote_close(self, tokens, idx, options, env):
+        return f"</{env['quotes'].pop()}>\n"
 
     def heading_open(self, tokens, idx, options, env):
         token = tokens[idx]
@@ -134,7 +212,7 @@ class Rules:
 
     def link_open(self, tokens, idx, options, env):
         """A link to another page is written to its .md file, as it works on disk and on
-        GitHub; here it becomes the page's URL, or plain text if the page is not written."""
+        GitHub; here it becomes the page's address, or plain text if the page is not written."""
         href = tokens[idx].attrGet("href") or ""
         opened = env.setdefault("links", [])
         page, book = env["page"], env["book"]
@@ -173,8 +251,7 @@ class Rules:
             env["fragments"].append((where, href, target, fragment))
         if target is None or not target.published:
             opened.append("span")
-            title = ' title="This page is outlined and not yet written."' if target is not None else ""
-            return f'<span class="unwritten"{title}>'
+            return '<span class="planned">'
         opened.append("a")
         return f'<a href="{escape(target.url + ("#" + fragment if fragment else ""))}">'
 
@@ -184,7 +261,8 @@ class Rules:
 
 def markdown() -> MarkdownIt:
     md = MarkdownIt("commonmark", {"html": True, "typographer": True}).enable(["table", "smartquotes"])
-    for name in ("code_inline", "fence", "table_open", "table_close", "heading_open", "link_open", "link_close"):
+    for name in ("code_inline", "fence", "table_open", "table_close", "blockquote_open", "blockquote_close", "heading_open",
+                 "link_open", "link_close"):
         md.add_render_rule(name, getattr(Rules, name))
     return md
 
@@ -207,8 +285,22 @@ def blocks(tokens: list[Token]) -> list[tuple[int, int]]:
     return out
 
 
+def stub(body: str) -> bool:
+    """Is this page only its title and one paragraph? Then it is planned and not written:
+    it has a line in the contents, and no page of its own."""
+    return len(blocks(MD.parse(body, {}))) <= 2
+
+
 def inline(token: Token, env) -> str:
     return MD.renderer.renderInline(token.children or [], MD.options, env)
+
+
+def caption(under: Token | None) -> list[Token] | None:
+    """The tokens of a caption: a paragraph that is one italic run from end to end."""
+    children = (under.children or []) if under is not None else []
+    whole = (len(children) >= 3 and children[0].type == "em_open" and children[-1].type == "em_close"
+             and not any(c.type == "em_close" and c.level == children[0].level for c in children[1:-1]))
+    return children[1:-1] if whole else None
 
 
 def drawn(svg: str) -> tuple[str | None, float | None]:
@@ -243,66 +335,74 @@ def drawn(svg: str) -> tuple[str | None, float | None]:
 
 
 def figure(page, fence: Token, under: Token | None, env) -> str:
-    """A figure: the fenced block that holds its source, the SVG drawn from that source, and
-    the italic paragraph under the block, which is its caption."""
+    """A figure: the SVG drawn from the fenced block's source, and the italic paragraph under
+    the block, which is its caption. The source stays in the markdown, for the reader of that."""
     where = f"{page.where}:{env['line']}"
     name = FIGURE.search(fence.info).group(1)
     problems = env["problems"]
     if not FIGURE_NAME.fullmatch(name):
         problems.append(f"{where}: the figure `{name}`: a figure's name is lower-case words joined by hyphens")
         return ""
-    file = page.source.parent / "figures" / f"{name}.svg"
-    shown = f"{page.where.rsplit('/', 1)[0]}/figures/{name}.svg"
+    # a chapter's figures are in one directory, beside its sections: pages/<chapter>/figures/
+    home = env["book"].root / page.chapter.id if page.chapter is not None else env["book"].root
+    file = home / "figures" / f"{name}.svg"
+    try:
+        shown_at = file.relative_to(settings.BASE_DIR).as_posix()
+    except ValueError:
+        shown_at = file.as_posix()
     svg, width = "", None
     if not file.is_file():
-        problems.append(f"{where}: the figure `{name}`: there is no {shown}")
+        problems.append(f"{where}: the figure `{name}`: there is no {shown_at}")
     else:
         svg = PROLOG.sub("", file.read_text(encoding="utf-8")).strip()
         wrong, width = drawn(svg)
         if wrong:
-            problems.append(f"{shown}: {wrong}")
-    children = (under.children or []) if under is not None else []
-    whole = (len(children) >= 3 and children[0].type == "em_open" and children[-1].type == "em_close"
-             and not any(c.type == "em_close" and c.level == children[0].level for c in children[1:-1]))
-    if not whole:
+            problems.append(f"{shown_at}: {wrong}")
+    words = caption(under)
+    if words is None:
         problems.append(f"{where}: the figure `{name}`: its caption is the paragraph under it, one italic run from end to end")
-    caption = MD.renderer.renderInline(children[1:-1], MD.options, env) if whole else ""
+    said = MD.renderer.renderInline(words, MD.options, env) if words else ""
     if name in env["figures"]:
         problems.append(f"{where}: the figure `{name}`: this page has another of that name")
     env["figures"].append(name)
-    kind = fence.info.split()[0]
     wide = " wide" if width and width > COLUMN else ""
     size = f' style="--natural: {width:g}px"' if width else ""
-    return (f'<figure class="figure{wide}" id="figure-{name}"{size}>\n<div class="art">{svg}</div>\n'
-            f"<figcaption>{caption}</figcaption>\n"
-            f'<details class="source"><summary>What this figure is drawn from</summary>'
-            f'<pre data-kind="{escape(kind)}"><code>{escape(fence.content, quote=False)}</code></pre></details>\n'
-            f"</figure>\n")
+    label = escape(" ".join(plain(under).split()), quote=True) if under is not None else ""
+    return (f'<figure class="figure{wide}" id="figure-{name}"{size}>\n<div class="art" role="img" aria-label="{label}">{svg}</div>\n'
+            f'<figcaption><span class="no">Figure \x02F{len(env["figures"])}\x03</span> {said}</figcaption>\n</figure>\n')
 
 
 def body(page, tokens: list[Token], spans: list[tuple[int, int]], env) -> str:
-    """Some of a page's top-level blocks as HTML, each figure put together from its two blocks."""
+    """Some of a page's top-level blocks as HTML: each figure put together from its two
+    blocks, each captioned table from its two, and each block's sources set beside it."""
     out, i = [], 0
+    gates = env.get("gates")
     while i < len(spans):
         first, last = spans[i]
         token = tokens[first]
         env["line"] = page.line + (token.map[0] if token.map else 0) + 1
+        under = tokens[spans[i + 1][0] + 1] if i + 1 < len(spans) and tokens[spans[i + 1][0]].type == "paragraph_open" else None
         if is_figure(token):
-            under = None
-            if i + 1 < len(spans) and tokens[spans[i + 1][0]].type == "paragraph_open":
-                under = tokens[spans[i + 1][0] + 1]
-                i += 1
             out.append(figure(page, token, under, env))
+            i += 1 if under is not None else 0
+        elif token.type == "table_open" and caption(under) is not None:
+            env["tables"] += 1
+            table = MD.renderer.render(tokens[first:last + 1], MD.options, env)
+            said = MD.renderer.renderInline(caption(under), MD.options, env)
+            out.append(f'<figure class="tabular">\n<figcaption><span class="no">Table \x02T{env["tables"]}\x03</span> {said}</figcaption>\n{table}</figure>\n')
+            i += 1
         else:
+            found = sources(tokens[first:last + 1], gates) if token.type in SOURCED else []
             out.append(MD.renderer.render(tokens[first:last + 1], MD.options, env))
+            out.append(beside(found, gates))
         i += 1
     return "".join(out)
 
 
 def render(page, book, problems: list[str]) -> None:
-    """Fill in `page` from its markdown: its title, lede, brief, sections, anchors and
+    """Fill in `page` from its markdown: its title, lede, introduction, sections, anchors and
     figures. What is wrong with it is added to `problems`."""
-    env = {"page": page, "book": book, "problems": problems, "figures": [], "fragments": [], "line": page.line + 1,
+    env = {"page": page, "book": book, "problems": problems, "figures": [], "tables": 0, "fragments": [], "line": page.line + 1,
            "gates": getattr(book, "gates", None)}
     tokens = MD.parse(page.body, env)
 
@@ -338,7 +438,7 @@ def render(page, book, problems: list[str]) -> None:
     kinds = [(tokens[a].type, tokens[a].tag) for a, _ in spans]
     page.title_html = page.title_html_unlinked = page.title_text = page.title_md = page.brief_html = ""
     page.lede_html = page.lede_text = page.lede_md = ""
-    page.sections, page.anchors, page.figures, page.fragments = [], anchors, env["figures"], env["fragments"]
+    page.sections, page.anchors, page.figures, page.fragments, page.tables = [], anchors, env["figures"], env["fragments"], 0
     if not kinds or kinds[0] != ("heading_open", "h1"):
         problems.append(f"{page.where}:{page.line + 1}: a page opens with its title, the one # heading")
         return
@@ -363,8 +463,9 @@ def render(page, book, problems: list[str]) -> None:
         env["line"] = page.line + heading.map[0] + 1
         title_html = inline(words, env)
         html = body(page, tokens, spans[start + 1:end], env)
-        if not html.strip() and page.published:
-            problems.append(f"{at(heading)}: a section with nothing under it, on a page whose status is `{page.status}`")
+        if not html.strip():
+            problems.append(f"{at(heading)}: a section with nothing under it")
         # `line` is the heading's line in the file, which is how a code span is placed in its section (doors.py)
         page.sections.append({"id": heading.meta.get("id", ""), "title_html": title_html, "title_html_unlinked": unlinked(title_html),
                               "title_text": plain(words), "html": html, "line": page.line + heading.map[0] + 1})
+    page.tables = env["tables"]

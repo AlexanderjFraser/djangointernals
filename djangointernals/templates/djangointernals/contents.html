@@ -1,7 +1,0 @@
-<ol class="toc">{% for child in pages %}
-<li class="{% if child.published %}written{% else %}outlined{% endif %}">
-<p class="entry">{% if child.published %}<a href="{{ child.url }}">{{ child.title_html_unlinked|safe }}</a>{% else %}<span class="title">{{ child.title_html|safe }}</span>{% endif %}{% include "djangointernals/status.html" with level=child.level word=child.status_word %}</p>
-<p class="about">{{ child.lede_html|safe }}</p>
-{% if child.children %}{% include "djangointernals/contents.html" with pages=child.children %}{% endif %}
-</li>{% endfor %}
-</ol>

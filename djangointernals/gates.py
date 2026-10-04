@@ -1,8 +1,8 @@
 """The two gates and the link gate, as the site calls them; and what the renderer makes of a pointer.
 
 `tools/pointers.py`, `tools/names.py` and `tools/links.py` at the repository's
-root are vendored from the press, and a reader runs them as commands
-(SPEC.md §13). The site imports them too: the loader refuses a book whose
+root are a reader's to run as commands (SPEC.md, *Checking a page*). The
+site imports them too: the loader refuses a book whose
 pointers do not resolve at the pin or whose names do not exist, as it
 refuses a page that breaks the spec; the bake refuses what it wrote when a
 link in it does not resolve; and the renderer turns each pointer into a link
@@ -51,7 +51,7 @@ class Gates:
 
     def problems(self, page) -> list[str]:
         """What the two gates refuse on a page, each as `file:line: span: why`. The name gate
-        runs with --sections: a page's sections stand alone (SPEC.md §5, §7)."""
+        runs with --sections: a name several modules define is bound within its section."""
         path = str(page.source)
         found = pointers.examine(self.world, path)[1] + self.gate.examine(path, sections=True)[0]
         return [relabel(line, os.path.basename(path), page.where) for line in found]

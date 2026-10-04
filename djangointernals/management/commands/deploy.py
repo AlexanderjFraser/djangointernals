@@ -1,7 +1,7 @@
 """Publish the baked book to Cloudflare Pages, refusing on any failed gate.
 
     python manage.py deploy                      pages/ to production (the branch main)
-    python manage.py deploy --book specimen      the specimen instead
+    python manage.py deploy --book DIR           another directory of pages instead
     python manage.py deploy --branch skeleton    a preview deployment, at https://skeleton.<project>.pages.dev
     python manage.py deploy --dry-run            everything but the upload and the fetch-back
     python manage.py deploy --probe              prove it stops where it should, without the network
@@ -318,7 +318,7 @@ class Command(BaseCommand):
         with tempfile.TemporaryDirectory() as scratch:
             pin = json.loads(Path(settings.PIN_FILE).read_text(encoding="utf-8"))
             commit = pin["trees"][pin["subject"]]["commit"]
-            head = f"---\ndjango: main at {commit}\nstatus: verified\n---\n"
+            head = f"---\ndjango: main at {commit}\n---\n"
             book = Path(scratch) / "book"
             book.mkdir()
             (book / "index.md").write_text(head.replace("---\n", "---\ncontents: a\n", 1) + "# A book\n\nIts lede.\n\n## One\n\nText.\n",

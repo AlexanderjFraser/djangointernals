@@ -1,49 +1,48 @@
-# How Django Works
+# Django Internals
 
-A textbook of how Django works — the codebase, not the API: what each part
+A textbook of how Django works: the codebase, not the API. What each part
 owns, when it runs, how a request becomes a response and a queryset becomes
-SQL, and why it is the way it is — written for two readers at once: the
-person who needs a model of the system to direct an agent well, and the
-agent that reads the whole corpus and needs to know how everything fits.
-Every name checked against a pinned commit; every claim pointing at the line
-that supports it.
+SQL, and why it is built the way it is. Read it at
+[djangointernals.dev](https://djangointernals.dev).
 
-**Status: being built.** No page of the book is written yet.
-[djangointernals.dev](https://djangointernals.dev) serves what exists as
-it is built: today a specimen, a handful of pages that show the site and
-the page spec and say of themselves that they are not the book. The
-book's rules are in [CLAUDE.md](CLAUDE.md). Its predecessor, and the
-record of what one such book costs, is
-[MinecraftDocs](https://github.com/AlexanderjFraser/MinecraftDocs) (live
-at [minecraftdocs.dev](https://minecraftdocs.dev)).
+It is written for people who need a working model of the framework and for
+the agents they direct. Every class, function and setting it names exists
+in Django's source at the commit in [pin.json](pin.json), and every passage
+points at the code it is about; the tools in [tools/](tools/) check both.
 
-**What is here so far.** [pin.json](pin.json) names the commit of Django
-the book is verified against. [tools/](tools/) holds the tools that fetch
-and check that tree and map it; each has a `--probe` that proves it fails
-on what it should. [map/](map/) is the map of the source: Django's sizes
-by package, every file with what it defines and imports, and the slices
-the source is first read in ([map/generated/](map/generated/README.md));
-and where the source cites a ticket or names a deprecation
-([map/inventory/](map/inventory/README.md)). Both are generated, and
-neither is edited. Two gates check a markdown page against the pinned
-tree: `tools/pointers.py`, that every pointer (`path:Symbol`) resolves by
-the syntax tree, and `tools/names.py`, that every name in a code span
-exists, on the class that declares it. [map/runtime-names.md](map/runtime-names.md)
-will list the names Django makes only as it runs.
+## What is here
 
-The repository is also the site: a Django project ([manage.py](manage.py),
-[djangointernals/](djangointernals/)) that reads the book's markdown,
-runs the gates on every page, and bakes it to static files: each page
-with its markdown twin at the same address with `.md` after it, every
-pointer a link to its lines at the pinned commit, and the files an agent
-reads (`llms.txt`, `index.json`, `names.json`). `tools/links.py` then
-checks that every link in what was baked resolves. [SPEC.md](SPEC.md) is
-the page spec: what a page is, as a file and as a thing a reader meets.
-[specimen/](specimen/) is a small book that follows it, to see the site
-with before the book has pages: `python manage.py bake --book specimen`,
-then `python manage.py preview`.
+- [pages/](pages/): the book, as markdown. Each page is also served as it
+  is, at its address with `.md` after it.
+- [SPEC.md](SPEC.md): what a page is.
+- [recordings/](recordings/): scripts that run Django and write down what
+  happens, and their output. The chapters' flows are taken from these.
+- [map/](map/): Django's source by chapter, with sizes and reading orders.
+- [tools/](tools/): the gates that check every name and pointer in the
+  book against the pinned source, and every link in the built site.
+- [djangointernals/](djangointernals/) and [manage.py](manage.py): the
+  site, a Django project that bakes the book to static files.
 
-**Licence.** The writing is [CC BY 4.0](LICENSE): reuse it, adapt it, quote
-it, train on it; credit the source. The tools are [MIT](tools/LICENSE).
+## Building it
+
+```
+python -m venv .venv                        Python 3.12 or later
+pip install -r requirements.txt
+python tools/pin.py fetch                   fetches Django at the pinned commit into reference/
+pip install -e reference/django
+python manage.py bake                       checks every page and writes the site to dist/
+python manage.py preview                    serves it at http://127.0.0.1:8000/
+```
+
+## Corrections
+
+If something in the book is wrong,
+[open an issue](https://github.com/AlexanderjFraser/djangointernals/issues)
+with the page and the line of Django's source that shows it.
+
+## Licence
+
+The writing is [CC BY 4.0](LICENSE): reuse it, adapt it, quote it, train on
+it; credit the source. The tools are [MIT](tools/LICENSE).
 
 Not affiliated with or endorsed by the Django Software Foundation.

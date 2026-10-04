@@ -1,11 +1,12 @@
 """Settings for a site that is baked and never served: no database, no sessions, no users.
 
 The settings that are the book's own: BOOK_DIR is the directory of markdown
-the site renders, `pages/` unless $BOOK or `bake --book` names another (the
-specimen); SITE_URL is where the baked book is published, and PAGES_PROJECT
-the Cloudflare Pages project `deploy` publishes it through; DIST_DIR is where
-the bake writes. Whether what is baked may be indexed and carries canonical
-URLs is `views.indexable`: only the book itself, never the specimen.
+the site renders, `pages/` unless $BOOK or `bake --book` names another;
+SITE_URL is where the baked book is published, and PAGES_PROJECT the
+Cloudflare Pages project `deploy` publishes it through; DIST_DIR is where
+the bake writes. INDEXABLE says whether what is baked may be indexed by
+search engines: while it is false every page carries `noindex`, and there
+is no sitemap, no canonical URL and no `llms-full.txt`.
 """
 import os
 from pathlib import Path
@@ -18,6 +19,7 @@ DIST_DIR = BASE_DIR / "dist"
 SITE_URL = "https://djangointernals.dev"
 PAGES_PROJECT = "djangointernals"
 REPOSITORY_URL = "https://github.com/AlexanderjFraser/djangointernals"
+INDEXABLE = False
 
 # The key signs nothing: the site has no sessions, no forms and no users.
 SECRET_KEY = "baked-to-static-files"

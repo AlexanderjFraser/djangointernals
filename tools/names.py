@@ -47,8 +47,12 @@ How a name is written, and where it is looked for, in this order:
    name the index does not hold (a test's) is found the same way, in a file a pointer has
    named. With `--sections` the pointer must stand in the same section as the name: from one
    `##` heading to the next, the text above the first heading being a section of its own.
-   That is a page's rule (every section stands alone: SPEC.md); the site's build checks a
-   page so. A survey's sections are not the book's, and a survey runs the gate without it.
+   That is a page's rule (SPEC.md); the site's build checks a page so.
+   A member by itself, `load_middleware` or `process_request`, is accepted when at least one
+   class of the indexed packages declares a member spelt so. The gate cannot tell which class
+   is meant, so it checks only that the name exists; `--spans` lists the classes that declare
+   it. A page writes a member on its class where it first names it, and may write it bare
+   after that.
 4. As Python's own: a keyword, a builtin and its members (`len`, `dict.get`,
    `type.__call__`), a special method or attribute name the language defines (`__init__`,
    `__traceback__`; the list is in this file), `self`, `cls`, `args`, `kwargs`. A bare
@@ -82,8 +86,8 @@ name is.
 A member is one its class's own body declares (tools/pointers.py: a method, a class
 attribute, a nested class, a slot, an attribute its methods assign on `self`). An inherited
 member fails, and the message names the base that declares it where the gate can find it:
-`Class.member` is written on the declaring class. A member written without its class fails
-when it is a call, `.save()`; `.save` alone is read as other, like `.py`.
+`Class.member` is written on the declaring class. A member written with a leading dot and
+no class fails when it is a call, `.save()`; `.save` alone is read as other, like `.py`.
 
 A name made at runtime (by a metaclass, `contribute_to_class`, `setattr`, a descriptor, a
 module's `__getattr__`; or a setting the defaults do not define) exists in no syntax tree.
@@ -453,8 +457,10 @@ class Gate:
         if first in self.index.foreign:
             return "unchecked", "a library that is not pinned"
         if len(parts) == 1 and first in self.index.members:
-            raise Unresolved(f"it is no module-level name. A member is written on its class{self.declarers(first)}; "
-                             f"a function inside a function is written through it, `outer.inner`")
+            # a member by itself: it exists, on at least one class, and the gate cannot say which is meant
+            classes = sorted(set(self.index.members[first]))
+            return "member", ("a member, declared as " + ", ".join(f"{c}.{first}" for c in classes[:SHOWN])
+                              + (", ..." if len(classes) > SHOWN else ""))
         trees = ", ".join(sorted({tree for tree, _root in self.index.roots}))
         raise Unresolved(f"no module of {trees} defines `{first}` at its top, and it is no builtin; a standard-library "
                          f"name is written with its module (`collections.OrderedDict`), and a module from its top package")
@@ -758,7 +764,7 @@ def probe() -> int:
         refused("Child.save", "`Model` in pkg/models.py declares it")
         refused("Model.own", "binds no `own`")
         refused("default.save", "is an assignment: nothing can be named inside it")
-        refused("save", "A member is written on its class (declared, by this spelling, as `Model.save`")
+        passes("save", "own")   # a member by itself: some class declares one spelt so
         refused("nothing_here", "no module of a-library, single, subject defines `nothing_here` at its top")
         refused("Model.sav", "a name made at runtime is declared in a `runtime-names` block")
         refused("self._state", "an attribute is written on the class that declares it (declared, by this spelling, as `Model._state`")
@@ -998,7 +1004,7 @@ def probe() -> int:
           "object that stands for a module or a class (written alone or from its module, its places in order), "
           "in a library, in the standard library (alone, and where a walk is left at an import of it) and as "
           "Python's own, a builtin's members included; a member is one its class declares, and an inherited one "
-          "is refused with the base that declares it; a bare member, a misspelt name, a name hidden by "
+          "is refused with the base that declares it; a member by itself passes when some class declares one spelt so; a misspelt name, a name hidden by "
           "`__all__`, a name only a test or a locale holds, one deleted again and one imported only for type "
           "checking are refused; a name two files define is refused until a pointer on its line, the nearest "
           "above, or its module binds it, to what the named file defines or imports from a pinned tree, and a "

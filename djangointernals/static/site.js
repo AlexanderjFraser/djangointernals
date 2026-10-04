@@ -1,4 +1,4 @@
-/* How Django Works: the one script, and all it does is keep the reader's choice of colours.
+/* Django Internals: the one script, and all it does is keep the reader's choice of colours.
 
    The choice is one of the palettes the stylesheet has, kept in this browser under the key
    "colours" and set on the root element as data-colours; no choice kept means Auto, the

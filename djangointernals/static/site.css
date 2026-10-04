@@ -1,12 +1,15 @@
-/* How Django Works: the one stylesheet.
+/* Django Internals: the one stylesheet.
 
-   A book, not a documentation site: one column of text at a reading measure,
-   a serif for the text, a sans for the apparatus (everything the site says
-   about a page: where it is, what it was verified against, its status, its
-   captions), a mono for the names of the source. One accent, a rubric red,
-   for links and for the section mark. Tables and figures may be wider than
-   the text. Beside the column, where there is room, the book's contents; on
-   a narrow screen they open under the running head when asked for.
+   A book, not a documentation site. One column of text at a reading measure,
+   set in a serif; a sans for everything that is not the text (the running
+   head, the contents, captions, labels); a mono for the names of the source.
+   One accent, a rubric red, for links, numbers and rules.
+
+   Beside the text, where the screen is wide enough, a margin: the sources of
+   each paragraph stand there, level with it, as a textbook's marginal notes
+   do. Where there is no room for a margin they stand under their paragraph.
+   Tables and wide figures may run into the margin. To the left, the book's
+   contents; on a narrow screen they open under the running head when asked.
 
    The colours are five palettes: Paper and Dusk, which follow the reader's
    system unless the reader chooses, and White, Sepia and Night, which are
@@ -15,10 +18,9 @@
    system decides, and nothing else here needs one.
 
    Every colour is a custom property of :root, so a figure, which carries
-   classes and never a colour, follows the palette with the page. A department
+   classes and never a colour, follows the palette with the page. A chapter
    adds its own figure classes in figures/figures.css in its own directory of
-   the book, which the site puts on that department's pages only; it does not
-   restyle the apparatus. */
+   the book, which the site puts on that chapter's pages only. */
 
 @font-face { font-family: "Source Serif 4"; font-style: normal; font-weight: 200 900; font-display: swap;
   src: url("fonts/source-serif-4-latin-wght-normal.woff2") format("woff2");
@@ -49,7 +51,8 @@
   --sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Source Code Pro", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --measure: 34em;
-  --wide: 52em;
+  --gap: 2.2em;
+  --margin: 13.5em;
   --gutter: 1.25rem;
   --beside: 17rem;
 }
@@ -116,6 +119,7 @@ body {
   font-size: 1.0625rem;
   line-height: 1.55;
   font-kerning: normal;
+  font-variant-numeric: oldstyle-nums proportional-nums;
   text-rendering: optimizeLegibility;
   overflow-wrap: break-word;
 }
@@ -128,26 +132,18 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outli
 
 main { grid-area: main; min-width: 0; align-content: start; }
 
-/* The column: text at the measure; a table or a wide figure may take the margins too. */
-.column, .section, .head, .contents { display: grid; grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--measure)) minmax(var(--gutter), 1fr); }
-.column > *, .section > *, .head > *, .contents > * { grid-column: 2; min-width: 0; }
-.column > .section, .column > .head, .column > .contents { grid-column: 1 / -1; }
-.section > .table, .section > .wide, .contents > .wide {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: max-content;
-  min-width: min(var(--measure), 100% - 2 * var(--gutter));
-  max-width: min(var(--wide), 100% - 2 * var(--gutter));
-}
+/* The column. Text at the measure; where the screen is wide, a margin beside it. */
+.flow { display: grid; grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--measure)) minmax(var(--gutter), 1fr); }
+.flow > * { grid-column: 2; min-width: 0; }
 
-/* The running head: where this page is in the book, and at its end what the reader can set:
+/* The running head: the book, the chapter this page is in, and what the reader can set:
    the contents opened (on a narrow screen, where they are not beside the page) and the colours. */
-.running { grid-area: running; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.3em 1.4em; padding: 0.7em var(--gutter); font-family: var(--sans); font-size: 0.8em; border-bottom: 1px solid var(--rule); }
-.running .crumbs { display: flex; flex-wrap: wrap; gap: 0.1em 0.55em; align-items: baseline; }
+.running { grid-area: running; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.3em 1.4em; padding: 0.75em var(--gutter); font-family: var(--sans); font-size: 0.8em; font-variant-numeric: lining-nums; border-bottom: 1px solid var(--rule); }
+.running .crumbs { display: flex; flex-wrap: wrap; gap: 0.1em 0.6em; align-items: baseline; }
 .running a { color: var(--ink-2); text-decoration: none; }
 .running a:hover { color: var(--ink); text-decoration: underline; }
-.running .book { color: var(--ink); font-weight: 600; letter-spacing: 0.01em; }
-.running .mark { color: var(--accent); font-family: var(--serif); font-weight: 600; }
+.running .book { color: var(--ink); font-family: var(--serif); font-size: 1.12em; font-weight: 600; letter-spacing: 0.005em; }
+.running .book:hover { color: var(--accent); text-decoration: none; }
 .running .sep { color: var(--rule); }
 .running .controls { display: flex; align-items: baseline; gap: 1.2em; margin-left: auto; color: var(--ink-2); }
 .open-contents { position: relative; cursor: pointer; font-weight: 600; color: var(--ink); user-select: none; }
@@ -159,159 +155,206 @@ main { grid-area: main; min-width: 0; align-content: start; }
 .colours select:hover { border-color: var(--ink-2); }
 .colours select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-/* The book's contents, beside the page: every page under the contents page, the branch that
-   leads to this page opened, and this page's own sections under it. On a narrow screen they
-   are closed until the running head's Contents is pressed, and then stand above the page. */
-.booknav { grid-area: beside; display: none; padding: 0.9rem var(--gutter) 1.1rem; border-bottom: 1px solid var(--rule); font-family: var(--sans); font-size: 0.875rem; line-height: 1.35; }
+/* The book's contents, beside the page: the parts and their chapters, the chapter this page is
+   in opened to its sections, and this page's own headings under it. On a narrow screen they are
+   closed until the running head's Contents is pressed, and then stand above the page. */
+.booknav { grid-area: beside; display: none; padding: 0.9rem var(--gutter) 1.1rem; border-bottom: 1px solid var(--rule); font-family: var(--sans); font-size: 0.875rem; line-height: 1.35; font-variant-numeric: lining-nums tabular-nums; }
 body:has(#_contents-open:checked) .booknav { display: block; }
 .booknav ol { margin: 0; padding: 0; list-style: none; }
 .booknav li { margin: 0; }
-.booknav a, .booknav .outlined { display: block; padding: 0.3em 0; color: var(--ink-2); text-decoration: none; }
+.booknav .part { margin: 1.5em 0 0.45em; font-size: 0.72em; font-weight: 600; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-2); }
+.booknav .parts > li:first-child .part { margin-top: 0; }
+.booknav a, .booknav .planned { display: grid; grid-template-columns: 1.75em 1fr; padding: 0.27em 0; color: var(--ink); text-decoration: none; }
 .booknav a:hover { color: var(--accent); }
+.booknav .no { color: var(--ink-2); }
+.booknav .planned { color: var(--ink-2); }
 .booknav code { font-size: 0.9em; }
-.booknav .outlined { text-decoration: underline dotted var(--rule); text-underline-offset: 0.2em; cursor: help; }
-.booknav > ol > li > a { margin-bottom: 0.35em; font-size: 0.82em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
-.booknav > ol > li > ol > li > a, .booknav > ol > li > ol > li > .outlined { font-weight: 600; color: var(--ink); }
-.booknav > ol > li > ol > li > .outlined { font-weight: 500; color: var(--ink-2); }
-.booknav > ol > li > ol > li ol { margin: 0.1em 0 0.45em 0.2em; padding-left: 0.85em; border-left: 1px solid var(--rule); }
 .booknav a[aria-current] { color: var(--accent); font-weight: 600; }
-.booknav .sections { font-size: 0.93em; }
-.booknav .sections a { padding: 0.22em 0; font-weight: 400; }
-.booknav > ol > li > .sections { margin: 0 0 0.6em 0.2em; padding-left: 0.85em; border-left: 1px solid var(--rule); }
+.booknav a[aria-current] .no { color: inherit; }
+.booknav .under { margin: 0.1em 0 0.5em 0.55em; padding-left: 0.9em; border-left: 1px solid var(--rule); font-size: 0.95em; }
+.booknav .under a, .booknav .under .planned { grid-template-columns: 2.1em 1fr; padding: 0.24em 0; }
+.booknav .headings { margin: 0 0 0.35em 2.1em; font-size: 0.93em; }
+.booknav .chapters > li > .headings { margin-left: 1.75em; }
+.booknav .headings a { display: block; padding: 0.2em 0; color: var(--ink-2); font-weight: 400; }
+.booknav .headings a:hover { color: var(--accent); }
 
 @media (min-width: 62em) {
   body { grid-template-columns: var(--beside) minmax(0, 1fr); grid-template-rows: auto 1fr auto; grid-template-areas: "running running" "beside main" "beside colophon"; }
   body::before { content: ""; grid-area: beside; border-right: 1px solid var(--rule); }
-  .booknav, body:has(#_contents-open:checked) .booknav { display: block; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 1.9rem 1.1rem 2rem var(--gutter); border-bottom: 0; }
+  .booknav, body:has(#_contents-open:checked) .booknav { display: block; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 1.7rem 1.1rem 2rem var(--gutter); border-bottom: 0; }
   .open-contents { display: none; }
 }
 
-/* The head of a page: its title, its lede, and what the site says about it. */
-.head { padding-top: 3.2em; }
-.kicker { margin: 0 0 0.5em; font-family: var(--sans); font-size: 0.78em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
-.kicker a { color: var(--ink-2); text-decoration: none; }
+/* Where there is room, the margin. A block's sources go there; a table or a wide figure may. */
+@media (min-width: 80em) {
+  .flow { grid-template-columns: minmax(var(--gutter), 0.7fr) minmax(0, var(--measure)) var(--gap) var(--margin) minmax(var(--gutter), 1fr); }
+  .flow > .sources { grid-column: 4; align-self: start; margin: 0; padding: 0.42em 0 0; border: 0; }
+  .flow > .sources .src { margin-bottom: 0.6em; }
+  .flow > .sources .src code, .flow > .sources .src .in { display: block; }
+  .flow > .table, .flow > .tabular, .flow > .figure.wide { grid-column: 2 / 5; }
+}
+
+/* The head of a page. */
+.head { padding-top: 3.4em; }
+.kicker { margin: 0 0 0.65em; font-family: var(--sans); font-size: 0.74em; font-weight: 600; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-2); font-variant-numeric: lining-nums; }
+.kicker a { color: inherit; text-decoration: none; }
 .kicker a:hover { color: var(--accent); }
-h1 { margin: 0; font-size: 2.3em; line-height: 1.12; font-weight: 600; letter-spacing: -0.012em; text-wrap: balance; }
-.lede { margin: 0.7em 0 0; font-size: 1.24em; line-height: 1.4; font-style: italic; color: var(--ink-2); text-wrap: pretty; }
+h1 { margin: 0; font-size: 2.3em; line-height: 1.12; font-weight: 600; letter-spacing: -0.012em; text-wrap: balance; font-variant-numeric: lining-nums; }
+h1 .no { margin-right: 0.28em; font-weight: 400; color: var(--accent); }
+.lede { margin: 0.75em 0 0; font-size: 1.22em; line-height: 1.42; font-style: italic; color: var(--ink-2); text-wrap: pretty; }
 .lede code { font-style: normal; }
-.apparatus { margin: 1.9em 0 0; padding: 0.75em 0; border-block: 1px solid var(--rule); font-family: var(--sans); font-size: 0.8em; line-height: 1.45; color: var(--ink-2); }
-.apparatus div { display: grid; grid-template-columns: 8.4em 1fr; gap: 0 0.8em; padding: 0.16em 0; }
-.apparatus dt { font-weight: 600; letter-spacing: 0.04em; font-size: 0.92em; text-transform: uppercase; padding-top: 0.08em; }
-.apparatus dd { margin: 0; }
-.apparatus a { color: inherit; }
-.apparatus code { font-size: 0.92em; color: var(--ink); }
-.apparatus a code { color: inherit; }
+.spoken { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-/* A pointer is a link to the lines it lands on, at the pinned commit. Quiet: a page carries five to
-   a paragraph, and in the accent they would spot the text. The underline comes on hover. */
-a.pointer { color: var(--ink-2); text-decoration: none; }
-a.pointer:hover, a.pointer:focus-visible { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent); }
-a.pointer code { color: inherit; }
-pre a.pointer { color: var(--ink); }
-@media (max-width: 30em) { .apparatus div { grid-template-columns: 1fr; } }
+/* A chapter opens with its number, large. */
+.opener { padding-top: 3.8em; }
+.opener .numeral { margin: 0.1em 0 0.12em -0.03em; font-size: 5.6em; line-height: 0.95; font-weight: 300; color: var(--accent); font-variant-numeric: lining-nums; }
+.opener h1 { font-size: 2.65em; }
+.opener .lede { padding-bottom: 1.3em; border-bottom: 1px solid var(--rule); }
 
-/* A status: three pips, filled as far as the page has come, and the word. */
-.status { font-family: var(--sans); font-weight: 600; white-space: nowrap; color: var(--ink); }
-.pips { display: inline-flex; gap: 2px; margin-right: 0.45em; vertical-align: 0.06em; }
-.pips i { width: 0.5em; height: 0.5em; border: 1px solid var(--ink-2); border-radius: 50%; }
-.level-1 .pips i:nth-child(-n+1), .level-2 .pips i:nth-child(-n+2), .level-3 .pips i:nth-child(-n+3) { background: var(--accent); border-color: var(--accent); }
+/* The front page: the title, what the book is, which Django it describes. */
+.title-page { padding-top: 4.6em; }
+.title-page h1 { font-size: 3.5em; line-height: 1.02; letter-spacing: -0.022em; }
+.title-page .lede { margin-top: 0.7em; font-size: 1.34em; }
+.title-page .lede::after { content: ""; display: block; width: 3.2em; margin-top: 1.25em; border-top: 2px solid var(--accent); }
+.edition { margin: 1.25em 0 0; font-family: var(--sans); font-size: 0.78em; color: var(--ink-2); font-variant-numeric: lining-nums; }
+.edition a { color: inherit; }
+@media (max-width: 46em) { .title-page h1 { font-size: 2.7em; } .opener .numeral { font-size: 4.4em; } .opener h1 { font-size: 2.2em; } }
 
-/* What the page asserts in brief, and the questions it answers. */
-.brief { padding-top: 1.7em; }
-.answers { margin-top: 1.6em; padding: 0.9em 0 0.2em; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 0.86em; line-height: 1.4; }
-.answers h2 { margin: 0 0 0.5em; font: inherit; font-size: 0.86em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
-.answers ol { margin: 0; padding: 0; list-style: none; counter-reset: answer; }
-.answers li { counter-increment: answer; display: grid; grid-template-columns: 1.7em 1fr; padding: 0.2em 0; }
-.answers li::before { content: counter(answer); color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.answers a { color: var(--ink); text-decoration-color: var(--rule); }
-.answers a:hover { color: var(--accent); text-decoration-color: currentColor; }
+.brief { padding-top: 1.9em; }
 
 /* The text. */
 p { margin: 0 0 0.85em; text-wrap: pretty; hanging-punctuation: first; }
-.section h2 { position: relative; margin: 2.5em 0 0.6em; font-size: 1.42em; line-height: 1.22; font-weight: 600; letter-spacing: -0.006em; text-wrap: balance; }
-.section h3 { margin: 1.9em 0 0.45em; font-size: 1.08em; line-height: 1.3; font-weight: 600; font-style: italic; }
-.anchor { position: absolute; right: 100%; padding-right: 0.45em; color: var(--accent); font-weight: 400; text-decoration: none; opacity: 0.55; }
-.anchor:hover, h2:target .anchor { opacity: 1; }
-@media (max-width: 46em) { .anchor { position: static; float: right; padding: 0 0 0 0.4em; } }
+.section h2 { margin: 2.4em 0 0.6em; font-size: 1.46em; line-height: 1.22; font-weight: 600; letter-spacing: -0.006em; text-wrap: balance; font-variant-numeric: lining-nums; }
+.section h3 { margin: 1.7em 0 0.4em; font-size: 1.08em; line-height: 1.3; font-weight: 600; font-style: italic; }
 strong { font-weight: 600; }
-code, pre { font-family: var(--mono); font-variant-ligatures: none; }
+code, pre { font-family: var(--mono); font-variant-ligatures: none; font-variant-numeric: normal; }
 code { font-size: 0.86em; }
 h1 code, h2 code, h3 code { font-size: 0.9em; font-weight: 500; letter-spacing: -0.01em; }
-pre { margin: 0 0 1em; padding: 0.85em 1em; background: var(--paper-2); border-radius: 3px; font-size: 0.82em; line-height: 1.5; overflow-x: auto; overflow-wrap: normal; }
+pre { margin: 0.2em 0 1.1em; padding: 0.85em 1em; background: var(--paper-2); border-radius: 3px; font-size: 0.8em; line-height: 1.5; overflow-x: auto; overflow-wrap: normal; }
 pre code { font-size: 1em; }
-pre[data-kind="runtime-names"] { border-left: 2px solid var(--accent); border-radius: 0; }
-pre[data-kind="runtime-names"]::before { content: "Names Django makes as it runs, each with the code that makes it"; display: block; margin-bottom: 0.6em; font-family: var(--sans); font-size: 0.92em; color: var(--ink-2); }
-ul, ol { margin: 0 0 0.85em; padding-left: 1.5em; }
+ul, ol { margin: 0 0 0.85em; padding-left: 1.4em; }
 li { margin: 0.25em 0; }
 li > p { margin-bottom: 0.4em; }
-blockquote { margin: 1.1em 0; padding: 0.05em 0 0.05em 1.1em; border-left: 2px solid var(--accent); color: var(--ink-2); }
+blockquote { margin: 1.1em 0; padding: 0.05em 0 0.05em 1.1em; border-left: 2px solid var(--rule); color: var(--ink-2); font-style: italic; }
 blockquote > :last-child { margin-bottom: 0; }
 hr { border: 0; border-top: 1px solid var(--rule); margin: 2.2em 0; }
-.unwritten { text-decoration: underline dotted var(--ink-2); text-underline-offset: 0.18em; cursor: help; }
+.planned { color: inherit; }
+
+/* A pointer in the text is a link to the lines it names at the pinned commit. Quiet: it reads as
+   the name it shows, and the underline comes on hover. */
+a.pointer { color: inherit; text-decoration: underline dotted var(--rule); text-decoration-thickness: 0.09em; text-underline-offset: 0.22em; }
+a.pointer:hover, a.pointer:focus-visible { color: var(--accent); text-decoration: underline solid var(--accent); }
+a.pointer code { color: inherit; }
+
+/* A block's sources: the symbols it is about, each a link to its lines. Under the block on a
+   narrow screen; in the margin, level with the block, on a wide one (above). */
+.sources { margin: -0.3em 0 1em; padding-left: 0.8em; border-left: 1px solid var(--rule); font-family: var(--sans); font-size: 0.7em; line-height: 1.32; color: var(--ink-2); font-variant-numeric: lining-nums; }
+.sources .src { display: block; margin-bottom: 0.25em; color: inherit; text-decoration: none; }
+.sources .src code { font-size: 0.97em; color: var(--ink); }
+.sources .src .in { font-size: 0.94em; }
+.sources .src:hover code, .sources .src:focus-visible code { color: var(--accent); }
+a.src { color: inherit; text-decoration: none; }
+a.src:hover code { color: var(--accent); }
+td a.src code { display: block; }
+td a.src .in { display: block; font-family: var(--sans); font-size: 0.86em; color: var(--ink-2); }
+
+/* A note: a quotation that opens with its label in bold. */
+.note { margin: 1.3em 0 1.4em; padding: 0.1em 0 0.1em 1.1em; border-left: 2px solid var(--accent); font-size: 0.94em; line-height: 1.5; }
+.note > :last-child { margin-bottom: 0; }
+.note > p:first-child > strong:first-child { margin-right: 0.35em; font-family: var(--sans); font-size: 0.8em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); }
 
 /* Tables: ruled above and below, a hairline between rows, no boxes. */
-.table { margin: 1.3em 0 1.5em; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 0.9em; line-height: 1.42; border-block: 1.5px solid var(--ink); }
-th, td { padding: 0.5em 0.9em 0.5em 0; vertical-align: top; text-align: left; }
+.table { margin: 1.3em 0 1.5em; overflow-x: auto; justify-self: start; width: max-content; min-width: min(100%, var(--measure)); max-width: 100%; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9em; line-height: 1.42; border-block: 1.5px solid var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+th, td { padding: 0.5em 1.1em 0.5em 0; vertical-align: top; text-align: left; }
 th:last-child, td:last-child { padding-right: 0; }
-th { font-family: var(--sans); font-size: 0.86em; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); border-bottom: 1px solid var(--ink); white-space: nowrap; }
+th { font-family: var(--sans); font-size: 0.84em; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-2); border-bottom: 1px solid var(--ink); white-space: nowrap; }
 tbody tr + tr td { border-top: 1px solid var(--rule); }
 td code { font-size: 0.9em; }
+.tabular { margin: 1.5em 0 1.6em; justify-self: start; width: max-content; min-width: min(100%, var(--measure)); max-width: 100%; }
+.tabular .table { margin: 0.55em 0 0; width: auto; min-width: 0; }
+/* On a narrow screen a table gives way before it scrolls: its headings wrap, and a long name may break. */
+@media (max-width: 46em) {
+  table { font-size: 0.86em; }
+  th { white-space: normal; }
+  td code { overflow-wrap: anywhere; }
+  th, td { padding-right: 0.8em; }
+}
 
-/* Figures: drawn before the bake, inlined here, numbered by the stylesheet. */
-.column { counter-reset: figure; }
+/* Figures: drawn before the bake, put into the page as they are, numbered by the book. */
 /* A figure is shown at the size it was drawn (--natural, its viewBox's width) where there is
    room. Where there is not, it shrinks to three quarters of that and then scrolls sideways:
    a figure too small to read is worse than one that has to be scrolled. */
-.figure { margin: 1.6em 0 1.7em; counter-increment: figure; }
-.figure.wide { grid-column: 1 / -1; justify-self: center; width: 100%; max-width: min(var(--natural), 100% - 2 * var(--gutter)); }
+.figure { margin: 1.7em 0 1.9em; }
 .figure .art { overflow-x: auto; }
 .figure svg { display: block; width: 100%; max-width: var(--natural); min-width: calc(var(--natural) * 0.75); height: auto; margin: 0 auto; }
-figcaption { margin-top: 0.7em; font-family: var(--sans); font-size: 0.84em; line-height: 1.42; color: var(--ink-2); }
-figcaption::before { content: "Figure " counter(figure) ". "; font-weight: 600; color: var(--ink); }
-.figure .source { margin-top: 0.5em; font-family: var(--sans); font-size: 0.8em; color: var(--ink-2); }
-.figure .source summary { cursor: pointer; width: fit-content; }
-.figure .source pre { margin: 0.6em 0 0; font-size: 0.95em; }
+.figure.wide svg { margin: 0; }
+figcaption { margin-top: 0.75em; font-family: var(--sans); font-size: 0.82em; line-height: 1.42; color: var(--ink-2); font-variant-numeric: lining-nums; }
+.tabular figcaption { margin-top: 0; }
+figcaption .no { margin-right: 0.3em; font-weight: 600; color: var(--ink); }
+figcaption code { font-size: 0.9em; }
 
 /* What a figure is drawn with. A figure names these classes and no colour. */
-.fig text { font-family: var(--sans); font-size: 14px; fill: var(--ink); }
+.fig text { font-family: var(--sans); font-size: 14px; fill: var(--ink); font-variant-numeric: lining-nums; }
 .fig .name { font-family: var(--mono); font-size: 13px; }
 .fig .quiet { fill: var(--ink-2); }
+.fig .strong { font-weight: 600; }
+.fig .small { font-size: 12px; }
 .fig .box { fill: var(--paper-2); stroke: var(--ink-2); stroke-width: 1; }
+.fig .ground { fill: var(--paper); stroke: var(--ink-2); stroke-width: 1; }
 .fig .line { fill: none; stroke: var(--ink-2); stroke-width: 1.25; }
+.fig .dashed { stroke-dasharray: 4 3; }
 .fig .head { fill: var(--ink-2); stroke: none; }
 .fig .mark { fill: var(--accent); }
+.fig text.mark { fill: var(--accent); }
 .fig .mark-line { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.fig .mark-box { fill: color-mix(in srgb, var(--accent) 9%, var(--paper)); stroke: var(--accent); stroke-width: 1.25; }
 
-/* The contents: every page under this one, with its lede and how far it has come. */
-.contents > h2 { margin: 2.8em 0 0.2em; padding-top: 1em; border-top: 1.5px solid var(--ink); font-family: var(--sans); font-size: 0.8em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
+/* A chapter's outline, on its opening page: its sections, each with what it is about. */
+.outline { margin-top: 1.6em; }
+.outline h2, .contents > h2 { margin: 0 0 0.7em; font-family: var(--sans); font-size: 0.74em; font-weight: 600; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-2); }
+.outline ol { margin: 0; padding: 0; list-style: none; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+.outline li { display: grid; grid-template-columns: 2.5em 1fr; margin: 0; padding: 0.62em 0 0.6em; }
+.outline li + li { border-top: 1px solid var(--rule); }
+.outline a, .outline .planned { display: contents; color: var(--ink); text-decoration: none; }
+.outline .no { grid-column: 1; color: var(--accent); font-variant-numeric: lining-nums tabular-nums; }
+.outline .title { grid-column: 2; font-weight: 600; }
+.outline a:hover .title { color: var(--accent); text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.18em; }
+.outline .planned .no, .outline .planned .title { color: var(--ink-2); font-weight: 400; }
+.outline .about { grid-column: 2; margin-top: 0.12em; font-size: 0.9em; line-height: 1.45; color: var(--ink-2); }
+
+/* The contents, on the front page: the parts, their chapters, each with what it is about. */
+.contents { margin-top: 2.6em; }
+.contents > h2 { padding-top: 1.1em; border-top: 1.5px solid var(--ink); margin-bottom: 0; }
+.contents .part { margin: 2.1em 0 0.2em; font-size: 1.08em; font-weight: 600; font-style: italic; }
 .toc { margin: 0; padding: 0; list-style: none; }
-.toc li { margin: 0; padding: 0.85em 0 0.75em; border-bottom: 1px solid var(--rule); }
-.toc .toc { margin: 0.75em 0 -0.75em; padding-left: 1.4em; border-top: 1px solid var(--rule); }
-.toc .toc li:last-child { border-bottom: 0; }
-.toc .entry { display: flex; justify-content: space-between; align-items: baseline; gap: 1em; margin: 0; font-size: 1.12em; font-weight: 600; line-height: 1.3; }
-.toc .toc .entry { font-size: 1em; }
-.toc .entry a { color: var(--ink); text-decoration: none; }
-.toc .entry a:hover { color: var(--accent); text-decoration: underline; }
-.toc .status { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-2); }
-.toc .about { margin: 0.25em 0 0; font-size: 0.92em; line-height: 1.45; color: var(--ink-2); max-width: 46ch; }
-.toc .outlined > .entry .title { color: var(--ink-2); font-weight: 500; }
-.key { margin: 1.4em 0 0; font-family: var(--sans); font-size: 0.78em; line-height: 1.45; color: var(--ink-2); }
-.key div { display: grid; grid-template-columns: 8.2em 1fr; gap: 0 0.8em; padding: 0.14em 0; }
-.key dd { margin: 0; }
-.key .status { font-size: 1em; color: var(--ink-2); }
+.toc > li { margin: 0; padding: 0.7em 0 0.72em; border-bottom: 1px solid var(--rule); }
+.toc .entry { margin: 0; font-size: 1.06em; line-height: 1.3; }
+.toc .entry a, .toc .entry .planned { display: grid; grid-template-columns: 2.1em 1fr; color: var(--ink); text-decoration: none; }
+.toc .entry .no { color: var(--accent); font-variant-numeric: lining-nums tabular-nums; }
+.toc .entry .title { font-weight: 600; }
+.toc .entry a:hover .title { color: var(--accent); text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.18em; }
+.toc .entry .planned .title { font-weight: 500; }
+.toc .about { margin: 0.18em 0 0 2.23em; font-size: 0.9em; line-height: 1.45; color: var(--ink-2); }
+.toc .under { margin: 0.5em 0 0 2.23em; padding: 0; list-style: none; font-family: var(--sans); font-size: 0.82em; line-height: 1.4; font-variant-numeric: lining-nums tabular-nums; }
+.toc .under li { margin: 0; padding: 0.14em 0; }
+.toc .under a, .toc .under .planned { display: grid; grid-template-columns: 2.4em 1fr; color: var(--ink); text-decoration: none; }
+.toc .under a:hover { color: var(--accent); }
+.toc .under .no, .toc .under .planned { color: var(--ink-2); }
 
 /* Turning the page. */
-.turn { display: flex; justify-content: space-between; gap: 2em; margin-top: 3.4em; padding-top: 1.1em; border-top: 1px solid var(--rule); font-size: 1.02em; line-height: 1.3; }
+.turn { margin-top: 3.6em; }
+.turn > div { display: flex; justify-content: space-between; gap: 2em; padding-top: 1.1em; border-top: 1px solid var(--rule); font-size: 1.02em; line-height: 1.3; }
 .turn a { color: var(--ink); text-decoration: none; font-weight: 600; max-width: 46%; }
 .turn a:hover { color: var(--accent); }
-.turn a span { display: block; margin-bottom: 0.2em; font-family: var(--sans); font-size: 0.7em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
+.turn a span { display: block; margin-bottom: 0.25em; font-family: var(--sans); font-size: 0.7em; font-weight: 600; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-2); }
+.turn .no { font-weight: 400; color: var(--accent); font-variant-numeric: lining-nums; }
 .turn .after { margin-left: auto; text-align: right; }
 
-/* The colophon. */
+/* The foot of the page. */
 .colophon { grid-area: colophon; margin-top: 4em; padding: 1.3em 0 2.4em; border-top: 1px solid var(--rule); }
-.colophon div { font-family: var(--sans); font-size: 0.78em; line-height: 1.5; color: var(--ink-2); }
-.colophon p { margin: 0 0 0.45em; }
+.colophon div { font-family: var(--sans); font-size: 0.76em; line-height: 1.5; color: var(--ink-2); font-variant-numeric: lining-nums; }
+.colophon p { margin: 0 0 0.4em; }
 .colophon a { color: inherit; }
 
 /* On paper: the page alone, in black on white whatever the reader chose on the screen. */
@@ -319,5 +362,5 @@ figcaption::before { content: "Figure " counter(figure) ". "; font-weight: 600; 
   :root, :root[data-colours] { --paper: #fff; --paper-2: #f4f4f4; --ink: #000; --ink-2: #444; --rule: #bbb; --accent: #7a1f10; }
   body { display: block; font-size: 10.5pt; }
   body::before { content: none; }
-  .running, .booknav, .turn, .anchor, .figure .source { display: none !important; }
+  .running, .booknav, .turn { display: none !important; }
 }

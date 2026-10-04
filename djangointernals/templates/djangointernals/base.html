@@ -1,11 +1,11 @@
 {% load static %}<!doctype html>
-<html lang="en"{% if page.department %} data-department="{{ page.department.id }}"{% endif %}>
+<html lang="en"{% if page.chapter %} data-chapter="{{ page.chapter.id }}"{% endif %}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{{ book.index.title_text }}{% endblock %}</title>
 {% block meta %}{% endblock %}
-{% if twin %}<link rel="alternate" type="text/markdown" href="{{ twin }}" title="This page as markdown">
+{% if twin %}<link rel="alternate" type="text/markdown" href="{{ twin }}" title="This page as Markdown">
 {% endif %}{% if not indexable %}<meta name="robots" content="noindex">
 {% endif %}<script>try{var c=localStorage.getItem("colours");if(c)document.documentElement.setAttribute("data-colours",c)}catch(e){}</script>
 <link rel="preload" href="{% static 'fonts/source-serif-4-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
@@ -15,10 +15,10 @@
 {% endif %}<link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
 <script src="{% static 'site.js' %}" defer></script>
 </head>
-<body>
+<body{% if front %} class="front"{% endif %}>
 <header class="running">
 <nav class="crumbs" aria-label="Where this page is in the book">
-<a class="book" href="/"><span class="mark" aria-hidden="true">§</span> {{ book.index.title_text }}</a>{% for above in page.ancestors %}{% if above.id %}<span class="sep" aria-hidden="true">/</span><a href="{{ above.url }}">{{ above.title_text }}</a>{% endif %}{% endfor %}
+<a class="book" href="/">{{ book.index.title_text }}</a>{% if page.chapter and page.chapter is not page %}<span class="sep" aria-hidden="true">/</span><a href="{{ page.chapter.url }}">{{ page.chapter.title_text }}</a>{% endif %}
 </nav>
 <div class="controls">
 <label class="open-contents"><input type="checkbox" id="_contents-open"> Contents</label>
@@ -27,17 +27,16 @@
 </select></label>
 </div>
 </header>
-<main class="column">
+<main>
 {% block main %}{% endblock %}
 </main>
-<nav class="booknav" aria-label="The book's contents">
-{% include "djangointernals/nav.html" with entries=nav %}
+<nav class="booknav" aria-label="Contents">
+{% include "djangointernals/nav.html" with parts=nav %}
 </nav>
-<footer class="colophon column">
+<footer class="colophon flow">
 <div>
-<p>{{ book.index.title_text }}{% if indexable %} · <a href="{{ site_url }}">djangointernals.dev</a>{% endif %}. Not affiliated with or endorsed by the Django Software Foundation.</p>
-<p>The writing is licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: reuse it, adapt it, quote it, train on it; credit the source. Every page is markdown in <a href="{{ repository_url }}">the repository</a>, with the tools that check it.</p>
-<p>Found something false? <a href="{{ repository_url }}/issues">Open an issue</a> with the pointer that shows it.</p>
+{% if edition %}<p>This page describes Django {{ edition }}.{% if twin %} <a href="{{ twin }}">This page as Markdown</a>.{% endif %}</p>
+{% endif %}<p>{{ book.index.title_text }} is licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Its source is <a href="{{ repository_url }}">on GitHub</a>, where <a href="{{ repository_url }}/issues">corrections</a> are welcome. Not affiliated with or endorsed by the Django Software Foundation.</p>
 </div>
 </footer>
 </body>
