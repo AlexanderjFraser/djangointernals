@@ -8,7 +8,7 @@ The map is what the tools know about the pinned tree before anyone reads it: eve
 |---|---|
 | `packages.md`, `packages.json` | sizes by package, the imports between packages, the largest files, the tree beside the source |
 | `files.json` | every file under the source packages, with what it defines and imports; locale data by directory |
-| `slices.md`, `slices.json`, `slices/` | the slices (`map/slices.json`): the table, and one page for each with its files in reading order |
+| `chapters.md`, `chapters.json`, `chapters/` | the chapters (`map/chapters.json`): the table, and one page for each with its files in reading order |
 
 **How things are counted** is in the head of `tools/map_source.py`. In short: a file is a file the pinned commit holds; bytes and lines are counted from the repository's own bytes; a token count is an estimate at 2.45 bytes a token, or at the ratio `map/map.json` gives for the set of files it was measured on; classes and functions are those defined at module level; an import is an import statement, resolved to a file of the tree.
 

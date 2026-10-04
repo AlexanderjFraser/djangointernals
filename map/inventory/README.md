@@ -26,18 +26,27 @@ Sites by kind: `warn`, passed to a call named `warn` or `warn_explicit`; `passed
 | `RemovedInDjango2029Warning` | `django/utils/deprecation.py` | `PendingDeprecationWarning` | `RemovedAfterNextVersionWarning` | 5 | 1 |  |  |  | 12 |  | 4 |
 | a matching name that is no class of the tree |  |  |  |  |  |  |  |  |  | 6 |  |
 
-## By slice
+## By chapter
 
-| # | slice | ticket citations | deprecation sites, imports aside |
+| # | chapter | ticket citations | deprecation sites, imports aside |
 |---|---|---:|---:|
-| 1 | [the request path and the runtime](slices/1-request.md) | 9 | 51 |
-| 2 | [the ORM's model side](slices/2-orm-models.md) | 9 | 9 |
-| 3 | [the ORM's query side](slices/3-orm-queries.md) | 6 | 22 |
-| 4a | [the database backends](slices/4a-backends.md) | 21 | 3 |
-| 4b | [migrations](slices/4b-migrations.md) | 9 | 0 |
-| 5a | [templates and forms](slices/5a-templates-forms.md) | 19 | 2 |
-| 5b | [the admin](slices/5b-admin.md) | 6 | 22 |
-| 6a | [services and tooling](slices/6a-services.md) | 23 | 73 |
-| 6b | [the utilities and the test framework](slices/6b-utils-test.md) | 23 | 22 |
-| 7a | [the contrib apps](slices/7a-contrib.md) | 25 | 0 |
-| 7b | [the ORM's extensions](slices/7b-orm-extensions.md) | 10 | 13 |
+| 2 | [Settings, apps and startup](chapters/2-startup.md) | 3 | 36 |
+| 3 | [Management commands](chapters/3-commands.md) | 8 | 0 |
+| 4 | [Handlers and middleware](chapters/4-handlers.md) | 1 | 1 |
+| 5 | [Requests and responses](chapters/5-http.md) | 2 | 4 |
+| 7 | [Views](chapters/7-views.md) | 4 | 0 |
+| 8 | [Models and fields](chapters/8-models.md) | 9 | 9 |
+| 9 | [QuerySets](chapters/9-querysets.md) | 1 | 14 |
+| 10 | [From QuerySet to SQL](chapters/10-sql.md) | 5 | 8 |
+| 11 | [Database backends](chapters/11-backends.md) | 21 | 3 |
+| 12 | [Migrations](chapters/12-migrations.md) | 9 | 0 |
+| 13 | [Templates](chapters/13-templates.md) | 8 | 4 |
+| 14 | [Forms](chapters/14-forms.md) | 15 | 7 |
+| 15 | [Security](chapters/15-security.md) | 0 | 7 |
+| 16 | [Internationalization and time zones](chapters/16-i18n.md) | 4 | 0 |
+| 17 | [Caching, files, mail, signals and tasks](chapters/17-services.md) | 16 | 75 |
+| 18 | [The utility layer](chapters/18-utils.md) | 9 | 12 |
+| 19 | [Authentication, sessions and messages](chapters/19-auth.md) | 13 | 0 |
+| 20 | [The admin](chapters/20-admin.md) | 6 | 22 |
+| 21 | [Content types, static files and the other contrib apps](chapters/21-contrib.md) | 22 | 13 |
+| 22 | [The test framework](chapters/22-testing.md) | 4 | 2 |
