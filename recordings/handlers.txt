@@ -1,0 +1,299 @@
+Django 6.2.dev20260926051415 with MIDDLEWARE = [A, B, C]
+
+Making a WSGIHandler builds the chain, last middleware first
+    C(get_response)    get_response is the wrapper around BaseHandler._get_response
+    B(get_response)    get_response is the wrapper around C
+    A(get_response)    get_response is the wrapper around B
+
+The three lists of hooks, as the handler keeps them
+    _view_middleware: A, B, C
+    _template_response_middleware: C, B, A
+    _exception_middleware: C, B, A
+
+WSGI, GET /plain/: a view that returns a response
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view
+    C.process_response(200)
+    B.process_response(200)
+    A.process_response(200)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /template/: a view that returns a TemplateResponse
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, returning a TemplateResponse
+    C.process_template_response
+    B.process_template_response
+    A.process_template_response
+    C.process_response(200)
+    B.process_response(200)
+    A.process_response(200)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /nowhere/: no URL pattern matches
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    C.process_response(404)
+    B.process_response(404)
+    A.process_response(404)
+    start_response("404 Not Found", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /missing/: the view raises Http404
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, raising Http404
+    C.process_exception(Http404)
+    B.process_exception(Http404)
+    A.process_exception(Http404)
+    C.process_response(404)
+    B.process_response(404)
+    A.process_response(404)
+    start_response("404 Not Found", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /denied/: the view raises PermissionDenied
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, raising PermissionDenied
+    C.process_exception(PermissionDenied)
+    B.process_exception(PermissionDenied)
+    A.process_exception(PermissionDenied)
+    C.process_response(403)
+    B.process_response(403)
+    A.process_response(403)
+    start_response("403 Forbidden", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /broken/: the view raises ValueError
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, raising ValueError
+    C.process_exception(ValueError)
+    B.process_exception(ValueError)
+    A.process_exception(ValueError)
+    signal: got_request_exception
+    C.process_response(500)
+    B.process_response(500)
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /nothing/: the view returns None
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, returning None
+    signal: got_request_exception
+    C.process_response(500)
+    B.process_response(500)
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /raise-in-B/: B.process_request raises RuntimeError
+    signal: request_started
+    A.process_request
+    B.process_request
+    signal: got_request_exception
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /async/: an async view
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view (async def), on another thread
+    C.process_response(200)
+    B.process_response(200)
+    A.process_response(200)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /broken/: the view raises ValueError, and the 500 error view raises too
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, raising ValueError
+    C.process_exception(ValueError)
+    B.process_exception(ValueError)
+    A.process_exception(ValueError)
+    signal: got_request_exception
+    the 500 error view, raising LookupError
+    signal: got_request_exception
+    the 500 error view, raising LookupError
+    signal: got_request_exception
+    the 500 error view, raising LookupError
+    signal: got_request_exception
+    the 500 error view, raising LookupError
+    the handler raises LookupError to the server
+
+WSGI, GET /broken/: the view raises ValueError, with DEBUG_PROPAGATE_EXCEPTIONS = True
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, raising ValueError
+    C.process_exception(ValueError)
+    B.process_exception(ValueError)
+    A.process_exception(ValueError)
+    signal: got_request_exception
+    signal: got_request_exception
+    signal: got_request_exception
+    signal: got_request_exception
+    the handler raises ValueError to the server
+
+MIDDLEWARE = [A, Unused, C], where Unused raises MiddlewareNotUsed: it is left out of the chain
+    C(get_response)    get_response is the wrapper around BaseHandler._get_response
+    A(get_response)    get_response is the wrapper around C
+
+From here on A, B and C have process_request and process_response and no other hook, each line says
+which thread it ran on, and every crossing between the event loop and a thread is written down.
+
+Making an ASGIHandler; A, B and C can only run synchronously (async_capable = False)
+    C(get_response)    get_response is async_to_sync(the wrapper around BaseHandler._get_response_async)
+    B(get_response)    get_response is the wrapper around C
+    A(get_response)    get_response is the wrapper around B
+    the chain: sync_to_async(the wrapper around A)
+
+ASGI, GET /async/: an async view, synchronous middleware
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+      loop -> thread: sync_to_async(the wrapper around A)
+    A.process_request  [worker]
+    B.process_request  [worker]
+    C.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+    the view (async def)  [loop]
+    C.process_response(200)  [worker]
+    B.process_response(200)  [worker]
+    A.process_response(200)  [worker]
+    send(http.response.start)  [loop]
+    send(http.response.body)  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /plain/: a synchronous view, synchronous middleware
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+      loop -> thread: sync_to_async(the wrapper around A)
+    A.process_request  [worker]
+    B.process_request  [worker]
+    C.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+      loop -> thread: sync_to_async(plain)
+    the view  [worker]
+    C.process_response(200)  [worker]
+    B.process_response(200)  [worker]
+    A.process_response(200)  [worker]
+    send(http.response.start)  [loop]
+    send(http.response.body)  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    (everything marked worker ran on 1 thread)
+
+Making an ASGIHandler; A, B and C say they can run either way (async_capable = True)
+    C(get_response)    get_response is the wrapper around BaseHandler._get_response_async
+    B(get_response)    get_response is the wrapper around C
+    A(get_response)    get_response is the wrapper around B
+    the chain: the wrapper around A
+
+ASGI, GET /async/: an async view, middleware in async mode
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+      loop -> thread: sync_to_async(A.process_request)
+    A.process_request  [worker]
+      loop -> thread: sync_to_async(B.process_request)
+    B.process_request  [worker]
+      loop -> thread: sync_to_async(C.process_request)
+    C.process_request  [worker]
+    the view (async def)  [loop]
+      loop -> thread: sync_to_async(C.process_response)
+    C.process_response(200)  [worker]
+      loop -> thread: sync_to_async(B.process_response)
+    B.process_response(200)  [worker]
+      loop -> thread: sync_to_async(A.process_response)
+    A.process_response(200)  [worker]
+    send(http.response.start)  [loop]
+    send(http.response.body)  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /plain/: a synchronous view, middleware in async mode
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+      loop -> thread: sync_to_async(A.process_request)
+    A.process_request  [worker]
+      loop -> thread: sync_to_async(B.process_request)
+    B.process_request  [worker]
+      loop -> thread: sync_to_async(C.process_request)
+    C.process_request  [worker]
+      loop -> thread: sync_to_async(plain)
+    the view  [worker]
+      loop -> thread: sync_to_async(C.process_response)
+    C.process_response(200)  [worker]
+      loop -> thread: sync_to_async(B.process_response)
+    B.process_response(200)  [worker]
+      loop -> thread: sync_to_async(A.process_response)
+    A.process_response(200)  [worker]
+    send(http.response.start)  [loop]
+    send(http.response.body)  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    (everything marked worker ran on 1 thread)
+
+Making an ASGIHandler; A and C can run either way, B only synchronously
+    C(get_response)    get_response is the wrapper around BaseHandler._get_response_async
+    B(get_response)    get_response is async_to_sync(the wrapper around C)
+    A(get_response)    get_response is the wrapper around B
+    the chain: sync_to_async(the wrapper around A)
+

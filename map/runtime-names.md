@@ -11,4 +11,7 @@ document. One entry a line: the name, the pointer, and after `#` anything.
 Each entry is a claim and is verified like one.
 
 ```runtime-names
+ROOT_URLCONF                 django/conf/__init__.py:Settings.__init__                   # the defaults do not define it; a project's settings module does, and each of its upper-case names is set here
+process_exception            django/core/handlers/base.py:BaseHandler.load_middleware    # a method the handler looks for on a middleware instance; no class in Django declares one
+process_template_response    django/core/handlers/base.py:BaseHandler.load_middleware    # the same
 ```
