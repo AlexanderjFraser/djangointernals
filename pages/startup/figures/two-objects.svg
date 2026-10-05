@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 476">
+  <!-- three columns: the settings, the three statements of django.setup, the app registry; time runs down -->
+  <text class="strong" x="86" y="14" text-anchor="middle">settings</text>
+  <text class="strong" x="304" y="14" text-anchor="middle">django.setup()</text>
+  <text class="strong" x="541" y="14" text-anchor="middle">apps</text>
+
+  <!-- the two objects as their modules leave them -->
+  <rect class="ground" x="0" y="28" width="172" height="48" rx="4"/>
+  <text class="name" x="10" y="48">LazySettings</text>
+  <text class="quiet small" x="10" y="64">made empty, at import</text>
+  <rect class="ground" x="436" y="28" width="210" height="48" rx="4"/>
+  <text class="name" x="446" y="48">Apps</text>
+  <text class="quiet small" x="446" y="64">made empty, at import</text>
+
+  <!-- each object's life, down its column -->
+  <path class="line dashed" d="M86 76 V112"/>
+  <path class="line dashed" d="M541 76 V248"/>
+
+  <!-- the three statements, in order -->
+  <path class="line" d="M304 160 V172"/>
+  <polygon class="head" points="304,182 299,172 309,172"/>
+  <path class="line" d="M304 230 V238"/>
+  <polygon class="head" points="304,248 299,238 309,238"/>
+
+  <rect class="box" x="204" y="112" width="200" height="48" rx="4"/>
+  <text class="name" x="214" y="132">configure_logging</text>
+  <text class="quiet small" x="214" y="148">reads settings.LOGGING_CONFIG</text>
+
+  <rect class="box" x="204" y="182" width="200" height="48" rx="4"/>
+  <text class="name" x="214" y="202">set_script_prefix</text>
+  <text class="quiet small" x="214" y="218">unless the caller declines</text>
+
+  <rect class="box" x="204" y="248" width="200" height="48" rx="4"/>
+  <text class="name" x="214" y="268">Apps.populate</text>
+  <text class="quiet small" x="214" y="284">with settings.INSTALLED_APPS</text>
+
+  <!-- the first statement's read loads the settings -->
+  <path class="mark-line" d="M204 136 H182"/>
+  <polygon class="head mark" points="172,136 182,131 182,141"/>
+  <rect class="mark-box" x="0" y="112" width="172" height="48" rx="4"/>
+  <text class="name" x="10" y="132">Settings</text>
+  <text class="quiet small" x="10" y="148">the module, on the first read</text>
+
+  <!-- the third fills the registry, in three phases, each ending with a flag -->
+  <path class="mark-line" d="M404 272 H426"/>
+  <polygon class="head mark" points="436,272 426,267 426,277"/>
+
+  <rect class="mark-box" x="436" y="248" width="210" height="48" rx="4"/>
+  <text class="name" x="446" y="268">AppConfig.create</text>
+  <text class="quiet small" x="446" y="284">each entry of INSTALLED_APPS</text>
+  <path class="line" d="M456 296 V314"/>
+  <polygon class="head" points="456,324 451,314 461,314"/>
+  <text x="472" y="315"><tspan class="name mark">apps_ready</tspan><tspan class="quiet small"> is true</tspan></text>
+
+  <rect class="mark-box" x="436" y="324" width="210" height="48" rx="4"/>
+  <text class="name" x="446" y="344">AppConfig.import_models</text>
+  <text class="quiet small" x="446" y="360">each application</text>
+  <path class="line" d="M456 372 V390"/>
+  <polygon class="head" points="456,400 451,390 461,390"/>
+  <text x="472" y="391"><tspan class="name mark">models_ready</tspan><tspan class="quiet small"> is true</tspan></text>
+
+  <rect class="mark-box" x="436" y="400" width="210" height="48" rx="4"/>
+  <text class="name" x="446" y="420">AppConfig.ready</text>
+  <text class="quiet small" x="446" y="436">each application</text>
+  <path class="line" d="M456 448 V470"/>
+  <text x="472" y="467"><tspan class="name mark">ready</tspan><tspan class="quiet small"> is true</tspan></text>
+</svg>

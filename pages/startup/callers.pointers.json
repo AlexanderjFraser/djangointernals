@@ -1,0 +1,222 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "callers.md",
+ "pointers": [
+  {
+   "pointer": "django/conf/project_template/manage.py-tpl",
+   "line": 15,
+   "sentence": "The three entry files that `django-admin startproject` writes each begin by setting it, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
+   "tree": "django",
+   "path": "django/conf/project_template/manage.py-tpl",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    22
+   ],
+   "fingerprint": "243b861b4dbaef46"
+  },
+  {
+   "pointer": "django/conf/project_template/project_name/wsgi.py-tpl",
+   "line": 15,
+   "sentence": "The three entry files that `django-admin startproject` writes each begin by setting it, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
+   "tree": "django",
+   "path": "django/conf/project_template/project_name/wsgi.py-tpl",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    16
+   ],
+   "fingerprint": "3827e38c2b1d11e5"
+  },
+  {
+   "pointer": "django/conf/project_template/project_name/asgi.py-tpl",
+   "line": 15,
+   "sentence": "The three entry files that `django-admin startproject` writes each begin by setting it, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
+   "tree": "django",
+   "path": "django/conf/project_template/project_name/asgi.py-tpl",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    16
+   ],
+   "fingerprint": "abfe89a39b4bcba6"
+  },
+  {
+   "pointer": "django/core/management/base.py:handle_default_options",
+   "line": 17,
+   "sentence": "`ManagementUtility.execute` parses that one option, and `--pythonpath`, ahead of everything else, and `handle_default_options` assigns the value (`django/core/management/base.py:handle_default_options`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "handle_default_options",
+   "kind": "function",
+   "lines": [
+    92,
+    101
+   ],
+   "fingerprint": "b99c3d0a5b0ecdb8"
+  },
+  {
+   "pointer": "django/core/wsgi.py:get_wsgi_application",
+   "line": 21,
+   "sentence": "The module calls `get_wsgi_application` or `get_asgi_application`, and each of those is two lines: call `django.setup` with `set_prefix=False`, and return a new handler (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "tree": "django",
+   "path": "django/core/wsgi.py",
+   "symbol": "get_wsgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "db32b08cd1f96afc"
+  },
+  {
+   "pointer": "django/core/asgi.py:get_asgi_application",
+   "line": 21,
+   "sentence": "The module calls `get_wsgi_application` or `get_asgi_application`, and each of those is two lines: call `django.setup` with `set_prefix=False`, and return a new handler (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "tree": "django",
+   "path": "django/core/asgi.py",
+   "symbol": "get_asgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "03951811c2123fc0"
+  },
+  {
+   "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
+   "line": 29,
+   "sentence": "`manage.py` and `django-admin` both end in `ManagementUtility.execute`, and it decides whether to start Django before it has found the command's class (`django/core/management/__init__.py:ManagementUtility.execute`).",
+   "tree": "django",
+   "path": "django/core/management/__init__.py",
+   "symbol": "ManagementUtility.execute",
+   "kind": "function",
+   "lines": [
+    353,
+    434
+   ],
+   "fingerprint": "31851105e39a4745"
+  },
+  {
+   "pointer": "django/core/management/__init__.py:get_commands",
+   "line": 33,
+   "sentence": "The list of available commands depends on the same test: without settings it holds only Django's own, and with them it also holds those of every installed application, found by looking in each one's directory (`django/core/management/__init__.py:get_commands`).",
+   "tree": "django",
+   "path": "django/core/management/__init__.py",
+   "symbol": "get_commands",
+   "kind": "function",
+   "lines": [
+    52,
+    80
+   ],
+   "at": 53,
+   "fingerprint": "5a4cd26784bdab31"
+  },
+  {
+   "pointer": "django/utils/autoreload.py:check_errors",
+   "line": 39,
+   "sentence": "The wrapper, `check_errors`, notes the exception and the file it came from before letting it out, and `execute` then swallows it (`django/utils/autoreload.py:check_errors`).",
+   "tree": "django",
+   "path": "django/utils/autoreload.py",
+   "symbol": "check_errors",
+   "kind": "function",
+   "lines": [
+    61,
+    85
+   ],
+   "fingerprint": "c03d6a4307660585"
+  },
+  {
+   "pointer": "django/core/management/commands/runserver.py:Command.inner_run",
+   "line": 41,
+   "sentence": "In the child, the first thing the server's thread does is raise the noted exception again, so the traceback appears and that thread ends (`django/core/management/commands/runserver.py:Command.inner_run`).",
+   "tree": "django",
+   "path": "django/core/management/commands/runserver.py",
+   "symbol": "Command.inner_run",
+   "kind": "function",
+   "lines": [
+    121,
+    170
+   ],
+   "fingerprint": "be42ca880195cc70"
+  },
+  {
+   "pointer": "django/utils/autoreload.py:restart_with_reloader",
+   "line": 41,
+   "sentence": "The main thread goes on watching, the file that failed included, and when one is saved it exits the process with the status that asks the parent for a new child (`django/utils/autoreload.py:restart_with_reloader`).",
+   "tree": "django",
+   "path": "django/utils/autoreload.py",
+   "symbol": "restart_with_reloader",
+   "kind": "function",
+   "lines": [
+    273,
+    292
+   ],
+   "fingerprint": "39371258badfae0f"
+  },
+  {
+   "pointer": "django/utils/autoreload.py:BaseReloader.wait_for_apps_ready",
+   "line": 43,
+   "sentence": "Before the watching thread imports the root URLconf and starts to watch, it waits for the event, or for the server's thread to end without it (`django/utils/autoreload.py:BaseReloader.wait_for_apps_ready`).",
+   "tree": "django",
+   "path": "django/utils/autoreload.py",
+   "symbol": "BaseReloader.wait_for_apps_ready",
+   "kind": "function",
+   "lines": [
+    327,
+    343
+   ],
+   "fingerprint": "d38521c72f9b64b1"
+  },
+  {
+   "pointer": "django/core/management/templates.py:TemplateCommand.handle",
+   "line": 47,
+   "sentence": "`TemplateCommand.handle` prepares what its comment calls a stub settings environment for the rendering: when nothing is configured it calls `settings.configure()` with no arguments, which yields the defaults alone, and then `django.setup`, which populates the registry with no applications (`django/core/management/templates.py:TemplateCommand.handle`).",
+   "tree": "django",
+   "path": "django/core/management/templates.py",
+   "symbol": "TemplateCommand.handle",
+   "kind": "function",
+   "lines": [
+    89,
+    235
+   ],
+   "fingerprint": "8bc06a24bde327f5"
+  },
+  {
+   "pointer": "django/test/runner.py:_init_worker",
+   "line": 51,
+   "sentence": "A worker made any other way, spawned or forked from a separate fork server, has neither, and the function that initializes each worker calls `django.setup` for it and sets up the test environment again (`django/test/runner.py:_init_worker`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "_init_worker",
+   "kind": "function",
+   "lines": [
+    473,
+    524
+   ],
+   "fingerprint": "ffa01dd6338820a5"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:get_internal_wsgi_application",
+   "line": 73,
+   "sentence": "The development server makes one: the command has already started Django when it obtains the handler, and obtaining it runs `get_wsgi_application`, which calls `django.setup` again (`django/core/servers/basehttp.py:get_internal_wsgi_application`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "get_internal_wsgi_application",
+   "kind": "function",
+   "lines": [
+    29,
+    54
+   ],
+   "fingerprint": "4b461ac5a064a46b"
+  }
+ ]
+}

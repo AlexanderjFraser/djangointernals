@@ -1,0 +1,151 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "startup.md",
+ "pointers": [
+  {
+   "pointer": "django/__init__.py",
+   "line": 11,
+   "sentence": "Importing `django` does almost nothing: the package's own module defines a version and one function (`django/__init__.py`).",
+   "tree": "django",
+   "path": "django/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    24
+   ],
+   "fingerprint": "ee7df4d9b07d72b2"
+  },
+  {
+   "pointer": "django/conf/__init__.py:settings",
+   "line": 17,
+   "sentence": "`django.conf.settings` is a `LazySettings`: a stand-in for the project's settings that holds nothing until something reads a setting from it (`django/conf/__init__.py:settings`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "settings",
+   "kind": "assignment",
+   "lines": [
+    423,
+    423
+   ],
+   "fingerprint": "4f8094cd409a9075"
+  },
+  {
+   "pointer": "django/apps/registry.py:apps",
+   "line": 17,
+   "sentence": "`django.apps.apps` is an `Apps`, the **app registry**: the record of the installed applications and of every model class (`django/apps/registry.py:apps`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "apps",
+   "kind": "assignment",
+   "lines": [
+    438,
+    438
+   ],
+   "fingerprint": "a47a82f2bb516299"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings._setup",
+   "line": 21,
+   "sentence": "Neither a server nor a command ever says \"load the settings\": whichever line of code reads a setting first does it, and every later read finds it done (`django/conf/__init__.py:LazySettings._setup`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings._setup",
+   "kind": "function",
+   "lines": [
+    93,
+    109
+   ],
+   "fingerprint": "6721d7ba7192c979"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.populate",
+   "line": 23,
+   "sentence": "It stays empty until `Apps.populate` is called with the list of applications, and until then it refuses most questions with the exception `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.populate",
+   "kind": "function",
+   "lines": [
+    61,
+    127
+   ],
+   "fingerprint": "32f7c6ad9925afa8"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.check_apps_ready",
+   "line": 23,
+   "sentence": "It stays empty until `Apps.populate` is called with the list of applications, and until then it refuses most questions with the exception `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.check_apps_ready",
+   "kind": "function",
+   "lines": [
+    129,
+    138
+   ],
+   "fingerprint": "7dbef7462298717a"
+  },
+  {
+   "pointer": "django/__init__.py:setup",
+   "line": 27,
+   "sentence": "`django.setup` is the function that takes a process from the one state to the other, from having imported Django to being able to use it (`django/__init__.py:setup`).",
+   "tree": "django",
+   "path": "django/__init__.py",
+   "symbol": "setup",
+   "kind": "function",
+   "lines": [
+    8,
+    24
+   ],
+   "fingerprint": "1d9e6fad619c10ab"
+  },
+  {
+   "pointer": "django/core/wsgi.py:get_wsgi_application",
+   "line": 104,
+   "sentence": "Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`).",
+   "tree": "django",
+   "path": "django/core/wsgi.py",
+   "symbol": "get_wsgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "db32b08cd1f96afc"
+  },
+  {
+   "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
+   "line": 104,
+   "sentence": "For a management command it is `ManagementUtility.execute`, before it looks for the command (`django/core/management/__init__.py:ManagementUtility.execute`).",
+   "tree": "django",
+   "path": "django/core/management/__init__.py",
+   "symbol": "ManagementUtility.execute",
+   "kind": "function",
+   "lines": [
+    353,
+    434
+   ],
+   "fingerprint": "31851105e39a4745"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
+   "line": 119,
+   "sentence": "`SecurityMiddleware` reads its settings into attributes once, in its constructor, when the middleware chain is made (`django/middleware/security.py:SecurityMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.__init__",
+   "kind": "function",
+   "lines": [
+    11,
+    21
+   ],
+   "fingerprint": "d589cea40c7ab213"
+  }
+ ]
+}
