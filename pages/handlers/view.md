@@ -18,7 +18,7 @@ The match is a `ResolverMatch`. It is kept as `HttpRequest.resolver_match`, wher
 
 When nothing matches, the resolver raises `Resolver404`, which is a subclass of `Http404` (`django/urls/exceptions.py:Resolver404`). No view has been chosen, so nothing described below runs. The exception leaves `_get_response` and is turned into a 404 response by the wrapper around the centre. The middleware never see the exception, only the response on its way out:
 
-```text
+```text recording=handlers
 WSGI, GET /nowhere/: no URL pattern matches
     signal: request_started
     A.process_request
@@ -64,7 +64,7 @@ A view may return a response that has not been rendered yet: a `TemplateResponse
 
 It is first passed through each method in `BaseHandler._template_response_middleware`, the `process_template_response` hooks, innermost first. A hook may change the template or the context, or return a different response, which must itself have a `render` method. Whatever it returns is checked as the view's result was. Then the handler calls `render`. An exception raised while rendering gets the same treatment as one raised by the view: the exception hooks first, and out of the centre if none of them answers.
 
-```text
+```text recording=handlers
 WSGI, GET /template/: a view that returns a TemplateResponse
     signal: request_started
     A.process_request

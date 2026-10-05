@@ -86,7 +86,7 @@ deprecation warnings are named by year, and much else has moved.
   are generated (`tools/map_source.py`, `tools/inventory.py`) and never
   edited. `map/runtime-names.md` lists the names that exist only as the
   code runs.
-- `tools/` (MIT): the pin, the map and the three gates. Each has a
+- `tools/` (MIT): the pin, the map and the four gates. Each has a
   `--probe`.
 - `djangointernals/` and `manage.py`: the site, a Django project baked to
   static files for Cloudflare Pages. `djangointernals/__init__.py` says

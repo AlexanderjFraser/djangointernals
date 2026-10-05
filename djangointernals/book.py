@@ -39,9 +39,10 @@ page that is not a chapter; a page under a section (the book is two levels
 deep); a child named in `contents` with no file, and a
 markdown file no `contents` names; a written page under one that is only
 planned; a front page with nothing on it; a link to an anchor its target
-does not have. And what the two gates refuse (gates.py: tools/pointers.py
-and tools/names.py, run on every page, the name gate binding within a
-section): a pointer that does not resolve at the pin, a name that does not
+does not have. And what the three gates refuse (gates.py: tools/pointers.py,
+tools/names.py and tools/recordings.py, run on every page, the name gate
+binding within a section): a pointer that does not resolve at the pin, a
+quote of a recording that is not one block's lines in order, a name that does not
 exist.
 
 What it does not check is what only a reader can: that a page is right, and
@@ -313,7 +314,7 @@ def load(root: Path | None = None) -> Book:
         for where, href, target, fragment in page.fragments:
             if fragment not in target.anchors and not (fragment.startswith("figure-") and fragment[7:] in target.figures):
                 problems.append(f"{where}: the link `{href}`: {target.where} has no heading or figure that comes to `#{fragment}`")
-    # the two gates, on every page: a pointer that does not resolve, a name that does not exist
+    # the three gates, on every page: a pointer that does not resolve, a name that does not exist, a quote of a recording altered
     problems += gates.list_problems
     for page in book.order:
         problems += gates.problems(page)

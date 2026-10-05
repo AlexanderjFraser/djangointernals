@@ -5,7 +5,7 @@
     python manage.py bake --out DIR          somewhere other than dist/
     python manage.py bake --probe            prove the bake refuses what it should, and writes what it should
 
-The book is read whole first (djangointernals/book.py), the two gates run
+The book is read whole first (djangointernals/book.py), the three gates run
 on every page (gates.py), and a book with a problem is refused whole: every
 problem is printed as `file:line: what is wrong`, nothing is written, and
 the command fails. Then each written page is requested with Django's test

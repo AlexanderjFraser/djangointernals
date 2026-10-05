@@ -13,7 +13,7 @@ In order, stopping at the first failure and saying which step it was:
    changed and the gate not run; a missing one, that it was never run. When the book is inside
    this repository, a report that is not committed, or changed since, stops it too: the
    reports are what a re-pin compares, and must be in the history.
-2. `python manage.py bake` of the same book: the loader's refusals, the two gates on every
+2. `python manage.py bake` of the same book: the loader's refusals, the three gates on every
    page, the agent's files, and the link gate over what was written. The book is the one
    named here (`--book`, else `pages/`), whatever `$BOOK` says.
 3. `wrangler pages deploy dist --project-name PROJECT --branch BRANCH --commit-dirty=true`.

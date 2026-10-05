@@ -186,8 +186,26 @@ asgiref:asgiref/sync.py:sync_to_async
 Where the order of calls is the point, the page shows a recording from a
 running Django, not an order inferred by reading. A chapter's recordings
 are made by a script, `recordings/<chapter>.py`, whose output is committed
-beside it. A page quotes the output in a fenced block: it may leave lines
-out and says so, and it never alters or reorders them.
+beside it as `recordings/<chapter>.txt`; a recording that needs a project
+keeps it in a directory beside the script. The output is blocks: a title
+at the left margin, and the lines recorded under it, indented, to the next
+blank line.
+
+A page quotes the output in a fenced block that names the recording,
+`recording=<chapter>` after the block's kind, and the quote is held to the
+output (`python tools/recordings.py`): its lines are the lines of one
+block, in the block's order and with the block's nesting, and nothing is
+altered, added or moved. A quote may leave lines out, and says so: in the
+prose beside it, or with a line of three dots where they were. An excerpt
+from inside a block may be shifted left as a whole.
+
+````
+```text recording=handlers
+WSGI, GET /plain/: a view that returns a response
+    signal: request_started
+    A.process_request
+```
+````
 
 ## Figures
 
@@ -274,7 +292,9 @@ proves each refusal.
 - *The gates*, on every page: a pointer that does not resolve at the pin
   (`tools/pointers.py`); a name no pinned tree declares, or written on a
   class that does not declare it, or defined by several modules and bound
-  by nothing in its section (`tools/names.py --sections`).
+  by nothing in its section (`tools/names.py --sections`); a quote of a
+  recording that names one there is no output for, or whose lines are not
+  one block's in its order and nesting (`tools/recordings.py`).
 - *What was written*: a link in a baked page, a twin, `llms.txt` or the
   sitemap that resolves to no file or no heading (`tools/links.py`).
 
@@ -297,6 +317,7 @@ python tools/pointers.py pages/              every pointer resolves; a report wr
 python tools/pointers.py --check pages/      the committed reports are what the gate writes now
 python tools/names.py --sections pages/      every name in a code span exists
 python tools/names.py --spans PAGE.md        what each code span was taken for
+python tools/recordings.py pages/            every quote of a recording is one block's lines, in order, nesting kept
 python recordings/handlers.py                a chapter's recording, to compare with the committed output
 ```
 

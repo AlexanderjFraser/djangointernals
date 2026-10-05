@@ -49,7 +49,7 @@ If the mode chosen differs from that of the chain so far, the chain so far is ad
 
 A chain that mixes the kinds shows the rule at work. In this recording of an `ASGIHandler` being made, A and C can run either way and B can only run synchronously:
 
-```text
+```text recording=handlers
 Making an ASGIHandler; A and C can run either way, B only synchronously
     C(get_response)    get_response is the wrapper around BaseHandler._get_response_async
     B(get_response)    get_response is async_to_sync(the wrapper around C)
@@ -65,7 +65,7 @@ The rule keeps each layer in the mode of the layer inside it whenever the layer 
 
 Under ASGI, then, a chain of Django's own middleware is synchronous from top to bottom, around an asynchronous centre. This is a request for an async view through three such middleware. Every crossing made by one of the adapters is written down, and each hook says which thread it ran on.
 
-```text
+```text recording=handlers
 ASGI, GET /async/: an async view, synchronous middleware
       loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
       loop -> thread: sync_to_async(the wrapper around A)

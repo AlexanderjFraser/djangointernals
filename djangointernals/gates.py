@@ -1,14 +1,14 @@
-"""The two gates and the link gate, as the site calls them; and what the renderer makes of a pointer.
+"""The three gates and the link gate, as the site calls them; and what the renderer makes of a pointer.
 
-`tools/pointers.py`, `tools/names.py` and `tools/links.py` at the repository's
-root are a reader's to run as commands (SPEC.md, *Checking a page*). The
-site imports them too: the loader refuses a book whose
-pointers do not resolve at the pin or whose names do not exist, as it
-refuses a page that breaks the spec; the bake refuses what it wrote when a
-link in it does not resolve; and the renderer turns each pointer into a link
-to the lines it lands on, at the pinned commit, in the tree's own
-repository. The two gates need the pinned trees on disk
-(`python tools/pin.py fetch`), so the bake does too.
+`tools/pointers.py`, `tools/names.py`, `tools/recordings.py` and `tools/links.py`
+at the repository's root are a reader's to run as commands (SPEC.md, *Checking
+a page*). The site imports them too: the loader refuses a book whose
+pointers do not resolve at the pin, whose names do not exist or whose quotes
+of a recording are not the recording's, as it refuses a page that breaks the
+spec; the bake refuses what it wrote when a link in it does not resolve; and
+the renderer turns each pointer into a link to the lines it lands on, at the
+pinned commit, in the tree's own repository. The pointer and name gates need
+the pinned trees on disk (`python tools/pin.py fetch`), so the bake does too.
 
 One World and one name index per process: the index of Django's names takes
 seconds to build, and the pin does not change while the site runs.
@@ -27,6 +27,7 @@ if TOOLS not in sys.path:
 import links  # noqa: E402  (the link gate, run by the bake over what it wrote)
 import names  # noqa: E402  (the name gate; it imports the pointer gate)
 import pointers  # noqa: E402  (the pointer gate: the trees, the walk, what a pointer is)
+import recordings  # noqa: E402  (the recording gate: a fenced block that quotes a recording quotes it as recorded)
 
 
 class Unavailable(Exception):
@@ -41,6 +42,7 @@ class Gates:
             raise Unavailable(str(why)) from None
         self.world = self.gate.world
         self.pinned = self.world.pinned
+        self.recordings: dict = {}  # each recording's output, read once a process
 
     @property
     def list_problems(self) -> list[str]:
@@ -50,10 +52,12 @@ class Gates:
         return [relabel(line, os.path.basename(path), shown) for line in self.gate.list_problems]
 
     def problems(self, page) -> list[str]:
-        """What the two gates refuse on a page, each as `file:line: span: why`. The name gate
-        runs with --sections: a name several modules define is bound within its section."""
+        """What the three gates refuse on a page, each as `file:line: span: why`. The name gate
+        runs with --sections: a name several modules define is bound within its section. The
+        recording gate reads the fenced blocks that name a recording."""
         path = str(page.source)
-        found = pointers.examine(self.world, path)[1] + self.gate.examine(path, sections=True)[0]
+        found = (pointers.examine(self.world, path)[1] + self.gate.examine(path, sections=True)[0]
+                 + recordings.examine(path, str(settings.BASE_DIR), self.recordings)[0])
         return [relabel(line, os.path.basename(path), page.where) for line in found]
 
     def is_pointer(self, body: str) -> bool:

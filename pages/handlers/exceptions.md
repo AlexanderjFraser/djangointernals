@@ -14,7 +14,7 @@ An exception raised while Django serves a request rarely reaches the server. Som
 
 `BaseHandler.load_middleware` applies it to the centre of the chain and to every middleware as it builds the chain, so each layer has a wrapper of its own. The point of wrapping each one is that no middleware leaks an exception to the next: the layer outside can rely on being handed a response. The effect shows when a middleware in the middle of the chain raises:
 
-```text
+```text recording=handlers
 WSGI, GET /raise-in-B/: B.process_request raises RuntimeError
     signal: request_started
     A.process_request
@@ -34,7 +34,7 @@ When the callable it wraps is a coroutine function, the wrapper is a coroutine t
 
 An exception raised by a view meets the `process_exception` hooks first. They belong to the centre of the chain and are described with it in [The centre of the chain](view.md): each is offered the exception, innermost middleware first, and the first to return a response ends the matter. Only when none answers is the exception raised again and caught by the wrapper around the centre.
 
-```text
+```text recording=handlers
 WSGI, GET /broken/: the view raises ValueError
     signal: request_started
     A.process_request
@@ -109,7 +109,7 @@ Anything raised before the chain is entered. The wrappers are part of the chain 
 
 A failure of the conversion itself. The plainest case is a 500 error view that raises. Nothing is left to turn that into a response: each wrapper in turn tries the 500 error view again, and when the outermost has failed as well, the exception leaves the handler:
 
-```text
+```text recording=handlers
 WSGI, GET /broken/: the view raises ValueError, and the 500 error view raises too
     signal: request_started
     A.process_request

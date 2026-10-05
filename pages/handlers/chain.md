@@ -28,7 +28,7 @@ After the loop it adapts the outermost wrapper to the handler's own mode and sto
 
 In this recording of a `WSGIHandler` being made with `MIDDLEWARE = [A, B, C]`, each middleware writes a line when its factory is called, saying what it was given.
 
-```text
+```text recording=handlers
 Making a WSGIHandler builds the chain, last middleware first
     C(get_response)    get_response is the wrapper around BaseHandler._get_response
     B(get_response)    get_response is the wrapper around C

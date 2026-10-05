@@ -40,7 +40,7 @@ The nest is built once and kept on the handler as `BaseHandler._middleware_chain
 
 What follows was recorded from a running Django. Three middleware, A, B and C, write down each hook as Django calls it. A script plays the server's part: it calls a `WSGIHandler` with a request for a view that returns a plain response, reads the body, and closes the response.
 
-```text
+```text recording=handlers
 WSGI, GET /plain/: a view that returns a response
     signal: request_started
     A.process_request
