@@ -1,0 +1,313 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "response.md",
+ "pointers": [
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.__init__",
+   "line": 45,
+   "sentence": "`HttpResponseBase.__init__` makes the headers, a `ResponseHeaders` that keeps each as a pair and looks them up without regard to case, and if no `Content-Type` was given sets one of `\"text/html\"` with the charset of `settings.DEFAULT_CHARSET`; the status is the class's `status_code`, 200, unless one was passed (`django/http/response.py:HttpResponseBase.__init__`, `django/http/response.py:ResponseHeaders`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.__init__",
+   "kind": "function",
+   "lines": [
+    120,
+    148
+   ],
+   "fingerprint": "2735b0e6baf1055b"
+  },
+  {
+   "pointer": "django/http/response.py:ResponseHeaders",
+   "line": 45,
+   "sentence": "`HttpResponseBase.__init__` makes the headers, a `ResponseHeaders` that keeps each as a pair and looks them up without regard to case, and if no `Content-Type` was given sets one of `\"text/html\"` with the charset of `settings.DEFAULT_CHARSET`; the status is the class's `status_code`, 200, unless one was passed (`django/http/response.py:HttpResponseBase.__init__`, `django/http/response.py:ResponseHeaders`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "ResponseHeaders",
+   "kind": "class",
+   "lines": [
+    40,
+    103
+   ],
+   "fingerprint": "66d336c4ac769e21"
+  },
+  {
+   "pointer": "django/http/response.py:ResponseHeaders.__setitem__",
+   "line": 45,
+   "sentence": "A header's name must be ASCII, a value that Latin-1 cannot hold is MIME-encoded, and neither may hold a newline: `ResponseHeaders.__setitem__` refuses one that does with `BadHeaderError`, which is what keeps a value taken from the request from injecting a header (`django/http/response.py:ResponseHeaders.__setitem__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "ResponseHeaders.__setitem__",
+   "kind": "function",
+   "lines": [
+    93,
+    96
+   ],
+   "fingerprint": "99acbf4f370c2ac3"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponse.content",
+   "line": 47,
+   "sentence": "A string is encoded with the response's charset, bytes are kept, and an iterator is consumed into bytes at once, so that the response can be iterated more than once (`django/http/response.py:HttpResponse.content`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponse.content",
+   "kind": "function",
+   "lines": [
+    404,
+    406
+   ],
+   "at": 405,
+   "more": [
+    [
+     408,
+     424
+    ]
+   ],
+   "fingerprint": "129a636a6864d109"
+  },
+  {
+   "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response",
+   "line": 53,
+   "sentence": "**`XFrameOptionsMiddleware`** sets `X-Frame-Options` to the value of `settings.X_FRAME_OPTIONS`, `\"DENY\"` by default, unless the header is already there or the response was marked exempt by the decorator (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/clickjacking.py",
+   "symbol": "XFrameOptionsMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    27,
+    40
+   ],
+   "fingerprint": "89028bc106485437"
+  },
+  {
+   "pointer": "django/contrib/messages/middleware.py:MessageMiddleware.process_response",
+   "line": 55,
+   "sentence": "**`MessageMiddleware`** asks the request's message storage to store what has not been read, into a cookie or the session; here there is nothing to store (`django/contrib/messages/middleware.py:MessageMiddleware.process_response`, `django/contrib/messages/storage/base.py:BaseStorage.update`).",
+   "tree": "django",
+   "path": "django/contrib/messages/middleware.py",
+   "symbol": "MessageMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    16,
+    28
+   ],
+   "fingerprint": "be585f06ac1b5929"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/base.py:BaseStorage.update",
+   "line": 55,
+   "sentence": "**`MessageMiddleware`** asks the request's message storage to store what has not been read, into a cookie or the session; here there is nothing to store (`django/contrib/messages/middleware.py:MessageMiddleware.process_response`, `django/contrib/messages/storage/base.py:BaseStorage.update`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/base.py",
+   "symbol": "BaseStorage.update",
+   "kind": "function",
+   "lines": [
+    128,
+    140
+   ],
+   "fingerprint": "17248471c5ac7cd0"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:get_token",
+   "line": 59,
+   "sentence": "**`CsrfViewMiddleware`** sets the CSRF cookie only when `HttpRequest.META` was marked with `\"CSRF_COOKIE_NEEDS_UPDATE\"` during the request, which `get_token` does whenever something asks for a token, a template's `csrf_token` tag among them, and which the replacing of a malformed cookie on the way in does too; nothing in this request asked (`django/middleware/csrf.py:get_token`) (`django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "get_token",
+   "kind": "function",
+   "lines": [
+    96,
+    114
+   ],
+   "fingerprint": "475f3a9372b9cf53"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_response",
+   "line": 59,
+   "sentence": "**`CsrfViewMiddleware`** sets the CSRF cookie only when `HttpRequest.META` was marked with `\"CSRF_COOKIE_NEEDS_UPDATE\"` during the request, which `get_token` does whenever something asks for a token, a template's `csrf_token` tag among them, and which the replacing of a malformed cookie on the way in does too; nothing in this request asked (`django/middleware/csrf.py:get_token`) (`django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    474,
+    486
+   ],
+   "fingerprint": "d5d6e46ffe74bc00"
+  },
+  {
+   "pointer": "django/middleware/common.py:CommonMiddleware.process_response",
+   "line": 61,
+   "sentence": "To any response that is not streaming and has no `Content-Length`, it adds one, the length of the body (`django/middleware/common.py:CommonMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/common.py",
+   "symbol": "CommonMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    101,
+    118
+   ],
+   "fingerprint": "f4c4c51301998248"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
+   "line": 63,
+   "sentence": "This request's session was never touched, so nothing is done (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/contrib/sessions/backends/base.py:SessionBase.is_empty`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    24,
+    84
+   ],
+   "fingerprint": "e54a21ed4b7c52be"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.is_empty",
+   "line": 63,
+   "sentence": "This request's session was never touched, so nothing is done (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/contrib/sessions/backends/base.py:SessionBase.is_empty`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/base.py",
+   "symbol": "SessionBase.is_empty",
+   "kind": "function",
+   "lines": [
+    190,
+    195
+   ],
+   "fingerprint": "d7bb009c48419c5f"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_response",
+   "line": 65,
+   "sentence": "`Strict-Transport-Security` is added only to a secure request and only when `settings.SECURE_HSTS_SECONDS` is set (`django/middleware/security.py:SecurityMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    35,
+    68
+   ],
+   "fingerprint": "7ad22778135f164b"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.get_response",
+   "line": 67,
+   "sentence": "`BaseHandler.get_response` then registers the request's own `close` among the response's closers, so that closing the response closes any files that were uploaded with the request, and logs the response if its status is 400 or more; a 200 is not logged (`django/core/handlers/base.py:BaseHandler.get_response`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.get_response",
+   "kind": "function",
+   "lines": [
+    138,
+    152
+   ],
+   "fingerprint": "1936a064b0c5bd82"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 71,
+   "sentence": "It passes both to the server's function and returns the response object itself (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponse.__iter__",
+   "line": 71,
+   "sentence": "An `HttpResponse` is iterable, and iterating it yields its body in one piece (`django/http/response.py:HttpResponse.__iter__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponse.__iter__",
+   "kind": "function",
+   "lines": [
+    430,
+    431
+   ],
+   "fingerprint": "10033f487ba0de44"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.close",
+   "line": 75,
+   "sentence": "`HttpResponseBase.close` runs each closer registered on the response, the request's among them, and then sends `request_finished` (`django/http/response.py:HttpResponseBase.close`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.close",
+   "kind": "function",
+   "lines": [
+    339,
+    348
+   ],
+   "fingerprint": "7689c4f13ba32ef4"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "line": 77,
+   "sentence": "A positive age keeps it for the next request on the same thread (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "kind": "function",
+   "lines": [
+    591,
+    616
+   ],
+   "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
+   "line": 77,
+   "sentence": "A positive age keeps it for the next request on the same thread (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.connect",
+   "kind": "function",
+   "lines": [
+    236,
+    261
+   ],
+   "at": 237,
+   "fingerprint": "c5345148a50b5e4c"
+  },
+  {
+   "pointer": "django/core/cache/__init__.py:close_caches",
+   "line": 78,
+   "sentence": "`close_caches` calls `close` on every cache that has been made, which for most backends does nothing (`django/core/cache/__init__.py:close_caches`).",
+   "tree": "django",
+   "path": "django/core/cache/__init__.py",
+   "symbol": "close_caches",
+   "kind": "function",
+   "lines": [
+    61,
+    64
+   ],
+   "fingerprint": "2ba32d3f493faede"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:reset_urlconf",
+   "line": 79,
+   "sentence": "`reset_urlconf` clears the URLconf set for the thread at the start of the request (`django/core/handlers/base.py:reset_urlconf`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "reset_urlconf",
+   "kind": "function",
+   "lines": [
+    370,
+    372
+   ],
+   "fingerprint": "4bb512828ef75bbe"
+  }
+ ]
+}

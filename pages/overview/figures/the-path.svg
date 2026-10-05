@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 870 740">
+  <!-- the four parts of Django the request passes through, one column each; time runs down -->
+  <rect class="ground" x="72" y="46" width="220" height="690" rx="8"/>
+  <rect class="ground" x="300" y="46" width="170" height="690" rx="8"/>
+  <rect class="ground" x="478" y="46" width="220" height="690" rx="8"/>
+  <rect class="ground" x="706" y="46" width="164" height="690" rx="8"/>
+
+  <text class="strong" x="182" y="22" text-anchor="middle">Handlers and middleware</text>
+  <text class="quiet small" x="182" y="38" text-anchor="middle">requests and responses</text>
+  <text class="strong" x="385" y="22" text-anchor="middle">URL routing, views</text>
+  <text class="strong" x="588" y="22" text-anchor="middle">The ORM</text>
+  <text class="quiet small" x="588" y="38" text-anchor="middle">models, querysets, SQL, backends</text>
+  <text class="strong" x="788" y="22" text-anchor="middle">Templates</text>
+
+  <!-- the server, outside Django -->
+  <text class="quiet small" x="0" y="74">the server</text>
+  <text class="quiet small" x="0" y="87">calls</text>
+  <path class="line" d="M38 80 H60"/>
+  <polygon class="head" points="70,80 60,75 60,85"/>
+  <text class="quiet small" x="0" y="694">the server</text>
+  <text class="quiet small" x="0" y="707">sends it,</text>
+  <text class="quiet small" x="0" y="720">then closes</text>
+  <path class="line" d="M70 700 H50"/>
+  <polygon class="head" points="40,700 50,695 50,705"/>
+
+  <!-- the path, box to box, in the order the request takes -->
+  <path class="mark-line" d="M182 104 V108"/>
+  <polygon class="head mark" points="182,118 177,108 187,108"/>
+  <path class="mark-line" d="M182 166 V173 H385 V170"/>
+  <polygon class="head mark" points="385,180 380,170 390,170"/>
+  <path class="mark-line" d="M385 228 V232"/>
+  <polygon class="head mark" points="385,242 380,232 390,232"/>
+  <path class="mark-line" d="M385 290 V297 H588 V294"/>
+  <polygon class="head mark" points="588,304 583,294 593,294"/>
+  <path class="mark-line" d="M588 352 V359 H788 V356"/>
+  <polygon class="head mark" points="788,366 783,356 793,356"/>
+  <path class="mark-line" d="M788 414 V418"/>
+  <polygon class="head mark" points="788,428 783,418 793,418"/>
+  <path class="mark-line" d="M788 476 V483 H588 V480"/>
+  <polygon class="head mark" points="588,490 583,480 593,480"/>
+  <path class="mark-line" d="M588 538 V545 H788 V542"/>
+  <polygon class="head mark" points="788,552 783,542 793,542"/>
+  <path class="mark-line" d="M788 600 V607 H182 V604"/>
+  <polygon class="head mark" points="182,614 177,604 187,604"/>
+  <path class="mark-line" d="M182 662 V666"/>
+  <polygon class="head mark" points="182,676 177,666 187,666"/>
+
+  <!-- the stations -->
+  <rect class="box" x="72" y="56" width="220" height="48" rx="4"/>
+  <text class="name" x="82" y="74">WSGIHandler.__call__</text>
+  <text class="quiet small" x="82" y="90">request_started; a WSGIRequest</text>
+
+  <rect class="box" x="72" y="118" width="220" height="48" rx="4"/>
+  <text class="name" x="82" y="136">process_request ×6</text>
+  <text class="quiet small" x="82" y="149">the way in: session, host,</text>
+  <text class="quiet small" x="82" y="161">user, messages</text>
+
+  <rect class="box" x="300" y="180" width="170" height="48" rx="4"/>
+  <text class="name" x="310" y="198">URLResolver.resolve</text>
+  <text class="quiet small" x="310" y="211">a RoutePattern matches;</text>
+  <text class="quiet small" x="310" y="223">a ResolverMatch</text>
+
+  <rect class="box" x="300" y="242" width="170" height="48" rx="4"/>
+  <text class="name" x="310" y="260">by_year(year=2026)</text>
+  <text class="quiet small" x="310" y="273">the view, called with</text>
+  <text class="quiet small" x="310" y="285">the capture</text>
+
+  <rect class="box" x="478" y="304" width="220" height="48" rx="4"/>
+  <text class="name" x="488" y="322">QuerySet.filter, order_by</text>
+  <text class="quiet small" x="488" y="338">a Query is built; no SQL yet</text>
+
+  <rect class="box" x="706" y="366" width="164" height="48" rx="4"/>
+  <text class="name" x="716" y="384">get_template</text>
+  <text class="quiet small" x="716" y="397">engine, loaders, compile:</text>
+  <text class="quiet small" x="716" y="409">once a process</text>
+
+  <rect class="box" x="706" y="428" width="164" height="48" rx="4"/>
+  <text class="name" x="716" y="446">Template.render</text>
+  <text class="quiet small" x="716" y="459">context processors,</text>
+  <text class="quiet small" x="716" y="471">then each node</text>
+
+  <rect class="mark-box" x="478" y="490" width="220" height="48" rx="4"/>
+  <text class="name" x="488" y="508">QuerySet.__len__</text>
+  <text class="quiet small" x="488" y="521">from the for tag: SQLCompiler,</text>
+  <text class="quiet small" x="488" y="533">connect, SELECT; rows to objects</text>
+
+  <rect class="box" x="706" y="552" width="164" height="48" rx="4"/>
+  <text class="name" x="716" y="570">VariableNode.render</text>
+  <text class="quiet small" x="716" y="586">each value escaped</text>
+
+  <rect class="box" x="72" y="614" width="220" height="48" rx="4"/>
+  <text class="name" x="82" y="632">HttpResponse</text>
+  <text class="quiet small" x="82" y="645">process_response ×6, the way out:</text>
+  <text class="quiet small" x="82" y="657">five headers added</text>
+
+  <rect class="box" x="72" y="676" width="220" height="48" rx="4"/>
+  <text class="name" x="82" y="694">start_response; close</text>
+  <text class="quiet small" x="82" y="707">the body to the server; then</text>
+  <text class="quiet small" x="82" y="719">request_finished: connection closed</text>
+</svg>

@@ -1,0 +1,464 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "startup.md",
+ "pointers": [
+  {
+   "pointer": "django/core/wsgi.py:get_wsgi_application",
+   "line": 9,
+   "sentence": "A server starts that sequence by importing the project's `wsgi.py`, which calls `get_wsgi_application` (`django/core/wsgi.py:get_wsgi_application`).",
+   "tree": "django",
+   "path": "django/core/wsgi.py",
+   "symbol": "get_wsgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "db32b08cd1f96afc"
+  },
+  {
+   "pointer": "django/__init__.py:setup",
+   "line": 62,
+   "sentence": "`django.setup` itself is three lines: configure logging, set the script prefix (the part of the path the server mounted Django under) when asked to, and populate the app registry from `settings.INSTALLED_APPS` (`django/__init__.py:setup`).",
+   "tree": "django",
+   "path": "django/__init__.py",
+   "symbol": "setup",
+   "kind": "function",
+   "lines": [
+    8,
+    24
+   ],
+   "fingerprint": "1d9e6fad619c10ab"
+  },
+  {
+   "pointer": "django/conf/__init__.py:settings",
+   "line": 68,
+   "sentence": "`django.conf.settings` is a `LazySettings`, made when `django.conf` is imported and empty until something reads an attribute of it (`django/conf/__init__.py:settings`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "settings",
+   "kind": "assignment",
+   "lines": [
+    423,
+    423
+   ],
+   "fingerprint": "4f8094cd409a9075"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings._setup",
+   "line": 68,
+   "sentence": "The first read calls `LazySettings._setup`, which takes the module's dotted name from the environment variable `\"DJANGO_SETTINGS_MODULE\"` and makes a `Settings` from it; if the variable is not set and nobody has called `LazySettings.configure`, it raises `ImproperlyConfigured` with the familiar message about settings not being configured (`django/conf/__init__.py:LazySettings._setup`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings._setup",
+   "kind": "function",
+   "lines": [
+    93,
+    109
+   ],
+   "fingerprint": "6721d7ba7192c979"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 68,
+   "sentence": "`Settings.__init__` first copies every upper-case name of `django/conf/global_settings.py` onto itself, then imports the project's module and copies its upper-case names over them, remembering which ones the project set explicitly.",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 68,
+   "sentence": "It also checks that the five settings which must be lists or tuples are, and, where the platform allows, moves the time zone into the environment (`django/conf/__init__.py:Settings.__init__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
+   "line": 68,
+   "sentence": "Every value read through the proxy is then kept on the proxy itself, so a setting is looked up once per process (`django/conf/__init__.py:LazySettings.__getattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__getattr__",
+   "kind": "function",
+   "lines": [
+    119,
+    146
+   ],
+   "fingerprint": "fd7eca125afabf3c"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.populate",
+   "line": 74,
+   "sentence": "It holds a lock, returns at once when it has already run, raises if it is entered again while running, and runs three phases over `settings.INSTALLED_APPS` in order (`django/apps/registry.py:Apps.populate`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.populate",
+   "kind": "function",
+   "lines": [
+    61,
+    127
+   ],
+   "fingerprint": "32f7c6ad9925afa8"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.create",
+   "line": 76,
+   "sentence": "`AppConfig.create` imports the entry's module and looks for an `apps` submodule with one `AppConfig` subclass in it; a dotted path to a configuration class is accepted too (`django/apps/config.py:AppConfig.create`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.create",
+   "kind": "function",
+   "lines": [
+    99,
+    222
+   ],
+   "at": 100,
+   "fingerprint": "908a15da2135b37a"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.import_models",
+   "line": 77,
+   "sentence": "`AppConfig.import_models` imports the application's `models` module if it has one (`django/apps/config.py:AppConfig.import_models`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.import_models",
+   "kind": "function",
+   "lines": [
+    262,
+    269
+   ],
+   "fingerprint": "c684821c21372298"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase.__new__",
+   "line": 77,
+   "sentence": "Importing it runs each model's class statement, and a model's class statement is where the ORM does its setup: the metaclass `ModelBase.__new__` builds the class's `_meta`, an `Options`, moves each field onto it, gives the class its three exceptions, DoesNotExist, MultipleObjectsReturned and NotUpdated, adds a default manager named `objects` if the class declares none, and finally registers the class with the registry (`django/db/models/base.py:ModelBase.__new__`, `django/db/models/base.py:ModelBase._prepare`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase.__new__",
+   "kind": "function",
+   "lines": [
+    105,
+    397
+   ],
+   "fingerprint": "0088098d570317e1"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase._prepare",
+   "line": 77,
+   "sentence": "Importing it runs each model's class statement, and a model's class statement is where the ORM does its setup: the metaclass `ModelBase.__new__` builds the class's `_meta`, an `Options`, moves each field onto it, gives the class its three exceptions, DoesNotExist, MultipleObjectsReturned and NotUpdated, adds a default manager named `objects` if the class declares none, and finally registers the class with the registry (`django/db/models/base.py:ModelBase.__new__`, `django/db/models/base.py:ModelBase._prepare`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase._prepare",
+   "kind": "function",
+   "lines": [
+    405,
+    458
+   ],
+   "fingerprint": "f8e5007832b262d0"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.register_model",
+   "line": 77,
+   "sentence": "`Apps.register_model` files it under its application label and lower-case name, which is the key `Apps.get_model` later answers to (`django/apps/registry.py:Apps.register_model`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.register_model",
+   "kind": "function",
+   "lines": [
+    215,
+    240
+   ],
+   "fingerprint": "ddfd62bf89c7f1b3"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.ready",
+   "line": 78,
+   "sentence": "`AppConfig.ready` is the hook for work that needs every model to exist (`django/apps/config.py:AppConfig.ready`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.ready",
+   "kind": "function",
+   "lines": [
+    271,
+    274
+   ],
+   "fingerprint": "b1f8fe46b896d7a4"
+  },
+  {
+   "pointer": "django/contrib/admin/apps.py:AdminConfig.ready",
+   "line": 78,
+   "sentence": "The admin's is the one with a visible effect: `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
+   "tree": "django",
+   "path": "django/contrib/admin/apps.py",
+   "symbol": "AdminConfig.ready",
+   "kind": "function",
+   "lines": [
+    25,
+    27
+   ],
+   "fingerprint": "ba0c6817b9e94754"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:autodiscover_modules",
+   "line": 78,
+   "sentence": "The admin's is the one with a visible effect: `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "autodiscover_modules",
+   "kind": "function",
+   "lines": [
+    52,
+    85
+   ],
+   "fingerprint": "c4422a6ab6f89528"
+  },
+  {
+   "pointer": "django/contrib/auth/apps.py:AuthConfig.ready",
+   "line": 78,
+   "sentence": "The auth application's connects receivers to `post_migrate`, so that permissions are created after each migration, and registers system checks (`django/contrib/auth/apps.py:AuthConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/auth/apps.py",
+   "symbol": "AuthConfig.ready",
+   "kind": "function",
+   "lines": [
+    18,
+    35
+   ],
+   "fingerprint": "c5e2565bc4196afa"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__init__",
+   "line": 84,
+   "sentence": "Its constructor ends by calling `BaseHandler.load_middleware`, which imports each class named in `settings.MIDDLEWARE` and instantiates it, last first, each given the layer before it as the one it will call, the last in the setting being given the handler's own `BaseHandler._get_response`, so that the first in the setting is the outermost layer (`django/core/handlers/wsgi.py:WSGIHandler.__init__`, `django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__init__",
+   "kind": "function",
+   "lines": [
+    116,
+    118
+   ],
+   "fingerprint": "a57342459a9a5cc3"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 84,
+   "sentence": "Its constructor ends by calling `BaseHandler.load_middleware`, which imports each class named in `settings.MIDDLEWARE` and instantiates it, last first, each given the layer before it as the one it will call, the last in the setting being given the handler's own `BaseHandler._get_response`, so that the first in the setting is the outermost layer (`django/core/handlers/wsgi.py:WSGIHandler.__init__`, `django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/db.py",
+   "line": 84,
+   "sentence": "`SecurityMiddleware` reads nine settings into attributes when it is made and never again; `SessionMiddleware` imports the session engine named by `settings.SESSION_ENGINE` and keeps the engine's session store class, which for the default engine is the `SessionStore` of `django/contrib/sessions/backends/db.py` (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/db.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    198
+   ],
+   "fingerprint": "b3a44d765256c86c"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
+   "line": 84,
+   "sentence": "`SecurityMiddleware` reads nine settings into attributes when it is made and never again; `SessionMiddleware` imports the session engine named by `settings.SESSION_ENGINE` and keeps the engine's session store class, which for the default engine is the `SessionStore` of `django/contrib/sessions/backends/db.py` (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.__init__",
+   "kind": "function",
+   "lines": [
+    11,
+    21
+   ],
+   "fingerprint": "d589cea40c7ab213"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.__init__",
+   "line": 84,
+   "sentence": "`SecurityMiddleware` reads nine settings into attributes when it is made and never again; `SessionMiddleware` imports the session engine named by `settings.SESSION_ENGINE` and keeps the engine's session store class, which for the default engine is the `SessionStore` of `django/contrib/sessions/backends/db.py` (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.__init__",
+   "kind": "function",
+   "lines": [
+    15,
+    18
+   ],
+   "fingerprint": "729defcd673f0b25"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.urlconf_module",
+   "line": 90,
+   "sentence": "The resolver is made on the first request, and it imports `settings.ROOT_URLCONF` the first time its patterns are asked for (`django/urls/resolvers.py:URLResolver.urlconf_module`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.urlconf_module",
+   "kind": "function",
+   "lines": [
+    721,
+    726
+   ],
+   "at": 722,
+   "fingerprint": "0d82ca08e9b7a915"
+  },
+  {
+   "pointer": "django/template/utils.py:EngineHandler.__getitem__",
+   "line": 91,
+   "sentence": "The engines named in `settings.TEMPLATES` are made the first time a template is asked for, and each engine's loaders the first time it looks for one (`django/template/utils.py:EngineHandler.__getitem__`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.__getitem__",
+   "kind": "function",
+   "lines": [
+    67,
+    88
+   ],
+   "fingerprint": "fb1491113fd312c3"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection",
+   "line": 92,
+   "sentence": "A connection is opened by the first query that needs a cursor (`django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.ensure_connection",
+   "kind": "function",
+   "lines": [
+    270,
+    279
+   ],
+   "at": 271,
+   "fingerprint": "11d0697684ee76e0"
+  },
+  {
+   "pointer": "django/core/management/commands/runserver.py",
+   "line": 94,
+   "sentence": "The runserver command (`django/core/management/commands/runserver.py`) runs the system checks before it serves: the check of the URL configuration asks the resolver for its patterns, which imports the URLconf, and the check of the templates asks for every engine, which makes them (`django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`); it then looks for unapplied migrations, which opens a database connection, and closes every connection before it serves (`django/core/management/commands/runserver.py:Command.inner_run`).",
+   "tree": "django",
+   "path": "django/core/management/commands/runserver.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    202
+   ],
+   "fingerprint": "5cd5bebe2702f420"
+  },
+  {
+   "pointer": "django/core/checks/urls.py:check_url_config",
+   "line": 94,
+   "sentence": "The runserver command (`django/core/management/commands/runserver.py`) runs the system checks before it serves: the check of the URL configuration asks the resolver for its patterns, which imports the URLconf, and the check of the templates asks for every engine, which makes them (`django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`); it then looks for unapplied migrations, which opens a database connection, and closes every connection before it serves (`django/core/management/commands/runserver.py:Command.inner_run`).",
+   "tree": "django",
+   "path": "django/core/checks/urls.py",
+   "symbol": "check_url_config",
+   "kind": "function",
+   "lines": [
+    10,
+    17
+   ],
+   "at": 11,
+   "fingerprint": "d65f1e8ee080de99"
+  },
+  {
+   "pointer": "django/core/checks/templates.py:check_templates",
+   "line": 94,
+   "sentence": "The runserver command (`django/core/management/commands/runserver.py`) runs the system checks before it serves: the check of the URL configuration asks the resolver for its patterns, which imports the URLconf, and the check of the templates asks for every engine, which makes them (`django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`); it then looks for unapplied migrations, which opens a database connection, and closes every connection before it serves (`django/core/management/commands/runserver.py:Command.inner_run`).",
+   "tree": "django",
+   "path": "django/core/checks/templates.py",
+   "symbol": "check_templates",
+   "kind": "function",
+   "lines": [
+    4,
+    12
+   ],
+   "at": 5,
+   "fingerprint": "44fa45b45642667f"
+  },
+  {
+   "pointer": "django/core/management/commands/runserver.py:Command.inner_run",
+   "line": 94,
+   "sentence": "The runserver command (`django/core/management/commands/runserver.py`) runs the system checks before it serves: the check of the URL configuration asks the resolver for its patterns, which imports the URLconf, and the check of the templates asks for every engine, which makes them (`django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`); it then looks for unapplied migrations, which opens a database connection, and closes every connection before it serves (`django/core/management/commands/runserver.py:Command.inner_run`).",
+   "tree": "django",
+   "path": "django/core/management/commands/runserver.py",
+   "symbol": "Command.inner_run",
+   "kind": "function",
+   "lines": [
+    121,
+    170
+   ],
+   "fingerprint": "be42ca880195cc70"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:get_internal_wsgi_application",
+   "line": 94,
+   "sentence": "The server then obtains the handler by importing the object `settings.WSGI_APPLICATION` names, which is the same `wsgi.py` a production server would import, and hands it to a `WSGIServer` to serve for ever (`django/core/servers/basehttp.py:get_internal_wsgi_application`, `django/core/servers/basehttp.py:run`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "get_internal_wsgi_application",
+   "kind": "function",
+   "lines": [
+    29,
+    54
+   ],
+   "fingerprint": "4b461ac5a064a46b"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:run",
+   "line": 94,
+   "sentence": "The server then obtains the handler by importing the object `settings.WSGI_APPLICATION` names, which is the same `wsgi.py` a production server would import, and hands it to a `WSGIServer` to serve for ever (`django/core/servers/basehttp.py:get_internal_wsgi_application`, `django/core/servers/basehttp.py:run`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "run",
+   "kind": "function",
+   "lines": [
+    251,
+    277
+   ],
+   "fingerprint": "52cc12657515b274"
+  },
+  {
+   "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
+   "line": 94,
+   "sentence": "A management command's process runs `django.setup` too, before the command, so the first two stages above are the same for a command as for a server; the third is a server's, and runserver's, and the test client makes a handler of its own to drive the chain without a server (`django/core/management/__init__.py:ManagementUtility.execute`).",
+   "tree": "django",
+   "path": "django/core/management/__init__.py",
+   "symbol": "ManagementUtility.execute",
+   "kind": "function",
+   "lines": [
+    353,
+    434
+   ],
+   "fingerprint": "31851105e39a4745"
+  }
+ ]
+}

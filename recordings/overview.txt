@@ -1,0 +1,363 @@
+Django 6.2.dev20260926051415 with the settings django-admin startproject writes, and one app, journal
+
+The process starts: a server imports journal/wsgi.py
+    get_wsgi_application
+      setup
+        LazySettings._setup: the settings module "journal.settings" is imported
+        configure_logging
+        Apps.populate
+          AppConfig.create("django.contrib.admin")
+          AppConfig.create("django.contrib.auth")
+          AppConfig.create("django.contrib.contenttypes")
+          AppConfig.create("django.contrib.sessions")
+          AppConfig.create("django.contrib.messages")
+          AppConfig.create("django.contrib.staticfiles")
+          AppConfig.create("journal")
+          AppConfig.import_models  (admin)
+            Apps.register_model(contenttypes.ContentType)
+            Apps.register_model(admin.LogEntry)
+          AppConfig.import_models  (auth)
+            Apps.register_model(auth.Permission)
+            Apps.register_model(auth.Group_permissions)
+            Apps.register_model(auth.Group)
+            Apps.register_model(auth.User_groups)
+            Apps.register_model(auth.User_user_permissions)
+            Apps.register_model(auth.User)
+          AppConfig.import_models  (contenttypes)
+          AppConfig.import_models  (sessions)
+            Apps.register_model(sessions.Session)
+          AppConfig.import_models  (messages)
+          AppConfig.import_models  (staticfiles)
+          AppConfig.import_models  (journal)
+            Apps.register_model(journal.Entry)
+          AdminConfig.ready  (admin)
+            SimpleAdminConfig.ready  (admin)
+            autodiscover
+          AuthConfig.ready  (auth)
+          ContentTypesConfig.ready  (contenttypes)
+          AppConfig.ready  (sessions)
+          MessagesConfig.ready  (messages)
+          StaticFilesConfig.ready  (staticfiles)
+          AppConfig.ready  (journal)
+      WSGIHandler.__init__
+        BaseHandler.load_middleware
+          MiddlewareMixin.__init__ (XFrameOptionsMiddleware)
+          MiddlewareMixin.__init__ (MessageMiddleware)
+          MiddlewareMixin.__init__ (AuthenticationMiddleware)
+          MiddlewareMixin.__init__ (CsrfViewMiddleware)
+          MiddlewareMixin.__init__ (CommonMiddleware)
+          MiddlewareMixin.__init__ (SessionMiddleware)
+          MiddlewareMixin.__init__ (SecurityMiddleware)
+
+The first request: GET /entries/2026/
+    WSGIHandler.__call__(environ, start_response)  GET /entries/2026/
+      set_script_prefix('')
+      signal request_started -> reset_queries, close_old_connections
+        reset_queries
+        close_old_connections
+          BaseDatabaseWrapper.close_if_unusable_or_obsolete
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        set_urlconf('journal.urls')
+        MiddlewareMixin.__call__ (SecurityMiddleware)
+          SecurityMiddleware.process_request
+          MiddlewareMixin.__call__ (SessionMiddleware)
+            SessionMiddleware.process_request
+              SessionStore.__init__(session_key=None)  (sessions.backends.db)
+            MiddlewareMixin.__call__ (CommonMiddleware)
+              CommonMiddleware.process_request
+                HttpRequest.get_host
+              MiddlewareMixin.__call__ (CsrfViewMiddleware)
+                CsrfViewMiddleware.process_request
+                  CsrfViewMiddleware._get_secret
+                MiddlewareMixin.__call__ (AuthenticationMiddleware)
+                  AuthenticationMiddleware.process_request
+                  MiddlewareMixin.__call__ (MessageMiddleware)
+                    MessageMiddleware.process_request
+                      FallbackStorage.__init__
+                    MiddlewareMixin.__call__ (XFrameOptionsMiddleware)
+                      BaseHandler._get_response
+                        BaseHandler.resolve_request
+                          URLResolver.resolve('/entries/2026/')
+                            URLResolver.urlconf_module: the root URLconf is imported
+                              import journal.urls
+                                import journal.views
+                                path("entries/<int:year>/", by_year, name="entries-by-year")
+                            URLPattern.resolve('entries/2026/')
+                              RoutePattern.match('entries/2026/')
+                                IntConverter.to_python('2026')
+                              ResolverMatch(journal.views.by_year, kwargs={'year': 2026})
+                            ResolverMatch(journal.views.by_year, kwargs={'year': 2026})
+                        CsrfViewMiddleware.process_view
+                        BaseHandler.make_view_atomic
+                        journal.views.by_year(request, year=2026)
+                          BaseManager.get_queryset  (Entry.objects)
+                          QuerySet.filter(published__year=2026)
+                            QuerySet._clone
+                              Query.clone
+                            Query.add_q
+                              Query.build_filter
+                                Query.solve_lookup_type('published__year')
+                                Query.setup_joins(['published'])
+                                Query.build_lookup
+                                  Query.try_transform('year')
+                                    ExtractYear.__init__
+                                  YearExact.__init__(lhs=ExtractYear, rhs=2026)
+                          QuerySet.order_by('published')
+                            QuerySet._clone
+                              Query.clone
+                            Query.add_ordering
+                          render(request, "journal/entries.html", context)
+                            get_template('journal/entries.html')
+                              EngineHandler.__getitem__("django")
+                                DjangoTemplates.__init__
+                                  get_installed_libraries
+                                  Engine.__init__
+                              DjangoTemplates.get_template('journal/entries.html')
+                                Engine.get_template('journal/entries.html')
+                                  Engine.find_template('journal/entries.html')
+                                    Engine.get_template_loaders
+                                      cached.Loader.__init__
+                                        Engine.get_template_loaders
+                                          filesystem.Loader.__init__
+                                          filesystem.Loader.__init__  (app_directories.Loader)
+                                    cached.Loader.get_template('journal/entries.html')
+                                      base.Loader.get_template('journal/entries.html')  (cached.Loader)
+                                        filesystem.Loader.get_contents  (app_directories.Loader, in admin/templates)
+                                          raises TemplateDoesNotExist
+                                        filesystem.Loader.get_contents  (app_directories.Loader, in auth/templates)
+                                          raises TemplateDoesNotExist
+                                        filesystem.Loader.get_contents  (app_directories.Loader, in journal/templates)
+                                        Template.__init__: the source is compiled
+                                          Lexer.tokenize
+                                          Parser.parse
+                                            do_for: {% for %} becomes a ForNode
+                                              Parser.parse
+                            Template.render(context, request)  (the backend's Template)
+                              make_context
+                                RequestContext.__init__
+                              Template.render(context)  (the engine's Template)
+                                Engine.template_context_processors: the context processors are imported
+                                context_processors.csrf
+                                context_processors.request
+                                auth.context_processors.auth
+                                messages.context_processors.messages
+                                VariableNode.render  {{ year }}
+                                  conditional_escape
+                                VariableNode.render  {{ year }}
+                                  conditional_escape
+                                ForNode.render  {% for entry in entries %}
+                                  QuerySet.__len__
+                                    QuerySet._fetch_all
+                                      ModelIterable.__iter__
+                                        Query.get_compiler('default')
+                                        SQLCompiler.execute_sql
+                                          SQLCompiler.as_sql
+                                            SQLCompiler.get_select
+                                            SQLCompiler.get_order_by
+                                              Query.setup_joins(['published'])
+                                            SQLCompiler.get_from_clause
+                                            WhereNode.as_sql
+                                              YearLookup.as_sql  (YearExact)
+                                          BaseDatabaseWrapper.cursor
+                                            BaseDatabaseWrapper.connect
+                                              DatabaseWrapper.get_new_connection  (sqlite3)
+                                              signal connection_created -> no receivers
+                                          CursorWrapper.execute
+                                            SQL SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry" WHERE "journal_entry"."published" BETWEEN %s AND %s ORDER BY "journal_entry"."published" ASC with params ('2026-01-01', '2026-12-31')
+                                            SQLiteCursorWrapper.execute
+                                        SQLCompiler.results_iter
+                                        DatabaseOperations.convert_datefield_value  (sqlite3)
+                                        Model.from_db  (Entry)
+                                          Model.__init__  (Entry)
+                                            signal pre_init -> no receivers
+                                            signal post_init -> no receivers
+                                        DatabaseOperations.convert_datefield_value  (sqlite3)
+                                        Model.from_db  (Entry)
+                                          Model.__init__  (Entry)
+                                            signal pre_init -> no receivers
+                                            signal post_init -> no receivers
+                                  QuerySet.__iter__
+                                    QuerySet._fetch_all
+                                  VariableNode.render  {{ entry.published|date:"j F" }}
+                                    defaultfilters.date(value, "j F")
+                                    conditional_escape
+                                  VariableNode.render  {{ entry.title }}
+                                    conditional_escape
+                                  VariableNode.render  {{ entry.published|date:"j F" }}
+                                    defaultfilters.date(value, "j F")
+                                    conditional_escape
+                                  VariableNode.render  {{ entry.title }}
+                                    conditional_escape
+                            HttpResponse.__init__(content)
+                              response["Content-Type"] = "text/html; charset=utf-8"
+                        BaseHandler.check_response
+                      XFrameOptionsMiddleware.process_response  (status 200)
+                        response["X-Frame-Options"] = "DENY"
+                    MessageMiddleware.process_response  (status 200)
+                      BaseStorage.update
+                CsrfViewMiddleware.process_response  (status 200)
+              CommonMiddleware.process_response  (status 200)
+                response["Content-Length"] = "148"
+            SessionMiddleware.process_response  (status 200)
+              SessionBase.is_empty
+          SecurityMiddleware.process_response  (status 200)
+            response["X-Content-Type-Options"] = "nosniff"
+            response["Referrer-Policy"] = "same-origin"
+            response["Cross-Origin-Opener-Policy"] = "same-origin"
+      start_response("200 OK", [Content-Type, X-Frame-Options, Content-Length, X-Content-Type-Options, Referrer-Policy, Cross-Origin-Opener-Policy])
+    the server has sent the body: 148 bytes
+    HttpResponseBase.close
+      HttpRequest.close
+      signal request_finished -> close_old_connections, close_caches, reset_urlconf
+        close_old_connections
+          BaseDatabaseWrapper.close_if_unusable_or_obsolete
+            DatabaseWrapper.close  (sqlite3)
+        close_caches
+        reset_urlconf
+          set_urlconf(None)
+
+The second request: GET /entries/2026/ again
+    WSGIHandler.__call__(environ, start_response)  GET /entries/2026/
+      set_script_prefix('')
+      signal request_started -> reset_queries, close_old_connections
+        reset_queries
+        close_old_connections
+          BaseDatabaseWrapper.close_if_unusable_or_obsolete
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        set_urlconf('journal.urls')
+        MiddlewareMixin.__call__ (SecurityMiddleware)
+          SecurityMiddleware.process_request
+          MiddlewareMixin.__call__ (SessionMiddleware)
+            SessionMiddleware.process_request
+              SessionStore.__init__(session_key=None)  (sessions.backends.db)
+            MiddlewareMixin.__call__ (CommonMiddleware)
+              CommonMiddleware.process_request
+                HttpRequest.get_host
+              MiddlewareMixin.__call__ (CsrfViewMiddleware)
+                CsrfViewMiddleware.process_request
+                  CsrfViewMiddleware._get_secret
+                MiddlewareMixin.__call__ (AuthenticationMiddleware)
+                  AuthenticationMiddleware.process_request
+                  MiddlewareMixin.__call__ (MessageMiddleware)
+                    MessageMiddleware.process_request
+                      FallbackStorage.__init__
+                    MiddlewareMixin.__call__ (XFrameOptionsMiddleware)
+                      BaseHandler._get_response
+                        BaseHandler.resolve_request
+                          URLResolver.resolve('/entries/2026/')
+                            URLPattern.resolve('entries/2026/')
+                              RoutePattern.match('entries/2026/')
+                                IntConverter.to_python('2026')
+                              ResolverMatch(journal.views.by_year, kwargs={'year': 2026})
+                            ResolverMatch(journal.views.by_year, kwargs={'year': 2026})
+                        CsrfViewMiddleware.process_view
+                        BaseHandler.make_view_atomic
+                        journal.views.by_year(request, year=2026)
+                          BaseManager.get_queryset  (Entry.objects)
+                          QuerySet.filter(published__year=2026)
+                            QuerySet._clone
+                              Query.clone
+                            Query.add_q
+                              Query.build_filter
+                                Query.solve_lookup_type('published__year')
+                                Query.setup_joins(['published'])
+                                Query.build_lookup
+                                  Query.try_transform('year')
+                                    ExtractYear.__init__
+                                  YearExact.__init__(lhs=ExtractYear, rhs=2026)
+                          QuerySet.order_by('published')
+                            QuerySet._clone
+                              Query.clone
+                            Query.add_ordering
+                          render(request, "journal/entries.html", context)
+                            get_template('journal/entries.html')
+                              EngineHandler.__getitem__("django")
+                              DjangoTemplates.get_template('journal/entries.html')
+                                Engine.get_template('journal/entries.html')
+                                  Engine.find_template('journal/entries.html')
+                                    cached.Loader.get_template('journal/entries.html')
+                            Template.render(context, request)  (the backend's Template)
+                              make_context
+                                RequestContext.__init__
+                              Template.render(context)  (the engine's Template)
+                                context_processors.csrf
+                                context_processors.request
+                                auth.context_processors.auth
+                                messages.context_processors.messages
+                                VariableNode.render  {{ year }}
+                                  conditional_escape
+                                VariableNode.render  {{ year }}
+                                  conditional_escape
+                                ForNode.render  {% for entry in entries %}
+                                  QuerySet.__len__
+                                    QuerySet._fetch_all
+                                      ModelIterable.__iter__
+                                        Query.get_compiler('default')
+                                        SQLCompiler.execute_sql
+                                          SQLCompiler.as_sql
+                                            SQLCompiler.get_select
+                                            SQLCompiler.get_order_by
+                                              Query.setup_joins(['published'])
+                                            SQLCompiler.get_from_clause
+                                            WhereNode.as_sql
+                                              YearLookup.as_sql  (YearExact)
+                                          BaseDatabaseWrapper.cursor
+                                            BaseDatabaseWrapper.connect
+                                              DatabaseWrapper.get_new_connection  (sqlite3)
+                                              signal connection_created -> no receivers
+                                          CursorWrapper.execute
+                                            SQL SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry" WHERE "journal_entry"."published" BETWEEN %s AND %s ORDER BY "journal_entry"."published" ASC with params ('2026-01-01', '2026-12-31')
+                                            SQLiteCursorWrapper.execute
+                                        SQLCompiler.results_iter
+                                        DatabaseOperations.convert_datefield_value  (sqlite3)
+                                        Model.from_db  (Entry)
+                                          Model.__init__  (Entry)
+                                            signal pre_init -> no receivers
+                                            signal post_init -> no receivers
+                                        DatabaseOperations.convert_datefield_value  (sqlite3)
+                                        Model.from_db  (Entry)
+                                          Model.__init__  (Entry)
+                                            signal pre_init -> no receivers
+                                            signal post_init -> no receivers
+                                  QuerySet.__iter__
+                                    QuerySet._fetch_all
+                                  VariableNode.render  {{ entry.published|date:"j F" }}
+                                    defaultfilters.date(value, "j F")
+                                    conditional_escape
+                                  VariableNode.render  {{ entry.title }}
+                                    conditional_escape
+                                  VariableNode.render  {{ entry.published|date:"j F" }}
+                                    defaultfilters.date(value, "j F")
+                                    conditional_escape
+                                  VariableNode.render  {{ entry.title }}
+                                    conditional_escape
+                            HttpResponse.__init__(content)
+                              response["Content-Type"] = "text/html; charset=utf-8"
+                        BaseHandler.check_response
+                      XFrameOptionsMiddleware.process_response  (status 200)
+                        response["X-Frame-Options"] = "DENY"
+                    MessageMiddleware.process_response  (status 200)
+                      BaseStorage.update
+                CsrfViewMiddleware.process_response  (status 200)
+              CommonMiddleware.process_response  (status 200)
+                response["Content-Length"] = "148"
+            SessionMiddleware.process_response  (status 200)
+              SessionBase.is_empty
+          SecurityMiddleware.process_response  (status 200)
+            response["X-Content-Type-Options"] = "nosniff"
+            response["Referrer-Policy"] = "same-origin"
+            response["Cross-Origin-Opener-Policy"] = "same-origin"
+      start_response("200 OK", [Content-Type, X-Frame-Options, Content-Length, X-Content-Type-Options, Referrer-Policy, Cross-Origin-Opener-Policy])
+    the server has sent the body: 148 bytes
+    HttpResponseBase.close
+      HttpRequest.close
+      signal request_finished -> close_old_connections, close_caches, reset_urlconf
+        close_old_connections
+          BaseDatabaseWrapper.close_if_unusable_or_obsolete
+            DatabaseWrapper.close  (sqlite3)
+        close_caches
+        reset_urlconf
+          set_urlconf(None)
+
