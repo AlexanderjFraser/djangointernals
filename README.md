@@ -19,7 +19,8 @@ points at the code it is about; the tools in [tools/](tools/) check both.
   happens, and their output. The chapters' flows are taken from these.
 - [map/](map/): Django's source by chapter, with sizes and reading orders.
 - [tools/](tools/): the gates that check every name and pointer in the
-  book against the pinned source, and every link in the built site.
+  book against the pinned source, every quote of a recording against the
+  recorded output, and every link in the built site.
 - [djangointernals/](djangointernals/) and [manage.py](manage.py): the
   site, a Django project that bakes the book to static files.
 

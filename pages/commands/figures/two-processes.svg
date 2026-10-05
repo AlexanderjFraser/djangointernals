@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 352">
+  <!-- two processes: the first only starts the second and waits; the second has two threads and ends itself with status 3 -->
+  <text class="strong" x="0" y="14">the first process</text>
+  <text class="name small" x="0" y="32">python manage.py runserver</text>
+
+  <text class="strong" x="280" y="14">a second process, replaced at each change</text>
+  <text class="name small" x="280" y="32">the same command line, with RUN_MAIN="true"</text>
+
+  <!-- the first process -->
+  <rect class="ground" x="0" y="44" width="236" height="306" rx="8"/>
+  <text class="name" x="12" y="68">ManagementUtility.execute</text>
+  <text class="name" x="24" y="88">django.setup()</text>
+  <text class="name" x="12" y="112">Command.handle</text>
+  <text class="name" x="24" y="132">run_with_reloader</text>
+  <text class="name" x="36" y="152">restart_with_reloader</text>
+  <rect class="box" x="36" y="164" width="188" height="50" rx="6"/>
+  <text class="name" x="46" y="186">subprocess.run</text>
+  <text class="quiet small" x="46" y="203">waits for it to end</text>
+  <text x="36" y="272"><tspan class="mark strong">status 3</tspan>: runs it again</text>
+  <text x="36" y="302">any other status:</text>
+  <text x="36" y="320">exits with it</text>
+
+  <!-- the second process -->
+  <rect class="ground" x="280" y="44" width="366" height="306" rx="8"/>
+  <text class="name" x="292" y="68">ManagementUtility.execute</text>
+  <text class="name" x="304" y="88">django.setup()</text>
+  <text class="name" x="292" y="112">Command.handle</text>
+  <text class="name" x="304" y="132">run_with_reloader</text>
+  <text class="name" x="316" y="152">start_django</text>
+
+  <rect class="box" x="292" y="164" width="168" height="112" rx="6"/>
+  <text class="strong small" x="302" y="184">the main thread</text>
+  <text class="name small" x="302" y="206">BaseReloader.run</text>
+  <text class="quiet small" x="302" y="228">looks at every watched</text>
+  <text class="quiet small" x="302" y="244">file once a second</text>
+
+  <rect class="box" x="468" y="164" width="166" height="112" rx="6"/>
+  <text class="strong small" x="478" y="184">django-main-thread</text>
+  <text class="name small" x="478" y="206">Command.inner_run</text>
+  <text class="quiet small" x="478" y="228">the system checks</text>
+  <text class="quiet small" x="478" y="244">the HTTP server</text>
+
+  <rect class="mark-box" x="292" y="290" width="168" height="48" rx="6"/>
+  <text class="small" x="302" y="310">a file changed:</text>
+  <text class="name small" x="302" y="328">sys.exit(3)</text>
+
+  <!-- the first starts the second -->
+  <path class="line" d="M224 182 H270"/>
+  <polygon class="head" points="280,182 270,177 270,187"/>
+
+  <!-- the second asks to be started again -->
+  <path class="mark-line" d="M292 314 H258 V268 H172"/>
+  <polygon class="head mark" points="162,268 172,263 172,273"/>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 368">
+  <!-- left: the server's thread, which only accepts; right: the thread of one connection, as calls nested as they are made -->
+  <text class="strong" x="0" y="14">the thread django-main-thread</text>
+  <text class="strong" x="240" y="14">a thread for each connection</text>
+
+  <rect class="ground" x="0" y="28" width="204" height="94" rx="6"/>
+  <text class="name small" x="10" y="50">BaseServer.serve_forever</text>
+  <text class="quiet small" x="10" y="70">accepts a connection,</text>
+  <text class="quiet small" x="10" y="86">starts a thread for it,</text>
+  <text class="quiet small" x="10" y="102">and waits for the next</text>
+
+  <path class="line" d="M204 56 H230"/>
+  <polygon class="head" points="240,56 230,51 230,61"/>
+
+  <rect class="ground" x="240" y="28" width="406" height="338" rx="8"/>
+  <text class="name" x="252" y="50">WSGIRequestHandler.handle</text>
+  <text class="quiet small" x="252" y="67">one object for the connection</text>
+
+  <rect class="box" x="252" y="78" width="382" height="256" rx="8"/>
+  <text class="name" x="264" y="100">WSGIRequestHandler.handle_one_request</text>
+  <text class="quiet small" x="264" y="117">reads one request line and its headers</text>
+
+  <rect class="ground" x="264" y="128" width="358" height="194" rx="8"/>
+  <text class="name" x="276" y="150">BaseHandler.run</text>
+  <text class="quiet small" x="276" y="167">on a ServerHandler, one object for the request</text>
+
+  <rect class="box" x="276" y="178" width="334" height="96" rx="8"/>
+  <text class="name" x="288" y="200">StaticFilesHandler.__call__</text>
+  <text class="quiet small" x="288" y="217">answers a path under STATIC_URL itself</text>
+
+  <rect class="mark-box" x="288" y="226" width="310" height="40" rx="6"/>
+  <text class="name" x="300" y="243">WSGIHandler.__call__</text>
+  <text class="quiet small" x="300" y="259">the project's application: the request cycle</text>
+
+  <text class="name" x="276" y="294">ServerHandler.finish_response</text>
+  <text class="quiet small" x="276" y="311">sends the response, logs the request, closes it</text>
+
+  <text class="quiet small" x="252" y="354">and again, while the connection stays open</text>
+</svg>

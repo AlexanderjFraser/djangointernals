@@ -1,0 +1,235 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "running.md",
+ "pointers": [
+  {
+   "pointer": "django/core/management/base.py:BaseCommand",
+   "line": 9,
+   "sentence": "Everything around those two methods is inherited: reading the command line, the options every command accepts, the checks, where output goes and in what colours, and what an exception turns into (`django/core/management/base.py:BaseCommand`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "BaseCommand",
+   "kind": "class",
+   "lines": [
+    193,
+    630
+   ],
+   "fingerprint": "91763831396bc7fd"
+  },
+  {
+   "pointer": "django/core/management/base.py:BaseCommand.run_from_argv",
+   "line": 15,
+   "sentence": "It owns what only makes sense when a person typed the command: parsing an argument list, turning a `CommandError` into a line on standard error and an exit status, and closing the database connections before the process ends (`django/core/management/base.py:BaseCommand.run_from_argv`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "BaseCommand.run_from_argv",
+   "kind": "function",
+   "lines": [
+    410,
+    444
+   ],
+   "fingerprint": "8ba54d11e3f72965"
+  },
+  {
+   "pointer": "django/core/management/base.py:BaseCommand.execute",
+   "line": 17,
+   "sentence": "Code that runs a command without a command line enters here ([`call_command`](call-command.md)) (`django/core/management/base.py:BaseCommand.execute`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "BaseCommand.execute",
+   "kind": "function",
+   "lines": [
+    446,
+    481
+   ],
+   "fingerprint": "9157a074291f8af1"
+  },
+  {
+   "pointer": "django/core/management/base.py:BaseCommand.create_parser",
+   "line": 39,
+   "sentence": "`BaseCommand.create_parser` returns a `CommandParser`, Django's subclass of `argparse.ArgumentParser`, named after the program and the subcommand and described by the class's `help` attribute (`django/core/management/base.py:BaseCommand.create_parser`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "BaseCommand.create_parser",
+   "kind": "function",
+   "lines": [
+    309,
+    383
+   ],
+   "fingerprint": "c91da714b6e5ccbe"
+  },
+  {
+   "pointer": "django/core/management/base.py:BaseCommand.add_base_argument",
+   "line": 43,
+   "sentence": "It can list some of them in `BaseCommand.suppressed_base_arguments`, and they are then accepted as before and left out of the help; runserver lists two (`django/core/management/base.py:BaseCommand.add_base_argument`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "BaseCommand.add_base_argument",
+   "kind": "function",
+   "lines": [
+    391,
+    400
+   ],
+   "fingerprint": "28957e97a91bedbd"
+  },
+  {
+   "pointer": "django/core/management/base.py:CommandParser",
+   "line": 55,
+   "sentence": "`CommandParser` differs from the parser it extends mainly in what an error does (`django/core/management/base.py:CommandParser`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "CommandParser",
+   "kind": "class",
+   "lines": [
+    49,
+    89
+   ],
+   "fingerprint": "c0c9e593ed3b70bd"
+  },
+  {
+   "pointer": "django/core/management/base.py:AppCommand",
+   "line": 106,
+   "sentence": "Each declares the positional arguments, under the name args, and implements `handle` as a loop; the author writes the body of the loop (`django/core/management/base.py:AppCommand`, `django/core/management/base.py:LabelCommand`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "AppCommand",
+   "kind": "class",
+   "lines": [
+    633,
+    675
+   ],
+   "fingerprint": "f82cc9046c13711b"
+  },
+  {
+   "pointer": "django/core/management/base.py:LabelCommand",
+   "line": 106,
+   "sentence": "Each declares the positional arguments, under the name args, and implements `handle` as a loop; the author writes the body of the loop (`django/core/management/base.py:AppCommand`, `django/core/management/base.py:LabelCommand`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "LabelCommand",
+   "kind": "class",
+   "lines": [
+    678,
+    718
+   ],
+   "fingerprint": "3710770e1c46a4fb"
+  },
+  {
+   "pointer": "django/core/management/base.py:OutputWrapper",
+   "line": 112,
+   "sentence": "A command writes to `BaseCommand.stdout` and `BaseCommand.stderr`, which are not the process's streams but an `OutputWrapper` around each (`django/core/management/base.py:OutputWrapper`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "OutputWrapper",
+   "kind": "class",
+   "lines": [
+    151,
+    187
+   ],
+   "fingerprint": "8df576597b1ad380"
+  },
+  {
+   "pointer": "django/core/management/color.py:make_style",
+   "line": 116,
+   "sentence": "The style functions come from the command's `style` attribute, an object with one function for each of a fixed set of roles: an error, a warning, a success, a notice, the parts of an SQL statement, the classes of HTTP status, and a few more (`django/core/management/color.py:make_style`).",
+   "tree": "django",
+   "path": "django/core/management/color.py",
+   "symbol": "make_style",
+   "kind": "function",
+   "lines": [
+    74,
+    103
+   ],
+   "fingerprint": "9b62010f6eb7dbe0"
+  },
+  {
+   "pointer": "django/core/management/color.py:supports_color",
+   "line": 118,
+   "sentence": "`supports_color` decides, and its first condition is that the process's standard output is a terminal; on Windows it also wants one of several signs that the console understands the codes (`django/core/management/color.py:supports_color`).",
+   "tree": "django",
+   "path": "django/core/management/color.py",
+   "symbol": "supports_color",
+   "kind": "function",
+   "lines": [
+    28,
+    67
+   ],
+   "fingerprint": "700af5aa79db0990"
+  },
+  {
+   "pointer": "django/core/management/color.py:color_style",
+   "line": 119,
+   "sentence": "The environment variable `\"DJANGO_COLORS\"` can name another and override single roles (`django/core/management/color.py:color_style`, `django/utils/termcolors.py:parse_color_setting`).",
+   "tree": "django",
+   "path": "django/core/management/color.py",
+   "symbol": "color_style",
+   "kind": "function",
+   "lines": [
+    114,
+    120
+   ],
+   "fingerprint": "524b186a8e245f7b"
+  },
+  {
+   "pointer": "django/utils/termcolors.py:parse_color_setting",
+   "line": 119,
+   "sentence": "The environment variable `\"DJANGO_COLORS\"` can name another and override single roles (`django/core/management/color.py:color_style`, `django/utils/termcolors.py:parse_color_setting`).",
+   "tree": "django",
+   "path": "django/utils/termcolors.py",
+   "symbol": "parse_color_setting",
+   "kind": "function",
+   "lines": [
+    152,
+    230
+   ],
+   "fingerprint": "1770fd1184c9a5fa"
+  },
+  {
+   "pointer": "django/core/management/base.py:CommandError",
+   "line": 127,
+   "sentence": "`CommandError` is the exception a command raises to say it cannot do what was asked, and `run_from_argv` treats it differently from every other (`django/core/management/base.py:CommandError`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "CommandError",
+   "kind": "class",
+   "lines": [
+    23,
+    38
+   ],
+   "fingerprint": "e5e13125b62e7ccf"
+  },
+  {
+   "pointer": "django/core/management/commands/dbshell.py:Command.handle",
+   "line": 145,
+   "sentence": "Django's dbshell uses that to end with the status of the database client it ran (`django/core/management/commands/dbshell.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/dbshell.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    28,
+    49
+   ],
+   "fingerprint": "9e54fbd9edd81888"
+  },
+  {
+   "pointer": "django/core/management/base.py:no_translations",
+   "line": 184,
+   "sentence": "Of Django's commands, migrate and makemigrations do (`django/core/management/base.py:no_translations`).",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "no_translations",
+   "kind": "function",
+   "lines": [
+    104,
+    119
+   ],
+   "fingerprint": "c57957987d407c0d"
+  }
+ ]
+}

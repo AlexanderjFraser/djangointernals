@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 436">
+  <!-- one command line as three calls, each inside the one before; only handle is the command's own -->
+  <text class="name" x="0" y="14">python manage.py count 3 --per-row 10</text>
+
+  <rect class="ground" x="0" y="28" width="646" height="406" rx="8"/>
+  <text class="name strong" x="14" y="52">ManagementUtility.execute</text>
+  <text class="quiet small" x="632" y="52" text-anchor="end">one for each command line</text>
+  <text class="strong" x="14" y="78">1</text>
+  <text x="34" y="78">reads <tspan class="name">--settings</tspan> and <tspan class="name">--pythonpath</tspan> before anything else</text>
+  <text class="strong" x="14" y="100">2</text>
+  <text x="34" y="100">loads the settings and calls <tspan class="name">django.setup()</tspan></text>
+  <text class="strong" x="14" y="122">3</text>
+  <text x="34" y="122">finds the command by name, and makes an instance of its class</text>
+
+  <rect class="box" x="14" y="138" width="618" height="282" rx="8"/>
+  <text class="name strong" x="28" y="162">BaseCommand.run_from_argv</text>
+  <text class="quiet small" x="618" y="162" text-anchor="end">the same for every command</text>
+  <text class="strong" x="28" y="188">4</text>
+  <text x="48" y="188">builds the parser, adds the command's arguments, parses the rest of argv</text>
+
+  <rect class="ground" x="28" y="204" width="590" height="150" rx="8"/>
+  <text class="name strong" x="42" y="228">BaseCommand.execute</text>
+  <text class="strong" x="42" y="254">5</text>
+  <text x="62" y="254">runs the system checks, unless the command or the command line declines</text>
+
+  <rect class="mark-box" x="42" y="268" width="562" height="36" rx="6"/>
+  <text class="strong" x="54" y="291">6</text>
+  <text class="name" x="74" y="291">Command.handle(*args, **options)</text>
+  <text class="quiet small" x="592" y="291" text-anchor="end">the command's own code</text>
+
+  <text class="strong" x="42" y="330">7</text>
+  <text x="62" y="330">writes what <tspan class="name">handle</tspan> returned, if it returned anything</text>
+
+  <text class="strong" x="28" y="380">8</text>
+  <text x="48" y="380">on <tspan class="name">CommandError</tspan>: the message to standard error, its status to the shell</text>
+  <text class="strong" x="28" y="402">9</text>
+  <text x="48" y="402">closes the database connections</text>
+</svg>

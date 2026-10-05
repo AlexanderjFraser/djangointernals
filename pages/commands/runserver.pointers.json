@@ -1,0 +1,221 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "runserver.md",
+ "pointers": [
+  {
+   "pointer": "django/core/servers/basehttp.py",
+   "line": 7,
+   "sentence": "What `python manage.py runserver` runs: a command whose `handle` does not return while the server is up, which runs the system checks, obtains the project's WSGI application, and gives it to `run` in `django/core/servers/basehttp.py`, an HTTP server made of small subclasses of the classes in Python's `wsgiref` and `socketserver`.",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    277
+   ],
+   "fingerprint": "aae42b603c526747"
+  },
+  {
+   "pointer": "django/core/management/commands/runserver.py:Command",
+   "line": 15,
+   "sentence": "The command's class divides its work at one line: what every process of the server does, including the first, which never serves a request, and what only a process that serves does (`django/core/management/commands/runserver.py:Command`).",
+   "tree": "django",
+   "path": "django/core/management/commands/runserver.py",
+   "symbol": "Command",
+   "kind": "class",
+   "lines": [
+    27,
+    202
+   ],
+   "fingerprint": "128e91cec99c9d42"
+  },
+  {
+   "pointer": "django/core/management/commands/runserver.py:Command.get_handler",
+   "line": 78,
+   "sentence": "The command's `get_handler` returns what `get_internal_wsgi_application` returns, and that function reads one setting (`django/core/management/commands/runserver.py:Command.get_handler`).",
+   "tree": "django",
+   "path": "django/core/management/commands/runserver.py",
+   "symbol": "Command.get_handler",
+   "kind": "function",
+   "lines": [
+    71,
+    73
+   ],
+   "fingerprint": "7131c48a21bdb4ae"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:get_internal_wsgi_application",
+   "line": 78,
+   "sentence": "If the setting is `None` it calls `get_wsgi_application` itself (`django/core/servers/basehttp.py:get_internal_wsgi_application`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "get_internal_wsgi_application",
+   "kind": "function",
+   "lines": [
+    29,
+    54
+   ],
+   "fingerprint": "4b461ac5a064a46b"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler",
+   "line": 82,
+   "sentence": "Its `get_handler` wraps the application in a `StaticFilesHandler` when `settings.DEBUG` is true, or when `--insecure` was given, and `--nostatic` was not (`django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/runserver.py",
+   "symbol": "Command.get_handler",
+   "kind": "function",
+   "lines": [
+    26,
+    36
+   ],
+   "fingerprint": "d3277a000ed4a018"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandler",
+   "line": 84,
+   "sentence": "Every other path it passes to the application inside (`django/contrib/staticfiles/handlers.py:StaticFilesHandler`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "StaticFilesHandler",
+   "kind": "class",
+   "lines": [
+    67,
+    81
+   ],
+   "fingerprint": "002b71329279f50f"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:run",
+   "line": 88,
+   "sentence": "It chooses a server class, makes an instance bound to the address, calls `on_bind`, gives the instance the application and calls its `socketserver.BaseServer.serve_forever` (`django/core/servers/basehttp.py:run`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "run",
+   "kind": "function",
+   "lines": [
+    251,
+    277
+   ],
+   "fingerprint": "52cc12657515b274"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py",
+   "line": 101,
+   "sentence": "*The four classes of `django/core/servers/basehttp.py`.*",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    277
+   ],
+   "fingerprint": "aae42b603c526747"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerThread",
+   "line": 103,
+   "sentence": "`ThreadedWSGIServer` is the server class of the test framework's live server, where a test and the server may have to share one connection to an in-memory database (`django/test/testcases.py:LiveServerThread`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerThread",
+   "kind": "class",
+   "lines": [
+    1735,
+    1791
+   ],
+   "fingerprint": "15cf9e391e602fd9"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:WSGIRequestHandler.handle",
+   "line": 136,
+   "sentence": "A `WSGIRequestHandler` is made for the connection, and its `handle` serves requests on it one after another until the connection is to be closed (`django/core/servers/basehttp.py:WSGIRequestHandler.handle`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "WSGIRequestHandler.handle",
+   "kind": "function",
+   "lines": [
+    219,
+    227
+   ],
+   "fingerprint": "57f685e27ccbd2bd"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:ServerHandler",
+   "line": 142,
+   "sentence": "`ServerHandler.finish_response` sends what came back, and `ServerHandler.close` finishes: it reads whatever of the request's body the application left unread, so that nothing of it is left on the connection, logs the request, and closes the response (`django/core/servers/basehttp.py:ServerHandler`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "ServerHandler",
+   "kind": "class",
+   "lines": [
+    115,
+    175
+   ],
+   "fingerprint": "3c98fa4aacd65789"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:WSGIRequestHandler.log_message",
+   "line": 148,
+   "sentence": "Django's version sends the message to the logger `\"django.server\"`, choosing the level from the status: an error for 500 and above, a warning for 400 and above, and information otherwise (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`, `django/utils/log.py:log_message`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "WSGIRequestHandler.log_message",
+   "kind": "function",
+   "lines": [
+    185,
+    206
+   ],
+   "fingerprint": "253ff422c0dcbe5f"
+  },
+  {
+   "pointer": "django/utils/log.py:log_message",
+   "line": 148,
+   "sentence": "Django's version sends the message to the logger `\"django.server\"`, choosing the level from the status: an error for 500 and above, a warning for 400 and above, and information otherwise (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`, `django/utils/log.py:log_message`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "log_message",
+   "kind": "function",
+   "lines": [
+    252,
+    289
+   ],
+   "fingerprint": "6fd85549bf556a44"
+  },
+  {
+   "pointer": "django/utils/log.py:ServerFormatter",
+   "line": 150,
+   "sentence": "It makes a style object of its own for that, from the same palettes as a command's ([Running a command: `BaseCommand`](running.md#output-and-colour)), which is why `--no-color` has to travel through the environment to reach it (`django/utils/log.py:ServerFormatter`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "ServerFormatter",
+   "kind": "class",
+   "lines": [
+    213,
+    249
+   ],
+   "fingerprint": "a8aedf046a051cc0"
+  },
+  {
+   "pointer": "django/core/management/commands/testserver.py:Command.handle",
+   "line": 162,
+   "sentence": "A comment gives the reason for the reloader: with it, this `handle`, and so the creation of the database, would run more than once (`django/core/management/commands/testserver.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/testserver.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    38,
+    65
+   ],
+   "fingerprint": "bfaed9303e7f5ff2"
+  }
+ ]
+}

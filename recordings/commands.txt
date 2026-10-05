@@ -1,0 +1,856 @@
+Django 6.2.dev20260926051415 on Python 3.14 (win32), and the project orchard: django.contrib.staticfiles and two applications with commands
+
+A command of the project, from the command line
+    python manage.py count 3 --per-row 10
+      execute_from_command_line(["manage.py", "count", "3", "--per-row", "10"])
+        ManagementUtility.execute
+          handle_default_options(settings=None, pythonpath=None)
+          Settings.__init__("orchard.settings")
+            import orchard.settings
+          django.setup
+            import trees.apps
+            import trees.models
+            import trees.checks
+          ManagementUtility.autocomplete
+          ManagementUtility.fetch_command("count")
+            get_commands
+              find_commands("django/core/management")
+                -> 26 names, "check" to "testserver"
+              find_commands("press/management")
+                -> ["count", "juice"]
+              find_commands("trees/management")
+                -> ["count", "prune"]
+              find_commands("django/contrib/staticfiles/management")
+                -> ["collectstatic", "findstatic", "runserver"]
+            load_command_class("trees", "count")
+              import trees.management
+              import trees.management.commands
+              import trees.management.commands.count
+          BaseCommand.run_from_argv(["manage.py", "count", "3", "--per-row", "10"])
+            BaseCommand.create_parser("manage.py", "count")
+              Command.add_arguments  (trees.management.commands.count)
+            CommandParser.parse_args(["3", "--per-row", "10"])
+            handle_default_options(settings=None, pythonpath=None)
+            BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False, rows=3, per_row=10)
+              BaseCommand.get_check_kwargs
+                -> {}
+              BaseCommand.check()
+                CheckRegistry.run_checks()
+                  -> 23 check functions called; no messages
+              Command.handle  (trees.management.commands.count)
+                OutputWrapper.write("30 trees in 3 rows")  to stdout
+            BaseConnectionHandler.close_all  (the database connections)
+      stdout | 30 trees in 3 rows
+      exit status 0
+
+A command that returns its output and asks for no system checks, from BaseCommand.run_from_argv on
+    python manage.py juice --kilos 10
+      BaseCommand.run_from_argv(["manage.py", "juice", "--kilos", "10"])
+        BaseCommand.create_parser("manage.py", "juice")
+          Command.add_arguments  (press.management.commands.juice)
+        CommandParser.parse_args(["--kilos", "10"])
+        handle_default_options(settings=None, pythonpath=None)
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, kilos=10)
+          Command.handle  (press.management.commands.juice)
+          OutputWrapper.write("6.0 litres")  to stdout
+        BaseConnectionHandler.close_all  (the database connections)
+      stdout | 6.0 litres
+      exit status 0
+
+A LabelCommand that asks for the checks of two tags, from BaseCommand.run_from_argv on
+    python manage.py prune 4 7
+      BaseCommand.run_from_argv(["manage.py", "prune", "4", "7"])
+        BaseCommand.create_parser("manage.py", "prune")
+          LabelCommand.add_arguments
+        CommandParser.parse_args(["4", "7"])
+        handle_default_options(settings=None, pythonpath=None)
+        BaseCommand.execute("4", "7", verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False)
+          BaseCommand.get_check_kwargs
+            -> {"tags": ["models", "trees"]}
+          BaseCommand.check(tags=["models", "trees"])
+            CheckRegistry.run_checks(tags=["models", "trees"])
+              -> 3 check functions called; no messages
+          LabelCommand.handle("4", "7")
+            Command.handle_label("4")  (trees.management.commands.prune)
+            Command.handle_label("7")  (trees.management.commands.prune)
+          OutputWrapper.write("row 4 pruned\nrow 7 pruned")  to stdout
+        BaseConnectionHandler.close_all  (the database connections)
+      stdout | row 4 pruned
+      stdout | row 7 pruned
+      exit status 0
+
+The commands of the project: what find_commands finds in each place, in the order of INSTALLED_APPS
+    django.core
+      check, compilemessages, createcachetable, dbshell, diffsettings, dumpdata, flush,
+      inspectdb, listurls, loaddata, makemessages, makemigrations, migrate, optimizemigration,
+      runserver (not used: django.contrib.staticfiles has one), sendtestemail, shell,
+      showmigrations, sqlflush, sqlmigrate, sqlsequencereset, squashmigrations, startapp,
+      startproject, test, testserver
+    django.contrib.staticfiles
+      collectstatic, findstatic, runserver
+    trees
+      count, prune
+    press
+      count (not used: trees has one), juice
+
+The commands of django.core and of django.contrib.staticfiles: the base of each, and what its own class sets and overrides of what BaseCommand defines
+    django.core
+      check  (BaseCommand)
+        requires_system_checks = []
+      compilemessages  (BaseCommand)
+        requires_system_checks = []
+      createcachetable  (BaseCommand)
+        requires_system_checks = []
+      dbshell  (BaseCommand)
+        requires_system_checks = []
+      diffsettings  (BaseCommand)
+        requires_system_checks = []
+      dumpdata  (BaseCommand)
+      flush  (BaseCommand)
+        stealth_options = ["reset_sequences", "allow_cascade", "inhibit_post_migrate"]
+      inspectdb  (BaseCommand)
+        requires_system_checks = []
+        stealth_options = ["table_name_filter"]
+      listurls  (BaseCommand)
+        overrides __init__
+      loaddata  (BaseCommand)
+      makemessages  (BaseCommand)
+        requires_system_checks = []
+        requires_settings = False
+      makemigrations  (BaseCommand)
+      migrate  (BaseCommand)
+        overrides get_check_kwargs
+      optimizemigration  (BaseCommand)
+      runserver  (BaseCommand)
+        stealth_options = ["shutdown_message"]
+        suppressed_base_arguments = ["--traceback", "--verbosity"]
+        overrides execute, get_check_kwargs
+      sendtestemail  (BaseCommand)
+      shell  (BaseCommand)
+        requires_system_checks = []
+        requires_settings = False
+      showmigrations  (BaseCommand)
+      sqlflush  (BaseCommand)
+        output_transaction = True
+      sqlmigrate  (BaseCommand)
+        output_transaction = True
+        overrides execute
+      sqlsequencereset  (AppCommand)
+        output_transaction = True
+      squashmigrations  (BaseCommand)
+      startapp  (templates.TemplateCommand)
+        requires_settings = False
+      startproject  (templates.TemplateCommand)
+        requires_settings = False
+      test  (BaseCommand)
+        requires_system_checks = []
+        overrides run_from_argv
+      testserver  (BaseCommand)
+        requires_system_checks = []
+    django.contrib.staticfiles
+      collectstatic  (BaseCommand)
+        requires_system_checks = ["staticfiles"]
+        overrides __init__
+      findstatic  (LabelCommand)
+      runserver  (runserver.Command)
+
+No settings: python -m django, with DJANGO_SETTINGS_MODULE not set
+    python -m django count 3
+      stderr | No Django settings specified.
+      stderr | Unknown command: 'count'
+      stderr | Type 'python -m django help' for usage.
+      exit status 1
+    python -m django check
+      stderr | Requested setting INSTALLED_APPS, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
+      exit status 1
+    python -m django shell --no-imports -c print(40+2)
+      stdout | 42
+      exit status 0
+
+The --settings option, for a module that does not exist and for one that does
+    python manage.py count 3 --settings=orchard.no_such_settings
+      stderr | No module named 'orchard.no_such_settings'.
+      stderr | Unknown command: 'count'
+      stderr | Type 'manage.py help' for usage.
+      exit status 1
+    python manage.py check --settings=orchard.no_such_settings
+      stderr | No module named 'orchard.no_such_settings'.
+      exit status 1
+    python -m django count 3 --settings=orchard.settings
+      stdout | 36 trees in 3 rows
+      exit status 0
+
+A command raises CommandError, from BaseCommand.run_from_argv on
+    python manage.py juice
+      BaseCommand.run_from_argv(["manage.py", "juice"])
+        BaseCommand.create_parser("manage.py", "juice")
+          Command.add_arguments  (press.management.commands.juice)
+        CommandParser.parse_args([])
+        handle_default_options(settings=None, pythonpath=None)
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, kilos=0)
+          Command.handle  (press.management.commands.juice)
+        OutputWrapper.write("CommandError: The press is empty.")  to stderr
+        BaseConnectionHandler.close_all  (the database connections)
+      stderr | CommandError: The press is empty.
+      exit status 5
+
+CommandError with --traceback, and an exception that is not a CommandError
+    python manage.py juice --traceback
+      stderr | Traceback (most recent call last):
+      stderr |   (the frames)
+      stderr | django.core.management.base.CommandError: The press is empty.
+      exit status 1
+    python manage.py juice --kilos -1
+      stderr | Traceback (most recent call last):
+      stderr |   (the frames)
+      stderr | ValueError: a weight cannot be negative
+      exit status 1
+
+An argument the parser refuses, from BaseCommand.run_from_argv on
+    python manage.py juice --kilos ten
+      BaseCommand.run_from_argv(["manage.py", "juice", "--kilos", "ten"])
+        BaseCommand.create_parser("manage.py", "juice")
+          Command.add_arguments  (press.management.commands.juice)
+        CommandParser.parse_args(["--kilos", "ten"])
+          CommandParser.error("argument --kilos: invalid int value: 'ten'")
+      stderr | usage: manage.py juice [-h] [--kilos KILOS] [--version] [-v {0,1,2,3}]
+      stderr |                        [--settings SETTINGS] [--pythonpath PYTHONPATH]
+      stderr |                        [--traceback] [--no-color] [--force-color]
+      stderr | manage.py juice: error: argument --kilos: invalid int value: 'ten'
+      exit status 2
+
+A command that does not exist, and a command given too little
+    python manage.py cont 3
+      stderr | Unknown command: 'cont'. Did you mean count?
+      stderr | Type 'manage.py help' for usage.
+      exit status 1
+    python manage.py count
+      stderr | usage: manage.py count [-h] [--per-row PER_ROW] [--version] [-v {0,1,2,3}]
+      stderr |                        [--settings SETTINGS] [--pythonpath PYTHONPATH]
+      stderr |                        [--traceback] [--no-color] [--force-color]
+      stderr |                        [--skip-checks]
+      stderr |                        rows
+      stderr | manage.py count: error: the following arguments are required: rows
+      exit status 2
+
+The help of one command: its own arguments, then those every command has
+    python manage.py count --help
+      stdout | usage: manage.py count [-h] [--per-row PER_ROW] [--version] [-v {0,1,2,3}]
+      stdout |                        [--settings SETTINGS] [--pythonpath PYTHONPATH]
+      stdout |                        [--traceback] [--no-color] [--force-color]
+      stdout |                        [--skip-checks]
+      stdout |                        rows
+      stdout |
+      stdout | Says how many trees a number of rows will hold.
+      stdout |
+      stdout | positional arguments:
+      stdout |   rows                  How many rows are planted.
+      stdout |
+      stdout | options:
+      stdout |   -h, --help            show this help message and exit
+      stdout |   --per-row PER_ROW     Trees in a row, if not settings.TREES_PER_ROW.
+      stdout |   --version             Show program's version number and exit.
+      stdout |   -v, --verbosity {0,1,2,3}
+      stdout |                         Verbosity level; 0=minimal output, 1=normal output,
+      stdout |                         2=verbose output, 3=very verbose output
+      stdout |   --settings SETTINGS   The Python path to a settings module, e.g.
+      stdout |                         "myproject.settings.main". If this isn't provided, the
+      stdout |                         DJANGO_SETTINGS_MODULE environment variable will be
+      stdout |                         used.
+      stdout |   --pythonpath PYTHONPATH
+      stdout |                         A directory to add to the Python path, e.g.
+      stdout |                         "/home/djangoprojects/myproject".
+      stdout |   --traceback           Display a full stack trace on CommandError exceptions.
+      stdout |   --no-color            Don't colorize the command output.
+      stdout |   --force-color         Force colorization of the command output.
+      stdout |   --skip-checks         Skip system checks.
+      exit status 0
+
+call_command: a command called from code
+    call_command("count", 3, per_row=10, stdout=out)
+      call_command("count", 3, per_row=10, stdout=a StringIO)
+        get_commands
+          find_commands("django/core/management")
+            -> 26 names, "check" to "testserver"
+          find_commands("press/management")
+            -> ["count", "juice"]
+          find_commands("trees/management")
+            -> ["count", "prune"]
+          find_commands("django/contrib/staticfiles/management")
+            -> ["collectstatic", "findstatic", "runserver"]
+        load_command_class("trees", "count")
+          import trees.management
+          import trees.management.commands
+          import trees.management.commands.count
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3"])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=True, rows=3, per_row=10, stdout=a StringIO)
+          Command.handle  (trees.management.commands.count)
+            OutputWrapper.write("30 trees in 3 rows")  to a StringIO
+      -> None
+    out.getvalue()  -> '30 trees in 3 rows\n'
+
+call_command: what the command returns is returned, and written as well
+    call_command("juice", kilos=10, stdout=out), a command that returns its output
+      call_command("juice", kilos=10, stdout=a StringIO)
+        load_command_class("press", "juice")
+          import press.management
+          import press.management.commands
+          import press.management.commands.juice
+        BaseCommand.create_parser("", "juice")
+          Command.add_arguments  (press.management.commands.juice)
+        CommandParser.parse_args([])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, kilos=10, stdout=a StringIO, skip_checks=True)
+          Command.handle  (press.management.commands.juice)
+          OutputWrapper.write("6.0 litres")  to a StringIO
+      -> '6.0 litres'
+    out.getvalue()  -> '6.0 litres\n'
+
+call_command: an option given as an argument is parsed, and one given as a keyword is not
+    call_command("count", 3, "--per-row", "10", stdout=out), the option as the command line spells it
+      call_command("count", 3, "--per-row", "10", stdout=a StringIO)
+        load_command_class("trees", "count")
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3", "--per-row", "10"])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=True, rows=3, per_row=10, stdout=a StringIO)
+          Command.handle  (trees.management.commands.count)
+            OutputWrapper.write("30 trees in 3 rows")  to a StringIO
+      -> None
+    out.getvalue()  -> '30 trees in 3 rows\n'
+    call_command("count", 3, per_row="10", stdout=out), the option as a keyword, and its value a string
+      call_command("count", 3, per_row="10", stdout=a StringIO)
+        load_command_class("trees", "count")
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3"])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=True, rows=3, per_row="10", stdout=a StringIO)
+          Command.handle  (trees.management.commands.count)
+            OutputWrapper.write("101010 trees in 3 rows")  to a StringIO
+      -> None
+    out.getvalue()  -> '101010 trees in 3 rows\n'
+
+call_command: errors reach the caller as exceptions
+    call_command("juice")
+      call_command("juice")
+        load_command_class("press", "juice")
+        BaseCommand.create_parser("", "juice")
+          Command.add_arguments  (press.management.commands.juice)
+        CommandParser.parse_args([])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, kilos=0, skip_checks=True)
+          Command.handle  (press.management.commands.juice)
+      -> raises CommandError: The press is empty.
+    call_command("count", "three")
+      call_command("count", "three")
+        load_command_class("trees", "count")
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["three"])
+          CommandParser.error("argument rows: invalid int value: 'three'")
+      -> raises CommandError: Error: argument rows: invalid int value: 'three'
+    call_command("count", 3, colour=True)
+      call_command("count", 3, colour=True)
+        load_command_class("trees", "count")
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3"])
+      -> raises TypeError: Unknown option(s) for count command: colour. Valid options are: force_color, help, no_color, per_row, pythonpath, rows, settings, skip_checks, stderr, stdout, traceback, verbosity, version.
+    call_command("cont", 3)
+      call_command("cont", 3)
+      -> raises CommandError: Unknown command: 'cont'
+
+call_command: a positional argument given as a keyword
+    call_command("count", rows=3)
+      call_command("count", rows=3)
+        load_command_class("trees", "count")
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+      -> raises ValueError: min() iterable argument is empty
+
+call_command runs no system checks unless it is asked to
+    TREES_PER_ROW is 30, for which the check of the trees application returns an error
+    call_command("count", 3, stdout=out)
+      call_command("count", 3, stdout=a StringIO)
+        get_commands
+          find_commands("django/core/management")
+            -> 26 names, "check" to "testserver"
+          find_commands("press/management")
+            -> ["count", "juice"]
+          find_commands("trees/management")
+            -> ["count", "prune"]
+          find_commands("django/contrib/staticfiles/management")
+            -> ["collectstatic", "findstatic", "runserver"]
+        load_command_class("trees", "count")
+          import trees.management
+          import trees.management.commands
+          import trees.management.commands.count
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3"])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=True, rows=3, per_row=None, stdout=a StringIO)
+          Command.handle  (trees.management.commands.count)
+            OutputWrapper.write("90 trees in 3 rows")  to a StringIO
+      -> None
+    call_command("count", 3, stdout=out, skip_checks=False)
+      call_command("count", 3, stdout=a StringIO, skip_checks=False)
+        load_command_class("trees", "count")
+        BaseCommand.create_parser("", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3"])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False, rows=3, per_row=None, stdout=a StringIO)
+          BaseCommand.get_check_kwargs
+            -> {}
+          BaseCommand.check()
+            CheckRegistry.run_checks()
+              -> 23 check functions called; trees.E001
+      -> raises SystemCheckError: SystemCheckError: System check identified some issues: ...
+
+call_command and the checks: a command whose class asks for none, and the check command
+    call_command("juice", kilos=10, stdout=out, skip_checks=False)
+      call_command("juice", kilos=10, stdout=a StringIO, skip_checks=False)
+        load_command_class("press", "juice")
+          import press.management
+          import press.management.commands
+          import press.management.commands.juice
+        BaseCommand.create_parser("", "juice")
+          Command.add_arguments  (press.management.commands.juice)
+        CommandParser.parse_args([])
+      -> raises TypeError: Unknown option(s) for juice command: skip_checks. Valid options are: force_color, help, kilos, no_color, pythonpath, settings, stderr, stdout, traceback, verbosity, version.
+    call_command("check", stdout=out)
+      call_command("check", stdout=a StringIO)
+        load_command_class("django.core", "check")
+          import django.core.management.commands.check
+        BaseCommand.create_parser("", "check")
+          Command.add_arguments  (django.core.management.commands.check)
+        CommandParser.parse_args([])
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, tags=None, list_tags=False, deploy=False, fail_level="ERROR", databases=None, stdout=a StringIO, skip_checks=True)
+          Command.handle  (django.core.management.commands.check)
+            BaseCommand.check(display_num_errors=True)
+              CheckRegistry.run_checks()
+                -> 23 check functions called; trees.E001
+      -> raises SystemCheckError: SystemCheckError: System check identified some issues: ...
+
+The check registry after django.setup(), by the module that defines each check
+    registered_checks
+      django.contrib.staticfiles.checks  tagged staticfiles
+        check_finders, check_storages
+      django.core.checks.caches  tagged caches
+        check_default_cache_is_configured, check_file_based_cache_is_absolute
+      django.core.checks.commands  tagged commands
+        migrate_and_makemigrations_autodetector
+      django.core.checks.compatibility.django_4_0  tagged compatibility
+        check_csrf_trusted_origins
+      django.core.checks.database  tagged database
+        check_database_backends
+      django.core.checks.files  tagged files
+        check_setting_file_upload_temp_dir
+      django.core.checks.mail  tagged mail
+        check_mailers_default_alias
+      django.core.checks.model_checks  tagged models
+        check_all_models, check_lazy_references
+      django.core.checks.security.base  tagged security
+        check_csp_nonce_context_processor, check_csp_settings
+      django.core.checks.security.csrf  tagged security
+        check_csrf_failure_view
+      django.core.checks.templates  tagged templates
+        check_templates
+      django.core.checks.translation  tagged translation
+        check_language_settings_consistent, check_setting_language_code,
+        check_setting_languages, check_setting_languages_bidi
+      django.core.checks.urls  tagged urls
+        check_custom_error_handlers, check_url_config, check_url_namespaces_unique,
+        check_url_settings
+      trees.checks  tagged trees
+        check_trees_per_row
+    deployment_checks
+      django.core.checks.async_checks  tagged async_support
+        check_async_unsafe
+      django.core.checks.caches  tagged caches
+        check_cache_location_not_exposed
+      django.core.checks.mail  tagged mail
+        check_mailers_production_backend
+      django.core.checks.security.base  tagged security
+        check_allowed_hosts, check_content_type_nosniff, check_cross_origin_opener_policy,
+        check_debug, check_referrer_policy, check_secret_key, check_secret_key_fallbacks,
+        check_security_middleware, check_ssl_redirect, check_sts,
+        check_sts_include_subdomains, check_sts_preload, check_xframe_deny,
+        check_xframe_options_middleware
+      django.core.checks.security.csrf  tagged security
+        check_csrf_cookie_secure, check_csrf_middleware
+      django.core.checks.security.sessions  tagged security
+        check_session_cookie_httponly, check_session_cookie_secure
+
+python manage.py check, from BaseCommand.run_from_argv on
+    python manage.py check
+      BaseCommand.run_from_argv(["manage.py", "check"])
+        BaseCommand.create_parser("manage.py", "check")
+          Command.add_arguments  (django.core.management.commands.check)
+        CommandParser.parse_args([])
+        handle_default_options(settings=None, pythonpath=None)
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, tags=None, list_tags=False, deploy=False, fail_level="ERROR", databases=None)
+          Command.handle  (django.core.management.commands.check)
+            BaseCommand.check(display_num_errors=True)
+              CheckRegistry.run_checks()
+                -> 23 check functions called; no messages
+                   check_all_models, check_csp_nonce_context_processor, check_csp_settings,
+                   check_csrf_failure_view, check_csrf_trusted_origins, check_custom_error_handlers,
+                   check_default_cache_is_configured, check_file_based_cache_is_absolute, check_finders,
+                   check_language_settings_consistent, check_lazy_references, check_mailers_default_alias,
+                   check_setting_file_upload_temp_dir, check_setting_language_code, check_setting_languages,
+                   check_setting_languages_bidi, check_storages, check_templates, check_trees_per_row,
+                   check_url_config, check_url_namespaces_unique, check_url_settings,
+                   migrate_and_makemigrations_autodetector
+                   and from inside them: import django.core.management.commands.makemigrations
+                   and from inside them: import django.core.management.commands.migrate
+                   and from inside them: import orchard.urls
+                   and from inside them: import orchard.views
+                   and from inside them: load_command_class("django.core", "makemigrations")
+                   and from inside them: load_command_class("django.core", "migrate")
+              OutputWrapper.write("System check identified no issues (0 silenced).")  to stdout
+        BaseConnectionHandler.close_all  (the database connections)
+      stdout | System check identified no issues (0 silenced).
+      exit status 0
+
+The checks of two tags, one of them the tag that is left out unless asked for, from BaseCommand.execute on
+    python manage.py check --database default --tag database --tag trees
+      BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, tags=["database", "trees"], list_tags=False, deploy=False, fail_level="ERROR", databases=["default"])
+        Command.handle  (django.core.management.commands.check)
+          BaseCommand.check(tags=["database", "trees"], display_num_errors=True, databases=["default"])
+            CheckRegistry.run_checks(tags=["database", "trees"], databases=["default"])
+              -> 2 check functions called; no messages
+                 check_database_backends, check_trees_per_row
+            OutputWrapper.write("System check identified no issues (0 silenced).")  to stdout
+      BaseConnectionHandler.close_all  (the database connections)
+      stdout | System check identified no issues (0 silenced).
+      exit status 0
+
+A check returns a warning and the command runs, from BaseCommand.execute on
+    TREES_PER_ROW=18 python manage.py count 3
+      BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False, rows=3, per_row=None)
+        BaseCommand.get_check_kwargs
+          -> {}
+        BaseCommand.check()
+          CheckRegistry.run_checks()
+            -> 23 check functions called; trees.W001
+          OutputWrapper.write("System check identified some issues:\n\nWARNINGS:\n?: (trees.W001) TREE...")  to stderr
+        Command.handle  (trees.management.commands.count)
+          OutputWrapper.write("54 trees in 3 rows")  to stdout
+      BaseConnectionHandler.close_all  (the database connections)
+      stdout | 54 trees in 3 rows
+      stderr | System check identified some issues:
+      stderr |
+      stderr | WARNINGS:
+      stderr | ?: (trees.W001) TREES_PER_ROW is 18: the trees will be crowded.
+      exit status 0
+
+A check returns an error and the command does not run, from BaseCommand.run_from_argv on
+    TREES_PER_ROW=30 python manage.py count 3
+      BaseCommand.run_from_argv(["manage.py", "count", "3"])
+        BaseCommand.create_parser("manage.py", "count")
+          Command.add_arguments  (trees.management.commands.count)
+        CommandParser.parse_args(["3"])
+        handle_default_options(settings=None, pythonpath=None)
+        BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False, rows=3, per_row=None)
+          BaseCommand.get_check_kwargs
+            -> {}
+          BaseCommand.check()
+            CheckRegistry.run_checks()
+              -> 23 check functions called; trees.E001
+        OutputWrapper.write("SystemCheckError: System check identified some issues:\n\nERRORS:\n?: (...")  to stderr
+        BaseConnectionHandler.close_all  (the database connections)
+      stderr | SystemCheckError: System check identified some issues:
+      stderr |
+      stderr | ERRORS:
+      stderr | ?: (trees.E001) TREES_PER_ROW is 30, and a row has room for 20.
+      stderr |         HINT: Plant another row.
+      exit status 1
+
+The same error skipped and silenced, and a warning made to fail
+    TREES_PER_ROW=30 python manage.py count 3 --skip-checks
+      stdout | 90 trees in 3 rows
+      exit status 0
+    TREES_PER_ROW=30 SILENCED=trees.E001 python manage.py count 3
+      stdout | 90 trees in 3 rows
+      exit status 0
+    TREES_PER_ROW=30 SILENCED=trees.E001 python manage.py check
+      stdout | System check identified no issues (1 silenced).
+      exit status 0
+    TREES_PER_ROW=18 python manage.py check --fail-level WARNING
+      stderr | SystemCheckError: System check identified some issues:
+      stderr |
+      stderr | WARNINGS:
+      stderr | ?: (trees.W001) TREES_PER_ROW is 18: the trees will be crowded.
+      stderr |
+      stderr | System check identified 1 issue (0 silenced).
+      exit status 1
+
+python manage.py check --deploy, for this project
+    python manage.py check --deploy
+      stderr | System check identified some issues:
+      stderr |
+      stderr | WARNINGS:
+      stderr | ?: (security.W001) You do not have 'django.middleware.security.SecurityMiddleware' in your MIDDLEWARE so the SECURE_HSTS_SECONDS, SECURE_CONTENT_TYPE_NOSNIFF, SECURE_REFERRER_POLICY, SECURE_CROSS_ORIGIN_OPENER_POLICY, and SECURE_SSL_REDIRECT settings will have no effect.
+      stderr | ?: (security.W002) You do not have 'django.middleware.clickjacking.XFrameOptionsMiddleware' in your MIDDLEWARE, so your pages will not be served with an 'x-frame-options' header. Unless there is a good reason for your site to be served in a frame, you should consider enabling this header to help prevent clickjacking attacks.
+      stderr | ?: (security.W003) You don't appear to be using Django's built-in cross-site request forgery protection via the middleware ('django.middleware.csrf.CsrfViewMiddleware' is not in your MIDDLEWARE). Enabling the middleware is the safest approach to ensure you don't leave any holes.
+      stderr | ?: (security.W009) Your SECRET_KEY has less than 50 characters, less than 5 unique characters, or it's prefixed with 'django-insecure-' indicating that it was generated automatically by Django. Please generate a long and random value, otherwise many of Django's security-critical features will be vulnerable to attack.
+      stderr | ?: (security.W018) You should not have DEBUG set to True in deployment.
+      stderr | ?: (security.W020) ALLOWED_HOSTS must not be empty in deployment.
+      stderr |
+      stderr | System check identified 6 issues (0 silenced).
+      exit status 0
+
+The tags that the registered checks carry
+    python manage.py check --list-tags
+      stdout | caches
+      stdout | commands
+      stdout | compatibility
+      stdout | database
+      stdout | files
+      stdout | mail
+      stdout | models
+      stdout | security
+      stdout | staticfiles
+      stdout | templates
+      stdout | translation
+      stdout | trees
+      stdout | urls
+      exit status 0
+
+The development server: what the recording did, and what it was answered
+    python manage.py runserver 8642
+    GET /  -> 200
+    the modification time of orchard/views.py is set two seconds ahead
+    GET /  -> 200
+    GET /stop/, whose view ends its process with os._exit(7)  -> no answer
+    the first process ends with status 7
+
+The development server: the first process (python manage.py runserver, with RUN_MAIN not set), its only thread
+    execute_from_command_line(["manage.py", "runserver", "8642"])
+      ManagementUtility.execute
+        handle_default_options(settings=None, pythonpath=None)
+        Settings.__init__("orchard.settings")
+          import orchard.settings
+        the wrapper that check_errors made around setup
+          django.setup
+            import trees.apps
+            import trees.models
+            import trees.checks
+        ManagementUtility.autocomplete
+        ManagementUtility.fetch_command("runserver")
+          get_commands
+            find_commands("django/core/management")
+              -> 26 names, "check" to "testserver"
+            find_commands("press/management")
+              -> ["count", "juice"]
+            find_commands("trees/management")
+              -> ["count", "prune"]
+            find_commands("django/contrib/staticfiles/management")
+              -> ["collectstatic", "findstatic", "runserver"]
+          load_command_class("django.contrib.staticfiles", "runserver")
+            import django.contrib.staticfiles.management.commands.runserver
+              import django.core.management.commands.runserver
+        BaseCommand.run_from_argv(["manage.py", "runserver", "8642"])
+          BaseCommand.create_parser("manage.py", "runserver")
+            Command.add_arguments  (django.contrib.staticfiles.management.commands.runserver)
+              Command.add_arguments  (django.core.management.commands.runserver)
+          CommandParser.parse_args(["8642"])
+          handle_default_options(settings=None, pythonpath=None)
+          Command.execute  (django.core.management.commands.runserver)
+            BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False, addrport="8642", use_ipv6=False, use_threading=True, use_reloader=True, use_static_handler=True, insecure_serving=False)
+              Command.get_check_kwargs  (django.core.management.commands.runserver)
+                -> {"tags": set()}
+              BaseCommand.check(tags=set())
+                CheckRegistry.run_checks(tags=set())
+                  -> 0 check functions called; no messages
+              Command.handle  (django.core.management.commands.runserver)
+                Command.run  (django.core.management.commands.runserver)
+                  run_with_reloader(Command.inner_run)  with RUN_MAIN None in the environment
+                    restart_with_reloader
+                      get_child_arguments
+                      subprocess.run(["python", "manage.py", "runserver", "8642"], env with RUN_MAIN="true")
+                        -> the process ended with status 3
+                      subprocess.run(["python", "manage.py", "runserver", "8642"], env with RUN_MAIN="true")
+                        -> the process ended with status 7
+          BaseConnectionHandler.close_all  (the database connections)
+
+The development server: the second process (started by the first with RUN_MAIN="true"), its main thread
+    execute_from_command_line(["manage.py", "runserver", "8642"])
+      ManagementUtility.execute
+        handle_default_options(settings=None, pythonpath=None)
+        Settings.__init__("orchard.settings")
+          import orchard.settings
+        the wrapper that check_errors made around setup
+          django.setup
+            import trees.apps
+            import trees.models
+            import trees.checks
+        ManagementUtility.autocomplete
+        ManagementUtility.fetch_command("runserver")
+          get_commands
+            find_commands("django/core/management")
+              -> 26 names, "check" to "testserver"
+            find_commands("press/management")
+              -> ["count", "juice"]
+            find_commands("trees/management")
+              -> ["count", "prune"]
+            find_commands("django/contrib/staticfiles/management")
+              -> ["collectstatic", "findstatic", "runserver"]
+          load_command_class("django.contrib.staticfiles", "runserver")
+            import django.contrib.staticfiles.management.commands.runserver
+              import django.core.management.commands.runserver
+        BaseCommand.run_from_argv(["manage.py", "runserver", "8642"])
+          BaseCommand.create_parser("manage.py", "runserver")
+            Command.add_arguments  (django.contrib.staticfiles.management.commands.runserver)
+              Command.add_arguments  (django.core.management.commands.runserver)
+          CommandParser.parse_args(["8642"])
+          handle_default_options(settings=None, pythonpath=None)
+          Command.execute  (django.core.management.commands.runserver)
+            BaseCommand.execute(verbosity=1, settings=None, pythonpath=None, traceback=False, no_color=False, force_color=False, skip_checks=False, addrport="8642", use_ipv6=False, use_threading=True, use_reloader=True, use_static_handler=True, insecure_serving=False)
+              Command.get_check_kwargs  (django.core.management.commands.runserver)
+                -> {"tags": set()}
+              BaseCommand.check(tags=set())
+                CheckRegistry.run_checks(tags=set())
+                  -> 0 check functions called; no messages
+              Command.handle  (django.core.management.commands.runserver)
+                Command.run  (django.core.management.commands.runserver)
+                  run_with_reloader(Command.inner_run)  with RUN_MAIN "true" in the environment
+                    get_reloader
+                      -> a StatReloader
+                    start_django(a StatReloader, Command.inner_run)
+                      BaseReloader.run
+                        BaseReloader.wait_for_apps_ready
+                          -> True
+                        get_resolver
+                        autoreload_started.send()
+                        BaseReloader.run_loop
+                          BaseReloader.notify_file_changed("orchard/views.py")
+                            file_changed.send(file_path="orchard/views.py")
+                              -> template_changed answered None, translation_file_changed answered None
+                            trigger_reload("orchard/views.py")
+          BaseConnectionHandler.close_all  (the database connections)
+
+The development server: the second process (started by the first with RUN_MAIN="true"), the thread django-main-thread
+    the wrapper that check_errors made around Command.inner_run
+      Command.inner_run  (django.core.management.commands.runserver)
+        raise_last_exception
+        OutputWrapper.write("Performing system checks...\n\n")  to stdout
+        BaseCommand.get_check_kwargs
+          -> {}
+        BaseCommand.check(display_num_errors=True)
+          CheckRegistry.run_checks()
+            -> 23 check functions called; no messages
+          OutputWrapper.write("System check identified no issues (0 silenced).")  to stdout
+        BaseCommand.check_migrations
+        Command.get_handler  (django.contrib.staticfiles.management.commands.runserver)
+          Command.get_handler  (django.core.management.commands.runserver)
+            get_internal_wsgi_application
+              import orchard.wsgi
+                get_wsgi_application
+                  django.setup
+                  WSGIHandler.__init__
+          StaticFilesHandler.__init__
+            WSGIHandler.__init__
+        run("127.0.0.1", 8642, a StaticFilesHandler, threading=True, server_cls=WSGIServer)
+          WSGIServer.__init__  (the class is WSGIServer, made from socketserver.ThreadingMixIn, WSGIServer)
+          Command.on_bind  (django.core.management.commands.runserver)
+          BaseServer.serve_forever
+            ThreadingMixIn.process_request  (a connection is accepted: a thread is started for it)
+
+The development server: the second process (started by the first with RUN_MAIN="true"), the thread started for the connection that sent GET /
+    ThreadingMixIn.process_request_thread
+      WSGIRequestHandler.handle
+        WSGIRequestHandler.handle_one_request
+          BaseHandler.run(a StaticFilesHandler)
+            StaticFilesHandler.__call__  GET /
+              WSGIHandler.__call__  GET /
+            ServerHandler.finish_response
+              ServerHandler.close
+                WSGIRequestHandler.log_message("\"GET / HTTP/1.1\" 200 13")
+
+The development server: the third process (started by the first with RUN_MAIN="true"), its main thread, from run_with_reloader on
+    run_with_reloader(Command.inner_run)  with RUN_MAIN "true" in the environment
+      get_reloader
+        -> a StatReloader
+      start_django(a StatReloader, Command.inner_run)
+        BaseReloader.run
+          BaseReloader.wait_for_apps_ready
+            -> True
+          get_resolver
+          autoreload_started.send()
+          BaseReloader.run_loop
+
+The development server: the third process (started by the first with RUN_MAIN="true"), the thread django-main-thread
+    the wrapper that check_errors made around Command.inner_run
+      Command.inner_run  (django.core.management.commands.runserver)
+        raise_last_exception
+        OutputWrapper.write("Performing system checks...\n\n")  to stdout
+        BaseCommand.get_check_kwargs
+          -> {}
+        BaseCommand.check(display_num_errors=True)
+          CheckRegistry.run_checks()
+            -> 23 check functions called; no messages
+          OutputWrapper.write("System check identified no issues (0 silenced).")  to stdout
+        BaseCommand.check_migrations
+        Command.get_handler  (django.contrib.staticfiles.management.commands.runserver)
+          Command.get_handler  (django.core.management.commands.runserver)
+            get_internal_wsgi_application
+              import orchard.wsgi
+                get_wsgi_application
+                  django.setup
+                  WSGIHandler.__init__
+          StaticFilesHandler.__init__
+            WSGIHandler.__init__
+        run("127.0.0.1", 8642, a StaticFilesHandler, threading=True, server_cls=WSGIServer)
+          WSGIServer.__init__  (the class is WSGIServer, made from socketserver.ThreadingMixIn, WSGIServer)
+          Command.on_bind  (django.core.management.commands.runserver)
+          BaseServer.serve_forever
+            ThreadingMixIn.process_request  (a connection is accepted: a thread is started for it)
+            ThreadingMixIn.process_request  (a connection is accepted: a thread is started for it)
+
+The development server: the third process (started by the first with RUN_MAIN="true"), the thread started for the connection that sent GET /
+    ThreadingMixIn.process_request_thread
+      WSGIRequestHandler.handle
+        WSGIRequestHandler.handle_one_request
+          BaseHandler.run(a StaticFilesHandler)
+            StaticFilesHandler.__call__  GET /
+              WSGIHandler.__call__  GET /
+            ServerHandler.finish_response
+              ServerHandler.close
+                WSGIRequestHandler.log_message("\"GET / HTTP/1.1\" 200 13")
+
+The development server: the third process (started by the first with RUN_MAIN="true"), the thread started for the connection that sent GET /stop/
+    ThreadingMixIn.process_request_thread
+      WSGIRequestHandler.handle
+        WSGIRequestHandler.handle_one_request
+          BaseHandler.run(a StaticFilesHandler)
+            StaticFilesHandler.__call__  GET /stop/
+              WSGIHandler.__call__  GET /stop/
+
+The development server: what the three processes wrote to the terminal, standard output and standard error together
+    | Watching for file changes with StatReloader
+    | Performing system checks...
+    |
+    | System check identified no issues (0 silenced).
+    | (the date and the time)
+    | Django version 6.2.dev20260926051415, using settings 'orchard.settings'
+    | Starting WSGI development server at http://127.0.0.1:8642/
+    | Quit the server with CTRL-BREAK.
+    |
+    | WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+    | For more information on production servers see: https://docs.djangoproject.com/en/dev/howto/deployment/
+    | [(the date and the time)] "GET / HTTP/1.1" 200 13
+    | orchard/views.py changed, reloading.
+    | Watching for file changes with StatReloader
+    | Performing system checks...
+    |
+    | System check identified no issues (0 silenced).
+    | (the date and the time)
+    | Django version 6.2.dev20260926051415, using settings 'orchard.settings'
+    | Starting WSGI development server at http://127.0.0.1:8642/
+    | Quit the server with CTRL-BREAK.
+    |
+    | WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+    | For more information on production servers see: https://docs.djangoproject.com/en/dev/howto/deployment/
+    | [(the date and the time)] "GET / HTTP/1.1" 200 13
+
