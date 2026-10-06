@@ -58,13 +58,18 @@ PAINTED = {"style", "fill", "stroke", "color", "font", "font-family", "font-size
 ANCHOR_TAG = re.compile(r"</?a\b[^>]*>")
 PROLOG = re.compile(r"\A\s*(?:(?:<\?xml.*?\?>|<!DOCTYPE.*?>|<!--.*?-->)\s*)*", re.S)
 COLUMN = 646  # the text column in CSS pixels at the size the stylesheet sets: a wider figure uses the margin
+UNBROKEN = 16  # a code span of this many characters or fewer is never broken across lines
 BETWEEN = re.compile(r"\s*(?:[,;]|,?\s*and)?\s*")  # what may stand between two pointers of one parenthesis
 SOURCED = {"paragraph_open", "bullet_list_open", "ordered_list_open", "blockquote_open"}  # blocks whose sources are set beside them
 
 
 def breakable(code: str) -> str:
-    """A code span's text, escaped, with the places a long name or pointer may break."""
+    """A code span's text, escaped, with the places a long name or pointer may break. A short
+    one is given none: `settings.DEBUG` reads worse broken than it fits whole, and in the narrow
+    first column of a table a browser breaks wherever it is allowed to."""
     text = escape(code, quote=False)
+    if len(code) <= UNBROKEN:
+        return text
     text = re.sub(r"([/:])(?=[^\s/:])", r"\1<wbr>", text)
     return re.sub(r"(?<=\w)\.(?=\w)", "<wbr>.", text)
 
