@@ -23,7 +23,10 @@ import sys
 
 sys.stdout.reconfigure(newline="\n")  # the same bytes on every machine
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)  # so that `library` imports, as it would from a project's directory
+# `library` imports from this directory, as it would from a project's. The directory goes last
+# on the path and not first, where Python puts a script's own: `http.py` in it has the name of
+# a package of the standard library, which Django imports.
+sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != HERE] + [HERE]
 
 LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line

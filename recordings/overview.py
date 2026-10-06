@@ -23,7 +23,10 @@ import tempfile
 
 sys.stdout.reconfigure(newline="\n")  # the same bytes on every machine
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)  # so that `journal` imports, as it would from a project's directory
+# `journal` imports from this directory, as it would from a project's. The directory goes last
+# on the path and not first, where Python puts a script's own: `http.py` in it has the name of
+# a package of the standard library, which Django imports.
+sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != HERE] + [HERE]
 
 DATABASE = os.path.join(tempfile.mkdtemp(), "journal.sqlite3")
 os.environ["JOURNAL_DATABASE"] = DATABASE

@@ -14,11 +14,16 @@ synchronous code runs on is `worker`.
 """
 import asyncio
 import io
+import os
 import sys
 import threading
 
-import django
-from django.conf import settings
+# Python puts a script's directory first on the path, and `http.py` in this one has the name of
+# a package of the standard library, which Django imports: take the directory off first.
+sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != os.path.dirname(os.path.abspath(__file__))]
+
+import django  # noqa: E402
+from django.conf import settings  # noqa: E402
 
 sys.stdout.reconfigure(newline="\n")  # the same bytes on every machine
 LINES = []

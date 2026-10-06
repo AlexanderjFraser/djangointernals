@@ -26,10 +26,16 @@ import subprocess
 import sys
 import tempfile
 import time
-import urllib.request
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+# Python puts a script's directory first on the path, and `http.py` in this one has the name of
+# a package of the standard library, which `urllib.request` and Django import: take the
+# directory off first.
+sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != HERE]
+
+import urllib.request  # noqa: E402
 
 sys.stdout.reconfigure(newline="\n")  # the same bytes on every machine
-HERE = os.path.dirname(os.path.abspath(__file__))
 ORCHARD = os.path.join(HERE, "orchard")
 sys.path.insert(0, ORCHARD)  # so that the project imports, as it does for its manage.py
 PORT = 8642

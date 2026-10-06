@@ -69,7 +69,7 @@ LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line
 SEEN = set()  # generator frames already written down: a generator is entered once per value
 PENDING = []  # the watched call that has just returned: (frame, depth, what to say of its value, the value)
-RAISED = set()  # exceptions already written down, at the innermost watched call they left
+RAISED = []  # exceptions already written down, at the innermost watched call they left: the objects, since an id is used again
 UPLOAD = {"open": False, "chunks": 0, "more": 0, "last": None, "reads": 0}  # the file being uploaded
 GIVEN = {}  # what a header was set to, by the frame of the call that set it
 HANDLERS = []  # the upload handlers of the request being parsed
@@ -428,8 +428,8 @@ def unwinding(code, offset, exception):
     frame = sys._getframe(1)
     if PENDING and PENDING[-1][0] is frame:
         depth = PENDING.pop()[1]
-        if id(exception) not in RAISED and not isinstance(exception, (StopIteration, GeneratorExit)):
-            RAISED.add(id(exception))
+        if not any(e is exception for e in RAISED) and not isinstance(exception, (StopIteration, GeneratorExit)):
+            RAISED.append(exception)
             LINES.append("  " * depth + f"raises {type(exception).__name__}")
 
 
