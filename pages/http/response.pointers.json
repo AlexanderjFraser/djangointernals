@@ -1,0 +1,256 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "response.md",
+ "pointers": [
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.__init__",
+   "line": 13,
+   "sentence": "`HttpResponseBase.__init__` takes optional arguments for a content type, a status, a reason, a charset and a dictionary of headers, and from them sets everything about a response except its content (`django/http/response.py:HttpResponseBase.__init__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.__init__",
+   "kind": "function",
+   "lines": [
+    120,
+    148
+   ],
+   "fingerprint": "2735b0e6baf1055b"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.reason_phrase",
+   "line": 17,
+   "sentence": "The **reason phrase**, the words after the number on the status line, is normally not stored at all: `HttpResponseBase.reason_phrase` is a property that looks the status code up in Python's table of standard phrases each time it is read, so a response whose status is changed after it was made gets the right words (`django/http/response.py:HttpResponseBase.reason_phrase`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.reason_phrase",
+   "kind": "function",
+   "lines": [
+    150,
+    156
+   ],
+   "at": 151,
+   "more": [
+    [
+     158,
+     162
+    ]
+   ],
+   "fingerprint": "9a8af6f9b2831a1e"
+  },
+  {
+   "pointer": "django/http/response.py:ResponseHeaders",
+   "line": 34,
+   "sentence": "`ResponseHeaders` is built on the same `CaseInsensitiveMapping` as a request's `HttpHeaders`, and adds what that read-only class lacks: assignment, deletion, `pop` and `setdefault` (`django/http/response.py:ResponseHeaders`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "ResponseHeaders",
+   "kind": "class",
+   "lines": [
+    40,
+    103
+   ],
+   "fingerprint": "66d336c4ac769e21"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.__setitem__",
+   "line": 36,
+   "sentence": "`response.headers[\"Vary\"]` and `response[\"Vary\"]` are the same entry, and a membership test, a deletion, `get`, `items` and `setdefault` on a response all mean its headers (`django/http/response.py:HttpResponseBase.__setitem__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.__setitem__",
+   "kind": "function",
+   "lines": [
+    202,
+    203
+   ],
+   "fingerprint": "f4631ad4facbb817"
+  },
+  {
+   "pointer": "django/utils/cache.py:patch_vary_headers",
+   "line": 38,
+   "sentence": "A header that should carry several values, such as `\"Vary\"`, has to be built up as one comma-separated string; that is what the helpers that patch such headers do (`django/utils/cache.py:patch_vary_headers`, in [Caching, files, mail, signals and tasks](../services.md)).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "patch_vary_headers",
+   "kind": "function",
+   "lines": [
+    303,
+    329
+   ],
+   "fingerprint": "9b15914a7c54165c"
+  },
+  {
+   "pointer": "django/http/response.py:ResponseHeaders._convert_to_charset",
+   "line": 40,
+   "sentence": "Every value goes through `ResponseHeaders.__setitem__`, which makes it fit to be sent or refuses it (`django/http/response.py:ResponseHeaders._convert_to_charset`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "ResponseHeaders._convert_to_charset",
+   "kind": "function",
+   "lines": [
+    51,
+    88
+   ],
+   "fingerprint": "b61e31318c19a6be"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.charset",
+   "line": 59,
+   "sentence": "The second is read from the header every time and not stored, deliberately, so that a `Content-Type` replaced later takes its charset with it (`django/http/response.py:HttpResponseBase.charset`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.charset",
+   "kind": "function",
+   "lines": [
+    164,
+    177
+   ],
+   "at": 165,
+   "more": [
+    [
+     179,
+     181
+    ]
+   ],
+   "fingerprint": "b12ba00a86a4b342"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponse.content",
+   "line": 65,
+   "sentence": "If what was assigned can be iterated and is not a string, bytes or a `memoryview`, it is consumed there and then, each item converted and all of them joined, and closed if it has a `close`: an `HttpResponse` always holds its whole body, which is what lets a middleware read `content`, measure it or compress it, and what makes the response safe to iterate more than once (`django/http/response.py:HttpResponse.content`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponse.content",
+   "kind": "function",
+   "lines": [
+    404,
+    406
+   ],
+   "at": 405,
+   "more": [
+    [
+     408,
+     424
+    ]
+   ],
+   "fingerprint": "129a636a6864d109"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponse.serialize",
+   "line": 73,
+   "sentence": "It is not what is sent: it has no status line, and no cookies (`django/http/response.py:HttpResponse.serialize`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponse.serialize",
+   "kind": "function",
+   "lines": [
+    398,
+    400
+   ],
+   "fingerprint": "d04a5c11a570d00d"
+  },
+  {
+   "pointer": "django/middleware/common.py:CommonMiddleware.process_response",
+   "line": 75,
+   "sentence": "The view returns a response with a body, and leaving the body out of what is sent is the server's work, which Django's development server does for itself (`django/middleware/common.py:CommonMiddleware.process_response`, `django/core/servers/basehttp.py:ServerHandler.finish_response`).",
+   "tree": "django",
+   "path": "django/middleware/common.py",
+   "symbol": "CommonMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    101,
+    118
+   ],
+   "fingerprint": "f4c4c51301998248"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:ServerHandler.finish_response",
+   "line": 75,
+   "sentence": "The view returns a response with a body, and leaving the body out of what is sent is the server's work, which Django's development server does for itself (`django/middleware/common.py:CommonMiddleware.process_response`, `django/core/servers/basehttp.py:ServerHandler.finish_response`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "ServerHandler.finish_response",
+   "kind": "function",
+   "lines": [
+    161,
+    175
+   ],
+   "fingerprint": "26863af64b5f604c"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
+   "line": 105,
+   "sentence": "`HttpResponseRedirectBase.__init__` takes the target first, sets it as `\"Location\"` after escaping it into ASCII, and then makes two checks (`django/http/response.py:HttpResponseRedirectBase.__init__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseRedirectBase.__init__",
+   "kind": "function",
+   "lines": [
+    642,
+    662
+   ],
+   "fingerprint": "d24c129d406f5945"
+  },
+  {
+   "pointer": "django/utils/http.py",
+   "line": 118,
+   "sentence": "That is a separate question with a separate function, `url_has_allowed_host_and_scheme` ([The helpers in `django/utils/http.py`](helpers.md#urls-that-came-from-a-client)).",
+   "tree": "django",
+   "path": "django/utils/http.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    434
+   ],
+   "fingerprint": "aca6086ffea6bad3"
+  },
+  {
+   "pointer": "django/http/response.py:JsonResponse.__init__",
+   "line": 126,
+   "sentence": "Its constructor serialises the data with `json.dumps`, using `DjangoJSONEncoder` unless it is given another encoder, a class that also knows dates, times, decimals and UUIDs; it sets the content type to `\"application/json\"` unless the caller passed one; and it hands the result to `HttpResponse` as the body (`django/http/response.py:JsonResponse.__init__`, `django/core/serializers/json.py:DjangoJSONEncoder`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "JsonResponse.__init__",
+   "kind": "function",
+   "lines": [
+    756,
+    785
+   ],
+   "fingerprint": "1fc5ef8a0f619bc5"
+  },
+  {
+   "pointer": "django/core/serializers/json.py:DjangoJSONEncoder",
+   "line": 126,
+   "sentence": "Its constructor serialises the data with `json.dumps`, using `DjangoJSONEncoder` unless it is given another encoder, a class that also knows dates, times, decimals and UUIDs; it sets the content type to `\"application/json\"` unless the caller passed one; and it hands the result to `HttpResponse` as the body (`django/http/response.py:JsonResponse.__init__`, `django/core/serializers/json.py:DjangoJSONEncoder`).",
+   "tree": "django",
+   "path": "django/core/serializers/json.py",
+   "symbol": "DjangoJSONEncoder",
+   "kind": "class",
+   "lines": [
+    84,
+    114
+   ],
+   "fingerprint": "18381a946779b7b0"
+  },
+  {
+   "pointer": "django/template/response.py:SimpleTemplateResponse",
+   "line": 138,
+   "sentence": "`TemplateResponse` is an `HttpResponse` whose content is not there yet: it holds a template and a context, and is rendered only after middleware has had the chance to change them; it belongs to [Templates](../templates.md) (`django/template/response.py:SimpleTemplateResponse`).",
+   "tree": "django",
+   "path": "django/template/response.py",
+   "symbol": "SimpleTemplateResponse",
+   "kind": "class",
+   "lines": [
+    10,
+    144
+   ],
+   "fingerprint": "2cc51481d854ce65"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 336">
+  <!-- an unread body, and the three things that can happen to it first -->
+  <rect class="ground" x="0" y="134" width="120" height="68" rx="4"/>
+  <text class="strong" x="12" y="160">unread</text>
+  <text class="quiet small" x="12" y="180">the stream has</text>
+  <text class="quiet small" x="12" y="195">not been touched</text>
+
+  <!-- body is read first -->
+  <path class="line" d="M120 168 H140 V52 H270"/>
+  <polygon class="head" points="280,52 270,47 270,57"/>
+  <text class="name small" x="150" y="44">body</text>
+  <rect class="box" x="280" y="0" width="366" height="104" rx="4"/>
+  <text class="strong" x="292" y="24">kept</text>
+  <text class="small" x="292" y="44">the bytes are held as _body, and the stream is</text>
+  <text class="small" x="292" y="59">replaced by one over them</text>
+  <text class="quiet small" x="292" y="80">body, POST and FILES work from here on, any number</text>
+  <text class="quiet small" x="292" y="95">of times, and the stream can be read once more</text>
+
+  <!-- a multipart form is parsed first -->
+  <path class="line" d="M120 168 H270"/>
+  <polygon class="head" points="280,168 270,163 270,173"/>
+  <text class="name small" x="150" y="160">POST or FILES</text>
+  <text class="quiet small" x="150" y="184">of a multipart form</text>
+  <rect class="ground" x="280" y="116" width="366" height="104" rx="4"/>
+  <text class="strong" x="292" y="140">parsed</text>
+  <text class="small" x="292" y="160">the fields are held as _post and the files as _files;</text>
+  <text class="small" x="292" y="175">the bytes went through the parser and are not kept</text>
+  <text class="quiet small" x="292" y="196">body raises RawPostDataException,</text>
+  <text class="quiet small" x="292" y="211">and read() returns nothing</text>
+
+  <!-- the stream is read by hand first -->
+  <path class="mark-line" d="M120 168 H140 V284 H270"/>
+  <polygon class="head mark" points="280,284 270,279 270,289"/>
+  <text class="name small" x="150" y="276">read() or</text>
+  <text class="name small" x="150" y="300">readline()</text>
+  <rect class="mark-box" x="280" y="232" width="366" height="104" rx="4"/>
+  <text class="strong" x="292" y="256">started</text>
+  <text class="small" x="292" y="276">_read_started is set</text>
+  <text class="quiet small" x="292" y="297">body raises RawPostDataException;</text>
+  <text class="quiet small" x="292" y="312">POST and FILES are empty, and say nothing</text>
+</svg>

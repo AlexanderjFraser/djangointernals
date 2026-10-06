@@ -1,0 +1,410 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "uploads.md",
+ "pointers": [
+  {
+   "pointer": "django/http/multipartparser.py",
+   "line": 34,
+   "sentence": "The parser's lower half is a set of small classes that wrap one another: iterators over bytes, and above them an iterator over parts (`django/http/multipartparser.py`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "845c70ca339c0252"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:BoundaryIter.__next__",
+   "line": 36,
+   "sentence": "When it does not, it yields all but the last few bytes and pushes those back, as many as a boundary line is long, so that a boundary cut in two by the end of a chunk is found whole on the next pass (`django/http/multipartparser.py:BoundaryIter.__next__`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "BoundaryIter.__next__",
+   "kind": "function",
+   "lines": [
+    614,
+    653
+   ],
+   "fingerprint": "1022f57d172cb26f"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:parse_boundary_stream",
+   "line": 38,
+   "sentence": "The headers of one part must fit in 1024 bytes, and a part whose headers run past that raises `MultiPartParserError` (`django/http/multipartparser.py:parse_boundary_stream`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "parse_boundary_stream",
+   "kind": "function",
+   "lines": [
+    689,
+    747
+   ],
+   "fingerprint": "6bdedec5c0d3c147"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:LazyStream._update_unget_history",
+   "line": 40,
+   "sentence": "`LazyStream` keeps a short history of the sizes pushed back and raises `SuspiciousMultipartForm` when the same size recurs too often (`django/http/multipartparser.py:LazyStream._update_unget_history`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "LazyStream._update_unget_history",
+   "kind": "function",
+   "lines": [
+    516,
+    538
+   ],
+   "fingerprint": "6fec557984dd8dd3"
+  },
+  {
+   "pointer": "django/core/files/uploadhandler.py:FileUploadHandler",
+   "line": 44,
+   "sentence": "The parser calls the methods below on the request's handlers, in the handlers' order, and what a method returns or raises is how a handler steers the upload (`django/core/files/uploadhandler.py:FileUploadHandler`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "FileUploadHandler",
+   "kind": "class",
+   "lines": [
+    70,
+    159
+   ],
+   "fingerprint": "28370fe0a19425be"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 57,
+   "sentence": "Neither reaches the view as an exception: the view finds `POST` and `FILES` holding whatever was parsed, without the file (`django/http/multipartparser.py:MultiPartParser._parse`, `django/core/files/uploadhandler.py:StopUpload`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/core/files/uploadhandler.py:StopUpload",
+   "line": 57,
+   "sentence": "Neither reaches the view as an exception: the view finds `POST` and `FILES` holding whatever was parsed, without the file (`django/http/multipartparser.py:MultiPartParser._parse`, `django/core/files/uploadhandler.py:StopUpload`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "StopUpload",
+   "kind": "class",
+   "lines": [
+    32,
+    49
+   ],
+   "fingerprint": "1baae000b589f646"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._initialize_handlers",
+   "line": 104,
+   "sentence": "A handler belongs to one request, and can keep state between its calls (`django/http/request.py:HttpRequest._initialize_handlers`, `django/core/files/uploadhandler.py:load_handler`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._initialize_handlers",
+   "kind": "function",
+   "lines": [
+    349,
+    353
+   ],
+   "fingerprint": "8b1c49e2fe076ea2"
+  },
+  {
+   "pointer": "django/core/files/uploadhandler.py:load_handler",
+   "line": 104,
+   "sentence": "A handler belongs to one request, and can keep state between its calls (`django/http/request.py:HttpRequest._initialize_handlers`, `django/core/files/uploadhandler.py:load_handler`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "load_handler",
+   "kind": "function",
+   "lines": [
+    255,
+    268
+   ],
+   "fingerprint": "9ddacb4afea25f79"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser.__init__",
+   "line": 106,
+   "sentence": "It also settles the chunk size: the smallest `chunk_size` among the handlers, 64 KB for the two here (`django/http/multipartparser.py:MultiPartParser.__init__`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser.__init__",
+   "kind": "function",
+   "lines": [
+    58,
+    115
+   ],
+   "fingerprint": "51c8baa2f0bd857b"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 110,
+   "sentence": "A file is known to be complete only when the next part begins, so `handle_file_complete` runs at the top of the next turn of the loop, which is why it appears above after a further `parse_boundary_stream` (`django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input",
+   "line": 163,
+   "sentence": "The setting has the same default as `settings.DATA_UPLOAD_MAX_MEMORY_SIZE` and a different job: that one refuses a body, and this one chooses where a file is kept (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "MemoryFileUploadHandler.handle_raw_input",
+   "kind": "function",
+   "lines": [
+    199,
+    223
+   ],
+   "fingerprint": "7cc8fefef717d342"
+  },
+  {
+   "pointer": "django/core/files/uploadhandler.py:TemporaryFileUploadHandler",
+   "line": 167,
+   "sentence": "Each chunk is written to it, and `file_complete` rewinds it and returns it (`django/core/files/uploadhandler.py:TemporaryFileUploadHandler`, `django/core/files/uploadedfile.py:TemporaryUploadedFile`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "TemporaryFileUploadHandler",
+   "kind": "class",
+   "lines": [
+    162,
+    191
+   ],
+   "fingerprint": "22b12833da38e25d"
+  },
+  {
+   "pointer": "django/core/files/uploadedfile.py:TemporaryUploadedFile",
+   "line": 167,
+   "sentence": "Each chunk is written to it, and `file_complete` rewinds it and returns it (`django/core/files/uploadhandler.py:TemporaryFileUploadHandler`, `django/core/files/uploadedfile.py:TemporaryUploadedFile`).",
+   "tree": "django",
+   "path": "django/core/files/uploadedfile.py",
+   "symbol": "TemporaryUploadedFile",
+   "kind": "class",
+   "lines": [
+    74,
+    97
+   ],
+   "fingerprint": "1c290fa851fbcc47"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage._save",
+   "line": 182,
+   "sentence": "Where the file was renamed, the close at the end of the request finds nothing to delete, which `TemporaryUploadedFile.close` allows for (`django/core/files/storage/filesystem.py:FileSystemStorage._save`, `django/core/files/move.py:file_move_safe`, `django/core/files/uploadedfile.py:TemporaryUploadedFile.close`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage._save",
+   "kind": "function",
+   "lines": [
+    68,
+    144
+   ],
+   "fingerprint": "5670333b5936370d"
+  },
+  {
+   "pointer": "django/core/files/move.py:file_move_safe",
+   "line": 182,
+   "sentence": "Where the file was renamed, the close at the end of the request finds nothing to delete, which `TemporaryUploadedFile.close` allows for (`django/core/files/storage/filesystem.py:FileSystemStorage._save`, `django/core/files/move.py:file_move_safe`, `django/core/files/uploadedfile.py:TemporaryUploadedFile.close`).",
+   "tree": "django",
+   "path": "django/core/files/move.py",
+   "symbol": "file_move_safe",
+   "kind": "function",
+   "lines": [
+    16,
+    92
+   ],
+   "fingerprint": "174c14c3de9515be"
+  },
+  {
+   "pointer": "django/core/files/uploadedfile.py:TemporaryUploadedFile.close",
+   "line": 182,
+   "sentence": "Where the file was renamed, the close at the end of the request finds nothing to delete, which `TemporaryUploadedFile.close` allows for (`django/core/files/storage/filesystem.py:FileSystemStorage._save`, `django/core/files/move.py:file_move_safe`, `django/core/files/uploadedfile.py:TemporaryUploadedFile.close`).",
+   "tree": "django",
+   "path": "django/core/files/uploadedfile.py",
+   "symbol": "TemporaryUploadedFile.close",
+   "kind": "function",
+   "lines": [
+    90,
+    97
+   ],
+   "fingerprint": "81f3942aecc38718"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 196,
+   "sentence": "A file input that was left empty still sends a part, with an empty file name, and `parse_boundary_stream` classes it as a field: the input's name turns up in `POST` with an empty value (`django/http/multipartparser.py:MultiPartParser._parse`, `django/http/multipartparser.py:parse_boundary_stream`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:parse_boundary_stream",
+   "line": 196,
+   "sentence": "A file input that was left empty still sends a part, with an empty file name, and `parse_boundary_stream` classes it as a field: the input's name turns up in `POST` with an empty value (`django/http/multipartparser.py:MultiPartParser._parse`, `django/http/multipartparser.py:parse_boundary_stream`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "parse_boundary_stream",
+   "kind": "function",
+   "lines": [
+    689,
+    747
+   ],
+   "fingerprint": "6bdedec5c0d3c147"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.upload_handlers",
+   "line": 200,
+   "sentence": "The property's setter raises `AttributeError` once `FILES` exists, and `HttpRequest.parse_file_upload` turns the list into an `ImmutableList` as parsing begins, so that a later attempt to append to it fails with a message saying why (`django/http/request.py:HttpRequest.upload_handlers`, `django/http/request.py:HttpRequest.parse_file_upload`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.upload_handlers",
+   "kind": "function",
+   "lines": [
+    355,
+    361
+   ],
+   "at": 356,
+   "more": [
+    [
+     363,
+     370
+    ]
+   ],
+   "fingerprint": "04405d557ebb75e1"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.parse_file_upload",
+   "line": 200,
+   "sentence": "The property's setter raises `AttributeError` once `FILES` exists, and `HttpRequest.parse_file_upload` turns the list into an `ImmutableList` as parsing begins, so that a later attempt to append to it fails with a message saying why (`django/http/request.py:HttpRequest.upload_handlers`, `django/http/request.py:HttpRequest.parse_file_upload`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.parse_file_upload",
+   "kind": "function",
+   "lines": [
+    385,
+    397
+   ],
+   "fingerprint": "516085e945391798"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_token",
+   "line": 202,
+   "sentence": "With the CSRF middleware installed, a `POST` request's form is read in that middleware's `process_view`, to find the token, and that is before the view is called (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._check_token",
+   "kind": "function",
+   "lines": [
+    351,
+    401
+   ],
+   "fingerprint": "b5d057f8cd09d712"
+  },
+  {
+   "pointer": "django/core/files/uploadedfile.py:UploadedFile",
+   "line": 210,
+   "sentence": "Its `size` is the number of bytes the parser counted as it passed them to the handler, not anything the client declared (`django/core/files/uploadedfile.py:UploadedFile`).",
+   "tree": "django",
+   "path": "django/core/files/uploadedfile.py",
+   "symbol": "UploadedFile",
+   "kind": "class",
+   "lines": [
+    21,
+    71
+   ],
+   "fingerprint": "18c9d3c5480fc1e1"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser.sanitize_file_name",
+   "line": 212,
+   "sentence": "The docstring of `sanitize_file_name` says plainly that the result is still text chosen by the client, to be treated as untrusted (`django/http/multipartparser.py:MultiPartParser.sanitize_file_name`, `django/core/files/uploadedfile.py:UploadedFile._set_name`, `django/core/files/utils.py:validate_file_name`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser.sanitize_file_name",
+   "kind": "function",
+   "lines": [
+    387,
+    408
+   ],
+   "fingerprint": "753f07906e5a9ab2"
+  },
+  {
+   "pointer": "django/core/files/uploadedfile.py:UploadedFile._set_name",
+   "line": 212,
+   "sentence": "The docstring of `sanitize_file_name` says plainly that the result is still text chosen by the client, to be treated as untrusted (`django/http/multipartparser.py:MultiPartParser.sanitize_file_name`, `django/core/files/uploadedfile.py:UploadedFile._set_name`, `django/core/files/utils.py:validate_file_name`).",
+   "tree": "django",
+   "path": "django/core/files/uploadedfile.py",
+   "symbol": "UploadedFile._set_name",
+   "kind": "function",
+   "lines": [
+    54,
+    69
+   ],
+   "fingerprint": "bfa7f194aebf78ff"
+  },
+  {
+   "pointer": "django/core/files/utils.py:validate_file_name",
+   "line": 212,
+   "sentence": "The docstring of `sanitize_file_name` says plainly that the result is still text chosen by the client, to be treated as untrusted (`django/http/multipartparser.py:MultiPartParser.sanitize_file_name`, `django/core/files/uploadedfile.py:UploadedFile._set_name`, `django/core/files/utils.py:validate_file_name`).",
+   "tree": "django",
+   "path": "django/core/files/utils.py",
+   "symbol": "validate_file_name",
+   "kind": "function",
+   "lines": [
+    7,
+    23
+   ],
+   "fingerprint": "0f4d6c7683d1e73b"
+  },
+  {
+   "pointer": "django/core/files/uploadedfile.py:InMemoryUploadedFile",
+   "line": 214,
+   "sentence": "`SimpleUploadedFile` is an in-memory file made from a name and bytes, with no request behind it (`django/core/files/uploadedfile.py:InMemoryUploadedFile`, `django/core/files/uploadedfile.py:SimpleUploadedFile`).",
+   "tree": "django",
+   "path": "django/core/files/uploadedfile.py",
+   "symbol": "InMemoryUploadedFile",
+   "kind": "class",
+   "lines": [
+    100,
+    128
+   ],
+   "fingerprint": "c282aa73cb5e9b2b"
+  },
+  {
+   "pointer": "django/core/files/uploadedfile.py:SimpleUploadedFile",
+   "line": 214,
+   "sentence": "`SimpleUploadedFile` is an in-memory file made from a name and bytes, with no request behind it (`django/core/files/uploadedfile.py:InMemoryUploadedFile`, `django/core/files/uploadedfile.py:SimpleUploadedFile`).",
+   "tree": "django",
+   "path": "django/core/files/uploadedfile.py",
+   "symbol": "SimpleUploadedFile",
+   "kind": "class",
+   "lines": [
+    131,
+    155
+   ],
+   "fingerprint": "acc3ebf5af7c40ac"
+  }
+ ]
+}

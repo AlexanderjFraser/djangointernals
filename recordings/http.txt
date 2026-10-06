@@ -1,0 +1,771 @@
+Django 6.2.dev20260926051415 with no middleware, and ALLOWED_HOSTS = ['shop.example']
+
+A form is posted: what making the request does, and what each first read does
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+          parse_header_parameters('application/x-www-form-urlencoded')
+            -> ('application/x-www-form-urlencoded', {})
+        LimitedStream.__init__(stream, limit=26)
+      BaseHandler.get_response
+        the view reads request.method, request.path, request.content_type and request.encoding
+          -> 'POST', '/orders/', 'application/x-www-form-urlencoded', None
+        the view reads request.GET
+          WSGIRequest.GET
+            QueryDict.__init__(b'page=2&tag=new&tag=sale', encoding=None)
+          -> <QueryDict: {'page': ['2'], 'tag': ['new', 'sale']}>
+        the view reads request.GET again
+        the view reads request.COOKIES
+          WSGIRequest.COOKIES
+            parse_cookie('theme=dark; basket=3')
+              -> {'theme': 'dark', 'basket': '3'}
+        the view reads request.headers
+          HttpRequest.headers
+            HttpHeaders.__init__(META)
+          -> {'Host': 'shop.example', 'Content-Length': '26', 'Content-Type': 'application/x-www-form-urlencoded', 'Cookie': 'theme=dark; basket=3', 'Accept-Language': 'en'}
+        the view reads request.POST
+          WSGIRequest._get_post
+            HttpRequest._load_post_and_files
+              HttpRequest.body
+                HttpRequest._check_data_too_big(26)
+                HttpRequest.read()
+                  LimitedStream.read(-1)
+                    -> 26 bytes
+                -> 26 bytes
+              QueryDict.__init__(b'customer=Ada&item=3&item=7', encoding='utf-8')
+          -> <QueryDict: {'customer': ['Ada'], 'item': ['3', '7']}>
+        the view reads request.FILES
+          WSGIRequest.FILES
+          -> <MultiValueDict: {}>
+        the view reads request.body
+          HttpRequest.body
+            -> 26 bytes
+        the view calls request.get_host()
+          HttpRequest.get_host
+            HttpRequest._get_raw_host
+              -> 'shop.example'
+            validate_host('shop.example', ['shop.example'])
+              -> True
+            -> 'shop.example'
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    the server sends 2 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      HttpRequest.close
+      signal request_finished
+
+A Content-Type with a charset sets the request's encoding as the request is made
+    a WSGIRequest is made, for a request line of "POST /orders/?q=caf%E9" and a Content-Type of "text/plain; charset=iso-8859-1"
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+          parse_header_parameters('text/plain; charset=iso-8859-1')
+            -> ('text/plain', {'charset': 'iso-8859-1'})
+          HttpRequest.encoding = 'iso-8859-1'
+            WSGIRequest.GET
+              QueryDict.__init__(b'q=caf%E9', encoding='iso-8859-1')
+        LimitedStream.__init__(stream, limit=0)
+    request.encoding is 'iso-8859-1', and request.GET is <QueryDict: {'q': ['café']}>
+
+WSGI: the environ is META, and the path is decoded again
+    the environ: SCRIPT_NAME '/shop', and PATH_INFO as a WSGI server passes it, '/caf\xc3\xa9/'
+    request.META is environ: True
+    request.path_info: '/café/'
+    request.path: '/shop/café/'
+    request.META["PATH_INFO"]: '/café/'
+    request.headers: {'Host': 'shop.example', 'X-Token': 'abc', 'Content-Type': 'text/plain'}
+    request.headers["x_token"]: 'abc'
+
+ASGI: META is built from the scope
+    the scope's headers, in the order sent:
+      host: shop.example
+      accept: text/html
+      accept: application/json
+      cookie: theme=dark
+      cookie: basket=3
+      x_token: spoofed
+      x-token: abc
+      content-type: text/plain
+      content-length: 0
+    request.method: 'GET'
+    request.path: '/shop/café/'
+    request.path_info: '/café/'
+    request.scheme: 'https'
+    META['REQUEST_METHOD']: 'GET'
+    META['QUERY_STRING']: 'page=2'
+    META['SCRIPT_NAME']: '/shop'
+    META['PATH_INFO']: '/café/'
+    META['wsgi.multithread']: True
+    META['wsgi.multiprocess']: True
+    META['REMOTE_ADDR']: '203.0.113.9'
+    META['REMOTE_HOST']: '203.0.113.9'
+    META['REMOTE_PORT']: 51234
+    META['SERVER_NAME']: 'shop.example'
+    META['SERVER_PORT']: '443'
+    META['HTTP_COOKIE']: 'theme=dark; basket=3'
+    META['HTTP_HOST']: 'shop.example'
+    META['HTTP_ACCEPT']: 'text/html,application/json'
+    META['HTTP_X_TOKEN']: 'abc'
+    META['CONTENT_TYPE']: 'text/plain'
+    META['CONTENT_LENGTH']: '0'
+
+The body's stream is read once: what can follow what
+    a form (application/x-www-form-urlencoded), 19 bytes
+      request.body, then request.POST  ->  POST is {'customer': ['Ada'], 'item': ['3']}
+      request.body, then request.read()  ->  read() returns 19 bytes
+      request.body, then request.read() twice  ->  read() returns 19 bytes, and then 0
+      request.POST, then request.body  ->  body is 19 bytes
+      request.POST, then request.read()  ->  read() returns 19 bytes
+      request.read(8), then request.body  ->  raises RawPostDataException: You cannot access body after reading from request's data stream
+      request.read(8), then request.POST  ->  POST is {}
+      request.POST, then request.encoding = "utf-8", then request.POST  ->  POST is {'customer': ['Ada'], 'item': ['3']}
+    a multipart form (multipart/form-data), 102 bytes
+      request.body, then request.POST  ->  POST is {'customer': ['Ada']}
+      request.body, then request.read()  ->  read() returns 102 bytes
+      request.body, then request.read() twice  ->  read() returns 102 bytes, and then 0
+      request.POST, then request.body  ->  raises RawPostDataException: You cannot access body after reading from request's data stream
+      request.POST, then request.read()  ->  read() returns 0 bytes
+      request.read(8), then request.body  ->  raises RawPostDataException: You cannot access body after reading from request's data stream
+      request.read(8), then request.POST  ->  POST is {}
+      request.POST, then request.encoding = "utf-8", then request.POST  ->  POST is {}
+
+A multipart form with a small file: the body, 251 bytes, is under FILE_UPLOAD_MAX_MEMORY_SIZE (2621440)
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+          parse_header_parameters('multipart/form-data; boundary=recording-boundary')
+            -> ('multipart/form-data', {'boundary': 'recording-boundary'})
+        LimitedStream.__init__(stream, limit=251)
+      BaseHandler.get_response
+        the view reads request.POST
+          WSGIRequest._get_post
+            HttpRequest._load_post_and_files
+              HttpRequest.parse_file_upload
+                HttpRequest._initialize_handlers
+                  load_handler("django.core.files.uploadhandler.MemoryFileUploadHandler", request)
+                  load_handler("django.core.files.uploadhandler.TemporaryFileUploadHandler", request)
+                MultiPartParser.__init__(META, input_data, upload_handlers, encoding=None)
+                  parse_header_parameters('multipart/form-data; boundary=recording-boundary')
+                    -> ('multipart/form-data', {'boundary': 'recording-boundary'})
+                MultiPartParser.parse
+                  MemoryFileUploadHandler.handle_raw_input(content_length=251)
+                    -> None, and activated = True
+                  FileUploadHandler.handle_raw_input  (TemporaryFileUploadHandler)
+                    -> None
+                  HttpRequest.read(65536)
+                    LimitedStream.read(65536)
+                      -> 251 bytes
+                  parse_boundary_stream
+                    -> raw: no headers
+                  parse_boundary_stream
+                    parse_header_parameters('form-data; name="customer"')
+                      -> ('form-data', {'name': 'customer'})
+                    -> field: name="customer"
+                  parse_boundary_stream
+                    parse_header_parameters('form-data; name="notes"; filename="notes.txt"')
+                      -> ('form-data', {'name': 'notes', 'filename': 'notes.txt'})
+                    parse_header_parameters('text/plain')
+                      -> ('text/plain', {})
+                    -> file: name="notes", filename="notes.txt"
+                  MultiPartParser.sanitize_file_name('notes.txt')
+                    -> 'notes.txt'
+                  MemoryFileUploadHandler.new_file("notes", "notes.txt", "text/plain")
+                    raises StopFutureHandlers
+                  MemoryFileUploadHandler.receive_data_chunk(29 bytes, start=0)
+                    -> None: the chunk is kept, and goes no further
+                  parse_boundary_stream
+                    HttpRequest.read(65536)
+                      LimitedStream.read(65536)
+                        -> 0 bytes
+                    -> raw: no headers
+                  MultiPartParser.handle_file_complete("notes")
+                    MemoryFileUploadHandler.file_complete(29)
+                      -> <InMemoryUploadedFile: notes.txt (text/plain)>
+                  HttpRequest.read(65536)
+                    LimitedStream.read(65536)
+                      -> 0 bytes
+                  FileUploadHandler.upload_complete  (MemoryFileUploadHandler)
+                  FileUploadHandler.upload_complete  (TemporaryFileUploadHandler)
+          -> <QueryDict: {'customer': ['Ada']}>
+        the view reads request.FILES
+          WSGIRequest.FILES
+          FILES["notes"] is a InMemoryUploadedFile, name 'notes.txt', size 29, in memory
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    the server sends 2 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      HttpRequest.close
+        File.close  (InMemoryUploadedFile)
+      signal request_finished
+
+The same form with a second file of 3,000,000 bytes: the body, 3000395 bytes, is over FILE_UPLOAD_MAX_MEMORY_SIZE (2621440)
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+          parse_header_parameters('multipart/form-data; boundary=recording-boundary')
+            -> ('multipart/form-data', {'boundary': 'recording-boundary'})
+        LimitedStream.__init__(stream, limit=3000395)
+      BaseHandler.get_response
+        the view reads request.POST
+          WSGIRequest._get_post
+            HttpRequest._load_post_and_files
+              HttpRequest.parse_file_upload
+                HttpRequest._initialize_handlers
+                  load_handler("django.core.files.uploadhandler.MemoryFileUploadHandler", request)
+                  load_handler("django.core.files.uploadhandler.TemporaryFileUploadHandler", request)
+                MultiPartParser.__init__(META, input_data, upload_handlers, encoding=None)
+                  parse_header_parameters('multipart/form-data; boundary=recording-boundary')
+                    -> ('multipart/form-data', {'boundary': 'recording-boundary'})
+                MultiPartParser.parse
+                  MemoryFileUploadHandler.handle_raw_input(content_length=3000395)
+                    -> None, and activated = False
+                  FileUploadHandler.handle_raw_input  (TemporaryFileUploadHandler)
+                    -> None
+                  HttpRequest.read(65536)
+                    LimitedStream.read(65536)
+                      -> 65536 bytes
+                  parse_boundary_stream
+                    -> raw: no headers
+                  parse_boundary_stream
+                    parse_header_parameters('form-data; name="customer"')
+                      -> ('form-data', {'name': 'customer'})
+                    -> field: name="customer"
+                  parse_boundary_stream
+                    parse_header_parameters('form-data; name="notes"; filename="notes.txt"')
+                      -> ('form-data', {'name': 'notes', 'filename': 'notes.txt'})
+                    parse_header_parameters('text/plain')
+                      -> ('text/plain', {})
+                    -> file: name="notes", filename="notes.txt"
+                  MultiPartParser.sanitize_file_name('notes.txt')
+                    -> 'notes.txt'
+                  MemoryFileUploadHandler.new_file("notes", "notes.txt", "text/plain")
+                  TemporaryFileUploadHandler.new_file("notes", "notes.txt", "text/plain")
+                    TemporaryUploadedFile.__init__("notes.txt", ...)
+                  MemoryFileUploadHandler.receive_data_chunk(29 bytes, start=0)
+                    -> the chunk, for the next handler
+                  TemporaryFileUploadHandler.receive_data_chunk(29 bytes, start=0)
+                    -> None: the chunk is written to the file
+                  parse_boundary_stream
+                    parse_header_parameters('form-data; name="scan"; filename="../scans/receipt.bin"')
+                      -> ('form-data', {'name': 'scan', 'filename': '../scans/receipt.bin'})
+                    parse_header_parameters('application/octet-stream')
+                      -> ('application/octet-stream', {})
+                    -> file: name="scan", filename="../scans/receipt.bin"
+                  MultiPartParser.handle_file_complete("notes")
+                    MemoryFileUploadHandler.file_complete(29)
+                      -> None
+                    TemporaryFileUploadHandler.file_complete(29)
+                      -> <TemporaryUploadedFile: notes.txt (text/plain)>
+                  MultiPartParser.sanitize_file_name('../scans/receipt.bin')
+                    -> 'receipt.bin'
+                  MemoryFileUploadHandler.new_file("scan", "receipt.bin", "application/octet-stream")
+                  TemporaryFileUploadHandler.new_file("scan", "receipt.bin", "application/octet-stream")
+                    TemporaryUploadedFile.__init__("receipt.bin", ...)
+                  MemoryFileUploadHandler.receive_data_chunk(65141 bytes, start=0)
+                    -> the chunk, for the next handler
+                  TemporaryFileUploadHandler.receive_data_chunk(65141 bytes, start=0)
+                    -> None: the chunk is written to the file
+                  ... 45 more reads of the stream and 45 more chunks, each chunk through the same calls; the last is 51275 bytes at start=2948725
+                  parse_boundary_stream
+                    HttpRequest.read(65536)
+                      LimitedStream.read(65536)
+                        -> 0 bytes
+                    -> raw: no headers
+                  MultiPartParser.handle_file_complete("scan")
+                    MemoryFileUploadHandler.file_complete(3000000)
+                      -> None
+                    TemporaryFileUploadHandler.file_complete(3000000)
+                      -> <TemporaryUploadedFile: receipt.bin (application/octet-stream)>
+                  HttpRequest.read(65536)
+                    LimitedStream.read(65536)
+                      -> 0 bytes
+                  FileUploadHandler.upload_complete  (MemoryFileUploadHandler)
+                  FileUploadHandler.upload_complete  (TemporaryFileUploadHandler)
+          -> <QueryDict: {'customer': ['Ada']}>
+        the view reads request.FILES
+          WSGIRequest.FILES
+          FILES["notes"] is a TemporaryUploadedFile, name 'notes.txt', size 29, a temporary file on disk
+          FILES["scan"] is a TemporaryUploadedFile, name 'receipt.bin', size 3000000, a temporary file on disk
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    the server sends 2 bytes
+    the uploaded files' temporary files exist: [True, True]
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      HttpRequest.close
+        TemporaryUploadedFile.close
+        TemporaryUploadedFile.close
+      signal request_finished
+    the uploaded files' temporary files exist: [False, False]
+
+Two multipart forms that are not what they seem
+    the small form above, cut off after 204 of its 251 bytes, inside the file  ->  POST is {'customer': ['Ada']}, FILES is {}
+    a form whose one part is a file input left empty: name="photo"; filename=""  ->  POST is {'photo': ['']}, FILES is {}
+
+What is refused, by which exception, and what the client gets
+    a query string of 1001 parameters; the view reads request.GET
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      WSGIRequest.GET
+        raises TooManyFieldsSent
+      HttpRequest._mark_post_parse_error
+      logged by django.security.TooManyFieldsSent at ERROR: The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+      the client gets 400 Bad Request
+    a form of 1001 fields; the view reads request.POST
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      HttpRequest._load_post_and_files
+        HttpRequest.body
+          -> 6897 bytes
+        raises TooManyFieldsSent
+      HttpRequest._mark_post_parse_error
+      logged by django.security.TooManyFieldsSent at ERROR: The number of GET/POST parameters exceeded settings.DATA_UPLOAD_MAX_NUMBER_FIELDS.
+      the client gets 400 Bad Request
+    a form of 2621441 bytes; the view reads request.POST
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      HttpRequest._load_post_and_files
+        HttpRequest.body
+          raises RequestDataTooBig
+      HttpRequest._mark_post_parse_error
+      logged by django.security.RequestDataTooBig at ERROR: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+      the client gets 400 Bad Request
+    a multipart form with one field of 3,000,000 bytes and no file; the view reads request.POST
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      HttpRequest._load_post_and_files
+        MultiPartParser.__init__
+        MultiPartParser.parse
+          raises RequestDataTooBig
+      HttpRequest._mark_post_parse_error
+      logged by django.security.RequestDataTooBig at ERROR: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+      the client gets 400 Bad Request
+    a multipart form with 101 files; the view reads request.POST
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      HttpRequest._load_post_and_files
+        MultiPartParser.__init__
+        MultiPartParser.parse
+          raises TooManyFilesSent
+        HttpRequest._mark_post_parse_error
+      HttpRequest._mark_post_parse_error
+      logged by django.security.TooManyFilesSent at ERROR: The number of files exceeded settings.DATA_UPLOAD_MAX_NUMBER_FILES.
+      the client gets 400 Bad Request
+    a multipart form whose Content-Type names no boundary; the view reads request.POST
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      HttpRequest._load_post_and_files
+        MultiPartParser.__init__
+          raises MultiPartParserError
+        HttpRequest._mark_post_parse_error
+      logged by django.request at WARNING: Bad request (Unable to parse request body): /posted/
+      the client gets 400 Bad Request
+    a form whose Content-Type is "application/x-www-form-urlencoded; charset=iso-8859-1"; the view reads request.POST
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+          WSGIRequest.GET
+      HttpRequest._load_post_and_files
+        raises BadRequest
+      logged by django.request at WARNING: HTTP requests with the 'application/x-www-form-urlencoded' content type must be UTF-8 encoded.: /posted/
+      the client gets 400 Bad Request
+    a request whose Host header is "evil.example"; the view calls request.get_host()
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+      HttpRequest.get_host
+        raises DisallowedHost
+      logged by django.security.DisallowedHost at ERROR: Invalid HTTP_HOST header: 'evil.example'. You may need to add 'evil.example' to ALLOWED_HOSTS.
+      the client gets 400 Bad Request
+    a request whose Content-Type header is 10,014 characters long; no view is reached
+      WSGIRequest.__init__(environ)
+        HttpRequest._set_content_type_params
+          raises BadRequest
+      the handler raises BadRequest to the server, and has made no response
+
+A response under WSGI, from its constructor to the server's close()
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes HttpResponse("<h1>Thanks</h1>")
+          HttpResponse.__init__
+            HttpResponseBase.__init__
+              response["Content-Type"] = 'text/html; charset=utf-8'
+            HttpResponse.content = '<h1>Thanks</h1>'
+        the view sets response["X-Order"] = 1042
+          response["X-Order"] = 1042
+            -> stored as '1042'
+        the view calls response.set_cookie("basket", "empty", max_age=3600, httponly=True)
+          HttpResponseBase.set_cookie("basket", 'empty', max_age=3600, httponly=True)
+        the view calls response.write("<p>Order 1042</p>")
+          HttpResponse.write('<p>Order 1042</p>')
+      start_response("200 OK", headers), the headers being:
+        Content-Type: text/html; charset=utf-8
+        X-Order: 1042
+        Set-Cookie: basket=empty; expires=Mon, 21 Sep 2026 15:13:20 GMT; HttpOnly; Max-Age=3600; Path=/
+    the handler has returned the response; the server iterates it
+    HttpResponse.__iter__
+    the server sends 15 bytes
+    the server sends 17 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      HttpRequest.close
+      signal request_finished
+
+A streaming response under WSGI: the body is produced as the server asks for it
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes StreamingHttpResponse(parts())
+          StreamingHttpResponse.__init__
+            HttpResponseBase.__init__
+              response["Content-Type"] = 'text/html; charset=utf-8'
+            StreamingHttpResponse._set_streaming_content
+      start_response("200 OK", headers), the headers being:
+        Content-Type: text/html; charset=utf-8
+    the handler has returned the response; the server iterates it
+    StreamingHttpResponse.__iter__
+    the generator produces part 1
+    the server sends 7 bytes
+    the generator produces part 2
+    the server sends 7 bytes
+    the generator produces part 3
+    the server sends 7 bytes
+    the generator has no more parts
+    the server calls close() on what it was given
+    HttpResponseBase.close  (StreamingHttpResponse)
+      HttpRequest.close
+      signal request_finished
+
+A streaming response under WSGI, and the client goes away after the first part
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes StreamingHttpResponse(parts())
+          StreamingHttpResponse.__init__
+            HttpResponseBase.__init__
+              response["Content-Type"] = 'text/html; charset=utf-8'
+            StreamingHttpResponse._set_streaming_content
+      start_response("200 OK", headers), the headers being:
+        Content-Type: text/html; charset=utf-8
+    the handler has returned the response; the server iterates it
+    StreamingHttpResponse.__iter__
+    the generator produces part 1
+    the server sends 7 bytes
+    the client goes away; the server stops iterating
+    the server calls close() on what it was given
+    HttpResponseBase.close  (StreamingHttpResponse)
+      the generator is closed where it stood, after a part and before the next
+      HttpRequest.close
+      signal request_finished
+
+A FileResponse under WSGI, to a server that offers no file wrapper
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes FileResponse(open(".../report.txt", "rb"), as_attachment=True)
+          FileResponse.__init__
+            StreamingHttpResponse.__init__  (FileResponse)
+              HttpResponseBase.__init__
+                response["Content-Type"] = 'text/html; charset=utf-8'
+              FileResponse._set_streaming_content
+                FileResponse.set_headers
+                  response["Content-Length"] = 10000
+                    -> stored as '10000'
+                  response["Content-Type"] = 'text/plain'
+                  content_disposition_header(True, 'report.txt')
+                    -> 'attachment; filename="report.txt"'
+                  response["Content-Disposition"] = 'attachment; filename="report.txt"'
+                StreamingHttpResponse._set_streaming_content  (FileResponse)
+      start_response("200 OK", headers), the headers being:
+        Content-Type: text/plain
+        Content-Length: 10000
+        Content-Disposition: attachment; filename="report.txt"
+    the handler has returned the response; the server iterates it
+    StreamingHttpResponse.__iter__  (FileResponse)
+    the server sends 4096 bytes
+    the server sends 4096 bytes
+    the server sends 1808 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (FileResponse)
+      HttpRequest.close
+      signal request_finished
+
+A FileResponse under WSGI, to a server that offers wsgi.file_wrapper
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes FileResponse(open(".../report.txt", "rb"), as_attachment=True)
+          FileResponse.__init__
+            StreamingHttpResponse.__init__  (FileResponse)
+              HttpResponseBase.__init__
+                response["Content-Type"] = 'text/html; charset=utf-8'
+              FileResponse._set_streaming_content
+                FileResponse.set_headers
+                  response["Content-Length"] = 10000
+                    -> stored as '10000'
+                  response["Content-Type"] = 'text/plain'
+                  content_disposition_header(True, 'report.txt')
+                    -> 'attachment; filename="report.txt"'
+                  response["Content-Disposition"] = 'attachment; filename="report.txt"'
+                StreamingHttpResponse._set_streaming_content  (FileResponse)
+      start_response("200 OK", headers), the headers being:
+        Content-Type: text/plain
+        Content-Length: 10000
+        Content-Disposition: attachment; filename="report.txt"
+      the server's file wrapper is made around the file, block size 4096
+    the handler has returned a ServerFileWrapper, the server's own wrapper around the file; the server iterates it
+    the server sends 4096 bytes
+    the server sends 4096 bytes
+    the server sends 1808 bytes
+    the server calls close() on what it was given
+    the wrapper calls the file's close, which the handler replaced with the response's
+      HttpResponseBase.close  (FileResponse)
+        HttpRequest.close
+        signal request_finished
+
+ASGI: an HttpResponse is two messages
+    send: http.response.start, status 200, headers:
+      Content-Type: text/html; charset=utf-8
+      X-Order: 1042
+      Set-Cookie: basket=empty; expires=Mon, 21 Sep 2026 15:13:20 GMT; HttpOnly; Max-Age=3600; Path=/
+    send: http.response.body, 32 bytes, more_body False
+
+ASGI: a body of 150,000 bytes goes in pieces of at most 65,536
+    send: http.response.start, status 200, headers:
+      Content-Type: text/html; charset=utf-8
+    send: http.response.body, 65536 bytes, more_body True
+    send: http.response.body, 65536 bytes, more_body True
+    send: http.response.body, 18928 bytes, more_body False
+
+ASGI: a streaming response over an asynchronous iterator
+    send: http.response.start, status 200, headers:
+      Content-Type: text/html; charset=utf-8
+    the async generator produces part 1
+    send: http.response.body, 7 bytes, more_body True
+    the async generator produces part 2
+    send: http.response.body, 7 bytes, more_body True
+    the async generator produces part 3
+    send: http.response.body, 7 bytes, more_body True
+    send: http.response.body, no body
+
+ASGI: a streaming response over a synchronous iterator
+    send: http.response.start, status 200, headers:
+      Content-Type: text/html; charset=utf-8
+    warning (Warning): StreamingHttpResponse must consume synchronous iterators in order to serve them asynchronously. Use an asynchronous iterator instead.
+    the generator produces part 1
+    the generator produces part 2
+    the generator produces part 3
+    the generator has no more parts
+    send: http.response.body, 7 bytes, more_body True
+    send: http.response.body, 7 bytes, more_body True
+    send: http.response.body, 7 bytes, more_body True
+    send: http.response.body, no body
+
+ASGI: a streaming response, and the client goes away after the first part
+    send: http.response.start, status 200, headers:
+      Content-Type: text/html; charset=utf-8
+    the async generator produces part 1
+    send: http.response.body, 7 bytes, more_body True
+    receive: http.disconnect
+    the async generator, waiting for its next part, is stopped by CancelledError
+    signal request_finished
+
+ASGI: a FileResponse of 10,000 bytes
+    send: http.response.start, status 200, headers:
+      Content-Type: text/plain
+      Content-Length: 10000
+      Content-Disposition: attachment; filename="report.txt"
+    warning (Warning): StreamingHttpResponse must consume synchronous iterators in order to serve them asynchronously. Use an asynchronous iterator instead.
+    send: http.response.body, 10000 bytes, more_body True
+    send: http.response.body, no body
+
+ASGI: the multipart form of 251 bytes again, and what its Content-Length header says
+    with Content-Length: 251, which is the body's length  ->  POST is {'customer': ['Ada']}, FILES is {'notes': ['InMemoryUploadedFile, 29 bytes']}
+    with Content-Length: 5  ->  POST is {'customer': ['Ada']}, FILES is {'notes': ['InMemoryUploadedFile, 29 bytes']}
+    with no Content-Length header  ->  POST is {}, FILES is {}
+
+QueryDict: one key, several values, and no changing it
+    q = QueryDict("tag=new&tag=sale&page=2&empty=")
+    q["tag"]  ->  'sale'
+    q.getlist("tag")  ->  ['new', 'sale']
+    q["empty"]  ->  ''
+    q.get("missing")  ->  None
+    q["missing"]  ->  raises MultiValueDictKeyError: 'missing'
+    dict(q.items())  ->  {'tag': 'sale', 'page': '2', 'empty': ''}
+    dict(q.lists())  ->  {'tag': ['new', 'sale'], 'page': ['2'], 'empty': ['']}
+    q.dict()  ->  {'tag': 'sale', 'page': '2', 'empty': ''}
+    q["page"] = "3"  ->  raises AttributeError: This QueryDict instance is immutable
+    c = q.copy(); c["page"] = "3"; c.appendlist("tag", "last")
+    c.urlencode()  ->  'tag=new&tag=sale&tag=last&page=3&empty='
+    q.urlencode()  ->  'tag=new&tag=sale&page=2&empty='
+    frozen = QueryDict("page=2"); frozen |= {"extra": ["1"]}  ->  <QueryDict: {'page': ['2'], 'extra': ['1']}>, and its _mutable is still False
+    QueryDict("next=/a%26b/").urlencode()  ->  'next=%2Fa%26b%2F'
+    QueryDict("next=/a%26b/").urlencode(safe="/")  ->  'next=/a%26b/'
+    QueryDict(b"name=caf\xe9")  (bytes that are not UTF-8)  ->  <QueryDict: {'name': ['café']}>
+    QueryDict("name=caf%E9")  (an escape that is not UTF-8)  ->  <QueryDict: {'name': ['caf�']}>
+    QueryDict("name=caf%E9", encoding="iso-8859-1")  ->  <QueryDict: {'name': ['café']}>
+
+The Accept header: preference and precedence
+    Accept: text/html;q=0.8, application/json, text/*;q=0.9, */*;q=0.1
+      request.accepted_types  ->  application/json, text/*; q=0.9, text/html; q=0.8, */*; q=0.1
+      request.accepted_types_by_precedence  ->  application/json, text/html; q=0.8, text/*; q=0.9, */*; q=0.1
+      request.accepted_type("text/html")  ->  text/html; q=0.8
+      request.accepted_type("text/plain")  ->  text/*; q=0.9
+      request.get_preferred_type(["text/html", "application/json"])  ->  'application/json'
+      request.get_preferred_type(["text/html", "text/plain"])  ->  'text/plain'
+      request.accepts("image/png")  ->  True
+    Accept: text/html, image/png;q=0
+      request.accepted_types  ->  text/html
+      request.accepts("image/png")  ->  False
+    no Accept header
+      request.accepted_types  ->  */*
+
+The host and the scheme: what is believed
+    request.get_host(), with ALLOWED_HOSTS = ['shop.example'] unless the line says otherwise
+      Host: shop.example  ->  'shop.example'
+      Host: SHOP.example:8000  ->  'SHOP.example:8000'
+      Host: shop.example.  (a trailing dot)  ->  'shop.example.'
+      Host: www.shop.example  ->  raises DisallowedHost
+      Host: www.shop.example, and ALLOWED_HOSTS = ['.shop.example']  ->  'www.shop.example'
+      Host: shop.example/x  (not a host name)  ->  raises DisallowedHost
+      no Host header; SERVER_NAME shop.example, SERVER_PORT 80  ->  'shop.example'
+      no Host header; SERVER_NAME shop.example, SERVER_PORT 8000  ->  'shop.example:8000'
+      Host: shop.example, X-Forwarded-Host: evil.example  ->  'shop.example'
+      the same, and USE_X_FORWARDED_HOST = True  ->  raises DisallowedHost
+      Host: evil.example, and ALLOWED_HOSTS = ['*']  ->  'evil.example'
+      Host: evil.example, and ALLOWED_HOSTS = [], DEBUG = False  ->  raises DisallowedHost
+      Host: evil.example, and ALLOWED_HOSTS = [], DEBUG = True  ->  raises DisallowedHost
+      Host: app.localhost:8000, and ALLOWED_HOSTS = [], DEBUG = True  ->  'app.localhost:8000'
+    request.scheme
+      the server says http  ->  'http'
+      the server says http, X-Forwarded-Proto: https  ->  'http'
+      the same, and SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  ->  'https'
+      that setting, X-Forwarded-Proto: https, http  (a list)  ->  'https'
+      that setting, the server says https, no such header  ->  'https'
+      that setting, the server says https, X-Forwarded-Proto: http  ->  'http'
+    request.build_absolute_uri, of a request for http://shop.example/orders/2026/?page=2
+      build_absolute_uri()  ->  'http://shop.example/orders/2026/?page=2'
+      build_absolute_uri("/pay/")  ->  'http://shop.example/pay/'
+      build_absolute_uri("pay/?step=1")  ->  'http://shop.example/orders/2026/pay/?step=1'
+      build_absolute_uri("../2025/")  ->  'http://shop.example/orders/2025/'
+      build_absolute_uri("//cdn.example/logo.png")  ->  'http://cdn.example/logo.png'
+      build_absolute_uri("https://bank.example/pay/?to=é")  ->  'https://bank.example/pay/?to=%C3%A9'
+      get_full_path()  ->  '/orders/2026/?page=2'
+
+The response classes: what a constructor leaves
+    HttpResponse("café")  ->  200 OK; headers: Content-Type: text/html; charset=utf-8; body b'caf\xc3\xa9'
+    HttpResponse("café", content_type="text/plain; charset=iso-8859-1")  ->  200 OK; headers: Content-Type: text/plain; charset=iso-8859-1; body b'caf\xe9'
+    HttpResponse(iter(["a", b"b", 3]))  ->  200 OK; headers: Content-Type: text/html; charset=utf-8; body b'ab3'
+    HttpResponse(status=204)  ->  204 No Content; headers: Content-Type: text/html; charset=utf-8
+    HttpResponse(status=299)  ->  299 Unknown Status Code; headers: Content-Type: text/html; charset=utf-8
+    HttpResponse(status=600)  ->  raises ValueError: HTTP status code must be an integer from 100 to 599.
+    HttpResponseRedirect("/next/")  ->  302 Found; headers: Content-Type: text/html; charset=utf-8, Location: /next/
+    HttpResponseRedirect("/next/", preserve_request=True)  ->  307 Temporary Redirect; headers: Content-Type: text/html; charset=utf-8, Location: /next/
+    HttpResponsePermanentRedirect("/café/?q=é")  ->  301 Moved Permanently; headers: Content-Type: text/html; charset=utf-8, Location: /caf%C3%A9/?q=%C3%A9
+    HttpResponsePermanentRedirect("/next/", preserve_request=True)  ->  308 Permanent Redirect; headers: Content-Type: text/html; charset=utf-8, Location: /next/
+    HttpResponseRedirect("javascript:alert(1)")  ->  raises DisallowedRedirect: Unsafe redirect to URL with protocol 'javascript'
+    HttpResponseRedirect("/" + "x" * 16384)  ->  raises DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+    HttpResponseNotAllowed(["GET", "HEAD"])  ->  405 Method Not Allowed; headers: Content-Type: text/html; charset=utf-8, Allow: GET, HEAD
+    HttpResponseNotModified()  ->  304 Not Modified; headers: none
+    HttpResponseNotModified("body")  ->  raises AttributeError: You cannot set content to a 304 (Not Modified) response
+    JsonResponse([1, 2])  ->  200 OK; headers: Content-Type: application/json; body b'[1, 2]'
+    JsonResponse({"a": 1}, safe=False)  ->  200 OK; headers: Content-Type: application/json; body b'{"a": 1}'; warns RemovedInDjango2029Warning: The safe parameter is deprecated.
+    JsonResponse([1, 2], safe=True)  ->  raises TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.; warns RemovedInDjango2029Warning: The safe parameter is deprecated.
+
+Headers on a response: what is stored, and what is refused
+    response["X-Note"] = "plain"  ->  stored as 'plain'
+    response["X-Note"] = 42  ->  stored as '42'
+    response["X-Note"] = "café"  (Latin-1 can hold it)  ->  stored as 'café'
+    response["X-Note"] = "naïve ☕"  (Latin-1 cannot)  ->  stored as '=?utf-8?b?bmHDr3ZlIOKYlQ==?='
+    response["X-Note"] = "one\r\nSet-Cookie: stolen=1"  ->  raises BadHeaderError: Header values can't contain newlines (got 'one\r\nSet-Cookie: stolen=1')
+    response["X-Nöte"] = "x"  (a name that is not ASCII)  ->  raises UnicodeEncodeError: 'ascii' codec can't encode character '\xf6' in position 3: ordinal not in range(128), HTTP response headers must be in ascii format
+    response["content-type"] = "text/plain", then response.items()  ->  [('content-type', 'text/plain')]
+    "CONTENT-TYPE" in response  ->  True
+    HttpResponse(reason="Fine\r\nX: y")  ->  raises BadHeaderError: reason_phrase can't contain control characters.
+
+Cookies on a response, and cookies coming back
+    response.set_cookie("theme", "dark")
+      Set-Cookie: theme=dark; Path=/
+    response.set_cookie("basket", "3", max_age=3600, secure=True, httponly=True, samesite="Lax")
+      Set-Cookie: basket=3; expires=Mon, 21 Sep 2026 15:13:20 GMT; HttpOnly; Max-Age=3600; Path=/; SameSite=Lax; Secure
+    response.set_cookie("note", "a b; c")
+      Set-Cookie: note="a b\073 c"; Path=/
+    response.delete_cookie("basket")
+      Set-Cookie: basket=""; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/
+    response.delete_cookie("__Host-basket")
+      Set-Cookie: __Host-basket=""; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/; Secure
+    response.set_signed_cookie("basket", "3", salt="shop")
+      Set-Cookie: basket=3:1x8elk:0hOG8UOeJ1By0rV18GiJFR5pNhH-FusCci9t0OxtUic; Path=/
+    the signer's salt for it: 'django.http.cookies.v2:4:shopbasket'
+    and when a request brings the cookie back:
+      request.get_signed_cookie("basket", salt="shop")  ->  '3'
+      request.get_signed_cookie("basket")  (no salt)  ->  raises BadSignature
+      the same value sent back under the name "total"  ->  raises BadSignature
+      the value changed from 3 to 9  ->  raises BadSignature
+      the value changed, and default=None  ->  None
+      request.get_signed_cookie("absent"), of a request with no such cookie  ->  raises KeyError: 'absent'
+      two hours later, with max_age=3600  ->  raises SignatureExpired
+      two hours later, with no max_age  ->  '3'
+    parse_cookie, given the header  theme=dark; basket=3; flag; note="a b\073 c"  ->  {'theme': 'dark', 'basket': '3', '': 'flag', 'note': 'a b; c'}
+
+The helpers of django/utils/http.py
+    dates
+      http_date(1790000000)  ->  'Mon, 21 Sep 2026 14:13:20 GMT'
+      parse_http_date("Mon, 21 Sep 2026 14:13:20 GMT")  ->  1790000000
+      parse_http_date("Monday, 21-Sep-26 14:13:20 GMT")  ->  1790000000
+      parse_http_date("Mon Sep 21 14:13:20 2026")  ->  1790000000
+      parse_http_date("2026-09-21 14:13:20")  ->  raises ValueError
+      parse_http_date_safe("2026-09-21 14:13:20")  ->  None
+    entity tags
+      quote_etag('abc')  ->  '"abc"'
+      quote_etag('W/"abc"')  ->  'W/"abc"'
+      parse_etags('"abc", W/"def", ghi')  ->  ['"abc"', 'W/"def"']
+      parse_etags('*')  ->  ['*']
+    header values
+      parse_header_parameters('Text/HTML; Charset="utf-8"')  ->  ('text/html', {'charset': 'utf-8'})
+      parse_header_parameters("attachment; filename*=UTF-8''caf%C3%A9.txt")  ->  ('attachment', {'filename': 'café.txt'})
+      list(split_header_value('Accept-Encoding,  Cookie,'))  ->  ['Accept-Encoding', 'Cookie']
+      list(split_directive_names('max-age=60, Private="Set-Cookie"'))  ->  ['max-age', 'private']
+      content_disposition_header(True, 'report 2026.txt')  ->  'attachment; filename="report 2026.txt"'
+      content_disposition_header(False, 'café "menu".txt')  ->  "inline; filename*=utf-8''caf%C3%A9%20%22menu%22.txt"
+      content_disposition_header(False, 'a "b".txt')  ->  'inline; filename="a \\"b\\".txt"'
+      content_disposition_header(False, '')  ->  None
+    query strings
+      urlencode({'tag': ['new', 'sale'], 'page': 2}, doseq=True)  ->  'tag=new&tag=sale&page=2'
+      urlencode(MultiValueDict({'tag': ['new', 'sale']}), doseq=True)  ->  'tag=new&tag=sale'
+      urlencode({'page': None})  ->  raises TypeError: Cannot encode None for key 'page' in a query string. Did you mean to pass an empty string or omit the value?
+    URLs that came from a client; allowed_hosts is {'shop.example'}
+      url_has_allowed_host_and_scheme('/orders/', allowed_hosts)  ->  True
+      url_has_allowed_host_and_scheme('https://shop.example/orders/', allowed_hosts)  ->  True
+      url_has_allowed_host_and_scheme('https://evil.example/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('//evil.example/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('///evil.example/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('/\\evil.example/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('http:///evil.example/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('javascript:alert(1)', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('ftp://shop.example/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('//shop.example/orders/', allowed_hosts)  ->  True
+      url_has_allowed_host_and_scheme('https://SHOP.example/orders/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('https://shop.example:443/orders/', allowed_hosts)  ->  False
+      url_has_allowed_host_and_scheme('http://shop.example/', allowed_hosts, require_https=True)  ->  False
+      escape_leading_slashes('//evil.example/')  ->  '/%2Fevil.example/'
+      is_same_domain('www.shop.example', '.shop.example')  ->  True
+      is_same_domain('shop.example', '.shop.example')  ->  True
+      is_same_domain('notshop.example', '.shop.example')  ->  False
+    compact encodings
+      int_to_base36(1790000000)  ->  'tlpwu8'
+      base36_to_int('tlpwu8')  ->  1790000000
+      base36_to_int('z' * 14)  ->  raises ValueError: Base36 input too large
+      urlsafe_base64_encode(bytes([251, 255, 254]))  ->  '-__-'
+      urlsafe_base64_encode(b'42')  ->  'NDI'
+      urlsafe_base64_decode('NDI')  ->  b'42'
+

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 456">
+  <!-- three columns: the server, the two objects of django.http, the view; the request above, the response below -->
+  <text class="strong" x="0" y="14">the server</text>
+  <text class="strong" x="176" y="14">django.http</text>
+  <text class="strong" x="548" y="14">the view</text>
+
+  <!-- in: what the server passes -->
+  <rect class="ground" x="0" y="30" width="140" height="62" rx="4"/>
+  <text x="10" y="56">an environ,</text>
+  <text class="quiet small" x="10" y="76">or a scope and a body</text>
+  <path class="line" d="M140 61 H166"/>
+  <polygon class="head" points="176,61 166,56 166,66"/>
+
+  <!-- the request -->
+  <rect class="box" x="176" y="30" width="330" height="212" rx="4"/>
+  <text class="name strong" x="188" y="54">HttpRequest</text>
+  <text class="quiet small" x="188" y="72">made as a WSGIRequest or an ASGIRequest</text>
+  <text class="strong small" x="188" y="100">set as it is made</text>
+  <text class="name" x="188" y="120">method  path  path_info  META</text>
+  <text class="name" x="188" y="138">content_type  encoding</text>
+  <text class="strong small" x="188" y="166">parsed on first use, and kept</text>
+  <text class="name" x="188" y="186">GET  COOKIES  headers</text>
+  <text class="strong small" x="188" y="212">read from the body's stream, once</text>
+  <text class="name" x="188" y="232">body  POST  FILES</text>
+
+  <!-- the view -->
+  <rect class="ground" x="548" y="30" width="98" height="336" rx="4"/>
+  <text x="560" y="186">reads</text>
+  <path class="line" d="M548 181 H516"/>
+  <polygon class="head" points="506,181 516,176 516,186"/>
+  <text x="560" y="232">reads</text>
+  <path class="line" d="M548 227 H516"/>
+  <polygon class="head" points="506,227 516,222 516,232"/>
+  <text x="560" y="319">returns</text>
+  <path class="line" d="M548 314 H516"/>
+  <polygon class="head" points="506,314 516,309 516,319"/>
+
+  <!-- the response -->
+  <rect class="box" x="176" y="262" width="330" height="104" rx="4"/>
+  <text class="name strong" x="188" y="286">HttpResponse</text>
+  <text class="quiet small" x="188" y="304">or another subclass of HttpResponseBase</text>
+  <text class="name" x="188" y="330">status_code  headers  cookies</text>
+  <text class="quiet small" x="188" y="350">and the body: bytes, or an iterator</text>
+
+  <!-- out: what the server is given -->
+  <rect class="ground" x="0" y="272" width="140" height="84" rx="4"/>
+  <text class="small" x="10" y="296">a status line,</text>
+  <text class="small" x="10" y="316">a list of headers,</text>
+  <text class="small" x="10" y="336">an iterable of bytes</text>
+  <path class="line" d="M176 314 H150"/>
+  <polygon class="head" points="140,314 150,309 150,319"/>
+
+  <!-- the server closes the response -->
+  <text class="name" x="0" y="412">close()</text>
+  <text class="quiet small" x="0" y="430">when the body is sent</text>
+  <path class="mark-line" d="M70 408 H166"/>
+  <polygon class="head mark" points="176,408 166,403 166,413"/>
+  <rect class="mark-box" x="176" y="384" width="330" height="68" rx="4"/>
+  <text class="name" x="188" y="408">HttpResponseBase.close</text>
+  <text class="quiet small" x="188" y="427">closes the request's uploaded files,</text>
+  <text class="quiet small" x="188" y="443">and sends the signal request_finished</text>
+</svg>

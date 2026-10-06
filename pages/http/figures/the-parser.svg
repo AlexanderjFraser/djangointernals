@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 444">
+  <!-- above: the stream wrapped in iterators that cut it into parts; below: what the parser does with a field and with a file -->
+  <rect class="ground" x="0" y="0" width="646" height="150" rx="4"/>
+  <text x="12" y="24">the request's stream</text>
+  <text class="quiet small" x="220" y="24">read 64 KB at a time by ChunkIter</text>
+  <rect class="box" x="12" y="36" width="622" height="102" rx="4"/>
+  <text class="name" x="24" y="58">LazyStream</text>
+  <text class="quiet small" x="220" y="58">the same bytes, with a way to push some back</text>
+  <rect class="ground" x="24" y="70" width="598" height="56" rx="4"/>
+  <text class="name" x="36" y="92">BoundaryIter</text>
+  <text class="quiet small" x="220" y="92">the bytes up to the next boundary: one part</text>
+  <text class="name" x="36" y="114">parse_boundary_stream</text>
+  <text class="quiet small" x="220" y="114">the part's kind (raw, field or file), its headers, its content</text>
+
+  <path class="line" d="M323 150 V170"/>
+  <polygon class="head" points="323,180 318,170 328,170"/>
+
+  <text class="name" x="0" y="200">MultiPartParser._parse</text>
+  <text class="quiet small" x="186" y="200">for each part</text>
+
+  <!-- a field -->
+  <text class="strong small" x="0" y="228">a field</text>
+  <rect class="ground" x="0" y="238" width="150" height="44" rx="4"/>
+  <text class="small" x="10" y="265">appended to POST</text>
+
+  <!-- a file -->
+  <text class="strong small" x="176" y="228">a file</text>
+  <text class="quiet small" x="216" y="228">each chunk passes along the upload handlers, in their order</text>
+
+  <rect class="box" x="176" y="238" width="220" height="150" rx="4"/>
+  <text class="name small" x="188" y="260">MemoryFileUploadHandler</text>
+  <rect class="box" x="426" y="238" width="220" height="150" rx="4"/>
+  <text class="name small" x="438" y="260">TemporaryFileUploadHandler</text>
+
+  <text class="strong small" x="188" y="288">a body that is small</text>
+  <text class="quiet small" x="188" y="306">keeps the chunk in memory,</text>
+  <text class="quiet small" x="188" y="321">and returns None</text>
+  <text class="quiet small" x="438" y="306">is given nothing</text>
+
+  <text class="strong small" x="188" y="350">a body that is large</text>
+  <text class="quiet small" x="188" y="368">returns the chunk unchanged</text>
+  <path class="line" d="M396 364 H416"/>
+  <polygon class="head" points="426,364 416,359 416,369"/>
+  <text class="quiet small" x="438" y="368">writes it to a temporary file</text>
+
+  <text class="small" x="0" y="414">At the end of the part, the first handler to return an object from file_complete has made the entry</text>
+  <text class="small" x="0" y="431">in FILES: an InMemoryUploadedFile or a TemporaryUploadedFile.</text>
+</svg>

@@ -1,0 +1,222 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "cookies.md",
+ "pointers": [
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 9,
+   "sentence": "A browser returns only names and values, with the attributes gone, in one `\"Cookie\"` header, or under HTTP/2 possibly in several, which an `ASGIRequest` joins into one (`django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
+   "pointer": "django/http/cookie.py:parse_cookie",
+   "line": 13,
+   "sentence": "It does not validate names or reject anything, and where a name appears twice the later value replaces the earlier (`django/http/cookie.py:parse_cookie`, `django/core/handlers/wsgi.py:WSGIRequest.COOKIES`).",
+   "tree": "django",
+   "path": "django/http/cookie.py",
+   "symbol": "parse_cookie",
+   "kind": "function",
+   "lines": [
+    7,
+    23
+   ],
+   "fingerprint": "7dd60e978cee4178"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.COOKIES",
+   "line": 13,
+   "sentence": "It does not validate names or reject anything, and where a name appears twice the later value replaces the earlier (`django/http/cookie.py:parse_cookie`, `django/core/handlers/wsgi.py:WSGIRequest.COOKIES`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.COOKIES",
+   "kind": "function",
+   "lines": [
+    99,
+    102
+   ],
+   "at": 100,
+   "fingerprint": "ac08d7e3735160b8"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.set_cookie",
+   "line": 23,
+   "sentence": "`HttpResponseBase.set_cookie` adds an entry to it and sets the entry's attributes from its arguments (`django/http/response.py:HttpResponseBase.set_cookie`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.set_cookie",
+   "kind": "function",
+   "lines": [
+    223,
+    285
+   ],
+   "fingerprint": "c7f8083e0c74adf9"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.delete_cookie",
+   "line": 40,
+   "sentence": "It adds the `\"Secure\"` attribute by itself when the cookie's name begins with `\"__Secure-\"` or `\"__Host-\"`, or the caller passes a SameSite value of `\"none\"`, because a browser ignores a `Set-Cookie` for such a cookie without it, and the deletion would silently not happen (`django/http/response.py:HttpResponseBase.delete_cookie`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.delete_cookie",
+   "kind": "function",
+   "lines": [
+    297,
+    313
+   ],
+   "fingerprint": "8d98fd4c554e82ca"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 44,
+   "sentence": "A middleware that looks through `HttpResponseBase.headers` for cookies will find none; it has to look in `HttpResponseBase.cookies` (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.send_response`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.send_response",
+   "line": 44,
+   "sentence": "A middleware that looks through `HttpResponseBase.headers` for cookies will find none; it has to look in `HttpResponseBase.cookies` (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.send_response`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.send_response",
+   "kind": "function",
+   "lines": [
+    298,
+    350
+   ],
+   "fingerprint": "0c490117391fe1df"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.set_signed_cookie",
+   "line": 48,
+   "sentence": "A **signed cookie** carries proof that the value is the server's: `HttpResponseBase.set_signed_cookie` appends a timestamp and a signature to the value before setting it, and `HttpRequest.get_signed_cookie` checks the signature before returning it (`django/http/response.py:HttpResponseBase.set_signed_cookie`, `django/http/request.py:HttpRequest.get_signed_cookie`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.set_signed_cookie",
+   "kind": "function",
+   "lines": [
+    291,
+    295
+   ],
+   "fingerprint": "3b10957ad13bb4fd"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.get_signed_cookie",
+   "line": 48,
+   "sentence": "A **signed cookie** carries proof that the value is the server's: `HttpResponseBase.set_signed_cookie` appends a timestamp and a signature to the value before setting it, and `HttpRequest.get_signed_cookie` checks the signature before returning it (`django/http/response.py:HttpResponseBase.set_signed_cookie`, `django/http/request.py:HttpRequest.get_signed_cookie`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_signed_cookie",
+   "kind": "function",
+   "lines": [
+    239,
+    261
+   ],
+   "fingerprint": "68b31391edbd56e4"
+  },
+  {
+   "pointer": "django/core/signing.py:get_cookie_signer",
+   "line": 65,
+   "sentence": "The part after the value is the time of signing, and the last is an HMAC over the two before it, made by the class `settings.SIGNING_BACKEND` names, `TimestampSigner` unless a project changes it, with a key derived from `settings.SECRET_KEY` ([Security](../security.md) has the signer itself) (`django/core/signing.py:get_cookie_signer`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "get_cookie_signer",
+   "kind": "function",
+   "lines": [
+    150,
+    156
+   ],
+   "fingerprint": "3162cc89a1bdf525"
+  },
+  {
+   "pointer": "django/core/signing.py:_cookie_signer_salt",
+   "line": 67,
+   "sentence": "That is why the same signed value is refused under another cookie's name, and refused when read without the salt it was written with: a value signed for one purpose cannot be replayed for another (`django/core/signing.py:_cookie_signer_salt`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "_cookie_signer_salt",
+   "kind": "function",
+   "lines": [
+    123,
+    125
+   ],
+   "fingerprint": "ade2da5a1d2387e6"
+  },
+  {
+   "pointer": "django/core/signing.py:_unsign_cookie",
+   "line": 71,
+   "sentence": "The setting is transitional: it is false by default, and setting it at all warns with `RemovedInDjango2028Warning` (`django/core/signing.py:_unsign_cookie`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "_unsign_cookie",
+   "kind": "function",
+   "lines": [
+    133,
+    147
+   ],
+   "fingerprint": "0d65ea5849dceb3a"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
+   "line": 75,
+   "sentence": "The first two call `set_cookie` with attributes taken from settings of their own, and the messages cookie borrows the session cookie's domain and its Secure, HttpOnly and SameSite settings ([Authentication, sessions and messages](../auth.md), [Security](../security.md)) (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    24,
+    84
+   ],
+   "fingerprint": "e54a21ed4b7c52be"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie",
+   "line": 75,
+   "sentence": "The first two call `set_cookie` with attributes taken from settings of their own, and the messages cookie borrows the session cookie's domain and its Secure, HttpOnly and SameSite settings ([Authentication, sessions and messages](../auth.md), [Security](../security.md)) (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._set_csrf_cookie",
+   "kind": "function",
+   "lines": [
+    255,
+    271
+   ],
+   "fingerprint": "492884da45235766"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie",
+   "line": 75,
+   "sentence": "The first two call `set_cookie` with attributes taken from settings of their own, and the messages cookie borrows the session cookie's domain and its Secure, HttpOnly and SameSite settings ([Authentication, sessions and messages](../auth.md), [Security](../security.md)) (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._update_cookie",
+   "kind": "function",
+   "lines": [
+    109,
+    128
+   ],
+   "fingerprint": "1aa1616ffa47cb8a"
+  }
+ ]
+}
