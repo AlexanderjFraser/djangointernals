@@ -12,9 +12,9 @@ The innermost layer of the chain is not a middleware. It is a method of the hand
 
 `BaseHandler.resolve_request` picks a resolver, asks it to match the request's `path_info`, which is the path without the script prefix, and stores the answer on the request (`django/core/handlers/base.py:BaseHandler.resolve_request`).
 
-The resolver is normally the one for `settings.ROOT_URLCONF`, which `get_resolver` makes on first use and keeps. A middleware can route a single request by a different URLconf by setting an attribute named `"urlconf"` on the request: `resolve_request` looks for that attribute, and when it is there it makes the named URLconf the current one (for the thread, or under ASGI for the task) and resolves with it.
+The resolver is normally the one for `settings.ROOT_URLCONF`, which `get_resolver` makes on first use and keeps. A middleware can route a single request by a different URLconf by setting an attribute named `"urlconf"` on the request: `resolve_request` looks for that attribute, and when it is there it makes the named URLconf the current one (for the thread, or under ASGI for the task) and resolves with it ([The script prefix, the current URLconf and the caches](../urls/state.md#the-current-urlconf)).
 
-The match is a `ResolverMatch`. It is kept as `HttpRequest.resolver_match`, where the view and anything after it can read it, and it unpacks into the three things the handler needs: the view, its positional arguments and its keyword arguments.
+The match is a `ResolverMatch`. It is kept as `HttpRequest.resolver_match`, where the view and anything after it can read it, and it unpacks into the three things the handler needs: the view, its positional arguments and its keyword arguments ([Resolving a path](../urls/resolving.md#a-resolvermatch-attribute-by-attribute)).
 
 When nothing matches, the resolver raises `Resolver404`, which is a subclass of `Http404` (`django/urls/exceptions.py:Resolver404`). No view has been chosen, so nothing described below runs. The exception leaves `_get_response` and is turned into a 404 response by the wrapper around the centre. The middleware never see the exception, only the response on its way out:
 

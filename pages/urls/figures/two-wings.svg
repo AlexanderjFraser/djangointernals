@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 404">
+  <!-- the two ways of writing the name -->
+  <text class="quiet small" x="0" y="12">a name with an application in front</text>
+  <text class="name strong" x="0" y="32">"gallery:room"</text>
+  <text class="quiet small" x="646" y="12" text-anchor="end">a name with an instance in front</text>
+  <text class="name strong" x="646" y="32" text-anchor="end">"east:room"</text>
+
+  <!-- the application is turned into one of its instances -->
+  <path class="line" d="M56 40 V60"/>
+  <polygon class="head" points="56,70 51,60 61,60"/>
+  <rect class="box" x="0" y="70" width="404" height="96" rx="4"/>
+  <text class="quiet small" x="12" y="89">the root resolver's app_dict</text>
+  <text class="name" x="12" y="111">"gallery"</text>
+  <text class="name" x="118" y="111">west, east</text>
+  <text class="quiet small" x="12" y="131">one instance is chosen: the current application if it is one of them;</text>
+  <text class="quiet small" x="12" y="146">else an instance named gallery, the default; else the first of the list,</text>
+  <text class="quiet small" x="12" y="161">which is the one included last</text>
+
+  <!-- an instance is turned into a prefix and a resolver -->
+  <rect class="ground" x="0" y="206" width="646" height="74" rx="4"/>
+  <text class="quiet small" x="12" y="225">the root resolver's namespace_dict</text>
+  <rect class="ground" x="12" y="236" width="296" height="34" rx="3"/>
+  <text class="name" x="22" y="258">"west"</text>
+  <text class="quiet small" x="298" y="258" text-anchor="end">west/, and a resolver</text>
+  <rect class="mark-box" x="338" y="236" width="296" height="34" rx="3"/>
+  <text class="name" x="348" y="258">"east"</text>
+  <text class="quiet small" x="624" y="258" text-anchor="end">east/, and a resolver</text>
+
+  <!-- with the current application east, the left-hand name arrives at the same place -->
+  <path class="mark-line" d="M360 166 V226"/>
+  <polygon class="head mark" points="360,236 355,226 365,226"/>
+  <text class="quiet small" x="370" y="181">here the current</text>
+  <text class="quiet small" x="370" y="195">application is east</text>
+  <path class="mark-line" d="M600 40 V226"/>
+  <polygon class="head mark" points="600,236 595,226 605,226"/>
+
+  <!-- both resolvers hold the one list -->
+  <path class="line dashed" d="M160 270 V300"/>
+  <polygon class="head" points="160,310 155,300 165,300"/>
+  <path class="mark-line" d="M486 270 V300"/>
+  <polygon class="head mark" points="486,310 481,300 491,300"/>
+  <rect class="box" x="0" y="310" width="646" height="50" rx="4"/>
+  <text class="quiet small" x="12" y="329">both resolvers hold one list of patterns, and in each one's own reverse_dict</text>
+  <text class="name" x="12" y="349">"room"</text>
+  <text class="name" x="118" y="349">rooms/%(room)s/</text>
+
+  <!-- the prefix is put back -->
+  <text class="quiet small" x="0" y="382">get_ns_resolver puts east/ in front,</text>
+  <text class="quiet small" x="0" y="398">and room=12 fills the gap</text>
+  <path class="mark-line" d="M408 360 V374"/>
+  <polygon class="head mark" points="408,384 403,374 413,374"/>
+  <text class="name" x="330" y="400">east/rooms/%(room)s/</text>
+  <path class="mark-line" d="M492 396 H512"/>
+  <polygon class="head mark" points="522,396 512,391 512,401"/>
+  <text class="name strong" x="530" y="400">/east/rooms/12/</text>
+</svg>

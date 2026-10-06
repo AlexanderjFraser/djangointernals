@@ -1,0 +1,864 @@
+Django 6.2.dev20260926051415 and the project museum: ROOT_URLCONF = 'museum.urls', no middleware unless a block says so
+
+The root URLconf is imported by the first read of the root resolver's url_patterns
+    before anything asks: 'museum.urls' in sys.modules is False
+    the script calls get_resolver()
+      get_resolver()
+        _get_cached_resolver('museum.urls')  ->  a URLResolver: pattern '^/', urlconf_name 'museum.urls'
+    'museum.urls' in sys.modules is False
+    the script reads the resolver's url_patterns
+      URLResolver.url_patterns  (the root resolver)
+        URLResolver.urlconf_module  (the root resolver)
+          import museum.urls
+            import museum.converters
+            import museum.views
+            register_converter(MonthConverter, 'month')
+            path('', views.shop, name='shop')  ->  a URLPattern: name 'shop', default_args {}
+            path('<slug:item>/', views.item, name='item')  ->  a URLPattern: name 'item', default_args {}
+            path('', views.entrance, name='entrance')  ->  a URLPattern: name 'entrance', default_args {}
+            path('tickets/<int:year>/', views.tickets, name='tickets')  ->  a URLPattern: name 'tickets', default_args {}
+            path('tickets/<int:year>/<month:month>/', views.tickets, name='tickets')  ->  a URLPattern: name 'tickets', default_args {}
+            include('museum.gallery.urls', namespace='east')
+              import museum.gallery.urls
+                path('<slug:track>/', views.track, name='track')  ->  a URLPattern: name 'track', default_args {}
+                path('', views.wing, name='wing')  ->  a URLPattern: name 'wing', default_args {}
+                path('rooms/<int:room>/', views.room, name='room')  ->  a URLPattern: name 'room', default_args {}
+                include((a list of 1 entry, 'audio'))  ->  (a list of 1 entry, 'audio', 'audio')
+                path('rooms/<int:room>/audio/', what include returned)  ->  a URLResolver: app_name 'audio', namespace 'audio', default_kwargs {}
+              -> (the module museum.gallery.urls, 'gallery', 'east')
+            path('east/', what include returned, {'wing': 'east'})  ->  a URLResolver: app_name 'gallery', namespace 'east', default_kwargs {'wing': 'east'}
+            include('museum.gallery.urls', namespace='west')  ->  (the module museum.gallery.urls, 'gallery', 'west')
+            path('west/', what include returned, {'wing': 'west'})  ->  a URLResolver: app_name 'gallery', namespace 'west', default_kwargs {'wing': 'west'}
+            include(a list of 2 entries)  ->  (a list of 2 entries, None, None)
+            path('shop/', what include returned)  ->  a URLResolver: app_name None, namespace None, default_kwargs {}
+            re_path('^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$', views.plan, name='plan')  ->  a URLPattern: name 'plan', default_args {}
+            path('files/<path:name>', views.download, name='download')  ->  a URLPattern: name 'download', default_args {}
+    'museum.urls' in sys.modules is True
+    the script calls get_resolver() and reads url_patterns again
+      get_resolver()
+
+The tree: what the root resolver holds, read from url_patterns downwards
+    URLResolver '^/'; urlconf_name 'museum.urls'
+      URLPattern ''; callback views.entrance; name 'entrance'
+      URLPattern 'tickets/<int:year>/'; callback views.tickets; name 'tickets'
+      URLPattern 'tickets/<int:year>/<month:month>/'; callback views.tickets; name 'tickets'
+      URLResolver 'east/'; app_name 'gallery', namespace 'east'; default_kwargs {'wing': 'east'}; urlconf_name the module museum.gallery.urls
+        URLPattern ''; callback views.wing; name 'wing'
+        URLPattern 'rooms/<int:room>/'; callback views.room; name 'room'
+        URLResolver 'rooms/<int:room>/audio/'; app_name 'audio', namespace 'audio'; urlconf_name a list of 1 entry
+          URLPattern '<slug:track>/'; callback views.track; name 'track'
+      URLResolver 'west/'; app_name 'gallery', namespace 'west'; default_kwargs {'wing': 'west'}; urlconf_name the module museum.gallery.urls
+        its entries are the list under 'east/': the same objects
+      URLResolver 'shop/'; urlconf_name a list of 2 entries
+        URLPattern ''; callback views.shop; name 'shop'
+        URLPattern '<slug:item>/'; callback views.item; name 'item'
+      URLPattern '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'; callback views.plan; name 'plan'
+      URLPattern 'files/<path:name>'; callback views.download; name 'download'
+
+The matcher of each entry in the tree, and the regular expression made from its route
+    RoutePattern '', a view's  ->  regex '^\\Z'
+    RoutePattern 'tickets/<int:year>/', a view's  ->  regex '^tickets/(?P<year>[0-9]+)/\\Z', converters {'year': IntConverter}
+    RoutePattern 'tickets/<int:year>/<month:month>/', a view's  ->  regex '^tickets/(?P<year>[0-9]+)/(?P<month>[0-9]{2})/\\Z', converters {'year': IntConverter, 'month': MonthConverter}
+    RoutePattern 'east/', an include's  ->  regex '^east/'
+    RoutePattern '', a view's  ->  regex '^\\Z'
+    RoutePattern 'rooms/<int:room>/', a view's  ->  regex '^rooms/(?P<room>[0-9]+)/\\Z', converters {'room': IntConverter}
+    RoutePattern 'rooms/<int:room>/audio/', an include's  ->  regex '^rooms/(?P<room>[0-9]+)/audio/', converters {'room': IntConverter}
+    RoutePattern '<slug:track>/', a view's  ->  regex '^(?P<track>[-a-zA-Z0-9_]+)/\\Z', converters {'track': SlugConverter}
+    RoutePattern 'west/', an include's  ->  regex '^west/'
+    RoutePattern 'shop/', an include's  ->  regex '^shop/'
+    RoutePattern '', a view's  ->  regex '^\\Z'
+    RoutePattern '<slug:item>/', a view's  ->  regex '^(?P<item>[-a-zA-Z0-9_]+)/\\Z', converters {'item': SlugConverter}
+    RegexPattern '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$', a view's  ->  regex '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'
+    RoutePattern 'files/<path:name>', a view's  ->  regex '^files/(?P<name>.+)\\Z', converters {'name': PathConverter}
+
+path() turns its route into a regular expression as it is called, and the result is kept
+    after the import of the URLconf: _route_to_regex.cache_info()  ->  CacheInfo(hits=2, misses=11, maxsize=128, currsize=11)
+    the script calls path("lifts/<int:floor>/", views.plan)
+      path('lifts/<int:floor>/', views.plan)
+        _route_to_regex('lifts/<int:floor>/', is_endpoint=True)  ->  ('^lifts/(?P<floor>[0-9]+)/\\Z', {'floor': IntConverter})
+        -> a URLPattern: name None, default_args {}
+    and calls it again
+      path('lifts/<int:floor>/', views.plan)  ->  a URLPattern: name None, default_args {}
+    the script calls path("", views.entrance), a route the URLconf has already used
+      path('', views.entrance)  ->  a URLPattern: name None, default_args {}
+    the script calls path("lifts/", include([]))
+      path('lifts/', what include returned)
+        _route_to_regex('lifts/', is_endpoint=False)  ->  ('^lifts/', {})
+        -> a URLResolver: app_name None, namespace None, default_kwargs {}
+
+What a route expands to with and without a converter named, and the routes path() refuses
+    path("lifts/<int:floor>/", views.plan).pattern.regex.pattern  ->  '^lifts/(?P<floor>[0-9]+)/\\Z'
+    path("lifts/<floor>/", views.plan).pattern.regex.pattern  ->  '^lifts/(?P<floor>[^/]+)/\\Z'
+    type(path("lifts/<floor>/", views.plan).pattern.converters["floor"]).__name__  ->  'StringConverter'
+    path("lifts/<floor:number>/", views.plan)  ->  raises ImproperlyConfigured: URL route 'lifts/<floor:number>/' uses invalid converter 'floor'.
+    path("lifts/<int:floor number>/", views.plan)  ->  raises ImproperlyConfigured: URL route 'lifts/<int:floor number>/' cannot contain whitespace in angle brackets <…>.
+    path("lifts/<int:2nd>/", views.plan)  ->  raises ImproperlyConfigured: URL route 'lifts/<int:2nd>/' uses parameter name '2nd' which isn't a valid Python identifier.
+
+What path() makes of the argument in the view's place
+    type(path("tour/", views.Tour.as_view())).__name__  ->  'URLPattern'
+    type(path("tour/", views.Tour)).__name__  ->  'URLPattern'
+    path("tour/", views.Tour())  ->  raises TypeError: view must be a callable, pass Tour.as_view(), not Tour().
+    path("tour/", "museum.views.shop")  ->  raises TypeError: view must be a callable or a list/tuple in the case of include(), but got str.
+    path("tour/", views.shop, ["guide"])  ->  raises TypeError: kwargs argument must be a dict, but got list.
+    path("shop/", [path("", views.shop)])  ->  raises ValueError
+
+What include() returns: the URLconf, the application namespace and the instance namespace
+    include("museum.gallery.urls")[1:]  ->  ('gallery', 'gallery')
+    include("museum.gallery.urls", namespace="east")[1:]  ->  ('gallery', 'east')
+    include(("museum.gallery.urls", "exhibits"))[1:]  ->  ('gallery', 'gallery')
+    include(([], "audio"))  ->  ([], 'audio', 'audio')
+    include(([], "audio"), namespace="guide")  ->  ([], 'audio', 'guide')
+    include([])  ->  ([], None, None)
+    include([], namespace="guide")  ->  raises ImproperlyConfigured
+    include(([], "audio", "guide"))  ->  raises ImproperlyConfigured
+    include("museum.nowhere")  ->  raises ModuleNotFoundError
+    include("museum.urls_languages")  ->  raises ImproperlyConfigured: Using i18n_patterns in an included URLconf is not allowed.
+
+An include's route is matched as a prefix, and nothing puts a slash after it
+    SLASHLESS is a URLconf of one entry: path("east", include("museum.gallery.urls"), {"wing": "east"})
+    resolve('/east/rooms/12/', urlconf=SLASHLESS)  ->  raises Resolver404
+    resolve('/eastrooms/12/', urlconf=SLASHLESS)  ->  views.room, args (), kwargs {'wing': 'east', 'room': 12}
+
+ROOT_URLCONF = 'museum.urls_early', a URLconf that calls reverse() above its own urlpatterns
+    resolve("/")  ->  raises ImproperlyConfigured: The included URLconf 'museum.urls_early' does not appear to have any patterns in it. If you see the 'urlpatterns' variable with valid patterns in the file then the issue is probably caused by a circular import.
+    afterwards
+      "museum.urls_early" in sys.modules  ->  False
+      "urlconf_module" in vars(get_resolver())  ->  True
+      hasattr(get_resolver().urlconf_module, "urlpatterns")  ->  False
+      resolve("/")  ->  raises ImproperlyConfigured
+
+GET / when ROOT_URLCONF names a module that cannot be imported, with DEBUG = False
+    BaseHandler.resolve_request
+      URLResolver.resolve('/')  (the root resolver)
+        URLResolver.urlconf_module  (the root resolver)  raises ImportError
+    response_for_exception
+      handle_uncaught_exception
+        URLResolver.resolve_error_handler(500)  (the root resolver)
+          URLResolver.urlconf_module  (the root resolver)  raises ImportError
+    the handler raises ImportError to the server
+    afterwards
+      "urlconf_module" in vars(get_resolver())  ->  False
+      get_urlconf()  ->  'museum.urls_broken'
+
+The same request with DEBUG = True
+    BaseHandler.resolve_request
+      URLResolver.resolve('/')  (the root resolver)
+        URLResolver.urlconf_module  (the root resolver)  raises ImportError
+    response_for_exception
+      handle_uncaught_exception
+        technical_500_response
+          get_caller
+            resolve('/')
+              URLResolver.resolve('/')  (the root resolver)
+                URLResolver.urlconf_module  (the root resolver)  raises ImportError
+    the handler raises ImportError to the server
+
+GET /east/rooms/12/: the path is resolved, entry by entry, and the view is called
+    BaseHandler.resolve_request
+      get_resolver()
+      URLResolver.resolve('/east/rooms/12/')  (the root resolver)
+        RegexPattern.match('/east/rooms/12/')  ->  ('east/rooms/12/', (), {})
+        URLPattern.resolve('east/rooms/12/')  ('')  ->  None
+        URLPattern.resolve('east/rooms/12/')  ('tickets/<int:year>/')  ->  None
+        URLPattern.resolve('east/rooms/12/')  ('tickets/<int:year>/<month:month>/')  ->  None
+        URLResolver.resolve('east/rooms/12/')  ('east/')
+          RoutePattern.match('east/rooms/12/')  ->  ('rooms/12/', (), {})
+          URLPattern.resolve('rooms/12/')  ('')  ->  None
+          URLPattern.resolve('rooms/12/')  ('rooms/<int:room>/')
+            RoutePattern.match('rooms/12/')
+              IntConverter.to_python('12')  ->  12
+              -> ('', (), {'room': 12})
+            -> ResolverMatch(views.room, kwargs={'room': 12}, namespaces=[], route='rooms/<int:room>/')
+          -> ResolverMatch(views.room, kwargs={'wing': 'east', 'room': 12}, namespaces=['east'], route='rooms/<int:room>/')
+        -> ResolverMatch(views.room, kwargs={'wing': 'east', 'room': 12}, namespaces=['east'], route='east/rooms/<int:room>/')
+    views.room(request, wing='east', room=12)
+    start_response("200 OK", headers)
+    the server sends the body: 'room 12 of the east wing'
+    the server calls close() on what it was given
+
+GET /tickets/2026/13/: a converter refuses, and nothing else matches
+    BaseHandler.resolve_request
+      get_resolver()
+      URLResolver.resolve('/tickets/2026/13/')  (the root resolver)
+        RegexPattern.match('/tickets/2026/13/')  ->  ('tickets/2026/13/', (), {})
+        URLPattern.resolve('tickets/2026/13/')  ('')  ->  None
+        URLPattern.resolve('tickets/2026/13/')  ('tickets/<int:year>/')  ->  None
+        URLPattern.resolve('tickets/2026/13/')  ('tickets/<int:year>/<month:month>/')
+          RoutePattern.match('tickets/2026/13/')
+            IntConverter.to_python('2026')  ->  2026
+            MonthConverter.to_python('13')  raises ValueError
+            -> None
+          -> None
+        URLResolver.resolve('tickets/2026/13/')  ('east/')  raises Resolver404
+        URLResolver.resolve('tickets/2026/13/')  ('west/')  raises Resolver404
+        URLResolver.resolve('tickets/2026/13/')  ('shop/')  raises Resolver404
+        URLPattern.resolve('tickets/2026/13/')  ('^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$')  ->  None
+        URLPattern.resolve('tickets/2026/13/')  ('files/<path:name>')  ->  None
+        raises Resolver404
+    response_for_exception
+      get_resolver('museum.urls')
+      URLResolver.resolve_error_handler(404)  (the root resolver)  ->  defaults.page_not_found
+    start_response("404 Not Found", headers)
+    the server sends the body, 179 bytes
+    the server calls close() on what it was given
+    asked again with resolve(), the root resolver raises a Resolver404 that carries one dictionary: 'path' is 'tickets/2026/13/', and 'tried' is
+      ''
+      'tickets/<int:year>/'
+      'tickets/<int:year>/<month:month>/'
+      'east/'
+      'west/'
+      'shop/'
+      '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'
+      'files/<path:name>'
+
+What a Resolver404 carries: the path that was left, and each chain of entries tried
+    resolve('/east/rooms/12') raises Resolver404 with {'tried': ..., 'path': 'east/rooms/12'}, where 'tried' is
+      ''
+      'tickets/<int:year>/'
+      'tickets/<int:year>/<month:month>/'
+      'east/' > ''
+      'east/' > 'rooms/<int:room>/'
+      'east/' > 'rooms/<int:room>/audio/'
+      'west/'
+      'shop/'
+      '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'
+      'files/<path:name>'
+    resolve('east/rooms/12/') raises Resolver404 with {'path': 'east/rooms/12/'}
+
+resolve(path): the view found, and what it will be called with
+    resolve('/')  ->  views.entrance, args (), kwargs {}
+    resolve('/tickets/2026/')  ->  views.tickets, args (), kwargs {'year': 2026}
+    resolve('/tickets/2026/03/')  ->  views.tickets, args (), kwargs {'year': 2026, 'month': 3}
+    resolve('/tickets/2026/3/')  ->  raises Resolver404
+    resolve('/tickets/2026/13/')  ->  raises Resolver404
+    resolve('/tickets/2026/\n')  ->  raises Resolver404
+    resolve('/plans/2')  ->  views.plan, args (), kwargs {'floor': '2'}
+    resolve('/plans/2.pdf')  ->  views.plan, args (), kwargs {'floor': '2', 'format': 'pdf'}
+    resolve('/plans/2.png')  ->  raises Resolver404
+    resolve('/files/maps/ground floor.pdf')  ->  views.download, args (), kwargs {'name': 'maps/ground floor.pdf'}
+    resolve('/shop/poster/')  ->  views.item, args (), kwargs {'item': 'poster'}
+    resolve('/shop/tea towel/')  ->  raises Resolver404
+    resolve('/east/')  ->  views.wing, args (), kwargs {'wing': 'east'}
+    resolve('/east/rooms/12/audio/intro/')  ->  views.track, args (), kwargs {'wing': 'east', 'room': 12, 'track': 'intro'}
+    resolve('/east/rooms/12')  ->  raises Resolver404
+    resolve('east/rooms/12/')  ->  raises Resolver404
+    resolve('/north/rooms/12/')  ->  raises Resolver404
+
+A ResolverMatch, attribute by attribute
+    match = resolve("/east/rooms/12/audio/intro/")
+      match.func  ->  views.track
+      match.args  ->  ()
+      match.kwargs  ->  {'wing': 'east', 'room': 12, 'track': 'intro'}
+      match.url_name  ->  'track'
+      match.route  ->  'east/rooms/<int:room>/audio/<slug:track>/'
+      match.app_names  ->  ['gallery', 'audio']
+      match.app_name  ->  'gallery:audio'
+      match.namespaces  ->  ['east', 'audio']
+      match.namespace  ->  'east:audio'
+      match.view_name  ->  'east:audio:track'
+      match.captured_kwargs  ->  {'track': 'intro'}
+      match.extra_kwargs  ->  {'wing': 'east'}
+      match._func_path  ->  'museum.views.track'
+      match.tried  ->  a list of the chains tried, the last being the one that matched:
+        ''
+        'tickets/<int:year>/'
+        'tickets/<int:year>/<month:month>/'
+        'east/' > ''
+        'east/' > 'rooms/<int:room>/'
+        'east/' > 'rooms/<int:room>/audio/' > '<slug:track>/'
+      view, args, kwargs = match  ->  views.track, (), {'wing': 'east', 'room': 12, 'track': 'intro'}
+      pickle.dumps(match)  ->  raises PicklingError: Cannot pickle ResolverMatch.
+
+Regular expressions written with re_path(): what holds a match to the start and to the end of the text
+    ENDS is a URLconf of four patterns:
+      re_path(r"^tower/$", views.shop, name="tower")
+      re_path(r"^press/", views.shop, name="press")
+      re_path(r"cafe/$", views.shop, name="cafe")
+      re_path(r"lift/", views.shop, name="lift")
+    resolve('/tower/', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
+    resolve('/tower/\n', urlconf=ENDS)  ->  raises Resolver404
+    resolve('/press/', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
+    resolve('/press/2026/release.pdf', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
+    resolve('/cafe/', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
+    resolve('/ground/cafe/', urlconf=ENDS)  ->  raises Resolver404
+    resolve('/ground/lift/up', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
+
+Regular expressions written with re_path(): which groups become the view's arguments
+    GROUPS is a URLconf of three patterns:
+      re_path(r"^archive/([0-9]{4})/([0-9]{2})/$", views.tickets, name="archive")
+      re_path(r"^mixed/([0-9]{4})/(?P<month>[0-9]{2})/$", views.tickets, name="mixed")
+      re_path(r"^draft/([0-9]+)?$", views.tickets, name="draft")
+    resolve('/archive/2026/03/', urlconf=GROUPS)  ->  views.tickets, args ('2026', '03'), kwargs {}
+    resolve('/mixed/2026/03/', urlconf=GROUPS)  ->  views.tickets, args (), kwargs {'month': '03'}
+    resolve('/draft/', urlconf=GROUPS)  ->  views.tickets, args (None,), kwargs {}
+
+Arguments from several levels: which one the view gets
+    OVERRIDES is path("<slug:wing>/", include([path("rooms/<int:room>/", views.room, {"room": 1}, name="room")]), {"wing": "annexe"})
+      resolve('/east/rooms/12/', urlconf=OVERRIDES)  ->  views.room, args (), kwargs {'wing': 'annexe', 'room': 1}
+    NESTED is path("<slug:wing>/", include([path("<slug:wing>/", views.wing, name="wing")]))
+      resolve('/east/west/', urlconf=NESTED)  ->  views.wing, args (), kwargs {'wing': 'west'}
+    POSITIONAL is a URLconf of two entries:
+      re_path(r"^a/([0-9]+)/", include([re_path(r"^b/([0-9]+)/$", views.tickets, name="b")]))
+      re_path(r"^c/([0-9]+)/", include([re_path(r"^d/([0-9]+)/$", views.tickets, {"month": 12}, name="d")]))
+      resolve('/a/1/b/2/', urlconf=POSITIONAL)  ->  views.tickets, args ('1', '2'), kwargs {}
+      resolve('/c/1/d/2/', urlconf=POSITIONAL)  ->  views.tickets, args ('2',), kwargs {'month': 12}
+
+A path that gets into an include, matches nothing there, and is matched by a later entry
+    RETURNS is a URLconf of two entries:
+      path("shop/", include([path("", views.shop, name="shop"), path("<slug:item>/", views.item, name="item")]))
+      path("shop/<slug:item>/closed/", views.item, name="closed")
+    the script calls resolve("/shop/poster/closed/", urlconf=RETURNS)
+      resolve('/shop/poster/closed/', urlconf=a tuple of 2 entries)
+        get_resolver(a tuple of 2 entries)
+        URLResolver.resolve('/shop/poster/closed/')  (the root resolver of the URLconf given)
+          RegexPattern.match('/shop/poster/closed/')  ->  ('shop/poster/closed/', (), {})
+          URLResolver.resolve('shop/poster/closed/')  ('shop/')
+            RoutePattern.match('shop/poster/closed/')  ->  ('poster/closed/', (), {})
+            URLPattern.resolve('poster/closed/')  ('')  ->  None
+            URLPattern.resolve('poster/closed/')  ('<slug:item>/')  ->  None
+            raises Resolver404
+          URLPattern.resolve('shop/poster/closed/')  ('shop/<slug:item>/closed/')
+            RoutePattern.match('shop/poster/closed/')
+              StringConverter.to_python('poster')  (SlugConverter)  ->  'poster'
+              -> ('', (), {'item': 'poster'})
+            -> ResolverMatch(views.item, kwargs={'item': 'poster'}, namespaces=[], route='shop/<slug:item>/closed/')
+          -> ResolverMatch(views.item, kwargs={'item': 'poster'}, namespaces=[], route='shop/<slug:item>/closed/')
+        -> ResolverMatch(views.item, kwargs={'item': 'poster'}, namespaces=[], route='shop/<slug:item>/closed/')
+
+GET /east/rooms/12, with CommonMiddleware and APPEND_SLASH: the resolver is asked three times
+    BaseHandler.resolve_request
+      URLResolver.resolve('/east/rooms/12')  (the root resolver)  raises Resolver404
+    CommonMiddleware.process_response  (given a 404)
+      CommonMiddleware.should_redirect_with_slash
+        is_valid_path('/east/rooms/12', None)
+          URLResolver.resolve('/east/rooms/12')  (the root resolver)  raises Resolver404
+          -> False
+        is_valid_path('/east/rooms/12/', None)
+          URLResolver.resolve('/east/rooms/12/')  (the root resolver)  ->  ResolverMatch(views.room, kwargs={'wing': 'east', 'room': 12}, namespaces=['east'], route='east/rooms/<int:room>/')
+          -> the ResolverMatch
+        -> True
+      -> a 301, Location '/east/rooms/12/'
+    start_response("301 Moved Permanently", headers), with Location: /east/rooms/12/
+    the server sends the body: ''
+    the server calls close() on what it was given
+
+After every path above was resolved, and before any name of museum.urls is reversed: which entries of its tree have a matcher with a compiled expression
+    RoutePattern ''  ->  not compiled
+    RoutePattern 'tickets/<int:year>/'  ->  compiled
+    RoutePattern 'tickets/<int:year>/<month:month>/'  ->  compiled
+    RoutePattern 'east/'  ->  not compiled
+    RoutePattern ''  ->  not compiled
+    RoutePattern 'rooms/<int:room>/'  ->  compiled
+    RoutePattern 'rooms/<int:room>/audio/'  ->  compiled
+    RoutePattern '<slug:track>/'  ->  compiled
+    RoutePattern 'west/'  ->  not compiled
+    RoutePattern 'shop/'  ->  not compiled
+    RoutePattern ''  ->  not compiled
+    RoutePattern '<slug:item>/'  ->  compiled
+    RegexPattern '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'  ->  compiled
+    RoutePattern 'files/<path:name>'  ->  compiled
+
+reverse(): the first call for a URLconf fills its resolvers' tables, and each call reads them
+    the script calls reverse("tickets", kwargs={"year": 2026, "month": 3})
+      reverse('tickets', kwargs={'year': 2026, 'month': 3})
+        get_resolver()
+        URLResolver._reverse_with_prefix('tickets', '/', year=2026, month=3)  (the root resolver)
+          URLResolver._populate  (the root resolver)
+            URLResolver._populate  ('shop/')
+            URLResolver._populate  ('west/')
+              URLResolver._populate  ('rooms/<int:room>/audio/')
+            URLResolver._populate  ('east/')
+              URLResolver._populate  ('rooms/<int:room>/audio/')
+          IntConverter.to_url(2026)  ->  '2026'
+          MonthConverter.to_url(3)  ->  '03'
+          -> '/tickets/2026/03/'
+        -> '/tickets/2026/03/'
+    and calls it again
+      reverse('tickets', kwargs={'year': 2026, 'month': 3})
+        get_resolver()
+        URLResolver._reverse_with_prefix('tickets', '/', year=2026, month=3)  (the root resolver)
+          IntConverter.to_url(2026)  ->  '2026'
+          MonthConverter.to_url(3)  ->  '03'
+          -> '/tickets/2026/03/'
+        -> '/tickets/2026/03/'
+    the script calls reverse("tickets", kwargs={"year": 2026, "month": 13})
+      reverse('tickets', kwargs={'year': 2026, 'month': 13})
+        get_resolver()
+        URLResolver._reverse_with_prefix('tickets', '/', year=2026, month=13)  (the root resolver)
+          IntConverter.to_url(2026)  ->  '2026'
+          MonthConverter.to_url(13)  raises ValueError
+          raises NoReverseMatch
+
+After that first reverse with museum.urls: which entries of its tree have a matcher with a compiled expression
+    RoutePattern ''  ->  compiled
+    RoutePattern 'tickets/<int:year>/'  ->  compiled
+    RoutePattern 'tickets/<int:year>/<month:month>/'  ->  compiled
+    RoutePattern 'east/'  ->  compiled
+    RoutePattern ''  ->  compiled
+    RoutePattern 'rooms/<int:room>/'  ->  compiled
+    RoutePattern 'rooms/<int:room>/audio/'  ->  compiled
+    RoutePattern '<slug:track>/'  ->  compiled
+    RoutePattern 'west/'  ->  compiled
+    RoutePattern 'shop/'  ->  compiled
+    RoutePattern ''  ->  compiled
+    RoutePattern '<slug:item>/'  ->  compiled
+    RegexPattern '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'  ->  compiled
+    RoutePattern 'files/<path:name>'  ->  compiled
+
+What the root resolver keeps for reversing
+    reverse_dict: under each key its candidates, in the order they are tried; a candidate is its forms; its regular expression; its extra arguments; its converters
+      'download'
+        [('files/%(name)s', ['name'])]; 'files/(?P<name>.+)\\Z'; {}; {'name': PathConverter}
+      the function views.download  ->  the same candidates as 'download'
+      'plan'
+        [('plans/%(floor)s', ['floor']), ('plans/%(floor)s.%(format)s', ['floor', 'format'])]; 'plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$'; {}; {}
+      the function views.plan  ->  the same candidates as 'plan'
+      'item'
+        [('shop/%(item)s/', ['item'])]; 'shop/(?P<item>[-a-zA-Z0-9_]+)/\\Z'; {}; {'item': SlugConverter}
+      the function views.item  ->  the same candidates as 'item'
+      'shop'
+        [('shop/', [])]; 'shop/\\Z'; {}; {}
+      the function views.shop  ->  the same candidates as 'shop'
+      'tickets'
+        [('tickets/%(year)s/%(month)s/', ['year', 'month'])]; 'tickets/(?P<year>[0-9]+)/(?P<month>[0-9]{2})/\\Z'; {}; {'year': IntConverter, 'month': MonthConverter}
+        [('tickets/%(year)s/', ['year'])]; 'tickets/(?P<year>[0-9]+)/\\Z'; {}; {'year': IntConverter}
+      the function views.tickets  ->  the same candidates as 'tickets'
+      'entrance'
+        [('', [])]; '\\Z'; {}; {}
+      the function views.entrance  ->  the same candidates as 'entrance'
+    namespace_dict
+      'west'  ->  ('west/', the resolver 'west/')
+      'east'  ->  ('east/', the resolver 'east/')
+    app_dict  ->  {'gallery': ['west', 'east']}
+    _callback_strs, sorted  ->  ['museum.views.download', 'museum.views.entrance', 'museum.views.item', 'museum.views.plan', 'museum.views.room', 'museum.views.shop', 'museum.views.tickets', 'museum.views.track', 'museum.views.wing']
+
+What the resolver of 'east/' keeps for reversing
+    reverse_dict: under each key its candidates, in the order they are tried; a candidate is its forms; its regular expression; its extra arguments; its converters
+      'room'
+        [('rooms/%(room)s/', ['room'])]; 'rooms/(?P<room>[0-9]+)/\\Z'; {}; {'room': IntConverter}
+      the function views.room  ->  the same candidates as 'room'
+      'wing'
+        [('', [])]; '\\Z'; {}; {}
+      the function views.wing  ->  the same candidates as 'wing'
+    namespace_dict
+      'audio'  ->  ('rooms/(?P<room>[0-9]+)/audio/', the resolver 'rooms/<int:room>/audio/')
+    app_dict  ->  {'audio': ['audio']}
+
+reverse(): what comes back, and what is refused
+    reverse("entrance")  ->  '/'
+    reverse("tickets", kwargs={"year": 2026})  ->  '/tickets/2026/'
+    reverse("tickets", kwargs={"year": 2026, "month": 3})  ->  '/tickets/2026/03/'
+    reverse("tickets", args=[2026, 3])  ->  '/tickets/2026/03/'
+    reverse("tickets", args=[2026], kwargs={"month": 3})  ->  raises ValueError: Don't mix *args and **kwargs in call to reverse()!
+    reverse("tickets")  ->  raises NoReverseMatch: Reverse for 'tickets' with no arguments not found. 2 pattern(s) tried: ['tickets/(?P<year>[0-9]+)/(?P<month>[0-9]{2})/\\Z', 'tickets/(?P<year>[0-9]+)/\\Z']
+    reverse("tickets", kwargs={"year": 2026, "day": 1})  ->  raises NoReverseMatch
+    reverse("tickets", kwargs={"year": 2026, "month": 13})  ->  raises NoReverseMatch
+    reverse("ticket")  ->  raises NoReverseMatch: Reverse for 'ticket' not found. 'ticket' is not a valid view function or pattern name.
+    reverse(views.tickets, kwargs={"year": 2026})  ->  '/tickets/2026/'
+    reverse("museum.views.tickets", kwargs={"year": 2026})  ->  raises NoReverseMatch: Reverse for 'museum.views.tickets' not found. 'museum.views.tickets' is not a valid view function or pattern name.
+    reverse(views.room, kwargs={"room": 12})  ->  raises NoReverseMatch: Reverse for 'museum.views.room' not found. 'museum.views.room' is not a valid view function or pattern name.
+    reverse("plan", kwargs={"floor": 2})  ->  '/plans/2'
+    reverse("plan", kwargs={"floor": 2, "format": "pdf"})  ->  '/plans/2.pdf'
+    reverse("plan", args=[2, "svg"])  ->  '/plans/2.svg'
+    reverse("plan", kwargs={"floor": 2, "format": "png"})  ->  raises NoReverseMatch
+    reverse("plan", kwargs={"floor": 12})  ->  raises NoReverseMatch
+    reverse("item", kwargs={"item": "poster"})  ->  '/shop/poster/'
+    reverse("item", kwargs={"item": "tea towel"})  ->  raises NoReverseMatch
+
+reverse(): the path is escaped once it has been checked
+    reverse("download", kwargs={"name": "maps/ground floor.pdf"})  ->  '/files/maps/ground%20floor.pdf'
+    reverse("download", kwargs={"name": "notes?draft#2 100%.txt"})  ->  '/files/notes%3Fdraft%232%20100%25.txt'
+    reverse("download", kwargs={"name": "café.txt"})  ->  '/files/caf%C3%A9.txt'
+    ANYTHING is a URLconf of one pattern: path("<path:name>", views.download, name="anything")
+      reverse("anything", urlconf=ANYTHING, kwargs={"name": "/evil.example/"})  ->  '/%2Fevil.example/'
+    NOTES is a URLconf of one pattern: re_path(r"^notes/(?P<name>[a-z ]+)/$", views.download, name="notes")
+      reverse("notes", urlconf=NOTES, kwargs={"name": "tea towel"})  ->  '/notes/tea%20towel/'
+      reverse("notes", urlconf=NOTES, kwargs={"name": "tea%20towel"})  ->  raises NoReverseMatch
+
+reverse(): a query string and a fragment
+    reverse("entrance", query={"lang": "nl", "tag": ["new", "sale"]}, fragment="hours")  ->  '/?lang=nl&tag=new&tag=sale#hours'
+    reverse("entrance", query={})  ->  '/'
+    reverse("entrance", fragment="")  ->  '/#'
+
+reverse_lazy(): nothing is reversed until the text is asked for
+    type(reverse_lazy("entrance")).__mro__[1].__name__  ->  'Promise'
+    str(reverse_lazy("entrance"))  ->  '/'
+    reverse_lazy("no-such-name") is not None  ->  True
+    str(reverse_lazy("no-such-name"))  ->  raises NoReverseMatch
+
+Two patterns with one name, told apart by their extra arguments
+    FEEDS is a URLconf of two patterns, in this order:
+      path("feed/rss/", views.feed, {"kind": "rss"}, name="feed")
+      path("feed/atom/", views.feed, {"kind": "atom"}, name="feed")
+    resolve('/feed/rss/', urlconf=FEEDS)  ->  views.feed, args (), kwargs {'kind': 'rss'}
+    reverse("feed", urlconf=FEEDS, kwargs={"kind": "rss"})  ->  '/feed/rss/'
+    reverse("feed", urlconf=FEEDS, kwargs={"kind": "atom"})  ->  '/feed/atom/'
+    reverse("feed", urlconf=FEEDS)  ->  '/feed/atom/'
+    reverse("feed", urlconf=FEEDS, kwargs={"kind": "json"})  ->  raises NoReverseMatch
+
+Patterns that resolve and cannot be reversed, and how far the failure reaches
+    ALTERNATIVES is path("about/", views.entrance, name="about") and re_path(r"^(?:east|west)/lift/$", views.entrance, name="lift")
+      resolve("/west/lift/", urlconf=ALTERNATIVES).url_name  ->  'lift'
+      reverse("lift", urlconf=ALTERNATIVES)  ->  raises NoReverseMatch
+      reverse("about", urlconf=ALTERNATIVES)  ->  '/about/'
+    PERCENT is path("about/", views.entrance, name="about") and path("sale-50%/", views.shop, name="sale")
+      resolve("/sale-50%/", urlconf=PERCENT).url_name  ->  'sale'
+      reverse("sale", urlconf=PERCENT)  ->  raises ValueError
+      reverse("about", urlconf=PERCENT)  ->  '/about/'
+    FLAGGED is path("about/", views.entrance, name="about") and re_path(r"(?i)^cafe/$", views.entrance, name="cafe")
+      resolve("/CAFE/", urlconf=FLAGGED).url_name  ->  'cafe'
+      reverse("cafe", urlconf=FLAGGED)  ->  raises ValueError: Non-reversible reg-exp portion: '(?i'
+      reverse("about", urlconf=FLAGGED)  ->  raises ValueError: Non-reversible reg-exp portion: '(?i'
+    CAFE is [re_path(r"(?i)^cafe/$", views.entrance, name="cafe")], and INCLUDING is path("about/", views.entrance, name="about") and path("food/", include((CAFE, "food")))
+      reverse("about", urlconf=INCLUDING)  ->  raises ValueError: Non-reversible reg-exp portion: '(?i'
+
+An expression with an unnamed group and a named one: what resolving passes on, and what reversing asks for
+    MIXED is a URLconf of one pattern: re_path(r"^mixed/([0-9]{4})/(?P<month>[0-9]{2})/$", views.tickets, name="mixed")
+      resolve('/mixed/2026/03/', urlconf=MIXED)  ->  views.tickets, args (), kwargs {'month': '03'}
+      normalize(r"^mixed/([0-9]{4})/(?P<month>[0-9]{2})/$")  ->  [('mixed/%(_0)s/%(month)s/', ['_0', 'month'])]
+      reverse("mixed", urlconf=MIXED, kwargs={"month": "03"})  ->  raises NoReverseMatch
+      reverse("mixed", urlconf=MIXED, args=[2026, "03"])  ->  '/mixed/2026/03/'
+
+normalize(): the forms a regular expression can be filled in as
+    normalize('^tickets/(?P<year>[0-9]+)/(?P<month>[0-9]{2})/\\Z')  ->  [('tickets/%(year)s/%(month)s/', ['year', 'month'])]
+    normalize('^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$')  ->  [('plans/%(floor)s', ['floor']), ('plans/%(floor)s.%(format)s', ['floor', 'format'])]
+    normalize('^archive/([0-9]{4})/([0-9]{2})/$')  ->  [('archive/%(_0)s/%(_1)s/', ['_0', '_1'])]
+    normalize('^pair/(?P<a>[0-9]+)/(?P=a)/$')  ->  [('pair/%(a)s/%(a)s/', ['a'])]
+    normalize('^rooms?/$')  ->  [('room/', [])]
+    normalize('^(?:wing/)?rooms/$')  ->  [('rooms/', [])]
+    normalize('^room/\\d+/\\w+/$')  ->  [('room/0/x/', [])]
+    normalize('^files/.+\\.[a-z]{3}$')  ->  [('files/..aaa', [])]
+    normalize('^files/[^/]+/$')  ->  [('files/^/', [])]
+    normalize('^(?:east|west)/lift/$')  ->  [('', [])]
+    normalize('^lift/(?P<side>east|west)/$')  ->  [('lift/%(side)s/', ['side'])]
+    normalize('^sale\\-50%/\\Z')  ->  [('sale-50%/', [])]
+    normalize('(?i)^cafe/$')  ->  raises ValueError: Non-reversible reg-exp portion: '(?i'
+    normalize('^a{,3}/$')  ->  raises ValueError
+    normalize('')  ->  [('', [])]
+
+reverse() of a name inside namespaces: a resolver is made for the routes that lead to the namespace, and kept
+    the script calls reverse("east:audio:track", kwargs={"room": 12, "track": "intro"})
+      reverse('east:audio:track', kwargs={'room': 12, 'track': 'intro'})
+        get_resolver()
+        get_ns_resolver('east/rooms/(?P<room>[0-9]+)/audio/', the resolver of 'rooms/<int:room>/audio/', (('room', IntConverter),))  ->  a URLResolver '^/' whose one entry is a URLResolver with the RegexPattern 'east/rooms/(?P<room>[0-9]+)/audio/' and converters {'room': IntConverter}
+        URLResolver._reverse_with_prefix('track', '/', room=12, track='intro')  (a resolver made for the namespace)
+          URLResolver._populate  (a resolver made for the namespace)
+            URLResolver._populate  (the resolver made for 'east/rooms/(?P<room>[0-9]+)/audio/')
+          IntConverter.to_url(12)  ->  '12'
+          StringConverter.to_url('intro')  (SlugConverter)  ->  'intro'
+          -> '/east/rooms/12/audio/intro/'
+        -> '/east/rooms/12/audio/intro/'
+    and calls it again
+      reverse('east:audio:track', kwargs={'room': 12, 'track': 'intro'})
+        get_resolver()
+        URLResolver._reverse_with_prefix('track', '/', room=12, track='intro')  (a resolver made for the namespace)
+          IntConverter.to_url(12)  ->  '12'
+          StringConverter.to_url('intro')  (SlugConverter)  ->  'intro'
+          -> '/east/rooms/12/audio/intro/'
+        -> '/east/rooms/12/audio/intro/'
+    the script calls reverse("east:room", kwargs={"room": 12})
+      reverse('east:room', kwargs={'room': 12})
+        get_resolver()
+        get_ns_resolver('east/', the resolver of 'east/', ())  ->  a URLResolver '^/' whose one entry is a URLResolver with the RegexPattern 'east/' and converters {}
+        URLResolver._reverse_with_prefix('room', '/', room=12)  (a resolver made for the namespace)
+          URLResolver._populate  (a resolver made for the namespace)
+            URLResolver._populate  (the resolver made for 'east/')
+              URLResolver._populate  ('rooms/<int:room>/audio/')
+          IntConverter.to_url(12)  ->  '12'
+          -> '/east/rooms/12/'
+        -> '/east/rooms/12/'
+
+reverse() and namespaces: which wing a name leads to
+    reverse("east:room", kwargs={"room": 12})  ->  '/east/rooms/12/'
+    reverse("west:room", kwargs={"room": 12})  ->  '/west/rooms/12/'
+    reverse("gallery:room", kwargs={"room": 12})  ->  '/west/rooms/12/'
+    reverse("gallery:room", kwargs={"room": 12}, current_app="east")  ->  '/east/rooms/12/'
+    reverse("gallery:room", kwargs={"room": 12}, current_app="north")  ->  '/west/rooms/12/'
+    reverse("east:room", kwargs={"room": 12}, current_app="west")  ->  '/east/rooms/12/'
+    reverse("room", kwargs={"room": 12})  ->  raises NoReverseMatch
+    reverse("east:audio:track", kwargs={"room": 12, "track": "intro"})  ->  '/east/rooms/12/audio/intro/'
+    reverse("gallery:audio:track", kwargs={"room": 12, "track": "intro"})  ->  '/west/rooms/12/audio/intro/'
+    reverse("gallery:audio:track", kwargs={"room": 12, "track": "intro"}, current_app="east:audio")  ->  '/east/rooms/12/audio/intro/'
+    reverse("north:room", kwargs={"room": 12})  ->  raises NoReverseMatch: 'north' is not a registered namespace
+    reverse("east:shop:item", kwargs={"item": "poster"})  ->  raises NoReverseMatch: 'shop' is not a registered namespace inside 'east'
+    reverse("east:wing")  ->  '/east/'
+    reverse("east:wing", kwargs={"wing": "east"})  ->  raises NoReverseMatch
+
+An instance whose namespace is the application's own is the default
+    DEFAULT is a URLconf of three entries, in this order:
+      path("east/", include("museum.gallery.urls", namespace="east"))
+      path("main/", include("museum.gallery.urls"))
+      path("west/", include("museum.gallery.urls", namespace="west"))
+    get_resolver(DEFAULT).app_dict  ->  {'gallery': ['west', 'gallery', 'east']}
+    reverse("gallery:wing", urlconf=DEFAULT)  ->  '/main/'
+    reverse("gallery:wing", urlconf=DEFAULT, current_app="east")  ->  '/east/'
+    reverse("gallery:wing", urlconf=DEFAULT, current_app="north")  ->  '/main/'
+
+GET /east/rooms/12/: the template tag {% url %} reverses for the wing the request is in
+    views.room(request, wing='east', room=12)
+      request.resolver_match.namespace  ->  'east'
+      the view renders the template {% url 'gallery:room' room=13 %}
+        reverse('gallery:room', kwargs={'room': 13}, current_app='east')  ->  '/east/rooms/13/'
+        the template renders as '/east/rooms/13/'
+      the view sets request.current_app = "west" and renders it again
+        reverse('gallery:room', kwargs={'room': 13}, current_app='west')  ->  '/west/rooms/13/'
+        the template renders as '/west/rooms/13/'
+    start_response("200 OK", headers)
+    the server sends the body: 'room 12 of the east wing'
+    the server calls close() on what it was given
+
+GET /museum/east/rooms/12/, where the server's SCRIPT_NAME is /museum: what the handler sets for the thread, and what clears it
+    before this request
+      get_script_prefix()  ->  '/'
+      get_urlconf()  ->  None
+    WSGIHandler.__call__(environ, start_response)
+      set_script_prefix('/museum')
+      signal request_started
+      BaseHandler.get_response
+        set_urlconf('museum.urls')
+        BaseHandler.resolve_request
+          get_resolver()
+          URLResolver.resolve('/east/rooms/12/')  (the root resolver)  ->  ResolverMatch(views.room, kwargs={'wing': 'east', 'room': 12}, namespaces=['east'], route='east/rooms/<int:room>/')
+        views.room(request, wing='east', room=12)
+          the view asks
+            request.path  ->  '/museum/east/rooms/12/'
+            request.path_info  ->  '/east/rooms/12/'
+            get_script_prefix()  ->  '/museum/'
+            get_urlconf()  ->  'museum.urls'
+            reverse("entrance")  ->  '/museum/'
+      start_response("200 OK", headers)
+    the server sends the body: 'room 12 of the east wing'
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      signal request_finished
+        reset_urlconf
+          set_urlconf(None)
+    after the request, on the same thread
+      get_script_prefix()  ->  '/museum/'
+      get_urlconf()  ->  None
+      reverse("entrance")  ->  '/museum/'
+    and on a thread started now
+      get_script_prefix()  ->  '/'
+
+The same request with FORCE_SCRIPT_NAME = '/exhibits': the prefix the handler sets, and what the view is told
+    WSGIHandler.__call__(environ, start_response)
+      set_script_prefix('/exhibits')
+      views.room(request, wing='east', room=12)
+        the view asks
+          request.path  ->  '/exhibits/east/rooms/12/'
+          request.path_info  ->  '/east/rooms/12/'
+          get_script_prefix()  ->  '/exhibits/'
+          get_urlconf()  ->  'museum.urls'
+          reverse("entrance")  ->  '/exhibits/'
+
+GET / for the host members.museum.example: a middleware sets request.urlconf
+    WSGIHandler.__call__(environ, start_response)
+      set_script_prefix('')
+      signal request_started
+      BaseHandler.get_response
+        set_urlconf('museum.urls')
+        HostURLconf.__call__, the recording's middleware
+          request.urlconf = "museum.urls_members"
+          and then, still in the middleware: get_urlconf()  ->  'museum.urls'
+          BaseHandler.resolve_request
+            set_urlconf('museum.urls_members')
+            get_resolver('museum.urls_members')
+            URLResolver.resolve('/')  (the root resolver of museum.urls_members)  ->  ResolverMatch(views.members, kwargs={}, namespaces=[], route='')
+          views.members(request)
+            the view asks
+              get_urlconf()  ->  'museum.urls_members'
+              reverse("renew", kwargs={"year": 2026})  ->  '/renew/2026/'
+              reverse("tickets", kwargs={"year": 2026})  ->  raises NoReverseMatch
+      start_response("200 OK", headers)
+    the server sends the body: "the members' entrance"
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      signal request_finished
+        reset_urlconf
+          set_urlconf(None)
+    after the request
+      get_urlconf()  ->  None
+
+The test client passes SCRIPT_NAME to the request, and its handler does not set the script prefix
+    the script calls set_script_prefix("/elsewhere")
+    and then Client().get("/east/rooms/12/", SCRIPT_NAME="/museum")
+      the view asks
+        request.path  ->  '/museum/east/rooms/12/'
+        request.path_info  ->  '/east/rooms/12/'
+        get_script_prefix()  ->  '/elsewhere/'
+        get_urlconf()  ->  'museum.urls'
+        reverse("entrance")  ->  '/elsewhere/'
+
+One root resolver for each value get_resolver() is given, kept until the caches are cleared
+    get_resolver() is get_resolver()  ->  True
+    get_resolver() is get_resolver("museum.urls")  ->  True
+    get_resolver("museum.urls_members") is get_resolver()  ->  False
+    get_resolver(sys.modules["museum.urls"]) is get_resolver("museum.urls")  ->  False
+    _get_cached_resolver.cache_info().currsize > 1  ->  True
+    get_ns_resolver.cache_info().currsize > 0  ->  True
+    the script calls clear_url_caches()
+    _get_cached_resolver.cache_info().currsize  ->  0
+    get_ns_resolver.cache_info().currsize  ->  0
+    get_resolver() is the root resolver there was before the call  ->  False
+    the script keeps the root resolver there is now, enters override_settings(ROOT_URLCONF="museum.urls_members") and leaves it again
+    inside it: reverse("renew", kwargs={"year": 2026})  ->  '/renew/2026/'
+    get_resolver() is the root resolver the script kept  ->  False
+
+museum.urls_languages: a prefix for the active language, and a route that is translated
+    with the language en active
+      reverse("hours", urlconf=LANGUAGES)  ->  '/en/opening-hours/'
+      reverse("shop", urlconf=LANGUAGES)  ->  '/en/shop/'
+      reverse("entrance", urlconf=LANGUAGES)  ->  '/'
+      resolve("/en/opening-hours/", urlconf=LANGUAGES).url_name  ->  'hours'
+      resolve("/nl/openingstijden/", urlconf=LANGUAGES).url_name  ->  raises Resolver404
+      resolve("/nl/opening-hours/", urlconf=LANGUAGES).url_name  ->  raises Resolver404
+    with the language nl active
+      reverse("hours", urlconf=LANGUAGES)  ->  '/nl/openingstijden/'
+      reverse("shop", urlconf=LANGUAGES)  ->  '/nl/shop/'
+      reverse("entrance", urlconf=LANGUAGES)  ->  '/'
+      resolve("/en/opening-hours/", urlconf=LANGUAGES).url_name  ->  raises Resolver404
+      resolve("/nl/openingstijden/", urlconf=LANGUAGES).url_name  ->  'hours'
+      resolve("/nl/opening-hours/", urlconf=LANGUAGES).url_name  ->  raises Resolver404
+
+What is kept once, and what once for each language
+    shop is the URLPattern of the route "shop/", a str; hours is the URLPattern of the translated route; resolver is the root resolver of museum.urls_languages
+    type(shop.pattern._route).__name__  ->  'str'
+    "regex" in vars(shop.pattern)  ->  True
+    sorted(shop.pattern._regex_dict)  ->  []
+    type(hours.pattern._route).__mro__[1].__name__  ->  'Promise'
+    "regex" in vars(hours.pattern)  ->  False
+    sorted(hours.pattern._regex_dict)  ->  ['en', 'nl']
+    sorted(resolver._reverse_dict)  ->  ['en', 'nl']
+
+is_language_prefix_patterns_used(urlconf): is there a prefix, and has the default language one
+    the entry i18n_patterns made: type(entry).__name__, type(entry.pattern).__name__  ->  ('URLResolver', 'LocalePrefixPattern')
+    is_language_prefix_patterns_used(LANGUAGES)  ->  (True, True)
+    is_language_prefix_patterns_used("museum.urls")  ->  (False, False)
+
+With no language active, the prefix is that of LANGUAGE_CODE
+    inside translation.override(None), which deactivates translations
+      translation.get_language()  ->  None
+      settings.LANGUAGE_CODE  ->  'en'
+      reverse("hours", urlconf=LANGUAGES)  ->  '/en/opening-hours/'
+      resolve("/en/opening-hours/", urlconf=LANGUAGES).url_name  ->  'hours'
+
+translate_url(url, lang_code): the same view's address in another language
+    with en active, and museum.urls_languages the current URLconf
+      translate_url("/en/opening-hours/", "nl")  ->  '/nl/openingstijden/'
+      translate_url("https://museum.example/en/opening-hours/?day=sunday#top", "nl")  ->  'https://museum.example/nl/openingstijden/?day=sunday#top'
+      translate_url("/en/shop/", "nl")  ->  '/nl/shop/'
+      translate_url("/", "nl")  ->  '/'
+      translate_url("/en/nothing/", "nl")  ->  '/en/nothing/'
+      translate_url("/nl/openingstijden/", "en")  ->  '/nl/openingstijden/'
+    with nl active
+      translate_url("/nl/openingstijden/", "en")  ->  '/en/opening-hours/'
+
+The default language without a prefix
+    UNPREFIXED is a URLconf of what i18n_patterns(path("shop/", views.shop, name="shop"), prefix_default_language=False) returns
+    with the language en active
+      reverse("shop", urlconf=UNPREFIXED)  ->  '/shop/'
+    with the language nl active
+      reverse("shop", urlconf=UNPREFIXED)  ->  '/nl/shop/'
+    is_language_prefix_patterns_used(UNPREFIXED)  ->  (True, False)
+    with USE_I18N = False: [type(p).__name__ for p in i18n_patterns(path("shop/", views.shop, name="shop"))]  ->  ['URLPattern']
+
+With LocaleMiddleware and ROOT_URLCONF = 'museum.urls_languages': GET /nl/openingstijden/
+    the script empties the cache of is_language_prefix_patterns_used, so that its body runs when it is next called
+    LocaleMiddleware.process_request
+      is_language_prefix_patterns_used('museum.urls_languages')  ->  (True, True)
+      activate('nl')
+    BaseHandler.resolve_request
+      URLResolver.resolve('/nl/openingstijden/')  (the root resolver)  ->  ResolverMatch(views.hours, kwargs={}, namespaces=[], route='nl/openingstijden/')
+    views.hours(request)
+    LocaleMiddleware.process_response  (given a 200)  ->  a 200
+    start_response("200 OK", headers)
+    the server sends the body: 'the opening hours'
+    the server calls close() on what it was given
+    afterwards: is_language_prefix_patterns_used.cache_info()  ->  CacheInfo(hits=1, misses=1, maxsize=None, currsize=1)
+
+With LocaleMiddleware and ROOT_URLCONF = 'museum.urls_languages': GET /shop/ with Accept-Language: nl
+    LocaleMiddleware.process_request
+      activate('nl')
+    BaseHandler.resolve_request
+      URLResolver.resolve('/shop/')  (the root resolver)  raises Resolver404
+    LocaleMiddleware.process_response  (given a 404)
+      is_valid_path('/nl/shop/', 'museum.urls_languages')
+        URLResolver.resolve('/nl/shop/')  (the root resolver)  ->  ResolverMatch(views.shop, kwargs={}, namespaces=[], route='nl/shop/')
+        -> the ResolverMatch
+      -> a 302, Location '/nl/shop/'
+    start_response("302 Found", headers), with Location: /nl/shop/
+    the server sends the body: ''
+    the server calls close() on what it was given
+    afterwards: is_language_prefix_patterns_used.cache_info()  ->  CacheInfo(hits=3, misses=1, maxsize=None, currsize=1)
+
+The four checks tagged urls, each called over museum.urls_mistakes, with STATIC_URL = 'static'
+    check_url_config
+      urls.W002, Warning: Your URL pattern '/lost' [name='lost'] has a route beginning with a '/'. Remove this slash as it is unnecessary. If this pattern is targeted in an include(), ensure the include() pattern has a trailing '/'.
+      urls.W003, Warning: Your URL pattern 'cloakroom/' [name='cloak:room'] has a name including a ':'. Remove the colon, to avoid ambiguous namespace references.
+      2_0.W001, Warning: Your URL pattern '^lifts/$' [name='lifts'] has a route that contains '(?P<', begins with a '^', or ends with a '$'. This was likely an oversight when migrating to django.urls.path().
+      urls.W010, Warning: Your URL pattern 'stairs/<int:floor/' [name='stairs'] has an unmatched '<' bracket.
+      urls.E009, Error: Your URL pattern 'tour/' [name='tour'] has an invalid view, pass Tour.as_view() instead of Tour.
+      urls.E004, Error: Your URL pattern ('garden/', 'museum.views.entrance') is invalid. Ensure that urlpatterns is a list of path() and/or re_path() instances.
+        hint: Try using path() instead of a tuple.
+      urls.W001, Warning: Your URL pattern '^cafe/$' uses include with a route ending with a '$'. Remove the dollar from the route to avoid problems including URLs.
+      urls.W002, Warning: Your URL pattern '/seats' [name='seats'] has a route beginning with a '/'. Remove this slash as it is unnecessary. If this pattern is targeted in an include(), ensure the include() pattern has a trailing '/'.
+    check_url_namespaces_unique
+      urls.W005, Warning: URL namespace 'annexe' isn't unique. You may not be able to reverse all URLs in this namespace
+      urls.W005, Warning: URL namespace 'annexe:audio' isn't unique. You may not be able to reverse all URLs in this namespace
+    check_url_settings
+      urls.E006, Error: The STATIC_URL setting must end with a slash.
+    check_custom_error_handlers
+      urls.E007, Error: The custom handler403 view 'museum.views.lost' does not take the correct number of arguments (request, exception).
+      urls.E008, Error: The custom handler404 view 'museum.views.nowhere' could not be imported.
+        hint: Could not import 'museum.views.nowhere'. View does not exist in module museum.views.
+
+The same checks over museum.urls, run through the registry by their tag
+    checks.run_checks(tags=["urls"])  ->  []
+
+call_command("listurls"), with ROOT_URLCONF = 'museum.urls': each line as printed, without the spaces at its end
+    /                                           museum.views.entrance  entrance
+    /east/                                      museum.views.wing      east:wing
+    /east/rooms/<int:room>/                     museum.views.room      east:room
+    /east/rooms/<int:room>/audio/<slug:track>/  museum.views.track     east:audio:track
+    /files/<path:name>                          museum.views.download  download
+    /plans/<floor>                              museum.views.plan      plan
+    /shop/                                      museum.views.shop      shop
+    /shop/<slug:item>/                          museum.views.item      item
+    /tickets/<int:year>/                        museum.views.tickets   tickets
+    /tickets/<int:year>/<month:month>/          museum.views.tickets   tickets
+    /west/                                      museum.views.wing      west:wing
+    /west/rooms/<int:room>/                     museum.views.room      west:room
+    /west/rooms/<int:room>/audio/<slug:track>/  museum.views.track     west:audio:track
+
+extract_views_from_urlpatterns(get_resolver().url_patterns): a tuple for each pattern
+    (views.entrance, '', None, 'entrance')
+    (views.tickets, 'tickets/<int:year>/', None, 'tickets')
+    (views.tickets, 'tickets/<int:year>/<month:month>/', None, 'tickets')
+    (views.wing, 'east/', ['east'], 'wing')
+    (views.room, 'east/rooms/<int:room>/', ['east'], 'room')
+    (views.track, 'east/rooms/<int:room>/audio/<slug:track>/', ['east', 'audio'], 'track')
+    (views.wing, 'west/', ['west'], 'wing')
+    (views.room, 'west/rooms/<int:room>/', ['west'], 'room')
+    (views.track, 'west/rooms/<int:room>/audio/<slug:track>/', ['west', 'audio'], 'track')
+    (views.shop, 'shop/', [], 'shop')
+    (views.item, 'shop/<slug:item>/', [], 'item')
+    (views.plan, '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$', None, 'plan')
+    (views.download, 'files/<path:name>', None, 'download')
+
+simplify_regex(): a regular expression made into an address a person can read
+    simplify_regex('^tickets/(?P<year>[0-9]+)/(?P<month>[0-9]{2})/\\Z')  ->  '/tickets/<year>/<month>/'
+    simplify_regex('^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$')  ->  '/plans/<floor>'
+    simplify_regex('^archive/([0-9]{4})/([0-9]{2})/$')  ->  '/archive/<var>/<var>/'
+    simplify_regex('east/rooms/<int:room>/audio/<slug:track>/')  ->  '/east/rooms/<int:room>/audio/<slug:track>/'
+
+get_callable(), and the error views used when a URLconf names none
+    get_callable("museum.views.shop") is views.shop  ->  True
+    get_callable(views.shop) is views.shop  ->  True
+    get_callable("museum.views.nowhere")  ->  raises ViewDoesNotExist: Could not import 'museum.views.nowhere'. View does not exist in module museum.views.
+    get_callable("museum.nowhere.shop")  ->  raises ViewDoesNotExist: Could not import 'museum.nowhere.shop'. Parent module museum.nowhere does not exist.
+    get_callable("shop")  ->  raises ImportError: Could not import 'shop'. The path must be fully qualified.
+    get_callable(404)  ->  raises ViewDoesNotExist: '404' is not a callable or a dot-notation path
+    get_resolver().resolve_error_handler(404)  ->  defaults.page_not_found
+    get_resolver().resolve_error_handler(500)  ->  defaults.server_error
+    get_resolver().resolve_error_handler(418)  ->  raises AttributeError
+
