@@ -139,7 +139,12 @@ A code span holds a name of the source, a pointer, or code.
   `"ATOMIC_REQUESTS"`. Without them the gates take it for a name or a
   pointer.
 - **A word that is not a name of the source is not put in a code span**: a
-  parameter, a local variable, the made-up names of an example.
+  parameter, a local variable, the made-up names of an example. An
+  attribute is written on its class or bare (`WSGIRequest.GET`, `GET`),
+  not on a variable that holds an instance.
+- **An HTTP header's name of one word is a literal**, `"Host"`,
+  `"Cookie"`, as is a method, `"POST"`. A name with a hyphen cannot be
+  taken for a name of the source and is written plain: `Content-Type`.
 - **A name that several modules define** (`DatabaseWrapper`) is given with
   its module, or after a pointer into its file, in the section that uses
   it.
