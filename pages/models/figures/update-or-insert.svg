@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 510">
+  <!-- the questions of Model._save_table down the left, what each answer leads to on the right -->
+  <text class="strong" x="0" y="14">Model._save_table, for one table of a model</text>
+
+  <!-- 1: the key -->
+  <rect class="ground" x="0.5" y="28.5" width="359" height="76" rx="4"/>
+  <text x="14" y="53">Is the primary key set?</text>
+  <text class="quiet small" x="14" y="74">A key still unset when an update was forced, or</text>
+  <text class="quiet small" x="14" y="90">update_fields given, raises ValueError.</text>
+  <path class="line" d="M360 50 H420"/>
+  <polygon class="head" points="430,50 420,45 420,55"/>
+  <text class="quiet small" x="382" y="44">no</text>
+  <rect class="ground dashed" x="430.5" y="28.5" width="215" height="60" rx="4"/>
+  <text class="small" x="442" y="47">ask the key's field for a value,</text>
+  <text class="small" x="442" y="63">unless it holds a placeholder</text>
+  <text class="name" x="442" y="80">get_pk_value_on_save</text>
+  <path class="line" d="M180 104 V122"/>
+  <polygon class="head" points="180,132 175,122 185,122"/>
+
+  <!-- 2: an insert at once -->
+  <rect class="ground" x="0.5" y="132.5" width="359" height="78" rx="4"/>
+  <text x="14" y="155">Is the instance being added, and has every</text>
+  <text x="14" y="173">field of the key a default?</text>
+  <text class="quiet small" x="14" y="190">and the save is not raw, and neither force_insert</text>
+  <text class="quiet small" x="14" y="204">nor force_update was given</text>
+  <path class="mark-line" d="M360 171 H420"/>
+  <polygon class="head mark" points="430,171 420,166 420,176"/>
+  <text class="quiet small" x="380" y="165">yes</text>
+  <rect class="mark-box" x="430.5" y="149.5" width="215" height="44" rx="4"/>
+  <text class="name" x="442" y="176">INSERT</text>
+  <path class="line" d="M180 210 V228"/>
+  <polygon class="head" points="180,238 175,228 185,228"/>
+  <text class="quiet small" x="190" y="226">no</text>
+
+  <!-- 3: is there a key to update by -->
+  <rect class="ground" x="0.5" y="238.5" width="359" height="44" rx="4"/>
+  <text x="14" y="265">Is the key set, and the save not an insert?</text>
+  <path class="mark-line" d="M360 260 H420"/>
+  <polygon class="head mark" points="430,260 420,255 420,265"/>
+  <text class="quiet small" x="382" y="254">no</text>
+  <rect class="mark-box" x="430.5" y="238.5" width="215" height="44" rx="4"/>
+  <text class="name" x="442" y="265">INSERT</text>
+  <path class="line" d="M180 282 V300"/>
+  <polygon class="head" points="180,310 175,300 185,300"/>
+  <text class="quiet small" x="190" y="298">yes</text>
+
+  <!-- 4: the update, and its two outcomes -->
+  <rect class="box" x="0.5" y="310.5" width="359" height="44" rx="4"/>
+  <text x="14" y="337"><tspan class="name">UPDATE</tspan> … where the key matches</text>
+
+  <path class="line" d="M90 354 V386"/>
+  <polygon class="head" points="90,396 85,386 95,386"/>
+  <text class="quiet small" x="100" y="376">a row was updated</text>
+  <text x="14" y="416">this table is done</text>
+
+  <path class="line" d="M300 354 V386"/>
+  <polygon class="head" points="300,396 295,386 305,386"/>
+  <text class="quiet small" x="310" y="376">no row was updated</text>
+
+  <!-- 5: was the update forced -->
+  <rect class="ground" x="220.5" y="396.5" width="425" height="44" rx="4"/>
+  <text x="234" y="423">Was an update forced, or update_fields given?</text>
+  <path class="line" d="M300 440 V448"/>
+  <polygon class="head" points="300,458 295,448 305,448"/>
+  <text class="quiet small" x="310" y="453">yes</text>
+  <rect class="ground" x="220.5" y="458.5" width="200" height="44" rx="4"/>
+  <text x="234" y="485">raise <tspan class="name">NotUpdated</tspan></text>
+  <path class="mark-line" d="M540 440 V448"/>
+  <polygon class="head mark" points="540,458 535,448 545,448"/>
+  <text class="quiet small" x="550" y="453">no</text>
+  <rect class="mark-box" x="440.5" y="458.5" width="205" height="44" rx="4"/>
+  <text class="name" x="452" y="485">INSERT</text>
+</svg>

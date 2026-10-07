@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 484">
+  <!-- a tree from the ship outwards, left to right: the instance, the two models that point at Ship, the five that point at those -->
+  <text class="strong" x="0" y="14">petrel.delete(): what Collector.collect reached</text>
+  <text class="quiet small" x="0" y="32">one relation at a time, and how each set of rows was dealt with</text>
+
+  <!-- the ship: the instance given -->
+  <rect class="mark-box" x="0.5" y="189.5" width="124" height="67" rx="4"/>
+  <text class="name strong" x="12" y="209">Ship: Petrel</text>
+  <text x="12" y="228">entered in <tspan class="name">data</tspan></text>
+  <text class="quiet small" x="12" y="244">the instance given</text>
+
+  <!-- the relations that point at Ship -->
+  <path class="line" d="M222 120 H145 V326 H222 M145 223 H135"/>
+  <polygon class="head" points="125,223 135,218 135,228"/>
+  <text class="name quiet" x="184" y="113" text-anchor="middle">ship</text>
+  <text class="name" x="184" y="137" text-anchor="middle">CASCADE</text>
+  <text class="name quiet" x="184" y="319" text-anchor="middle">ship</text>
+  <text class="name" x="184" y="343" text-anchor="middle">CASCADE</text>
+
+  <!-- Voyage: fetched, and entered in data -->
+  <rect class="box" x="222.5" y="77.5" width="124" height="85" rx="4"/>
+  <text class="name strong" x="234" y="97">Voyage</text>
+  <text class="quiet small" x="335" y="97" text-anchor="end">1 row</text>
+  <text x="234" y="116">entered in <tspan class="name">data</tspan></text>
+  <text class="quiet small" x="234" y="133">not a fast delete:</text>
+  <text class="quiet small" x="234" y="149">fetched, keys only</text>
+
+  <!-- Sailor: fetched, and entered in data -->
+  <rect class="box" x="222.5" y="283.5" width="124" height="85" rx="4"/>
+  <text class="name strong" x="234" y="303">Sailor</text>
+  <text class="quiet small" x="335" y="303" text-anchor="end">5 rows</text>
+  <text x="234" y="322">entered in <tspan class="name">data</tspan></text>
+  <text class="quiet small" x="234" y="339">not a fast delete:</text>
+  <text class="quiet small" x="234" y="355">fetched, keys only</text>
+
+  <!-- the relations that point at Voyage -->
+  <path class="line" d="M468 82 H367 V158 H468 M367 120 H357"/>
+  <polygon class="head" points="347,120 357,115 357,125"/>
+  <text class="name quiet" x="418" y="75" text-anchor="middle">voyage</text>
+  <text class="name" x="418" y="99" text-anchor="middle">CASCADE</text>
+  <text class="name quiet" x="418" y="151" text-anchor="middle">voyage</text>
+  <text class="name" x="418" y="175" text-anchor="middle">CASCADE</text>
+
+  <!-- the relations that point at Sailor: the one that is not a cascade is dashed -->
+  <path class="line dashed" d="M468 250 H367 V326"/>
+  <path class="line" d="M468 402 H367 V326 M468 326 H357"/>
+  <polygon class="head" points="347,326 357,321 357,331"/>
+  <text class="name quiet" x="418" y="243" text-anchor="middle">captain</text>
+  <text class="name" x="418" y="267" text-anchor="middle">SET_NULL</text>
+  <text class="name quiet" x="418" y="319" text-anchor="middle">sailor_ptr</text>
+  <text class="name" x="418" y="343" text-anchor="middle">CASCADE</text>
+  <text class="name quiet" x="418" y="395" text-anchor="middle">sailor</text>
+  <text class="name" x="418" y="419" text-anchor="middle">CASCADE</text>
+
+  <!-- the rows that point at the voyage: two fast deletes -->
+  <rect class="ground dashed" x="468.5" y="48.5" width="177" height="67" rx="4"/>
+  <text class="name strong" x="480" y="68">Voyage_calls</text>
+  <text x="480" y="87">a fast delete</text>
+  <text class="quiet small" x="480" y="103">a queryset, nothing fetched</text>
+
+  <rect class="ground dashed" x="468.5" y="124.5" width="177" height="67" rx="4"/>
+  <text class="name strong" x="480" y="144">Manifest</text>
+  <text x="480" y="163">a fast delete</text>
+  <text class="quiet small" x="480" y="179">a queryset, nothing fetched</text>
+
+  <!-- the rows that point at the sailors: a field update, nothing, a fast delete -->
+  <rect class="ground dashed" x="468.5" y="216.5" width="177" height="67" rx="4"/>
+  <text class="name strong" x="480" y="236">Ship</text>
+  <text x="480" y="255">a field update</text>
+  <text class="quiet small" x="480" y="271">a queryset, nothing fetched</text>
+
+  <rect class="ground" x="468.5" y="292.5" width="177" height="67" rx="4"/>
+  <text class="name strong quiet" x="480" y="312">Officer</text>
+  <text class="quiet small" x="634" y="312" text-anchor="end">no rows</text>
+  <text class="quiet" x="480" y="331">nothing done</text>
+  <text class="quiet small" x="480" y="347">not a fast delete: fetched</text>
+
+  <rect class="ground dashed" x="468.5" y="368.5" width="177" height="67" rx="4"/>
+  <text class="name strong" x="480" y="388">Licence</text>
+  <text x="480" y="407">a fast delete</text>
+  <text class="quiet small" x="480" y="423">a queryset, nothing fetched</text>
+
+  <!-- Port: the ship points at it, and the delete does not go there -->
+  <path class="line" d="M16 257 V296"/>
+  <polygon class="head" points="16,306 11,296 21,296"/>
+  <text class="name quiet" x="28" y="281">home</text>
+  <text class="name strong quiet" x="0" y="326">Port</text>
+  <text class="quiet" x="0" y="345">not reached</text>
+  <text class="quiet small" x="0" y="362">A child's link to its parent</text>
+  <text class="quiet small" x="0" y="378">aside, a delete follows only</text>
+  <text class="quiet small" x="0" y="394">what points at what it deletes.</text>
+
+  <!-- what an arrow is, and what is written beside it -->
+  <text class="quiet small" x="0" y="460">An arrow is a relation, drawn from the model that has the field to the model the field points at.</text>
+  <text class="quiet small" x="0" y="476">Those the delete followed carry the field and its <tspan class="name small">on_delete</tspan>; the one that is not <tspan class="name small">CASCADE</tspan> is dashed.</text>
+</svg>

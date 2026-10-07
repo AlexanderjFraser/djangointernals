@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 502">
+  <!-- three reads, each a lane down the page: the descriptor found, the options asked, the manager their walk comes to, the copy returned. The first two lanes share a descriptor and a manager -->
+
+  <!-- what is read -->
+  <text class="strong" x="0" y="14"><tspan class="name">Sailor.objects</tspan> is read</text>
+  <text class="quiet small" x="0" y="32">Sailor declares one manager</text>
+  <text class="strong" x="220" y="14"><tspan class="name">Officer.objects</tspan> is read</text>
+  <text class="quiet small" x="220" y="32">Officer declares no manager</text>
+  <text class="strong" x="440" y="14"><tspan class="name">Veteran.objects</tspan> is read</text>
+  <text class="quiet small" x="440" y="32">Veteran declares a manager</text>
+  <text class="quiet small" x="440" y="48">of the same name</text>
+
+  <!-- Python finds a descriptor -->
+  <path class="line" d="M18.5 56 V82"/>
+  <polygon class="head" points="18.5,92 13.5,82 23.5,82"/>
+  <text class="quiet small" x="32" y="69">Python finds</text>
+  <text class="small" x="32" y="84">the descriptor</text>
+  <path class="line" d="M238.5 56 V82"/>
+  <polygon class="head" points="238.5,92 233.5,82 243.5,82"/>
+  <text class="quiet small" x="252" y="69">Python finds</text>
+  <text class="small" x="252" y="84">the same descriptor</text>
+  <path class="line" d="M458.5 56 V82"/>
+  <polygon class="head" points="458.5,92 453.5,82 463.5,82"/>
+  <text class="quiet small" x="472" y="69">Python finds</text>
+  <text class="small" x="472" y="84">Veteran's own descriptor</text>
+
+  <!-- the descriptors: one on Sailor for two reads, one on Veteran -->
+  <rect class="box" x="0.5" y="92.5" width="425" height="56" rx="4"/>
+  <text x="13" y="114">a <tspan class="name">ManagerDescriptor</tspan></text>
+  <text class="small" x="13" y="134">set on the class: <tspan class="name">Sailor.__dict__["objects"]</tspan></text>
+  <rect class="box" x="440.5" y="92.5" width="205" height="56" rx="4"/>
+  <text x="453" y="114">a <tspan class="name">ManagerDescriptor</tspan></text>
+  <text class="small" x="453" y="134">in <tspan class="name">Veteran.__dict__</tspan></text>
+
+  <!-- the descriptor asks the options of the class that was read -->
+  <path class="line" d="M18.5 148.5 V164.5"/>
+  <polygon class="head" points="18.5,174.5 13.5,164.5 23.5,164.5"/>
+  <text class="quiet small" x="32" y="166">which asks</text>
+  <path class="line" d="M238.5 148.5 V164.5"/>
+  <polygon class="head" points="238.5,174.5 233.5,164.5 243.5,164.5"/>
+  <text class="quiet small" x="252" y="166">which asks</text>
+  <path class="line" d="M458.5 148.5 V164.5"/>
+  <polygon class="head" points="458.5,174.5 453.5,164.5 463.5,164.5"/>
+  <text class="quiet small" x="472" y="166">which asks</text>
+
+  <rect class="ground" x="0.5" y="174.5" width="205" height="52" rx="4"/>
+  <text x="13" y="195">the options of Sailor, for</text>
+  <text class="name" x="13" y="214">managers_map["objects"]</text>
+  <rect class="ground" x="220.5" y="174.5" width="205" height="52" rx="4"/>
+  <text x="233" y="195">the options of Officer, for</text>
+  <text class="name" x="233" y="214">managers_map["objects"]</text>
+  <rect class="ground" x="440.5" y="174.5" width="205" height="52" rx="4"/>
+  <text x="453" y="195">the options of Veteran, for</text>
+  <text class="name" x="453" y="214">managers_map["objects"]</text>
+
+  <!-- the options' walk over the class's method resolution order -->
+  <path class="line" d="M18.5 226.5 V290.5"/>
+  <polygon class="head" points="18.5,300.5 13.5,290.5 23.5,290.5"/>
+  <text class="name" x="32" y="243">Options.managers</text>
+  <text class="quiet small" x="32" y="259">goes through Sailor's</text>
+  <text class="quiet small" x="32" y="274">method resolution order:</text>
+  <text class="small" x="32" y="290">Sailor</text>
+  <path class="line" d="M238.5 226.5 V290.5"/>
+  <polygon class="head" points="238.5,300.5 233.5,290.5 243.5,290.5"/>
+  <text class="name" x="252" y="243">Options.managers</text>
+  <text class="quiet small" x="252" y="259">goes through Officer's</text>
+  <text class="quiet small" x="252" y="274">method resolution order:</text>
+  <text class="small" x="252" y="290">Officer, Sailor</text>
+  <path class="line" d="M458.5 226.5 V290.5"/>
+  <polygon class="head" points="458.5,300.5 453.5,290.5 463.5,290.5"/>
+  <text class="name" x="472" y="243">Options.managers</text>
+  <text class="quiet small" x="472" y="259">goes through Veteran's</text>
+  <text class="quiet small" x="472" y="274">method resolution order:</text>
+  <text class="small" x="472" y="290">Veteran, Sailor</text>
+
+  <!-- the managers the walks come to: Sailor's for two reads, Veteran's own -->
+  <rect class="box" x="0.5" y="300.5" width="425" height="56" rx="4"/>
+  <text x="13" y="322">the manager made by <tspan class="name">SailorQuerySet.as_manager()</tspan></text>
+  <text class="small" x="13" y="342">kept in the options of Sailor: <tspan class="name">local_managers</tspan></text>
+  <rect class="box" x="440.5" y="300.5" width="205" height="56" rx="4"/>
+  <text x="453" y="333">Veteran's manager</text>
+
+  <!-- a copy for each class that was read -->
+  <path class="mark-line" d="M18.5 356.5 V372.5"/>
+  <polygon class="head mark" points="18.5,382.5 13.5,372.5 23.5,372.5"/>
+  <path class="mark-line" d="M238.5 356.5 V372.5"/>
+  <polygon class="head mark" points="238.5,382.5 233.5,372.5 243.5,372.5"/>
+  <path class="mark-line" d="M458.5 356.5 V372.5"/>
+  <polygon class="head mark" points="458.5,382.5 453.5,372.5 463.5,372.5"/>
+
+  <rect class="mark-box" x="0.5" y="382.5" width="205" height="52" rx="4"/>
+  <text x="13" y="403">a copy of the manager,</text>
+  <text x="13" y="421">its model Sailor</text>
+  <text class="quiet small" x="13" y="452">made once and</text>
+  <text class="quiet small" x="13" y="467">kept by the options</text>
+  <rect class="mark-box" x="220.5" y="382.5" width="205" height="52" rx="4"/>
+  <text x="233" y="403">another copy of the same</text>
+  <text x="233" y="421">manager, its model Officer</text>
+  <rect class="mark-box" x="440.5" y="382.5" width="205" height="52" rx="4"/>
+  <text x="453" y="403">a copy of Veteran's manager,</text>
+  <text x="453" y="421">its model Veteran</text>
+  <text class="quiet small" x="453" y="452">Sailor's manager of that name</text>
+  <text class="quiet small" x="453" y="467">is passed over</text>
+
+  <text class="quiet small" x="0" y="494">The two wide boxes are what the class statement of Sailor left: a descriptor, and the manager it holds.</text>
+</svg>

@@ -24,7 +24,7 @@ The class statement of a model is run by the metaclass `ModelBase.__new__`, and 
 
 Near the start it works out which application the new class belongs to. It gives the registry the dotted name of the module the class is being defined in, and `Apps.get_containing_app_config` returns the installed application whose name is a prefix of it; where applications are nested and several match, the one with the longest name (`django/apps/registry.py:Apps.get_containing_app_config`). The application's label becomes the model's `app_label`. A class in no installed application must name its label itself, in its `Meta`, or the class statement raises `RuntimeError`; an abstract class is let through without one. This is the step that needs `Apps.apps_ready`, and the reason a models module cannot be imported before `django.setup` has run.
 
-At the end, when the class's `_meta` is complete, it calls `Apps.register_model`. An abstract model returns before that and is never registered.
+At the end, when the class's `_meta` is complete, it calls `Apps.register_model`. An abstract model returns before that and is never registered. What the metaclass does between those two steps is the subject of [`ModelBase`: a class statement becomes a model](../models/metaclass.md).
 
 `Apps.register_model` files the class in `all_models` under its label and its lower-case name (`django/apps/registry.py:Apps.register_model`). If a class is already filed there, one of two things is happening. A class with the same name from the same module means the module is being executed a second time; the registry warns that reloading models is not advised, and replaces the old class. Any other class means two different models claim one name in one application, and that raises `RuntimeError`.
 
@@ -32,7 +32,7 @@ It then does two more things, both for the benefit of other code: it runs whatev
 
 ## References that wait: `Apps.lazy_model_operation`
 
-A `ForeignKey` may name its target as a string, `"catalogue.Book"`, and often has to, because the target's module may not be importable yet, or may import this one. The field cannot finish setting itself up without the class, and the class does not exist. Django's answer is a general one: give the registry a function and the names of the models it needs, and the registry calls it when the last of them has been registered (`django/apps/registry.py:Apps.lazy_model_operation`).
+A `ForeignKey` may name its target as a string, `"catalogue.Book"`, and often has to, because the target's module may not be importable yet, or may import this one. The field cannot finish setting itself up without the class, and the class does not exist. Django's answer is a general one: give the registry a function and the names of the models it needs, and the registry calls it when the last of them has been registered (`django/apps/registry.py:Apps.lazy_model_operation`). What the field's function does once it is called is in [Relations: a field, its rel and the class at the other end](../models/relations.md).
 
 The names are pairs of an application label and a lower-case model name, and the registry works through them in order. While the model for a pair is not registered, the job waits in `Apps._pending_operations` under that pair. Each time a model is registered, `Apps.do_pending_operations` resumes whatever was waiting for it. When no pair is left, the function is called with the classes.
 

@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 432">
+  <!-- three columns: the body as written, the class as left, the app registry and the class the relation points at -->
+  <text class="strong" x="0" y="14">The body of Ship, as written</text>
+  <text class="strong" x="310" y="14">The class Ship, as it is left</text>
+  <text class="strong" x="680" y="14">The app registry</text>
+
+  <!-- the body -->
+  <rect class="ground" x="0.5" y="28.5" width="279" height="104" rx="4"/>
+  <text class="name" x="12" y="52">tonnage = PositiveIntegerField()</text>
+  <text class="name" x="12" y="74">home = ForeignKey(Port, …)</text>
+  <text class="name" x="12" y="96">captain = OneToOneField(…)</text>
+  <text class="name" x="12" y="118">class Meta(Named.Meta)</text>
+
+  <!-- what the metaclass adds -->
+  <rect class="ground dashed" x="0.5" y="150.5" width="279" height="134" rx="4"/>
+  <text class="quiet small" x="12" y="170">not written in the body, and added by</text>
+  <text class="name" x="12" y="194">name</text>
+  <text class="quiet small" x="96" y="194">a copy of the field of Named</text>
+  <text class="name" x="12" y="216">id</text>
+  <text class="quiet small" x="96" y="216">Options._prepare</text>
+  <text class="name" x="12" y="238">objects</text>
+  <text class="quiet small" x="96" y="238">ModelBase._prepare</text>
+  <text class="name" x="12" y="260">DoesNotExist</text>
+  <text class="quiet small" x="118" y="260">ModelBase.__new__</text>
+  <text class="quiet small" x="12" y="276">and two more exception classes</text>
+
+  <!-- body to class -->
+  <path class="mark-line" d="M280 80 H300"/>
+  <polygon class="head mark" points="310,80 300,75 300,85"/>
+  <path class="mark-line" d="M280 216 H300"/>
+  <polygon class="head mark" points="310,216 300,211 300,221"/>
+
+  <!-- the class -->
+  <rect class="box" x="310.5" y="28.5" width="339" height="394" rx="4"/>
+  <text class="name" x="322" y="52">tonnage</text>
+  <text class="name" x="422" y="52">DeferredAttribute</text>
+  <text class="name" x="322" y="72">home_id</text>
+  <text class="name" x="422" y="72">ForeignKeyDeferredAttribute</text>
+  <text class="name" x="322" y="92">home</text>
+  <text class="name" x="422" y="92">ForwardManyToOneDescriptor</text>
+  <text class="name" x="322" y="112">captain_id</text>
+  <text class="name" x="422" y="112">ForeignKeyDeferredAttribute</text>
+  <text class="name" x="322" y="132">captain</text>
+  <text class="name" x="422" y="132">ForwardOneToOneDescriptor</text>
+  <text class="name" x="322" y="152">name</text>
+  <text class="name" x="422" y="152">DeferredAttribute</text>
+  <text class="name" x="322" y="172">id</text>
+  <text class="name" x="422" y="172">DeferredAttribute</text>
+  <text class="name" x="322" y="192">objects</text>
+  <text class="name" x="422" y="192">ManagerDescriptor</text>
+  <text class="quiet small" x="322" y="212">DoesNotExist, MultipleObjectsReturned, NotUpdated</text>
+
+  <!-- the options -->
+  <rect class="mark-box" x="322.5" y="228.5" width="315" height="132" rx="4"/>
+  <text x="334" y="250"><tspan class="name">_meta</tspan><tspan class="quiet small">  an Options</tspan></text>
+  <text class="name" x="334" y="274">local_fields</text>
+  <text class="small" x="460" y="274">id, name, tonnage,</text>
+  <text class="small" x="460" y="290">home, captain</text>
+  <text class="name" x="334" y="312">pk</text>
+  <text class="small" x="460" y="312">the field id</text>
+  <text class="name" x="334" y="332">local_managers</text>
+  <text class="small" x="460" y="332">the manager objects</text>
+  <text class="quiet small" x="334" y="350">and what Meta said: ordering, constraints, indexes</text>
+
+  <text class="quiet small" x="322" y="384">Two more names are added later, by the class</text>
+  <text class="quiet small" x="322" y="400">statements of Voyage and of Sailor:</text>
+  <text class="name" x="322" y="416">voyage_set, crew</text>
+
+  <!-- class to registry -->
+  <path class="mark-line" d="M650 80 H670"/>
+  <polygon class="head mark" points="680,80 670,75 670,85"/>
+
+  <!-- the registry -->
+  <rect class="ground" x="680.5" y="28.5" width="259" height="152" rx="4"/>
+  <text class="quiet small" x="692" y="48">Apps.register_model enters the class</text>
+  <text class="name" x="692" y="72">all_models["fleet"]["ship"]</text>
+  <text class="small" x="692" y="90">the class Ship</text>
+  <text class="name" x="692" y="118">_pending_operations</text>
+  <text class="name" x="692" y="136">[("crew", "sailor")]</text>
+  <text class="small" x="692" y="154">the function that captain left,</text>
+  <text class="small" x="692" y="170">still waiting for that class</text>
+
+  <!-- the function home left runs, and Port gains an attribute -->
+  <path class="mark-line" d="M910 181 V264"/>
+  <polygon class="head mark" points="910,274 905,264 915,264"/>
+  <text class="quiet small" x="692" y="204">the function that home left</text>
+  <text class="quiet small" x="692" y="220">runs as Ship is registered</text>
+
+  <text class="strong" x="680" y="264">The class Port</text>
+  <rect class="box" x="680.5" y="274.5" width="259" height="56" rx="4"/>
+  <text class="name" x="692" y="298">ships</text>
+  <text class="name" x="692" y="318">ReverseManyToOneDescriptor</text>
+</svg>

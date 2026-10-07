@@ -145,7 +145,7 @@ log, WARNING to django.request: Not Found: /articles/no-such-article/
 start_response("404 Not Found", headers)
 ```
 
-**The queryset.** `SingleObjectMixin.get_queryset` returns the `queryset` attribute if the class set one, and otherwise everything the `model` attribute's default manager has; with neither it raises `ImproperlyConfigured`. In both cases what it returns is the result of `all()`, a new queryset. A queryset written as a class attribute is one object shared by every request the process serves, and each request works on a copy of it (`django/views/generic/detail.py:SingleObjectMixin.get_queryset`).
+**The queryset.** `SingleObjectMixin.get_queryset` returns the `queryset` attribute if the class set one, and otherwise everything the `model` attribute's default manager has ([Managers](../models/managers.md)); with neither it raises `ImproperlyConfigured`. In both cases what it returns is the result of `all()`, a new queryset. A queryset written as a class attribute is one object shared by every request the process serves, and each request works on a copy of it (`django/views/generic/detail.py:SingleObjectMixin.get_queryset`).
 
 **The context.** `SingleObjectMixin.get_context_data` puts the view's object, when it has one, in as `"object"`, and a second time under the name `get_context_object_name` returns, when it returns one: `context_object_name` if set, and otherwise, for a model instance, the model's name in lower case. So the Gazette's template can say article where a template written for any model would say object (`django/views/generic/detail.py:SingleObjectMixin.get_context_data`).
 

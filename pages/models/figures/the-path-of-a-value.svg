@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 752">
+  <!-- the title, and what was recorded -->
+  <text class="strong" x="0" y="14">The value of one field, into a row and out of one</text>
+  <text class="quiet small" x="0" y="32">Each step, what does it, and who calls it. Recorded for <tspan class="name small">Sailor.signed_on</tspan>, a <tspan class="name small">DateTimeField</tspan>, on SQLite.</text>
+
+  <!-- the way in, down the left: the instance's attribute to a parameter of the statement -->
+  <text x="0" y="62"><tspan class="strong">Into a row</tspan><tspan class="quiet small" dx="8">an insert</tspan></text>
+  <text x="174" y="88" text-anchor="middle">the instance's attribute</text>
+  <path class="line" d="M174 98 V112"/>
+  <polygon class="head" points="174,122 169,112 179,112"/>
+
+  <!-- the first of the field's four methods -->
+  <rect class="box" x="0.5" y="122.5" width="347" height="66" rx="4"/>
+  <text class="name" x="12" y="144">Field.pre_save</text>
+  <text class="quiet small" x="12" y="162">called by <tspan class="name small">Model._save_table</tspan>,</text>
+  <text class="quiet small" x="12" y="178">and again by <tspan class="name small">SQLInsertCompiler.pre_save_val</tspan></text>
+  <path class="line" d="M174 189 V203"/>
+  <polygon class="head" points="174,213 169,203 179,203"/>
+
+  <text x="174" y="229" text-anchor="middle">a Python value</text>
+  <text class="quiet small" x="174" y="245" text-anchor="middle">an aware datetime</text>
+  <path class="line" d="M174 255 V269"/>
+  <polygon class="head" points="174,279 169,269 179,269"/>
+
+  <!-- the other three, each inside the one that calls it -->
+  <rect class="box" x="0.5" y="279.5" width="347" height="281" rx="4"/>
+  <text class="name" x="12" y="301">Field.get_db_prep_save</text>
+  <text class="quiet small" x="12" y="319">called by <tspan class="name small">SQLInsertCompiler.prepare_value</tspan></text>
+  <text class="quiet small" x="12" y="335">(in an update, by <tspan class="name small">SQLUpdateCompiler.as_sql</tspan>)</text>
+
+  <rect class="ground" x="10.5" y="347.5" width="327" height="203" rx="4"/>
+  <text class="name" x="22" y="369">Field.get_db_prep_value</text>
+  <text class="quiet small" x="22" y="387">called by <tspan class="name small">get_db_prep_save</tspan></text>
+
+  <rect class="box" x="20.5" y="399.5" width="307" height="66" rx="4"/>
+  <text class="name" x="32" y="421">Field.get_prep_value</text>
+  <text class="small" x="32" y="439">the field's own type, no backend</text>
+  <text class="quiet small" x="32" y="455">called by <tspan class="name small">get_db_prep_value</tspan></text>
+  <path class="line" d="M174 466 V480"/>
+  <polygon class="head" points="174,490 169,480 179,480"/>
+
+  <rect class="box" x="20.5" y="490.5" width="307" height="50" rx="4"/>
+  <text x="32" y="512">the backend's <tspan class="name">adapt_datetimefield_value</tspan></text>
+  <text class="quiet small" x="32" y="530">called by <tspan class="name small">DateTimeField</tspan>'s <tspan class="name small">get_db_prep_value</tspan></text>
+
+  <path class="line" d="M174 561 V575"/>
+  <polygon class="head" points="174,585 169,575 179,575"/>
+  <text x="174" y="601" text-anchor="middle">a parameter of the statement</text>
+  <text class="name" x="174" y="619" text-anchor="middle">'2026-04-10 09:00:00'</text>
+
+  <!-- the one method that is not on the way out -->
+  <rect class="mark-box" x="373.5" y="359.5" width="165" height="122" rx="4"/>
+  <text class="name" x="385" y="381">Field.to_python</text>
+  <text class="strong" x="385" y="401">not on the way out</text>
+  <text class="quiet small" x="385" y="421">called by <tspan class="name small">Field.clean</tspan>,</text>
+  <text class="quiet small" x="385" y="437">by the <tspan class="name small">get_prep_value</tspan></text>
+  <text class="quiet small" x="385" y="453">of many field classes,</text>
+  <text class="quiet small" x="385" y="469">and by the deserializers</text>
+
+  <!-- the way out, up the right: the column's value to the instance's attribute -->
+  <text x="564" y="62"><tspan class="strong">Out of a row</tspan><tspan class="quiet small" dx="8">a select</tspan></text>
+  <text x="752" y="88" text-anchor="middle">the instance's attribute</text>
+  <polygon class="head" points="752,98 747,108 757,108"/>
+  <path class="line" d="M752 108 V130"/>
+
+  <rect class="box" x="564.5" y="130.5" width="375" height="50" rx="4"/>
+  <text class="name" x="576" y="152">Model.from_db</text>
+  <text class="small" x="576" y="170">makes the instance from the row's values</text>
+  <polygon class="head" points="752,181 747,191 757,191"/>
+  <path class="line" d="M752 191 V213"/>
+
+  <text x="752" y="229" text-anchor="middle">a Python value</text>
+  <text class="quiet small" x="752" y="245" text-anchor="middle">an aware datetime</text>
+  <polygon class="head" points="752,255 747,265 757,265"/>
+  <path class="line" d="M752 265 V319"/>
+
+  <!-- the converters: two lists, the backend's called before the field's -->
+  <rect class="box" x="564.5" y="319.5" width="375" height="201" rx="4"/>
+  <text class="quiet small" x="576" y="341">both lists are gathered by <tspan class="name small">SQLCompiler.get_converters</tspan>,</text>
+  <text class="quiet small" x="576" y="357">once for the query, and <tspan class="name small">SQLCompiler.apply_converters</tspan></text>
+  <text class="quiet small" x="576" y="373">calls them on each row</text>
+
+  <rect class="ground" x="574.5" y="385.5" width="355" height="50" rx="4"/>
+  <text x="586" y="407">the field's converters</text>
+  <text class="small" x="586" y="425"><tspan class="name small">from_db_value</tspan>, where the field has one: here none</text>
+  <polygon class="head" points="752,436 747,446 757,446"/>
+  <path class="line" d="M752 446 V460"/>
+
+  <rect class="ground" x="574.5" y="460.5" width="355" height="50" rx="4"/>
+  <text x="586" y="482">the backend's converters<tspan class="quiet small">, here</tspan></text>
+  <text class="name small" x="586" y="500">DatabaseOperations.convert_datetimefield_value</text>
+
+  <polygon class="head" points="752,521 747,531 757,531"/>
+  <path class="line" d="M752 531 V585"/>
+  <text x="752" y="601" text-anchor="middle">the column's value as the driver gives it</text>
+  <text class="quiet small" x="752" y="617" text-anchor="middle">a naive datetime</text>
+
+  <!-- the way into a condition, left to right: the two inner methods, at two moments -->
+  <text x="0" y="664"><tspan class="strong">Into a condition</tspan><tspan class="quiet small" dx="8">a filter; the condition is on </tspan><tspan class="name small quiet">Sailor.name</tspan></text>
+  <text x="0" y="708">the value given</text>
+  <text x="0" y="726">to <tspan class="name">filter()</tspan></text>
+  <path class="line" d="M96 711 H114"/>
+  <polygon class="head" points="124,711 114,706 114,716"/>
+
+  <rect class="box" x="124.5" y="678.5" width="256" height="66" rx="4"/>
+  <text class="name" x="136" y="700">Field.get_prep_value</text>
+  <text class="small" x="136" y="718">when the lookup is made</text>
+  <text class="quiet small" x="136" y="734">called by <tspan class="name small">Lookup.get_prep_lookup</tspan></text>
+  <path class="line" d="M381 711 H399"/>
+  <polygon class="head" points="409,711 399,706 399,716"/>
+
+  <rect class="box" x="409.5" y="678.5" width="402" height="66" rx="4"/>
+  <text x="421" y="700"><tspan class="name">Field.get_db_prep_value</tspan>, with <tspan class="name">prepared=True</tspan></text>
+  <text class="small" x="421" y="718">when the statement is compiled</text>
+  <text class="quiet small" x="421" y="734">called by <tspan class="name small">FieldGetDbPrepValueMixin.get_db_prep_lookup</tspan></text>
+  <path class="line" d="M812 711 H830"/>
+  <polygon class="head" points="840,711 830,706 830,716"/>
+
+  <text x="848" y="708">a parameter of</text>
+  <text x="848" y="726">the statement</text>
+</svg>

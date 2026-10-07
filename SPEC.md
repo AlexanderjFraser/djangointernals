@@ -84,7 +84,10 @@ The introduction, down to the first heading.
 A value is plain text, written in double quotes when it begins with
 anything but a letter or a digit, or holds a colon followed by a space.
 
-**The title** is the page's one `#` heading. It names the subject.
+**The title** is the page's one `#` heading. It names the subject. It is
+also the text of every link to the page, so it holds no name that several
+modules define (`Field`, `Options`): the name gate would ask for a pointer
+beside each link.
 
 **The lede** is the first paragraph: one to three sentences that say what
 the page is about, with the names a reader would search for. It is what the

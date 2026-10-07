@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 670">
+  <!-- what add does first and the three answers of its plan, across the top; from the third answer the slow way down the left and the fast way on the right; the recorded cases beneath -->
+  <text class="strong" x="0" y="14">ManyRelatedManager.add(*objs), in one transaction</text>
+
+  <!-- 1: the keys -->
+  <rect class="ground" x="0.5" y="28.5" width="645" height="44" rx="4"/>
+  <text class="name" x="14" y="55">_get_target_ids</text>
+  <text x="190" y="55">the keys of the objects given, as a set</text>
+  <path class="line" d="M190 73 V81"/>
+  <polygon class="head" points="190,91 185,81 195,81"/>
+
+  <!-- 2: the plan, and its three answers; the third is made of the other two -->
+  <rect class="ground" x="0.5" y="91.5" width="645" height="158" rx="4"/>
+  <text class="name" x="14" y="115">_get_add_plan</text>
+  <text x="190" y="115">three answers</text>
+  <text x="14" y="143">Can a conflict be ignored?</text>
+  <text class="small" x="190" y="143">the through model was made by Django, and the backend can pass</text>
+  <text class="small" x="190" y="159">over a row that conflicts</text>
+  <text x="14" y="183">Must signals be sent?</text>
+  <text class="small" x="190" y="183">a receiver of <tspan class="name">m2m_changed</tspan> is connected for the through model,</text>
+  <text class="small" x="190" y="199">and this is not the second call of a symmetrical relation</text>
+  <path class="line" d="M1 213 H645"/>
+  <text x="14" y="236">Is the fast way open?</text>
+  <text class="small" x="190" y="236">the first, and not the second</text>
+
+  <!-- no: the slow way -->
+  <path class="line" d="M190 250 V268"/>
+  <polygon class="head" points="190,278 185,268 195,268"/>
+  <text class="quiet small" x="200" y="266">no</text>
+
+  <rect class="box" x="0.5" y="278.5" width="380" height="52" rx="4"/>
+  <text class="name" x="14" y="300">_get_missing_target_ids</text>
+  <text class="small" x="14" y="318">a <tspan class="name">SELECT</tspan> on the table between: which of the keys have no row yet</text>
+  <path class="line" d="M190 331 V339"/>
+  <polygon class="head" points="190,349 185,339 195,339"/>
+
+  <rect class="ground dashed" x="0.5" y="348.5" width="380" height="52" rx="4"/>
+  <text x="14" y="370"><tspan class="name">m2m_changed</tspan>, <tspan class="name">"pre_add"</tspan>, <tspan class="name">pk_set</tspan> = the missing keys</text>
+  <text class="quiet small" x="14" y="388">only if signals must be sent</text>
+  <path class="line" d="M190 401 V409"/>
+  <polygon class="head" points="190,419 185,409 195,409"/>
+
+  <rect class="box" x="0.5" y="418.5" width="380" height="72" rx="4"/>
+  <text x="14" y="441"><tspan class="name">bulk_create</tspan>: a row for each missing key,</text>
+  <text x="14" y="459">with <tspan class="name">through_defaults</tspan></text>
+  <text class="quiet small" x="14" y="477">conflicts ignored only if a conflict can be ignored</text>
+  <path class="line" d="M190 491 V499"/>
+  <polygon class="head" points="190,509 185,499 195,499"/>
+
+  <rect class="ground dashed" x="0.5" y="508.5" width="380" height="52" rx="4"/>
+  <text x="14" y="530"><tspan class="name">m2m_changed</tspan>, <tspan class="name">"post_add"</tspan>, <tspan class="name">pk_set</tspan> = the missing keys</text>
+  <text class="quiet small" x="14" y="548">only if signals must be sent</text>
+
+  <!-- yes: the fast way -->
+  <path class="mark-line" d="M528 250 V268"/>
+  <polygon class="head mark" points="528,278 523,268 533,268"/>
+  <text class="quiet small" x="538" y="266">yes</text>
+
+  <rect class="mark-box" x="410.5" y="278.5" width="235" height="94" rx="4"/>
+  <text x="422" y="301"><tspan class="name">bulk_create</tspan>: a row for every key,</text>
+  <text x="422" y="319">conflicts ignored</text>
+  <text class="quiet small" x="422" y="342">nothing is read first,</text>
+  <text class="quiet small" x="422" y="358">and no signal is sent</text>
+
+  <!-- the three recorded cases -->
+  <text class="strong" x="0" y="600">Recorded</text>
+  <text class="quiet small" x="300" y="600">the three answers</text>
+  <text class="small" x="0" y="622"><tspan class="name small">Voyage.calls</tspan> with no receiver</text>
+  <text class="small" x="300" y="622">yes, no, yes</text>
+  <text class="small mark" x="422" y="622">the fast way</text>
+  <text class="small" x="0" y="642"><tspan class="name small">Voyage.calls</tspan> with a receiver</text>
+  <text class="small" x="300" y="642">yes, yes, no</text>
+  <text class="small" x="422" y="642">a <tspan class="name small">SELECT</tspan>, the signals, an <tspan class="name small">INSERT</tspan></text>
+  <text class="small" x="0" y="662"><tspan class="name small">Sailor.pilots_into</tspan>, through Licence, no receiver</text>
+  <text class="small" x="300" y="662">no, no, no</text>
+  <text class="small" x="422" y="662">a <tspan class="name small">SELECT</tspan> and an <tspan class="name small">INSERT</tspan></text>
+</svg>

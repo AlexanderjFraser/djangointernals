@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 496">
+  <!-- three panels side by side, one for each kind of inheritance: what the metaclass does, the two classes over their tables, and the child's options -->
+
+  <!-- an abstract base: Named and Port -->
+  <text class="strong" x="0" y="14">An abstract base</text>
+  <text class="small" x="0" y="36">The metaclass copies <tspan class="name">name</tspan> into Port.</text>
+
+  <!-- the classes -->
+  <rect class="ground" x="0.5" y="68.5" width="141" height="70" rx="4"/>
+  <text class="name strong" x="13" y="89">Named</text>
+  <text class="name" x="13" y="109">name</text>
+  <text class="name quiet" x="13" y="127">abstract = True</text>
+  <rect class="ground" x="158.5" y="68.5" width="141" height="70" rx="4"/>
+  <text class="name strong" x="171" y="89">Port(Named)</text>
+  <text class="name mark" x="171" y="109">name</text>
+  <text class="quiet small" x="210" y="109">a copy</text>
+  <text class="name" x="171" y="127">country</text>
+  <!-- the field is copied -->
+  <path class="mark-line" d="M52 105 H148.5"/>
+  <polygon class="head mark" points="158.5,105 148.5,100 148.5,110"/>
+
+  <!-- the tables -->
+  <path class="line" d="M198.5 138.5 V198.5"/>
+  <polygon class="head" points="198.5,208.5 193.5,198.5 203.5,198.5"/>
+  <text class="quiet small" x="209" y="194">its table</text>
+  <rect class="ground dashed" x="0.5" y="208.5" width="141" height="96" rx="4"/>
+  <text class="quiet small" x="71" y="261" text-anchor="middle">no table</text>
+  <rect class="box" x="158.5" y="208.5" width="141" height="96" rx="4"/>
+  <text class="name strong" x="171" y="229">fleet_port</text>
+  <path class="line" d="M158.5 237.5 H299.5"/>
+  <text class="name" x="171" y="257">id</text>
+  <text class="name" x="171" y="275">name</text>
+  <text class="name" x="171" y="293">country</text>
+
+  <!-- the options of Port -->
+  <text class="strong small" x="0" y="362">The options of Port</text>
+  <text class="name small" x="0" y="382">parents</text>
+  <text class="name small" x="116" y="382">{}</text>
+  <text class="name small" x="0" y="400">concrete_model</text>
+  <text class="name small" x="116" y="400">Port</text>
+  <text class="name small" x="0" y="418">local_fields</text>
+  <text class="name small" x="116" y="418">id, name, country</text>
+
+  <!-- a parent with a table: Sailor and Officer -->
+  <text class="strong" x="320" y="14">A parent with a table</text>
+  <text class="small" x="320" y="36">The metaclass adds a link, <tspan class="name">sailor_ptr</tspan>, to Officer, and</text>
+  <text class="small" x="320" y="52"><tspan class="name">Options._prepare</tspan> makes it Officer's primary key.</text>
+
+  <!-- the classes -->
+  <rect class="ground" x="320.5" y="68.5" width="141" height="106" rx="4"/>
+  <text class="name strong" x="333" y="89">Sailor</text>
+  <text class="name" x="333" y="109">name</text>
+  <text class="name" x="333" y="127">ship</text>
+  <text class="name" x="333" y="145">signed_on</text>
+  <text class="name" x="333" y="163">pilots_into</text>
+  <rect class="ground" x="478.5" y="68.5" width="141" height="70" rx="4"/>
+  <text class="name strong" x="491" y="89">Officer(Sailor)</text>
+  <text class="name mark" x="491" y="109">sailor_ptr</text>
+  <text class="quiet small" x="577" y="109">a link</text>
+  <text class="name" x="491" y="127">rank</text>
+
+  <!-- the tables -->
+  <path class="line" d="M360.5 174.5 V198.5"/>
+  <polygon class="head" points="360.5,208.5 355.5,198.5 365.5,198.5"/>
+  <text class="quiet small" x="371" y="194">its table</text>
+  <path class="line" d="M518.5 138.5 V198.5"/>
+  <polygon class="head" points="518.5,208.5 513.5,198.5 523.5,198.5"/>
+  <text class="quiet small" x="529" y="194">its table</text>
+  <rect class="box" x="320.5" y="208.5" width="141" height="114" rx="4"/>
+  <text class="name strong" x="333" y="229">crew_sailor</text>
+  <path class="line" d="M320.5 237.5 H461.5"/>
+  <text class="name" x="333" y="257">id</text>
+  <text class="name" x="333" y="275">name</text>
+  <text class="name" x="333" y="293">ship_id</text>
+  <text class="name" x="333" y="311">signed_on</text>
+  <rect class="box" x="478.5" y="208.5" width="141" height="114" rx="4"/>
+  <text class="name strong" x="491" y="229">crew_officer</text>
+  <path class="line" d="M478.5 237.5 H619.5"/>
+  <text class="name" x="491" y="257">sailor_ptr_id</text>
+  <text class="quiet small" x="491" y="273">the primary key,</text>
+  <text class="quiet small" x="491" y="288">and a reference</text>
+  <text class="name" x="491" y="311">rank</text>
+  <!-- the link's column refers to the parent's key -->
+  <path class="mark-line" d="M478.5 253 H368"/>
+  <polygon class="head mark" points="358,253 368,248 368,258"/>
+
+  <!-- the options of Officer -->
+  <text class="strong small" x="320" y="362">The options of Officer</text>
+  <text class="name small" x="320" y="382">parents</text>
+  <text class="name small" x="436" y="382">{Sailor: sailor_ptr}</text>
+  <text class="name small" x="320" y="400">concrete_model</text>
+  <text class="name small" x="436" y="400">Officer</text>
+  <text class="name small" x="320" y="418">local_fields</text>
+  <text class="name small" x="436" y="418">sailor_ptr, rank</text>
+  <text class="name small" x="320" y="436">fields</text>
+  <text class="name small" x="436" y="436">id, name, ship, signed_on</text>
+  <text class="quiet small" x="436" y="452">Sailor's own field objects, the</text>
+  <text class="quiet small" x="436" y="468">many-to-many field not among them</text>
+  <text class="small" x="436" y="486"><tspan class="quiet">then </tspan><tspan class="name small">sailor_ptr, rank</tspan></text>
+
+  <!-- a proxy: Sailor and Veteran -->
+  <text class="strong" x="640" y="14">A proxy</text>
+  <text class="small" x="640" y="36">The metaclass gives the options of Veteran the</text>
+  <text class="small" x="640" y="52">table and the primary key of Sailor.</text>
+
+  <!-- the classes -->
+  <rect class="ground" x="640.5" y="68.5" width="141" height="106" rx="4"/>
+  <text class="name strong" x="653" y="89">Sailor</text>
+  <text class="name" x="653" y="109">name</text>
+  <text class="name" x="653" y="127">ship</text>
+  <text class="name" x="653" y="145">signed_on</text>
+  <text class="name" x="653" y="163">pilots_into</text>
+  <rect class="ground" x="798.5" y="68.5" width="141" height="70" rx="4"/>
+  <text class="name strong" x="811" y="89">Veteran(Sailor)</text>
+  <text class="quiet small" x="811" y="109">no fields</text>
+  <text class="name quiet" x="811" y="127">proxy = True</text>
+
+  <!-- the one table, and both classes over it -->
+  <path class="line" d="M680.5 174.5 V198.5"/>
+  <polygon class="head" points="680.5,208.5 675.5,198.5 685.5,198.5"/>
+  <text class="quiet small" x="691" y="194">its table</text>
+  <path class="mark-line" d="M838.5 138.5 V224 H791.5"/>
+  <polygon class="head mark" points="781.5,224 791.5,219 791.5,229"/>
+  <text class="quiet small" x="849" y="194">Sailor's table</text>
+  <rect class="box" x="640.5" y="208.5" width="141" height="114" rx="4"/>
+  <text class="name strong" x="653" y="229">crew_sailor</text>
+  <path class="line" d="M640.5 237.5 H781.5"/>
+  <text class="name" x="653" y="257">id</text>
+  <text class="name" x="653" y="275">name</text>
+  <text class="name" x="653" y="293">ship_id</text>
+  <text class="name" x="653" y="311">signed_on</text>
+  <rect class="ground dashed" x="798.5" y="248.5" width="141" height="74" rx="4"/>
+  <text class="quiet small" x="869" y="290" text-anchor="middle">no table</text>
+
+  <!-- the options of Veteran -->
+  <text class="strong small" x="640" y="362">The options of Veteran</text>
+  <text class="name small" x="640" y="382">parents</text>
+  <text class="name small" x="756" y="382">{Sailor: None}</text>
+  <text class="name small" x="640" y="400">concrete_model</text>
+  <text class="name small" x="756" y="400">Sailor</text>
+  <text class="name small" x="640" y="418">local_fields</text>
+  <text class="quiet small" x="756" y="418">none</text>
+  <text class="name small" x="640" y="436">fields</text>
+  <text class="name small" x="756" y="436">id, name, ship, signed_on</text>
+  <text class="quiet small" x="756" y="452">Sailor's own field objects</text>
+</svg>

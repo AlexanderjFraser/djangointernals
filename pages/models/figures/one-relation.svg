@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 642">
+  <!-- two relations of Ship, one above the other: the declaring class on the left, the other class on the right, and for the first relation its two objects beneath them -->
+  <text x="0" y="14"><tspan class="strong">Two relations that the body of Ship declares</tspan><tspan class="quiet small" dx="8">after every class statement has run</tspan></text>
+
+  <!-- the first relation, as it is written -->
+  <text class="name" x="0" y="46">home = ForeignKey(Port, related_name="ships")</text>
+
+  <!-- the class Ship: what the relation leaves on it -->
+  <rect class="box" x="0.5" y="58.5" width="240" height="190" rx="4"/>
+  <text class="strong" x="12" y="80">the class Ship</text>
+  <text class="quiet small" x="12" y="102">set while the body of Ship</text>
+  <text class="quiet small" x="12" y="118">is dealt with:</text>
+  <text class="name" x="12" y="140">home_id</text>
+  <text class="name quiet" x="12" y="157">ForeignKeyDeferredAttribute</text>
+  <text class="name" x="12" y="179">home</text>
+  <text class="name quiet" x="12" y="196">ForwardManyToOneDescriptor</text>
+  <text class="name" x="12" y="218">_meta.local_fields</text>
+  <text class="quiet small" x="12" y="235">holds the field</text>
+
+  <!-- the class Port: the one attribute -->
+  <rect class="box" x="405.5" y="58.5" width="240" height="112" rx="4"/>
+  <text class="strong" x="417" y="80">the class Port</text>
+  <text class="quiet small" x="417" y="102">set as Ship is registered,</text>
+  <text class="quiet small" x="417" y="118">Port being there already:</text>
+  <text class="name" x="417" y="140">ships</text>
+  <text class="name quiet" x="417" y="157">ReverseManyToOneDescriptor</text>
+
+  <!-- each class to its object -->
+  <path class="line" d="M24 249 V268"/>
+  <polygon class="head" points="24,278 19,268 29,268"/>
+  <path class="line" d="M429 171 V268"/>
+  <polygon class="head" points="429,278 424,268 434,268"/>
+  <text class="name" x="443" y="220">_meta.get_fields()</text>
+  <text class="quiet small" x="443" y="237">finds the rel</text>
+
+  <!-- the field -->
+  <rect class="mark-box" x="0.5" y="278.5" width="240" height="100" rx="4"/>
+  <text x="12" y="301"><tspan class="strong">the field</tspan>, a <tspan class="name">ForeignKey</tspan></text>
+  <text class="name" x="12" y="326">name</text>
+  <text class="name" x="84" y="326">"home"</text>
+  <text class="name" x="12" y="346">attname</text>
+  <text class="name" x="84" y="346">"home_id"</text>
+  <text class="name" x="12" y="366">model</text>
+  <text class="name" x="84" y="366">Ship</text>
+
+  <!-- the rel -->
+  <rect class="mark-box" x="405.5" y="278.5" width="240" height="120" rx="4"/>
+  <text x="417" y="301"><tspan class="strong">the rel</tspan>, a <tspan class="name">ManyToOneRel</tspan></text>
+  <text class="name" x="417" y="326">model</text>
+  <text class="name" x="535" y="326">Port</text>
+  <text class="name" x="417" y="346">related_model</text>
+  <text class="name" x="535" y="346">Ship</text>
+  <text class="name" x="417" y="366">related_name</text>
+  <text class="name" x="535" y="366">"ships"</text>
+  <text class="name" x="417" y="386">field_name</text>
+  <text class="name" x="535" y="386">"id"</text>
+
+  <!-- each of the two holds the other -->
+  <text class="name" x="323" y="314" text-anchor="middle">remote_field</text>
+  <path class="mark-line" d="M241 322 H395"/>
+  <polygon class="head mark" points="405,322 395,317 395,327"/>
+  <text class="name" x="323" y="354" text-anchor="middle">field</text>
+  <path class="mark-line" d="M405 362 H251"/>
+  <polygon class="head mark" points="241,362 251,357 251,367"/>
+
+  <!-- the second relation, as it is written -->
+  <text class="name" x="0" y="439">captain = OneToOneField("crew.Sailor", related_name="command")</text>
+
+  <!-- the class Ship -->
+  <rect class="box" x="0.5" y="451.5" width="240" height="190" rx="4"/>
+  <text class="strong" x="12" y="473">the class Ship</text>
+  <text class="quiet small" x="12" y="495">set while the body of Ship</text>
+  <text class="quiet small" x="12" y="511">is dealt with:</text>
+  <text class="name" x="12" y="533">captain_id</text>
+  <text class="name quiet" x="12" y="550">ForeignKeyDeferredAttribute</text>
+  <text class="name" x="12" y="572">captain</text>
+  <text class="name quiet" x="12" y="589">ForwardOneToOneDescriptor</text>
+  <text class="name" x="12" y="611">_meta.local_fields</text>
+  <text class="quiet small" x="12" y="628">holds the field</text>
+
+  <!-- the class Sailor -->
+  <rect class="box" x="405.5" y="451.5" width="240" height="112" rx="4"/>
+  <text class="strong" x="417" y="473">the class Sailor</text>
+  <text class="quiet small" x="417" y="495">set as Sailor is registered,</text>
+  <text class="quiet small" x="417" y="511">in the crew's module:</text>
+  <text class="name" x="417" y="533">command</text>
+  <text class="name quiet" x="417" y="550">ReverseOneToOneDescriptor</text>
+
+  <!-- between the two moments -->
+  <text class="quiet small" x="323" y="484" text-anchor="middle">between the two,</text>
+  <text class="quiet small" x="323" y="500" text-anchor="middle">the rel's model is</text>
+  <text class="quiet small" x="323" y="516" text-anchor="middle">the string</text>
+  <text class="name" x="323" y="535" text-anchor="middle">"crew.Sailor"</text>
+</svg>

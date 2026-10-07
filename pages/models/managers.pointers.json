@@ -1,0 +1,625 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "managers.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.__init__",
+   "line": 45,
+   "sentence": "`BaseManager.__init__` gives a new manager four attributes besides its creation counter: `BaseManager.model` and `BaseManager.name`, both `None` until the manager joins a class; an alias, `None` unless the manager has been told to use one database; and the hints it will pass to the database router, an empty dictionary (`django/db/models/manager.py:BaseManager.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.__init__",
+   "kind": "function",
+   "lines": [
+    27,
+    33
+   ],
+   "fingerprint": "af4d668e26b144a5"
+  },
+  {
+   "pointer": "django/db/models/manager.py:Manager",
+   "line": 53,
+   "sentence": "All it has comes from its one base, and that base is written nowhere as a class statement: it is the value of an expression in `Manager`'s own, a call of `BaseManager.from_queryset` with `QuerySet` (`django/db/models/manager.py:Manager`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "Manager",
+   "kind": "class",
+   "lines": [
+    176,
+    177
+   ],
+   "fingerprint": "86b1e7e17e8fa14c"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.from_queryset",
+   "line": 55,
+   "sentence": "The body is one attribute, `\"_queryset_class\"`, holding the queryset class, and a method for each method of the queryset class that `BaseManager._get_queryset_methods` picks out (`django/db/models/manager.py:BaseManager.from_queryset`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.from_queryset",
+   "kind": "function",
+   "lines": [
+    107,
+    118
+   ],
+   "at": 108,
+   "fingerprint": "95bc6cbc8d9b478e"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager._get_queryset_methods",
+   "line": 66,
+   "sentence": "`_get_queryset_methods` goes through every plain function that `inspect.getmembers` finds on the queryset class, inherited ones included, and passes over one for any of three reasons (`django/db/models/manager.py:BaseManager._get_queryset_methods`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager._get_queryset_methods",
+   "kind": "function",
+   "lines": [
+    82,
+    105
+   ],
+   "at": 83,
+   "fingerprint": "5e74335544ea5ef4"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.as_manager",
+   "line": 90,
+   "sentence": "`QuerySet.as_manager` is the short way to it: a class method that calls `from_queryset` on `Manager` with the class it is itself called on, makes an instance of the result, sets `\"_built_with_as_manager\"` on the instance, and returns it (`django/db/models/query.py:QuerySet.as_manager`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.as_manager",
+   "kind": "function",
+   "lines": [
+    409,
+    415
+   ],
+   "more": [
+    [
+     418,
+     418
+    ]
+   ],
+   "fingerprint": "03b62847957afaa8"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.get_queryset",
+   "line": 111,
+   "sentence": "`BaseManager.get_queryset` returns a new object of the manager's queryset class, made with the manager's model, its alias and its hints (`django/db/models/manager.py:BaseManager.get_queryset`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.get_queryset",
+   "kind": "function",
+   "lines": [
+    150,
+    155
+   ],
+   "fingerprint": "c57644bee65968d2"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.all",
+   "line": 125,
+   "sentence": "`QuerySet.all` works by copying the queryset it is called on, and the copy loses any results cached by `prefetch_related`; the `get_queryset` of a related manager may hand back just such a queryset of prefetched results, and the manager's method must not throw them away (`django/db/models/manager.py:BaseManager.all`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.all",
+   "kind": "function",
+   "lines": [
+    157,
+    164
+   ],
+   "fingerprint": "1918baf64a99ddca"
+  },
+  {
+   "pointer": "django/db/models/manager.py:EmptyManager",
+   "line": 127,
+   "sentence": "It is a `Manager` for a place where there is no table to ask: it is given its model in its constructor, without joining any class, and its `get_queryset` returns the queryset that `QuerySet.none` gives, which fetches nothing (`django/db/models/manager.py:EmptyManager`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "EmptyManager",
+   "kind": "class",
+   "lines": [
+    207,
+    213
+   ],
+   "fingerprint": "48a5c829cdab6691"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:AnonymousUser",
+   "line": 127,
+   "sentence": "`AnonymousUser`, which is not a model, has two of them, for its groups and for its permissions (`django/contrib/auth/models.py:AnonymousUser`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "AnonymousUser",
+   "kind": "class",
+   "lines": [
+    534,
+    639
+   ],
+   "fingerprint": "72330f40a2dd452f"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.contribute_to_class",
+   "line": 131,
+   "sentence": "And it enters the manager in the class's options with `Options.add_manager`, which appends it to `Options.local_managers` and discards what the options had cached (`django/db/models/manager.py:BaseManager.contribute_to_class`, `django/db/models/options.py:Options.add_manager`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.contribute_to_class",
+   "kind": "function",
+   "lines": [
+    120,
+    126
+   ],
+   "fingerprint": "b8eaca347a8a6240"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.add_manager",
+   "line": 131,
+   "sentence": "And it enters the manager in the class's options with `Options.add_manager`, which appends it to `Options.local_managers` and discards what the options had cached (`django/db/models/manager.py:BaseManager.contribute_to_class`, `django/db/models/options.py:Options.add_manager`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.add_manager",
+   "kind": "function",
+   "lines": [
+    336,
+    338
+   ],
+   "fingerprint": "e168ba9b9bbb4a7a"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase._prepare",
+   "line": 140,
+   "sentence": "`ModelBase._prepare` asks the options for the class's managers, and when there are none it makes a `Manager`, sets `auto_created` on it, and adds it under the name `\"objects\"` in the same way (`django/db/models/base.py:ModelBase._prepare`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase._prepare",
+   "kind": "function",
+   "lines": [
+    405,
+    458
+   ],
+   "fingerprint": "f8e5007832b262d0"
+  },
+  {
+   "pointer": "django/db/models/manager.py:ManagerDescriptor.__get__",
+   "line": 170,
+   "sentence": "For any other read the descriptor returns one entry of a dictionary, `Options.managers_map`, kept by the options of the class the attribute was read on: the entry under the name of the manager it was made for (`django/db/models/manager.py:ManagerDescriptor.__get__`, `django/db/models/options.py:Options.managers_map`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "ManagerDescriptor.__get__",
+   "kind": "function",
+   "lines": [
+    184,
+    204
+   ],
+   "fingerprint": "cdacb21aac68fa4e"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.managers_map",
+   "line": 170,
+   "sentence": "For any other read the descriptor returns one entry of a dictionary, `Options.managers_map`, kept by the options of the class the attribute was read on: the entry under the name of the manager it was made for (`django/db/models/manager.py:ManagerDescriptor.__get__`, `django/db/models/options.py:Options.managers_map`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.managers_map",
+   "kind": "function",
+   "lines": [
+    473,
+    475
+   ],
+   "at": 474,
+   "fingerprint": "d59cb4a2cf36405d"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.managers",
+   "line": 174,
+   "sentence": "`Options.managers` builds the list of a class's managers the first time it is asked (`django/db/models/options.py:Options.managers`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.managers",
+   "kind": "function",
+   "lines": [
+    453,
+    471
+   ],
+   "at": 454,
+   "fingerprint": "9f83478f326c47a0"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options._expire_cache",
+   "line": 204,
+   "sentence": "When the cache is discarded, as it is whenever a field or a manager is added to the class, the next read makes a new copy (`django/db/models/options.py:Options._expire_cache`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options._expire_cache",
+   "kind": "function",
+   "lines": [
+    852,
+    863
+   ],
+   "fingerprint": "ecc7968f3649e789"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase._default_manager",
+   "line": 231,
+   "sentence": "They return what the options work out as `Options.default_manager` and `Options.base_manager` (`django/db/models/base.py:ModelBase._default_manager`, `django/db/models/options.py:Options.default_manager`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase._default_manager",
+   "kind": "function",
+   "lines": [
+    464,
+    466
+   ],
+   "at": 465,
+   "fingerprint": "21990feef35029aa"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.default_manager",
+   "line": 231,
+   "sentence": "They return what the options work out as `Options.default_manager` and `Options.base_manager` (`django/db/models/base.py:ModelBase._default_manager`, `django/db/models/options.py:Options.default_manager`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.default_manager",
+   "kind": "function",
+   "lines": [
+    506,
+    529
+   ],
+   "at": 507,
+   "fingerprint": "3ada197985128d4a"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.base_manager",
+   "line": 240,
+   "sentence": "It never joins the class: it has no descriptor and is in none of the options' lists (`django/db/models/options.py:Options.base_manager`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.base_manager",
+   "kind": "function",
+   "lines": [
+    477,
+    504
+   ],
+   "at": 478,
+   "fingerprint": "e511b33103994999"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 248,
+   "sentence": "| saving: the update and the insert of each table | base, of the class whose table it is | `django/db/models/base.py:Model._save_table` |",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
+   "kind": "function",
+   "lines": [
+    1075,
+    1212
+   ],
+   "fingerprint": "52c8d3bbd3d1cbaf"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.refresh_from_db",
+   "line": 249,
+   "sentence": "| `Model.refresh_from_db`, and through it a deferred field read for one instance | base, of the instance's class | `django/db/models/base.py:Model.refresh_from_db` |",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.refresh_from_db",
+   "kind": "function",
+   "lines": [
+    741,
+    823
+   ],
+   "fingerprint": "4a13341830abd54d"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:DeferredAttribute.fetch_many",
+   "line": 250,
+   "sentence": "| a deferred field fetched for several instances together | base, of the model the field belongs to | `django/db/models/query_utils.py:DeferredAttribute.fetch_many` |",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "DeferredAttribute.fetch_many",
+   "kind": "function",
+   "lines": [
+    299,
+    308
+   ],
+   "fingerprint": "96dab8c68fd81041"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_queryset",
+   "line": 251,
+   "sentence": "| reading the object a foreign key or a one-to-one field points at | base, of the model pointed at | `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_queryset` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ForwardManyToOneDescriptor.get_queryset",
+   "kind": "function",
+   "lines": [
+    169,
+    172
+   ],
+   "fingerprint": "c043650615a59cf0"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.get_queryset",
+   "line": 252,
+   "sentence": "| reading the object at the other end of a one-to-one field | base, of the model with the field | `django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.get_queryset` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ReverseOneToOneDescriptor.get_queryset",
+   "kind": "function",
+   "lines": [
+    470,
+    473
+   ],
+   "fingerprint": "3da43cadc90bcb50"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.validate",
+   "line": 253,
+   "sentence": "| validating that the value of a foreign key has a row | base, of the model pointed at | `django/db/models/fields/related.py:ForeignKey.validate` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.validate",
+   "kind": "function",
+   "lines": [
+    1215,
+    1237
+   ],
+   "fingerprint": "9d6d9a83799e5ffd"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.related_objects",
+   "line": 254,
+   "sentence": "| finding the rows that point at an object being deleted | base, of the model those rows belong to | `django/db/models/deletion.py:Collector.related_objects` |",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.related_objects",
+   "kind": "function",
+   "lines": [
+    433,
+    441
+   ],
+   "fingerprint": "17961ee7e10a3c91"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager",
+   "line": 255,
+   "sentence": "| adding objects through the manager at the other end of a foreign key, with `bulk=True` | base, of the model with the foreign key | `django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_reverse_many_to_one_manager",
+   "kind": "function",
+   "lines": [
+    714,
+    1025
+   ],
+   "fingerprint": "14f78879f0b63ad3"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._perform_unique_checks",
+   "line": 256,
+   "sentence": "| the unique checks of `Model.full_clean` | default, of the class the field belongs to, or whose options hold the `unique_together` | `django/db/models/base.py:Model._perform_unique_checks` |",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._perform_unique_checks",
+   "kind": "function",
+   "lines": [
+    1552,
+    1606
+   ],
+   "fingerprint": "f6c8a7399b25634c"
+  },
+  {
+   "pointer": "django/db/models/constraints.py:UniqueConstraint.validate",
+   "line": 257,
+   "sentence": "| validating a `UniqueConstraint` | default, of the class whose options hold the constraint | `django/db/models/constraints.py:UniqueConstraint.validate` |",
+   "tree": "django",
+   "path": "django/db/models/constraints.py",
+   "symbol": "UniqueConstraint.validate",
+   "kind": "function",
+   "lines": [
+    585,
+    699
+   ],
+   "fingerprint": "c7af07c5058b1201"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._get_next_or_previous_by_FIELD",
+   "line": 258,
+   "sentence": "| the next or previous instance by a date field | default, of the instance's class | `django/db/models/base.py:Model._get_next_or_previous_by_FIELD` |",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._get_next_or_previous_by_FIELD",
+   "kind": "function",
+   "lines": [
+    1361,
+    1380
+   ],
+   "fingerprint": "b2f6aa7b033ed9e8"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.formfield",
+   "line": 259,
+   "sentence": "| the choices a foreign key offers to a form | default, of the model pointed at | `django/db/models/fields/related.py:ForeignKey.formfield` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.formfield",
+   "kind": "function",
+   "lines": [
+    1296,
+    1311
+   ],
+   "fingerprint": "86fdf5b252ae5d24"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager",
+   "line": 260,
+   "sentence": "| adding and removing the rows of a many-to-many relation | default, of the through model | `django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_forward_many_to_many_manager",
+   "kind": "function",
+   "lines": [
+    1075,
+    1714
+   ],
+   "fingerprint": "b93cf4954deac4f9"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ReverseManyToOneDescriptor.related_manager_cls",
+   "line": 261,
+   "sentence": "| the manager at the other end of a foreign key | a subclass of the class of the default manager of the model with the foreign key | `django/db/models/fields/related_descriptors.py:ReverseManyToOneDescriptor.related_manager_cls` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ReverseManyToOneDescriptor.related_manager_cls",
+   "kind": "function",
+   "lines": [
+    677,
+    684
+   ],
+   "at": 678,
+   "fingerprint": "febc3260ac1c46f1"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.related_manager_cls",
+   "line": 262,
+   "sentence": "| the manager at either end of a many-to-many field | a subclass of the class of the default manager of the model at the other end | `django/db/models/fields/related_descriptors.py:ManyToManyDescriptor.related_manager_cls` |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ManyToManyDescriptor.related_manager_cls",
+   "kind": "function",
+   "lines": [
+    1057,
+    1065
+   ],
+   "at": 1058,
+   "fingerprint": "e5445ec16e905215"
+  },
+  {
+   "pointer": "django/db/models/",
+   "line": 264,
+   "sentence": "*Which of a model's two managers the code of `django/db/models/` goes to, in the places this chapter passes through.*",
+   "tree": "django",
+   "path": "django/db/models/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e3a8bbfe5524355d"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.save_base",
+   "line": 294,
+   "sentence": "The save above does not ask a manager of Veteran at all: `Model.save_base` exchanges a proxy for its concrete model, and the update goes through the base manager of Sailor (`django/db/models/base.py:Model.save_base`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.save_base",
+   "kind": "function",
+   "lines": [
+    956,
+    1024
+   ],
+   "fingerprint": "60f9f7bb293fe492"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager",
+   "line": 296,
+   "sentence": "A filter in the first is in a related set fetched that way, which leaves out one asked for by another manager's name and one prefetched with a queryset of the caller's own (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_reverse_many_to_one_manager",
+   "kind": "function",
+   "lines": [
+    714,
+    1025
+   ],
+   "fingerprint": "14f78879f0b63ad3"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.db_manager",
+   "line": 302,
+   "sentence": "`get_queryset` passes both to the queryset it makes, and `BaseManager.db` answers with the alias, or without one with whatever `ConnectionRouter.db_for_read` says for the model and the hints (`django/db/models/manager.py:BaseManager.db_manager`, `django/db/utils.py:ConnectionRouter`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.db_manager",
+   "kind": "function",
+   "lines": [
+    136,
+    140
+   ],
+   "fingerprint": "b51c90b44ae7b5e4"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter",
+   "line": 302,
+   "sentence": "`get_queryset` passes both to the queryset it makes, and `BaseManager.db` answers with the alias, or without one with whatever `ConnectionRouter.db_for_read` says for the model and the hints (`django/db/models/manager.py:BaseManager.db_manager`, `django/db/utils.py:ConnectionRouter`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter",
+   "kind": "class",
+   "lines": [
+    200,
+    282
+   ],
+   "fingerprint": "61e4995a1291e807"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/createsuperuser.py:Command.handle",
+   "line": 306,
+   "sentence": "The command that creates a superuser does so for a method of the user model's manager, which on Django's own user model is `UserManager.create_superuser` (`django/contrib/auth/management/commands/createsuperuser.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/createsuperuser.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    92,
+    254
+   ],
+   "fingerprint": "af5c84e0174aa57b"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.deconstruct",
+   "line": 310,
+   "sentence": "A migration that carries a manager writes it down and rebuilds it by them (`django/db/models/manager.py:BaseManager.deconstruct`, `django/db/migrations/state.py:ModelState.construct_managers`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.deconstruct",
+   "kind": "function",
+   "lines": [
+    42,
+    77
+   ],
+   "fingerprint": "6cfa1db80ce60300"
+  },
+  {
+   "pointer": "django/db/migrations/state.py:ModelState.construct_managers",
+   "line": 310,
+   "sentence": "A migration that carries a manager writes it down and rebuilds it by them (`django/db/models/manager.py:BaseManager.deconstruct`, `django/db/migrations/state.py:ModelState.construct_managers`).",
+   "tree": "django",
+   "path": "django/db/migrations/state.py",
+   "symbol": "ModelState.construct_managers",
+   "kind": "function",
+   "lines": [
+    934,
+    945
+   ],
+   "fingerprint": "03bcfc5c974a5364"
+  },
+  {
+   "pointer": "django/db/migrations/state.py:ModelState.from_model",
+   "line": 318,
+   "sentence": "It carries none at all where the one manager kept would be such a stand-in for the default manager, called `\"objects\"` (`django/db/migrations/state.py:ModelState.from_model`) ([Migrations](../migrations.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/state.py",
+   "symbol": "ModelState.from_model",
+   "kind": "function",
+   "lines": [
+    798,
+    932
+   ],
+   "at": 799,
+   "fingerprint": "60d77856bbbafd97"
+  }
+ ]
+}
