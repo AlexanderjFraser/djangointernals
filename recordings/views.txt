@@ -1,0 +1,1690 @@
+Django 6.2.dev20260926051415 and the project gazette: ROOT_URLCONF = 'gazette.urls', no middleware unless a block says so,
+DEBUG = False unless a block says so, and the clock at 2026-04-10 09:00 UTC
+
+The Gazette's articles as the recording begins, by the moment each was published
+    2026-01-09 08:00 UTC  lost-cat: Lost: a grey cat, Quay Street
+    2026-01-12 08:00 UTC  found-cat: Found: a grey cat
+    2026-02-27 09:00 UTC  harbour-wall: Harbour wall to be rebuilt
+    2026-03-03 08:00 UTC  ferry-timetable: New ferry timetable
+    2026-03-14 10:00 UTC  lighthouse-open-day: Lighthouse open day
+    2026-03-28 18:00 UTC  council-budget: Council passes budget
+    2026-04-02 12:00 UTC  spring-fair: Spring fair dates set
+    2026-05-01 07:00 UTC  may-day: May Day programme
+
+The URLconf is imported: each as_view() is called once; the decorators made from a middleware, and method_decorator, as they run
+    import gazette.urls
+      import gazette.views
+        the decorator made from Stamp is given notices
+          Stamp.__init__(get_response=notices)
+        the decorator made from Stamp is given notices_page
+          Stamp.__init__(get_response=notices_page)
+        the decorator made from Stamp is given notices_lost
+          Stamp.__init__(get_response=notices_lost)
+        the decorator made from Shut is given notices_shut
+          Stamp.__init__(get_response=notices_shut)
+        method_decorator(announced, name='dispatch')
+        _multi_decorate(decorators, View.dispatch)
+          _update_method_wrapper
+            announced is applied to _update_method_wrapper.<locals>.dummy
+        method_decorator(stamped, name='dispatch')
+        _multi_decorate(decorators, View.dispatch)
+          _update_method_wrapper
+            the decorator made from Stamp is given _update_method_wrapper.<locals>.dummy
+              Stamp.__init__(get_response=_update_method_wrapper.<locals>.dummy)
+        method_decorator(csrf_exempt, name='dispatch')
+        _multi_decorate(decorators, View.dispatch)
+          _update_method_wrapper
+        method_decorator(csrf_exempt)
+        _multi_decorate(decorators, TipsMarkedOnPost.post)
+          _update_method_wrapper
+      Blank.as_view()  ->  a function named 'view', with view_class Blank and view_initkwargs {}
+      Wire.as_view()  ->  a function named 'view', with view_class Wire and view_initkwargs {}
+      Wire.as_view()  ->  a function named 'view', with view_class Wire and view_initkwargs {}
+      Colophon.as_view()  ->  a function named 'view', with view_class Colophon and view_initkwargs {}
+      Colophon.as_view(type_size=14)  ->  a function named 'view', with view_class Colophon and view_initkwargs {'type_size': 14}
+      Births.as_view()  ->  a function named 'view', with view_class Births and view_initkwargs {}
+      Crossword.as_view()  ->  a function named 'view', with view_class Crossword and view_initkwargs {}
+      Tips.as_view()  ->  a function named 'view', with view_class Tips and view_initkwargs {}
+      TipsMarkedOnPost.as_view()  ->  a function named 'view', with view_class TipsMarkedOnPost and view_initkwargs {}
+      ArticleList.as_view()  ->  a function named 'view', with view_class ArticleList and view_initkwargs {}
+      ArticleCreate.as_view()  ->  a function named 'view', with view_class ArticleCreate and view_initkwargs {}
+      ArticleDetail.as_view()  ->  a function named 'view', with view_class ArticleDetail and view_initkwargs {}
+      ArticleUpdate.as_view()  ->  a function named 'view', with view_class ArticleUpdate and view_initkwargs {}
+      ArticleDelete.as_view()  ->  a function named 'view', with view_class ArticleDelete and view_initkwargs {}
+      ArticleYear.as_view()  ->  a function named 'view', with view_class ArticleYear and view_initkwargs {}
+      ArticleMonth.as_view()  ->  a function named 'view', with view_class ArticleMonth and view_initkwargs {}
+      Letters.as_view()  ->  a function named 'view', with view_class Letters and view_initkwargs {}
+      TemplateView.as_view(template_name='gazette/thanks.html')  ->  a function named 'view', with view_class TemplateView and view_initkwargs {'template_name': 'gazette/thanks.html'}
+      TemplateView.as_view(template_name='gazette/about.html', extra_context={'founded': 1871})  ->  a function named 'view', with view_class TemplateView and view_initkwargs {'template_name': 'gazette/about.html', 'extra_context': {'founded': 1871}}
+      RedirectView.as_view(pattern_name='articles')  ->  a function named 'view', with view_class RedirectView and view_initkwargs {'pattern_name': 'articles'}
+      RedirectView.as_view(pattern_name='article', permanent=True, query_string=True)  ->  a function named 'view', with view_class RedirectView and view_initkwargs {'pattern_name': 'article', 'permanent': True, 'query_string': True}
+      RedirectView.as_view()  ->  a function named 'view', with view_class RedirectView and view_initkwargs {}
+
+What the resolver hands the handler, for each kind of view in the Gazette's URLconf
+    resolve("/").func is views.front  ->  True
+    resolve("/").func.__name__  ->  'front'
+    resolve("/")._func_path  ->  'gazette.views.front'
+    resolve("/colophon/").func.__name__  ->  'view'
+    resolve("/colophon/").func.__qualname__  ->  'View.as_view.<locals>.view'
+    resolve("/colophon/").func.view_class  ->  <class 'gazette.views.Colophon'>
+    resolve("/colophon/")._func_path  ->  'gazette.views.Colophon'
+    resolve("/colophon/").view_name  ->  'colophon'
+    resolve("/colophon/").func is resolve("/colophon/large/").func  ->  False
+    resolve("/colophon/large/").func.view_initkwargs  ->  {'type_size': 14}
+    type(resolve("/almanac/").func).__name__  ->  'Almanac'
+    resolve("/almanac/")._func_path  ->  'gazette.views.Almanac'
+    type(resolve("/tide/").func).__name__  ->  'partial'
+    resolve("/tide/")._func_path  ->  'functools.partial'
+    resolve("/tide/").view_name  ->  'tide'
+    the lookup_str of the pattern named colophon  ->  'gazette.views.Colophon'
+
+as_view(): what it accepts, what it refuses, and what it leaves on the function
+    views.Colophon.as_view().__doc__  ->  'Who prints the paper, and in what type.'
+    views.Colophon.as_view().__module__  ->  'gazette.views'
+    views.Colophon.as_view(type_size=14).view_initkwargs  ->  {'type_size': 14}
+    views.Colophon.as_view(colour="red")  ->  raises TypeError: Colophon() received an invalid keyword 'colour'. as_view only accepts arguments that are already attributes of the class.
+    views.Colophon.as_view(get=None)  ->  raises TypeError: The method name get is not accepted as a keyword argument to Colophon().
+    views.Colophon().as_view  ->  raises AttributeError: This method is available only on the class, not on instances.
+    path("colophon/", views.Colophon())  ->  raises TypeError: view must be a callable, pass Colophon.as_view(), not Colophon().
+    [error.id for error in path("colophon/", views.Colophon).check()]  ->  ['urls.E009']
+    views.Colophon.as_view()(request("/colophon/"))  ->  an HttpResponse, status 200, content 'set in 9 point'
+    views.Colophon(type_size=30).type_size  ->  30
+
+A view that returns None: how the handler names the view in its complaint
+    GET /nothing/, a function that returns None
+    signal got_request_exception, for ValueError: The view gazette.views.nothing didn't return an HttpResponse object. It returned None instead.
+    log, ERROR to django.request: Internal Server Error: /nothing/
+    start_response("500 Internal Server Error", headers)
+    GET /blank/, a class whose get returns None
+    signal got_request_exception, for ValueError: The view gazette.views.view didn't return an HttpResponse object. It returned None instead.
+    log, ERROR to django.request: Internal Server Error: /blank/
+    start_response("500 Internal Server Error", headers)
+    GET /almanac/blank/, an object whose __call__ returns None
+    signal got_request_exception, for ValueError: The view gazette.views.Almanac.__call__ didn't return an HttpResponse object. It returned None instead.
+    log, ERROR to django.request: Internal Server Error: /almanac/blank/
+    start_response("500 Internal Server Error", headers)
+
+A view that returns something that is not a response
+    GET /headline/, a function that returns a string, with no middleware
+    the handler raises AttributeError to the server: 'str' object has no attribute '_resource_closers'
+    the same request with CommonMiddleware installed
+    signal got_request_exception, for AttributeError: 'str' object has no attribute 'status_code'
+    log, ERROR to django.request: Internal Server Error: /headline/
+    start_response("500 Internal Server Error", headers)
+
+GET /colophon/, twice: a class-based view is a function that makes an instance for each request
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__()  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          Colophon.get(request)  ->  an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'set in 9 point'
+    and the same request again
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__()  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          Colophon.get(request)  ->  an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'set in 9 point'
+
+GET /colophon/large/: the arguments given to as_view() are given to each instance
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__(type_size=14)  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          Colophon.get(request)  ->  an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'set in 14 point'
+
+HEAD /colophon/: a class with get and no head
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__()  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          Colophon.get(request)  ->  an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    what the handler returned has a body of 14 bytes
+
+OPTIONS /colophon/: answered by View.options
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__()  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          View.options(request)
+            View._allowed_methods  ->  ['GET', 'HEAD', 'OPTIONS']
+            View.view_is_async  ->  False
+            -> an HttpResponse, status 200, Allow 'GET, HEAD, OPTIONS'
+          -> an HttpResponse, status 200, Allow 'GET, HEAD, OPTIONS'
+        -> an HttpResponse, status 200, Allow 'GET, HEAD, OPTIONS'
+    start_response("200 OK", headers), with Allow: GET, HEAD, OPTIONS
+    the server sends the body: ''
+
+PUT /colophon/: the class has no method of that name
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__()  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          View.http_method_not_allowed(request)
+            View._allowed_methods  ->  ['GET', 'HEAD', 'OPTIONS']
+            log, WARNING to django.request: Method Not Allowed (PUT): /colophon/
+            View.view_is_async  ->  False
+            -> an HttpResponseNotAllowed, status 405, Allow 'GET, HEAD, OPTIONS'
+          -> an HttpResponseNotAllowed, status 405, Allow 'GET, HEAD, OPTIONS'
+        -> an HttpResponseNotAllowed, status 405, Allow 'GET, HEAD, OPTIONS'
+    start_response("405 Method Not Allowed", headers), with Allow: GET, HEAD, OPTIONS
+    the server sends the body: ''
+
+PROPFIND /colophon/: a method that is not in http_method_names
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Colophon)
+        View.__init__()  (a new Colophon)
+        View.setup(request)
+        View.dispatch(request)
+          View.http_method_not_allowed(request)
+            View._allowed_methods  ->  ['GET', 'HEAD', 'OPTIONS']
+            log, WARNING to django.request: Method Not Allowed (PROPFIND): /colophon/
+            View.view_is_async  ->  False
+            -> an HttpResponseNotAllowed, status 405, Allow 'GET, HEAD, OPTIONS'
+          -> an HttpResponseNotAllowed, status 405, Allow 'GET, HEAD, OPTIONS'
+        -> an HttpResponseNotAllowed, status 405, Allow 'GET, HEAD, OPTIONS'
+    start_response("405 Method Not Allowed", headers), with Allow: GET, HEAD, OPTIONS
+    the server sends the body: ''
+
+GET /masthead/: three decorators around one function
+    BaseHandler._get_response
+      the wrapper require_http_methods made, for ['GET']
+        the wrapper never_cache made
+          the wrapper vary_on_headers made, for ('Cookie',)
+            views.masthead(request)  ->  an HttpResponse, status 200
+            patch_vary_headers(response, ('Cookie',))
+            -> an HttpResponse, status 200
+          add_never_cache_headers(response)
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers), with Vary: Cookie, Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private
+    the server sends the body: 'The Gazette'
+
+POST /masthead/: the outermost wrapper answers, and nothing inside it runs
+    BaseHandler._get_response
+      the wrapper require_http_methods made, for ['GET']
+        log, WARNING to django.request: Method Not Allowed (POST): /masthead/
+        -> an HttpResponseNotAllowed, status 405, Allow 'GET'
+    start_response("405 Method Not Allowed", headers), with Allow: GET
+    the server sends the body: ''
+
+What a decorator leaves behind: on the view, on the response, on the request
+    views.front is a function with no decorators; request(...) makes a request as the handler would, for a path, a method and posted data
+    csrf_exempt(views.front).csrf_exempt  ->  True
+    csrf_exempt(views.front) is views.front  ->  False
+    hasattr(views.front, "csrf_exempt")  ->  False
+    csrf_exempt(views.front).__wrapped__ is views.front  ->  True
+    csrf_exempt(views.front).__name__  ->  'front'
+    no_append_slash(views.front).should_append_slash  ->  False
+    non_atomic_requests(views.front)._non_atomic_requests  ->  {'default'}
+    non_atomic_requests(using="archive")(non_atomic_requests(views.front))._non_atomic_requests == {"default", "archive"}  ->  True
+    never_cache(csrf_exempt(views.front)).csrf_exempt  ->  True
+    hasattr(views.bare(csrf_exempt(views.front)), "csrf_exempt")  ->  False
+    xframe_options_exempt(views.front)(request()).xframe_options_exempt  ->  True
+    after sensitive_post_parameters("password")(views.front) is called with a request: request.sensitive_post_parameters  ->  ('password',)
+    never_cache(views.front)('not a request')  ->  raises TypeError: never_cache didn't receive an HttpRequest. If you are decorating a classmethod, be sure to use @method_decorator.
+    sensitive_variables(views.front)  ->  raises TypeError: sensitive_variables() must be called to use it as a decorator, e.g., use @sensitive_variables(), not @sensitive_variables.
+
+as_view() copies what decorators left on dispatch; a mark on post stays on post
+    views.Tips.as_view().csrf_exempt  ->  True
+    views.Tips.dispatch.csrf_exempt  ->  True
+    hasattr(views.TipsMarkedOnPost.as_view(), "csrf_exempt")  ->  False
+    views.TipsMarkedOnPost.post.csrf_exempt  ->  True
+    views.Tips.dispatch is View.dispatch  ->  False
+    views.Tips.dispatch.__name__  ->  'dispatch'
+    method_decorator(never_cache).__name__  ->  'method_decorator(never_cache)'
+    method_decorator(never_cache, name="render")(views.Tips)  ->  raises ValueError
+    method_decorator([never_cache, csrf_exempt])(View.dispatch).csrf_exempt  ->  True
+
+GET /births/, twice: a decorator on dispatch is applied again at every call
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Births)
+        View.__init__()  (a new Births)
+        View.setup(request)
+        the wrapper method_decorator made
+          announced is applied to a partial around the bound method View.dispatch
+          the wrapper that announced made is called
+          View.dispatch(request)
+            Births.get(request)  ->  an HttpResponse, status 200
+            -> an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'births, marriages and deaths'
+    and the same request again
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Births)
+        View.__init__()  (a new Births)
+        View.setup(request)
+        the wrapper method_decorator made
+          announced is applied to a partial around the bound method View.dispatch
+          the wrapper that announced made is called
+          View.dispatch(request)
+            Births.get(request)  ->  an HttpResponse, status 200
+            -> an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'births, marriages and deaths'
+
+POST /tips/ and POST /tips/marked/ with CsrfViewMiddleware installed and no token sent
+    POST /tips/, whose class has csrf_exempt on dispatch
+    start_response("200 OK", headers)
+    POST /tips/marked/, whose class has csrf_exempt on post
+    log, WARNING to django.security.csrf: Forbidden (CSRF cookie not set.): /tips/marked/
+    start_response("403 Forbidden", headers)
+
+GET /notices/: a view decorated with a middleware
+    BaseHandler._get_response
+      the wrapper made from Stamp
+        Stamp.process_request
+        Stamp.process_view(view=notices)
+        views.notices(request)  ->  an HttpResponse, status 200
+        Stamp.process_response(a 200, content='public notices')
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'public notices'
+
+GET /notices/page/: the decorated view returns a TemplateResponse
+    BaseHandler._get_response
+      the wrapper made from Stamp
+        Stamp.process_request
+        Stamp.process_view(view=notices_page)
+        views.notices_page(request)  ->  a TemplateResponse, status 200, not rendered
+        Stamp.process_template_response(is_rendered=False)
+        SimpleTemplateResponse.add_post_render_callback
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+        Stamp.process_response(a 200, content='3 public notices\n')
+    start_response("200 OK", headers)
+    the server sends the body: '3 public notices\n'
+
+GET /notices/lost/: the decorated view raises
+    BaseHandler._get_response
+      the wrapper made from Stamp
+        Stamp.process_request
+        Stamp.process_view(view=notices_lost)
+        views.notices_lost(request)  raises LookupError
+        Stamp.process_exception(LookupError)
+    response_for_exception(request, LookupError)
+      signal got_request_exception, for LookupError: the notices are lost
+      the wrapper made from _EnsureCsrfToken  ->  an HttpResponseServerError, status 500
+      log, ERROR to django.request: Internal Server Error: /notices/lost/
+      -> an HttpResponseServerError, status 500
+    start_response("500 Internal Server Error", headers)
+    the server sends the body, 145 bytes
+
+GET /notices/shut/: the middleware's process_request answers
+    BaseHandler._get_response
+      the wrapper made from Shut
+        Shut.process_request, which returns a response
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'the office is shut'
+
+GET /crossword/, twice: method_decorator applies its decorator again at every call
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Crossword)
+        View.__init__()  (a new Crossword)
+        View.setup(request)
+        the wrapper method_decorator made
+          the decorator made from Stamp is given a partial around the bound method View.dispatch
+            Stamp.__init__(get_response=a partial around the bound method View.dispatch)
+          the wrapper made from Stamp
+            Stamp.process_request
+            Stamp.process_view(view=a partial around the bound method View.dispatch)
+            View.dispatch(request)
+              Crossword.get(request)  ->  an HttpResponse, status 200
+              -> an HttpResponse, status 200
+            Stamp.process_response(a 200, content="today's crossword")
+            -> an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: "today's crossword"
+    and the same request again
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Crossword)
+        View.__init__()  (a new Crossword)
+        View.setup(request)
+        the wrapper method_decorator made
+          the decorator made from Stamp is given a partial around the bound method View.dispatch
+            Stamp.__init__(get_response=a partial around the bound method View.dispatch)
+          the wrapper made from Stamp
+            Stamp.process_request
+            Stamp.process_view(view=a partial around the bound method View.dispatch)
+            View.dispatch(request)
+              Crossword.get(request)  ->  an HttpResponse, status 200
+              -> an HttpResponse, status 200
+            Stamp.process_response(a 200, content="today's crossword")
+            -> an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: "today's crossword"
+
+The decorators Django makes from its own middleware
+    csrf_protect(views.front)(request("/", "POST", {})).status_code  ->  403
+      log, WARNING to django.security.csrf: Forbidden (CSRF cookie not set.): /
+    requires_csrf_token(views.front)(request("/", "POST", {})).status_code  ->  200
+    "csrftoken" in views.front(request()).cookies  ->  False
+    "csrftoken" in csrf_protect(views.front)(request()).cookies  ->  False
+    "csrftoken" in ensure_csrf_cookie(views.front)(request()).cookies  ->  True
+    cache_page(60)(views.front)(request()).headers["Cache-Control"]  ->  'max-age=60'
+    csrf_protect.__name__  ->  'csrf_protect'
+
+GET /edition/: a view under condition()
+    BaseHandler._get_response
+      the wrapper condition made
+        views.edition_tag(request)  ->  'edition-7'
+        get_conditional_response(request, etag='"edition-7"', last_modified=None)  ->  None
+        views.edition(request)  ->  an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers), with ETag: "edition-7"
+    the server sends the body: "today's edition"
+
+GET /edition/ with If-None-Match: "edition-7"
+    BaseHandler._get_response
+      the wrapper condition made
+        views.edition_tag(request)  ->  'edition-7'
+        get_conditional_response(request, etag='"edition-7"', last_modified=None)  ->  an HttpResponseNotModified, status 304
+        -> an HttpResponseNotModified, status 304
+    start_response("304 Not Modified", headers), with ETag: "edition-7"
+    the server sends the body: ''
+
+PUT /edition/ with If-Match: "edition-6"
+    BaseHandler._get_response
+      the wrapper condition made
+        views.edition_tag(request)  ->  'edition-7'
+        get_conditional_response(request, etag='"edition-7"', last_modified=None)
+          log, WARNING to django.request: Precondition Failed: /edition/
+          -> an HttpResponse, status 412
+        -> an HttpResponse, status 412
+    start_response("412 Precondition Failed", headers)
+    the server sends the body: ''
+
+Which views are coroutine functions, and which decorators keep them so
+    iscoroutinefunction(views.front)  ->  False
+    iscoroutinefunction(views.wire)  ->  True
+    views.Colophon.view_is_async  ->  False
+    views.Wire.view_is_async  ->  True
+    iscoroutinefunction(views.Wire.as_view())  ->  True
+    iscoroutinefunction(views.Colophon.as_view())  ->  False
+    View.view_is_async  ->  False
+    views.Muddle.view_is_async  ->  raises ImproperlyConfigured: Muddle HTTP handlers must either be all sync or all async.
+    views.Muddle.as_view()  ->  raises ImproperlyConfigured: Muddle HTTP handlers must either be all sync or all async.
+    iscoroutinefunction(never_cache(views.wire))  ->  True
+    iscoroutinefunction(csrf_exempt(views.wire))  ->  True
+    iscoroutinefunction(require_POST(views.wire))  ->  True
+    iscoroutinefunction(non_atomic_requests(views.wire))  ->  False
+    iscoroutinefunction(method_decorator(never_cache)(views.Wire.get))  ->  True
+    iscoroutinefunction(views.counted(views.wire))  ->  False
+    iscoroutinefunction(views.wire_counted)  ->  False
+    iscoroutinefunction(views.bare(views.wire))  ->  False
+    iscoroutinefunction(views.counted(views.Wire.as_view()))  ->  True
+    iscoroutinefunction(views.bare(views.Wire.as_view()))  ->  False
+
+Views that are coroutine functions, requested through a WSGIHandler
+    GET /wire/, an async def function
+    start_response("200 OK", headers)
+    the server sends the body: 'from the wire'
+    GET /wire/class/, a class whose get is async def
+    start_response("200 OK", headers)
+    the server sends the body: 'from the wire'
+    OPTIONS /wire/class/
+    start_response("200 OK", headers), with Allow: GET, HEAD, OPTIONS
+    PUT /wire/class/
+    log, WARNING to django.request: Method Not Allowed (PUT): /wire/class/
+    start_response("405 Method Not Allowed", headers), with Allow: GET, HEAD, OPTIONS
+    GET /wire/class/counted/, the function as_view returned for that class, inside a wrapper that is an ordinary function
+    start_response("200 OK", headers)
+    the server sends the body: 'from the wire'
+    GET /wire/counted/, an async def function inside the same kind of wrapper
+    signal got_request_exception, for ValueError: The view gazette.views.wire_counted didn't return an HttpResponse object. It returned an unawaited coroutine instead. You may need to add an 'await' into your view.
+    log, ERROR to django.request: Internal Server Error: /wire/counted/
+    start_response("500 Internal Server Error", headers)
+
+resolve_url(): an object, a name, or a URL
+    resolve_url("/articles/")  ->  '/articles/'
+    resolve_url("articles")  ->  '/articles/'
+    resolve_url("article", slug="ferry-timetable")  ->  '/articles/ferry-timetable/'
+    resolve_url("article", "ferry-timetable")  ->  '/articles/ferry-timetable/'
+    resolve_url(views.front)  ->  '/'
+    resolve_url(ferry), where ferry is the Article with the slug 'ferry-timetable'  ->  '/articles/ferry-timetable/'
+    resolve_url(ferry, slug="ignored")  ->  '/articles/ferry-timetable/'
+    resolve_url("./next/")  ->  './next/'
+    resolve_url("../")  ->  '../'
+    resolve_url("https://example.org/")  ->  'https://example.org/'
+    resolve_url("gazette.example")  ->  'gazette.example'
+    resolve_url("no-such-name")  ->  raises NoReverseMatch
+    resolve_url("no such/name")  ->  'no such/name'
+    resolve_url(reverse_lazy("articles"))  ->  '/articles/'
+    resolve_url(views.nothing, 7)  ->  raises NoReverseMatch
+
+redirect(): the response it makes
+    redirect("articles")  ->  an HttpResponseRedirect, status 302, Location '/articles/', content ''
+    redirect("article", slug="ferry-timetable")  ->  an HttpResponseRedirect, status 302, Location '/articles/ferry-timetable/', content ''
+    redirect(ferry)  ->  an HttpResponseRedirect, status 302, Location '/articles/ferry-timetable/', content ''
+    redirect("articles", permanent=True)  ->  an HttpResponsePermanentRedirect, status 301, Location '/articles/', content ''
+    redirect("articles", preserve_request=True)  ->  an HttpResponseRedirect, status 307, Location '/articles/', content ''
+    redirect("articles", permanent=True, preserve_request=True)  ->  an HttpResponsePermanentRedirect, status 308, Location '/articles/', content ''
+    redirect("https://example.org/")  ->  an HttpResponseRedirect, status 302, Location 'https://example.org/', content ''
+    redirect("javascript:alert(1)")  ->  raises NoReverseMatch: 'javascript' is not a registered namespace
+
+render() returns a response already rendered; a TemplateResponse is made unrendered
+    render(request(), "gazette/front.html", {"edition": 7})  ->  an HttpResponse, status 200, content 'Edition 7 of the Gazette\n'
+    render(request(), "gazette/front.html", {"edition": 7}, status=203)  ->  an HttpResponse, status 203, content 'Edition 7 of the Gazette\n'
+    TemplateResponse(request(), "gazette/front.html", {"edition": 7})  ->  a TemplateResponse, status 200, not rendered
+    render(request(), "gazette/no-such.html")  ->  raises TemplateDoesNotExist
+    TemplateResponse(request(), "gazette/no-such.html")  ->  a TemplateResponse, status 200, not rendered
+
+get_object_or_404() and get_list_or_404()
+    (the queries these questions send are not written down)
+    get_object_or_404(Article, slug="ferry-timetable")  ->  <Article: New ferry timetable>
+    get_object_or_404(Article.objects, slug="ferry-timetable")  ->  <Article: New ferry timetable>
+    get_object_or_404(Article.objects.filter(published__month=3), slug="ferry-timetable")  ->  <Article: New ferry timetable>
+    get_object_or_404(Article.objects.filter(published__month=4), slug="ferry-timetable")  ->  raises Http404: No Article matches the given query.
+    get_object_or_404(Article, slug="no-such-article")  ->  raises Http404: No Article matches the given query.
+    get_object_or_404(Article, headline__contains="cat")  ->  raises MultipleObjectsReturned
+    get_object_or_404("Article", slug="ferry-timetable")  ->  raises ValueError: First argument to get_object_or_404() must be a Model, Manager, or QuerySet, not 'str'.
+    get_list_or_404(Article.objects.order_by("published"), headline__contains="cat")  ->  [<Article: Lost: a grey cat, Quay Street>, <Article: Found: a grey cat>]
+    get_list_or_404(Article, headline__contains="dog")  ->  raises Http404: No Article matches the given query.
+    type(get_list_or_404(Article.objects.order_by("slug"), published__month=3)).__name__  ->  'list'
+
+The method resolution order of each generic view, without object, the last of each
+    TemplateView  ->  TemplateView > TemplateResponseMixin > ContextMixin > View
+    RedirectView  ->  RedirectView > View
+    DetailView  ->  DetailView > SingleObjectTemplateResponseMixin > TemplateResponseMixin > BaseDetailView > SingleObjectMixin > ContextMixin > View
+    ListView  ->  ListView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseListView > MultipleObjectMixin > ContextMixin > View
+    FormView  ->  FormView > TemplateResponseMixin > BaseFormView > FormMixin > ContextMixin > ProcessFormView > View
+    CreateView  ->  CreateView > SingleObjectTemplateResponseMixin > TemplateResponseMixin > BaseCreateView > ModelFormMixin > FormMixin > SingleObjectMixin > ContextMixin > ProcessFormView > View
+    UpdateView  ->  UpdateView > SingleObjectTemplateResponseMixin > TemplateResponseMixin > BaseUpdateView > ModelFormMixin > FormMixin > SingleObjectMixin > ContextMixin > ProcessFormView > View
+    DeleteView  ->  DeleteView > SingleObjectTemplateResponseMixin > TemplateResponseMixin > BaseDeleteView > DeletionMixin > FormMixin > BaseDetailView > SingleObjectMixin > ContextMixin > View
+    ArchiveIndexView  ->  ArchiveIndexView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseArchiveIndexView > BaseDateListView > MultipleObjectMixin > ContextMixin > DateMixin > View
+    YearArchiveView  ->  YearArchiveView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseYearArchiveView > YearMixin > BaseDateListView > MultipleObjectMixin > ContextMixin > DateMixin > View
+    MonthArchiveView  ->  MonthArchiveView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseMonthArchiveView > YearMixin > MonthMixin > BaseDateListView > MultipleObjectMixin > ContextMixin > DateMixin > View
+    WeekArchiveView  ->  WeekArchiveView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseWeekArchiveView > YearMixin > WeekMixin > BaseDateListView > MultipleObjectMixin > ContextMixin > DateMixin > View
+    DayArchiveView  ->  DayArchiveView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseDayArchiveView > YearMixin > MonthMixin > DayMixin > BaseDateListView > MultipleObjectMixin > ContextMixin > DateMixin > View
+    TodayArchiveView  ->  TodayArchiveView > MultipleObjectTemplateResponseMixin > TemplateResponseMixin > BaseTodayArchiveView > BaseDayArchiveView > YearMixin > MonthMixin > DayMixin > BaseDateListView > MultipleObjectMixin > ContextMixin > DateMixin > View
+    DateDetailView  ->  DateDetailView > SingleObjectTemplateResponseMixin > TemplateResponseMixin > BaseDateDetailView > YearMixin > MonthMixin > DayMixin > DateMixin > BaseDetailView > SingleObjectMixin > ContextMixin > View
+
+DetailView: which class supplies each method
+    as_view  ->  View
+    setup  ->  View
+    dispatch  ->  View
+    get  ->  BaseDetailView
+    get_object  ->  SingleObjectMixin
+    get_queryset  ->  SingleObjectMixin
+    get_slug_field  ->  SingleObjectMixin
+    get_context_data  ->  SingleObjectMixin
+    get_context_object_name  ->  SingleObjectMixin
+    render_to_response  ->  TemplateResponseMixin
+    get_template_names  ->  SingleObjectTemplateResponseMixin
+
+UpdateView: which class supplies each method
+    get  ->  BaseUpdateView
+    post  ->  BaseUpdateView
+    put  ->  ProcessFormView
+    get_object  ->  SingleObjectMixin
+    get_form  ->  FormMixin
+    get_form_class  ->  ModelFormMixin
+    get_form_kwargs  ->  ModelFormMixin
+    get_initial  ->  FormMixin
+    form_valid  ->  ModelFormMixin
+    form_invalid  ->  FormMixin
+    get_success_url  ->  ModelFormMixin
+    get_context_data  ->  FormMixin
+    render_to_response  ->  TemplateResponseMixin
+    get_template_names  ->  SingleObjectTemplateResponseMixin
+
+DeleteView: which class supplies each method
+    get  ->  BaseDetailView
+    post  ->  BaseDeleteView
+    delete  ->  DeletionMixin
+    get_object  ->  SingleObjectMixin
+    get_form  ->  FormMixin
+    get_form_class  ->  FormMixin
+    form_valid  ->  BaseDeleteView
+    form_invalid  ->  FormMixin
+    get_success_url  ->  DeletionMixin
+    get_context_data  ->  FormMixin
+    get_template_names  ->  SingleObjectTemplateResponseMixin
+
+MonthArchiveView: which class supplies each method
+    get  ->  BaseDateListView
+    get_dated_items  ->  BaseMonthArchiveView
+    get_year  ->  YearMixin
+    get_month  ->  MonthMixin
+    get_dated_queryset  ->  BaseDateListView
+    get_date_list  ->  BaseDateListView
+    get_queryset  ->  MultipleObjectMixin
+    get_ordering  ->  BaseDateListView
+    get_next_month  ->  MonthMixin
+    get_previous_month  ->  MonthMixin
+    get_context_data  ->  MultipleObjectMixin
+    render_to_response  ->  TemplateResponseMixin
+    get_template_names  ->  MultipleObjectTemplateResponseMixin
+
+GET /about/: a TemplateView made in the URLconf
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for TemplateView)
+        View.__init__(template_name='gazette/about.html', extra_context={'founded': 1871})  (a new TemplateView)
+        View.setup(request)
+        View.dispatch(request)
+          TemplateView.get(request)
+            ContextMixin.get_context_data()  ->  a dict with the keys founded, view
+            TemplateResponseMixin.render_to_response(context)
+              TemplateResponseMixin.get_template_names  ->  ['gazette/about.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'The Gazette, founded 1871.\n'
+
+GET /news/: a RedirectView with a pattern_name
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for RedirectView)
+        View.__init__(pattern_name='articles')  (a new RedirectView)
+        View.setup(request)
+        View.dispatch(request)
+          RedirectView.get(request)
+            RedirectView.get_redirect_url()  ->  '/articles/'
+            -> an HttpResponseRedirect, status 302, Location '/articles/'
+          -> an HttpResponseRedirect, status 302, Location '/articles/'
+        -> an HttpResponseRedirect, status 302, Location '/articles/'
+    start_response("302 Found", headers), with Location: /articles/
+    the server sends the body: ''
+
+GET /news/ferry-timetable/?ref=front: a RedirectView that is permanent and keeps the query string
+    BaseHandler._get_response
+      view(request, slug='ferry-timetable')  (the function as_view returned for RedirectView)
+        View.__init__(pattern_name='article', permanent=True, query_string=True)  (a new RedirectView)
+        View.setup(request, slug='ferry-timetable')
+        View.dispatch(request, slug='ferry-timetable')
+          RedirectView.get(request, slug='ferry-timetable')
+            RedirectView.get_redirect_url(slug='ferry-timetable')  ->  '/articles/ferry-timetable/?ref=front'
+            -> an HttpResponsePermanentRedirect, status 301, Location '/articles/ferry-timetable/?ref=front'
+          -> an HttpResponsePermanentRedirect, status 301, Location '/articles/ferry-timetable/?ref=front'
+        -> an HttpResponsePermanentRedirect, status 301, Location '/articles/ferry-timetable/?ref=front'
+    start_response("301 Moved Permanently", headers), with Location: /articles/ferry-timetable/?ref=front
+    the server sends the body: ''
+
+GET /weather/: a RedirectView with nowhere to send the request
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for RedirectView)
+        View.__init__()  (a new RedirectView)
+        View.setup(request)
+        View.dispatch(request)
+          RedirectView.get(request)
+            RedirectView.get_redirect_url()  ->  None
+            log, WARNING to django.request: Gone: /weather/
+            -> an HttpResponseGone, status 410
+          -> an HttpResponseGone, status 410
+        -> an HttpResponseGone, status 410
+    start_response("410 Gone", headers)
+    the server sends the body: ''
+
+GET /articles/ferry-timetable/: a DetailView
+    BaseHandler._get_response
+      view(request, slug='ferry-timetable')  (the function as_view returned for ArticleDetail)
+        View.__init__()  (a new ArticleDetail)
+        View.setup(request, slug='ferry-timetable')
+        View.dispatch(request, slug='ferry-timetable')
+          BaseDetailView.get(request, slug='ferry-timetable')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('ferry-timetable',)
+              -> <Article: New ferry timetable>
+            SingleObjectMixin.get_context_data(object=...)
+              SingleObjectMixin.get_context_object_name(obj)  ->  'article'
+              ContextMixin.get_context_data(object=..., article=...)  ->  a dict with the keys article, object, view
+              -> a dict with the keys article, object, view
+            TemplateResponseMixin.render_to_response(context)
+              SingleObjectTemplateResponseMixin.get_template_names
+                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                -> ['gazette/article_detail.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'New ferry timetable, 3 March 2026\n'
+
+GET /articles/no-such-article/: the DetailView finds no object
+    BaseHandler._get_response
+      view(request, slug='no-such-article')  (the function as_view returned for ArticleDetail)
+        View.__init__()  (a new ArticleDetail)
+        View.setup(request, slug='no-such-article')
+        View.dispatch(request, slug='no-such-article')
+          BaseDetailView.get(request, slug='no-such-article')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('no-such-article',)
+              raises Http404
+    response_for_exception(request, Http404)  ->  an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /articles/no-such-article/
+    start_response("404 Not Found", headers)
+
+GET /articles/?page=2: a ListView that paginates
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for ArticleList)
+        View.__init__()  (a new ArticleList)
+        View.setup(request)
+        View.dispatch(request)
+          BaseListView.get(request)
+            MultipleObjectMixin.get_queryset
+              MultipleObjectMixin.get_ordering  ->  '-published'
+              -> a QuerySet of Article, ordered by -published, not yet fetched
+            MultipleObjectMixin.get_allow_empty  ->  True
+            MultipleObjectMixin.get_context_data()
+              MultipleObjectMixin.get_paginate_by(queryset)  ->  3
+              MultipleObjectMixin.get_context_object_name(object_list)  ->  'article_list'
+              MultipleObjectMixin.paginate_queryset(queryset, 3)
+                MultipleObjectMixin.get_paginate_orphans  ->  0
+                MultipleObjectMixin.get_allow_empty  ->  True
+                MultipleObjectMixin.get_paginator(queryset, 3, orphans=0, allow_empty_first_page=True)  ->  a Paginator
+                Paginator.page(2)
+                  SQL SELECT COUNT(*) AS "__count" FROM "gazette_article" with params ()
+                  -> <Page 2 of 3>
+                -> (a Paginator, <Page 2 of 3>, the page's objects: a QuerySet of Article, ordered by -published, not yet fetched, True)
+              ContextMixin.get_context_data(paginator=..., page_obj=..., is_paginated=..., object_list=..., article_list=...)  ->  a dict with the keys article_list, is_paginated, object_list, page_obj, paginator, view
+              -> a dict with the keys article_list, is_paginated, object_list, page_obj, paginator, view
+            TemplateResponseMixin.render_to_response(context)
+              MultipleObjectTemplateResponseMixin.get_template_names
+                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                -> ['gazette/article_list.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+        SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" ORDER BY "gazette_article"."published" DESC LIMIT 3 OFFSET 3 with params ()
+    start_response("200 OK", headers)
+    the server sends the body: 'Lighthouse open day; New ferry timetable; Harbour wall to be rebuilt; page 2 of 3\n'
+
+GET /articles/?page=9: a page the list does not have
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for ArticleList)
+        View.__init__()  (a new ArticleList)
+        View.setup(request)
+        View.dispatch(request)
+          BaseListView.get(request)
+            MultipleObjectMixin.get_queryset
+              MultipleObjectMixin.get_ordering  ->  '-published'
+              -> a QuerySet of Article, ordered by -published, not yet fetched
+            MultipleObjectMixin.get_allow_empty  ->  True
+            MultipleObjectMixin.get_context_data()
+              MultipleObjectMixin.get_paginate_by(queryset)  ->  3
+              MultipleObjectMixin.get_context_object_name(object_list)  ->  'article_list'
+              MultipleObjectMixin.paginate_queryset(queryset, 3)
+                MultipleObjectMixin.get_paginate_orphans  ->  0
+                MultipleObjectMixin.get_allow_empty  ->  True
+                MultipleObjectMixin.get_paginator(queryset, 3, orphans=0, allow_empty_first_page=True)  ->  a Paginator
+                Paginator.page(9)
+                  SQL SELECT COUNT(*) AS "__count" FROM "gazette_article" with params ()
+                  raises EmptyPage
+                raises Http404
+    response_for_exception(request, Http404)  ->  an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /articles/
+    start_response("404 Not Found", headers)
+
+GET /letters/: a FormView shows its form
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Letters)
+        View.__init__()  (a new Letters)
+        View.setup(request)
+        View.dispatch(request)
+          ProcessFormView.get(request)
+            FormMixin.get_context_data()
+              FormMixin.get_form()
+                FormMixin.get_form_class  ->  LetterForm
+                FormMixin.get_form_kwargs
+                  FormMixin.get_initial  ->  {}
+                  FormMixin.get_prefix  ->  None
+                  -> a dict with the keys initial, prefix
+                -> a LetterForm, not bound
+              ContextMixin.get_context_data(form=...)  ->  a dict with the keys form, view
+              -> a dict with the keys form, view
+            TemplateResponseMixin.render_to_response(context)
+              TemplateResponseMixin.get_template_names  ->  ['gazette/letters.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'Write to the editor\n'
+
+POST /letters/ with a letter that is too short: the form is not valid
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Letters)
+        View.__init__()  (a new Letters)
+        View.setup(request)
+        View.dispatch(request)
+          ProcessFormView.post(request)
+            FormMixin.get_form()
+              FormMixin.get_form_class  ->  LetterForm
+              FormMixin.get_form_kwargs
+                FormMixin.get_initial  ->  {}
+                FormMixin.get_prefix  ->  None
+                -> a dict with the keys data, files, initial, prefix
+              -> a LetterForm, bound
+            BaseForm.is_valid  ->  False
+            FormMixin.form_invalid(form)
+              FormMixin.get_context_data(form=...)
+                ContextMixin.get_context_data(form=...)  ->  a dict with the keys form, view
+                -> a dict with the keys form, view
+              TemplateResponseMixin.render_to_response(context)
+                TemplateResponseMixin.get_template_names  ->  ['gazette/letters.html']
+                -> a TemplateResponse, status 200, not rendered
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'Please correct: letter\n'
+
+POST /letters/ with a letter the form accepts
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Letters)
+        View.__init__()  (a new Letters)
+        View.setup(request)
+        View.dispatch(request)
+          ProcessFormView.post(request)
+            FormMixin.get_form()
+              FormMixin.get_form_class  ->  LetterForm
+              FormMixin.get_form_kwargs
+                FormMixin.get_initial  ->  {}
+                FormMixin.get_prefix  ->  None
+                -> a dict with the keys data, files, initial, prefix
+              -> a LetterForm, bound
+            BaseForm.is_valid  ->  True
+            Letters.form_valid(form)
+              FormMixin.form_valid(form)
+                FormMixin.get_success_url  ->  '/letters/thanks/'
+                -> an HttpResponseRedirect, status 302, Location '/letters/thanks/'
+              -> an HttpResponseRedirect, status 302, Location '/letters/thanks/'
+            -> an HttpResponseRedirect, status 302, Location '/letters/thanks/'
+          -> an HttpResponseRedirect, status 302, Location '/letters/thanks/'
+        -> an HttpResponseRedirect, status 302, Location '/letters/thanks/'
+    start_response("302 Found", headers), with Location: /letters/thanks/
+    the server sends the body: ''
+    the view's own form_valid put the name in views.RECEIVED: ['A. Reader']
+
+POST /articles/new/: a CreateView saves a new object
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for ArticleCreate)
+        View.__init__()  (a new ArticleCreate)
+        View.setup(request)
+        View.dispatch(request)
+          BaseCreateView.post(request)
+            ProcessFormView.post(request)
+              FormMixin.get_form()
+                ModelFormMixin.get_form_class
+                  modelform_factory(Article, fields=['slug', 'headline', 'published'])  ->  the class ArticleForm
+                  -> ArticleForm
+                ModelFormMixin.get_form_kwargs
+                  FormMixin.get_form_kwargs
+                    FormMixin.get_initial  ->  {}
+                    FormMixin.get_prefix  ->  None
+                    -> a dict with the keys data, files, initial, prefix
+                  -> a dict with the keys data, files, initial, instance, prefix
+                -> an ArticleForm, bound
+              BaseForm.is_valid
+                SQL SELECT %s AS "a" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 1 with params (1, 'regatta')
+                -> True
+              ModelFormMixin.form_valid(form)
+                BaseModelForm.save
+                  SQL INSERT INTO "gazette_article" ("slug", "headline", "published") VALUES (%s, %s, %s) RETURNING "gazette_article"."id" with params ('regatta', 'Regatta results', '2026-04-05 17:00:00')
+                  -> <Article: Regatta results>
+                FormMixin.form_valid(form)
+                  ModelFormMixin.get_success_url
+                    Article.get_absolute_url  ->  '/articles/regatta/'
+                    -> '/articles/regatta/'
+                  -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+                -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+              -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+            -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+          -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+        -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+    start_response("302 Found", headers), with Location: /articles/regatta/
+    the server sends the body: ''
+
+GET /articles/regatta/edit/: an UpdateView shows the form for an object
+    BaseHandler._get_response
+      view(request, slug='regatta')  (the function as_view returned for ArticleUpdate)
+        View.__init__()  (a new ArticleUpdate)
+        View.setup(request, slug='regatta')
+        View.dispatch(request, slug='regatta')
+          BaseUpdateView.get(request, slug='regatta')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('regatta',)
+              -> <Article: Regatta results>
+            ProcessFormView.get(request, slug='regatta')
+              FormMixin.get_context_data()
+                FormMixin.get_form()
+                  ModelFormMixin.get_form_class
+                    modelform_factory(Article, fields=['headline'])  ->  the class ArticleForm
+                    -> ArticleForm
+                  ModelFormMixin.get_form_kwargs
+                    FormMixin.get_form_kwargs
+                      FormMixin.get_initial  ->  {}
+                      FormMixin.get_prefix  ->  None
+                      -> a dict with the keys initial, prefix
+                    -> a dict with the keys initial, instance, prefix
+                  -> an ArticleForm, not bound
+                SingleObjectMixin.get_context_data(form=...)
+                  SingleObjectMixin.get_context_object_name(obj)  ->  'article'
+                  ContextMixin.get_context_data(object=..., article=..., form=...)  ->  a dict with the keys article, form, object, view
+                  -> a dict with the keys article, form, object, view
+                -> a dict with the keys article, form, object, view
+              TemplateResponseMixin.render_to_response(context)
+                SingleObjectTemplateResponseMixin.get_template_names
+                  TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                  -> ['gazette/article_form.html']
+                -> a TemplateResponse, status 200, not rendered
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'Change: Regatta results\n'
+
+POST /articles/regatta/edit/: an UpdateView saves the object
+    BaseHandler._get_response
+      view(request, slug='regatta')  (the function as_view returned for ArticleUpdate)
+        View.__init__()  (a new ArticleUpdate)
+        View.setup(request, slug='regatta')
+        View.dispatch(request, slug='regatta')
+          BaseUpdateView.post(request, slug='regatta')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('regatta',)
+              -> <Article: Regatta results>
+            ProcessFormView.post(request, slug='regatta')
+              FormMixin.get_form()
+                ModelFormMixin.get_form_class
+                  modelform_factory(Article, fields=['headline'])  ->  the class ArticleForm
+                  -> ArticleForm
+                ModelFormMixin.get_form_kwargs
+                  FormMixin.get_form_kwargs
+                    FormMixin.get_initial  ->  {}
+                    FormMixin.get_prefix  ->  None
+                    -> a dict with the keys data, files, initial, prefix
+                  -> a dict with the keys data, files, initial, instance, prefix
+                -> an ArticleForm, bound
+              BaseForm.is_valid  ->  True
+              ModelFormMixin.form_valid(form)
+                BaseModelForm.save
+                  SQL UPDATE "gazette_article" SET "slug" = %s, "headline" = %s, "published" = %s WHERE "gazette_article"."id" = %s with params ('regatta', 'Regatta results, corrected', '2026-04-05 17:00:00', 9)
+                  -> <Article: Regatta results, corrected>
+                FormMixin.form_valid(form)
+                  ModelFormMixin.get_success_url
+                    Article.get_absolute_url  ->  '/articles/regatta/'
+                    -> '/articles/regatta/'
+                  -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+                -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+              -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+            -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+          -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+        -> an HttpResponseRedirect, status 302, Location '/articles/regatta/'
+    start_response("302 Found", headers), with Location: /articles/regatta/
+    the server sends the body: ''
+
+GET /articles/lost-cat/delete/: a DeleteView asks first
+    BaseHandler._get_response
+      view(request, slug='lost-cat')  (the function as_view returned for ArticleDelete)
+        View.__init__()  (a new ArticleDelete)
+        View.setup(request, slug='lost-cat')
+        View.dispatch(request, slug='lost-cat')
+          BaseDetailView.get(request, slug='lost-cat')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('lost-cat',)
+              -> <Article: Lost: a grey cat, Quay Street>
+            FormMixin.get_context_data(object=...)
+              FormMixin.get_form()
+                FormMixin.get_form_class  ->  Form
+                FormMixin.get_form_kwargs
+                  FormMixin.get_initial  ->  {}
+                  FormMixin.get_prefix  ->  None
+                  -> a dict with the keys initial, prefix
+                -> a Form, not bound
+              SingleObjectMixin.get_context_data(object=..., form=...)
+                SingleObjectMixin.get_context_object_name(obj)  ->  'article'
+                ContextMixin.get_context_data(object=..., article=..., form=...)  ->  a dict with the keys article, form, object, view
+                -> a dict with the keys article, form, object, view
+              -> a dict with the keys article, form, object, view
+            TemplateResponseMixin.render_to_response(context)
+              SingleObjectTemplateResponseMixin.get_template_names
+                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                -> ['gazette/article_confirm_delete.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'Delete Lost: a grey cat, Quay Street?\n'
+
+POST /articles/lost-cat/delete/: a DeleteView deletes through its form
+    BaseHandler._get_response
+      view(request, slug='lost-cat')  (the function as_view returned for ArticleDelete)
+        View.__init__()  (a new ArticleDelete)
+        View.setup(request, slug='lost-cat')
+        View.dispatch(request, slug='lost-cat')
+          BaseDeleteView.post(request, slug='lost-cat')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('lost-cat',)
+              -> <Article: Lost: a grey cat, Quay Street>
+            FormMixin.get_form()
+              FormMixin.get_form_class  ->  Form
+              FormMixin.get_form_kwargs
+                FormMixin.get_initial  ->  {}
+                FormMixin.get_prefix  ->  None
+                -> a dict with the keys data, files, initial, prefix
+              -> a Form, bound
+            BaseForm.is_valid  ->  True
+            BaseDeleteView.form_valid(form)
+              DeletionMixin.get_success_url  ->  '/articles/'
+              Model.delete
+                SQL DELETE FROM "gazette_article" WHERE "gazette_article"."id" IN (%s) with params (1,)
+              -> an HttpResponseRedirect, status 302, Location '/articles/'
+            -> an HttpResponseRedirect, status 302, Location '/articles/'
+          -> an HttpResponseRedirect, status 302, Location '/articles/'
+        -> an HttpResponseRedirect, status 302, Location '/articles/'
+    start_response("302 Found", headers), with Location: /articles/
+    the server sends the body: ''
+
+DELETE /articles/found-cat/delete/: the same view, by the method DELETE
+    BaseHandler._get_response
+      view(request, slug='found-cat')  (the function as_view returned for ArticleDelete)
+        View.__init__()  (a new ArticleDelete)
+        View.setup(request, slug='found-cat')
+        View.dispatch(request, slug='found-cat')
+          DeletionMixin.delete(request, slug='found-cat')
+            SingleObjectMixin.get_object()
+              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
+              SingleObjectMixin.get_slug_field  ->  'slug'
+              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('found-cat',)
+              -> <Article: Found: a grey cat>
+            DeletionMixin.get_success_url  ->  '/articles/'
+            Model.delete
+              SQL DELETE FROM "gazette_article" WHERE "gazette_article"."id" IN (%s) with params (2,)
+            -> an HttpResponseRedirect, status 302, Location '/articles/'
+          -> an HttpResponseRedirect, status 302, Location '/articles/'
+        -> an HttpResponseRedirect, status 302, Location '/articles/'
+    start_response("302 Found", headers), with Location: /articles/
+    the server sends the body: ''
+
+The Gazette's articles by now: one was added and changed, and two were deleted
+    2026-02-27 09:00 UTC  harbour-wall: Harbour wall to be rebuilt
+    2026-03-03 08:00 UTC  ferry-timetable: New ferry timetable
+    2026-03-14 10:00 UTC  lighthouse-open-day: Lighthouse open day
+    2026-03-28 18:00 UTC  council-budget: Council passes budget
+    2026-04-02 12:00 UTC  spring-fair: Spring fair dates set
+    2026-04-05 17:00 UTC  regatta: Regatta results, corrected
+    2026-05-01 07:00 UTC  may-day: May Day programme
+
+GET /archive/2026/3/: a MonthArchiveView
+    BaseHandler._get_response
+      view(request, year=2026, month=3)  (the function as_view returned for ArticleMonth)
+        View.__init__()  (a new ArticleMonth)
+        View.setup(request, year=2026, month=3)
+        View.dispatch(request, year=2026, month=3)
+          BaseDateListView.get(request, year=2026, month=3)
+            BaseMonthArchiveView.get_dated_items
+              YearMixin.get_year  ->  2026
+              MonthMixin.get_month  ->  3
+              DateMixin.get_date_field  ->  'published'
+              YearMixin.get_year_format  ->  '%Y'
+              MonthMixin.get_month_format  ->  '%m'
+              _date_from_string(2026, '%Y', 3, '%m')  ->  2026-03-01
+              DateMixin._make_date_lookup_arg(2026-03-01)
+                DateMixin.uses_datetime_field
+                  DateMixin.get_date_field  ->  'published'
+                  -> True
+                -> 2026-03-01 00:00+00:00
+              MonthMixin._get_next_month(2026-03-01)  ->  2026-04-01
+              DateMixin._make_date_lookup_arg(2026-04-01)  ->  2026-04-01 00:00+00:00
+              BaseDateListView.get_dated_queryset(published__gte=2026-03-01 00:00+00:00, published__lt=2026-04-01 00:00+00:00)
+                MultipleObjectMixin.get_queryset
+                  BaseDateListView.get_ordering
+                    DateMixin.get_date_field  ->  'published'
+                    -> '-published'
+                  -> a QuerySet of Article, ordered by -published, not yet fetched
+                DateMixin.get_date_field  ->  'published'
+                DateMixin.get_allow_future  ->  False
+                MultipleObjectMixin.get_allow_empty  ->  False
+                MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+                SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC with params ('2026-03-01 00:00:00', '2026-04-01 00:00:00', '2026-04-10 09:00:00')
+                -> a QuerySet of Article, ordered by -published, already fetched
+              BaseDateListView.get_date_list(queryset)
+                DateMixin.get_date_field  ->  'published'
+                MultipleObjectMixin.get_allow_empty  ->  False
+                BaseDateListView.get_date_list_period  ->  'day'
+                SQL SELECT DISTINCT django_datetime_trunc(%s, "gazette_article"."published", %s, %s) AS "datetimefield" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s AND "gazette_article"."published" IS NOT NULL) ORDER BY 1 ASC with params ('day', 'UTC', 'UTC', '2026-03-01 00:00:00', '2026-04-01 00:00:00', '2026-04-10 09:00:00')
+                -> a QuerySet of datetimes, already fetched: 2026-03-03 00:00+00:00, 2026-03-14 00:00+00:00, 2026-03-28 00:00+00:00
+              MonthMixin.get_next_month(2026-03-01)
+                _get_next_prev(view, 2026-03-01, is_previous=False, period='month')
+                  DateMixin.get_date_field  ->  'published'
+                  MultipleObjectMixin.get_allow_empty  ->  False
+                  DateMixin.get_allow_future  ->  False
+                  MonthMixin._get_current_month(2026-03-01)  ->  2026-03-01
+                  MonthMixin._get_next_month(2026-03-01)  ->  2026-04-01
+                  DateMixin._make_date_lookup_arg(2026-04-01)  ->  2026-04-01 00:00+00:00
+                  MultipleObjectMixin.get_queryset
+                    BaseDateListView.get_ordering
+                      DateMixin.get_date_field  ->  'published'
+                      -> '-published'
+                    -> a QuerySet of Article, ordered by -published, not yet fetched
+                  SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" ASC LIMIT 1 with params ('2026-04-01 00:00:00', '2026-04-10 09:00:00')
+                  MonthMixin._get_current_month(2026-04-02)  ->  2026-04-01
+                  -> 2026-04-01
+                -> 2026-04-01
+              MonthMixin.get_previous_month(2026-03-01)
+                _get_next_prev(view, 2026-03-01, is_previous=True, period='month')
+                  DateMixin.get_date_field  ->  'published'
+                  MultipleObjectMixin.get_allow_empty  ->  False
+                  DateMixin.get_allow_future  ->  False
+                  MonthMixin._get_current_month(2026-03-01)  ->  2026-03-01
+                  MonthMixin._get_next_month(2026-03-01)  ->  2026-04-01
+                  DateMixin._make_date_lookup_arg(2026-03-01)  ->  2026-03-01 00:00+00:00
+                  MultipleObjectMixin.get_queryset
+                    BaseDateListView.get_ordering
+                      DateMixin.get_date_field  ->  'published'
+                      -> '-published'
+                    -> a QuerySet of Article, ordered by -published, not yet fetched
+                  SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC LIMIT 1 with params ('2026-03-01 00:00:00', '2026-04-10 09:00:00')
+                  MonthMixin._get_current_month(2026-02-27)  ->  2026-02-01
+                  -> 2026-02-01
+                -> 2026-02-01
+              -> (a QuerySet of 3 datetimes, a QuerySet of Article, ordered by -published, already fetched, {'month': 2026-03-01, 'next_month': 2026-04-01, 'previous_month': 2026-02-01})
+            MultipleObjectMixin.get_context_data(object_list=..., date_list=..., month=..., next_month=..., previous_month=...)
+              MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+              MultipleObjectMixin.get_context_object_name(object_list)  ->  'article_list'
+              ContextMixin.get_context_data(paginator=..., page_obj=..., is_paginated=..., object_list=..., article_list=..., date_list=..., month=..., next_month=..., previous_month=...)  ->  a dict with the keys article_list, date_list, is_paginated, month, next_month, object_list, page_obj, paginator, previous_month, view
+              -> a dict with the keys article_list, date_list, is_paginated, month, next_month, object_list, page_obj, paginator, previous_month, view
+            TemplateResponseMixin.render_to_response(context)
+              MultipleObjectTemplateResponseMixin.get_template_names
+                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                -> ['gazette/article_archive_month.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'March 2026: Council passes budget; Lighthouse open day; New ferry timetable; \n'
+
+GET /archive/2026/4/: the month the clock is in; the one article dated after the clock is in May
+    BaseHandler._get_response
+      view(request, year=2026, month=4)  (the function as_view returned for ArticleMonth)
+        View.__init__()  (a new ArticleMonth)
+        View.setup(request, year=2026, month=4)
+        View.dispatch(request, year=2026, month=4)
+          BaseDateListView.get(request, year=2026, month=4)
+            BaseMonthArchiveView.get_dated_items
+              YearMixin.get_year  ->  2026
+              MonthMixin.get_month  ->  4
+              DateMixin.get_date_field  ->  'published'
+              YearMixin.get_year_format  ->  '%Y'
+              MonthMixin.get_month_format  ->  '%m'
+              _date_from_string(2026, '%Y', 4, '%m')  ->  2026-04-01
+              DateMixin._make_date_lookup_arg(2026-04-01)
+                DateMixin.uses_datetime_field
+                  DateMixin.get_date_field  ->  'published'
+                  -> True
+                -> 2026-04-01 00:00+00:00
+              MonthMixin._get_next_month(2026-04-01)  ->  2026-05-01
+              DateMixin._make_date_lookup_arg(2026-05-01)  ->  2026-05-01 00:00+00:00
+              BaseDateListView.get_dated_queryset(published__gte=2026-04-01 00:00+00:00, published__lt=2026-05-01 00:00+00:00)
+                MultipleObjectMixin.get_queryset
+                  BaseDateListView.get_ordering
+                    DateMixin.get_date_field  ->  'published'
+                    -> '-published'
+                  -> a QuerySet of Article, ordered by -published, not yet fetched
+                DateMixin.get_date_field  ->  'published'
+                DateMixin.get_allow_future  ->  False
+                MultipleObjectMixin.get_allow_empty  ->  False
+                MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+                SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC with params ('2026-04-01 00:00:00', '2026-05-01 00:00:00', '2026-04-10 09:00:00')
+                -> a QuerySet of Article, ordered by -published, already fetched
+              BaseDateListView.get_date_list(queryset)
+                DateMixin.get_date_field  ->  'published'
+                MultipleObjectMixin.get_allow_empty  ->  False
+                BaseDateListView.get_date_list_period  ->  'day'
+                SQL SELECT DISTINCT django_datetime_trunc(%s, "gazette_article"."published", %s, %s) AS "datetimefield" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s AND "gazette_article"."published" IS NOT NULL) ORDER BY 1 ASC with params ('day', 'UTC', 'UTC', '2026-04-01 00:00:00', '2026-05-01 00:00:00', '2026-04-10 09:00:00')
+                -> a QuerySet of datetimes, already fetched: 2026-04-02 00:00+00:00, 2026-04-05 00:00+00:00
+              MonthMixin.get_next_month(2026-04-01)
+                _get_next_prev(view, 2026-04-01, is_previous=False, period='month')
+                  DateMixin.get_date_field  ->  'published'
+                  MultipleObjectMixin.get_allow_empty  ->  False
+                  DateMixin.get_allow_future  ->  False
+                  MonthMixin._get_current_month(2026-04-01)  ->  2026-04-01
+                  MonthMixin._get_next_month(2026-04-01)  ->  2026-05-01
+                  DateMixin._make_date_lookup_arg(2026-05-01)  ->  2026-05-01 00:00+00:00
+                  MultipleObjectMixin.get_queryset
+                    BaseDateListView.get_ordering
+                      DateMixin.get_date_field  ->  'published'
+                      -> '-published'
+                    -> a QuerySet of Article, ordered by -published, not yet fetched
+                  SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" ASC LIMIT 1 with params ('2026-05-01 00:00:00', '2026-04-10 09:00:00')
+                  -> None
+                -> None
+              MonthMixin.get_previous_month(2026-04-01)
+                _get_next_prev(view, 2026-04-01, is_previous=True, period='month')
+                  DateMixin.get_date_field  ->  'published'
+                  MultipleObjectMixin.get_allow_empty  ->  False
+                  DateMixin.get_allow_future  ->  False
+                  MonthMixin._get_current_month(2026-04-01)  ->  2026-04-01
+                  MonthMixin._get_next_month(2026-04-01)  ->  2026-05-01
+                  DateMixin._make_date_lookup_arg(2026-04-01)  ->  2026-04-01 00:00+00:00
+                  MultipleObjectMixin.get_queryset
+                    BaseDateListView.get_ordering
+                      DateMixin.get_date_field  ->  'published'
+                      -> '-published'
+                    -> a QuerySet of Article, ordered by -published, not yet fetched
+                  SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC LIMIT 1 with params ('2026-04-01 00:00:00', '2026-04-10 09:00:00')
+                  MonthMixin._get_current_month(2026-03-28)  ->  2026-03-01
+                  -> 2026-03-01
+                -> 2026-03-01
+              -> (a QuerySet of 2 datetimes, a QuerySet of Article, ordered by -published, already fetched, {'month': 2026-04-01, 'next_month': None, 'previous_month': 2026-03-01})
+            MultipleObjectMixin.get_context_data(object_list=..., date_list=..., month=..., next_month=..., previous_month=...)
+              MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+              MultipleObjectMixin.get_context_object_name(object_list)  ->  'article_list'
+              ContextMixin.get_context_data(paginator=..., page_obj=..., is_paginated=..., object_list=..., article_list=..., date_list=..., month=..., next_month=..., previous_month=...)  ->  a dict with the keys article_list, date_list, is_paginated, month, next_month, object_list, page_obj, paginator, previous_month, view
+              -> a dict with the keys article_list, date_list, is_paginated, month, next_month, object_list, page_obj, paginator, previous_month, view
+            TemplateResponseMixin.render_to_response(context)
+              MultipleObjectTemplateResponseMixin.get_template_names
+                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                -> ['gazette/article_archive_month.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'April 2026: Regatta results, corrected; Spring fair dates set; \n'
+
+GET /archive/2026/: a YearArchiveView, which lists months and, unless told to, no articles
+    BaseHandler._get_response
+      view(request, year=2026)  (the function as_view returned for ArticleYear)
+        View.__init__()  (a new ArticleYear)
+        View.setup(request, year=2026)
+        View.dispatch(request, year=2026)
+          BaseDateListView.get(request, year=2026)
+            BaseYearArchiveView.get_dated_items
+              YearMixin.get_year  ->  2026
+              DateMixin.get_date_field  ->  'published'
+              YearMixin.get_year_format  ->  '%Y'
+              _date_from_string(2026, '%Y')  ->  2026-01-01
+              DateMixin._make_date_lookup_arg(2026-01-01)
+                DateMixin.uses_datetime_field
+                  DateMixin.get_date_field  ->  'published'
+                  -> True
+                -> 2026-01-01 00:00+00:00
+              YearMixin._get_next_year(2026-01-01)  ->  2027-01-01
+              DateMixin._make_date_lookup_arg(2027-01-01)  ->  2027-01-01 00:00+00:00
+              BaseDateListView.get_dated_queryset(published__gte=2026-01-01 00:00+00:00, published__lt=2027-01-01 00:00+00:00)
+                MultipleObjectMixin.get_queryset
+                  BaseDateListView.get_ordering
+                    DateMixin.get_date_field  ->  'published'
+                    -> '-published'
+                  -> a QuerySet of Article, ordered by -published, not yet fetched
+                DateMixin.get_date_field  ->  'published'
+                DateMixin.get_allow_future  ->  False
+                MultipleObjectMixin.get_allow_empty  ->  False
+                MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+                SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC with params ('2026-01-01 00:00:00', '2027-01-01 00:00:00', '2026-04-10 09:00:00')
+                -> a QuerySet of Article, ordered by -published, already fetched
+              BaseDateListView.get_date_list(queryset)
+                DateMixin.get_date_field  ->  'published'
+                MultipleObjectMixin.get_allow_empty  ->  False
+                BaseDateListView.get_date_list_period  ->  'month'
+                SQL SELECT DISTINCT django_datetime_trunc(%s, "gazette_article"."published", %s, %s) AS "datetimefield" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s AND "gazette_article"."published" IS NOT NULL) ORDER BY 1 ASC with params ('month', 'UTC', 'UTC', '2026-01-01 00:00:00', '2027-01-01 00:00:00', '2026-04-10 09:00:00')
+                -> a QuerySet of datetimes, already fetched: 2026-02-01 00:00+00:00, 2026-03-01 00:00+00:00, 2026-04-01 00:00+00:00
+              BaseYearArchiveView.get_make_object_list  ->  False
+              YearMixin.get_next_year(2026-01-01)
+                _get_next_prev(view, 2026-01-01, is_previous=False, period='year')
+                  DateMixin.get_date_field  ->  'published'
+                  MultipleObjectMixin.get_allow_empty  ->  False
+                  DateMixin.get_allow_future  ->  False
+                  YearMixin._get_current_year(2026-01-01)  ->  2026-01-01
+                  YearMixin._get_next_year(2026-01-01)  ->  2027-01-01
+                  DateMixin._make_date_lookup_arg(2027-01-01)  ->  2027-01-01 00:00+00:00
+                  MultipleObjectMixin.get_queryset
+                    BaseDateListView.get_ordering
+                      DateMixin.get_date_field  ->  'published'
+                      -> '-published'
+                    -> a QuerySet of Article, ordered by -published, not yet fetched
+                  SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" ASC LIMIT 1 with params ('2027-01-01 00:00:00', '2026-04-10 09:00:00')
+                  -> None
+                -> None
+              YearMixin.get_previous_year(2026-01-01)
+                _get_next_prev(view, 2026-01-01, is_previous=True, period='year')
+                  DateMixin.get_date_field  ->  'published'
+                  MultipleObjectMixin.get_allow_empty  ->  False
+                  DateMixin.get_allow_future  ->  False
+                  YearMixin._get_current_year(2026-01-01)  ->  2026-01-01
+                  YearMixin._get_next_year(2026-01-01)  ->  2027-01-01
+                  DateMixin._make_date_lookup_arg(2026-01-01)  ->  2026-01-01 00:00+00:00
+                  MultipleObjectMixin.get_queryset
+                    BaseDateListView.get_ordering
+                      DateMixin.get_date_field  ->  'published'
+                      -> '-published'
+                    -> a QuerySet of Article, ordered by -published, not yet fetched
+                  SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC LIMIT 1 with params ('2026-01-01 00:00:00', '2026-04-10 09:00:00')
+                  -> None
+                -> None
+              -> (a QuerySet of 3 datetimes, an empty QuerySet of Article: its query is marked empty, {'year': 2026-01-01, 'next_year': None, 'previous_year': None})
+            MultipleObjectMixin.get_context_data(object_list=..., date_list=..., year=..., next_year=..., previous_year=...)
+              MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+              MultipleObjectMixin.get_context_object_name(object_list)  ->  'article_list'
+              ContextMixin.get_context_data(paginator=..., page_obj=..., is_paginated=..., object_list=..., article_list=..., date_list=..., year=..., next_year=..., previous_year=...)  ->  a dict with the keys article_list, date_list, is_paginated, next_year, object_list, page_obj, paginator, previous_year, view, year
+              -> a dict with the keys article_list, date_list, is_paginated, next_year, object_list, page_obj, paginator, previous_year, view, year
+            TemplateResponseMixin.render_to_response(context)
+              MultipleObjectTemplateResponseMixin.get_template_names
+                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
+                -> ['gazette/article_archive_year.html']
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: '2026: February; March; April; 0 articles listed\n'
+
+GET /archive/2025/12/: a month with no articles
+    BaseHandler._get_response
+      view(request, year=2025, month=12)  (the function as_view returned for ArticleMonth)
+        View.__init__()  (a new ArticleMonth)
+        View.setup(request, year=2025, month=12)
+        View.dispatch(request, year=2025, month=12)
+          BaseDateListView.get(request, year=2025, month=12)
+            BaseMonthArchiveView.get_dated_items
+              YearMixin.get_year  ->  2025
+              MonthMixin.get_month  ->  12
+              DateMixin.get_date_field  ->  'published'
+              YearMixin.get_year_format  ->  '%Y'
+              MonthMixin.get_month_format  ->  '%m'
+              _date_from_string(2025, '%Y', 12, '%m')  ->  2025-12-01
+              DateMixin._make_date_lookup_arg(2025-12-01)
+                DateMixin.uses_datetime_field
+                  DateMixin.get_date_field  ->  'published'
+                  -> True
+                -> 2025-12-01 00:00+00:00
+              MonthMixin._get_next_month(2025-12-01)  ->  2026-01-01
+              DateMixin._make_date_lookup_arg(2026-01-01)  ->  2026-01-01 00:00+00:00
+              BaseDateListView.get_dated_queryset(published__gte=2025-12-01 00:00+00:00, published__lt=2026-01-01 00:00+00:00)
+                MultipleObjectMixin.get_queryset
+                  BaseDateListView.get_ordering
+                    DateMixin.get_date_field  ->  'published'
+                    -> '-published'
+                  -> a QuerySet of Article, ordered by -published, not yet fetched
+                DateMixin.get_date_field  ->  'published'
+                DateMixin.get_allow_future  ->  False
+                MultipleObjectMixin.get_allow_empty  ->  False
+                MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+                SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC with params ('2025-12-01 00:00:00', '2026-01-01 00:00:00', '2026-04-10 09:00:00')
+                raises Http404
+    response_for_exception(request, Http404)  ->  an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /archive/2025/12/
+    start_response("404 Not Found", headers)
+
+GET /archive/2026/13/: a month that is not one
+    BaseHandler._get_response
+      view(request, year=2026, month=13)  (the function as_view returned for ArticleMonth)
+        View.__init__()  (a new ArticleMonth)
+        View.setup(request, year=2026, month=13)
+        View.dispatch(request, year=2026, month=13)
+          BaseDateListView.get(request, year=2026, month=13)
+            BaseMonthArchiveView.get_dated_items
+              YearMixin.get_year  ->  2026
+              MonthMixin.get_month  ->  13
+              DateMixin.get_date_field  ->  'published'
+              YearMixin.get_year_format  ->  '%Y'
+              MonthMixin.get_month_format  ->  '%m'
+              _date_from_string(2026, '%Y', 13, '%m')  raises Http404
+    response_for_exception(request, Http404)  ->  an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /archive/2026/13/
+    start_response("404 Not Found", headers)
+
+The date views: what each puts in the context, for the model Article and its field published
+    context(V, attributes, **from_the_path) makes the view V.as_view(model=Article, date_field="published", **attributes), calls it with
+    a GET request and the arguments given, and lists what the response's context holds: an article by its slug, the context's
+    keys in alphabetical order, and without the keys view, paginator, page_obj, is_paginated, article, article_list.
+    The queries are not written down. TodayArchiveView is not asked, and DateDetailView only about days long past: both read
+    the machine's date, datetime.date.today(), which the recording's clock does not replace.
+      context(generic.ArchiveIndexView)  ->  date_list = [2026-01-01 00:00+00:00]; latest = [regatta, spring-fair, council-budget, lighthouse-open-day, ferry-timetable, harbour-wall]; object_list = [regatta, spring-fair, council-budget, lighthouse-open-day, ferry-timetable, harbour-wall]
+      context(generic.YearArchiveView, year=2026)  ->  date_list = [2026-02-01 00:00+00:00, 2026-03-01 00:00+00:00, 2026-04-01 00:00+00:00]; next_year = None; object_list = []; previous_year = None; year = 2026-01-01
+      context(generic.YearArchiveView, {"make_object_list": True}, year=2026)  ->  date_list = [2026-02-01 00:00+00:00, 2026-03-01 00:00+00:00, 2026-04-01 00:00+00:00]; next_year = None; object_list = [regatta, spring-fair, council-budget, lighthouse-open-day, ferry-timetable, harbour-wall]; previous_year = None; year = 2026-01-01
+      context(generic.MonthArchiveView, year=2026, month="mar")  ->  date_list = [2026-03-03 00:00+00:00, 2026-03-14 00:00+00:00, 2026-03-28 00:00+00:00]; month = 2026-03-01; next_month = 2026-04-01; object_list = [council-budget, lighthouse-open-day, ferry-timetable]; previous_month = 2026-02-01
+      context(generic.WeekArchiveView, year=2026, week=10)  ->  date_list = None; next_week = 2026-03-22; object_list = [lighthouse-open-day]; previous_week = 2026-03-01; week = 2026-03-08
+      context(generic.DayArchiveView, year=2026, month="mar", day=14)  ->  date_list = None; day = 2026-03-14; next_day = 2026-03-28; next_month = 2026-04-01; object_list = [lighthouse-open-day]; previous_day = 2026-03-03; previous_month = 2026-02-01
+      context(generic.DayArchiveView, year=2026, month="mar", day=15)  ->  raises Http404: No articles available
+      context(generic.DayArchiveView, {"allow_empty": True}, year=2026, month="mar", day=15)  ->  date_list = None; day = 2026-03-15; next_day = 2026-03-16; next_month = 2026-04-01; object_list = []; previous_day = 2026-03-14; previous_month = 2026-02-01
+      context(generic.DateDetailView, year=2026, month="mar", day=14, slug="lighthouse-open-day")  ->  object = lighthouse-open-day
+      context(generic.DateDetailView, year=2026, month="mar", day=15, slug="lighthouse-open-day")  ->  raises Http404: No article found matching the query
+      context(generic.MonthArchiveView, {"allow_future": True}, year=2026, month="may")  ->  date_list = [2026-05-01 00:00+00:00]; month = 2026-05-01; next_month = None; object_list = [may-day]; previous_month = 2026-04-01
+      context(generic.MonthArchiveView, year=2026, month="may")  ->  raises Http404: No articles available
+      context(generic.MonthArchiveView, year=2026, month="3")  ->  raises Http404: Invalid date string “2026__3__” given format “%Y__%b__”
+      context(generic.WeekArchiveView, {"week_format": "%V"}, year=2026, week=10)  ->  raises ValueError: ISO week directive '%V' is incompatible with the year directive '%Y'. Use the ISO year '%G' instead.
+
+GET /no-such-page/ with DEBUG = False and no template named 404.html
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      get_exception_response(request, resolver, 404, exception)
+        URLResolver.resolve_error_handler(404)  ->  django.views.defaults.page_not_found
+        the wrapper made from _EnsureCsrfToken
+          CsrfViewMiddleware.process_request  (_EnsureCsrfToken)
+          CsrfViewMiddleware.process_view  (_EnsureCsrfToken)
+          page_not_found(request, Resolver404)
+            get_template('404.html')  raises TemplateDoesNotExist
+            Engine.from_string(ERROR_PAGE_TEMPLATE, filled in)
+            -> an HttpResponseNotFound, status 404
+          CsrfViewMiddleware.process_response  (_EnsureCsrfToken)
+          -> an HttpResponseNotFound, status 404
+        -> an HttpResponseNotFound, status 404
+      -> an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /no-such-page/
+    start_response("404 Not Found", headers)
+    the server sends the body, 179 bytes
+
+GET /no-such-page/ with DEBUG = False and a template named 404.html
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      get_exception_response(request, resolver, 404, exception)
+        URLResolver.resolve_error_handler(404)  ->  django.views.defaults.page_not_found
+        the wrapper made from _EnsureCsrfToken
+          CsrfViewMiddleware.process_request  (_EnsureCsrfToken)
+          CsrfViewMiddleware.process_view  (_EnsureCsrfToken)
+          page_not_found(request, Resolver404)
+            get_template('404.html')
+            -> an HttpResponseNotFound, status 404
+          CsrfViewMiddleware.process_response  (_EnsureCsrfToken)
+          -> an HttpResponseNotFound, status 404
+        -> an HttpResponseNotFound, status 404
+      -> an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /no-such-page/
+    start_response("404 Not Found", headers)
+    the server sends the body: 'Nothing is printed at /no-such-page/ (Resolver404).\n'
+
+GET /articles/no-such-article/ with a template named 404.html: the message of the Http404 a view raised
+    BaseHandler._get_response
+      SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('no-such-article',)
+      raises Http404
+    response_for_exception(request, Http404)
+      get_exception_response(request, resolver, 404, exception)
+        URLResolver.resolve_error_handler(404)  ->  django.views.defaults.page_not_found
+        the wrapper made from _EnsureCsrfToken
+          CsrfViewMiddleware.process_request  (_EnsureCsrfToken)
+          CsrfViewMiddleware.process_view  (_EnsureCsrfToken)
+          page_not_found(request, Http404)
+            get_template('404.html')
+            -> an HttpResponseNotFound, status 404
+          CsrfViewMiddleware.process_response  (_EnsureCsrfToken)
+          -> an HttpResponseNotFound, status 404
+        -> an HttpResponseNotFound, status 404
+      -> an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /articles/no-such-article/
+    start_response("404 Not Found", headers)
+    the server sends the body: 'Nothing is printed at /articles/no-such-article/ (No article found matching the query).\n'
+
+GET /editions/1790/ with DEBUG = False: the view raises LookupError
+    BaseHandler._get_response
+      views.missing(request, year=1790)  raises LookupError
+    response_for_exception(request, LookupError)
+      signal got_request_exception, for LookupError: no edition for 1790
+      handle_uncaught_exception(request, resolver, exc_info)
+        URLResolver.resolve_error_handler(500)  ->  django.views.defaults.server_error
+        the wrapper made from _EnsureCsrfToken
+          CsrfViewMiddleware.process_request  (_EnsureCsrfToken)
+          CsrfViewMiddleware.process_view  (_EnsureCsrfToken)
+          server_error(request)
+            get_template('500.html')  raises TemplateDoesNotExist
+            -> an HttpResponseServerError, status 500
+          CsrfViewMiddleware.process_response  (_EnsureCsrfToken)
+          -> an HttpResponseServerError, status 500
+        -> an HttpResponseServerError, status 500
+      log, ERROR to django.request: Internal Server Error: /editions/1790/
+      -> an HttpResponseServerError, status 500
+    start_response("500 Internal Server Error", headers)
+    the server sends the body, 145 bytes
+
+The four error views, called directly
+    defaults.page_not_found(request("/x y/"), Http404("no such edition"))  ->  an HttpResponseNotFound, status 404, between its body tags, white space run together: <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+    defaults.page_not_found(request("/x y/"), Http404())  ->  an HttpResponseNotFound, status 404, between its body tags, white space run together: <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+    defaults.page_not_found(request("/x y/"), Http404({"path": "x y/", "tried": []}))  ->  an HttpResponseNotFound, status 404, between its body tags, white space run together: <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+    defaults.page_not_found(request(), Http404(), template_name="gazette/gone.html")  ->  raises TemplateDoesNotExist
+    defaults.permission_denied(request(), PermissionDenied("subscribers only"))  ->  an HttpResponseForbidden, status 403, between its body tags, white space run together: <h1>403 Forbidden</h1><p></p>
+    defaults.bad_request(request(), BadRequest("no"))  ->  an HttpResponseBadRequest, status 400, between its body tags, white space run together: <h1>Bad Request (400)</h1><p></p>
+    defaults.server_error(request())  ->  an HttpResponseServerError, status 500, between its body tags, white space run together: <h1>Server Error (500)</h1><p></p>
+    with a template named 404.html: defaults.page_not_found(request("/x y/"), Http404("no such edition"))  ->  an HttpResponseNotFound, status 404, content 'Nothing is printed at /x%20y/ (no such edition).\n'
+
+GET /editions/1790/ with DEBUG = True and Accept: text/html
+    BaseHandler._get_response
+      views.missing(request, year=1790)  raises LookupError
+    response_for_exception(request, LookupError)
+      signal got_request_exception, for LookupError: no edition for 1790
+      handle_uncaught_exception(request, resolver, exc_info)
+        technical_500_response(request, LookupError, ..., status_code=500)
+          get_exception_reporter_class  ->  the class ExceptionReporter
+          ExceptionReporter.__init__(request, LookupError, ..., is_email=False)
+            get_exception_reporter_filter
+              get_default_exception_reporter_filter  ->  a SafeExceptionReporterFilter
+              -> a SafeExceptionReporterFilter
+          HttpRequest.get_preferred_type(['text/html', 'text/plain'])  ->  'text/html'
+          ExceptionReporter.get_traceback_html
+            Engine.from_string(the text of django/views/templates/technical_500.html)
+            ExceptionReporter.get_traceback_data
+              ExceptionReporter.get_traceback_frames
+                SafeExceptionReporterFilter.get_traceback_frame_variables  (the frame of inner)
+                  SafeExceptionReporterFilter.is_active  ->  False
+                  -> {'request': ..., 'exc': ..., 'get_response': ...}
+                SafeExceptionReporterFilter.get_traceback_frame_variables  (the frame of _get_response)
+                  SafeExceptionReporterFilter.is_active  ->  False
+                  -> {'self': ..., 'request': ..., 'response': ..., 'callback': ..., 'callback_args': ..., 'callback_kwargs': ..., 'wrapped_callback': ...}
+                SafeExceptionReporterFilter.get_traceback_frame_variables  (the frame of missing)
+                  SafeExceptionReporterFilter.is_active  ->  False
+                  -> {'request': ..., 'year': ..., 'password': ..., 'shelf': ...}
+              SafeExceptionReporterFilter.get_safe_request_meta
+              SafeExceptionReporterFilter.get_safe_cookies
+              SafeExceptionReporterFilter.get_post_parameters
+                SafeExceptionReporterFilter.is_active  ->  False
+              SafeExceptionReporterFilter.get_safe_settings
+              get_caller  ->  'gazette.views.missing'
+          -> an HttpResponse, status 500, Content-Type 'text/html'
+        -> an HttpResponse, status 500
+      log, ERROR to django.request: Internal Server Error: /editions/1790/
+      -> an HttpResponse, status 500
+    start_response("500 Internal Server Error", headers), with Content-Type: text/html
+
+GET /editions/1790/ with DEBUG = True and Accept: application/json
+    BaseHandler._get_response
+      views.missing(request, year=1790)  raises LookupError
+    response_for_exception(request, LookupError)
+      signal got_request_exception, for LookupError: no edition for 1790
+      handle_uncaught_exception(request, resolver, exc_info)
+        technical_500_response(request, LookupError, ..., status_code=500)
+          get_exception_reporter_class  ->  the class ExceptionReporter
+          ExceptionReporter.__init__(request, LookupError, ..., is_email=False)
+            get_exception_reporter_filter  ->  a SafeExceptionReporterFilter
+          HttpRequest.get_preferred_type(['text/html', 'text/plain'])  ->  None
+          ExceptionReporter.get_traceback_text
+            Engine.from_string(the text of django/views/templates/technical_500.txt)
+            ExceptionReporter.get_traceback_data
+              ExceptionReporter.get_traceback_frames
+                SafeExceptionReporterFilter.get_traceback_frame_variables  (the frame of inner)
+                  SafeExceptionReporterFilter.is_active  ->  False
+                  -> {'request': ..., 'exc': ..., 'get_response': ...}
+                SafeExceptionReporterFilter.get_traceback_frame_variables  (the frame of _get_response)
+                  SafeExceptionReporterFilter.is_active  ->  False
+                  -> {'self': ..., 'request': ..., 'response': ..., 'callback': ..., 'callback_args': ..., 'callback_kwargs': ..., 'wrapped_callback': ...}
+                SafeExceptionReporterFilter.get_traceback_frame_variables  (the frame of missing)
+                  SafeExceptionReporterFilter.is_active  ->  False
+                  -> {'request': ..., 'year': ..., 'password': ..., 'shelf': ...}
+              SafeExceptionReporterFilter.get_safe_request_meta
+              SafeExceptionReporterFilter.get_safe_cookies
+              SafeExceptionReporterFilter.get_post_parameters
+                SafeExceptionReporterFilter.is_active  ->  False
+              SafeExceptionReporterFilter.get_safe_settings
+              get_caller  ->  'gazette.views.missing'
+          -> an HttpResponse, status 500, Content-Type 'text/plain; charset=utf-8'
+        -> an HttpResponse, status 500
+      log, ERROR to django.request: Internal Server Error: /editions/1790/
+      -> an HttpResponse, status 500
+    start_response("500 Internal Server Error", headers), with Content-Type: text/plain; charset=utf-8
+
+GET /no-such-page/ with DEBUG = True
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      technical_404_response(request, exception)
+        Engine.from_string(the text of django/views/templates/technical_404.html)
+        SafeExceptionReporterFilter.get_safe_settings
+        get_caller  ->  ''
+        -> an HttpResponseNotFound, status 404
+      -> an HttpResponseNotFound, status 404
+    log, WARNING to django.request: Not Found: /no-such-page/
+    start_response("404 Not Found", headers), with Content-Type: text/html; charset=utf-8
+
+GET / with DEBUG = True and a URLconf that has no patterns
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      technical_404_response(request, exception)
+        default_urlconf(request)
+          Engine.from_string(the text of django/views/templates/default_urlconf.html)
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+      -> an HttpResponse, status 200
+    start_response("200 OK", headers), with Content-Type: text/html; charset=utf-8
+
+technical_500_response: HTML or plain text, by the request's Accept header
+    page_type(...) is the Content-Type of what technical_500_response returns for a request with the headers given
+      page_type()  ->  'text/html'
+      page_type(HTTP_ACCEPT="*/*")  ->  'text/html'
+      page_type(HTTP_ACCEPT="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")  ->  'text/html'
+      page_type(HTTP_ACCEPT="text/plain")  ->  'text/plain; charset=utf-8'
+      page_type(HTTP_ACCEPT="application/json")  ->  'text/plain; charset=utf-8'
+      page_type(HTTP_ACCEPT="text/plain, text/html")  ->  'text/plain; charset=utf-8'
+
+What a report shows of a frame's variables and of the posted data
+    views.missing has two local variables whose values are 'open sesame' (password) and 'the attic' (shelf), neither written out
+    whole in its source, and raises LookupError;
+    guarded is sensitive_variables("password")(views.missing), and all_guarded is sensitive_variables()(views.missing);
+    views.till has one local variable, posted = request.POST, and raises LookupError;
+    post_guarded is sensitive_post_parameters("pin")(views.till);
+    html(view, DEBUG) and text(view, DEBUG) are the two reports an ExceptionReporter writes for what the view raised, with the
+    setting DEBUG as given: with DEBUG True the reporter is made as for the debug page, and with DEBUG False as for the email
+    to the site's administrators (is_email=True), which by default carries the text report alone. The text report shows no
+    frame's variables at all, whatever the setting. The third argument of html and text is what was posted.
+      "open sesame" in html(views.missing, True)  ->  True
+      "open sesame" in text(views.missing, True)  ->  False
+      "open sesame" in html(views.missing, False)  ->  True
+      "open sesame" in text(views.missing, False)  ->  False
+      "the attic" in text(views.missing, False)  ->  False
+      "open sesame" in html(guarded, False)  ->  False
+      "the attic" in html(guarded, False)  ->  True
+      "open sesame" in html(guarded, True)  ->  True
+      "the attic" in html(all_guarded, False)  ->  False
+      "fourteen-ninety-two" in text(views.till, False, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  True
+      "fourteen-ninety-two" in html(views.till, False, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  True
+      "fourteen-ninety-two" in text(post_guarded, False, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  False
+      "fourteen-ninety-two" in html(post_guarded, False, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  False
+      "urgent" in text(post_guarded, False, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  True
+      "fourteen-ninety-two" in text(post_guarded, True, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  True
+      "SECRET_KEY = '********************'" in text(views.missing, True)  ->  True
+
+The frames of a report, when one exception was raised from another
+    lookup() raises KeyError; chained() calls it, catches the KeyError and raises LookupError from it;
+    frames() calls chained(), catches the LookupError, and returns what ExceptionReporter.get_traceback_frames makes of it:
+    the third frame is that of frames() itself, where the LookupError was caught
+      [(frame["function"], type(frame["exc_cause"]).__name__, bool(frame["exc_cause_explicit"])) for frame in frames()]  ->  [('chained', 'NoneType', False), ('lookup', 'NoneType', False), ('frames', 'KeyError', True), ('chained', 'KeyError', True)]
+      [frame["type"] for frame in frames()]  ->  ['user', 'user', 'user', 'user']
+      sorted(frames()[0])  ->  ['colno', 'context_line', 'exc_cause', 'exc_cause_explicit', 'filename', 'function', 'id', 'lineno', 'post_context', 'pre_context', 'pre_context_lineno', 'tb', 'tb_area_colno', 'type', 'vars']
+
+SafeExceptionReporterFilter: what is replaced by stars
+    filter is a SafeExceptionReporterFilter(), and request(...) a request with the headers given
+    filter.cleansed_substitute  ->  '********************'
+    filter.cleanse_setting("SECRET_KEY", "recording")  ->  '********************'
+    filter.cleanse_setting("TIME_ZONE", "UTC")  ->  'UTC'
+    filter.cleanse_setting("PASSENGERS", 12)  ->  '********************'
+    filter.cleanse_setting("API_URL", "https://api.example/")  ->  '********************'
+    filter.cleanse_setting("DATABASES", {"default": {"NAME": "gazette", "PASSWORD": "s3cret"}})  ->  {'default': {'NAME': 'gazette', 'PASSWORD': '********************'}}
+    filter.cleanse_setting("ADMINS", [{"email": "editor@gazette.example", "token": "t0ken"}])  ->  [{'email': 'editor@gazette.example', 'token': '********************'}]
+    filter.cleanse_setting("LOGIN_URL", len)  ->  <built-in function len>
+    type(filter.cleanse_setting("LOGIN_URL", len)).__name__  ->  'CallableSettingWrapper'
+    settings.SESSION_COOKIE_NAME  ->  'sessionid'
+    filter.cleanse_setting("sessionid", "abc123")  ->  '********************'
+    filter.get_safe_request_meta(request(HTTP_COOKIE="sessionid=abc123", HTTP_X_API_KEY="k3y"))["HTTP_COOKIE"]  ->  '********************'
+    filter.get_safe_request_meta(request(HTTP_COOKIE="sessionid=abc123", HTTP_X_API_KEY="k3y"))["HTTP_X_API_KEY"]  ->  '********************'
+    filter.get_safe_request_meta(request(HTTP_COOKIE="sessionid=abc123", HTTP_X_API_KEY="k3y"))["HTTP_HOST"]  ->  'gazette.example'
+    filter.get_safe_cookies(request(HTTP_COOKIE="sessionid=abc123; theme=dark"))  ->  {'sessionid': '********************', 'theme': 'dark'}
+    filter.is_active(request())  ->  True
+    with DEBUG = True: filter.is_active(request())  ->  False
+
+django.views.static.serve: what it answers
+    FILES is a directory that holds masthead.txt, a file named .proofs, and a directory, issues, with one file in it;
+    the script has set each file's modification time to 1 January 2026, 12:00:00 UTC, and told Python's mimetypes, which
+    the view asks, that .txt is text/plain
+      serve(request(), "masthead.txt", document_root=FILES)  ->  a FileResponse, status 200, Content-Type 'text/plain', Last-Modified 'Thu, 01 Jan 2026 12:00:00 GMT'
+      b"".join(serve(request(), "masthead.txt", document_root=FILES))  ->  b'THE GAZETTE\n'
+      serve(request(HTTP_IF_MODIFIED_SINCE="Thu, 01 Jan 2026 12:00:00 GMT"), "masthead.txt", document_root=FILES)  ->  an HttpResponseNotModified, status 304, content ''
+      serve(request(HTTP_IF_MODIFIED_SINCE="Thu, 01 Jan 2026 11:59:59 GMT"), "masthead.txt", document_root=FILES)  ->  a FileResponse, status 200, Content-Type 'text/plain', Last-Modified 'Thu, 01 Jan 2026 12:00:00 GMT'
+      serve(request(HTTP_IF_MODIFIED_SINCE="yesterday"), "masthead.txt", document_root=FILES)  ->  a FileResponse, status 200, Content-Type 'text/plain', Last-Modified 'Thu, 01 Jan 2026 12:00:00 GMT'
+      serve(request(), "issues/1871-01-07.txt", document_root=FILES)  ->  a FileResponse, status 200, Content-Type 'text/plain', Last-Modified 'Thu, 01 Jan 2026 12:00:00 GMT'
+      serve(request(), "issues/../masthead.txt", document_root=FILES)  ->  a FileResponse, status 200, Content-Type 'text/plain', Last-Modified 'Thu, 01 Jan 2026 12:00:00 GMT'
+      serve(request(), "/masthead.txt", document_root=FILES)  ->  a FileResponse, status 200, Content-Type 'text/plain', Last-Modified 'Thu, 01 Jan 2026 12:00:00 GMT'
+      serve(request(), "../views.py", document_root=FILES)  ->  raises SuspiciousFileOperation
+      serve(request(), "no-such-file.txt", document_root=FILES)  ->  raises Http404
+      serve(request(), "issues", document_root=FILES)  ->  raises Http404: Directory indexes are not allowed here.
+      serve(request(), "issues", document_root=FILES, show_indexes=True).status_code  ->  200
+      sorted(re.findall('href="([^"]*)"', serve(request(), "issues", document_root=FILES, show_indexes=True).content.decode()))  ->  ['../', '1871-01-07.txt']
+      sorted(re.findall('href="([^"]*)"', serve(request(), "", document_root=FILES, show_indexes=True).content.decode()))  ->  ['../', 'issues/', 'masthead.txt']
+      serve(request(), "masthead.txt")  ->  raises TypeError
+      static_views.was_modified_since("Thu, 01 Jan 2026 12:00:00 GMT", 1767268800.9)  ->  False
+      static_views.was_modified_since("Thu, 01 Jan 2026 12:00:00 GMT", 1767268801)  ->  True
+      static_views.was_modified_since(None, 1767268800)  ->  True
+
+static(): the pattern that routes a prefix to the view, made only when DEBUG is true
+    static("/media/", document_root=FILES)  ->  []
+    static("", document_root=FILES)  ->  raises ImproperlyConfigured
+    with DEBUG = True
+      static("/media/", document_root=FILES)  ->  [<URLPattern '^media/(?P<path>.*)$'>]
+      static("/media/", document_root=FILES)[0].callback is serve  ->  True
+      static("/media/", document_root=FILES)[0].default_args == {"document_root": FILES}  ->  True
+      static("https://cdn.example/media/", document_root=FILES)  ->  []
+

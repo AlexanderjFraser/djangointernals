@@ -85,7 +85,7 @@ An error view may return a template response that has not been rendered. It will
 
 ## The error views
 
-An error view is found by `URLResolver.resolve_error_handler`. It looks in the current URLconf module for a variable named `handler404` (or `handler403`, `handler400`, `handler500`), and when the module has none it takes the default of the same name from `django/conf/urls/__init__.py`, which are the views in `django/views/defaults.py` (`django/urls/resolvers.py:URLResolver.resolve_error_handler`).
+An error view is found by `URLResolver.resolve_error_handler`. It looks in the current URLconf module for a variable named `handler404` (or `handler403`, `handler400`, `handler500`), and when the module has none it takes the default of the same name from `django/conf/urls/__init__.py`, which are the views in `django/views/defaults.py` ([The error views](../views/errors.md)) (`django/urls/resolvers.py:URLResolver.resolve_error_handler`).
 
 `get_exception_response` calls the error view with the request and the exception. If the error view itself raises, the failure is treated as an unrecognised exception: the signal is sent and `handle_uncaught_exception` takes over. A broken 404 page thus becomes a 500 (`django/core/handlers/exception.py:get_exception_response`).
 
@@ -94,7 +94,7 @@ An error view is found by `URLResolver.resolve_error_handler`. It looks in the c
 `handle_uncaught_exception` makes the response for everything unrecognised (`django/core/handlers/exception.py:handle_uncaught_exception`).
 
 1. If `settings.DEBUG_PROPAGATE_EXCEPTIONS` is true, it raises the exception again.
-2. Otherwise, if `settings.DEBUG` is true, it returns `technical_500_response`: the debug page with the traceback.
+2. Otherwise, if `settings.DEBUG` is true, it returns `technical_500_response`: the debug page with the traceback ([The debug pages and `ExceptionReporter`](../views/debug.md)).
 3. Otherwise it calls the 500 error view, with the request alone.
 
 ## What does reach the server

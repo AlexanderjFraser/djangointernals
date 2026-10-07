@@ -1,0 +1,316 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "generic.md",
+ "pointers": [
+  {
+   "pointer": "django/views/generic/",
+   "line": 7,
+   "sentence": "How the generic views of `django/views/generic/` are put together: a handler method that calls a series of small methods declared by mixins, so that `TemplateView`, `DetailView` and `ListView` are little more than lists of base classes.",
+   "tree": "django",
+   "path": "django/views/generic/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "5c6cfaf43c576b28"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:DetailView",
+   "line": 17,
+   "sentence": "Every generic view that renders a template is assembled so, from two halves, except `TemplateView`, which is written in one piece: its bases are two mixins and `View`, and its `get` is its own (`django/views/generic/detail.py:DetailView`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "DetailView",
+   "kind": "class",
+   "lines": [
+    184,
+    191
+   ],
+   "fingerprint": "d877a4c963678b99"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:BaseDetailView",
+   "line": 19,
+   "sentence": "Its docstring says as much: it requires subclassing to provide a response mixin (`django/views/generic/detail.py:BaseDetailView`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "BaseDetailView",
+   "kind": "class",
+   "lines": [
+    104,
+    114
+   ],
+   "fingerprint": "fdfd07b211928bca"
+  },
+  {
+   "pointer": "django/views/generic/base.py:ContextMixin.get_context_data",
+   "line": 44,
+   "sentence": "And it lays the view's `extra_context` over the top, when that attribute is not `None` (`django/views/generic/base.py:ContextMixin.get_context_data`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "ContextMixin.get_context_data",
+   "kind": "function",
+   "lines": [
+    30,
+    34
+   ],
+   "fingerprint": "9e193bf5203e3337"
+  },
+  {
+   "pointer": "django/views/generic/base.py:TemplateResponseMixin",
+   "line": 48,
+   "sentence": "It calls `get_template_names`, and gives the result to `response_class`, which is `TemplateResponse` unless a subclass says otherwise, with the request, the context, and the view's `template_engine` and `content_type` (`django/views/generic/base.py:TemplateResponseMixin`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "TemplateResponseMixin",
+   "kind": "class",
+   "lines": [
+    183,
+    218
+   ],
+   "fingerprint": "eea13df11e8a38ab"
+  },
+  {
+   "pointer": "django/views/generic/base.py:TemplateView",
+   "line": 52,
+   "sentence": "`TemplateView` is the two mixins and `View` with a short `get` between them: the keyword arguments from the path go to `get_context_data`, and the context goes to `render_to_response` (`django/views/generic/base.py:TemplateView`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "TemplateView",
+   "kind": "class",
+   "lines": [
+    221,
+    228
+   ],
+   "fingerprint": "a1b436874496002b"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:BaseDetailView.get",
+   "line": 111,
+   "sentence": "`BaseDetailView.get` is three statements, and each is one of the indented groups: find the object and keep it as `BaseDetailView.object`, build the context, make the response (`django/views/generic/detail.py:BaseDetailView.get`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "BaseDetailView.get",
+   "kind": "function",
+   "lines": [
+    111,
+    114
+   ],
+   "fingerprint": "18901a409130fcbc"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:SingleObjectMixin.get_object",
+   "line": 132,
+   "sentence": "With neither it raises `AttributeError`, whose message says the view must be called with one or the other in the URLconf (`django/views/generic/detail.py:SingleObjectMixin.get_object`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectMixin.get_object",
+   "kind": "function",
+   "lines": [
+    21,
+    59
+   ],
+   "fingerprint": "b9ab23efb58a66f9"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.get",
+   "line": 134,
+   "sentence": "The `LIMIT 21` in the query is that method's own doing, not the view's (`django/db/models/query.py:QuerySet.get`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.get",
+   "kind": "function",
+   "lines": [
+    726,
+    759
+   ],
+   "fingerprint": "7af2c1f495fa5cf2"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:SingleObjectMixin.get_queryset",
+   "line": 148,
+   "sentence": "A queryset written as a class attribute is one object shared by every request the process serves, and each request works on a copy of it (`django/views/generic/detail.py:SingleObjectMixin.get_queryset`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectMixin.get_queryset",
+   "kind": "function",
+   "lines": [
+    61,
+    77
+   ],
+   "fingerprint": "b143a9abc9fec77f"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:SingleObjectMixin.get_context_data",
+   "line": 150,
+   "sentence": "So the Gazette's template can say article where a template written for any model would say object (`django/views/generic/detail.py:SingleObjectMixin.get_context_data`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectMixin.get_context_data",
+   "kind": "function",
+   "lines": [
+    92,
+    101
+   ],
+   "fingerprint": "912ec78ff7502323"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:SingleObjectTemplateResponseMixin.get_template_names",
+   "line": 152,
+   "sentence": "If nothing could be built it raises `ImproperlyConfigured` again, with a message that lists what would have helped (`django/views/generic/detail.py:SingleObjectTemplateResponseMixin.get_template_names`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectTemplateResponseMixin.get_template_names",
+   "kind": "function",
+   "lines": [
+    121,
+    181
+   ],
+   "fingerprint": "df814f3664b169d2"
+  },
+  {
+   "pointer": "django/views/generic/list.py:BaseListView.get",
+   "line": 196,
+   "sentence": "`BaseListView.get` keeps the queryset as `BaseListView.object_list`, makes the context and makes the response (`django/views/generic/list.py:BaseListView.get`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "BaseListView.get",
+   "kind": "function",
+   "lines": [
+    157,
+    179
+   ],
+   "fingerprint": "fce7a717a2624f87"
+  },
+  {
+   "pointer": "django/views/generic/list.py:MultipleObjectMixin.get_queryset",
+   "line": 198,
+   "sentence": "And an ordering is applied at the end when there is one: `get_ordering` returns the `ordering` attribute, which is `None` unless it has been set to a field name or a sequence of them, and when it is set the queryset is passed through `order_by` (`django/views/generic/list.py:MultipleObjectMixin.get_queryset`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectMixin.get_queryset",
+   "kind": "function",
+   "lines": [
+    22,
+    47
+   ],
+   "fingerprint": "dcc984da1da1c4eb"
+  },
+  {
+   "pointer": "django/views/generic/list.py:MultipleObjectMixin.get_context_data",
+   "line": 200,
+   "sentence": "Otherwise `paginate_queryset` takes over (`django/views/generic/list.py:MultipleObjectMixin.get_context_data`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectMixin.get_context_data",
+   "kind": "function",
+   "lines": [
+    122,
+    147
+   ],
+   "fingerprint": "2a66f820c0e6346f"
+  },
+  {
+   "pointer": "django/views/generic/list.py:MultipleObjectMixin.paginate_queryset",
+   "line": 202,
+   "sentence": "Any other value that `int` refuses is an `Http404`, and so is a number the paginator refuses (`django/views/generic/list.py:MultipleObjectMixin.paginate_queryset`):",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectMixin.paginate_queryset",
+   "kind": "function",
+   "lines": [
+    53,
+    79
+   ],
+   "fingerprint": "45ab798c27d627a8"
+  },
+  {
+   "pointer": "django/core/paginator.py:Paginator.page",
+   "line": 220,
+   "sentence": "The count is run by the paginator when the page is asked for, since it cannot validate a page number without knowing how many rows there are (`django/core/paginator.py:Paginator.page`, `django/core/paginator.py:Paginator.count`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Paginator.page",
+   "kind": "function",
+   "lines": [
+    168,
+    175
+   ],
+   "fingerprint": "aac5c831b6b867aa"
+  },
+  {
+   "pointer": "django/core/paginator.py:Paginator.count",
+   "line": 220,
+   "sentence": "The count is run by the paginator when the page is asked for, since it cannot validate a page number without knowing how many rows there are (`django/core/paginator.py:Paginator.page`, `django/core/paginator.py:Paginator.count`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Paginator.count",
+   "kind": "function",
+   "lines": [
+    177,
+    183
+   ],
+   "at": 178,
+   "fingerprint": "2094d88801c1fc68"
+  },
+  {
+   "pointer": "django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names",
+   "line": 224,
+   "sentence": "Unlike the detail view's, this one adds the generated name even when `template_name` was given, so the given name is tried first and the generated one stands behind it (`django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectTemplateResponseMixin.get_template_names",
+   "kind": "function",
+   "lines": [
+    187,
+    217
+   ],
+   "fingerprint": "a774e640ef8842e7"
+  },
+  {
+   "pointer": "django/views/generic/base.py:RedirectView",
+   "line": 228,
+   "sentence": "It has no mixins: it is `View` with a `get` that redirects (`django/views/generic/base.py:RedirectView`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "RedirectView",
+   "kind": "class",
+   "lines": [
+    231,
+    291
+   ],
+   "fingerprint": "898accf5e303f57d"
+  },
+  {
+   "pointer": "django/views/generic/base.py:RedirectView.get_redirect_url",
+   "line": 230,
+   "sentence": "If `query_string` is true, the request's query string is added to whatever was found (`django/views/generic/base.py:RedirectView.get_redirect_url`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "RedirectView.get_redirect_url",
+   "kind": "function",
+   "lines": [
+    240,
+    259
+   ],
+   "fingerprint": "d3421806d208a847"
+  },
+  {
+   "pointer": "django/views/generic/base.py:RedirectView.get",
+   "line": 232,
+   "sentence": "When there is no target it answers with a 410, `HttpResponseGone`, and logs a warning (`django/views/generic/base.py:RedirectView.get`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "RedirectView.get",
+   "kind": "function",
+   "lines": [
+    261,
+    273
+   ],
+   "fingerprint": "3b13cd9c64b48abc"
+  }
+ ]
+}

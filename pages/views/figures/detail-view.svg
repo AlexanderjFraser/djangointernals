@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 780 384">
+  <text class="quiet small" x="0" y="14">the classes, in method resolution order</text>
+  <text class="quiet small" x="272" y="14">which of them runs each of six methods during a GET; the numbers are the order of the calls</text>
+
+  <!-- lanes -->
+  <path class="line dashed" d="M0 30 H780 M0 76 H265 M0 122 H265 M0 168 H265 M0 214 H265 M0 260 H265 M0 306 H780"/>
+  <path class="line dashed" d="M265 30 V306"/>
+  <text class="name" x="0" y="58">SingleObjectTemplateResponseMixin</text>
+  <text class="name" x="0" y="104">TemplateResponseMixin</text>
+  <text class="name" x="0" y="150">BaseDetailView</text>
+  <text class="name" x="0" y="196">SingleObjectMixin</text>
+  <text class="name" x="0" y="242">ContextMixin</text>
+  <text class="name" x="0" y="288">View</text>
+
+  <!-- SingleObjectTemplateResponseMixin -->
+  <rect class="box" x="454" y="39" width="174" height="28" rx="4"/>
+  <text class="strong small" x="462" y="58">6</text>
+  <text class="name" x="478" y="58">get_template_names</text>
+  <path class="mark-line" d="M541 67 V75"/>
+  <polygon class="head mark" points="541,85 536,75 546,75"/>
+  <text class="quiet small" x="552" y="80">super()</text>
+
+  <!-- TemplateResponseMixin -->
+  <rect class="box" x="272" y="85" width="174" height="28" rx="4"/>
+  <text class="strong small" x="280" y="104">5</text>
+  <text class="name" x="296" y="104">render_to_response</text>
+  <rect class="mark-box" x="454" y="85" width="158" height="28" rx="4"/>
+  <text class="name" x="464" y="104">get_template_names</text>
+  <text class="quiet small" x="622" y="104">raises: no template_name</text>
+
+  <!-- BaseDetailView -->
+  <rect class="box" x="272" y="131" width="64" height="28" rx="4"/>
+  <text class="strong small" x="280" y="150">1</text>
+  <text class="name" x="296" y="150">get</text>
+
+  <!-- SingleObjectMixin -->
+  <rect class="box" x="272" y="177" width="120" height="28" rx="4"/>
+  <text class="strong small" x="280" y="196">2</text>
+  <text class="name" x="296" y="196">get_object</text>
+  <rect class="box" x="400" y="177" width="134" height="28" rx="4"/>
+  <text class="strong small" x="408" y="196">3</text>
+  <text class="name" x="424" y="196">get_queryset</text>
+  <rect class="box" x="542" y="177" width="166" height="28" rx="4"/>
+  <text class="strong small" x="550" y="196">4</text>
+  <text class="name" x="566" y="196">get_context_data</text>
+  <path class="mark-line" d="M625 205 V213"/>
+  <polygon class="head mark" points="625,223 620,213 630,213"/>
+  <text class="quiet small" x="636" y="218">super()</text>
+
+  <!-- ContextMixin -->
+  <rect class="mark-box" x="542" y="223" width="166" height="28" rx="4"/>
+  <text class="name" x="566" y="242">get_context_data</text>
+  <text class="quiet small" x="534" y="242" text-anchor="end">adds "view"</text>
+
+  <!-- View -->
+  <text class="quiet small" x="272" y="288">as_view, setup and dispatch, all before step 1</text>
+
+  <!-- what the steps do -->
+  <text class="strong small" x="0" y="330">2, 3</text>
+  <text class="small" x="40" y="330">the object is looked up in the queryset, by the slug or the pk the path captured</text>
+  <text class="strong small" x="0" y="350">4</text>
+  <text class="small" x="40" y="350">the context holds the object twice, as object and as article, and then the view</text>
+  <text class="strong small" x="0" y="370">6</text>
+  <text class="small" x="40" y="370">with no template_name, the name is built from the object's model: gazette/article_detail.html</text>
+</svg>
