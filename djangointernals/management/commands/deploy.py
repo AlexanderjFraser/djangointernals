@@ -157,7 +157,10 @@ def curl_fetch(url: str) -> tuple[int, dict, bytes]:
             resolve = ["--resolve", f"{host}:443:{found}"]
     with tempfile.TemporaryDirectory() as scratch:
         body, heads = os.path.join(scratch, "body"), os.path.join(scratch, "heads")
-        done = subprocess.run(["curl", "-sS", "-o", body, "-D", heads, "-w", "%{http_code}", *resolve, url],
+        # A connection that times out is tried again: where one address family is unreachable, curl now
+        # and then waits on it alone, and that is the network's failure, not the deployment's.
+        done = subprocess.run(["curl", "-sS", "--connect-timeout", "10", "--retry", "3", "-o", body, "-D", heads,
+                               "-w", "%{http_code}", *resolve, url],
                               capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
         if done.returncode:
             raise Stopped("the fetch-back", f"curl could not fetch {url}: {done.stderr.strip()}")
