@@ -158,8 +158,10 @@ def curl_fetch(url: str) -> tuple[int, dict, bytes]:
     with tempfile.TemporaryDirectory() as scratch:
         body, heads = os.path.join(scratch, "body"), os.path.join(scratch, "heads")
         # A connection that times out is tried again: where one address family is unreachable, curl now
-        # and then waits on it alone, and that is the network's failure, not the deployment's.
-        done = subprocess.run(["curl", "-sS", "--connect-timeout", "10", "--retry", "3", "-o", body, "-D", heads,
+        # and then waits on it alone, and that is the network's failure, not the deployment's. So is a
+        # connection reset as it is made, which curl tries again only when told to try after every error.
+        done = subprocess.run(["curl", "-sS", "--connect-timeout", "10", "--retry", "3", "--retry-all-errors",
+                               "-o", body, "-D", heads,
                                "-w", "%{http_code}", *resolve, url],
                               capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
         if done.returncode:
