@@ -34,6 +34,10 @@ What is changed on the way to HTML and nowhere else:
 - A figure's fenced source becomes the SVG drawn from it, numbered, with
   its caption; a table with an italic paragraph directly under it becomes a
   numbered table with that caption. The numbers are the book's (book.py).
+- A short name in a code span is marked to stay on one line. A table of three
+  columns or more carries each column's heading in its cells, hidden until a
+  narrow screen sets the table row by row (site.css); there a long name in a
+  table may break between its words.
 - A `runtime-names` block is not shown: it declares names for the name
   gate, and a reader of the page has no use for it.
 """
@@ -59,19 +63,31 @@ ANCHOR_TAG = re.compile(r"</?a\b[^>]*>")
 PROLOG = re.compile(r"\A\s*(?:(?:<\?xml.*?\?>|<!DOCTYPE.*?>|<!--.*?-->)\s*)*", re.S)
 COLUMN = 646  # the text column in CSS pixels at the size the stylesheet sets: a wider figure uses the margin
 UNBROKEN = 16  # a code span of this many characters or fewer is never broken across lines
+STACKS = 3  # a table of this many columns or more is set row by row on a narrow screen
 BETWEEN = re.compile(r"\s*(?:[,;]|,?\s*and)?\s*")  # what may stand between two pointers of one parenthesis
 SOURCED = {"paragraph_open", "bullet_list_open", "ordered_list_open", "blockquote_open"}  # blocks whose sources are set beside them
 
 
-def breakable(code: str) -> str:
+def breakable(code: str, words: bool = False) -> str:
     """A code span's text, escaped, with the places a long name or pointer may break. A short
     one is given none: `settings.DEBUG` reads worse broken than it fits whole, and in the narrow
-    first column of a table a browser breaks wherever it is allowed to."""
+    first column of a table a browser breaks wherever it is allowed to. `words` adds the places
+    between a long name's words, after an underscore and before a capital, each marked: the
+    stylesheet uses them where a table is set row by row, and nowhere else."""
     text = escape(code, quote=False)
     if len(code) <= UNBROKEN:
         return text
+    if words:
+        text = re.sub(r"(?<=[A-Za-z0-9])_(?=[A-Za-z0-9])|(?<=[a-z0-9])(?=[A-Z])", lambda found: found.group() + '<wbr class="word">', text)
     text = re.sub(r"([/:])(?=[^\s/:])", r"\1<wbr>", text)
     return re.sub(r"(?<=\w)\.(?=\w)", "<wbr>.", text)
+
+
+def code(text: str, words: bool = False) -> str:
+    """A code span's element. A short one is marked whole, and the stylesheet keeps it on one
+    line: on a narrow screen a table's code may otherwise break between any two letters."""
+    whole = ' class="whole"' if len(text) <= UNBROKEN else ""
+    return f"<code{whole}>{breakable(text, words)}</code>"
 
 
 def unlinked(html: str) -> str:
@@ -113,20 +129,21 @@ def shown(body: str, gates) -> tuple[str, str]:
     return tail + ("/" if path.endswith("/") else ""), prefix + (head + "/" if head else "")
 
 
-def pointer(body: str, gates, full: bool = False) -> str:
+def pointer(body: str, gates, full: bool = False, words: bool = False) -> str:
     """A code span's HTML. A pointer is a link to the lines it lands on at the pin (gates.py),
     shown by its symbol; `full` adds the file under it, as the margin and a table show it.
-    Anything else, and a pointer that does not resolve (the gate refuses the page), is code."""
+    Anything else, and a pointer that does not resolve (the gate refuses the page), is code.
+    `words` is for a table: a long name may break between its words (breakable)."""
     linked = gates.link(body) if gates is not None and gates.is_pointer(body) else None
     if linked is None:
-        return f"<code>{breakable(body)}</code>"
+        return code(body, words)
     href, title = linked
     what, where = shown(body, gates)
     link = f'href="{escape(href, quote=True)}" title="{escape(title, quote=True)}"'
     if full:
-        return f'<a class="src" {link}><code>{breakable(what)}</code> <span class="in">{breakable(where)}</span></a>'
+        return f'<a class="src" {link}>{code(what, words)} <span class="in">{breakable(where)}</span></a>'
     symbol = gates.world.parse(body)[2]
-    return f'<a class="pointer" {link}><code>{breakable(what if symbol else where + what)}</code></a>'
+    return f'<a class="pointer" {link}>{code(what if symbol else where + what, words)}</a>'
 
 
 def sources(tokens: list[Token], gates) -> list[str]:
@@ -182,7 +199,8 @@ class Rules:
     rendered, the book it is in, the line of the block being rendered, and the problems so far."""
 
     def code_inline(self, tokens, idx, options, env):
-        return pointer(tokens[idx].content, env.get("gates"), full=bool(env.get("in_table")))
+        in_table = bool(env.get("in_table"))
+        return pointer(tokens[idx].content, env.get("gates"), full=in_table, words=in_table)
 
     def fence(self, tokens, idx, options, env):
         token = tokens[idx]
@@ -193,12 +211,36 @@ class Rules:
         return f"<pre{kind}><code>{escape(token.content, quote=False)}</code></pre>\n"
 
     def table_open(self, tokens, idx, options, env):
+        """A table of STACKS columns or more is marked, and its headings kept for its cells:
+        a narrow screen has no room for it, and the stylesheet sets it there row by row."""
         env["in_table"] = True
-        return '<div class="table"><table>\n'
+        heads, at = [], idx + 1
+        while tokens[at].type != "thead_close":
+            if tokens[at].type == "th_open":
+                heads.append(self.renderInline(tokens[at + 1].children, options, env))
+            at += 1
+        env["labels"] = heads if len(heads) >= STACKS else None
+        return '<div class="table stacks"><table>\n' if env["labels"] else '<div class="table"><table>\n'
 
     def table_close(self, tokens, idx, options, env):
         env["in_table"] = False
+        env["labels"] = None
         return "</table></div>\n"
+
+    def tr_open(self, tokens, idx, options, env):
+        env["column"] = 0
+        return self.renderToken(tokens, idx, options, env)
+
+    def td_open(self, tokens, idx, options, env):
+        """In a table that is set row by row, each cell after a row's first opens with the
+        heading of its column, which only a narrow screen shows. An empty cell is left empty."""
+        column = env.get("column", 0)
+        env["column"] = column + 1
+        opened = self.renderToken(tokens, idx, options, env)
+        labels = env.get("labels")
+        if labels and column and tokens[idx + 1].content.strip():
+            opened += f'<span class="label">{labels[column]}</span> '
+        return opened
 
     def blockquote_open(self, tokens, idx, options, env):
         """A quotation that opens with a phrase in bold is a note, and the phrase its label."""
@@ -267,8 +309,8 @@ class Rules:
 
 def markdown() -> MarkdownIt:
     md = MarkdownIt("commonmark", {"html": True, "typographer": True}).enable(["table", "smartquotes"])
-    for name in ("code_inline", "fence", "table_open", "table_close", "blockquote_open", "blockquote_close", "heading_open",
-                 "link_open", "link_close"):
+    for name in ("code_inline", "fence", "table_open", "table_close", "tr_open", "td_open", "blockquote_open", "blockquote_close",
+                 "heading_open", "link_open", "link_close"):
         md.add_render_rule(name, getattr(Rules, name))
     return md
 

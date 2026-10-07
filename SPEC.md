@@ -256,6 +256,11 @@ A table is ruled above and below and may run into the margin. An italic
 paragraph directly under a table is its caption, and gives it a number. A
 pointer in a table cell is shown with its file under it.
 
+A narrow screen has no room for a table of three columns or more, and sets
+it row by row: a row's first cell stands alone as the row's name, and each
+cell after it beside the heading of its column. So a row's first cell says
+what the row is about, and a heading reads sensibly beside one cell.
+
 ## Links
 
 - A link to another page is the path of its `.md` file from the file the

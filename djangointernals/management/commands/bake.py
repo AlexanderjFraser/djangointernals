@@ -190,7 +190,8 @@ class Command(BaseCommand):
         figure = good["a.md"] + "\n```text figure=one\nx\n```\n\n*A caption.*\n"
         svg = '<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 10 10"><rect class="box" width="5" height="5"/></svg>'
         drawn = "a/figures/one.svg"
-        with_figure = {**good, "a.md": figure + "\n| x | y |\n|---|---|\n| 1 | 2 |\n\n*What the table shows.*\n\n> **Why.** A reason.\n\n> Somebody's words.\n",
+        with_figure = {**good, "a.md": figure + "\n| x | y |\n|---|---|\n| 1 | 2 |\n\n*What the table shows.*\n\n> **Why.** A reason.\n\n> Somebody's words.\n"
+                                                "\n| w | x | y |\n|---|---|---|\n| 1 | 2 | 3 |\n| 4 | | `process_template_response` |\n",
                        drawn: svg}
         plain = head + "# A\n\nLede.\n\n## First\n\nText.\n"
         cases = [
@@ -351,7 +352,7 @@ class Command(BaseCommand):
             if f'href="https://github.com/django/django/blob/{commit}/django/core/handlers/wsgi.py"' not in page:
                 fail("a file pointer is not a link to the file at the pin")
             asgiref = world.pinned["trees"]["asgiref"]
-            if f'href="{asgiref["repository"]}/blob/{asgiref["commit"]}/asgiref/sync.py#L' not in page or "<code>SyncToAsync</code>" not in page:
+            if f'href="{asgiref["repository"]}/blob/{asgiref["commit"]}/asgiref/sync.py#L' not in page or '<code class="whole">SyncToAsync</code>' not in page:
                 fail("a pointer into a library is not a link into the library's repository at its own commit, shown by its symbol")
             if "runtime-names" in page or "Model._meta" in page:
                 fail("a runtime-names block is shown on the page: it declares names for the gate, and is the twin's alone")
@@ -461,6 +462,15 @@ class Command(BaseCommand):
             with_numbers = (figured / "a.html").read_text(encoding="utf-8")
             if '<span class="no">Figure 1.1</span> A caption.' not in with_numbers or '<span class="no">Table 1.1</span> What the table shows.' not in with_numbers:
                 fail("a figure or a captioned table is not numbered by its chapter and its place in it")
+            # a table of three columns carries each column's heading in its cells, for a narrow screen; a table of two does not
+            if with_numbers.count('<div class="table stacks">') != 1 or with_numbers.count('<div class="table">') != 1:
+                fail("a table of three columns is not marked to be set row by row, or a table of two is")
+            long_name = '<code>process_<wbr class="word">template_<wbr class="word">response</code>'
+            labelled = ('<td>1</td>\n<td><span class="label">x</span> 2</td>\n<td><span class="label">y</span> 3</td>', f'<td>4</td>\n<td></td>\n<td><span class="label">y</span> {long_name}</td>')
+            if any(row not in with_numbers for row in labelled) or with_numbers.count('class="label"') != 3:
+                fail("a cell of a table of three columns does not open with its column's heading, or a row's first cell, an empty cell or a cell of a table of two does")
+            if with_numbers.count('<wbr class="word">') != 2:
+                fail("a long name in a table may not break between its words, or a name outside a table may")
             if '<figure class="figure" id="figure-one"' not in with_numbers or "<svg" not in with_numbers or "figure=one" in with_numbers:
                 fail("a figure is not put into the page as its SVG, or its source is shown beside it")
             if with_numbers.count('<aside class="note">') != 1 or with_numbers.count("<blockquote>") != 1:
