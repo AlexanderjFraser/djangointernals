@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 428">
+  <!-- three rows over two columns: the two querysets; what & makes of them; what union makes of them.
+       The condition of old keeps to the left column and that of on_petrel to the right, in every row. -->
+
+  <!-- the two querysets -->
+  <rect class="ground" x="0.5" y="0.5" width="312" height="56" rx="4"/>
+  <text class="name strong" x="14" y="23">old</text>
+  <text x="14" y="43">the sailors who signed on before 2020</text>
+  <rect class="ground" x="333.5" y="0.5" width="312" height="56" rx="4"/>
+  <text class="name strong" x="347" y="23">on_petrel</text>
+  <text x="347" y="43">the sailors of the Petrel</text>
+
+  <!-- the operator: one query, and one where clause that holds both conditions -->
+  <text class="name strong" x="0" y="98">old &amp; on_petrel</text>
+  <text x="131" y="98">a clone of <tspan class="name">old</tspan>, whose <tspan class="name">Query</tspan> has</text>
+  <rect class="box" x="0.5" y="110.5" width="645" height="86" rx="4"/>
+  <text class="name" x="14" y="134">where</text>
+  <rect class="mark-box" x="12.5" y="144.5" width="621" height="40" rx="4"/>
+  <text x="303" y="169" text-anchor="end">(signed on before 2020)</text>
+  <text class="name" x="323" y="169" text-anchor="middle">AND</text>
+  <text x="343" y="169">(ship is the Petrel)</text>
+  <text x="0" y="218">compiled as one <tspan class="name">SELECT</tspan> with one <tspan class="name">WHERE</tspan></text>
+
+  <!-- union: one query that holds the two queries as its parts -->
+  <text class="name strong" x="0" y="260">old.union(on_petrel)</text>
+  <text x="170" y="260">a clone of <tspan class="name">old</tspan>, whose <tspan class="name">Query</tspan> has</text>
+  <rect class="box" x="0.5" y="272.5" width="645" height="126" rx="4"/>
+  <text class="name" x="14" y="296">combinator</text>
+  <text class="name" x="108" y="296">"union"</text>
+  <text class="name" x="14" y="318">combined_queries</text>
+
+  <!-- part 0: the left queryset's own query -->
+  <rect class="mark-box" x="12.5" y="328.5" width="300" height="58" rx="4"/>
+  <text class="name strong" x="26" y="351">0</text>
+  <text x="46" y="351">the <tspan class="name">Query</tspan> of <tspan class="name">old</tspan> itself, not a copy</text>
+  <text class="name" x="46" y="371">where</text>
+  <text x="96" y="371">signed on before 2020</text>
+
+  <!-- part 1: a clone of the other's -->
+  <rect class="mark-box" x="333.5" y="328.5" width="300" height="58" rx="4"/>
+  <text class="name strong" x="347" y="351">1</text>
+  <text x="367" y="351">a clone of the <tspan class="name">Query</tspan> of <tspan class="name">on_petrel</tspan></text>
+  <text class="name" x="367" y="371">where</text>
+  <text x="417" y="371">ship is the Petrel</text>
+
+  <text x="0" y="420">compiled as one <tspan class="name">SELECT</tspan> for each part, with <tspan class="name">UNION</tspan> between them</text>
+</svg>

@@ -1,0 +1,702 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "writing.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/deletion.py:Collector",
+   "line": 9,
+   "sentence": "Where it writes to rows, no save is called: `update` makes no instance of any row, and `delete` hands a clone of the queryset to a `Collector`, which works out what the delete reaches, rows of other models among it, and sends the statements (`django/db/models/deletion.py:Collector`) ([Deleting: the `Collector`](../models/deleting.md)).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector",
+   "kind": "class",
+   "lines": [
+    117,
+    552
+   ],
+   "fingerprint": "70c697bd2fed5536"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.create",
+   "line": 31,
+   "sentence": "`QuerySet.create` takes keyword arguments, calls the model class with them, and saves what the class returns (`django/db/models/query.py:QuerySet.create`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.create",
+   "kind": "function",
+   "lines": [
+    764,
+    782
+   ],
+   "fingerprint": "8e522e9cbd79fded"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelState",
+   "line": 46,
+   "sentence": "And when the save is done it stores the queryset's fetch mode, `QuerySet._fetch_mode`, in the new instance's state, as `ModelState.fetch_mode` (`django/db/models/base.py:ModelState`) ([Deferred fields and fetch modes in a queryset](deferred.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelState",
+   "kind": "class",
+   "lines": [
+    485,
+    505
+   ],
+   "fingerprint": "6bc511a8b15682d9"
+  },
+  {
+   "pointer": "django/db/transaction.py:mark_for_rollback_on_error",
+   "line": 48,
+   "sentence": "The save ran inside `mark_for_rollback_on_error`, which opens no transaction and, where an exception passes through it inside a block of `atomic`, marks the connection as needing a rollback (`django/db/transaction.py:mark_for_rollback_on_error`) ([Database backends](../backends.md)).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "mark_for_rollback_on_error",
+   "kind": "function",
+   "lines": [
+    113,
+    139
+   ],
+   "at": 114,
+   "fingerprint": "833269fbe04c5776"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager.create",
+   "line": 50,
+   "sentence": "The manager at the far end of a foreign key does put its own instance among the values, by overriding `create` to add it to the arguments (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager.create`) ([Reading and setting related objects](../models/related-objects.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_reverse_many_to_one_manager.RelatedManager.create",
+   "kind": "function",
+   "lines": [
+    891,
+    896
+   ],
+   "fingerprint": "49a292e0cfb5bcc6"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options._reverse_one_to_one_field_names",
+   "line": 60,
+   "sentence": "`Options._reverse_one_to_one_field_names` holds such names for a model: it takes the one-to-one relations among `Options.related_objects`, each by the name a query knows it by (`django/db/models/options.py:Options._reverse_one_to_one_field_names`, `django/db/models/fields/reverse_related.py:ForeignObjectRel.name`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options._reverse_one_to_one_field_names",
+   "kind": "function",
+   "lines": [
+    1030,
+    1038
+   ],
+   "at": 1031,
+   "fingerprint": "7be4537032b4fbf1"
+  },
+  {
+   "pointer": "django/db/models/fields/reverse_related.py:ForeignObjectRel.name",
+   "line": 60,
+   "sentence": "`Options._reverse_one_to_one_field_names` holds such names for a model: it takes the one-to-one relations among `Options.related_objects`, each by the name a query knows it by (`django/db/models/options.py:Options._reverse_one_to_one_field_names`, `django/db/models/fields/reverse_related.py:ForeignObjectRel.name`).",
+   "tree": "django",
+   "path": "django/db/models/fields/reverse_related.py",
+   "symbol": "ForeignObjectRel.name",
+   "kind": "function",
+   "lines": [
+    69,
+    71
+   ],
+   "at": 70,
+   "fingerprint": "a7fecba76dfd34e6"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.__init__",
+   "line": 62,
+   "sentence": "Beside the names of its fields, `Model.__init__` takes a keyword that `Options.get_field` can find, a relation's far end included, and sets it as an attribute (`django/db/models/base.py:Model.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.__init__",
+   "kind": "function",
+   "lines": [
+    509,
+    622
+   ],
+   "fingerprint": "a5ca8ab9f2becf80"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.__set__",
+   "line": 62,
+   "sentence": "Assigning at that end of a one-to-one relation sets the key on the other object, and `create` saves the new instance and not that one (`django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.__set__`) ([Reading and setting related objects](../models/related-objects.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ReverseOneToOneDescriptor.__set__",
+   "kind": "function",
+   "lines": [
+    579,
+    650
+   ],
+   "fingerprint": "cdc81e96907e83f2"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.get_or_create",
+   "line": 66,
+   "sentence": "It leans on the database: where a unique constraint guards the row, the second insert fails, and the method catches the failure and looks again (`django/db/models/query.py:QuerySet.get_or_create`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.get_or_create",
+   "kind": "function",
+   "lines": [
+    1088,
+    1111
+   ],
+   "fingerprint": "88c72862d5368bb5"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 89,
+   "sentence": "`atomic` begins a transaction where none is open, as here, and makes a savepoint inside one that is (`django/db/transaction.py:Atomic.__enter__`) ([Database backends](../backends.md)).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._extract_model_params",
+   "line": 93,
+   "sentence": "`QuerySet._extract_model_params` turns the arguments of the search into the arguments of the model (`django/db/models/query.py:QuerySet._extract_model_params`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._extract_model_params",
+   "kind": "function",
+   "lines": [
+    1180,
+    1205
+   ],
+   "fingerprint": "58992cbeb30e28fa"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options._property_names",
+   "line": 93,
+   "sentence": "Each name that results has to be one `Options.get_field` finds, or a property of the model class that has a setter, the names of the class's properties being `Options._property_names` (`django/db/models/options.py:Options._property_names`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options._property_names",
+   "kind": "function",
+   "lines": [
+    1000,
+    1012
+   ],
+   "at": 1001,
+   "fingerprint": "194de06464ca773b"
+  },
+  {
+   "pointer": "django/db/models/utils.py:resolve_callables",
+   "line": 105,
+   "sentence": "Inside the block, `resolve_callables` replaces each value that can be called by what calling it returns, which is how the lambda given for Skagen's country became `'Denmark'` (`django/db/models/utils.py:resolve_callables`).",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": "resolve_callables",
+   "kind": "function",
+   "lines": [
+    28,
+    34
+   ],
+   "fingerprint": "892b881598330d2e"
+  },
+  {
+   "pointer": "django/db/utils.py:IntegrityError",
+   "line": 109,
+   "sentence": "If the `create` that `QuerySet.get_or_create` calls raises `IntegrityError`, the exception leaves the method's block of `atomic`, and the block undoes what was done inside it: it rolls back the transaction if it began one, and rolls back to its savepoint if it made one (`django/db/utils.py:IntegrityError`, `django/db/transaction.py:Atomic.__exit__`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "IntegrityError",
+   "kind": "class",
+   "lines": [
+    37,
+    38
+   ],
+   "fingerprint": "6b7bdd8a186bd741"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 109,
+   "sentence": "If the `create` that `QuerySet.get_or_create` calls raises `IntegrityError`, the exception leaves the method's block of `atomic`, and the block undoes what was done inside it: it rolls back the transaction if it began one, and rolls back to its savepoint if it made one (`django/db/utils.py:IntegrityError`, `django/db/transaction.py:Atomic.__exit__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 111,
+   "sentence": "Django's documentation states the condition this rests on: the method is atomic on the assumption that the database enforces the uniqueness of the keyword arguments, and where the fields have no such constraint, concurrent calls may insert several rows with the same values (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.update_or_create",
+   "line": 130,
+   "sentence": "It takes the conditions; `\"defaults\"`, the values to set on a row that is found; and `\"create_defaults\"`, the values for a row that has to be made, for which `\"defaults\"` serves where `\"create_defaults\"` is `None` (`django/db/models/query.py:QuerySet.update_or_create`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.update_or_create",
+   "kind": "function",
+   "lines": [
+    1123,
+    1167
+   ],
+   "fingerprint": "1214dc44a0b14c8f"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options._non_pk_concrete_field_names",
+   "line": 179,
+   "sentence": "If some name is anything else, a property with a setter for one, it calls `save` with no `\"update_fields\"`, and the save writes what a plain save of that instance writes; the comment at that test notes that `\"update_fields\"` does not support fields that are not concrete (`django/db/models/options.py:Options._non_pk_concrete_field_names`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options._non_pk_concrete_field_names",
+   "kind": "function",
+   "lines": [
+    1014,
+    1028
+   ],
+   "at": 1015,
+   "fingerprint": "e4943057f33385f1"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.pre_save",
+   "line": 181,
+   "sentence": "The method therefore adds, by name and by attname, each concrete field of the model's own, outside the key, whose class has a `pre_save` other than the base class's, `Field.pre_save` (`django/db/models/fields/__init__.py:Field.pre_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.pre_save",
+   "kind": "function",
+   "lines": [
+    1027,
+    1029
+   ],
+   "fingerprint": "f875aa1bbd8c51ec"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DateTimeField.pre_save",
+   "line": 183,
+   "sentence": "Sailor's `\"signed_on\"` is a `DateTimeField` declared with `auto_now_add=True`, and `DateTimeField.pre_save` sets the present moment where the field has `auto_now=True`, or has `auto_now_add=True` and the row is being added, and otherwise returns what the instance holds (`django/db/models/fields/__init__.py:DateTimeField.pre_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DateTimeField.pre_save",
+   "kind": "function",
+   "lines": [
+    1691,
+    1697
+   ],
+   "fingerprint": "003f304e7c7eca47"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.update",
+   "line": 200,
+   "sentence": "`QuerySet.update` takes field names and values as keyword arguments, and sets those columns in every row the queryset's query matches, making no instance of any row (`django/db/models/query.py:QuerySet.update`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.update",
+   "kind": "function",
+   "lines": [
+    1436,
+    1476
+   ],
+   "fingerprint": "1af0f8397db76c35"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 215,
+   "sentence": "The number is the cursor's count of rows for the statement, which the documentation describes as the rows matched, whether or not their values changed (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.chain",
+   "line": 219,
+   "sentence": "`Query.chain`, given a class, clones the query and assigns that class as the clone's class, and `UpdateQuery._setup_query` gives the clone an empty list of values to set (`django/db/models/sql/query.py:Query.chain`, `django/db/models/sql/subqueries.py:UpdateQuery`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.chain",
+   "kind": "function",
+   "lines": [
+    433,
+    446
+   ],
+   "fingerprint": "1296d8e0bfdf1117"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery",
+   "line": 219,
+   "sentence": "`Query.chain`, given a class, clones the query and assigns that class as the clone's class, and `UpdateQuery._setup_query` gives the clone an empty list of values to set (`django/db/models/sql/query.py:Query.chain`, `django/db/models/sql/subqueries.py:UpdateQuery`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery",
+   "kind": "class",
+   "lines": [
+    49,
+    145
+   ],
+   "fingerprint": "11cbc306ed8636fe"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery.add_update_values",
+   "line": 225,
+   "sentence": "`UpdateQuery.add_update_values` is given the keyword arguments of `QuerySet.update` as a dictionary (`django/db/models/sql/subqueries.py:UpdateQuery.add_update_values`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery.add_update_values",
+   "kind": "function",
+   "lines": [
+    81,
+    104
+   ],
+   "fingerprint": "31965311872bed04"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.get_field",
+   "line": 225,
+   "sentence": "It looks each name up with `Options.get_field` (`django/db/models/options.py:Options.get_field`), as one name: nothing is followed across a relation.",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.get_field",
+   "kind": "function",
+   "lines": [
+    670,
+    695
+   ],
+   "fingerprint": "c8d677b02b94ebc0"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 233,
+   "sentence": "The documentation gives the rule behind it: an update sets columns of the model's own table, not of related models (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery.add_related_update",
+   "line": 235,
+   "sentence": "`add_update_values` keeps such a value apart from the others, with `UpdateQuery.add_related_update` (`django/db/models/sql/subqueries.py:UpdateQuery.add_related_update`), and the update compiler then selects the keys of the rows the queryset matches and sends a statement to the parent's table for those keys ([From QuerySet to SQL](../sql.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery.add_related_update",
+   "kind": "function",
+   "lines": [
+    122,
+    128
+   ],
+   "fingerprint": "a6ef979c5bcef5c1"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 239,
+   "sentence": "The documentation says that `QuerySet.order_by` before `update` is supported on MariaDB and MySQL and ignored elsewhere, and MySQL's update compiler is the one that writes it (`docs/ref/models/querysets.txt`, `django/db/backends/mysql/compiler.py:SQLUpdateCompiler.as_sql`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/backends/mysql/compiler.py:SQLUpdateCompiler.as_sql",
+   "line": 239,
+   "sentence": "The documentation says that `QuerySet.order_by` before `update` is supported on MariaDB and MySQL and ignored elsewhere, and MySQL's update compiler is the one that writes it (`docs/ref/models/querysets.txt`, `django/db/backends/mysql/compiler.py:SQLUpdateCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/compiler.py",
+   "symbol": "SQLUpdateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    45,
+    69
+   ],
+   "fingerprint": "e4fbdd14f5e9f3d4"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clear_select_clause",
+   "line": 241,
+   "sentence": "Before the statement is compiled, `update` replaces each name in the ordering that is the name of an annotation by the annotation's expression, refusing with `FieldError` one that contains an aggregate, and then `Query.clear_select_clause` empties what the query would select, its annotations among the rest (`django/db/models/sql/query.py:Query.clear_select_clause`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clear_select_clause",
+   "kind": "function",
+   "lines": [
+    2240,
+    2247
+   ],
+   "fingerprint": "f1477d3ad97b1ec1"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup",
+   "line": 243,
+   "sentence": "Where the queryset's conditions need another, the update compiler moves them into a query that selects the keys of the rows, here a subquery of the statement, and the statement updates the rows that have those keys (`django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup`) ([From QuerySet to SQL](../sql.md)):",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.pre_sql_setup",
+   "kind": "function",
+   "lines": [
+    2191,
+    2254
+   ],
+   "fingerprint": "4578ae61945a38c1"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 252,
+   "sentence": "`Model.save` is not called, and `pre_save` and `post_save` are not sent; the documentation says both (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._update",
+   "line": 258,
+   "sentence": "`_update` is `QuerySet.update` for a caller that already holds field objects (`django/db/models/query.py:QuerySet._update`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._update",
+   "kind": "function",
+   "lines": [
+    1485,
+    1501
+   ],
+   "fingerprint": "2b8e256b107b9587"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._do_update",
+   "line": 258,
+   "sentence": "`Model._do_update` calls it on a queryset filtered to the instance's key, with the fields to write, each with its value, and a list of the fields whose new values the save wants back from the statement, the result of an expression for one (`django/db/models/base.py:Model._do_update`) ([Saving an instance](../models/saving.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._do_update",
+   "kind": "function",
+   "lines": [
+    1214,
+    1252
+   ],
+   "fingerprint": "7cee3d6c3a70dd1f"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql",
+   "line": 260,
+   "sentence": "With that list, which a save always gives it, `_update` returns a list with an entry for each row updated: the columns asked back where there are any and the backend's `BaseDatabaseFeatures.can_return_rows_from_update` is true, and an empty tuple otherwise (`django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.execute_returning_sql",
+   "kind": "function",
+   "lines": [
+    2159,
+    2189
+   ],
+   "fingerprint": "fbd6b41eb0089497"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._insert",
+   "line": 264,
+   "sentence": "It builds a new `InsertQuery` for the model, gives it the fields and the instances with `InsertQuery.insert_values`, and returns what the insert compiler returns: the rows of the columns asked back, or an empty list (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/subqueries.py:InsertQuery`) ([From QuerySet to SQL](../sql.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._insert",
+   "kind": "function",
+   "lines": [
+    2182,
+    2207
+   ],
+   "fingerprint": "5ead6406a35c3646"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:InsertQuery",
+   "line": 264,
+   "sentence": "It builds a new `InsertQuery` for the model, gives it the fields and the instances with `InsertQuery.insert_values`, and returns what the insert compiler returns: the rows of the columns asked back, or an empty list (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/subqueries.py:InsertQuery`) ([From QuerySet to SQL](../sql.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "InsertQuery",
+   "kind": "class",
+   "lines": [
+    148,
+    164
+   ],
+   "fingerprint": "5e9ea28247842710"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._do_insert",
+   "line": 264,
+   "sentence": "`Model._do_insert` gives it one instance (`django/db/models/base.py:Model._do_insert`), and `QuerySet._batched_insert` gives it a batch of them on behalf of `QuerySet.bulk_create`, which is also what its three arguments about conflicts are for ([`bulk_create` and `bulk_update`](bulk.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._do_insert",
+   "kind": "function",
+   "lines": [
+    1254,
+    1265
+   ],
+   "fingerprint": "43ca189194a4c914"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.delete",
+   "line": 268,
+   "sentence": "It prepares a queryset for a `Collector`, calls two of the collector's methods, `Collector.collect` and `Collector.delete`, and returns what the second returns (`django/db/models/query.py:QuerySet.delete`, `django/db/models/deletion.py:Collector`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.delete",
+   "kind": "function",
+   "lines": [
+    1386,
+    1414
+   ],
+   "fingerprint": "9994f33374cbec3e"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector",
+   "line": 268,
+   "sentence": "It prepares a queryset for a `Collector`, calls two of the collector's methods, `Collector.collect` and `Collector.delete`, and returns what the second returns (`django/db/models/query.py:QuerySet.delete`, `django/db/models/deletion.py:Collector`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector",
+   "kind": "class",
+   "lines": [
+    117,
+    552
+   ],
+   "fingerprint": "70c697bd2fed5536"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clear_ordering",
+   "line": 270,
+   "sentence": "And the query's `Query.select_for_update` and `Query.select_related` are turned off and its ordering is cleared with `Query.clear_ordering` (`django/db/models/sql/query.py:Query.clear_ordering`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clear_ordering",
+   "kind": "function",
+   "lines": [
+    2400,
+    2419
+   ],
+   "fingerprint": "02ed4a008fa1de1e"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.can_fast_delete",
+   "line": 299,
+   "sentence": "The collector takes a queryset as it stands, unfetched, only for a model with no cascades, no parents and no listeners for the delete signals (`django/db/models/deletion.py:Collector.can_fast_delete`); otherwise it needs the instances, to send the signals for and to find by their keys the rows that point at them, as the second statement does for ships whose home is one of the two.",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.can_fast_delete",
+   "kind": "function",
+   "lines": [
+    210,
+    254
+   ],
+   "fingerprint": "cd92cb96035bb45b"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:DeleteQuery.delete_batch",
+   "line": 299,
+   "sentence": "Under `Collector.delete` everything is in one transaction: a call of `QuerySet._raw_delete` for each model whose foreign key to a port cascades, of which the quote keeps the first, and then the ports themselves, by key, which the collector does with `DeleteQuery.delete_batch` (`django/db/models/sql/subqueries.py:DeleteQuery.delete_batch`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "DeleteQuery.delete_batch",
+   "kind": "function",
+   "lines": [
+    27,
+    46
+   ],
+   "fingerprint": "a5e44caec44868f2"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 299,
+   "sentence": "The block of `atomic` around them was made with `savepoint=False`, so inside a transaction already open it would have made no savepoint (`django/db/transaction.py:Atomic.__enter__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._raw_delete",
+   "line": 325,
+   "sentence": "`QuerySet._raw_delete` clones the queryset's query, assigns `DeleteQuery` as the clone's class, asks it for a compiler for the alias it was given, and returns the row count (`django/db/models/query.py:QuerySet._raw_delete`, `django/db/models/sql/subqueries.py:DeleteQuery`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._raw_delete",
+   "kind": "function",
+   "lines": [
+    1425,
+    1432
+   ],
+   "fingerprint": "f4407e562b0443d1"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:DeleteQuery",
+   "line": 325,
+   "sentence": "`QuerySet._raw_delete` clones the queryset's query, assigns `DeleteQuery` as the clone's class, asks it for a compiler for the alias it was given, and returns the row count (`django/db/models/query.py:QuerySet._raw_delete`, `django/db/models/sql/subqueries.py:DeleteQuery`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "DeleteQuery",
+   "kind": "class",
+   "lines": [
+    17,
+    46
+   ],
+   "fingerprint": "5fc13dcd7fc5b366"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.delete",
+   "line": 325,
+   "sentence": "Whether a set of rows needs neither is for the collector to decide, and `Collector.delete` is the method's one caller in Django: it calls it for each queryset it holds whose rows it did not fetch (`django/db/models/deletion.py:Collector.delete`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.delete",
+   "kind": "function",
+   "lines": [
+    466,
+    552
+   ],
+   "fingerprint": "e04d0d5583b5ecd6"
+  }
+ ]
+}

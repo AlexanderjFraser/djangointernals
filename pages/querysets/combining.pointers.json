@@ -1,0 +1,473 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "combining.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__and__",
+   "line": 35,
+   "sentence": "`QuerySet.__and__`, `QuerySet.__or__` and `QuerySet.__xor__` have one outline (`django/db/models/query.py:QuerySet.__and__`, `django/db/models/query.py:QuerySet.__or__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__and__",
+   "kind": "function",
+   "lines": [
+    540,
+    550
+   ],
+   "fingerprint": "660f56e27d6a9786"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__or__",
+   "line": 35,
+   "sentence": "`QuerySet.__and__`, `QuerySet.__or__` and `QuerySet.__xor__` have one outline (`django/db/models/query.py:QuerySet.__and__`, `django/db/models/query.py:QuerySet.__or__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__or__",
+   "kind": "function",
+   "lines": [
+    552,
+    569
+   ],
+   "fingerprint": "dbd71a31e6a3d4c6"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.combine",
+   "line": 35,
+   "sentence": "Otherwise, in the case recorded here, the left side is cloned, the related objects that the right side already has in hand are merged into the clone's, and the clone's query is told to take the other query in: `Query.combine`, with a connector, `\"AND\"`, `\"OR\"` or `\"XOR\"` (`django/db/models/sql/query.py:Query.combine`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.combine",
+   "kind": "function",
+   "lines": [
+    701,
+    815
+   ],
+   "fingerprint": "33c485d2faf041da"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
+   "line": 70,
+   "sentence": "Where a backend's feature `BaseDatabaseFeatures.supports_logical_xor` is false, as it is for SQLite, the where clause writes an exclusive or as an `\"OR\"` of the conditions together with a count of how many of them hold (`django/db/models/sql/where.py:WhereNode.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.as_sql",
+   "kind": "function",
+   "lines": [
+    116,
+    188
+   ],
+   "fingerprint": "3277e292e6bb60f6"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._merge_known_related_objects",
+   "line": 86,
+   "sentence": "`QuerySet._merge_known_related_objects` copies the right side's entries into the result's dictionary, field by field (`django/db/models/query.py:QuerySet._merge_known_related_objects`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._merge_known_related_objects",
+   "kind": "function",
+   "lines": [
+    2358,
+    2363
+   ],
+   "fingerprint": "ceb3db72be2f5463"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._check_operator_queryset",
+   "line": 99,
+   "sentence": "Its message names the operator (`django/db/models/query.py:QuerySet._check_operator_queryset`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._check_operator_queryset",
+   "kind": "function",
+   "lines": [
+    2408,
+    2410
+   ],
+   "fingerprint": "cfff9d2d550fad13"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._merge_sanity_check",
+   "line": 100,
+   "sentence": "Where the left side has none it compares nothing, whatever the right side is (`django/db/models/query.py:QuerySet._merge_sanity_check`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._merge_sanity_check",
+   "kind": "function",
+   "lines": [
+    2346,
+    2356
+   ],
+   "fingerprint": "fbf2fc288fe5864a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.can_filter",
+   "line": 117,
+   "sentence": "`Query.can_filter` is a query's answer to whether a condition may still be added to it, and it is false exactly where the query is sliced (`django/db/models/sql/query.py:Query.can_filter`); why a sliced query takes no more conditions is told in [Evaluation and the result cache](evaluation.md).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.can_filter",
+   "kind": "function",
+   "lines": [
+    2231,
+    2238
+   ],
+   "fingerprint": "2a1f1ed8ef204fed"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.get_prep_lookup",
+   "line": 144,
+   "sentence": "The four lines after it are the making of the replacement: the `QuerySet._chain` of `QuerySet.values`, which clones the sliced queryset, a SailorQuerySet; the test and the `_chain` of `QuerySet.filter`, called through the base manager, which clones the queryset that manager made, a plain `QuerySet`; and a `Query.clear_ordering`, by which the `\"in\"` lookup asks the inner query to drop its ordering (`django/db/models/lookups.py:In.get_prep_lookup`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.get_prep_lookup",
+   "kind": "function",
+   "lines": [
+    506,
+    520
+   ],
+   "fingerprint": "1f0b6f9db0f17ecf"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.get_queryset",
+   "line": 146,
+   "sentence": "One that `QuerySet.using` set on the sliced queryset stays with the subquery and does not reach the result, and if the result is then compiled for another database the `\"in\"` lookup raises `ValueError` (`django/db/models/manager.py:BaseManager.get_queryset`, `django/db/models/lookups.py:In.process_rhs`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.get_queryset",
+   "kind": "function",
+   "lines": [
+    150,
+    155
+   ],
+   "fingerprint": "c57644bee65968d2"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.process_rhs",
+   "line": 146,
+   "sentence": "One that `QuerySet.using` set on the sliced queryset stays with the subquery and does not reach the result, and if the result is then compiled for another database the `\"in\"` lookup raises `ValueError` (`django/db/models/manager.py:BaseManager.get_queryset`, `django/db/models/lookups.py:In.process_rhs`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.process_rhs",
+   "kind": "function",
+   "lines": [
+    522,
+    546
+   ],
+   "fingerprint": "dfd7c49912fbc025"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.combine",
+   "line": 150,
+   "sentence": "A sliced right side under `&` is tested by nothing: `combine` looks at the limits of the query it is called on and not at those of the query it is given, and takes none of them over, though it does take the other query's ordering (`django/db/models/sql/query.py:Query.combine`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.combine",
+   "kind": "function",
+   "lines": [
+    701,
+    815
+   ],
+   "fingerprint": "33c485d2faf041da"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._combinator_query",
+   "line": 154,
+   "sentence": "`QuerySet.union`, `QuerySet.intersection` and `QuerySet.difference` each take any number of other querysets and, short cuts aside, hand them to one method, `QuerySet._combinator_query`, with the name of the set operation: `\"union\"`, `\"intersection\"` or `\"difference\"` (`django/db/models/query.py:QuerySet._combinator_query`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._combinator_query",
+   "kind": "function",
+   "lines": [
+    1776,
+    1786
+   ],
+   "fingerprint": "da048cbf430373f1"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
+   "line": 173,
+   "sentence": "For a query with a combinator the compiler writes each part and joins them, and takes from the combined query itself what applies to the whole, such as an ordering and a limit (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    776,
+    1001
+   ],
+   "fingerprint": "ce816411ac549927"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._clear_ordering_in_combined_queries",
+   "line": 175,
+   "sentence": "Each of the others is a clone of its queryset's query, made by `QuerySet._clear_ordering_in_combined_queries` (`django/db/models/query.py:QuerySet._clear_ordering_in_combined_queries`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._clear_ordering_in_combined_queries",
+   "kind": "function",
+   "lines": [
+    2427,
+    2433
+   ],
+   "fingerprint": "ee432e07cbc0dd4b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clear_ordering",
+   "line": 189,
+   "sentence": "The clearing is done by `Query.clear_ordering`, which unless it is forced does nothing to a query that is sliced, has distinct fields or has `Query.select_for_update` set, and which leaves `Query.default_ordering` alone where it is called with `clear_default=False`, as it is for the other parts (`django/db/models/sql/query.py:Query.clear_ordering`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clear_ordering",
+   "kind": "function",
+   "lines": [
+    2400,
+    2419
+   ],
+   "fingerprint": "02ed4a008fa1de1e"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler._get_combinator_part_sql",
+   "line": 209,
+   "sentence": "In the statement of the union with `all=True` each part selects the one column, though `QuerySet.values_list` was called on the combined queryset and not on its parts: the compiler hands what the whole selects down to each part that has no selection of its own (`django/db/models/sql/compiler.py:SQLCompiler._get_combinator_part_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler._get_combinator_part_sql",
+   "kind": "function",
+   "lines": [
+    654,
+    678
+   ],
+   "fingerprint": "086b5da09929d91e"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.union",
+   "line": 213,
+   "sentence": "Each of `QuerySet.union`, `QuerySet.intersection` and `QuerySet.difference` looks for an empty queryset before it calls `_combinator_query` (`django/db/models/query.py:QuerySet.union`, `django/db/models/query.py:QuerySet.intersection`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.union",
+   "kind": "function",
+   "lines": [
+    1788,
+    1799
+   ],
+   "fingerprint": "7c462fe285e2fe07"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.intersection",
+   "line": 213,
+   "sentence": "Each of `QuerySet.union`, `QuerySet.intersection` and `QuerySet.difference` looks for an empty queryset before it calls `_combinator_query` (`django/db/models/query.py:QuerySet.union`, `django/db/models/query.py:QuerySet.intersection`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.intersection",
+   "kind": "function",
+   "lines": [
+    1801,
+    1808
+   ],
+   "fingerprint": "df2e4e4b60f98155"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql",
+   "line": 220,
+   "sentence": "An empty queryset that stays as a part is the compiler's to deal with: it leaves the empty parts out of a union that is not sliced, and an empty part out of a difference unless it is the first part (`django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_combinator_sql",
+   "kind": "function",
+   "lines": [
+    601,
+    652
+   ],
+   "fingerprint": "d7fe2adcd1279e2f"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_select_union",
+   "line": 224,
+   "sentence": "One is whether the backend has the operation at all, which every backend Django ships has (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_select_union`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_select_union",
+   "kind": "assignment",
+   "lines": [
+    257,
+    257
+   ],
+   "fingerprint": "edbb368cf88c1a96"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_slicing_ordering_in_compound",
+   "line": 224,
+   "sentence": "The backends for PostgreSQL, MySQL and Oracle set it true, and SQLite's leaves it as it is (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_slicing_ordering_in_compound`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_slicing_ordering_in_compound",
+   "kind": "assignment",
+   "lines": [
+    260,
+    260
+   ],
+   "fingerprint": "b41d5d982552a6b7"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql",
+   "line": 226,
+   "sentence": "For a part whose query is sliced it raises `DatabaseError`, and likewise for a part for which that part's compiler finds an ordering (`django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_combinator_sql",
+   "kind": "function",
+   "lines": [
+    601,
+    652
+   ],
+   "fingerprint": "d7fe2adcd1279e2f"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
+   "line": 226,
+   "sentence": "Finding an ordering means that `SQLCompiler.get_order_by` returns anything, and the ordering it reads falls back on the `ordering` of the model's `Meta` wherever the query has `Query.default_ordering` on and no ordering of its own (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler._order_by_pairs",
+   "kind": "function",
+   "lines": [
+    339,
+    497
+   ],
+   "fingerprint": "ba998de2fa3ab66a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_ordering",
+   "line": 253,
+   "sentence": "`QuerySet.order_by` clears with `clear_default=False`, and `Query.clear_ordering`, which goes on to clear each part of a combined query, hands that on to them; what switches the default off is `Query.add_ordering` called with no names, on the combined queryset's query alone (`django/db/models/sql/query.py:Query.add_ordering`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_ordering",
+   "kind": "function",
+   "lines": [
+    2335,
+    2370
+   ],
+   "fingerprint": "7d65037c119d224c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
+   "line": 255,
+   "sentence": "Each clears the ordering of the parts with the default included, `count` in `Query.get_aggregation` and `exists` in `Query.exists` (`django/db/models/sql/query.py:Query.get_aggregation`, `django/db/models/sql/query.py:Query.exists`):",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_aggregation",
+   "kind": "function",
+   "lines": [
+    458,
+    650
+   ],
+   "fingerprint": "92e28f95e3a4502a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.exists",
+   "line": 255,
+   "sentence": "Each clears the ordering of the parts with the default included, `count` in `Query.get_aggregation` and `exists` in `Query.exists` (`django/db/models/sql/query.py:Query.get_aggregation`, `django/db/models/sql/query.py:Query.exists`):",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.exists",
+   "kind": "function",
+   "lines": [
+    662,
+    682
+   ],
+   "fingerprint": "9bf05dfcb121746b"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 265,
+   "sentence": "The release notes give the consequence they expect a project to meet: `union`, `QuerySet.intersection` and `QuerySet.difference` raise `DatabaseError` when a field of the model's `ordering` is not among those selected by `QuerySet.values` or `QuerySet.values_list`, and calling `order_by` with no arguments after combining clears the default ordering (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_order_by",
+   "line": 267,
+   "sentence": "`SQLCompiler.get_order_by` raises it for the ordering of the whole statement, which is the ordering that call clears, where what is ordered by is not among the columns selected and a part has a selection that `values` or `values_list` fixed (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_order_by",
+   "kind": "function",
+   "lines": [
+    499,
+    558
+   ],
+   "fingerprint": "c479119e478ae75f"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
+   "line": 271,
+   "sentence": "A condition given to a combined queryset would go into the where clause of its own query, and the compiler does not write that clause for a compound statement: it writes the parts (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    776,
+    1001
+   ],
+   "fingerprint": "ce816411ac549927"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._not_support_combined_queries",
+   "line": 271,
+   "sentence": "Each of these begins by calling `QuerySet._not_support_combined_queries` with its own name, and that method raises `NotSupportedError` where the query has a combinator (`django/db/models/query.py:QuerySet._not_support_combined_queries`):",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._not_support_combined_queries",
+   "kind": "function",
+   "lines": [
+    2401,
+    2406
+   ],
+   "fingerprint": "97a7bf351a804d91"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.get",
+   "line": 280,
+   "sentence": "`QuerySet.get` makes the test itself, and only when it is given a condition (`django/db/models/query.py:QuerySet.get`) ([`get`, `first`, `count` and the other methods that run a query at once](results.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.get",
+   "kind": "function",
+   "lines": [
+    726,
+    759
+   ],
+   "fingerprint": "7af2c1f495fa5cf2"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.complex_filter",
+   "line": 299,
+   "sentence": "`complex_filter`, the method behind `\"limit_choices_to\"` ([`filter`, `exclude` and `Q` objects](filters.md)), reaches the query without going through any of them, so a combined queryset does not refuse it: its condition on the name was not written, and all three sailors came back (`django/db/models/query.py:QuerySet.complex_filter`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.complex_filter",
+   "kind": "function",
+   "lines": [
+    1759,
+    1774
+   ],
+   "fingerprint": "da0fea6eff0c58e2"
+  }
+ ]
+}

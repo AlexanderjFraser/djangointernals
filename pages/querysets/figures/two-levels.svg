@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 500">
+  <!-- three bands down the page, one for each statement. On the right, three lanes, one for each port:
+       the objects a statement fetched go down their lanes into the next band, and each share comes out in its owner's lane. -->
+  <text x="0" y="14"><tspan class="name strong">Port.objects.prefetch_related("ships__crew")</tspan>, evaluated: three statements</text>
+
+  <!-- the queryset's own statement -->
+  <rect class="mark-box" x="0.5" y="28.5" width="645" height="56" rx="4"/>
+  <text class="strong" x="12" y="50">the queryset's own statement</text>
+  <text class="name" x="12" y="72">SELECT ... FROM fleet_port ORDER BY name</text>
+
+  <!-- its result cache: one list of the three ports -->
+  <path class="line" d="M488 85 V97"/>
+  <polygon class="head" points="488,107 483,97 493,97"/>
+  <rect class="box" x="330.5" y="107.5" width="315" height="34" rx="4"/>
+  <text class="name" x="342" y="129">Bergen</text>
+  <text class="name" x="450" y="129">Leith</text>
+  <text class="name" x="558" y="129">Lisbon</text>
+  <text x="12" y="129">3 ports: the queryset's result cache</text>
+
+  <!-- the three ports go into level 0 -->
+  <path class="line" d="M380 142 V161"/>
+  <polygon class="head" points="380,171 375,161 385,161"/>
+  <path class="line" d="M488 142 V161"/>
+  <polygon class="head" points="488,171 483,161 493,161"/>
+  <path class="line" d="M596 142 V161"/>
+  <polygon class="head" points="596,171 591,161 601,161"/>
+
+  <!-- level 0 -->
+  <rect class="mark-box" x="0.5" y="171.5" width="645" height="56" rx="4"/>
+  <text x="12" y="193"><tspan class="strong">level 0, <tspan class="name">"ships"</tspan></tspan><tspan dx="14">the instances are the 3 ports</tspan></text>
+  <text class="quiet small" x="634" y="193" text-anchor="end">prefetcher: the related manager of the first port</text>
+  <text class="name" x="12" y="215">SELECT ... FROM fleet_ship WHERE home_id IN (1, 2, 3) ORDER BY name</text>
+
+  <!-- each port's share, in the port's lane -->
+  <path class="line" d="M380 228 V240"/>
+  <polygon class="head" points="380,250 375,240 385,240"/>
+  <path class="line" d="M488 228 V240"/>
+  <polygon class="head" points="488,250 483,240 493,240"/>
+  <path class="line" d="M596 228 V240"/>
+  <polygon class="head" points="596,250 591,240 601,240"/>
+  <rect class="box" x="330.5" y="250.5" width="99" height="34" rx="4"/>
+  <text class="name" x="342" y="272">Petrel</text>
+  <rect class="box" x="438.5" y="250.5" width="99" height="34" rx="4"/>
+  <text class="name" x="450" y="272">Gannet</text>
+  <rect class="ground dashed" x="546.5" y="250.5" width="99" height="34" rx="4"/>
+  <text class="quiet small" x="558" y="272">an empty list</text>
+  <text x="12" y="254">2 ships, dealt out by <tspan class="name">home_id</tspan>: each port's</text>
+  <text x="12" y="272"><tspan class="name">_prefetched_objects_cache["ships"]</tspan> is a</text>
+  <text x="12" y="290">queryset whose result cache is that port's ships</text>
+  <text x="12" y="314">the 2 ships are recorded under the path <tspan class="name">"ships"</tspan>,</text>
+  <text x="12" y="332">and are the instances of the next level</text>
+
+  <!-- the two ships go into level 1 -->
+  <path class="line" d="M380 285 V341"/>
+  <polygon class="head" points="380,351 375,341 385,341"/>
+  <path class="line" d="M488 285 V341"/>
+  <polygon class="head" points="488,351 483,341 493,341"/>
+
+  <!-- level 1 -->
+  <rect class="mark-box" x="0.5" y="351.5" width="645" height="56" rx="4"/>
+  <text x="12" y="373"><tspan class="strong">level 1, <tspan class="name">"crew"</tspan></tspan><tspan dx="14">the instances are the 2 ships</tspan></text>
+  <text class="quiet small" x="634" y="373" text-anchor="end">prefetcher: the related manager of the first ship, the Gannet</text>
+  <text class="name" x="12" y="395">SELECT ... FROM crew_sailor WHERE ship_id IN (2, 1)</text>
+
+  <!-- each ship's share, in the lane of the ship's port -->
+  <path class="line" d="M380 408 V420"/>
+  <polygon class="head" points="380,430 375,420 385,420"/>
+  <path class="line" d="M488 408 V420"/>
+  <polygon class="head" points="488,430 483,420 493,420"/>
+  <rect class="box" x="330.5" y="430.5" width="99" height="34" rx="4"/>
+  <text class="name" x="342" y="452">Ada, Bram</text>
+  <rect class="box" x="438.5" y="430.5" width="99" height="34" rx="4"/>
+  <text class="name" x="450" y="452">Cora, Dag</text>
+  <text x="12" y="434">4 sailors, dealt out by <tspan class="name">ship_id</tspan>: each ship's</text>
+  <text x="12" y="452"><tspan class="name">_prefetched_objects_cache["crew"]</tspan> is a</text>
+  <text x="12" y="470">queryset whose result cache is that ship's crew</text>
+  <text x="12" y="494">the 4 sailors are recorded under the path <tspan class="name">"ships__crew"</tspan></text>
+</svg>

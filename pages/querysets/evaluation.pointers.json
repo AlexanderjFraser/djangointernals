@@ -1,0 +1,291 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "evaluation.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/query.py:QuerySet._fetch_all",
+   "line": 13,
+   "sentence": "Then, where the queryset has prefetch lookups and its `QuerySet._prefetch_done` is not yet true, it follows them, which sets it (`django/db/models/query.py:QuerySet._fetch_all`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._fetch_all",
+   "kind": "function",
+   "lines": [
+    2326,
+    2330
+   ],
+   "fingerprint": "8b80eba4532fba23"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 34,
+   "sentence": "`SQLCompiler.execute_sql` sent the statement and then read every row from the cursor, a hundred at a call until a call returned none, before it returned; both instances were made; and only then did the loop's body run for the first time (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.exists",
+   "line": 138,
+   "sentence": "`exists` hands it to `Query.has_results`, which has `Query.exists` make a copy of the query that selects a constant and stops at one row (`django/db/models/sql/query.py:Query.exists`); `contains` is `exists` on a clone filtered by the object's primary key (`django/db/models/query.py:QuerySet.contains`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.exists",
+   "kind": "function",
+   "lines": [
+    662,
+    682
+   ],
+   "fingerprint": "9bf05dfcb121746b"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.contains",
+   "line": 138,
+   "sentence": "`exists` hands it to `Query.has_results`, which has `Query.exists` make a copy of the query that selects a constant and stops at one row (`django/db/models/sql/query.py:Query.exists`); `contains` is `exists` on a clone filtered by the object's primary key (`django/db/models/query.py:QuerySet.contains`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.contains",
+   "kind": "function",
+   "lines": [
+    1517,
+    1536
+   ],
+   "fingerprint": "f460ffd2ba07904d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__getitem__",
+   "line": 158,
+   "sentence": "Without one it makes a clone and narrows the clone's query with `Query.set_limits` (`django/db/models/query.py:QuerySet.__getitem__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__getitem__",
+   "kind": "function",
+   "lines": [
+    500,
+    535
+   ],
+   "fingerprint": "ea3ae0d5e3b16582"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_limits",
+   "line": 160,
+   "sentence": "So a slice of a slice counts from the first slice's start and cannot reach past its end (`django/db/models/sql/query.py:Query.set_limits`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_limits",
+   "kind": "function",
+   "lines": [
+    2197,
+    2218
+   ],
+   "fingerprint": "4f48332c8b4c0701"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 178,
+   "sentence": "For a filter and an ordering Django's documentation gives the reason: that does not translate well into SQL and would not have a clear meaning (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._filter_or_exclude",
+   "line": 195,
+   "sentence": "`QuerySet.filter` and `QuerySet.exclude` refuse only when they are given an argument (`django/db/models/query.py:QuerySet._filter_or_exclude`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._filter_or_exclude",
+   "kind": "function",
+   "lines": [
+    1739,
+    1748
+   ],
+   "fingerprint": "7889b8d65c9787da"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._iterator",
+   "line": 199,
+   "sentence": "`QuerySet.iterator` returns a generator over the same iterable class that `QuerySet._fetch_all` uses, and stores nothing: the queryset has no result cache afterwards, and one it already had is neither read nor changed (`django/db/models/query.py:QuerySet._iterator`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._iterator",
+   "kind": "function",
+   "lines": [
+    594,
+    607
+   ],
+   "fingerprint": "824d2d4eefa441a4"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 199,
+   "sentence": "With a chunked fetch `SQLCompiler.execute_sql` takes its cursor from `BaseDatabaseWrapper.chunked_cursor` and, where the backend's feature `BaseDatabaseFeatures.can_use_chunked_reads` is true, returns without having read the rows: they are read from the cursor as the consumer asks for them, a chunk at a call (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`, `django/db/models/sql/compiler.py:cursor_iter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:cursor_iter",
+   "line": 199,
+   "sentence": "With a chunked fetch `SQLCompiler.execute_sql` takes its cursor from `BaseDatabaseWrapper.chunked_cursor` and, where the backend's feature `BaseDatabaseFeatures.can_use_chunked_reads` is true, returns without having read the rows: they are read from the cursor as the consumer asks for them, a chunk at a call (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`, `django/db/models/sql/compiler.py:cursor_iter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "cursor_iter",
+   "kind": "function",
+   "lines": [
+    2282,
+    2291
+   ],
+   "fingerprint": "2843a36d01f4a95f"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.iterator",
+   "line": 252,
+   "sentence": "A number that is not positive is refused with `ValueError` (`django/db/models/query.py:QuerySet.iterator`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.iterator",
+   "kind": "function",
+   "lines": [
+    609,
+    626
+   ],
+   "fingerprint": "0b1531d60b31cfcb"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor",
+   "line": 254,
+   "sentence": "In the base class `chunked_cursor` returns an ordinary cursor, and its docstring says what a backend's own may return instead, where the database supports it: a cursor that tries to avoid caching, the server-side cursor that `\"DISABLE_SERVER_SIDE_CURSORS\"` is named for (`django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.chunked_cursor",
+   "kind": "function",
+   "lines": [
+    669,
+    674
+   ],
+   "fingerprint": "74ee9df67a5c6557"
+  },
+  {
+   "pointer": "docs/ref/databases.txt",
+   "line": 254,
+   "sentence": "The setting is for a connection that cannot use such a cursor, and Django's documentation gives the case of a connection pooler in transaction pooling mode (`docs/ref/databases.txt`).",
+   "tree": "django",
+   "path": "docs/ref/databases.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1305
+   ],
+   "fingerprint": "cbc28768aa410929"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__repr__",
+   "line": 279,
+   "sentence": "`QuerySet.__repr__` takes a slice of twenty-one, one more than `REPR_OUTPUT_SIZE`, and so sends a statement with that limit when the queryset has not been evaluated; a twenty-first row, which the office's twenty-five logbooks have, is replaced in what it prints by a note that the rest were left out (`django/db/models/query.py:QuerySet.__repr__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__repr__",
+   "kind": "function",
+   "lines": [
+    458,
+    462
+   ],
+   "fingerprint": "39030dabed23450a"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__setstate__",
+   "line": 281,
+   "sentence": "`QuerySet.__setstate__` warns, with `RuntimeWarning`, when the version it finds is not the one running, or when there is none, and restores the attributes either way (`django/db/models/query.py:QuerySet.__setstate__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__setstate__",
+   "kind": "function",
+   "lines": [
+    439,
+    456
+   ],
+   "fingerprint": "c7e73e07c583b2de"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__deepcopy__",
+   "line": 283,
+   "sentence": "`QuerySet.__deepcopy__` copies every attribute deeply but the result cache, which it leaves as `None` on the copy, so a deep copy of an evaluated queryset is an unevaluated one (`django/db/models/query.py:QuerySet.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    424,
+    432
+   ],
+   "fingerprint": "3c64224b864f3310"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.resolve_expression",
+   "line": 312,
+   "sentence": "When the outer queryset's filter is built, the inner one is asked to resolve itself as an expression, and `QuerySet.resolve_expression` hands back a copy of its query, resolved, with the queryset's own alias for a database set on the copy (`django/db/models/query.py:QuerySet.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.resolve_expression",
+   "kind": "function",
+   "lines": [
+    2365,
+    2368
+   ],
+   "fingerprint": "190585a09882cd4b"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.update",
+   "line": 316,
+   "sentence": "`QuerySet.update`, `QuerySet._update` and `QuerySet.delete`, each of which changes rows through the queryset, also set the cache of the queryset they are called on back to `None` (`django/db/models/query.py:QuerySet.update`, `django/db/models/query.py:QuerySet.delete`) ([Creating, updating and deleting through a queryset](writing.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.update",
+   "kind": "function",
+   "lines": [
+    1436,
+    1476
+   ],
+   "fingerprint": "1af0f8397db76c35"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.delete",
+   "line": 316,
+   "sentence": "`QuerySet.update`, `QuerySet._update` and `QuerySet.delete`, each of which changes rows through the queryset, also set the cache of the queryset they are called on back to `None` (`django/db/models/query.py:QuerySet.update`, `django/db/models/query.py:QuerySet.delete`) ([Creating, updating and deleting through a queryset](writing.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.delete",
+   "kind": "function",
+   "lines": [
+    1386,
+    1414
+   ],
+   "fingerprint": "9994f33374cbec3e"
+  }
+ ]
+}

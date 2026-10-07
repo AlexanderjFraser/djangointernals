@@ -1,0 +1,153 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "asgiref": "ef9d4b8b371cf8a7bb63dea3d0fdc60923e9e081",
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "querysets.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/query.py:QuerySet",
+   "line": 13,
+   "sentence": "The object that makes this work is the **queryset**, an instance of `QuerySet` (`django/db/models/query.py:QuerySet`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet",
+   "kind": "class",
+   "lines": [
+    374,
+    2433
+   ],
+   "fingerprint": "24377cfa0bc92af6"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query",
+   "line": 13,
+   "sentence": "There is a `Query`, the description of the statement, which is the subject of [From QuerySet to SQL](sql.md); this chapter calls it **the query**, and says only what the queryset's methods ask of it (`django/db/models/sql/query.py:Query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query",
+   "kind": "class",
+   "lines": [
+    232,
+    2801
+   ],
+   "fingerprint": "2b700a61f27d823d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._chain",
+   "line": 134,
+   "sentence": "The method then makes its change to the copy, most often to the copy's query, and returns it (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._chain",
+   "kind": "function",
+   "lines": [
+    2288,
+    2304
+   ],
+   "fingerprint": "13dce17e2b32c883"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._clone",
+   "line": 134,
+   "sentence": "The method then makes its change to the copy, most often to the copy's query, and returns it (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._clone",
+   "kind": "function",
+   "lines": [
+    2306,
+    2324
+   ],
+   "fingerprint": "14e698857d77db8a"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._fetch_all",
+   "line": 146,
+   "sentence": "Each of these calls `QuerySet._fetch_all`, which does not run the statement again when there is a result cache already (`django/db/models/query.py:QuerySet._fetch_all`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._fetch_all",
+   "kind": "function",
+   "lines": [
+    2326,
+    2330
+   ],
+   "fingerprint": "8b80eba4532fba23"
+  },
+  {
+   "pointer": "django/db/models/query.py:ModelIterable.__iter__",
+   "line": 177,
+   "sentence": "Its `__iter__` is where one query is run from end to end: it asks the query for a **compiler** for the queryset's database, the object that writes the statement and runs it, has the compiler execute the statement, and turns each row the compiler gives back into an instance by calling `Model.from_db` (`django/db/models/query.py:ModelIterable.__iter__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "ModelIterable.__iter__",
+   "kind": "function",
+   "lines": [
+    134,
+    209
+   ],
+   "fingerprint": "638fc3056680909a"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.results_iter",
+   "line": 177,
+   "sentence": "On the way the compiler applies **converters** to the columns that have them: functions, the backend's or a field's, that turn a value as the database's driver returned it into the one the program is to have (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.results_iter",
+   "kind": "function",
+   "lines": [
+    1589,
+    1610
+   ],
+   "fingerprint": "a6c2ba8872ad22c3"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.db",
+   "line": 237,
+   "sentence": "The methods that write set `QuerySet._for_write`, on the queryset or on the clone they make, and a queryset with no alias of its own then has its database chosen by the router's `ConnectionRouter.db_for_write` and not by `ConnectionRouter.db_for_read` (`django/db/models/query.py:QuerySet.db`); [Clones: how a queryset is built](querysets/chaining.md) lists the methods.",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.db",
+   "kind": "function",
+   "lines": [
+    2171,
+    2176
+   ],
+   "at": 2172,
+   "fingerprint": "1f13b69c0fc42893"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.aget",
+   "line": 245,
+   "sentence": "The twin does no asynchronous work with the database: it hands the synchronous method to a thread through `sync_to_async` and waits (`django/db/models/query.py:QuerySet.aget`, `asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.aget",
+   "kind": "function",
+   "lines": [
+    761,
+    762
+   ],
+   "fingerprint": "a141c5291474d4b0"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
+   "line": 245,
+   "sentence": "The twin does no asynchronous work with the database: it hands the synchronous method to a thread through `sync_to_async` and waits (`django/db/models/query.py:QuerySet.aget`, `asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.__call__",
+   "kind": "function",
+   "lines": [
+    457,
+    549
+   ],
+   "fingerprint": "6be21e12b059ba25"
+  }
+ ]
+}

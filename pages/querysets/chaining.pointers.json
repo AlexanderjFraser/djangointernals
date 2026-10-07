@@ -1,0 +1,371 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "chaining.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__init__",
+   "line": 13,
+   "sentence": "`QuerySet.__init__` takes a model, a query, a database's alias and a dictionary of hints, each optional, and sets everything else to a fixed starting value (`django/db/models/query.py:QuerySet.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__init__",
+   "kind": "function",
+   "lines": [
+    377,
+    393
+   ],
+   "fingerprint": "9feff4d36afcaccd"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._chain",
+   "line": 36,
+   "sentence": "`_chain` ordinarily calls `QuerySet._clone`, which makes a new object of the queryset's own class from the same model, alias and hints and from a copy of the query that `Query.chain` makes, and then copies a fixed list of attributes across by name (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._chain",
+   "kind": "function",
+   "lines": [
+    2288,
+    2304
+   ],
+   "fingerprint": "13dce17e2b32c883"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._clone",
+   "line": 36,
+   "sentence": "`_chain` ordinarily calls `QuerySet._clone`, which makes a new object of the queryset's own class from the same model, alias and hints and from a copy of the query that `Query.chain` makes, and then copies a fixed list of attributes across by name (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._clone",
+   "kind": "function",
+   "lines": [
+    2306,
+    2324
+   ],
+   "fingerprint": "14e698857d77db8a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clone",
+   "line": 69,
+   "sentence": "The query is a different object, and so are its where clause and its map of aliases: `Query.clone` copies those and most of the query's other dictionaries and sets one by one, and leaves immutable values such as the tuple of an ordering to be shared (`django/db/models/sql/query.py:Query.clone`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clone",
+   "kind": "function",
+   "lines": [
+    388,
+    431
+   ],
+   "fingerprint": "d19834614eed8eda"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.chain",
+   "line": 69,
+   "sentence": "`Query.chain` is `clone` followed by a little housekeeping, one piece of which is the sticky filter below (`django/db/models/sql/query.py:Query.chain`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.chain",
+   "kind": "function",
+   "lines": [
+    433,
+    446
+   ],
+   "fingerprint": "1296d8e0bfdf1117"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.db",
+   "line": 75,
+   "sentence": "What it will use is worked out by the property `QuerySet.db` each time it is read: the alias if there is one, and otherwise the answer of the router, which is asked `db_for_write` when `QuerySet._for_write` is true and `db_for_read` when it is not, with the model and the queryset's hints (`django/db/models/query.py:QuerySet.db`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.db",
+   "kind": "function",
+   "lines": [
+    2171,
+    2176
+   ],
+   "at": 2172,
+   "fingerprint": "1f13b69c0fc42893"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter",
+   "line": 77,
+   "sentence": "With no answer it uses the database that the instance among the hints came from, if there is such a hint and the instance has one, and failing that `\"default\"` (`django/db/utils.py:ConnectionRouter`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter",
+   "kind": "class",
+   "lines": [
+    200,
+    282
+   ],
+   "fingerprint": "61e4995a1291e807"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.get_or_create",
+   "line": 118,
+   "sentence": "`get_or_create` sets the mark before its `get`, and a comment there gives the reason: the `get` has to be aimed at the database that will be written to, to avoid what the comment calls potential transaction consistency problems (`django/db/models/query.py:QuerySet.get_or_create`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.get_or_create",
+   "kind": "function",
+   "lines": [
+    1088,
+    1111
+   ],
+   "fingerprint": "88c72862d5368bb5"
+  },
+  {
+   "pointer": "django/template/base.py:Variable._resolve_lookup",
+   "line": 129,
+   "sentence": "The template engine reads it: a variable in a template that resolves to a callable with a true `\"alters_data\"` is not called (`django/template/base.py:Variable._resolve_lookup`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Variable._resolve_lookup",
+   "kind": "function",
+   "lines": [
+    965,
+    1045
+   ],
+   "fingerprint": "e7f5c1cb99dd5024"
+  },
+  {
+   "pointer": "django/db/models/utils.py:AltersData",
+   "line": 129,
+   "sentence": "`QuerySet` inherits from `AltersData`, whose `__init_subclass__` carries the mark down, so that a subclass's own `delete`, written without the mark, takes the mark of the method it overrides (`django/db/models/utils.py:AltersData`).",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": "AltersData",
+   "kind": "class",
+   "lines": [
+    55,
+    69
+   ],
+   "fingerprint": "a6f5470d5e20f2b7"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._disable_cloning",
+   "line": 135,
+   "sentence": "A queryset has a switch, `QuerySet._cloning_enabled`, and while it is off `_chain` returns the queryset it was called on, so that `filter`, `using` and every other method that goes through `_chain` makes its change to that queryset, and one that returns a queryset returns that one (`django/db/models/query.py:QuerySet._disable_cloning`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._disable_cloning",
+   "kind": "function",
+   "lines": [
+    2257,
+    2264
+   ],
+   "fingerprint": "9b796700a2c53278"
+  },
+  {
+   "pointer": "django/db/models/query.py:PreventQuerySetCloning",
+   "line": 135,
+   "sentence": "`QuerySet._avoid_cloning` returns a context manager, `PreventQuerySetCloning`, that turns the switch off on entry and on again on exit (`django/db/models/query.py:PreventQuerySetCloning`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "PreventQuerySetCloning",
+   "kind": "class",
+   "lines": [
+    352,
+    371
+   ],
+   "fingerprint": "74b7da3d7bc52df9"
+  },
+  {
+   "pointer": "django/db/models/",
+   "line": 137,
+   "sentence": "In `django/db/models/` that is the code of the relations: a related manager applying the filter for its instance to a queryset just made for it, and a descriptor or a related manager building the queryset for a prefetch when the caller supplied none (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_prefetch_querysets`).",
+   "tree": "django",
+   "path": "django/db/models/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e3a8bbfe5524355d"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager",
+   "line": 137,
+   "sentence": "In `django/db/models/` that is the code of the relations: a related manager applying the filter for its instance to a queryset just made for it, and a descriptor or a related manager building the queryset for a prefetch when the caller supplied none (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_prefetch_querysets`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_reverse_many_to_one_manager",
+   "kind": "function",
+   "lines": [
+    714,
+    1025
+   ],
+   "fingerprint": "14f78879f0b63ad3"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_prefetch_querysets",
+   "line": 137,
+   "sentence": "In `django/db/models/` that is the code of the relations: a related manager applying the filter for its instance to a queryset just made for it, and a descriptor or a related manager building the queryset for a prefetch when the caller supplied none (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_prefetch_querysets`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ForwardManyToOneDescriptor.get_prefetch_querysets",
+   "kind": "function",
+   "lines": [
+    174,
+    227
+   ],
+   "fingerprint": "72ad96c74e7597f7"
+  },
+  {
+   "pointer": "django/db/models/",
+   "line": 157,
+   "sentence": "The filter that a related manager in `django/db/models/` puts on its queryset for its instance is not applied to the query when `QuerySet.filter` is called: it waits.",
+   "tree": "django",
+   "path": "django/db/models/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e3a8bbfe5524355d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._filter_or_exclude",
+   "line": 157,
+   "sentence": "The related manager sets `QuerySet._defer_next_filter` on the queryset before it filters, and `QuerySet._filter_or_exclude`, finding the mark, clears it and stores the filter's arguments as `QuerySet._deferred_filter` in place of applying them (`django/db/models/query.py:QuerySet._filter_or_exclude`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._filter_or_exclude",
+   "kind": "function",
+   "lines": [
+    1739,
+    1748
+   ],
+   "fingerprint": "7889b8d65c9787da"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.query",
+   "line": 157,
+   "sentence": "`QuerySet.query` is a property: where there is a deferred filter it applies it to the query with `QuerySet._filter_or_exclude_inplace`, forgets it, and then returns the query (`django/db/models/query.py:QuerySet.query`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.query",
+   "kind": "function",
+   "lines": [
+    395,
+    401
+   ],
+   "at": 396,
+   "more": [
+    [
+     403,
+     407
+    ]
+   ],
+   "fingerprint": "cf26664cb0f1a2fa"
+  },
+  {
+   "pointer": "docs/topics/db/queries.txt",
+   "line": 173,
+   "sentence": "Two conditions in one call of `filter` that cross a relation to many rows are about the same related row, and share a join; conditions in separate calls may each be met by a different related row, and each call joins the relation's table again (`docs/topics/db/queries.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/queries.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2128
+   ],
+   "fingerprint": "3debe4a08c415afc"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._next_is_sticky",
+   "line": 199,
+   "sentence": "`_next_is_sticky` sets `QuerySet._sticky_filter` and returns the queryset itself, not a clone (`django/db/models/query.py:QuerySet._next_is_sticky`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._next_is_sticky",
+   "kind": "function",
+   "lines": [
+    2332,
+    2344
+   ],
+   "fingerprint": "d38966c09241f28f"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._chain",
+   "line": 199,
+   "sentence": "The next `QuerySet._chain`, which in the manager returns the queryset itself because cloning is off, marks its query, as `Query.filter_is_sticky`, and clears the mark on the queryset (`django/db/models/query.py:QuerySet._chain`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._chain",
+   "kind": "function",
+   "lines": [
+    2288,
+    2304
+   ],
+   "fingerprint": "13dce17e2b32c883"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.build_filter",
+   "line": 199,
+   "sentence": "A new condition that crosses a relation to many rows may go through one of those joins again (`django/db/models/sql/query.py:Query.build_filter`, `django/db/models/sql/query.py:Query.setup_joins`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.build_filter",
+   "kind": "function",
+   "lines": [
+    1495,
+    1665
+   ],
+   "fingerprint": "973489d67ce452f8"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.setup_joins",
+   "line": 199,
+   "sentence": "A new condition that crosses a relation to many rows may go through one of those joins again (`django/db/models/sql/query.py:Query.build_filter`, `django/db/models/sql/query.py:Query.setup_joins`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.setup_joins",
+   "kind": "function",
+   "lines": [
+    1898,
+    2013
+   ],
+   "fingerprint": "03a5136e0ffb24f1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.chain",
+   "line": 199,
+   "sentence": "`Query.chain` ordinarily gives the copy an empty set, so that each call of `filter` starts with none; where the query it copies is marked sticky it leaves the copy's set as it is, and unmarks the copy (`django/db/models/sql/query.py:Query.chain`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.chain",
+   "kind": "function",
+   "lines": [
+    433,
+    446
+   ],
+   "fingerprint": "1296d8e0bfdf1117"
+  },
+  {
+   "pointer": "django/",
+   "line": 232,
+   "sentence": "The `_apply_rel_filters` of `ManyRelatedManager` is the one caller of `_next_is_sticky` in `django/` (`django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`).",
+   "tree": "django",
+   "path": "django/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4842baf7ebf76511"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager",
+   "line": 232,
+   "sentence": "The `_apply_rel_filters` of `ManyRelatedManager` is the one caller of `_next_is_sticky` in `django/` (`django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_forward_many_to_many_manager",
+   "kind": "function",
+   "lines": [
+    1075,
+    1714
+   ],
+   "fingerprint": "b93cf4954deac4f9"
+  }
+ ]
+}

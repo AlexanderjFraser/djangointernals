@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 518">
+  <!-- two timelines, one for each loop: the event loop's thread above a rule, the other thread below it, time running to the right.
+       An accent arrow is one call handed to the thread; the dashes are the coroutine, suspended until the thread returns. -->
+  <text class="strong" x="0" y="14">Two loops in a coroutine</text>
+  <text class="quiet small" x="608" y="14" text-anchor="end">time</text>
+  <path class="line" d="M614 10 H636"/>
+  <polygon class="head" points="646,10 636,5 636,15"/>
+
+  <!-- the first loop: async for over the queryset itself -->
+  <text class="name" x="0" y="46">async for sailor in Sailor.objects.filter(ship=petrel).order_by('id')</text>
+  <text class="quiet small" x="646" y="46" text-anchor="end">two sailors</text>
+  <text class="quiet" x="0" y="70">the event loop's thread</text>
+  <path class="line" d="M0 140.5 H646"/>
+  <text class="quiet" x="0" y="183">another thread</text>
+
+  <!-- suspended, then the one crossing and the return -->
+  <path class="line dashed" d="M177 102.5 H473"/>
+  <path class="mark-line" d="M165.5 102.5 H176 V178.5 H185"/>
+  <polygon class="head mark" points="195,178.5 185,173.5 185,183.5"/>
+  <path class="line" d="M462.5 178.5 H473 V102.5 H482"/>
+  <polygon class="head" points="492,102.5 482,97.5 482,107.5"/>
+
+  <rect class="ground" x="0.5" y="78.5" width="165" height="48" rx="4"/>
+  <text class="name" x="83" y="107" text-anchor="middle">QuerySet.__aiter__</text>
+
+  <rect class="box" x="195.5" y="154.5" width="267" height="48" rx="4"/>
+  <text class="name" x="329" y="174" text-anchor="middle">QuerySet._fetch_all</text>
+  <text x="329" y="192" text-anchor="middle">the statement, both instances</text>
+
+  <rect class="ground" x="492.5" y="78.5" width="153" height="48" rx="4"/>
+  <text x="569" y="107" text-anchor="middle">the loop's body, twice</text>
+
+  <text x="0" y="228">One crossing for the whole of an evaluation.</text>
+
+  <!-- the second loop: aiterator, in chunks of three -->
+  <text class="name" x="0" y="272">async for sailor in Sailor.objects.order_by('id').aiterator(chunk_size=3)</text>
+  <text class="quiet small" x="646" y="272" text-anchor="end">four sailors</text>
+  <text class="quiet" x="0" y="296">the event loop's thread</text>
+  <path class="line" d="M0 366.5 H646"/>
+  <text class="quiet" x="0" y="409">another thread</text>
+
+  <!-- suspended twice: a crossing and a return for each chunk -->
+  <path class="line dashed" d="M177 328.5 H317"/>
+  <path class="mark-line" d="M165.5 328.5 H176 V404.5 H185"/>
+  <polygon class="head mark" points="195,404.5 185,399.5 185,409.5"/>
+  <path class="line" d="M306.5 404.5 H317 V328.5 H326"/>
+  <polygon class="head" points="336,328.5 326,323.5 326,333.5"/>
+
+  <path class="line dashed" d="M440 328.5 H546"/>
+  <path class="mark-line" d="M428.5 328.5 H439 V404.5 H448"/>
+  <polygon class="head mark" points="458,404.5 448,399.5 448,409.5"/>
+  <path class="line" d="M535.5 404.5 H546 V328.5 H555"/>
+  <polygon class="head" points="565,328.5 555,323.5 555,333.5"/>
+
+  <rect class="ground" x="0.5" y="304.5" width="165" height="48" rx="4"/>
+  <text class="name" x="83" y="333" text-anchor="middle">QuerySet.aiterator</text>
+
+  <rect class="box" x="195.5" y="380.5" width="111" height="48" rx="4"/>
+  <text x="251" y="400" text-anchor="middle">the statement,</text>
+  <text x="251" y="418" text-anchor="middle">a list of 3</text>
+
+  <rect class="ground" x="336.5" y="304.5" width="92" height="48" rx="4"/>
+  <text x="382.5" y="324" text-anchor="middle">the body,</text>
+  <text x="382.5" y="342" text-anchor="middle">three times</text>
+
+  <rect class="box" x="458.5" y="380.5" width="77" height="48" rx="4"/>
+  <text x="497" y="409" text-anchor="middle">a list of 1</text>
+
+  <rect class="ground" x="565.5" y="304.5" width="80" height="48" rx="4"/>
+  <text x="605.5" y="324" text-anchor="middle">the body,</text>
+  <text x="605.5" y="342" text-anchor="middle">once</text>
+
+  <text x="0" y="454">Here, one crossing for each chunk of an iteration that keeps nothing.</text>
+
+  <!-- the key -->
+  <path class="mark-line" d="M0 487.5 H24"/>
+  <polygon class="head mark" points="34,487.5 24,482.5 24,492.5"/>
+  <text class="small" x="46" y="492">one call handed to a thread through <tspan class="name small">sync_to_async</tspan></text>
+  <path class="line dashed" d="M0 507.5 H34"/>
+  <text class="small" x="46" y="512">the coroutine is suspended until the thread returns</text>
+</svg>

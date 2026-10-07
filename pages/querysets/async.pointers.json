@@ -1,0 +1,357 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "asgiref": "ef9d4b8b371cf8a7bb63dea3d0fdc60923e9e081",
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "async.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/",
+   "line": 9,
+   "sentence": "Nothing under `django/db/models/sql/` or `django/db/backends/` is a coroutine function, and the connection's methods that open it, give a cursor, end a transaction or keep a savepoint refuse to be called on a thread where an event loop is running.",
+   "tree": "django",
+   "path": "django/db/models/sql/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "813f8fd9b32b4cac"
+  },
+  {
+   "pointer": "django/db/backends/",
+   "line": 9,
+   "sentence": "Nothing under `django/db/models/sql/` or `django/db/backends/` is a coroutine function, and the connection's methods that open it, give a cursor, end a transaction or keep a savepoint refuse to be called on a thread where an event loop is running.",
+   "tree": "django",
+   "path": "django/db/backends/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "f5d81d8628b99425"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
+   "line": 11,
+   "sentence": "It is a way to wait for a synchronous one without holding the event loop: the work is given to another thread, by asgiref's `sync_to_async`, and the coroutine is suspended until that thread has done it (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.__call__",
+   "kind": "function",
+   "lines": [
+    457,
+    549
+   ],
+   "fingerprint": "6be21e12b059ba25"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.aget",
+   "line": 32,
+   "sentence": "It wraps the synchronous method, bound to the queryset the twin was called on, in `sync_to_async`, calls what that returns with its own arguments, and awaits the result (`django/db/models/query.py:QuerySet.aget`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.aget",
+   "kind": "function",
+   "lines": [
+    761,
+    762
+   ],
+   "fingerprint": "a141c5291474d4b0"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
+   "line": 44,
+   "sentence": "The coroutine that awaited the twin is suspended at that point, and the event loop is free to run others, until the call has returned; what the method returned, or the exception it raised, is then what the `await` gives (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.__call__",
+   "kind": "function",
+   "lines": [
+    457,
+    549
+   ],
+   "fingerprint": "6be21e12b059ba25"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync",
+   "line": 62,
+   "sentence": "The docstring of `SyncToAsync` says what that is needed for: code that is not thread-safe, and its example is code that handles SQLite's database connections (`asgiref:asgiref/sync.py:SyncToAsync`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync",
+   "kind": "class",
+   "lines": [
+    383,
+    581
+   ],
+   "fingerprint": "d65007984d0bc2ce"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.__call__",
+   "line": 62,
+   "sentence": "Django's ASGI handler enters such a context for each request, so under the handler the thread is the request's own (`django/core/handlers/asgi.py:ASGIHandler.__call__`) ([Sync and async in one chain](../handlers/async.md)).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    161,
+    173
+   ],
+   "fingerprint": "46807d2758fb3e86"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.single_thread_executor",
+   "line": 62,
+   "sentence": "Where nothing of Django's or asgiref's stands above the event loop, as in these recordings, it is one thread that the class keeps for the whole process (`asgiref:asgiref/sync.py:SyncToAsync.single_thread_executor`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.single_thread_executor",
+   "kind": "assignment",
+   "lines": [
+    409,
+    409
+   ],
+   "fingerprint": "74f6e2a857ad7824"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionHandler.thread_critical",
+   "line": 82,
+   "sentence": "And the thread matters to the database layer here in this way: Django keeps its connections for each thread separately, so the statement goes over the connection of the thread that runs the method, not over one the event loop's thread may have (`django/db/utils.py:ConnectionHandler.thread_critical`) ([Database backends](../backends.md)).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionHandler.thread_critical",
+   "kind": "assignment",
+   "lines": [
+    148,
+    148
+   ],
+   "fingerprint": "048235ea8eda22d8"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager._get_queryset_methods",
+   "line": 84,
+   "sentence": "`BaseManager._get_queryset_methods` copies the public functions of the class that are not marked for querysets only, passing over a name the manager's class already has, and a coroutine function is a function (`django/db/models/manager.py:BaseManager._get_queryset_methods`) ([Managers](../models/managers.md)).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager._get_queryset_methods",
+   "kind": "function",
+   "lines": [
+    82,
+    105
+   ],
+   "at": 83,
+   "fingerprint": "5e74335544ea5ef4"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__aiter__",
+   "line": 88,
+   "sentence": "It defines an asynchronous generator inside itself and returns one (`django/db/models/query.py:QuerySet.__aiter__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__aiter__",
+   "kind": "function",
+   "lines": [
+    486,
+    494
+   ],
+   "fingerprint": "f1fac9d4e90a959e"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager._get_queryset_methods",
+   "line": 112,
+   "sentence": "A manager has no `__aiter__`: the copying of methods passes over a name that begins with an underscore where its function carries no `\"queryset_only\"`, and `__aiter__` carries none (`django/db/models/manager.py:BaseManager._get_queryset_methods`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager._get_queryset_methods",
+   "kind": "function",
+   "lines": [
+    82,
+    105
+   ],
+   "at": 83,
+   "fingerprint": "5e74335544ea5ef4"
+  },
+  {
+   "pointer": "django/db/models/query.py:RawQuerySet.__aiter__",
+   "line": 119,
+   "sentence": "`RawQuerySet.__aiter__` is the same method for a raw queryset, around the `_fetch_all` of that class (`django/db/models/query.py:RawQuerySet.__aiter__`) ([Raw querysets](raw.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "RawQuerySet.__aiter__",
+   "kind": "function",
+   "lines": [
+    2544,
+    2552
+   ],
+   "fingerprint": "f1fac9d4e90a959e"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.aiterator",
+   "line": 123,
+   "sentence": "Then it refuses a chunk size that is not positive with `ValueError`, decides on a chunked fetch as `iterator` does, by the setting `\"DISABLE_SERVER_SIDE_CURSORS\"` of the database, and makes the queryset's iterable class with the queryset, that decision and the chunk size, which is 2,000 where none was given (`django/db/models/query.py:QuerySet.aiterator`) ([From rows to instances: `ModelIterable` and `select_related`](iterables.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.aiterator",
+   "kind": "function",
+   "lines": [
+    628,
+    680
+   ],
+   "fingerprint": "5cd4f4bf58d752d8"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 125,
+   "sentence": "`aiterator` warns with `RemovedInDjango2029Warning` and goes on with 2,000; the release notes of 6.2, which deprecate the call, say that it will raise `ValueError` in its turn (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/db/models/query.py:BaseIterable._async_generator",
+   "line": 129,
+   "sentence": "It returns the asynchronous generator that `BaseIterable._async_generator` makes (`django/db/models/query.py:BaseIterable._async_generator`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "BaseIterable._async_generator",
+   "kind": "function",
+   "lines": [
+    103,
+    117
+   ],
+   "fingerprint": "cdc53abc31b8634d"
+  },
+  {
+   "pointer": "django/db/models/query.py:BaseIterable",
+   "line": 156,
+   "sentence": "It calls the method a generic converter of iterables for now, says that it will suffer a performance penalty on large sets of items, from the cost of crossing the sync barrier for each chunk, and says what should replace it and what stands in the way: an `__aiter__` of its own for each iterable class, which needs some work in the compiler first (`django/db/models/query.py:BaseIterable`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "BaseIterable",
+   "kind": "class",
+   "lines": [
+    95,
+    128
+   ],
+   "fingerprint": "a3fe45b88dc2710d"
+  },
+  {
+   "pointer": "django/db/models/query.py:ValuesListIterable.__iter__",
+   "line": 158,
+   "sentence": "Of the iterable classes, `ValuesListIterable` alone has an `__iter__` that is not one: it returns what `SQLCompiler.results_iter` returns, and that method has the statement run before it returns (`django/db/models/query.py:ValuesListIterable.__iter__`, `django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "ValuesListIterable.__iter__",
+   "kind": "function",
+   "lines": [
+    303,
+    311
+   ],
+   "fingerprint": "00e243c4ec3128ce"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.results_iter",
+   "line": 158,
+   "sentence": "Of the iterable classes, `ValuesListIterable` alone has an `__iter__` that is not one: it returns what `SQLCompiler.results_iter` returns, and that method has the statement run before it returns (`django/db/models/query.py:ValuesListIterable.__iter__`, `django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.results_iter",
+   "kind": "function",
+   "lines": [
+    1589,
+    1610
+   ],
+   "fingerprint": "a6c2ba8872ad22c3"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.aiterator",
+   "line": 176,
+   "sentence": "It gathers what the iterable yields into a list until the list is as long as the chunk size, awaits `aprefetch_related_objects` with the list and the lookups, yields the instances, and empties the list; what is left over when the iterable ends is dealt with in the same way (`django/db/models/query.py:QuerySet.aiterator`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.aiterator",
+   "kind": "function",
+   "lines": [
+    628,
+    680
+   ],
+   "fingerprint": "5cd4f4bf58d752d8"
+  },
+  {
+   "pointer": "django/db/models/query.py:aprefetch_related_objects",
+   "line": 176,
+   "sentence": "`aprefetch_related_objects` is to `prefetch_related_objects` what a twin is to its method, a coroutine function that awaits the synchronous function through `sync_to_async` with the arguments it was given, and `aiterator` is its one caller in Django (`django/db/models/query.py:aprefetch_related_objects`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "aprefetch_related_objects",
+   "kind": "function",
+   "lines": [
+    2843,
+    2847
+   ],
+   "fingerprint": "986279b676595364"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 219,
+   "sentence": "The queryset's share of the work went through, and the exception left `SQLCompiler.execute_sql`, which is where the connection is asked for a cursor (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.cursor",
+   "line": 221,
+   "sentence": "`BaseDatabaseWrapper.cursor` is wrapped by the decorator `async_unsafe`, as are the connection's methods that open it, close it, end a transaction or keep a savepoint (`django/db/backends/base/base.py:BaseDatabaseWrapper.cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.cursor",
+   "kind": "function",
+   "lines": [
+    317,
+    320
+   ],
+   "at": 318,
+   "fingerprint": "e0ac61a7eb8adfd4"
+  },
+  {
+   "pointer": "django/utils/asyncio.py:async_unsafe",
+   "line": 223,
+   "sentence": "If one is, it raises `SynchronousOnlyOperation` with the message of the recording, unless the environment variable `\"DJANGO_ALLOW_ASYNC_UNSAFE\"` is set; if none is, it calls the method (`django/utils/asyncio.py:async_unsafe`, `django/core/exceptions.py:SynchronousOnlyOperation`).",
+   "tree": "django",
+   "path": "django/utils/asyncio.py",
+   "symbol": "async_unsafe",
+   "kind": "function",
+   "lines": [
+    8,
+    39
+   ],
+   "fingerprint": "a148da8e03f6e918"
+  },
+  {
+   "pointer": "django/core/exceptions.py:SynchronousOnlyOperation",
+   "line": 223,
+   "sentence": "If one is, it raises `SynchronousOnlyOperation` with the message of the recording, unless the environment variable `\"DJANGO_ALLOW_ASYNC_UNSAFE\"` is set; if none is, it calls the method (`django/utils/asyncio.py:async_unsafe`, `django/core/exceptions.py:SynchronousOnlyOperation`).",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": "SynchronousOnlyOperation",
+   "kind": "class",
+   "lines": [
+    262,
+    265
+   ],
+   "fingerprint": "79c2f032745dcd36"
+  }
+ ]
+}

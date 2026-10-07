@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 542">
+  <!-- two roads, one under the other. In each, the methods called are down the left, a call runs to the right,
+       and the private method of a queryset that a road comes back to is the marked box at the right edge. -->
+  <text x="0" y="14">Five methods of a queryset that write, and what sends the statement for each.</text>
+
+  <!-- the first road -->
+  <text x="0" y="48"><tspan class="strong">Through an instance:</tspan><tspan class="quiet small"> the model layer decides what to send, and comes back to a queryset to send it.</tspan></text>
+
+  <!-- create: a save with a forced insert, which comes back to _insert -->
+  <rect class="box" x="0.5" y="62.5" width="142" height="40" rx="4"/>
+  <text class="name" x="12.5" y="87">QuerySet.create</text>
+  <path class="line" d="M142.5 82.5 H203.5"/>
+  <polygon class="head" points="213.5,82.5 203.5,77.5 203.5,87.5"/>
+  <rect class="ground" x="213.5" y="62.5" width="252" height="40" rx="4"/>
+  <text class="name" x="226.5" y="87">Model.save(force_insert=True)</text>
+  <path class="line" d="M465.5 82.5 H485.5"/>
+  <polygon class="head" points="495.5,82.5 485.5,77.5 485.5,87.5"/>
+  <rect class="mark-box" x="495.5" y="62.5" width="150" height="40" rx="4"/>
+  <text class="name" x="507.5" y="87">QuerySet._insert</text>
+  <path class="line" d="M570.5 102.5 V112.5"/>
+  <polygon class="head" points="570.5,122.5 565.5,112.5 575.5,112.5"/>
+  <text x="570.5" y="140" text-anchor="middle">an <tspan class="name">InsertQuery</tspan></text>
+
+  <!-- get_or_create: a get, and where that finds no row, the create above -->
+  <path class="line" d="M24.5 146.5 V112.5"/>
+  <polygon class="head" points="24.5,102.5 19.5,112.5 29.5,112.5"/>
+  <text class="small" x="40" y="129"><tspan class="name small">QuerySet.get</tspan><tspan class="quiet">; where that finds no row</tspan></text>
+  <rect class="box" x="0.5" y="146.5" width="196" height="40" rx="4"/>
+  <text class="name" x="12.5" y="171">QuerySet.get_or_create</text>
+
+  <!-- update_or_create: the get_or_create above, and where that found a row, a save, which comes back to _update -->
+  <path class="line" d="M24.5 230.5 V196.5"/>
+  <polygon class="head" points="24.5,186.5 19.5,196.5 29.5,196.5"/>
+  <rect class="box" x="0.5" y="230.5" width="220" height="40" rx="4"/>
+  <text class="name" x="12.5" y="255">QuerySet.update_or_create</text>
+  <path class="line" d="M220.5 250.5 H353.5"/>
+  <polygon class="head" points="363.5,250.5 353.5,245.5 353.5,255.5"/>
+  <text class="quiet small" x="287" y="244" text-anchor="middle">where that found a row</text>
+  <rect class="ground" x="363.5" y="230.5" width="102" height="40" rx="4"/>
+  <text class="name" x="375.5" y="255">Model.save</text>
+  <path class="line" d="M465.5 250.5 H485.5"/>
+  <polygon class="head" points="495.5,250.5 485.5,245.5 485.5,255.5"/>
+  <rect class="mark-box" x="495.5" y="230.5" width="150" height="40" rx="4"/>
+  <text class="name" x="507.5" y="255">QuerySet._update</text>
+  <path class="line" d="M570.5 270.5 V280.5"/>
+  <polygon class="head" points="570.5,290.5 565.5,280.5 575.5,280.5"/>
+  <text x="570.5" y="308" text-anchor="middle">an <tspan class="name">UpdateQuery</tspan></text>
+
+  <!-- the second road -->
+  <text x="0" y="346"><tspan class="strong">To the rows the query describes:</tspan><tspan class="quiet small"> no </tspan><tspan class="name small">Model.save</tspan><tspan class="quiet small"> is called.</tspan></text>
+
+  <!-- update: straight to an UpdateQuery -->
+  <rect class="box" x="0.5" y="360.5" width="142" height="40" rx="4"/>
+  <text class="name" x="12.5" y="385">QuerySet.update</text>
+  <path class="line" d="M142.5 380.5 H483"/>
+  <polygon class="head" points="493,380.5 483,375.5 483,385.5"/>
+  <text class="quiet small" x="313" y="374" text-anchor="middle">made from a copy of the queryset's query</text>
+  <text x="555.5" y="385" text-anchor="middle">an <tspan class="name">UpdateQuery</tspan></text>
+
+  <!-- delete: a collector, which comes back to _raw_delete for the rows it never fetched -->
+  <rect class="box" x="0.5" y="424.5" width="142" height="40" rx="4"/>
+  <text class="name" x="12.5" y="449">QuerySet.delete</text>
+  <path class="line" d="M142.5 444.5 H154.5"/>
+  <polygon class="head" points="164.5,444.5 154.5,439.5 154.5,449.5"/>
+  <rect class="ground" x="164.5" y="424.5" width="104" height="40" rx="4"/>
+  <text x="176.5" y="449">a <tspan class="name">Collector</tspan></text>
+  <path class="line" d="M268.5 444.5 H455.5"/>
+  <polygon class="head" points="465.5,444.5 455.5,439.5 455.5,449.5"/>
+  <text class="quiet small" x="365" y="438" text-anchor="middle">for rows the collector never fetched</text>
+  <rect class="mark-box" x="465.5" y="424.5" width="180" height="40" rx="4"/>
+  <text class="name" x="477.5" y="449">QuerySet._raw_delete</text>
+  <path class="line" d="M555.5 464.5 V474.5"/>
+  <polygon class="head" points="555.5,484.5 550.5,474.5 560.5,474.5"/>
+  <text x="555.5" y="502" text-anchor="middle">a <tspan class="name">DeleteQuery</tspan></text>
+
+  <!-- and, for the instances the collector holds, a method of DeleteQuery -->
+  <path class="line" d="M216.5 464.5 V528.5 H440"/>
+  <polygon class="head" points="450,528.5 440,523.5 440,533.5"/>
+  <text class="quiet small" x="328" y="522" text-anchor="middle">for instances the collector holds, by key</text>
+  <text class="name" x="645" y="533" text-anchor="end">DeleteQuery.delete_batch</text>
+</svg>

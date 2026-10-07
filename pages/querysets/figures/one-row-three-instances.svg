@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 406">
+  <!-- the row across the top, cut into its three shares; under each share the instance made of it,
+       each a step lower and further right than the one it was reached from, as the makers are nested -->
+  <text x="0" y="14"><tspan class="name strong">Sailor.objects.select_related("ship__home")</tspan>: one row of the result</text>
+
+  <!-- the row: one strip, three shares -->
+  <rect class="box" x="0.5" y="28.5" width="645" height="98" rx="4"/>
+  <path class="line" d="M215.5 28.5 V126.5"/>
+  <path class="line" d="M430.5 28.5 V126.5"/>
+
+  <text x="14" y="51">positions 0 to 3</text>
+  <text class="name strong" x="14" y="73">crew_sailor</text>
+  <text class="name" x="14" y="93">id, name,</text>
+  <text class="name" x="14" y="111">ship_id, signed_on</text>
+
+  <text x="229" y="51">positions 4 to 8</text>
+  <text class="name strong" x="229" y="73">fleet_ship</text>
+  <text class="name" x="229" y="93">id, name, tonnage,</text>
+  <text class="name" x="229" y="111">home_id, captain_id</text>
+
+  <text x="444" y="51">positions 9 to 11</text>
+  <text class="name strong" x="444" y="73">fleet_port</text>
+  <text class="name" x="444" y="93">id, name, country</text>
+
+  <!-- whose each share is, by klass_info -->
+  <text x="28" y="148"><tspan class="name">klass_info</tspan>: Sailor</text>
+  <text x="243" y="148"><tspan class="name">klass_info</tspan>: Ship,</text>
+  <text x="243" y="166">reached by <tspan class="name">Sailor.ship</tspan></text>
+  <text x="458" y="148"><tspan class="name">klass_info</tspan>: Port,</text>
+  <text x="458" y="166">reached by <tspan class="name">Ship.home</tspan></text>
+
+  <!-- the first share: the iterable makes a Sailor -->
+  <path class="line" d="M14 127 V208.5"/>
+  <polygon class="head" points="14,218.5 9,208.5 19,208.5"/>
+  <text class="name" x="28" y="182">ModelIterable.__iter__</text>
+  <text class="name quiet" x="28" y="200">Model.from_db</text>
+  <rect class="mark-box" x="0.5" y="218.5" width="160" height="44" rx="4"/>
+  <text class="strong" x="28" y="245">a Sailor</text>
+
+  <!-- the second share: the populator for Ship makes a Ship -->
+  <path class="line" d="M229 127 V276.5"/>
+  <polygon class="head" points="229,286.5 224,276.5 234,276.5"/>
+  <text x="243" y="250"><tspan class="name">RelatedPopulator</tspan> for Ship</text>
+  <text class="name quiet" x="243" y="268">Model.from_db</text>
+  <rect class="mark-box" x="215.5" y="286.5" width="160" height="44" rx="4"/>
+  <text class="strong" x="243" y="313">a Ship</text>
+
+  <!-- the third share: the populator for Port makes a Port -->
+  <path class="line" d="M444 127 V344.5"/>
+  <polygon class="head" points="444,354.5 439,344.5 449,344.5"/>
+  <text x="458" y="318"><tspan class="name">RelatedPopulator</tspan> for Port</text>
+  <text class="name quiet" x="458" y="336">Model.from_db</text>
+  <rect class="mark-box" x="430.5" y="354.5" width="160" height="44" rx="4"/>
+  <text class="strong" x="458" y="381">a Port</text>
+
+  <!-- the caches: the Ship on the Sailor, the Port on the Ship -->
+  <path class="mark-line" d="M14 263 V308.5 H205.5"/>
+  <polygon class="head mark" points="215.5,308.5 205.5,303.5 205.5,313.5"/>
+  <text x="26" y="301">cached under <tspan class="name">"ship"</tspan></text>
+
+  <path class="mark-line" d="M229 331 V376.5 H420.5"/>
+  <polygon class="head mark" points="430.5,376.5 420.5,371.5 420.5,381.5"/>
+  <text x="241" y="369">cached under <tspan class="name">"home"</tspan></text>
+
+  <!-- and nothing the other way -->
+  <text x="0" y="360">Nothing is cached the other way:</text>
+  <text x="0" y="378">the Ship has no entry for its crew,</text>
+  <text x="0" y="396">and the Port none for its ships.</text>
+</svg>

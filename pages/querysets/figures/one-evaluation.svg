@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 519">
+  <!-- the frame is one call of QuerySet._fetch_all; the numbers of its six steps run down the left -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="486" rx="4"/>
+  <text x="14" y="22"><tspan class="name strong">QuerySet._fetch_all</tspan>, where there is no result cache yet</text>
+
+  <!-- 1: the queryset's own work -->
+  <text class="strong" x="14" y="50">1</text>
+  <text x="38" y="50">an iterable is made for the queryset</text>
+  <text class="name" x="38" y="70">QuerySet._iterable_class</text>
+  <text class="quiet small" x="264" y="70"><tspan class="name small">ModelIterable</tspan> for a new queryset;</text>
+  <text class="quiet small" x="264" y="86"><tspan class="name small">values()</tspan> and <tspan class="name small">values_list()</tspan> set another</text>
+
+  <!-- the iterable's work: steps 2 to 4 -->
+  <rect class="box" x="38.5" y="100.5" width="593" height="240" rx="4"/>
+  <text class="strong" x="51" y="122">the iterable</text>
+
+  <!-- inside it, the compiler's and the backend's: steps 2 and 3 -->
+  <rect class="ground" x="51.5" y="133.5" width="567" height="130" rx="4"/>
+  <text class="strong" x="64" y="155">the compiler and the backend</text>
+
+  <text class="strong" x="14" y="181">2</text>
+  <text x="64" y="181">the iterable asks the query for a compiler, and the compiler runs the statement</text>
+  <text class="name" x="64" y="201">SQLCompiler.execute_sql</text>
+  <text class="quiet small" x="264" y="201">every row is read from the cursor before it returns</text>
+
+  <text class="strong" x="14" y="229">3</text>
+  <text x="64" y="229">the compiler hands the rows on, one at a time</text>
+  <text class="name" x="64" y="249">SQLCompiler.results_iter</text>
+  <text class="quiet small" x="264" y="249">converters are applied to the values that have them</text>
+
+  <!-- 4: back in the iterable, what a row becomes, by the class of the iterable -->
+  <text class="strong" x="14" y="289">4</text>
+  <text x="51" y="289">the iterable makes something of each row</text>
+  <text class="name" x="51" y="309">ModelIterable</text>
+  <text class="quiet small" x="51" y="326">an instance, by <tspan class="name small">Model.from_db</tspan></text>
+  <text class="name" x="264" y="309">ValuesIterable</text>
+  <text class="quiet small" x="264" y="326">a dictionary</text>
+  <text x="477" y="309">the others</text>
+  <text class="quiet small" x="477" y="326">a tuple or one value</text>
+
+  <!-- 5: the result cache, which is what the figure is about -->
+  <rect class="mark-box" x="38.5" y="351.5" width="593" height="57" rx="4"/>
+  <text class="strong" x="14" y="374">5</text>
+  <text x="51" y="374">the list of what it made is kept</text>
+  <text class="name mark" x="51" y="394">QuerySet._result_cache</text>
+
+  <!-- 6: the queryset's own work again -->
+  <text class="strong" x="14" y="434">6</text>
+  <text x="38" y="434">where the queryset has prefetch lookups not yet followed, they are followed,</text>
+  <text x="38" y="452">for all the instances at once</text>
+  <text class="name" x="38" y="472">prefetch_related_objects</text>
+  <text class="quiet small" x="264" y="472">further statements, where there is anything to fetch</text>
+
+  <!-- afterwards, outside the call -->
+  <text x="0" y="511">A later iteration, <tspan class="name">len</tspan>, <tspan class="name">bool</tspan>, index, <tspan class="name">count</tspan>, <tspan class="name">exists</tspan> or <tspan class="name">contains</tspan> reads <tspan class="name mark">QuerySet._result_cache</tspan>.</text>
+</svg>

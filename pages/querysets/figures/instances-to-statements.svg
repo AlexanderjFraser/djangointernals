@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 500">
+  <!-- a tree down the page: the list, the two groups it is sorted into, and each group's batches.
+       A filled box is a list of instances, a dashed frame a block of atomic, and the accent a batch. -->
+  <text x="0" y="14"><tspan class="name strong">QuerySet.bulk_create</tspan><tspan class="strong">: from a list of instances to statements</tspan></text>
+
+  <!-- the list, and the question asked of each instance in it -->
+  <rect class="box" x="0.5" y="28.5" width="645" height="60" rx="4"/>
+  <text class="strong" x="14" y="51">the instances, in the caller's order</text>
+  <text x="14" y="73"><tspan class="name">QuerySet._prepare_for_bulk_create</tspan> asks of each: has it a primary key?</text>
+
+  <!-- the block of atomic around both groups -->
+  <rect class="ground dashed" x="0.5" y="106.5" width="645" height="344" rx="4"/>
+  <text class="quiet small" x="14" y="438">a block of <tspan class="name small">atomic</tspan>, without a savepoint, where both groups have instances</text>
+
+  <!-- the list divides -->
+  <path class="line" d="M162.5 89 V120"/>
+  <polygon class="head" points="162.5,130 157.5,120 167.5,120"/>
+  <path class="line" d="M483.5 89 V120"/>
+  <polygon class="head" points="483.5,130 478.5,120 488.5,120"/>
+
+  <!-- the group with a key -->
+  <rect class="box" x="12.5" y="130.5" width="300" height="286" rx="4"/>
+  <text class="strong" x="26" y="153">with a key</text>
+  <text class="quiet small" x="298" y="153" text-anchor="end">inserted first</text>
+  <text class="quiet small" x="26" y="172">the caller's, or one the key's field supplied</text>
+  <text class="quiet small" x="26" y="199">fields</text>
+  <text x="74" y="199">every concrete field</text>
+  <text x="74" y="217">that is not generated</text>
+  <text class="name" x="26" y="246">QuerySet._batched_insert</text>
+
+  <!-- its batches, and the block of atomic around them -->
+  <rect class="ground dashed" x="26.5" y="257.5" width="272" height="147" rx="4"/>
+  <rect class="mark-box" x="39.5" y="269.5" width="70" height="30" rx="4"/>
+  <text x="74.5" y="289" text-anchor="middle">batch</text>
+  <path class="mark-line" d="M110 284.5 H140"/>
+  <polygon class="head mark" points="150,284.5 140,279.5 140,289.5"/>
+  <text class="name" x="158" y="289">QuerySet._insert</text>
+  <rect class="mark-box" x="39.5" y="309.5" width="70" height="30" rx="4"/>
+  <text x="74.5" y="329" text-anchor="middle">batch</text>
+  <path class="mark-line" d="M110 324.5 H140"/>
+  <polygon class="head mark" points="150,324.5 140,319.5 140,329.5"/>
+  <text class="name" x="158" y="329">QuerySet._insert</text>
+  <text x="74.5" y="354" text-anchor="middle">…</text>
+  <text class="quiet small" x="40" y="376">a block of <tspan class="name small">atomic</tspan>, without a savepoint,</text>
+  <text class="quiet small" x="40" y="392">where the group has more than one batch</text>
+
+  <!-- the group without a key -->
+  <rect class="box" x="333.5" y="130.5" width="300" height="286" rx="4"/>
+  <text class="strong" x="347" y="153">without a key</text>
+  <text class="quiet small" x="619" y="153" text-anchor="end">inserted second</text>
+  <text class="quiet small" x="347" y="172"><tspan class="name small">None</tspan>, or a default the database is to supply</text>
+  <text class="quiet small" x="347" y="199">fields</text>
+  <text x="395" y="199">the same,</text>
+  <text x="395" y="217">less any <tspan class="name">AutoField</tspan></text>
+  <text class="name" x="347" y="246">QuerySet._batched_insert</text>
+
+  <!-- its batches, and the block of atomic around them -->
+  <rect class="ground dashed" x="347.5" y="257.5" width="272" height="147" rx="4"/>
+  <rect class="mark-box" x="360.5" y="269.5" width="70" height="30" rx="4"/>
+  <text x="395.5" y="289" text-anchor="middle">batch</text>
+  <path class="mark-line" d="M431 284.5 H461"/>
+  <polygon class="head mark" points="471,284.5 461,279.5 461,289.5"/>
+  <text class="name" x="479" y="289">QuerySet._insert</text>
+  <rect class="mark-box" x="360.5" y="309.5" width="70" height="30" rx="4"/>
+  <text x="395.5" y="329" text-anchor="middle">batch</text>
+  <path class="mark-line" d="M431 324.5 H461"/>
+  <polygon class="head mark" points="471,324.5 461,319.5 461,329.5"/>
+  <text class="name" x="479" y="329">QuerySet._insert</text>
+  <text x="395.5" y="354" text-anchor="middle">…</text>
+  <text class="quiet small" x="361" y="376">a block of <tspan class="name small">atomic</tspan>, without a savepoint,</text>
+  <text class="quiet small" x="361" y="392">where the group has more than one batch</text>
+
+  <!-- the size of a batch -->
+  <text x="0" y="474">The size of a batch is the caller's <tspan class="name">batch_size</tspan>, or the backend's limit</text>
+  <text x="0" y="492">where that is smaller or none was given (<tspan class="name">BaseDatabaseOperations.bulk_batch_size</tspan>).</text>
+</svg>

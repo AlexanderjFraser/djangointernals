@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 434">
+  <!-- two lists side by side, the statement's columns and the model's fields, in three bands:
+       the names in both, the names among the fields only, the name among the columns only.
+       At the right of each band, what becomes of its names. -->
+
+  <!-- the statement -->
+  <text class="name" x="0" y="13">Sailor.objects.raw('SELECT id, name, upper(name) AS shout</text>
+  <text class="name" x="156" y="31">FROM crew_sailor WHERE ship_id = %s ORDER BY id', [1])</text>
+
+  <!-- the heads of the two lists -->
+  <text class="name strong" x="12" y="66">RawQuerySet.columns</text>
+  <text class="quiet small" x="12" y="84">what the statement returned,</text>
+  <text class="quiet small" x="12" y="100">in its order</text>
+  <text class="name strong" x="200" y="66">RawQuerySet.model_fields</text>
+  <text class="quiet small" x="200" y="84">Sailor's fields that have a column,</text>
+  <text class="quiet small" x="200" y="100">in the model's order</text>
+
+  <!-- in both: a column the statement returned that is a field's column -->
+  <rect class="mark-box" x="0.5" y="112.5" width="645" height="88" rx="4"/>
+  <rect class="ground" x="12.5" y="124.5" width="148" height="28" rx="4"/>
+  <text class="name" x="25" y="143">id</text>
+  <rect class="ground" x="12.5" y="160.5" width="148" height="28" rx="4"/>
+  <text class="name" x="25" y="179">name</text>
+  <path class="mark-line" d="M161 138.5 H200"/>
+  <path class="mark-line" d="M161 174.5 H200"/>
+  <rect class="ground" x="200.5" y="124.5" width="148" height="28" rx="4"/>
+  <text class="name" x="213" y="143">id</text>
+  <rect class="ground" x="200.5" y="160.5" width="148" height="28" rx="4"/>
+  <text class="name" x="213" y="179">name</text>
+  <text class="quiet small" x="388" y="140">returned, and a field's column</text>
+  <text x="388" y="160">their values are given to</text>
+  <text x="388" y="178"><tspan class="name">Model.from_db</tspan>, in the model's order</text>
+
+  <!-- among the fields only: a field's column that the statement did not return -->
+  <rect class="box" x="0.5" y="208.5" width="645" height="88" rx="4"/>
+  <rect class="ground" x="200.5" y="220.5" width="148" height="28" rx="4"/>
+  <text class="name" x="213" y="239">ship_id</text>
+  <rect class="ground" x="200.5" y="256.5" width="148" height="28" rx="4"/>
+  <text class="name" x="213" y="275">signed_on</text>
+  <text class="quiet small" x="388" y="245">a field's column, not returned</text>
+  <text x="388" y="265">the field is left deferred</text>
+
+  <!-- among the columns only: a column the statement returned that is no field's -->
+  <rect class="box" x="0.5" y="304.5" width="645" height="76" rx="4"/>
+  <rect class="ground" x="12.5" y="328.5" width="148" height="28" rx="4"/>
+  <text class="name" x="25" y="347">shout</text>
+  <text class="quiet small" x="388" y="326">returned, and no field's column</text>
+  <text x="388" y="346">set on the instance afterwards</text>
+  <text x="388" y="364">as the attribute <tspan class="name">"shout"</tspan></text>
+
+  <!-- what the method that puts the two lists together returns -->
+  <text x="0" y="408"><tspan class="name">RawQuerySet.resolve_model_init_order</tspan> returns</text>
+  <text class="name" x="0" y="428">(['id', 'name'], [0, 1], [('shout', 2)])</text>
+</svg>
