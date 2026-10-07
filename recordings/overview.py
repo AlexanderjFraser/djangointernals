@@ -19,6 +19,7 @@ import datetime
 import io
 import os
 import sys
+import weakref
 import tempfile
 
 sys.stdout.reconfigure(newline="\n")  # the same bytes on every machine
@@ -34,7 +35,7 @@ os.environ["DJANGO_SETTINGS_MODULE"] = "journal.settings"
 
 LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line
-SEEN = set()  # generator frames already written down: a generator is entered once per value
+SEEN = {}  # generator frames already written down: a generator is entered once per value
 SIGNALS = {"request_started", "request_finished", "got_request_exception", "connection_created", "pre_init", "post_init"}
 
 
@@ -297,10 +298,11 @@ def profile(frame, event, arg):
         if label is None:
             return
         if code.co_flags & 0x20:  # a generator: every resumption is a call event
-            if id(frame) in SEEN:
+            known = SEEN.get(id(frame))
+            if known is not None and known() is frame.f_generator:
                 STACK.append(frame)
                 return
-            SEEN.add(id(frame))
+            SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         text = label(frame)
         if text is None:
             return

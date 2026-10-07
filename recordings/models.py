@@ -70,6 +70,7 @@ the order of rows where a statement has no `ORDER BY` are this backend's.
 """
 import os
 import sys
+import weakref
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # `harbour` imports from this directory, as it would from a project's. The directory goes last
@@ -107,7 +108,7 @@ settings.configure(
 LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line
 AT = {}  # where in LINES the line of each open watched call is, by the frame
-SEEN = set()  # generator and coroutine frames already written down: such a frame is entered more than once
+SEEN = {}  # generator and coroutine frames already written down: such a frame is entered more than once
 PENDING = []  # the watched call that has just returned: (frame, depth, its line, what is to be said of its value)
 RAISED = []  # exceptions already written down, at the innermost watched call they left
 RESUMABLE = 0x20 | 0x80 | 0x200  # a generator, a coroutine, an asynchronous generator
@@ -211,9 +212,11 @@ def profile(frame, event, arg):
         label = find(frame.f_globals.get("__name__", ""), code.co_qualname, code.co_name)
         if label is None:
             return
-        if code.co_flags & RESUMABLE and id(frame) in SEEN:  # every resumption is a call event
-            STACK.append(frame)
-            return
+        if code.co_flags & RESUMABLE:  # every resumption is a call event
+            known = SEEN.get(id(frame))
+            if known is not None and known() is frame.f_generator:
+                STACK.append(frame)
+                return
         flush()  # what the call before this one returned is said first: a label may depend on it
         global LABELLING
         LABELLING = True
@@ -227,7 +230,7 @@ def profile(frame, event, arg):
         if text is None:
             return
         if code.co_flags & RESUMABLE:
-            SEEN.add(id(frame))
+            SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         note(text)
         AT[id(frame)] = len(LINES) - 1
         STACK.append(frame)

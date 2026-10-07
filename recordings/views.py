@@ -46,6 +46,7 @@ DateDetailView only about days long past.
 """
 import os
 import sys
+import weakref
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # `gazette` imports from this directory, as it would from a project's. The directory goes last
@@ -122,7 +123,7 @@ timezone.now = lambda: NOW  # the recording's clock: see the docstring
 LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line
 AT = {}  # where in LINES the line of each open watched call is, by the frame
-SEEN = set()  # generator and coroutine frames already written down: such a frame is entered more than once
+SEEN = {}  # generator and coroutine frames already written down: such a frame is entered more than once
 PENDING = []  # the watched call that has just returned: (frame, depth, its line, what is to be said of its value)
 RAISED = []  # exceptions already written down, at the innermost watched call they left
 RESUMABLE = 0x20 | 0x80 | 0x200  # a generator, a coroutine, an asynchronous generator
@@ -642,10 +643,11 @@ def profile(frame, event, arg):
         if label is None:
             return
         if code.co_flags & RESUMABLE:  # every resumption is a call event
-            if id(frame) in SEEN:
+            known = SEEN.get(id(frame))
+            if known is not None and known() is frame.f_generator:
                 STACK.append(frame)
                 return
-            SEEN.add(id(frame))
+            SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         flush()  # what the call before this one returned is said first: a label may depend on it
         try:
             text = label(frame)

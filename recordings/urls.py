@@ -30,6 +30,7 @@ down what an object holds, read by this script after Django made it.
 """
 import os
 import sys
+import weakref
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # `museum` imports from this directory, as it would from a project's. The directory goes last
@@ -103,7 +104,7 @@ from django.utils.regex_helper import normalize  # noqa: E402
 LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line
 AT = {}  # where in LINES the line of each open watched call is, by the frame
-SEEN = set()  # generator frames already written down: a generator is entered once per value
+SEEN = {}  # generator frames already written down: a generator is entered once per value
 PENDING = []  # the watched call that has just returned: (frame, depth, its line, what to say of its value, the value)
 RAISED = []  # exceptions already written down, at the innermost watched call they left: the objects, so that none is mistaken for a later one
 LEFT_OUT = object()  # what a rule answers for a call that is not to be written down after all
@@ -541,10 +542,11 @@ def profile(frame, event, arg):
         if label is None:
             return
         if code.co_flags & 0x20:  # a generator: every resumption is a call event
-            if id(frame) in SEEN:
+            known = SEEN.get(id(frame))
+            if known is not None and known() is frame.f_generator:
                 STACK.append(frame)
                 return
-            SEEN.add(id(frame))
+            SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         flush()  # what the call before this one returned is said first: a label may depend on it
         text = label(frame)
         if text is None:

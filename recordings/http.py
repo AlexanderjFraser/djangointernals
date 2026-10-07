@@ -23,6 +23,7 @@ on every run. The sizes in the titles and labels are computed from the data, not
 """
 import os
 import sys
+import weakref
 
 # This file is named for its chapter, and so has the name of a package of the standard
 # library. Python puts a script's directory first on the path: take it off before anything
@@ -67,7 +68,7 @@ time.time = lambda: NOW
 
 LINES = []
 STACK = []  # the watched frames open at this moment: the depth of the next line
-SEEN = set()  # generator frames already written down: a generator is entered once per value
+SEEN = {}  # generator frames already written down: a generator is entered once per value
 PENDING = []  # the watched call that has just returned: (frame, depth, what to say of its value, the value)
 RAISED = []  # exceptions already written down, at the innermost watched call they left: the objects, since an id is used again
 UPLOAD = {"open": False, "chunks": 0, "more": 0, "last": None, "reads": 0}  # the file being uploaded
@@ -404,10 +405,11 @@ def profile(frame, event, arg):
         if label is None:
             return
         if code.co_flags & 0x20:  # a generator: every resumption is a call event
-            if id(frame) in SEEN:
+            known = SEEN.get(id(frame))
+            if known is not None and known() is frame.f_generator:
                 STACK.append(frame)
                 return
-            SEEN.add(id(frame))
+            SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         text = label(frame)
         if text is None:
             return
