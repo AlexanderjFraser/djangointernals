@@ -78,7 +78,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.compile",
    "line": 68,
-   "sentence": "`SQLCompiler.compile` looks on a node for a method named `\"as_\"` and the connection's vendor, `as_sqlite`, `as_postgresql`, `as_mysql` or `as_oracle`, and calls it instead of `as_sql` where it finds one ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md), `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "sentence": "`SQLCompiler.compile` prefers a method named for the connection's vendor, `as_sqlite`, `as_postgresql`, `as_mysql` or `as_oracle`, where a node has one ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md), `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.compile",
@@ -120,7 +120,7 @@
   {
    "pointer": "django/db/models/functions/mixins.py",
    "line": 70,
-   "sentence": "And the mixins of `django/db/models/functions/mixins.py` are the vendor methods several classes share: `FixDecimalInputMixin.as_postgresql` casts a `FloatField` argument to a `DecimalField`, since PostgreSQL has no `\"LOG\"` or `\"MOD\"` of two doubles; `FixDurationInputMixin` gives `Sum` and `Avg` over a duration a cast on MySQL and, on an Oracle whose features lack `supports_aggregation_over_interval_types`, a conversion through seconds; and `NumericOutputFieldMixin` is not a vendor method but an inference, `_resolve_output_field` answering `DecimalField` where any source is one, `FloatField` where any is an `IntegerField`, the base inference otherwise, and `FloatField` for a function with no sources (`django/db/models/functions/mixins.py:NumericOutputFieldMixin`, `django/db/models/functions/mixins.py:FixDecimalInputMixin`).",
+   "sentence": "The mixins of `django/db/models/functions/mixins.py` are what several classes share: `FixDecimalInputMixin.as_postgresql` casts a `FloatField` argument to a `DecimalField`, since PostgreSQL has no `\"LOG\"` or `\"MOD\"` of two doubles, `FixDurationInputMixin` adapts `Sum` and `Avg` over a duration on MySQL and Oracle, and `NumericOutputFieldMixin` is not a vendor method but an inference, answering `DecimalField` where any source is one, `FloatField` where any is an `IntegerField`, the base inference otherwise, and `FloatField` for a function with no sources (`django/db/models/functions/mixins.py:NumericOutputFieldMixin`, `django/db/models/functions/mixins.py:FixDecimalInputMixin`).",
    "tree": "django",
    "path": "django/db/models/functions/mixins.py",
    "symbol": null,
@@ -134,7 +134,7 @@
   {
    "pointer": "django/db/models/functions/mixins.py:NumericOutputFieldMixin",
    "line": 70,
-   "sentence": "And the mixins of `django/db/models/functions/mixins.py` are the vendor methods several classes share: `FixDecimalInputMixin.as_postgresql` casts a `FloatField` argument to a `DecimalField`, since PostgreSQL has no `\"LOG\"` or `\"MOD\"` of two doubles; `FixDurationInputMixin` gives `Sum` and `Avg` over a duration a cast on MySQL and, on an Oracle whose features lack `supports_aggregation_over_interval_types`, a conversion through seconds; and `NumericOutputFieldMixin` is not a vendor method but an inference, `_resolve_output_field` answering `DecimalField` where any source is one, `FloatField` where any is an `IntegerField`, the base inference otherwise, and `FloatField` for a function with no sources (`django/db/models/functions/mixins.py:NumericOutputFieldMixin`, `django/db/models/functions/mixins.py:FixDecimalInputMixin`).",
+   "sentence": "The mixins of `django/db/models/functions/mixins.py` are what several classes share: `FixDecimalInputMixin.as_postgresql` casts a `FloatField` argument to a `DecimalField`, since PostgreSQL has no `\"LOG\"` or `\"MOD\"` of two doubles, `FixDurationInputMixin` adapts `Sum` and `Avg` over a duration on MySQL and Oracle, and `NumericOutputFieldMixin` is not a vendor method but an inference, answering `DecimalField` where any source is one, `FloatField` where any is an `IntegerField`, the base inference otherwise, and `FloatField` for a function with no sources (`django/db/models/functions/mixins.py:NumericOutputFieldMixin`, `django/db/models/functions/mixins.py:FixDecimalInputMixin`).",
    "tree": "django",
    "path": "django/db/models/functions/mixins.py",
    "symbol": "NumericOutputFieldMixin",
@@ -148,7 +148,7 @@
   {
    "pointer": "django/db/models/functions/mixins.py:FixDecimalInputMixin",
    "line": 70,
-   "sentence": "And the mixins of `django/db/models/functions/mixins.py` are the vendor methods several classes share: `FixDecimalInputMixin.as_postgresql` casts a `FloatField` argument to a `DecimalField`, since PostgreSQL has no `\"LOG\"` or `\"MOD\"` of two doubles; `FixDurationInputMixin` gives `Sum` and `Avg` over a duration a cast on MySQL and, on an Oracle whose features lack `supports_aggregation_over_interval_types`, a conversion through seconds; and `NumericOutputFieldMixin` is not a vendor method but an inference, `_resolve_output_field` answering `DecimalField` where any source is one, `FloatField` where any is an `IntegerField`, the base inference otherwise, and `FloatField` for a function with no sources (`django/db/models/functions/mixins.py:NumericOutputFieldMixin`, `django/db/models/functions/mixins.py:FixDecimalInputMixin`).",
+   "sentence": "The mixins of `django/db/models/functions/mixins.py` are what several classes share: `FixDecimalInputMixin.as_postgresql` casts a `FloatField` argument to a `DecimalField`, since PostgreSQL has no `\"LOG\"` or `\"MOD\"` of two doubles, `FixDurationInputMixin` adapts `Sum` and `Avg` over a duration on MySQL and Oracle, and `NumericOutputFieldMixin` is not a vendor method but an inference, answering `DecimalField` where any source is one, `FloatField` where any is an `IntegerField`, the base inference otherwise, and `FloatField` for a function with no sources (`django/db/models/functions/mixins.py:NumericOutputFieldMixin`, `django/db/models/functions/mixins.py:FixDecimalInputMixin`).",
    "tree": "django",
    "path": "django/db/models/functions/mixins.py",
    "symbol": "FixDecimalInputMixin",
@@ -218,7 +218,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Transform.get_bilateral_transforms",
-   "line": 87,
+   "line": 80,
    "sentence": "`Transform.get_bilateral_transforms` collects the classes marked so along the chain of transforms, the inner ones first and this one after them where it is bilateral, and `Lookup.__init__` keeps the list as `Lookup.bilateral_transforms` (`django/db/models/lookups.py:Transform.get_bilateral_transforms`, `django/db/models/lookups.py:Lookup.__init__`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -232,7 +232,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Lookup.__init__",
-   "line": 87,
+   "line": 80,
    "sentence": "`Transform.get_bilateral_transforms` collects the classes marked so along the chain of transforms, the inner ones first and this one after them where it is bilateral, and `Lookup.__init__` keeps the list as `Lookup.bilateral_transforms` (`django/db/models/lookups.py:Transform.get_bilateral_transforms`, `django/db/models/lookups.py:Lookup.__init__`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -246,7 +246,7 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py",
-   "line": 105,
+   "line": 98,
    "sentence": "The datetime module registers its classes as it is imported: the parts of a date on `DateField`, the parts of a time on `TimeField` and `DateTimeField`, the five year lookups on `ExtractYear` and `ExtractIsoYear`, and `TruncDate` and `TruncTime` on `DateTimeField`, which inherits `DateField`'s as well (`django/db/models/functions/datetime.py`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
@@ -260,7 +260,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:Lower",
-   "line": 105,
+   "line": 98,
    "sentence": "Of the text and the mathematical transforms none is registered on any field class at import: `Lower`, `Length` and `Upper` are classes with a `lookup_name`, and nothing more until something registers them (`django/db/models/functions/text.py:Lower`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -274,7 +274,7 @@
   },
   {
    "pointer": "django/db/models/functions/comparison.py",
-   "line": 118,
+   "line": 111,
    "sentence": "`django/db/models/functions/comparison.py` holds the comparisons and the casts.",
    "tree": "django",
    "path": "django/db/models/functions/comparison.py",
@@ -288,7 +288,7 @@
   },
   {
    "pointer": "django/db/models/functions/comparison.py:Cast",
-   "line": 118,
+   "line": 111,
    "sentence": "`Cast` takes one expression and an output field, which is its type and its target: `Cast.as_sql` adds the field's `cast_db_type` to the template as `\"db_type\"`, and `Field.cast_db_type` is the backend's `cast_data_types` entry for the field's internal type, filled with the field's parameters, or the field's `db_type` where there is none; a `CharField` with no `max_length` answers, through `CharField.cast_db_type`, the backend's `cast_char_field_without_max_length` (`django/db/models/functions/comparison.py:Cast`, `django/db/models/fields/__init__.py:Field.cast_db_type`, `django/db/models/fields/__init__.py:CharField.cast_db_type`).",
    "tree": "django",
    "path": "django/db/models/functions/comparison.py",
@@ -302,7 +302,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:Field.cast_db_type",
-   "line": 118,
+   "line": 111,
    "sentence": "`Cast` takes one expression and an output field, which is its type and its target: `Cast.as_sql` adds the field's `cast_db_type` to the template as `\"db_type\"`, and `Field.cast_db_type` is the backend's `cast_data_types` entry for the field's internal type, filled with the field's parameters, or the field's `db_type` where there is none; a `CharField` with no `max_length` answers, through `CharField.cast_db_type`, the backend's `cast_char_field_without_max_length` (`django/db/models/functions/comparison.py:Cast`, `django/db/models/fields/__init__.py:Field.cast_db_type`, `django/db/models/fields/__init__.py:CharField.cast_db_type`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -316,7 +316,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:CharField.cast_db_type",
-   "line": 118,
+   "line": 111,
    "sentence": "`Cast` takes one expression and an output field, which is its type and its target: `Cast.as_sql` adds the field's `cast_db_type` to the template as `\"db_type\"`, and `Field.cast_db_type` is the backend's `cast_data_types` entry for the field's internal type, filled with the field's parameters, or the field's `db_type` where there is none; a `CharField` with no `max_length` answers, through `CharField.cast_db_type`, the backend's `cast_char_field_without_max_length` (`django/db/models/functions/comparison.py:Cast`, `django/db/models/fields/__init__.py:Field.cast_db_type`, `django/db/models/fields/__init__.py:CharField.cast_db_type`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -331,7 +331,7 @@
   {
    "pointer": "django/db/models/functions/comparison.py:Collate",
    "line": 120,
-   "sentence": "`Collate` takes an expression and a collation's name, which it checks against a pattern of word characters and hyphens, and writes `expression COLLATE name`, the name quoted by the backend; it is not allowed as a database default (`django/db/models/functions/comparison.py:Collate`).",
+   "sentence": "`Collate` takes an expression and a collation's name, which it checks against a pattern of word characters and hyphens, and writes `expression COLLATE name`, the name quoted by the backend (`django/db/models/functions/comparison.py:Collate`).",
    "tree": "django",
    "path": "django/db/models/functions/comparison.py",
    "symbol": "Collate",
@@ -442,7 +442,7 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py:TruncBase",
-   "line": 152,
+   "line": 150,
    "sentence": "`TruncBase` carries `kind`, the part to cut to, on each of its subclasses, and takes an `output_field` and a `tzinfo` (`django/db/models/functions/datetime.py:TruncBase`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
@@ -456,7 +456,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.convert_trunc_expression",
-   "line": 152,
+   "line": 150,
    "sentence": "The value that comes back goes through `TruncBase.convert_value`, which is the backend's `convert_trunc_expression`: a datetime is made aware in the expression's `tzinfo`, or the current time zone where none was given, where `USE_TZ` is on, and a datetime that came back for a date or a time output is cut to that (`django/db/backends/base/operations.py:BaseDatabaseOperations.convert_trunc_expression`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -470,8 +470,8 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py:TruncDate",
-   "line": 154,
-   "sentence": "`TruncDate` and `TruncTime` are the two with a `lookup_name`, `\"date\"` and `\"time\"`, and an output field of their own, and each overrides `as_sql` to ask for a cast rather than a truncation, `datetime_cast_date_sql` and `datetime_cast_time_sql`, a comment saying so (`django/db/models/functions/datetime.py:TruncDate`).",
+   "line": 152,
+   "sentence": "`TruncDate` and `TruncTime` are the two with a `lookup_name`, `\"date\"` and `\"time\"`, and an output field of their own, and each overrides `as_sql` to ask for a cast rather than a truncation, `datetime_cast_date_sql` and `datetime_cast_time_sql` (`django/db/models/functions/datetime.py:TruncDate`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
    "symbol": "TruncDate",
@@ -484,8 +484,8 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py:Now",
-   "line": 178,
-   "sentence": "`Now` is a `Func` with no arguments whose template is `\"CURRENT_TIMESTAMP\"` and whose output is a `DateTimeField`, with a template of its own for each of the four backends: `\"STATEMENT_TIMESTAMP()\"` on PostgreSQL, where a comment says `\"CURRENT_TIMESTAMP\"` is the start of the transaction, `\"CURRENT_TIMESTAMP(6)\"` on MySQL, `\"STRFTIME\"` of the moment on SQLite, and `\"LOCALTIMESTAMP\"` on Oracle (`django/db/models/functions/datetime.py:Now`).",
+   "line": 176,
+   "sentence": "`Now` is a `Func` with no arguments whose template is `\"CURRENT_TIMESTAMP\"` and whose output is a `DateTimeField`, with a template of its own for each of the four backends (`django/db/models/functions/datetime.py:Now`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
    "symbol": "Now",
@@ -498,7 +498,7 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py:TimezoneMixin.deconstruct",
-   "line": 180,
+   "line": 185,
    "sentence": "In Django 2029 the current time zone will be captured when `tzinfo` is omitted (`django/db/models/functions/datetime.py:TimezoneMixin.deconstruct`, `docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
@@ -512,7 +512,7 @@
   },
   {
    "pointer": "docs/releases/6.2.txt",
-   "line": 180,
+   "line": 185,
    "sentence": "In Django 2029 the current time zone will be captured when `tzinfo` is omitted (`django/db/models/functions/datetime.py:TimezoneMixin.deconstruct`, `docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
@@ -526,7 +526,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py",
-   "line": 184,
+   "line": 189,
    "sentence": "`django/db/models/functions/text.py` holds the functions over strings, most of them transforms (`django/db/models/functions/text.py:Length`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -540,7 +540,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:Length",
-   "line": 184,
+   "line": 189,
    "sentence": "`django/db/models/functions/text.py` holds the functions over strings, most of them transforms (`django/db/models/functions/text.py:Length`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -554,7 +554,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:Concat",
-   "line": 184,
+   "line": 189,
    "sentence": "`Concat` is the one that writes no function of its own: `Concat.__init__` takes two expressions at least and pairs them from the right, `ConcatPair(a, ConcatPair(b, c))`, since, the docstring of `ConcatPair` says, not every backend takes more than two arguments, and its template is the pair alone (`django/db/models/functions/text.py:Concat`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -568,7 +568,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:ConcatPair",
-   "line": 184,
+   "line": 189,
    "sentence": "`ConcatPair` is `\"CONCAT\"`; on SQLite and PostgreSQL it is written as the two sides joined by `||`, each wrapped in a `Coalesce` with the empty string, since a null on either side would make the whole null, and on PostgreSQL a side that is not a `CharField` or `TextField` is cast to text first; on MySQL it is `\"CONCAT_WS\"` with an empty separator, which ignores nulls of itself (`django/db/models/functions/text.py:ConcatPair`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -582,7 +582,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:Substr",
-   "line": 197,
+   "line": 202,
    "sentence": "`Substr` takes an expression, a position counted from one, refusing a smaller plain number, and a length; `Left` and `Right` take an expression and a length, and on SQLite and Oracle each turns itself into a `Substr`, `Right` with a negative position (`django/db/models/functions/text.py:Substr`, `django/db/models/functions/text.py:Right`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -596,7 +596,7 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:Right",
-   "line": 197,
+   "line": 202,
    "sentence": "`Substr` takes an expression, a position counted from one, refusing a smaller plain number, and a length; `Left` and `Right` take an expression and a length, and on SQLite and Oracle each turns itself into a `Substr`, `Right` with a negative position (`django/db/models/functions/text.py:Substr`, `django/db/models/functions/text.py:Right`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
@@ -610,8 +610,8 @@
   },
   {
    "pointer": "django/db/models/functions/text.py:MySQLSHA2Mixin",
-   "line": 197,
-   "sentence": "The hashes are transforms whose function is the hash's name, with three mixins for the backends that spell it otherwise: `MySQLSHA2Mixin` writes `\"SHA2\"` with the bit length, `OracleHashMixin` a `\"STANDARD_HASH\"` of the raw bytes, and `PostgreSQLSHAMixin` an `\"ENCODE\"` of `\"DIGEST\"`; `SHA224` is refused on Oracle (`django/db/models/functions/text.py:MySQLSHA2Mixin`).",
+   "line": 202,
+   "sentence": "The hashes share three vendor mixins, `MySQLSHA2Mixin`, `OracleHashMixin` and `PostgreSQLSHAMixin`, each a template for that backend's spelling (`django/db/models/functions/text.py:MySQLSHA2Mixin`).",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
    "symbol": "MySQLSHA2Mixin",
@@ -624,8 +624,8 @@
   },
   {
    "pointer": "django/db/models/functions/text.py",
-   "line": 222,
-   "sentence": "*The classes of `django/db/models/functions/text.py`: the function each writes and where a backend writes another, its output field, and the word it is a transform under, which no field class registers at import. \"The argument's\" is the base inference: the output field of the sources, which for a transform is the one argument.*",
+   "line": 227,
+   "sentence": "*The classes of `django/db/models/functions/text.py`: the function each writes and where a backend writes another, its output field, and the word it is a transform under. \"The argument's\" is the base inference: the output field of the sources, which for a transform is the one argument.*",
    "tree": "django",
    "path": "django/db/models/functions/text.py",
    "symbol": null,
@@ -638,7 +638,7 @@
   },
   {
    "pointer": "django/db/models/functions/math.py",
-   "line": 226,
+   "line": 231,
    "sentence": "`django/db/models/functions/math.py` holds the mathematical functions, every one of them a `Transform` but those that take two arguments or none, and most of them with `NumericOutputFieldMixin` for their type (`django/db/models/functions/math.py:Round`).",
    "tree": "django",
    "path": "django/db/models/functions/math.py",
@@ -652,7 +652,7 @@
   },
   {
    "pointer": "django/db/models/functions/math.py:Round",
-   "line": 226,
+   "line": 231,
    "sentence": "`django/db/models/functions/math.py` holds the mathematical functions, every one of them a `Transform` but those that take two arguments or none, and most of them with `NumericOutputFieldMixin` for their type (`django/db/models/functions/math.py:Round`).",
    "tree": "django",
    "path": "django/db/models/functions/math.py",
@@ -666,7 +666,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/_functions.py",
-   "line": 226,
+   "line": 231,
    "sentence": "`Random` takes no argument, writes `\"RANDOM\"`, `\"RAND\"` on MySQL and on SQLite, where it is a function Django registers with the connection because, a comment there says, SQLite's own `\"RANDOM\"` returns a 64-bit integer and not a value from zero to one (`django/db/backends/sqlite3/_functions.py`), and `\"DBMS_RANDOM.VALUE\"` on Oracle, and contributes nothing to a `\"GROUP BY\"` (`django/db/models/functions/math.py:Random`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/_functions.py",
@@ -680,7 +680,7 @@
   },
   {
    "pointer": "django/db/models/functions/math.py:Random",
-   "line": 226,
+   "line": 231,
    "sentence": "`Random` takes no argument, writes `\"RANDOM\"`, `\"RAND\"` on MySQL and on SQLite, where it is a function Django registers with the connection because, a comment there says, SQLite's own `\"RANDOM\"` returns a 64-bit integer and not a value from zero to one (`django/db/backends/sqlite3/_functions.py`), and `\"DBMS_RANDOM.VALUE\"` on Oracle, and contributes nothing to a `\"GROUP BY\"` (`django/db/models/functions/math.py:Random`).",
    "tree": "django",
    "path": "django/db/models/functions/math.py",
@@ -694,7 +694,7 @@
   },
   {
    "pointer": "django/db/models/functions/math.py",
-   "line": 243,
+   "line": 248,
    "sentence": "*The classes of `django/db/models/functions/math.py`. \"Numeric\" is `NumericOutputFieldMixin`: a `DecimalField` (`django/db/models/fields/__init__.py:DecimalField`) where any argument is one, a `FloatField` where any is an `IntegerField`, and `FloatField` for no arguments.",
    "tree": "django",
    "path": "django/db/models/functions/math.py",
@@ -708,7 +708,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:DecimalField",
-   "line": 243,
+   "line": 248,
    "sentence": "*The classes of `django/db/models/functions/math.py`. \"Numeric\" is `NumericOutputFieldMixin`: a `DecimalField` (`django/db/models/fields/__init__.py:DecimalField`) where any argument is one, a `FloatField` where any is an `IntegerField`, and `FloatField` for no arguments.",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -722,8 +722,8 @@
   },
   {
    "pointer": "django/db/models/functions/json.py:JSONObject",
-   "line": 247,
-   "sentence": "`JSONObject` and `JSONArray` build a JSON value, with a `JSONField` for their output (`django/db/models/functions/json.py:JSONObject`, `django/db/models/fields/json.py:JSONField`).",
+   "line": 252,
+   "sentence": "`JSONObject` and `JSONArray` build a JSON value with a `JSONField` for their output, each refusing with `NotSupportedError` where the backend's features say it cannot, and each writing a native form on PostgreSQL and Oracle that names the type to return (`django/db/models/functions/json.py:JSONObject`, `django/db/models/functions/json.py:JSONArray`, `django/db/models/fields/json.py:JSONField`).",
    "tree": "django",
    "path": "django/db/models/functions/json.py",
    "symbol": "JSONObject",
@@ -735,9 +735,23 @@
    "fingerprint": "f3939bf49bfa92a4"
   },
   {
+   "pointer": "django/db/models/functions/json.py:JSONArray",
+   "line": 252,
+   "sentence": "`JSONObject` and `JSONArray` build a JSON value with a `JSONField` for their output, each refusing with `NotSupportedError` where the backend's features say it cannot, and each writing a native form on PostgreSQL and Oracle that names the type to return (`django/db/models/functions/json.py:JSONObject`, `django/db/models/functions/json.py:JSONArray`, `django/db/models/fields/json.py:JSONField`).",
+   "tree": "django",
+   "path": "django/db/models/functions/json.py",
+   "symbol": "JSONArray",
+   "kind": "class",
+   "lines": [
+    8,
+    56
+   ],
+   "fingerprint": "4d9781d82e3290fb"
+  },
+  {
    "pointer": "django/db/models/fields/json.py:JSONField",
-   "line": 247,
-   "sentence": "`JSONObject` and `JSONArray` build a JSON value, with a `JSONField` for their output (`django/db/models/functions/json.py:JSONObject`, `django/db/models/fields/json.py:JSONField`).",
+   "line": 252,
+   "sentence": "`JSONObject` and `JSONArray` build a JSON value with a `JSONField` for their output, each refusing with `NotSupportedError` where the backend's features say it cannot, and each writing a native form on PostgreSQL and Oracle that names the type to return (`django/db/models/functions/json.py:JSONObject`, `django/db/models/functions/json.py:JSONArray`, `django/db/models/fields/json.py:JSONField`).",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
    "symbol": "JSONField",
@@ -750,8 +764,8 @@
   },
   {
    "pointer": "django/db/models/functions/uuid.py:UUID4",
-   "line": 249,
-   "sentence": "`UUID4` and `UUID7` are functions of no argument with a `UUIDField` for their output, `\"UUIDV4\"` and `\"UUIDV7\"` (`django/db/models/functions/uuid.py:UUID4`, `django/db/models/functions/uuid.py:UUID7`).",
+   "line": 254,
+   "sentence": "`UUID4` and `UUID7` are functions of no argument with a `UUIDField` for their output, `\"UUIDV4\"` and `\"UUIDV7\"`, each refusing with `NotSupportedError` where the backend's features lack `supports_uuid4_function` or `supports_uuid7_function`, and on SQLite each a function Django registers with the connection, `\"UUIDV7\"` only on Python 3.14 and later (`django/db/models/functions/uuid.py:UUID4`, `django/db/models/functions/uuid.py:UUID7`).",
    "tree": "django",
    "path": "django/db/models/functions/uuid.py",
    "symbol": "UUID4",
@@ -764,8 +778,8 @@
   },
   {
    "pointer": "django/db/models/functions/uuid.py:UUID7",
-   "line": 249,
-   "sentence": "`UUID4` and `UUID7` are functions of no argument with a `UUIDField` for their output, `\"UUIDV4\"` and `\"UUIDV7\"` (`django/db/models/functions/uuid.py:UUID4`, `django/db/models/functions/uuid.py:UUID7`).",
+   "line": 254,
+   "sentence": "`UUID4` and `UUID7` are functions of no argument with a `UUIDField` for their output, `\"UUIDV4\"` and `\"UUIDV7\"`, each refusing with `NotSupportedError` where the backend's features lack `supports_uuid4_function` or `supports_uuid7_function`, and on SQLite each a function Django registers with the connection, `\"UUIDV7\"` only on Python 3.14 and later (`django/db/models/functions/uuid.py:UUID4`, `django/db/models/functions/uuid.py:UUID7`).",
    "tree": "django",
    "path": "django/db/models/functions/uuid.py",
    "symbol": "UUID7",
@@ -778,7 +792,7 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 258,
+   "line": 263,
    "sentence": "`UUID4` and `UUID7` are new in 6.1 (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
@@ -792,7 +806,7 @@
   },
   {
    "pointer": "django/db/models/functions/window.py",
-   "line": 260,
+   "line": 265,
    "sentence": "The window functions of `django/db/models/functions/window.py` are `Func` subclasses with `window_compatible` set and nothing else that a function needs: `CumeDist`, `DenseRank`, `FirstValue`, `Lag`, `LastValue`, `Lead`, `NthValue`, `Ntile`, `PercentRank`, `Rank` and `RowNumber`.",
    "tree": "django",
    "path": "django/db/models/functions/window.py",
@@ -806,7 +820,7 @@
   },
   {
    "pointer": "django/db/models/functions/window.py:LagLeadFunction",
-   "line": 260,
+   "line": 265,
    "sentence": "Each is given to a `Window`, which writes the `\"OVER\"` clause, and [Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](windows.md) has what each writes and what the two with an offset and a default check (`django/db/models/functions/window.py:LagLeadFunction`).",
    "tree": "django",
    "path": "django/db/models/functions/window.py",

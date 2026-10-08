@@ -150,7 +150,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup",
    "line": 47,
-   "sentence": "`SQLCompiler.pre_sql_setup` then settles the rest, in an order its docstring does not give but the clauses demand (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`).",
+   "sentence": "`SQLCompiler.pre_sql_setup` then settles the rest, in the order the clauses demand (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.pre_sql_setup",
@@ -163,7 +163,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 72,
+   "line": 51,
    "sentence": "`SQLCompiler.as_sql` takes two options, `with_limits=True` and `with_col_aliases=False`, and returns the statement and a tuple of its parameters (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -177,7 +177,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_from_clause",
-   "line": 74,
+   "line": 53,
    "sentence": "In the plain case `as_sql` first calls `get_distinct`, which resolves the fields of a `\"DISTINCT ON\"` and may join tables for them, and only then `get_from_clause`, whose docstring says it must be called after anything that might change the tables, the select columns, the ordering and the distinct among them: it reads the alias map and writes every entry that is still referenced, and the query's extra tables after them (`django/db/models/sql/compiler.py:SQLCompiler.get_from_clause`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -191,7 +191,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql",
-   "line": 76,
+   "line": 55,
    "sentence": "`\"SELECT\"` comes first, with what the operations object's `distinct_sql` returns after it where the query is distinct, which for the base class is `\"DISTINCT\"` alone and a `NotSupportedError` for fields (`django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -205,7 +205,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.for_update_sql",
-   "line": 78,
+   "line": 57,
    "sentence": "What survives goes to the operations object's `for_update_sql`, with the tables of an `\"OF\"` from `get_select_for_update_of_arguments` ([The SELECT clause: `get_select`, the select mask and `klass_info`](select.md)), and the clause is placed after `\"FROM\"` where `for_update_after_from` says so, which its comment says is for MSSQL, and at the end of the statement otherwise (`django/db/backends/base/operations.py:BaseDatabaseOperations.for_update_sql`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -219,7 +219,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
-   "line": 117,
+   "line": 96,
    "sentence": "`SQLCompiler.execute_sql` takes a result type, which is `MULTI` unless another is given and `NO_RESULTS` where `None` is given, and two options for reading in chunks (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -233,7 +233,7 @@
   },
   {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor",
-   "line": 117,
+   "line": 96,
    "sentence": "Otherwise it takes a cursor from the connection, `BaseDatabaseWrapper.chunked_cursor` when `chunked_fetch` was asked for and `BaseDatabaseWrapper.cursor` otherwise; the base class's `chunked_cursor` is `cursor`, and PostgreSQL's wrapper, which has server-side cursors, is the one that overrides it (`django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor`) ([Database backends](../backends.md)).",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
@@ -247,7 +247,7 @@
   },
   {
    "pointer": "django/db/models/sql/constants.py",
-   "line": 127,
+   "line": 106,
    "sentence": "*The result types of `django/db/models/sql/constants.py`, what each returns, and the callers that pass each at the pin.",
    "tree": "django",
    "path": "django/db/models/sql/constants.py",
@@ -261,8 +261,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:cursor_iter",
-   "line": 140,
-   "sentence": "The generator of the last line is `cursor_iter`, a function of the module: it asks the cursor for `chunk_size` rows at a time, until what comes back is the features' `empty_fetchmany_value`, and closes the cursor in a `finally` when the iteration ends or is abandoned (`django/db/models/sql/compiler.py:cursor_iter`).",
+   "line": 119,
+   "sentence": "The generator of the last line is `cursor_iter`: it asks the cursor for `chunk_size` rows at a time, until what comes back is the features' `empty_fetchmany_value`, and closes the cursor in a `finally` when the iteration ends or is abandoned (`django/db/models/sql/compiler.py:cursor_iter`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "cursor_iter",
@@ -275,7 +275,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.has_results",
-   "line": 164,
+   "line": 143,
    "sentence": "`SQLCompiler.has_results` is `bool` of `execute_sql(SINGLE)`; its docstring says a backend may override it with a faster way of asking whether a query has any rows, and no backend in the tree does (`django/db/models/sql/compiler.py:SQLCompiler.has_results`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -289,8 +289,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.results_iter",
-   "line": 168,
-   "sentence": "`SQLCompiler.results_iter` returns an iterator over the rows: a row is a list where a converter or a composite key was applied, a tuple where `tuple_expected=True` was asked, and otherwise what the cursor gave (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
+   "line": 147,
+   "sentence": "`SQLCompiler.results_iter` returns an iterator over the rows: a row is a tuple where `tuple_expected=True` was asked; otherwise a list where a converter or a composite key was applied; and otherwise what the cursor gave (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.results_iter",
@@ -303,7 +303,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_converters",
-   "line": 170,
+   "line": 149,
    "sentence": "`SQLCompiler.get_converters` walks the expressions by position and collects, for each, the backend's converters followed by the expression's, keeping an entry only where there is at least one; a `ColPairs` counts for as many positions as it has columns, and each column's converters go under its own position (`django/db/models/sql/compiler.py:SQLCompiler.get_converters`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -317,7 +317,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.get_db_converters",
-   "line": 170,
+   "line": 149,
    "sentence": "The backend's are the operations object's `get_db_converters` of the expression: the base class returns none, and SQLite's `DatabaseOperations.get_db_converters` adds one by the internal type of the expression's output field, for a datetime, a date, a time, a decimal, a UUID and a boolean (`django/db/backends/sqlite3/operations.py:DatabaseOperations.get_db_converters`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/operations.py",
@@ -331,7 +331,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.get_db_converters",
-   "line": 170,
+   "line": 149,
    "sentence": "The expression's are `BaseExpression.get_db_converters`: its own `convert_value`, a function chosen by the output field's type that makes a `float`, an `int` or a `decimal.Decimal` of what came back, unless that is the no-op, and then the output field's own converters (`django/db/models/expressions.py:BaseExpression.get_db_converters`); a `Col` does not use `convert_value`: `Col.get_db_converters` returns its output field's converters, and its target field's after them where the output field is another field ([Expressions: `resolve_expression` and `as_sql`](expressions.md), [A field: the base class](../models/fields.md)).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -345,7 +345,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.apply_converters",
-   "line": 170,
+   "line": 149,
    "sentence": "`SQLCompiler.apply_converters` makes a list of each row and, for each position that has converters, runs them in that order, the backend's first (`django/db/models/sql/compiler.py:SQLCompiler.apply_converters`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -359,7 +359,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.composite_fields_to_tuples",
-   "line": 183,
+   "line": 162,
    "sentence": "`SQLCompiler.composite_fields_to_tuples` is the last step, taken only where `has_composite_fields` finds a `ColPairs` among the columns: for each, the slice of the row that holds its columns is replaced by one value, the tuple of them, so that a Berth's key comes back as the pair of its port and its number in one cell (`django/db/models/sql/compiler.py:SQLCompiler.composite_fields_to_tuples`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -373,7 +373,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.explain",
-   "line": 187,
+   "line": 166,
    "sentence": "`QuerySet.explain` passes its format and options to `Query.explain` with the queryset's database (`django/db/models/query.py:QuerySet.explain`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -387,7 +387,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.explain",
-   "line": 187,
+   "line": 166,
    "sentence": "`Query.explain` clones the query, refuses with `ValueError` an option whose name does not match `EXPLAIN_OPTIONS_PATTERN`, a word of letters, digits, underscores and hyphens, or holds `\"--\"`, sets `Query.explain_info` on the clone to an `ExplainInfo` of the format and the options, and joins with newlines what the clone's compiler's `explain_query` yields (`django/db/models/sql/query.py:Query.explain`, `django/db/models/sql/query.py:EXPLAIN_OPTIONS_PATTERN`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -401,7 +401,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:EXPLAIN_OPTIONS_PATTERN",
-   "line": 187,
+   "line": 166,
    "sentence": "`Query.explain` clones the query, refuses with `ValueError` an option whose name does not match `EXPLAIN_OPTIONS_PATTERN`, a word of letters, digits, underscores and hyphens, or holds `\"--\"`, sets `Query.explain_info` on the clone to an `ExplainInfo` of the format and the options, and joins with newlines what the clone's compiler's `explain_query` yields (`django/db/models/sql/query.py:Query.explain`, `django/db/models/sql/query.py:EXPLAIN_OPTIONS_PATTERN`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -415,7 +415,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.explain_query",
-   "line": 189,
+   "line": 168,
    "sentence": "`SQLCompiler.explain_query` runs `execute_sql` and reads every row; the comment says some backends return one-element tuples of strings and others tuples of integers and strings, so a row that is not a string is joined into one by spaces, each value through `json.dumps` where the format is JSON and `str` otherwise (`django/db/models/sql/compiler.py:SQLCompiler.explain_query`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -429,7 +429,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.explain_query_prefix",
-   "line": 189,
+   "line": 168,
    "sentence": "The base class's refuses with `NotSupportedError` where the features object lacks `supports_explaining_query_execution`, which is whether the operations object has an `explain_prefix` at all; refuses a format with `ValueError` unless it is among the features' `supported_explain_formats`, with a message that lists them or says the backend has none; refuses any option the same way; and returns `BaseDatabaseOperations.explain_prefix`, which SQLite's operations set to `\"EXPLAIN QUERY PLAN\"` (`django/db/backends/base/operations.py:BaseDatabaseOperations.explain_query_prefix`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -443,7 +443,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql",
-   "line": 204,
+   "line": 183,
    "sentence": "`SQLAggregateCompiler.as_sql` writes the selected annotations over an inner query compiled with column aliases, as `SELECT ... FROM (...) subquery`, and sets `col_count` to their number; it is the compiler of the `AggregateQuery` that `get_aggregation` makes where the aggregates cannot be put on the query itself (`django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql`) ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](aggregates.md)).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",

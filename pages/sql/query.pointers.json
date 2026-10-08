@@ -79,20 +79,6 @@
    "fingerprint": "ec92eec8a34fc1d0"
   },
   {
-   "pointer": "django/db/models/sql/query.py:Query.get_initial_alias",
-   "line": 111,
-   "sentence": "The base table is counted twice, once when the first condition made it and once more when the second began its walk from it, since `Query.get_initial_alias` counts the base table each time a condition starts there (`django/db/models/sql/query.py:Query.get_initial_alias`); each join is counted once, for the condition that made it.",
-   "tree": "django",
-   "path": "django/db/models/sql/query.py",
-   "symbol": "Query.get_initial_alias",
-   "kind": "function",
-   "lines": [
-    1113,
-    1125
-   ],
-   "fingerprint": "edea199be6ada238"
-  },
-  {
    "pointer": "django/db/models/sql/query.py:Query.sql_with_params",
    "line": 115,
    "sentence": "`Query.sql_with_params` asks for a compiler for the default database and returns what its `as_sql` returns, the statement with `%s` for each parameter and the tuple of parameters; `Query.__str__` returns the first with the second substituted into it by Python's `%` (`django/db/models/sql/query.py:Query.sql_with_params`, `django/db/models/sql/query.py:Query.__str__`).",
@@ -151,7 +137,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.relabeled_clone",
    "line": 147,
-   "sentence": "And `Query.relabeled_clone` clones and then renames aliases throughout the clone with `change_aliases`, the relabelling every expression offers, which is reached when a tree that holds the query as a `Subquery` is relabelled (`django/db/models/sql/query.py:Query.relabeled_clone`); the renaming a query gets when it is put inside another is `bump_prefix`'s, and [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md) has it.",
+   "sentence": "And `Query.relabeled_clone` clones and then renames aliases throughout the clone with `change_aliases`, the relabelling every expression offers, which is reached when a tree that holds the query, as a `Subquery` or as the right side of a lookup, is relabelled (`django/db/models/sql/query.py:Query.relabeled_clone`); the renaming a query gets when it is put inside another is `bump_prefix`'s, and [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md) has it.",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.relabeled_clone",
@@ -191,23 +177,9 @@
    "fingerprint": "c649e5b374e50cb1"
   },
   {
-   "pointer": "django/db/models/sql/query.py:Query.setup_joins",
-   "line": 163,
-   "sentence": "Where a join crosses a relation that can reach several rows, a filter may reuse one that an earlier condition of the same `filter` call made, and may not reuse one that an earlier `filter` call made; a join to one row, across a foreign key or a one-to-one, is reused whichever call made it (`django/db/models/sql/query.py:Query.setup_joins`).",
-   "tree": "django",
-   "path": "django/db/models/sql/query.py",
-   "symbol": "Query.setup_joins",
-   "kind": "function",
-   "lines": [
-    1898,
-    2013
-   ],
-   "fingerprint": "03a5136e0ffb24f1"
-  },
-  {
    "pointer": "django/db/models/sql/query.py:Query.set_limits",
    "line": 167,
-   "sentence": "`Query.set_limits` takes a low bound, a high bound or both and adds each to the query's low mark, clamping both to the high mark the query already has, so that a slice of a slice is a slice of the original rows; when the two marks meet the query is set empty (`django/db/models/sql/query.py:Query.set_limits`).",
+   "sentence": "`Query.set_limits` takes a low bound, a high bound or both and adds each to the query's low mark, the high bound clamped to the high mark the query already has and the low bound to the high mark it then has, so that a slice of a slice is a slice of the original rows; when the two marks meet the query is set empty (`django/db/models/sql/query.py:Query.set_limits`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.set_limits",
@@ -262,8 +234,8 @@
   },
   {
    "pointer": "django/db/models/query.py:RawModelIterable.__iter__",
-   "line": 184,
-   "sentence": "The four attributes of a `Query` that a `RawQuery` mirrors, the two marks and the two empty selections, are there, the comment beside them says, so that a compiler can be used to process the results: the raw iterable makes a `SQLCompiler` for the raw query all the same, to apply the converters of the backend and of the model's fields to the rows the cursor returns (`django/db/models/query.py:RawModelIterable.__iter__`).",
+   "line": 175,
+   "sentence": "A `RawQuery` also mirrors four attributes of a `Query`, the two marks and the two empty selections, so that, the comment beside them says, a compiler can be used to process the results: the raw iterable makes a `SQLCompiler` for the raw query all the same, to apply the converters of the backend and of the model's fields to the rows the cursor returns (`django/db/models/query.py:RawModelIterable.__iter__`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "RawModelIterable.__iter__",

@@ -501,8 +501,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup",
-   "line": 134,
-   "sentence": "`SQLCompiler.pre_sql_setup` has the query's where tree divide itself into three with `WhereNode.split_having_qualify`: the part for the `\"WHERE\"`, the part that compares an aggregate and goes to the `\"HAVING\"`, and the part that refers to a window, each a node or `None`, and keeps the three on the compiler (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`, `django/db/models/sql/where.py:WhereNode.split_having_qualify`).",
+   "line": 130,
+   "sentence": "`SQLCompiler.pre_sql_setup` has `WhereNode.split_having_qualify` divide the query's where tree into its where part, its having part and its qualify part, the last being what refers to a window, and keeps the three on the compiler (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`, `django/db/models/sql/where.py:WhereNode.split_having_qualify`); how the tree is walked, and which nodes must stay whole, is told in [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.pre_sql_setup",
@@ -515,8 +515,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.split_having_qualify",
-   "line": 134,
-   "sentence": "`SQLCompiler.pre_sql_setup` has the query's where tree divide itself into three with `WhereNode.split_having_qualify`: the part for the `\"WHERE\"`, the part that compares an aggregate and goes to the `\"HAVING\"`, and the part that refers to a window, each a node or `None`, and keeps the three on the compiler (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`, `django/db/models/sql/where.py:WhereNode.split_having_qualify`).",
+   "line": 130,
+   "sentence": "`SQLCompiler.pre_sql_setup` has `WhereNode.split_having_qualify` divide the query's where tree into its where part, its having part and its qualify part, the last being what refers to a window, and keeps the three on the compiler (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`, `django/db/models/sql/where.py:WhereNode.split_having_qualify`); how the tree is walked, and which nodes must stay whole, is told in [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.split_having_qualify",
@@ -529,8 +529,8 @@
   },
   {
    "pointer": "docs/ref/models/expressions.txt",
-   "line": 136,
-   "sentence": "Where the flag is set and a window is among the children, the whole node goes to the qualify part, unless the node has plain children beside the window and the query groups, which the caller passes in as `must_group_by=True`: then the method raises `NotImplementedError`, with the message the documentation quotes (`docs/ref/models/expressions.txt`).",
+   "line": 132,
+   "sentence": "Where a node's children must stay together, as those of an `\"OR\"` that is not negated must, and a window is among them, the whole node goes to the qualify part, unless the node has plain children beside the window and the query groups, which the caller passes in as `must_group_by=True`: then the method raises `NotImplementedError`, with the message the documentation quotes (`docs/ref/models/expressions.txt`).",
    "tree": "django",
    "path": "docs/ref/models/expressions.txt",
    "symbol": null,
@@ -543,8 +543,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 156,
-   "sentence": "After the branch for a compound statement, and before the plain one, it calls `SQLCompiler.get_qualify_sql` and takes what that returns as the statement, then sets its own ordering aside, since the method has written one (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.get_qualify_sql`).",
+   "line": 152,
+   "sentence": "With a qualify part set, `SQLCompiler.as_sql` takes the statement from `SQLCompiler.get_qualify_sql` and sets its own ordering aside, since the method has written one (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.get_qualify_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.as_sql",
@@ -557,8 +557,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_qualify_sql",
-   "line": 156,
-   "sentence": "After the branch for a compound statement, and before the plain one, it calls `SQLCompiler.get_qualify_sql` and takes what that returns as the statement, then sets its own ordering aside, since the method has written one (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.get_qualify_sql`).",
+   "line": 152,
+   "sentence": "With a qualify part set, `SQLCompiler.as_sql` takes the statement from `SQLCompiler.get_qualify_sql` and sets its own ordering aside, since the method has written one (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.get_qualify_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.get_qualify_sql",
@@ -571,7 +571,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.add_annotation",
-   "line": 162,
+   "line": 158,
    "sentence": "Anything else is added to the inner query as an annotation under `\"qual0\"`, `\"qual1\"` and on, with `Query.add_annotation`, and replaced by that alias (`django/db/models/sql/query.py:Query.add_annotation`); the comment at the top of the method says when this happens, a window that `values` or `alias` has masked out of the selection being filtered on.",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -585,7 +585,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.leaves",
-   "line": 162,
+   "line": 158,
    "sentence": "The function is run over the leaves of the qualify tree, which `WhereNode.leaves` yields, and the tree is rewritten with `WhereNode.replace_expressions`, each expression that has a replacement becoming a `Ref` to its alias (`django/db/models/sql/where.py:WhereNode.leaves`, `django/db/models/sql/where.py:WhereNode.replace_expressions`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -599,7 +599,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.replace_expressions",
-   "line": 162,
+   "line": 158,
    "sentence": "The function is run over the leaves of the qualify tree, which `WhereNode.leaves` yields, and the tree is rewritten with `WhereNode.replace_expressions`, each expression that has a replacement becoming a `Ref` to its alias (`django/db/models/sql/where.py:WhereNode.leaves`, `django/db/models/sql/where.py:WhereNode.replace_expressions`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -612,8 +612,22 @@
    "fingerprint": "b5e239cd53081fd9"
   },
   {
+   "pointer": "django/db/models/query.py:QuerySet.__repr__",
+   "line": 173,
+   "sentence": "Back in `as_sql`, the limit and the offset are appended as for any other statement, which [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md) tells; the `LIMIT 21` of the `\"OR\"` statement above is what a queryset's repr asks for, and stands after the outer `\"WHERE\"` (`django/db/models/query.py:QuerySet.__repr__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__repr__",
+   "kind": "function",
+   "lines": [
+    458,
+    462
+   ],
+   "fingerprint": "39030dabed23450a"
+  },
+  {
    "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
-   "line": 206,
+   "line": 209,
    "sentence": "It looks for an aggregate that refers to an annotation with `contains_over_clause` set, and for a qualify part in the where tree, and for either sends the query inside an `AggregateQuery`, the window selected in the inner statement and the aggregate reading its alias outside (`django/db/models/sql/query.py:Query.get_aggregation`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -627,7 +641,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:ResolvedOuterRef.resolve_expression",
-   "line": 213,
+   "line": 216,
    "sentence": "`OuterRef` resolves to a `ResolvedOuterRef`, and when that in turn is resolved against the outer query, `ResolvedOuterRef.resolve_expression` raises `NotSupportedError` where what it found has `contains_over_clause` set, naming the reference (`django/db/models/expressions.py:ResolvedOuterRef.resolve_expression`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",

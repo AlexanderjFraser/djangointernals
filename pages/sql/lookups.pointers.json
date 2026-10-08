@@ -121,6 +121,20 @@
    "fingerprint": "fe86683e5c0ceab2"
   },
   {
+   "pointer": "django/db/models/lookups.py:Lookup.select_format",
+   "line": 31,
+   "sentence": "A lookup selected as a column, grouped by or used in a database default has `Lookup.select_format`, `Lookup.get_group_by_cols` and `Lookup.allowed_default` for it (`django/db/models/lookups.py:Lookup.select_format`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "Lookup.select_format",
+   "kind": "function",
+   "lines": [
+    198,
+    204
+   ],
+   "fingerprint": "64b2c8bd7ecddf06"
+  },
+  {
    "pointer": "django/db/models/lookups.py:Lookup.process_lhs",
    "line": 35,
    "sentence": "`Lookup.process_lhs` resolves the left side against the compiler's query where it can resolve itself, compiles it, and puts it in parentheses where it is itself a lookup, so that a comparison of a comparison keeps its precedence (`django/db/models/lookups.py:Lookup.process_lhs`).",
@@ -191,23 +205,9 @@
    "fingerprint": "f30f6833a8d6d043"
   },
   {
-   "pointer": "django/db/models/lookups.py:Transform.get_bilateral_transforms",
-   "line": 49,
-   "sentence": "`Transform.get_bilateral_transforms` collects, from the column outwards, the classes of the transforms in the chain that are marked so (`django/db/models/lookups.py:Transform.get_bilateral_transforms`); `Lookup.apply_bilateral_transforms` applies each class to a value in that order, and `Lookup.batch_process_rhs` does the same for each of several values, wrapping each in a `Value` of the left side's type, resolving and compiling it, and otherwise hands the values to `get_db_prep_lookup` and returns a placeholder for each (`django/db/models/lookups.py:Lookup.batch_process_rhs`).",
-   "tree": "django",
-   "path": "django/db/models/lookups.py",
-   "symbol": "Transform.get_bilateral_transforms",
-   "kind": "function",
-   "lines": [
-    224,
-    231
-   ],
-   "fingerprint": "47cad69cbbe75a8d"
-  },
-  {
    "pointer": "django/db/models/lookups.py:Lookup.batch_process_rhs",
-   "line": 49,
-   "sentence": "`Transform.get_bilateral_transforms` collects, from the column outwards, the classes of the transforms in the chain that are marked so (`django/db/models/lookups.py:Transform.get_bilateral_transforms`); `Lookup.apply_bilateral_transforms` applies each class to a value in that order, and `Lookup.batch_process_rhs` does the same for each of several values, wrapping each in a `Value` of the left side's type, resolving and compiling it, and otherwise hands the values to `get_db_prep_lookup` and returns a placeholder for each (`django/db/models/lookups.py:Lookup.batch_process_rhs`).",
+   "line": 47,
+   "sentence": "`Lookup.batch_process_rhs` prepares several values at once: with bilateral transforms each value is wrapped in a `Value` of the left side's type, transformed, resolved and compiled, and without them the values go through `get_db_prep_lookup` and come back as placeholders (`django/db/models/lookups.py:Lookup.batch_process_rhs`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "Lookup.batch_process_rhs",
@@ -220,8 +220,8 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:CharField",
-   "line": 49,
-   "sentence": "The recording registers a transform of its own, Shout, on `CharField` for one block, an `\"UPPER\"` with `bilateral = True`, and `Upper` beside it is the same function without the mark (`django/db/models/fields/__init__.py:CharField`):",
+   "line": 47,
+   "sentence": "Shout, the recording's own transform, is an `\"UPPER\"` marked bilateral and registered on `CharField` for one block; what a bilateral transform is, and what it does to a single value, is [Transforms and database functions: `Transform` and `Func`](functions.md) (`django/db/models/fields/__init__.py:CharField`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "CharField",
@@ -234,7 +234,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:BuiltinLookup.as_sql",
-   "line": 65,
+   "line": 59,
    "sentence": "`BuiltinLookup` is the base of every lookup registered on `Field`, and its `as_sql` is the plain case: the left half, the right half, and between them the operator, the parameters of the two halves joined in that order (`django/db/models/lookups.py:BuiltinLookup.as_sql`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -248,7 +248,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:BuiltinLookup.get_rhs_op",
-   "line": 65,
+   "line": 59,
    "sentence": "`BuiltinLookup.get_rhs_op` takes the operator from `operators`, a dictionary on the connection's `DatabaseWrapper` from a lookup's name to a string with a `%s` for the right half, so that `\"= %s\"` becomes `= %s` and SQLite's `\"LIKE %s ESCAPE '\\'\"` becomes the same with the placeholder inside (`django/db/models/lookups.py:BuiltinLookup.get_rhs_op`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.operators`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -262,7 +262,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.operators",
-   "line": 65,
+   "line": 59,
    "sentence": "`BuiltinLookup.get_rhs_op` takes the operator from `operators`, a dictionary on the connection's `DatabaseWrapper` from a lookup's name to a string with a `%s` for the right half, so that `\"= %s\"` becomes `= %s` and SQLite's `\"LIKE %s ESCAPE '\\'\"` becomes the same with the placeholder inside (`django/db/models/lookups.py:BuiltinLookup.get_rhs_op`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.operators`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/base.py",
@@ -276,8 +276,8 @@
   },
   {
    "pointer": "django/db/models/lookups.py:BuiltinLookup.process_lhs",
-   "line": 65,
-   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type, `\"%s\"` on the base class and on SQLite, a cast to text on PostgreSQL for `\"iexact\"`, the pattern and the regex lookups, with an `\"UPPER\"` round it for `\"iexact\"`, `\"icontains\"`, `\"istartswith\"` and `\"iendswith\"`, an `\"UPPER\"` or a `\"DBMS_LOB.SUBSTR\"` on Oracle (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`).",
+   "line": 59,
+   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/oracle/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/mysql/operations.py:DatabaseOperations.lookup_cast`):",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "BuiltinLookup.process_lhs",
@@ -290,8 +290,8 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast",
-   "line": 65,
-   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type, `\"%s\"` on the base class and on SQLite, a cast to text on PostgreSQL for `\"iexact\"`, the pattern and the regex lookups, with an `\"UPPER\"` round it for `\"iexact\"`, `\"icontains\"`, `\"istartswith\"` and `\"iendswith\"`, an `\"UPPER\"` or a `\"DBMS_LOB.SUBSTR\"` on Oracle (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`).",
+   "line": 59,
+   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/oracle/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/mysql/operations.py:DatabaseOperations.lookup_cast`):",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
    "symbol": "BaseDatabaseOperations.lookup_cast",
@@ -304,8 +304,8 @@
   },
   {
    "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast",
-   "line": 65,
-   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type, `\"%s\"` on the base class and on SQLite, a cast to text on PostgreSQL for `\"iexact\"`, the pattern and the regex lookups, with an `\"UPPER\"` round it for `\"iexact\"`, `\"icontains\"`, `\"istartswith\"` and `\"iendswith\"`, an `\"UPPER\"` or a `\"DBMS_LOB.SUBSTR\"` on Oracle (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`).",
+   "line": 59,
+   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/oracle/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/mysql/operations.py:DatabaseOperations.lookup_cast`):",
    "tree": "django",
    "path": "django/db/backends/postgresql/operations.py",
    "symbol": "DatabaseOperations.lookup_cast",
@@ -317,8 +317,36 @@
    "fingerprint": "9ceb999dbf030af9"
   },
   {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.lookup_cast",
+   "line": 59,
+   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/oracle/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/mysql/operations.py:DatabaseOperations.lookup_cast`):",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.lookup_cast",
+   "kind": "function",
+   "lines": [
+    357,
+    365
+   ],
+   "fingerprint": "576fd684557c9014"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.lookup_cast",
+   "line": 59,
+   "sentence": "`BuiltinLookup.process_lhs` wraps the left half in what `BaseDatabaseOperations.lookup_cast` returns for the lookup's name and the field's internal type (`django/db/models/lookups.py:BuiltinLookup.process_lhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.lookup_cast`, `django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/oracle/operations.py:DatabaseOperations.lookup_cast`, `django/db/backends/mysql/operations.py:DatabaseOperations.lookup_cast`):",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.lookup_cast",
+   "kind": "function",
+   "lines": [
+    378,
+    393
+   ],
+   "fingerprint": "b5ad052fb3446d04"
+  },
+  {
    "pointer": "django/db/models/lookups.py:FieldGetDbPrepValueMixin.get_db_prep_lookup",
-   "line": 73,
+   "line": 78,
    "sentence": "`FieldGetDbPrepValueMixin` replaces it with a call of the field's `get_db_prep_value`, the second step of a field's preparation, which adapts a value to the backend, with `prepared=True` since `get_prep_value` has run already (`django/db/models/lookups.py:FieldGetDbPrepValueMixin.get_db_prep_lookup`, `django/db/models/fields/__init__.py:Field.get_db_prep_value`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -332,7 +360,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:Field.get_db_prep_value",
-   "line": 73,
+   "line": 78,
    "sentence": "`FieldGetDbPrepValueMixin` replaces it with a call of the field's `get_db_prep_value`, the second step of a field's preparation, which adapts a value to the backend, with `prepared=True` since `get_prep_value` has run already (`django/db/models/lookups.py:FieldGetDbPrepValueMixin.get_db_prep_lookup`, `django/db/models/fields/__init__.py:Field.get_db_prep_value`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -346,7 +374,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:FieldGetDbPrepValueIterableMixin.get_prep_lookup",
-   "line": 75,
+   "line": 80,
    "sentence": "`FieldGetDbPrepValueIterableMixin` is the same for a lookup whose right side is several values, `In` and `Range`, and it draws one line: a list of plain values is prepared in Python, each through the field's `get_prep_value` and then its `get_db_prep_value`, and becomes placeholders, while a list with an expression in it is handed to the database as expressions, each plain value wrapped in a `Value` of the left side's type and compiled beside them, so that `tonnage__in=[F('id'), 480]` writes a column and a placeholder (`django/db/models/lookups.py:FieldGetDbPrepValueIterableMixin.get_prep_lookup`, `django/db/models/lookups.py:FieldGetDbPrepValueIterableMixin.batch_process_rhs`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -360,7 +388,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:FieldGetDbPrepValueIterableMixin.batch_process_rhs",
-   "line": 75,
+   "line": 80,
    "sentence": "`FieldGetDbPrepValueIterableMixin` is the same for a lookup whose right side is several values, `In` and `Range`, and it draws one line: a list of plain values is prepared in Python, each through the field's `get_prep_value` and then its `get_db_prep_value`, and becomes placeholders, while a list with an expression in it is handed to the database as expressions, each plain value wrapped in a `Value` of the left side's type and compiled beside them, so that `tonnage__in=[F('id'), 480]` writes a column and a placeholder (`django/db/models/lookups.py:FieldGetDbPrepValueIterableMixin.get_prep_lookup`, `django/db/models/lookups.py:FieldGetDbPrepValueIterableMixin.batch_process_rhs`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -374,7 +402,7 @@
   },
   {
    "pointer": "docs/releases/6.1.1.txt",
-   "line": 77,
+   "line": 82,
    "sentence": "The release notes record a regression of 6.1 in which an `in` lookup on an annotation returned nothing and a `range` lookup crashed when given an iterator (`docs/releases/6.1.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.1.txt",
@@ -388,7 +416,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py",
-   "line": 81,
+   "line": 86,
    "sentence": "Every field answers to the names in the table below, which `django/db/models/lookups.py` registers on `Field` as it is imported, unless its class registers another class under the same name, as `IntegerField` does, or cuts the inheritance off, as a relation field does (`django/db/models/fields/__init__.py:Field`, `django/db/models/fields/__init__.py:IntegerField`) ([The lookup registry: `RegisterLookupMixin`](../querysets/lookups.md), [Lookups on relations and composite keys: `RelatedIn` and the tuple lookups](related-lookups.md)).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -402,7 +430,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:Field",
-   "line": 81,
+   "line": 86,
    "sentence": "Every field answers to the names in the table below, which `django/db/models/lookups.py` registers on `Field` as it is imported, unless its class registers another class under the same name, as `IntegerField` does, or cuts the inheritance off, as a relation field does (`django/db/models/fields/__init__.py:Field`, `django/db/models/fields/__init__.py:IntegerField`) ([The lookup registry: `RegisterLookupMixin`](../querysets/lookups.md), [Lookups on relations and composite keys: `RelatedIn` and the tuple lookups](related-lookups.md)).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -417,7 +445,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:IntegerField",
-   "line": 81,
+   "line": 86,
    "sentence": "Every field answers to the names in the table below, which `django/db/models/lookups.py` registers on `Field` as it is imported, unless its class registers another class under the same name, as `IntegerField` does, or cuts the inheritance off, as a relation field does (`django/db/models/fields/__init__.py:Field`, `django/db/models/fields/__init__.py:IntegerField`) ([The lookup registry: `RegisterLookupMixin`](../querysets/lookups.md), [Lookups on relations and composite keys: `RelatedIn` and the tuple lookups](related-lookups.md)).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -431,7 +459,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Exact.get_prep_lookup",
-   "line": 131,
+   "line": 136,
    "sentence": "`Exact` has two cases of its own (`django/db/models/lookups.py:Exact.get_prep_lookup`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -445,7 +473,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Exact.as_sql",
-   "line": 145,
+   "line": 150,
    "sentence": "The other case is a boolean on the right of a conditional left side, a column of a `BooleanField` or an annotation that is a condition (`django/db/models/lookups.py:Exact.as_sql`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -459,7 +487,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.conditional_expression_supported_in_where_clause",
-   "line": 145,
+   "line": 150,
    "sentence": "The backend answers through `BaseDatabaseOperations.conditional_expression_supported_in_where_clause`: yes to anything where it has a native boolean type, which PostgreSQL has, and otherwise yes to an `Exists`, a lookup, a where tree, a conditional `RawSQL` or a conditional `ExpressionWrapper` of one of these, and no to a plain column (`django/db/backends/base/operations.py:BaseDatabaseOperations.conditional_expression_supported_in_where_clause`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -473,7 +501,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:IExact.process_rhs",
-   "line": 160,
+   "line": 165,
    "sentence": "`IExact` sets `prepare_rhs` off and passes its one parameter through `BaseDatabaseOperations.prep_for_iexact_query`, which on the base class is `prep_for_like_query`, escaping `\\`, `%` and `_` for a `\"LIKE\"`; PostgreSQL and Oracle, whose operator for it is `\"= UPPER(%s)\"`, return the value untouched (`django/db/models/lookups.py:IExact.process_rhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_iexact_query`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -487,7 +515,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_iexact_query",
-   "line": 160,
+   "line": 165,
    "sentence": "`IExact` sets `prepare_rhs` off and passes its one parameter through `BaseDatabaseOperations.prep_for_iexact_query`, which on the base class is `prep_for_like_query`, escaping `\\`, `%` and `_` for a `\"LIKE\"`; PostgreSQL and Oracle, whose operator for it is `\"= UPPER(%s)\"`, return the value untouched (`django/db/models/lookups.py:IExact.process_rhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_iexact_query`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -501,7 +529,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:PatternLookup",
-   "line": 162,
+   "line": 167,
    "sentence": "`PatternLookup` is the base of the pattern lookups, with `prepare_rhs` off and a `param_pattern` that says where the `%` go: either side of the value on `Contains`, after it on `StartsWith`, before it on `EndsWith`; `IContains`, `IStartsWith` and `IEndsWith` are subclasses with another name and nothing else, their difference being the backend's operator and cast (`django/db/models/lookups.py:PatternLookup`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -515,7 +543,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:PatternLookup.process_rhs",
-   "line": 162,
+   "line": 167,
    "sentence": "A simple value is escaped in Python by `prep_for_like_query` and, where `BaseDatabaseFeatures.pattern_lookup_needs_param_pattern` says the backend matches with `\"LIKE\"`, wrapped in the `%` of the pattern, and the operator comes from `operators` as usual (`django/db/models/lookups.py:PatternLookup.process_rhs`, `django/db/backends/base/features.py:BaseDatabaseFeatures.pattern_lookup_needs_param_pattern`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -529,7 +557,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.pattern_lookup_needs_param_pattern",
-   "line": 162,
+   "line": 167,
    "sentence": "A simple value is escaped in Python by `prep_for_like_query` and, where `BaseDatabaseFeatures.pattern_lookup_needs_param_pattern` says the backend matches with `\"LIKE\"`, wrapped in the `%` of the pattern, and the operator comes from `operators` as usual (`django/db/models/lookups.py:PatternLookup.process_rhs`, `django/db/backends/base/features.py:BaseDatabaseFeatures.pattern_lookup_needs_param_pattern`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -543,7 +571,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:PatternLookup.get_rhs_op",
-   "line": 162,
+   "line": 167,
    "sentence": "Anything else, a column, a transform or a transformed value, is escaped and wrapped by the database: `PatternLookup.get_rhs_op` takes the pattern from `pattern_ops`, a second table on the `DatabaseWrapper` whose entries hold the operator and the `%` as SQL, and fills its hole with `pattern_esc`, the SQL that escapes the three characters with `\"REPLACE\"` (`django/db/models/lookups.py:PatternLookup.get_rhs_op`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.pattern_ops`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -557,7 +585,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.pattern_ops",
-   "line": 162,
+   "line": 167,
    "sentence": "Anything else, a column, a transform or a transformed value, is escaped and wrapped by the database: `PatternLookup.get_rhs_op` takes the pattern from `pattern_ops`, a second table on the `DatabaseWrapper` whose entries hold the operator and the `%` as SQL, and fills its hole with `pattern_esc`, the SQL that escapes the three characters with `\"REPLACE\"` (`django/db/models/lookups.py:PatternLookup.get_rhs_op`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.pattern_ops`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/base.py",
@@ -571,7 +599,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:In.get_prep_lookup",
-   "line": 177,
+   "line": 182,
    "sentence": "A `Query` on the right is checked for the number of columns, as `Exact` checks it, then has its ordering cleared, default ordering included, and its primary key selected where nothing is (`django/db/models/lookups.py:In.get_prep_lookup`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -585,7 +613,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:In.process_rhs",
-   "line": 177,
+   "line": 182,
    "sentence": "`In.process_rhs` refuses with `ValueError` a query whose `_db` is another database than the connection's, the attribute `QuerySet.resolve_expression` sets on the query it hands over, with the message that the inner query is to be evaluated with `list` first (`django/db/models/lookups.py:In.process_rhs`, `django/db/models/query.py:QuerySet.resolve_expression`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -599,7 +627,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.resolve_expression",
-   "line": 177,
+   "line": 182,
    "sentence": "`In.process_rhs` refuses with `ValueError` a query whose `_db` is another database than the connection's, the attribute `QuerySet.resolve_expression` sets on the query it hands over, with the message that the inner query is to be evaluated with `list` first (`django/db/models/lookups.py:In.process_rhs`, `django/db/models/query.py:QuerySet.resolve_expression`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -613,7 +641,7 @@
   },
   {
    "pointer": "django/utils/datastructures.py:OrderedSet",
-   "line": 177,
+   "line": 182,
    "sentence": "For direct values it drops `None`, since the comment says `\"NULL\"` is never equal to anything, and duplicates, through an `OrderedSet` that keeps the order of first appearance, falling back to a list where a value cannot be hashed; and where nothing is left it raises `EmptyResultSet` (`django/utils/datastructures.py:OrderedSet`).",
    "tree": "django",
    "path": "django/utils/datastructures.py",
@@ -627,7 +655,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:In.split_parameter_list_as_sql",
-   "line": 177,
+   "line": 182,
    "sentence": "`In.as_sql` has one more case: where `BaseDatabaseOperations.max_in_list_size` gives a limit, Oracle's being 1000, and the values exceed it, `In.split_parameter_list_as_sql` writes `(col IN (...) OR col IN (...))` in groups of that size (`django/db/models/lookups.py:In.split_parameter_list_as_sql`, `django/db/backends/oracle/operations.py:DatabaseOperations.max_in_list_size`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -641,7 +669,7 @@
   },
   {
    "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.max_in_list_size",
-   "line": 177,
+   "line": 182,
    "sentence": "`In.as_sql` has one more case: where `BaseDatabaseOperations.max_in_list_size` gives a limit, Oracle's being 1000, and the values exceed it, `In.split_parameter_list_as_sql` writes `(col IN (...) OR col IN (...))` in groups of that size (`django/db/models/lookups.py:In.split_parameter_list_as_sql`, `django/db/backends/oracle/operations.py:DatabaseOperations.max_in_list_size`).",
    "tree": "django",
    "path": "django/db/backends/oracle/operations.py",
@@ -655,7 +683,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Range.get_rhs_op",
-   "line": 193,
+   "line": 198,
    "sentence": "`Range` is the iterable mixin and one operator: its `get_rhs_op` writes `BETWEEN %s AND %s` from the first two placeholders (`django/db/models/lookups.py:Range.get_rhs_op`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -669,7 +697,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:IsNull.as_sql",
-   "line": 195,
+   "line": 200,
    "sentence": "`IsNull` writes no placeholder at all: `IS NULL` for `True` and `IS NOT NULL` for `False`, and anything else on the right is refused with `ValueError` when the SQL is written, not when the filter is built (`django/db/models/lookups.py:IsNull.as_sql`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -683,7 +711,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.interprets_empty_strings_as_nulls",
-   "line": 195,
+   "line": 200,
    "sentence": "A `Value` on the left is decided before any SQL: a `None`, or an empty string where `BaseDatabaseFeatures.interprets_empty_strings_as_nulls` says the backend stores one as null, which Oracle's does, is null, and the lookup raises `FullResultSet` or `EmptyResultSet` according to the side asked for (`django/db/backends/base/features.py:BaseDatabaseFeatures.interprets_empty_strings_as_nulls`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -697,7 +725,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Regex.as_sql",
-   "line": 208,
+   "line": 213,
    "sentence": "`Regex` goes by the table where the backend has an entry for its name, as SQLite and PostgreSQL have, and otherwise by `BaseDatabaseOperations.regex_lookup`, a template with a hole for each side, which MySQL and Oracle fill with `\"REGEXP_LIKE\"` and a flag for the case, and MariaDB with `\"REGEXP\"` (`django/db/models/lookups.py:Regex.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.regex_lookup`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -711,7 +739,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.regex_lookup",
-   "line": 208,
+   "line": 213,
    "sentence": "`Regex` goes by the table where the backend has an entry for its name, as SQLite and PostgreSQL have, and otherwise by `BaseDatabaseOperations.regex_lookup`, a template with a hole for each side, which MySQL and Oracle fill with `\"REGEXP_LIKE\"` and a flag for the case, and MariaDB with `\"REGEXP\"` (`django/db/models/lookups.py:Regex.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.regex_lookup`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -725,7 +753,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/_functions.py:_sqlite_regexp",
-   "line": 208,
+   "line": 213,
    "sentence": "SQLite's `\"REGEXP\"` is a function Django registers on each connection, backed by Python's `re` (`django/db/backends/sqlite3/_functions.py:_sqlite_regexp`), and its table writes `\"iregex\"` by prepending `(?i)` to the pattern:",
    "tree": "django",
    "path": "django/db/backends/sqlite3/_functions.py",
@@ -739,7 +767,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:IntegerField",
-   "line": 216,
+   "line": 221,
    "sentence": "`IntegerField` registers, over the standard ones, `IntegerFieldExact`, `IntegerGreaterThan`, `IntegerGreaterThanOrEqual`, `IntegerLessThan` and `IntegerLessThanOrEqual`, under `\"exact\"`, `\"gt\"`, `\"gte\"`, `\"lt\"` and `\"lte\"`, and an integer column, or a column of a class built on `IntegerField`, finds these first (`django/db/models/fields/__init__.py:IntegerField`, `django/db/models/lookups.py:IntegerFieldExact`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -753,7 +781,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:IntegerFieldExact",
-   "line": 216,
+   "line": 221,
    "sentence": "`IntegerField` registers, over the standard ones, `IntegerFieldExact`, `IntegerGreaterThan`, `IntegerGreaterThanOrEqual`, `IntegerLessThan` and `IntegerLessThanOrEqual`, under `\"exact\"`, `\"gt\"`, `\"gte\"`, `\"lt\"` and `\"lte\"`, and an integer column, or a column of a class built on `IntegerField`, finds these first (`django/db/models/fields/__init__.py:IntegerField`, `django/db/models/lookups.py:IntegerFieldExact`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -768,7 +796,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:IntegerFieldOverflow.process_rhs",
-   "line": 216,
+   "line": 221,
    "sentence": "`IntegerFieldOverflow.process_rhs` asks `BaseDatabaseOperations.integer_field_range` for the range of the column's type and, where the value is an `int` outside it, raises an exception instead of sending anything (`django/db/models/lookups.py:IntegerFieldOverflow.process_rhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.integer_field_range`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -782,7 +810,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.integer_field_range",
-   "line": 216,
+   "line": 221,
    "sentence": "`IntegerFieldOverflow.process_rhs` asks `BaseDatabaseOperations.integer_field_range` for the range of the column's type and, where the value is an `int` outside it, raises an exception instead of sending anything (`django/db/models/lookups.py:IntegerFieldOverflow.process_rhs`, `django/db/backends/base/operations.py:BaseDatabaseOperations.integer_field_range`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -796,8 +824,8 @@
   },
   {
    "pointer": "django/db/models/lookups.py:IntegerFieldFloatRounding.get_prep_lookup",
-   "line": 216,
-   "sentence": "`IntegerFieldFloatRounding.get_prep_lookup` rounds a `float` up with `math.ceil` before the field makes an integer of it, and only `IntegerGreaterThanOrEqual` and `IntegerLessThan` carry it, the docstring saying that without it the decimal part would always be discarded: an `int` of 1.5 is 1, so `gt=1.5` and `lte=1.5` are right with the integer part alone, while `gte=1.5` and `lt=1.5` need 2 (`django/db/models/lookups.py:IntegerFieldFloatRounding.get_prep_lookup`).",
+   "line": 221,
+   "sentence": "Which exception, and what becomes of a `float` before the field makes an integer of it, is the class's; `IntegerFieldFloatRounding.get_prep_lookup`, which rounds up with `math.ceil`, is carried by the two for which the integer part alone would be wrong, its docstring saying that without it the decimal part would always be discarded (`django/db/models/lookups.py:IntegerFieldFloatRounding.get_prep_lookup`):",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "IntegerFieldFloatRounding.get_prep_lookup",
@@ -810,7 +838,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range",
-   "line": 231,
+   "line": 246,
    "sentence": "The range is the backend's: SQLite's `integer_field_range` gives every integer type 64 bits, and the positive types a floor of zero, while the base table gives each type the range of its own column type (`django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/operations.py",
@@ -824,7 +852,7 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py",
-   "line": 235,
+   "line": 250,
    "sentence": "Instead `ExtractYear` and `ExtractIsoYear` each register, under the same names, classes of their own: `YearExact`, `YearGt`, `YearGte`, `YearLt` and `YearLte` (`django/db/models/functions/datetime.py`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
@@ -838,7 +866,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:YearLookup.as_sql",
-   "line": 235,
+   "line": 250,
    "sentence": "Each is `YearLookup` in front of the plain lookup of that name, and `YearLookup.as_sql` does one thing: where the right side is a direct value, it compares the column under the extract, the transform's own left side, and not the extract, the comment saying this is to let an index on the column be used (`django/db/models/lookups.py:YearLookup.as_sql`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -852,7 +880,7 @@
   },
   {
    "pointer": "django/db/models/lookups.py:YearLookup.year_lookup_bounds",
-   "line": 235,
+   "line": 250,
    "sentence": "The year becomes its first and last moments through `YearLookup.year_lookup_bounds`, which asks `BaseDatabaseOperations.year_lookup_bounds_for_datetime_field` where the column is a `DateTimeField` and `year_lookup_bounds_for_date_field` otherwise, with an ISO week-numbering year where the transform was `ExtractIsoYear`; the datetime bounds are made aware in the current time zone where `USE_TZ` is on (`django/db/models/lookups.py:YearLookup.year_lookup_bounds`, `django/db/backends/base/operations.py:BaseDatabaseOperations.year_lookup_bounds_for_datetime_field`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
@@ -866,7 +894,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.year_lookup_bounds_for_datetime_field",
-   "line": 235,
+   "line": 250,
    "sentence": "The year becomes its first and last moments through `YearLookup.year_lookup_bounds`, which asks `BaseDatabaseOperations.year_lookup_bounds_for_datetime_field` where the column is a `DateTimeField` and `year_lookup_bounds_for_date_field` otherwise, with an ISO week-numbering year where the transform was `ExtractIsoYear`; the datetime bounds are made aware in the current time zone where `USE_TZ` is on (`django/db/models/lookups.py:YearLookup.year_lookup_bounds`, `django/db/backends/base/operations.py:BaseDatabaseOperations.year_lookup_bounds_for_datetime_field`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -879,37 +907,9 @@
    "fingerprint": "cc127d0fe16e110d"
   },
   {
-   "pointer": "django/db/models/fields/__init__.py:UUIDField.get_db_prep_value",
-   "line": 252,
-   "sentence": "A `UUIDField` on a backend with no UUID type of its own stores the hex digits with the hyphens removed, which is what `UUIDField.get_db_prep_value` returns where `BaseDatabaseFeatures.has_native_uuid_field` is false: PostgreSQL's sets it outright, and MySQL's is a property that is true on MariaDB (`django/db/models/fields/__init__.py:UUIDField.get_db_prep_value`, `django/db/backends/base/features.py:BaseDatabaseFeatures.has_native_uuid_field`).",
-   "tree": "django",
-   "path": "django/db/models/fields/__init__.py",
-   "symbol": "UUIDField.get_db_prep_value",
-   "kind": "function",
-   "lines": [
-    2836,
-    2844
-   ],
-   "fingerprint": "3ec9dd795a8b4336"
-  },
-  {
-   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.has_native_uuid_field",
-   "line": 252,
-   "sentence": "A `UUIDField` on a backend with no UUID type of its own stores the hex digits with the hyphens removed, which is what `UUIDField.get_db_prep_value` returns where `BaseDatabaseFeatures.has_native_uuid_field` is false: PostgreSQL's sets it outright, and MySQL's is a property that is true on MariaDB (`django/db/models/fields/__init__.py:UUIDField.get_db_prep_value`, `django/db/backends/base/features.py:BaseDatabaseFeatures.has_native_uuid_field`).",
-   "tree": "django",
-   "path": "django/db/backends/base/features.py",
-   "symbol": "BaseDatabaseFeatures.has_native_uuid_field",
-   "kind": "assignment",
-   "lines": [
-    85,
-    85
-   ],
-   "fingerprint": "3d1be9be6eaf5352"
-  },
-  {
    "pointer": "django/db/models/lookups.py:UUIDTextMixin.process_rhs",
-   "line": 252,
-   "sentence": "Those that do not, `IExact` and the pattern lookups, would compare a hyphenated string with unhyphenated text, so `UUIDField` registers a subclass of each with `UUIDTextMixin` in front: its `process_rhs`, where the backend has no native type, wraps a direct value in a `Value` and the right side in a `Replace` that removes the hyphens in SQL, with a `CharField` as its output field, and then goes on as the lookup would (`django/db/models/lookups.py:UUIDTextMixin.process_rhs`, `django/db/models/functions/text.py:Replace`).",
+   "line": 277,
+   "sentence": "`UUIDTextMixin` stands in front of the `IExact` and pattern lookups that `UUIDField` registers, whose column on a backend with no UUID type of its own holds the hex digits without hyphens: on such a backend its `process_rhs` wraps the right side in a `Replace` that removes the hyphens in SQL (`django/db/models/lookups.py:UUIDTextMixin.process_rhs`, `django/db/models/fields/__init__.py:UUIDField.get_db_prep_value`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "UUIDTextMixin.process_rhs",
@@ -921,23 +921,23 @@
    "fingerprint": "600e2e2c5a6b28ab"
   },
   {
-   "pointer": "django/db/models/functions/text.py:Replace",
-   "line": 252,
-   "sentence": "Those that do not, `IExact` and the pattern lookups, would compare a hyphenated string with unhyphenated text, so `UUIDField` registers a subclass of each with `UUIDTextMixin` in front: its `process_rhs`, where the backend has no native type, wraps a direct value in a `Value` and the right side in a `Replace` that removes the hyphens in SQL, with a `CharField` as its output field, and then goes on as the lookup would (`django/db/models/lookups.py:UUIDTextMixin.process_rhs`, `django/db/models/functions/text.py:Replace`).",
+   "pointer": "django/db/models/fields/__init__.py:UUIDField.get_db_prep_value",
+   "line": 277,
+   "sentence": "`UUIDTextMixin` stands in front of the `IExact` and pattern lookups that `UUIDField` registers, whose column on a backend with no UUID type of its own holds the hex digits without hyphens: on such a backend its `process_rhs` wraps the right side in a `Replace` that removes the hyphens in SQL (`django/db/models/lookups.py:UUIDTextMixin.process_rhs`, `django/db/models/fields/__init__.py:UUIDField.get_db_prep_value`).",
    "tree": "django",
-   "path": "django/db/models/functions/text.py",
-   "symbol": "Replace",
-   "kind": "class",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "UUIDField.get_db_prep_value",
+   "kind": "function",
    "lines": [
-    253,
-    257
+    2836,
+    2844
    ],
-   "fingerprint": "6a54a78a5a89a38b"
+   "fingerprint": "3ec9dd795a8b4336"
   },
   {
    "pointer": "django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql",
-   "line": 256,
-   "sentence": "`PostgresOperatorLookup` is a base for a lookup that PostgreSQL writes with an operator of its own: a subclass names the operator in `postgres_operator`, and `PostgresOperatorLookup.as_postgresql` writes the two halves with it between, leaving `as_sql` to the subclass for every other backend (`django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql`).",
+   "line": 277,
+   "sentence": "`PostgresOperatorLookup` is a base for a lookup that PostgreSQL writes with an operator of its own, named in `postgres_operator` and written by `PostgresOperatorLookup.as_postgresql`; the containment and key lookups of `JSONField`, and the containment, overlap, key and trigram lookups of `django.contrib.postgres` and those of its range fields, are built on it (`django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql`, `django/db/models/fields/json.py:JSONField`, [Content types, static files and the other contrib apps](../contrib.md)).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "PostgresOperatorLookup.as_postgresql",
@@ -950,8 +950,8 @@
   },
   {
    "pointer": "django/db/models/fields/json.py:JSONField",
-   "line": 256,
-   "sentence": "The containment and key lookups of `JSONField`, and the containment, overlap, key and trigram lookups of `django.contrib.postgres` and those of its range fields, are built on it (`django/db/models/fields/json.py:JSONField`, [Content types, static files and the other contrib apps](../contrib.md)).",
+   "line": 277,
+   "sentence": "`PostgresOperatorLookup` is a base for a lookup that PostgreSQL writes with an operator of its own, named in `postgres_operator` and written by `PostgresOperatorLookup.as_postgresql`; the containment and key lookups of `JSONField`, and the containment, overlap, key and trigram lookups of `django.contrib.postgres` and those of its range fields, are built on it (`django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql`, `django/db/models/fields/json.py:JSONField`, [Content types, static files and the other contrib apps](../contrib.md)).",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
    "symbol": "JSONField",

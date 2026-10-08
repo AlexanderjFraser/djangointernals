@@ -96,7 +96,7 @@
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.clone",
    "line": 19,
-   "sentence": "The method returns a clone of the tree, which `Query.resolve_expression` throws away; the resolution reaches the clone's tree all the same, because `WhereNode.clone` keeps the leaf objects, a lookup having no `clone` of its own, and `_resolve_node` sets the sides on those very objects (`django/db/models/sql/where.py:WhereNode.clone`).",
+   "sentence": "The clone of the tree that `WhereNode.resolve_expression` returns is thrown away, and the resolution reaches the clone's tree because `WhereNode.clone` keeps the leaf objects and `_resolve_node` sets the sides on them: relabelled copies where `change_aliases` had an alias to rename, and the queryset's own leaves where its alias map was empty (`django/db/models/sql/where.py:WhereNode.clone`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.clone",
@@ -335,7 +335,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.exists",
    "line": 138,
-   "sentence": "Its constructor replaces the query it was given with that query's `Query.exists`: a clone whose select list is cleared unless the query is both distinct and sliced, with a grouped query's grouping made explicit first, whose ordering is cleared, which asks for one row, and which selects the constant 1 under the alias `\"a\"`; a union's parts are each given the same treatment without the limit (`django/db/models/sql/query.py:Query.exists`) ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](aggregates.md)).",
+   "sentence": "Its constructor replaces the query it was given with that query's `Query.exists`, the query an `exists()` call runs: it selects a constant under the alias `\"a\"`, asks for one row, and clears the ordering and, unless the query is both distinct and sliced, the select list, so that `values` on the inner queryset changes nothing (`django/db/models/sql/query.py:Query.exists`) ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](aggregates.md)).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.exists",
@@ -391,7 +391,7 @@
   {
    "pointer": "django/db/models/lookups.py:In.get_prep_lookup",
    "line": 164,
-   "sentence": "`In.get_prep_lookup` and `Exact.get_prep_lookup` then make the subquery fit the left side: each compares the subquery's width with the left side's and refuses a mismatch with `ValueError`, and where the queryset has `has_select_fields` false, has chosen no columns, each clears its select clause and adds `\"pk\"`; `Exact` first refuses a query that `has_limit_one` denies, and `In` clears the ordering ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](lookups.md), `django/db/models/lookups.py:In.get_prep_lookup`, `django/db/models/lookups.py:Exact.get_prep_lookup`).",
+   "sentence": "`In.get_prep_lookup` and `Exact.get_prep_lookup` then make the subquery fit the left side: each compares the subquery's width with the left side's and refuses a mismatch with `ValueError`, and where the queryset has `has_select_fields` false, has chosen no columns, each clears its select clause and adds `\"pk\"`; `Exact` first refuses a query not limited to one row, which `has_limit_one` tells ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](lookups.md), `django/db/models/lookups.py:In.get_prep_lookup`, `django/db/models/lookups.py:Exact.get_prep_lookup`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "In.get_prep_lookup",
@@ -405,7 +405,7 @@
   {
    "pointer": "django/db/models/lookups.py:Exact.get_prep_lookup",
    "line": 164,
-   "sentence": "`In.get_prep_lookup` and `Exact.get_prep_lookup` then make the subquery fit the left side: each compares the subquery's width with the left side's and refuses a mismatch with `ValueError`, and where the queryset has `has_select_fields` false, has chosen no columns, each clears its select clause and adds `\"pk\"`; `Exact` first refuses a query that `has_limit_one` denies, and `In` clears the ordering ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](lookups.md), `django/db/models/lookups.py:In.get_prep_lookup`, `django/db/models/lookups.py:Exact.get_prep_lookup`).",
+   "sentence": "`In.get_prep_lookup` and `Exact.get_prep_lookup` then make the subquery fit the left side: each compares the subquery's width with the left side's and refuses a mismatch with `ValueError`, and where the queryset has `has_select_fields` false, has chosen no columns, each clears its select clause and adds `\"pk\"`; `Exact` first refuses a query not limited to one row, which `has_limit_one` tells ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](lookups.md), `django/db/models/lookups.py:In.get_prep_lookup`, `django/db/models/lookups.py:Exact.get_prep_lookup`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "Exact.get_prep_lookup",
@@ -448,7 +448,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.clear_ordering",
    "line": 179,
-   "sentence": "`In.get_prep_lookup` clears it with `clear_default=True`, so that the model's default ordering does not come back either (`django/db/models/sql/query.py:Query.clear_ordering`).",
+   "sentence": "`In.get_prep_lookup` clears it with `clear_default=True`, so that the model's default ordering does not come back either (`django/db/models/sql/query.py:Query.clear_ordering`) ([ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](ordering.md)).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.clear_ordering",
@@ -472,20 +472,6 @@
     79
    ],
    "fingerprint": "f25220f8c4c3fdce"
-  },
-  {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 181,
-   "sentence": "So where the query is a subquery and `get_extra_select` added columns, `SQLCompiler.as_sql` wraps the statement in another select that reads the wanted columns alone from it, under the alias `\"subquery\"` ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md), `django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.as_sql",
-   "kind": "function",
-   "lines": [
-    776,
-    1001
-   ],
-   "fingerprint": "ce816411ac549927"
   }
  ]
 }

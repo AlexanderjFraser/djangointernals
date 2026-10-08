@@ -135,7 +135,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.build_filter",
-   "line": 88,
+   "line": 90,
    "sentence": "`Query.build_filter` builds the node for one child of a `Q` and returns it with the joins the child needs inner, without adding anything to the where tree; the docstring says the caller is responsible for unreferencing the joins if it does not add the node (`django/db/models/sql/query.py:Query.build_filter`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -149,7 +149,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Combinable.__and__",
-   "line": 102,
+   "line": 104,
    "sentence": "A `Q` on the left of `&` or `|` takes an `Exists` as its other operand through `Q._combine`, which accepts anything conditional; an `Exists` on the left goes through `Combinable.__and__` and its fellow, which make a `Q` of two conditional operands (`django/db/models/expressions.py:Combinable.__and__`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -163,7 +163,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.resolve_lookup_value",
-   "line": 108,
+   "line": 110,
    "sentence": "`Query.resolve_lookup_value` resolves an expression against the query, with the reusable joins and the same leave to join; a list or a tuple is rebuilt with each item resolved, a named tuple through its own constructor; anything else is returned as it is (`django/db/models/sql/query.py:Query.resolve_lookup_value`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -177,7 +177,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.check_filterable",
-   "line": 108,
+   "line": 110,
    "sentence": "`Query.check_filterable` is asked of the annotation's expression and of the value, unless the caller turned the check off, as `Q.resolve_expression` does: it raises `NotSupportedError` for an expression whose `filterable` is false, or that holds one among its sources (`django/db/models/sql/query.py:Query.check_filterable`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -191,7 +191,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.check_related_objects",
-   "line": 118,
+   "line": 120,
    "sentence": "`Query.check_related_objects` is asked when the final field is a relation (`django/db/models/sql/query.py:Query.check_related_objects`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -205,7 +205,7 @@
   },
   {
    "pointer": "django/db/models/query_utils.py:check_rel_lookup_compatibility",
-   "line": 118,
+   "line": 120,
    "sentence": "Compatible is `check_rel_lookup_compatibility`: the same concrete model, so that a proxy stands for its model, or a parent of the other's model in either direction; and, for a primary key, the field's own model as well, which its comment explains by a one-to-one primary key to another model, where the field's target options are the other model's and `\"pk__in\"` with a queryset of the model itself must still be allowed (`django/db/models/query_utils.py:check_rel_lookup_compatibility`).",
    "tree": "django",
    "path": "django/db/models/query_utils.py",
@@ -219,7 +219,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.build_filter",
-   "line": 135,
+   "line": 137,
    "sentence": "The last thing `build_filter` does is decide what the condition means for the joins, and whether it needs a companion (`django/db/models/sql/query.py:Query.build_filter`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -233,8 +233,8 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.is_nullable",
-   "line": 137,
-   "sentence": "Nullable is `Query.is_nullable`: the field allows null, or the default database's backend treats the empty string as null and the field allows one, the comment saying that the query does not know which connection it will run on (`django/db/models/sql/query.py:Query.is_nullable`).",
+   "line": 148,
+   "sentence": "Nullable is `Query.is_nullable`: the field allows null, or allows the empty string on a backend that stores one as null, asked of the default database ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](names.md), `django/db/models/sql/query.py:Query.is_nullable`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.is_nullable",
@@ -247,7 +247,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.split_exclude",
-   "line": 154,
+   "line": 165,
    "sentence": "What is wanted is the ships for which no sailor named Ada exists, and `Query.split_exclude` writes that (`django/db/models/sql/query.py:Query.split_exclude`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -261,7 +261,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.trim_start",
-   "line": 173,
+   "line": 184,
    "sentence": "Then `Query.trim_start` cut the inner query down to begin at the first step that can reach several rows (`django/db/models/sql/query.py:Query.trim_start`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -275,7 +275,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
-   "line": 201,
+   "line": 212,
    "sentence": "`WhereNode.as_sql` compiles each child through `SQLCompiler.compile` and joins what comes back with the connector (`django/db/models/sql/where.py:WhereNode.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -289,7 +289,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.compile",
-   "line": 201,
+   "line": 212,
    "sentence": "`WhereNode.as_sql` compiles each child through `SQLCompiler.compile` and joins what comes back with the connector (`django/db/models/sql/where.py:WhereNode.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -303,7 +303,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 203,
+   "line": 214,
    "sentence": "What the compiler does with the two is in `SQLCompiler.as_sql` (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -317,7 +317,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_logical_xor",
-   "line": 225,
+   "line": 236,
    "sentence": "Where `BaseDatabaseFeatures.supports_logical_xor` is false, which it is on every backend but MySQL's, an `\"XOR\"` node compiles itself as an `\"AND\"` of two things: an `\"OR\"` of the same children, and an `Exact` of `1` with the sum of a `Case` for each child that is `1` where the child holds and `0` otherwise, the sum taken modulo 2 through `Mod` where there are more than two children (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_logical_xor`, `django/db/models/functions/math.py:Mod`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -331,7 +331,7 @@
   },
   {
    "pointer": "django/db/models/functions/math.py:Mod",
-   "line": 225,
+   "line": 236,
    "sentence": "Where `BaseDatabaseFeatures.supports_logical_xor` is false, which it is on every backend but MySQL's, an `\"XOR\"` node compiles itself as an `\"AND\"` of two things: an `\"OR\"` of the same children, and an `Exact` of `1` with the sum of a `Case` for each child that is `1` where the child holds and `0` otherwise, the sum taken modulo 2 through `Mod` where there are more than two children (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_logical_xor`, `django/db/models/functions/math.py:Mod`).",
    "tree": "django",
    "path": "django/db/models/functions/math.py",
@@ -345,8 +345,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.clone",
-   "line": 240,
-   "sentence": "`WhereNode.clone` makes a new node for each node of the tree and keeps every other child as it is, cloning only a child that has a `clone` method, which a lookup has not, so the lookups of a clone are the original's (`django/db/models/sql/where.py:WhereNode.clone`); `Query.clone` copies the where tree this way for every method of a queryset ([The query: what a `Query` holds, and how it is copied](query.md)).",
+   "line": 251,
+   "sentence": "The tree is copied, relabelled and resolved as the query is: `WhereNode.clone` makes a new node for each node of the tree and keeps every other child as it is, cloning only a child that has a `clone` method, which a lookup has not, so the lookups of a clone are the original's, and `WhereNode.relabel_aliases` renames aliases in place, by a map from old to new, recursing into a child node and replacing any other child with its `relabeled_clone`, which is what a query inside another and the right side of a `combine` go through (`django/db/models/sql/where.py:WhereNode.clone`, `django/db/models/sql/where.py:WhereNode.relabel_aliases`) ([The query: what a `Query` holds, and how it is copied](query.md), [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md)).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.clone",
@@ -359,8 +359,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.relabel_aliases",
-   "line": 240,
-   "sentence": "`WhereNode.relabel_aliases` renames aliases in place, by a map from old to new, recursing into a child node and replacing any other child with its `relabeled_clone`; `WhereNode.relabeled_clone` clones first (`django/db/models/sql/where.py:WhereNode.relabel_aliases`).",
+   "line": 251,
+   "sentence": "The tree is copied, relabelled and resolved as the query is: `WhereNode.clone` makes a new node for each node of the tree and keeps every other child as it is, cloning only a child that has a `clone` method, which a lookup has not, so the lookups of a clone are the original's, and `WhereNode.relabel_aliases` renames aliases in place, by a map from old to new, recursing into a child node and replacing any other child with its `relabeled_clone`, which is what a query inside another and the right side of a `combine` go through (`django/db/models/sql/where.py:WhereNode.clone`, `django/db/models/sql/where.py:WhereNode.relabel_aliases`) ([The query: what a `Query` holds, and how it is copied](query.md), [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md)).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.relabel_aliases",
@@ -373,8 +373,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.resolve_expression",
-   "line": 242,
-   "sentence": "`WhereNode.resolve_expression` is for a tree that already stands as an expression and is resolved again, as the tree a `Q` given to `annotate` became is when a filter on the annotation compiles it as a lookup's left side: it clones the tree, resolves against the query the `lhs` and the `rhs` of each leaf that has them, setting the result on the leaf itself, and marks the clone `resolved`, which is what puts a single-child node in parentheses when it is written (`django/db/models/sql/where.py:WhereNode.resolve_expression`).",
+   "line": 251,
+   "sentence": "`WhereNode.resolve_expression`, for a tree that already stands as an expression and is resolved again, as the tree a `Q` given to `annotate` became is when a filter on the annotation compiles it as a lookup's left side, clones the tree, resolves against the query the `lhs` and the `rhs` of each leaf that has them, setting the result on the leaf itself, so that the original tree's leaves are resolved too, and marks the clone `resolved`, which is what puts a single-child node in parentheses when it is written (`django/db/models/sql/where.py:WhereNode.resolve_expression`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.resolve_expression",
@@ -387,7 +387,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:NothingNode",
-   "line": 248,
+   "line": 255,
    "sentence": "`NothingNode` is a child that matches nothing: it raises `EmptyResultSet` whenever its SQL is asked for (`django/db/models/sql/where.py:NothingNode`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -401,7 +401,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:ExtraWhere",
-   "line": 250,
+   "line": 257,
    "sentence": "`ExtraWhere` is SQL a program wrote, taken as it is: `QuerySet.extra` hands its `where` list and `params` to `Query.add_extra`, which puts them in one `ExtraWhere` under `\"AND\"` when either is given (`django/db/models/sql/where.py:ExtraWhere`, `django/db/models/sql/query.py:Query.add_extra`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -415,7 +415,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.add_extra",
-   "line": 250,
+   "line": 257,
    "sentence": "`ExtraWhere` is SQL a program wrote, taken as it is: `QuerySet.extra` hands its `where` list and `params` to `Query.add_extra`, which puts them in one `ExtraWhere` under `\"AND\"` when either is given (`django/db/models/sql/where.py:ExtraWhere`, `django/db/models/sql/query.py:Query.add_extra`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -429,8 +429,8 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.build_where",
-   "line": 262,
-   "sentence": "`Query.build_where` builds a node for one condition with no joins allowed and returns the node without adding it; a check constraint and a conditional index compile their condition through it (`django/db/models/sql/query.py:Query.build_where`, `django/db/models/constraints.py:CheckConstraint._get_check_sql`).",
+   "line": 269,
+   "sentence": "`Query.build_where` builds a node for one condition with no joins allowed and returns it without adding it, which is how a check constraint's condition is compiled, and `Query.clear_where` replaces the tree with an empty one (`django/db/models/sql/query.py:Query.build_where`, `django/db/models/constraints.py:CheckConstraint._get_check_sql`, `django/db/models/sql/query.py:Query.clear_where`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.build_where",
@@ -443,8 +443,8 @@
   },
   {
    "pointer": "django/db/models/constraints.py:CheckConstraint._get_check_sql",
-   "line": 262,
-   "sentence": "`Query.build_where` builds a node for one condition with no joins allowed and returns the node without adding it; a check constraint and a conditional index compile their condition through it (`django/db/models/sql/query.py:Query.build_where`, `django/db/models/constraints.py:CheckConstraint._get_check_sql`).",
+   "line": 269,
+   "sentence": "`Query.build_where` builds a node for one condition with no joins allowed and returns it without adding it, which is how a check constraint's condition is compiled, and `Query.clear_where` replaces the tree with an empty one (`django/db/models/sql/query.py:Query.build_where`, `django/db/models/constraints.py:CheckConstraint._get_check_sql`, `django/db/models/sql/query.py:Query.clear_where`).",
    "tree": "django",
    "path": "django/db/models/constraints.py",
    "symbol": "CheckConstraint._get_check_sql",
@@ -457,8 +457,8 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.clear_where",
-   "line": 262,
-   "sentence": "`Query.clear_where` replaces the tree with an empty one (`django/db/models/sql/query.py:Query.clear_where`).",
+   "line": 269,
+   "sentence": "`Query.build_where` builds a node for one condition with no joins allowed and returns it without adding it, which is how a check constraint's condition is compiled, and `Query.clear_where` replaces the tree with an empty one (`django/db/models/sql/query.py:Query.build_where`, `django/db/models/constraints.py:CheckConstraint._get_check_sql`, `django/db/models/sql/query.py:Query.clear_where`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.clear_where",
@@ -471,7 +471,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.add_filtered_relation",
-   "line": 266,
+   "line": 273,
    "sentence": "What `Query.add_filtered_relation` leaves on the query is a clone of the object, stored in `Query._filtered_relations` under the alias, with its condition rewritten by `rename_prefix_from_q` so that each name in it that starts with the relation's name starts with the alias instead; a `QuerySet` inside the condition is refused there, with the comment that an `OuterRef` in it could not be pointed at the join (`django/db/models/sql/query.py:Query.add_filtered_relation`, `django/db/models/sql/query.py:rename_prefix_from_q`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -485,7 +485,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:rename_prefix_from_q",
-   "line": 266,
+   "line": 273,
    "sentence": "What `Query.add_filtered_relation` leaves on the query is a clone of the object, stored in `Query._filtered_relations` under the alias, with its condition rewritten by `rename_prefix_from_q` so that each name in it that starts with the relation's name starts with the alias instead; a `QuerySet` inside the condition is refused there, with the comment that an `OuterRef` in it could not be pointed at the join (`django/db/models/sql/query.py:Query.add_filtered_relation`, `django/db/models/sql/query.py:rename_prefix_from_q`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -499,8 +499,8 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:get_children_from_q",
-   "line": 266,
-   "sentence": "An alias with a period is refused with `ValueError`, and `Query.check_alias` refuses the characters an alias may not hold ([The SELECT clause: `get_select`, the select mask and `klass_info`](select.md)); the relation's name, divided by `solve_lookup_type`, may hold no lookup; and every name in the condition, found by `get_children_from_q`, which walks the `Q` and any expression in it for names and `F` references, is checked by its field words: those before the last, or before the last two where no lookup word ends the name, must agree with the relation's where the two overlap, and there may be at most one field word more than the relation has, so `\"crew__ship__name\"` for `\"crew\"` is refused with `ValueError`, while `\"home__name\"` is not (`django/db/models/sql/query.py:get_children_from_q`).",
+   "line": 273,
+   "sentence": "An alias with a period is refused with `ValueError`, and `Query.check_alias` refuses the characters an alias may not hold ([The SELECT clause: `get_select`, the select mask and `klass_info`](select.md)); the relation's name, divided by `solve_lookup_type`, may hold no lookup; and every name in the condition, found by `get_children_from_q`, which walks the `Q` and any expression in it for names and `F` references, is checked against the relation's name by its field words: `\"crew__ship__name\"` for `\"crew\"` is refused with `ValueError` as a relation nested deeper than the relation's name, while `\"home__name\"` is let through (`django/db/models/sql/query.py:get_children_from_q`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "get_children_from_q",
@@ -513,7 +513,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.join",
-   "line": 268,
+   "line": 275,
    "sentence": "As `Query.join` adds that join to the map it has the object resolve itself: `FilteredRelation.resolve_expression` returns a clone whose `resolved_condition` is what `build_filter` makes of the `Q`, built with the join itself among the reusable aliases, joins allowed, no subquery for a negated multi-valued relation, and no change to the join types (`django/db/models/sql/query.py:Query.join`, `django/db/models/query_utils.py:FilteredRelation.resolve_expression`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -527,7 +527,7 @@
   },
   {
    "pointer": "django/db/models/query_utils.py:FilteredRelation.resolve_expression",
-   "line": 268,
+   "line": 275,
    "sentence": "As `Query.join` adds that join to the map it has the object resolve itself: `FilteredRelation.resolve_expression` returns a clone whose `resolved_condition` is what `build_filter` makes of the `Q`, built with the join itself among the reusable aliases, joins allowed, no subquery for a negated multi-valued relation, and no change to the join types (`django/db/models/sql/query.py:Query.join`, `django/db/models/query_utils.py:FilteredRelation.resolve_expression`).",
    "tree": "django",
    "path": "django/db/models/query_utils.py",
@@ -541,7 +541,7 @@
   },
   {
    "pointer": "django/db/models/sql/datastructures.py:Join.as_sql",
-   "line": 268,
+   "line": 275,
    "sentence": "`Join.as_sql` compiles the resolved condition into the `\"ON\"` after the join's own columns, in parentheses, and leaves it out where it raises `FullResultSet` (`django/db/models/sql/datastructures.py:Join.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/datastructures.py",
@@ -555,7 +555,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.names_to_path",
-   "line": 296,
+   "line": 303,
    "sentence": "The last line of the recording annotates `FilteredRelation('crew__name')` and filters on the alias, and the statement compares the ship's own `\"name\"` column: `names_to_path`, walking the relation's name for the alias, keeps every step of the path but the last, expecting the last word to be a relation whose join will carry the condition; where the last word is a plain field there is no such join, the one step walked is dropped with it, and the field is read on the table the walk started from (`django/db/models/sql/query.py:Query.names_to_path`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",

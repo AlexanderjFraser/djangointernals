@@ -6,13 +6,15 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `Aggregate` is the `Func` that folds the rows of a group into one value, `"COUNT"`, `"SUM"`, `"STRING_AGG"`, and is marked as one, so that the query groups for it and a filter on it goes to `"HAVING"`. `Query.get_aggregation` runs a set of aggregates over a query for `QuerySet.aggregate` and `QuerySet.count`, in the query's own statement where that gives the right answer and otherwise in a statement wrapped around it; `Query.exists` makes the narrowed query that `QuerySet.exists` sends.
 
-An aggregate has three jobs that a plain function has not. It has to say that it is one, since the shape of the statement turns on it: the compiler groups by every selected column that is not aggregated, and a condition that compares an aggregate cannot stand in `"WHERE"`, where the database tests one row at a time, and is moved to `"HAVING"` ([GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md)). Each of those decisions is read off one mark, `contains_aggregate`, which an aggregate sets on its class and most other expressions compute from their parts; a `Window` sets it `False` on its class, a comment saying that the grouping an aggregate would bring in is not wanted for one. It has to refuse to stand inside another aggregate. And it has to answer for no rows: the database answers a sum of nothing with a null, and where the compiler can tell that the query matches nothing it sends no statement at all. Beside these it carries what SQL lets an aggregate carry: `"DISTINCT"` on its argument, a `"FILTER"` clause, an `"ORDER BY"` inside the parentheses for a function whose result depends on the order of the rows, and a default for the null.
+An aggregate has three jobs that a plain function has not. It has to say that it is one, since the shape of the statement turns on it: the compiler groups by the selected columns that are not aggregated, and a condition that compares an aggregate cannot stand in `"WHERE"`, where the database tests one row at a time, and is moved to `"HAVING"` ([GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md)). Each of those decisions is read off one mark, `contains_aggregate`, which an aggregate sets on its class and most other expressions compute from their parts; a `Window` sets it `False` on its class, a comment saying that the grouping an aggregate would bring in is not wanted for one. It has to refuse to stand inside another aggregate. And it has to answer for no rows: the database answers a sum of nothing with a null, and where the compiler can tell that the query matches nothing, and every aggregate has an answer for no rows, it sends no statement at all. Beside these it carries what SQL lets an aggregate carry: `"DISTINCT"` on its argument, a `"FILTER"` clause, an `"ORDER BY"` inside the parentheses for a function whose result depends on the order of the rows, and a default for the null.
 
 ## `Aggregate`: a `Func` with a mark and four options
 
 `Aggregate` is a subclass of `Func`, and what a function class declares, `function`, `template`, `arity`, it declares too ([Transforms and database functions: `Transform` and `Func`](functions.md)). Its template has three slots that `Func`'s has not, `"%(function)s(%(distinct)s%(expressions)s%(order_by)s)%(filter)s"`, one for each option that is written as SQL. On the class, `Aggregate.contains_aggregate` is `True`, where `BaseExpression` computes it from the sources; `window_compatible` is `True`, so that an aggregate may be the function a `Window` runs over its partition ([Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](windows.md)); `empty_result_set_value`, the answer for no rows, is `None`; `allow_distinct` and `allow_order_by` are `False`, and each subclass turns on what its function accepts; and `name` is what the class is called in a message and in a default alias (`django/db/models/aggregates.py:Aggregate`).
 
-`Aggregate.__init__` takes the function's arguments by position and the four options by keyword, and refuses three of them with `TypeError` according to the class: `distinct` unless `allow_distinct` is set, `order_by` unless `allow_order_by` is, and `default` where the class has an `empty_result_set_value` that is not `None`, which `Count` has. It keeps `distinct` as given, wraps the filter in an `AggregateFilter`, keeps the default as given until the aggregate is resolved, and turns the ordering into an `AggregateOrderBy` through `OrderByList.from_param`, which takes a string, an expression, or a list or tuple of either and raises `ValueError` for anything else; the arguments go to `Func.__init__` (`django/db/models/aggregates.py:Aggregate.__init__`, `django/db/models/expressions.py:OrderByList.from_param`). What follows was recorded from a running Django, on SQLite, over the models of [From QuerySet to SQL](../sql.md): a line is a question and its answer after `->`, or the exception it raised; a line that begins `SQL` under it is a statement as Django handed it to its cursor; and where a line is a call, the calls under it are those it set going, nested as they were made, with `->` what each returned.
+`Aggregate.__init__` takes the function's arguments by position and the four options by keyword, and refuses three of them with `TypeError` according to the class: `distinct` unless `allow_distinct` is set, `order_by` unless `allow_order_by` is, and `default` where the class has an `empty_result_set_value` that is not `None`, which `Count` has. It keeps `distinct` as given, wraps the filter in an `AggregateFilter`, keeps the default as given until the aggregate is resolved, and turns the ordering into an `AggregateOrderBy` through `OrderByList.from_param`, which takes a string, an expression, or a list or tuple of either and raises `ValueError` for anything else; the arguments go to `Func.__init__` (`django/db/models/aggregates.py:Aggregate.__init__`, `django/db/models/expressions.py:OrderByList.from_param`).
+
+What follows was recorded from a running Django, on SQLite, over the models of [From QuerySet to SQL](../sql.md): a line is a question and its answer after `->`, with a statement it sent under it as `SQL`, or a call with the calls it set going nested under it and `->` what each returned.
 
 ```text recording=sql
 Aggregate.template, Count.function, Count.allow_distinct, Max.allow_distinct, StringAgg.allow_order_by, Count.empty_result_set_value, Sum.empty_result_set_value, Aggregate.contains_aggregate, Aggregate.window_compatible  ->  ('%(function)s(%(distinct)s%(expressions)s%(order_by)s)%(filter)s', 'COUNT', True, False, True, 0, None, True, True)
@@ -21,7 +23,7 @@ Count('crew', order_by='name')  ->  raises TypeError: Count does not allow order
 Count('crew', default=0)  ->  raises TypeError: Count does not allow default.
 ```
 
-The filter and the ordering are sources of the expression. `Aggregate.get_source_expressions` returns the arguments with the filter and the ordering appended, `None` where there is none, and `Aggregate.set_source_expressions` takes the last two off again, so that resolving and relabelling reach them with the arguments. `Aggregate.get_source_fields`, from which the output field is inferred, leaves them out, since a comment says they have nothing to do with it (`django/db/models/aggregates.py:Aggregate.get_source_expressions`, `django/db/models/aggregates.py:Aggregate.get_source_fields`).
+The filter and the ordering are sources of the expression. `Aggregate.get_source_expressions` returns the arguments with the filter and the ordering appended, `None` where there is none, and `Aggregate.set_source_expressions` takes the last two off again. `Aggregate.get_source_fields`, from which the output field is inferred, leaves them out, since a comment says they have nothing to do with it (`django/db/models/aggregates.py:Aggregate.get_source_expressions`, `django/db/models/aggregates.py:Aggregate.get_source_fields`).
 
 `Aggregate.default_alias` is the name an aggregate goes under when `QuerySet.annotate` or `QuerySet.aggregate` is given it by position. Where exactly one source is not `None` and has a `name`, which an `F` has, the alias is that name, `"__"` and the class's `name` in lower case; otherwise the property raises `TypeError`. So a count of `"crew"` is `"crew__count"`, and a count with a filter, which has two sources that are not `None`, needs an alias as the sum of an arithmetic expression does (`django/db/models/aggregates.py:Aggregate.default_alias`). What the queryset makes of the error, and the names it refuses, is [Annotations, ordering and the other methods that change the query](../querysets/methods.md).
 
@@ -35,7 +37,7 @@ Count('crew').get_source_expressions(), Count('crew', filter=Q(crew__name='Ada')
 
 `Aggregate.as_sql` fills the three slots, and the backend's features decide two of them (`django/db/models/aggregates.py:Aggregate.as_sql`). It first refuses, with `NotSupportedError`, `distinct` on an aggregate of more than one argument where `supports_aggregate_distinct_multiple_argument` is off, which on SQLite it is (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_distinct_multiple_argument`). Then it compiles the ordering: `AggregateOrderBy.as_sql` raises `NotSupportedError` where `supports_aggregate_order_by_clause` is off, and otherwise writes `" ORDER BY "` and its expressions, which go inside the function's parentheses; nothing catches that refusal. SQLite has the clause from version 3.44 (`django/db/models/aggregates.py:AggregateOrderBy`, `django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_aggregate_order_by_clause`).
 
-Then it compiles the filter. `AggregateFilter.as_sql` raises `NotSupportedError` where `supports_aggregate_filter_clause` is off, and this refusal `Aggregate.as_sql` does catch: it makes a copy of the aggregate without the filter, puts in place of the first argument a `Case` of one `When` whose condition is the filter's and whose value is the argument, so that a row the condition rejects contributes `"NULL"` to the function, and compiles the copy; a comment calls it the fallback for backends that lack the clause. Where the clause is supported it is written after the closing parenthesis, `" FILTER (WHERE "`, the condition and `")"` (`django/db/models/aggregates.py:AggregateFilter`, `django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_filter_clause`). The condition is a `Q`, and becomes a where tree when the aggregate is resolved, as a `Q` does wherever an expression stands ([`filter`, `exclude` and `Q` objects](../querysets/filters.md)). The parameters are gathered in the template's order: the arguments', then the ordering's, then the filter's.
+Then it compiles the filter. `AggregateFilter.as_sql` raises `NotSupportedError` where `supports_aggregate_filter_clause` is off, and this refusal `Aggregate.as_sql` does catch: it makes a copy of the aggregate without the filter, puts in place of the first argument a `Case` of one `When` whose condition is the filter's and whose value is the argument, so that a row the condition rejects contributes `"NULL"` to the function, and compiles the copy; a comment calls it the fallback for backends that lack the clause. Where the clause is supported it is written after the closing parenthesis, `" FILTER (WHERE "`, the condition and `")"` (`django/db/models/aggregates.py:AggregateFilter`, `django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_filter_clause`). The condition is a `Q`, and becomes a where tree when the aggregate is resolved, as a `Q` does wherever an expression stands ([`filter`, `exclude` and `Q` objects](../querysets/filters.md)). The parameters are gathered in the template's order: the arguments', then the ordering's, then the filter's. The recording asks for the filter twice, the second time with `supports_aggregate_filter_clause` switched off for that one question.
 
 ```text recording=sql
 Ship.objects.aggregate(n=Count('crew', distinct=True))  ->  {'n': 4}
@@ -54,7 +56,7 @@ Ship.objects.aggregate(Sum('tonnage', default=0), Min('tonnage'))  ->  {'tonnage
   SQL SELECT COALESCE(SUM("fleet_ship"."tonnage"), %s) AS "tonnage__sum", MIN("fleet_ship"."tonnage") AS "tonnage__min" FROM "fleet_ship" with params (0,)
 ```
 
-The `"FILTER"` and the `"ORDER BY"` inside the parentheses are this backend's. The third statement is the second filter again, with `supports_aggregate_filter_clause` switched off for that one question: the `"CASE"` stands in for the clause, and a row the condition rejects gives `"NULL"` to the count. On a backend without the ordering clause the ordering is refused. The default is not in the template at all. In the last statement it has become a `"COALESCE"` around the sum, and that is the work of resolving.
+The `"FILTER"` and the `"ORDER BY"` inside the parentheses are this backend's; with the feature off, the `"CASE"` stands in for the clause, and a row the condition rejects gives `"NULL"` to the count. The default is not in the template at all. In the last statement it has become a `"COALESCE"` around the sum, and that is the work of resolving.
 
 ## `resolve_expression`: the refusals and the default
 
@@ -62,7 +64,7 @@ The `"FILTER"` and the `"ORDER BY"` inside the parentheses are this backend's. T
 
 The first is the mark `is_summary`, which `BaseExpression.resolve_expression` sets on every copy from the argument written `summarize=True`: true when `get_aggregation` resolves an aggregate and false when `Query.add_annotation` does. A **summary** is an aggregate that is the statement's one answer, taken over all the rows, rather than a column of each row of a group. An `F` inside an aggregate resolves differently under the mark: `Query.resolve_ref` with `summarize=True` answers a name that is a selected annotation with a `Ref` to it, and refuses with `FieldError` a name that is an annotation `QuerySet.alias` left unselected, telling the caller to promote it with `annotate`; without the mark it answers with the annotation itself (`django/db/models/sql/query.py:Query.resolve_ref`).
 
-The second is the refusal of an aggregate inside an aggregate, made two ways. Resolved for an annotation, the copy looks at each of its arguments, the filter and the ordering left out, and raises `FieldError` for one whose `contains_aggregate` is set, naming the argument as it was before resolving: an `F` by its name, so that a sum of an annotation that counts is refused as `Sum('n')`, and an aggregate by its class's `name`. Resolved as a summary, it looks instead at the names it refers to, which `BaseExpression.get_refs` collects from the `Ref` objects in it, and raises for one whose annotation is itself a summary: another aggregate of the same `aggregate` call. A summary over an annotation that aggregates is allowed, and `get_aggregation` wraps the query in a subquery for it.
+The second is the refusal of an aggregate inside an aggregate, made two ways. Resolved for an annotation, the copy looks at each of its arguments, the filter and the ordering left out, and raises `FieldError` for one whose `contains_aggregate` is set, naming the argument as it was before resolving: an `F` by its name, so that a sum of an annotation that counts is refused as `Sum('n')`, and an aggregate by its class's `name`. Resolved as a summary, it looks instead at the names it refers to, which `BaseExpression.get_refs` collects from the `Ref` objects in it, and raises for one whose annotation is itself a summary: another aggregate of the same `aggregate` call, which `get_aggregation` puts among the query's annotations as it resolves them. A summary over an annotation that aggregates is allowed, and `get_aggregation` wraps the query in a subquery for it.
 
 ```text recording=sql
 Ship.objects.annotate(n=Count('crew')).annotate(m=Sum('n'))  ->  raises FieldError: Cannot compute Sum('n'): 'n' is an aggregate
@@ -80,7 +82,7 @@ The third is the default. Where `default` was given, the copy's own `default` is
 
 ## The classes
 
-`Count` takes one expression, or the string `"*"`, which `Count.__init__` turns into a `Star`, the expression that writes `*`; a `Star` with a filter is refused with `ValueError`, and the message asks for a field. Its output field is declared on the class, an `IntegerField`, its `empty_result_set_value` is 0, and it allows `distinct` (`django/db/models/aggregates.py:Count`, `django/db/models/expressions.py:Star`, `django/db/models/fields/__init__.py:IntegerField`). It is the one class of the module with `allows_composite_expressions` set, so that `BaseExpression.resolve_expression` lets a `ColPairs`, the column pair a composite primary key resolves to, through; `Count.resolve_expression` then puts the first column of the pair in its place, a comment saying that a composite key is counted by its first column, and refuses `distinct` on one with `ValueError` (`django/db/models/aggregates.py:Count.resolve_expression`). A `ColPairs` is [Expressions: `resolve_expression` and `as_sql`](expressions.md)'s.
+`Count` takes one expression, or the string `"*"`, which `Count.__init__` turns into a `Star`, the expression that writes `*`. Its output field is declared on the class, an `IntegerField`, its `empty_result_set_value` is 0, and it allows `distinct` (`django/db/models/aggregates.py:Count`, `django/db/models/expressions.py:Star`, `django/db/models/fields/__init__.py:IntegerField`). It is the one class of the module with `allows_composite_expressions` set, so that `BaseExpression.resolve_expression` lets a `ColPairs`, the column pair a composite primary key resolves to ([Expressions: `resolve_expression` and `as_sql`](expressions.md)), through; `Count.resolve_expression` then puts the first column of the pair in its place, a comment saying that a composite key is counted by its first column, and refuses `distinct` on one with `ValueError` (`django/db/models/aggregates.py:Count.resolve_expression`).
 
 ```text recording=sql
 Ship.objects.aggregate(t=Sum('tonnage'), a=Avg('tonnage'), m=Max('tonnage'), s=StdDev('tonnage'), v=Variance('tonnage', sample=True))  ->  {'t': 1680, 'a': 840.0, 'm': 1200, 's': 360.0, 'v': 259200.0}
@@ -109,7 +111,7 @@ Berth.objects.aggregate(n=Count('pk', distinct=True))  ->  raises ValueError: CO
 
 *The aggregate classes of `django/db/models/aggregates.py`: the function each writes, what its constructor accepts, and where its output field comes from. Every class takes `filter`, and every class but `Count` takes `default`.*
 
-`Sum` and `Avg` carry `FixDurationInputMixin`, whose `as_mysql` and `as_oracle` see to an aggregate of durations on those two backends; `Avg`, `StdDev` and `Variance` carry `NumericOutputFieldMixin`, whose `_resolve_output_field` is the rule the table gives (`django/db/models/functions/mixins.py:FixDurationInputMixin`, `django/db/models/functions/mixins.py:NumericOutputFieldMixin`). `StdDev` and `Variance` choose their function in `__init__`, the sample form with `sample=True` and the population form without.
+`Sum` and `Avg` carry `FixDurationInputMixin`, whose `as_mysql` and `as_oracle` see to an aggregate of durations on those two backends; `Avg`, `StdDev` and `Variance` carry `NumericOutputFieldMixin`, whose `_resolve_output_field` is the rule the table gives (`django/db/models/functions/mixins.py:FixDurationInputMixin`, `django/db/models/functions/mixins.py:NumericOutputFieldMixin`).
 
 `StringAgg` takes an expression and a delimiter, wraps the delimiter in a `StringAggDelimiter`, a `Func` of one expression whose template is the expression alone, and passes both to `Aggregate.__init__`, so that it is an aggregate of two sources (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:StringAggDelimiter`). Its three vendor methods rearrange the two. `StringAgg.as_oracle` writes `"LISTAGG"`, with the ordering outside the parentheses as `"WITHIN GROUP (ORDER BY ...)"`. `StringAgg.as_mysql` writes `"GROUP_CONCAT"`, takes the delimiter out of the sources and writes it last, where the delimiter's own `as_mysql` puts `"SEPARATOR"` before it, since a comment says MySQL takes the delimiter as a declaration at the end and not as an argument. `StringAgg.as_sqlite` has three ways: with `distinct` and the delimiter `Value(",")` it drops the delimiter from the sources and writes `"GROUP_CONCAT"`, which is what let the recorded statement of `StringAgg` with `distinct=True` above pass the check on `distinct` with several arguments; on SQLite before 3.44 it writes `"GROUP_CONCAT"` with the delimiter; otherwise `"STRING_AGG"` (`django/db/models/aggregates.py:StringAgg.as_sqlite`).
 
@@ -125,76 +127,77 @@ Berth.objects.aggregate(n=Count('pk', distinct=True))  ->  raises ValueError: CO
 
 **The aggregates are resolved against each other.** Each is resolved against the query with `summarize=True`, and a later expression of the call may use an earlier one's alias in arithmetic, though not aggregate over it, as told above. For that, after each aggregate is resolved it is put among the query's annotations under its alias and added to the selected set, which a comment says is so that the remaining ones may resolve against it, and the `Ref` such a name resolves to is replaced by the earlier aggregate itself. Each alias is checked by `Query.check_alias` first, and a resolved copy whose `contains_aggregate` is not set is refused with `TypeError`: a plain expression is not an aggregate. Once all are resolved they are taken out of the annotations and the mask of selected annotations is put back as it was, and the method has noted whether any aggregate refers to an annotation that holds a subquery or a window.
 
-**Then it chooses between two shapes.** It asks the where tree for its having part and its qualify part, and takes the query to have an existing aggregation where any annotation contains an aggregate or the having part is not empty. The **plain case** is the query itself with its select list replaced: the aggregates become its only selected annotations, and one statement over the query's rows answers. The **wrapped case** makes a clone of the query the inner query of an `AggregateQuery`, whose compiler selects the aggregates from the clone's statement in parentheses (`django/db/models/sql/subqueries.py:AggregateQuery`). The wrapped case is taken when any of these holds: the query's `group_by` is a tuple; it is sliced; it has an existing aggregation; an aggregate refers to an annotation with a subquery, or with a window; the where tree has a qualify part; the query is distinct, or combined; or a selected annotation is marked `set_returning`. A comment gives the reasons for four of them: an existing aggregation would make the statement group, and `get_aggregation` must produce one result; a limit, a distinct or a set operation has to be done first, so that the aggregate is taken over the rows it leaves and not applied before it.
+**Then it chooses between two shapes.** It asks the where tree for its having part and its qualify part, the parts [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md) defines, and takes the query to have an existing aggregation where any annotation contains an aggregate or the having part is not empty. The **plain case** is the query itself with its select list replaced: the aggregates become its only selected annotations, and one statement over the query's rows answers. The **wrapped case** makes a clone of the query the inner query of an `AggregateQuery`, whose compiler selects the aggregates from the clone's statement in parentheses (`django/db/models/sql/subqueries.py:AggregateQuery`). The wrapped case is taken when any of these holds:
+
+- the query's `group_by` is a tuple;
+- it is sliced;
+- it has an existing aggregation;
+- an aggregate refers to an annotation with a subquery, or with a window;
+- the where tree has a qualify part;
+- the query is distinct, or combined;
+- a selected annotation is marked `set_returning`, as an expression that may return more than one row is.
+
+A comment gives the reasons for four of them: an existing aggregation would make the statement group, and `get_aggregation` must produce one result; a limit, a distinct or a set operation has to be done first, so that the aggregate is taken over the rows it leaves and not applied before it.
 
 In the plain case the query's select, `selected`, `default_cols` and `extra` are cleared, the aggregates become its annotations, with a `Ref` to any annotation the query had already replaced by that annotation's expression, and the mask is set to their aliases.
 
 ```text recording=sql
-get_aggregation, the plain case: the aggregates become the query's only annotations, and one statement answers
-    Ship.objects.aggregate(total=Sum('tonnage'), ships=Count('id'))
-      QuerySet.aggregate(total=Sum(F(tonnage)), ships=Count(F(id)))
-        Query.get_aggregation(using='default', aggregate_exprs={'total': Sum(F(tonnage)), 'ships': Count(F(id))})
-          Sum.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Sum(F(tonnage)))  ->  Sum(Col(fleet_ship, fleet.Ship.tonnage))
-          Query.append_annotation_mask(['total'])
-          Count.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Count(F(id)))  ->  Count(Col(fleet_ship, fleet.Ship.id))
-          Query.append_annotation_mask(['ships'])
-          Query.set_annotation_mask(None)
-          Query.set_annotation_mask(['ships', 'total'])
-          Query.clear_ordering(force=True)
-          Query.clear_limits
-          SQLCompiler.execute_sql(result_type='single')
-            SQLCompiler.as_sql  ->  ('SELECT SUM("fleet_ship"."tonnage") AS "total", COUNT("fleet_ship"."id") AS "ships" FROM "fleet_ship"', ())
-            SQL SELECT SUM("fleet_ship"."tonnage") AS "total", COUNT("fleet_ship"."id") AS "ships" FROM "fleet_ship"
-            -> (1680, 2)
-          SQLCompiler.get_converters  ->  {0: [BaseExpression.convert_value's lambda], 1: [BaseExpression.convert_value's lambda]}
-          SQLCompiler.apply_converters
-          -> {'total': 1680, 'ships': 2}
-        -> {'total': 1680, 'ships': 2}
+Ship.objects.aggregate(total=Sum('tonnage'), ships=Count('id'))
+  QuerySet.aggregate(total=Sum(F(tonnage)), ships=Count(F(id)))
+    Query.get_aggregation(using='default', aggregate_exprs={'total': Sum(F(tonnage)), 'ships': Count(F(id))})
+      Sum.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Sum(F(tonnage)))  ->  Sum(Col(fleet_ship, fleet.Ship.tonnage))
+      Count.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Count(F(id)))  ->  Count(Col(fleet_ship, fleet.Ship.id))
+      Query.clear_ordering(force=True)
+      Query.clear_limits
+      SQLCompiler.execute_sql(result_type='single')
+        SQLCompiler.as_sql  ->  ('SELECT SUM("fleet_ship"."tonnage") AS "total", COUNT("fleet_ship"."id") AS "ships" FROM "fleet_ship"', ())
+        SQL SELECT SUM("fleet_ship"."tonnage") AS "total", COUNT("fleet_ship"."id") AS "ships" FROM "fleet_ship"
+        -> (1680, 2)
+      SQLCompiler.get_converters  ->  {0: [BaseExpression.convert_value's lambda], 1: [BaseExpression.convert_value's lambda]}
+      SQLCompiler.apply_converters
+      -> {'total': 1680, 'ships': 2}
 ```
 
-In the wrapped case the inner query is made to select, under aliases, what the outer aggregates refer to and nothing else, and each step serves that. It is marked a subquery, with `select_for_update` and `select_related` off. Its ordering is cleared where `Query.orderby_issubset_groupby` allows, without force, so that a sliced query keeps the ordering its slice depends on ([ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](ordering.md)). Unless it is distinct, its default columns are turned off, and where it had them and an existing aggregation its `group_by` is set to the model's primary key, since a comment says an inner query with the default columns and an aggregate annotation must be grouped by the main model's primary key; and unless a window is filtered on or the query is combined, its selected annotations, at first the query's, are narrowed to those the grouping or the aggregates refer to, and those that put a column into the grouping. Every column the aggregates refer to directly, which `Query._gen_cols` yields with the `Ref` objects left aside, is added to the inner query as an annotation named `"__col1"`, `"__col2"` and so on, and the aggregate in the outer query is made to refer to that name; an aggregate that refers to an annotation by a `Ref` keeps the `Ref`, the annotation being selected under its own alias. Where that leaves the inner query selecting nothing, the primary key is selected, for the sake of a count over a slice (`django/db/models/sql/query.py:Query._gen_cols`).
+In the wrapped case the inner query is made to select, under aliases, what the outer aggregates refer to and nothing else, and each step serves that. It is marked a subquery, with `select_for_update` and `select_related` off. Its ordering is cleared where `Query.orderby_issubset_groupby` allows, without force, so that a sliced query keeps the ordering its slice depends on ([ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](ordering.md)). Unless it is distinct, its default columns are turned off, and where it had them and an existing aggregation its `group_by` is set to the model's primary key, since a comment says an inner query with the default columns and an aggregate annotation must be grouped by the main model's primary key; and, where it is not distinct either, an annotation that neither the grouping nor the aggregates refer to, and that puts no column into the grouping, is left unselected, unless a window is filtered on or the query is combined, which a comment says would need complex realiasing. Every column the aggregates refer to directly, which `Query._gen_cols` yields with the `Ref` objects left aside, is added to the inner query as an annotation named `"__col1"`, `"__col2"` and so on, and the aggregate in the outer query is made to refer to that name; an aggregate that refers to an annotation by a `Ref` keeps the `Ref`, the annotation being selected under its own alias. Where that leaves the inner query selecting nothing, the primary key is selected, for the sake of a count over a slice (`django/db/models/sql/query.py:Query._gen_cols`).
 
 ```text recording=sql
-Query.get_aggregation(using='default', aggregate_exprs={'total': Sum(F(tonnage))})
-  Sum.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Sum(F(tonnage)))  ->  Sum(Col(fleet_ship, fleet.Ship.tonnage))
-  Query.append_annotation_mask(['total'])
-  Query.set_annotation_mask(None)
-  AggregateQuery.__init__(model=Ship, inner_query=a Query of Ship)
-  Query.set_annotation_mask([])
-  Query.clear_ordering
-  Query.set_annotation_mask([])
-  Query.add_annotation(annotation=Col(fleet_ship, fleet.Ship.tonnage), alias='__col1')
-    Query.append_annotation_mask(['__col1'])
-      Query.set_annotation_mask(['__col1'])
-  Query.clear_ordering(force=True)
-  Query.clear_limits
-  SQLCompiler.execute_sql(result_type='single')
-    SQLAggregateCompiler.as_sql
-      SQLCompiler.as_sql(with_col_aliases=True)  ->  ('SELECT "fleet_ship"."tonnage" AS "__col1" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC LIMIT 1', ())
-      -> ('SELECT SUM("__col1") FROM (SELECT "fleet_ship"."tonnage" AS "__col1" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC LIMIT 1) subquery', ())
-    SQL SELECT SUM("__col1") FROM (SELECT "fleet_ship"."tonnage" AS "__col1" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC LIMIT 1) subquery
-    -> (1200,)
+Ship.objects.order_by('name')[:1].aggregate(total=Sum('tonnage'))
+  Query.clear_ordering(force=True, clear_default=False)
+  QuerySet.aggregate(total=Sum(F(tonnage)))
+    Query.get_aggregation(using='default', aggregate_exprs={'total': Sum(F(tonnage))})
+      Sum.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Sum(F(tonnage)))  ->  Sum(Col(fleet_ship, fleet.Ship.tonnage))
+      AggregateQuery.__init__(model=Ship, inner_query=a Query of Ship)
+      Query.clear_ordering
+      Query.add_annotation(annotation=Col(fleet_ship, fleet.Ship.tonnage), alias='__col1')
+      Query.clear_ordering(force=True)
+      Query.clear_limits
+      SQLCompiler.execute_sql(result_type='single')
+        SQLAggregateCompiler.as_sql
+          SQLCompiler.as_sql(with_col_aliases=True)  ->  ('SELECT "fleet_ship"."tonnage" AS "__col1" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC LIMIT 1', ())
+          -> ('SELECT SUM("__col1") FROM (SELECT "fleet_ship"."tonnage" AS "__col1" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC LIMIT 1) subquery', ())
+        SQL SELECT SUM("__col1") FROM (SELECT "fleet_ship"."tonnage" AS "__col1" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC LIMIT 1) subquery
+        -> (1200,)
 ```
 
-The inner statement keeps its `"ORDER BY"` and `"LIMIT"`, and selects the one column the sum needs under the name the outer statement sums. `SQLAggregateCompiler.as_sql` is the whole of the outer compiler: it compiles each selected annotation of the `AggregateQuery`, has the inner query's compiler write its statement with `with_col_aliases=True`, so that every column has a name the outer statement can use, and writes `"SELECT"`, the aggregates, `"FROM ("`, the inner statement and `") subquery"`; the aggregates are given no aliases, the result being read by position (`django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql`).
+The first `clear_ordering` under `get_aggregation`, without force, is the inner query's, and leaves the ordering since the query is sliced; the second, with force, is the outer's. The inner statement keeps its `"ORDER BY"` and `"LIMIT"`, and selects the one column the sum needs under the name the outer statement sums. `SQLAggregateCompiler.as_sql` is the whole of the outer compiler: it compiles each selected annotation of the `AggregateQuery`, has the inner query's compiler write its statement with `with_col_aliases=True`, so that every column has a name the outer statement can use, and writes `"SELECT"`, the aggregates, `"FROM ("`, the inner statement and `") subquery"`; the aggregates are given no aliases, the result being read by position (`django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql`).
 
 ```text recording=sql
-Query.get_aggregation(using='default', aggregate_exprs={'most': Max(F(hands))})
-  Max.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Max(F(hands)))  ->  Max(Ref(hands, Count(Col(crew_sailor, crew.Sailor.id))))
-  Query.append_annotation_mask(['most'])
-  Query.set_annotation_mask(None)
-  AggregateQuery.__init__(model=Ship, inner_query=a Query of Ship)
-  Query.set_annotation_mask(['hands'])
-  Query.clear_ordering
-  Query.set_annotation_mask(['hands'])
-  Query.clear_ordering(force=True)
-  Query.clear_limits
-  SQLCompiler.execute_sql(result_type='single')
-    SQLAggregateCompiler.as_sql
-      SQLCompiler.as_sql(with_col_aliases=True)  ->  ('SELECT COUNT("crew_sailor"."id") AS "hands" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY "fleet_ship"."id"', ())
-      -> ('SELECT MAX("hands") FROM (SELECT COUNT("crew_sailor"."id") AS "hands" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY "fleet_ship"."id") subquery', ())
-    SQL SELECT MAX("hands") FROM (SELECT COUNT("crew_sailor"."id") AS "hands" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY "fleet_ship"."id") subquery
-    -> (2,)
+Ship.objects.annotate(hands=Count('crew')).aggregate(most=Max('hands'))
+  Query.add_annotation(annotation=Count(F(crew)), alias='hands')
+    Count.resolve_expression(summarize=False)  (Aggregate.resolve_expression, of Count(F(crew)))  ->  Count(Col(crew_sailor, crew.Sailor.id))
+  QuerySet.aggregate(most=Max(F(hands)))
+    Query.get_aggregation(using='default', aggregate_exprs={'most': Max(F(hands))})
+      Max.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Max(F(hands)))  ->  Max(Ref(hands, Count(Col(crew_sailor, crew.Sailor.id))))
+      AggregateQuery.__init__(model=Ship, inner_query=a Query of Ship)
+      Query.clear_ordering
+      Query.clear_ordering(force=True)
+      Query.clear_limits
+      SQLCompiler.execute_sql(result_type='single')
+        SQLAggregateCompiler.as_sql
+          SQLCompiler.as_sql(with_col_aliases=True)  ->  ('SELECT COUNT("crew_sailor"."id") AS "hands" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY "fleet_ship"."id"', ())
+          -> ('SELECT MAX("hands") FROM (SELECT COUNT("crew_sailor"."id") AS "hands" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY "fleet_ship"."id") subquery', ())
+        SQL SELECT MAX("hands") FROM (SELECT COUNT("crew_sailor"."id") AS "hands" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY "fleet_ship"."id") subquery
+        -> (2,)
 ```
 
 Here the inner query had default columns and an aggregate among its annotations, so it is grouped by the ship's primary key and selects the count alone, and the outer `Max` refers to it as `"hands"`, the `Ref` the summary resolved to.
@@ -221,7 +224,7 @@ written by SQLCompiler                                      LEFT OUTER JOIN "cre
 
 *The two shapes of `get_aggregation`, as the two recorded calls above wrote them. On the left the aggregates stand in the query's own select list; on the right the query keeps its grouping inside the parentheses and the aggregates are taken from what it selects.*
 
-**Either way, one row is fetched, or none.** Where every selected aggregate has an answer for no rows, its `empty_result_set_value`, a query the compiler can tell matches nothing is not sent at all, and those answers are the result. The outer query's ordering is cleared with force, its limits are cleared, and `select_for_update` and `select_related` are turned off. The method gathers each selected aggregate's `empty_result_set_value` and sets the compiler's `elide_empty` to whether none of them is `NotImplemented`, a comment at `SQLCompiler.__init__` saying that some queries, a coalesced aggregation among them, have to be run even where they would return no rows: with it set, a where tree that can match nothing makes `SQLCompiler.as_sql` raise `EmptyResultSet` and `SQLCompiler.execute_sql` answer with nothing, and the gathered values are the answer; without it, `as_sql` writes `"0 = 1"` for the where clause and the statement is sent, so that an expression with no answer of its own, a sum with one added to it, gets the database's (`django/db/models/sql/compiler.py:SQLCompiler.__init__`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`). `Count` answers 0, `Aggregate` answers `None`, a `Coalesce` answers with the first of its sources whose answer is not `None`, and has no answer where that source has none, and a `Value` answers with its value, which is how a default reaches the dictionary without a statement (`django/db/models/functions/comparison.py:Coalesce.empty_result_set_value`).
+**Either way, one row is fetched, or none.** Where every selected aggregate has an answer for no rows, its `empty_result_set_value`, a query the compiler can tell matches nothing is not sent at all, and those answers are the result. The outer query's ordering is cleared with force, its limits are cleared, and `select_for_update` and `select_related` are turned off. The method gathers each selected aggregate's `empty_result_set_value` and sets the compiler's `elide_empty` to whether none of them is `NotImplemented`, the option [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md) tells: with it set, a where tree that can match nothing makes `SQLCompiler.as_sql` raise `EmptyResultSet` and `SQLCompiler.execute_sql` answer with nothing, and the gathered values are the answer; without it, `as_sql` writes `"0 = 1"` for the where clause and the statement is sent, so that an expression with no answer of its own, a sum with one added to it, gets the database's (`django/db/models/sql/compiler.py:SQLCompiler.__init__`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`). `Count` answers 0, `Aggregate` answers `None`, a `Coalesce` answers with the first of its sources whose answer is not `None`, and has no answer where that source has none, and a `Value` answers with its value, which is how a default reaches the dictionary without a statement (`django/db/models/functions/comparison.py:Coalesce.empty_result_set_value`).
 
 ```text recording=sql
 Aggregating over a query that matches nothing: each aggregate's empty_result_set_value is the answer, unless one has none, and then the statement is sent with a false predicate
@@ -239,35 +242,34 @@ The row that comes back from `execute_sql` with `SINGLE` is cut to the compiler'
 `Query.get_count` clones the query and returns `get_aggregation` of `Count("*")` under the alias `"__count"`, which is the alias in the statement; everything above holds for it, the wrapped case included (`django/db/models/sql/query.py:Query.get_count`).
 
 ```text recording=sql
-Query.get_count('default')
-  Query.get_aggregation(using='default', aggregate_exprs={'__count': Count('*')})
-    Count.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Count('*'))  ->  Count('*')
-    AggregateQuery.__init__(model=Ship, inner_query=a Query of Ship)
-    Query.clear_ordering
-    Query.clear_ordering(force=True)
-    Query.clear_limits
-    SQLCompiler.execute_sql(result_type='single')
-      SQLAggregateCompiler.as_sql
-        SQLCompiler.as_sql(with_col_aliases=True)  ->  ('SELECT "fleet_ship"."id" AS "col1" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY 1', ())
-        -> ('SELECT COUNT(*) FROM (SELECT "fleet_ship"."id" AS "col1" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY 1) subquery', ())
-      SQL SELECT COUNT(*) FROM (SELECT "fleet_ship"."id" AS "col1" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY 1) subquery
-      -> (2,)
-...
-      SQL SELECT COUNT(*) AS "__count" FROM "fleet_ship" WHERE "fleet_ship"."tonnage" > %s with params (1000,)
+Ship.objects.annotate(hands=Count('crew')).count()
+  Query.add_annotation(annotation=Count(F(crew)), alias='hands')
+    Count.resolve_expression(summarize=False)  (Aggregate.resolve_expression, of Count(F(crew)))  ->  Count(Col(crew_sailor, crew.Sailor.id))
+  QuerySet.count
+    Query.get_count('default')
+      Query.get_aggregation(using='default', aggregate_exprs={'__count': Count('*')})
+        Count.resolve_expression(summarize=True)  (Aggregate.resolve_expression, of Count('*'))  ->  Count('*')
+        AggregateQuery.__init__(model=Ship, inner_query=a Query of Ship)
+        Query.clear_ordering
+        Query.clear_ordering(force=True)
+        Query.clear_limits
+        SQLCompiler.execute_sql(result_type='single')
+          SQLAggregateCompiler.as_sql
+            SQLCompiler.as_sql(with_col_aliases=True)  ->  ('SELECT "fleet_ship"."id" AS "col1" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY 1', ())
+            -> ('SELECT COUNT(*) FROM (SELECT "fleet_ship"."id" AS "col1" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY 1) subquery', ())
+          SQL SELECT COUNT(*) FROM (SELECT "fleet_ship"."id" AS "col1" FROM "fleet_ship" LEFT OUTER JOIN "crew_sailor" ON ("fleet_ship"."id" = "crew_sailor"."ship_id") GROUP BY 1) subquery
+          -> (2,)
 ```
 
-The grouped query went inside, and since no column of it is wanted by the count, the inner statement selects the primary key alone, under the alias `"col1"` that `with_col_aliases=True` gives it, and groups by that position. The last line is the count of a query that does not group, the plain case, with the alias in the statement.
+The grouped query went inside, and since no column of it is wanted by the count, the inner statement selects the primary key alone, under the alias `"col1"` that `with_col_aliases=True` gives it, and groups by that position.
 
 `Query.exists` makes the narrowed query that answers whether any row matches (`django/db/models/sql/query.py:Query.exists`). On a clone it clears the select clause with `Query.clear_select_clause`, which empties `select`, turns `default_cols` and `select_related` off, and masks every extra and every annotation; but where `group_by` is `True` it first adds every concrete field of the model to the select and calls `Query.set_group_by` with `allow_aliases=False`, so that the grouping is fixed as a tuple of columns before the select list it stood for is cleared, which a comment says is to avoid orphaning a reference to that list; a query that is both distinct and sliced keeps its select list. Where the query is a union, each part is replaced by that part's own `exists`, without the limit. Then the ordering is cleared with force, a limit of one row is set unless the caller asked for none, and the constant 1 is added as an annotation under the alias `"a"`, the one thing selected. `Query.has_results` makes that query and asks its compiler's `SQLCompiler.has_results`, which is whether `execute_sql` with `SINGLE` returned a row (`django/db/models/sql/query.py:Query.has_results`, `django/db/models/sql/compiler.py:SQLCompiler.has_results`).
 
 ```text recording=sql
     Query.has_results('default')
       Query.exists
-        Query.set_annotation_mask([])
         Query.clear_ordering(force=True)
         Query.add_annotation(annotation=Value(1), alias='a')
-          Query.append_annotation_mask(['a'])
-            Query.set_annotation_mask(['a'])
         -> a Query of Ship
       SQLCompiler.has_results
         SQLCompiler.execute_sql(result_type='single')
@@ -276,9 +278,10 @@ The grouped query went inside, and since no column of it is wanted by the count,
           -> (1,)
         -> True
 ...
+e = Ship.objects.filter(tonnage__gt=1000).query.exists()
 e.select, e.default_cols, e.annotation_select, e.high_mark, e.order_by, e.default_ordering, str(e)  ->  ((), False, {'a': Value(1)}, 1, (), False, 'SELECT 1 AS "a" FROM "fleet_ship" WHERE "fleet_ship"."tonnage" > 1000 LIMIT 1')
 ```
 
-The last line is what the narrowed query holds, and its statement: no columns of the model, the annotation alone, a high mark of one, no ordering, and `default_ordering` off so that the model's default ordering does not come back. A query that groups and filters on its count keeps both clauses in the narrowed statement, which [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md) shows.
+The last two lines are the narrowed query itself, and what it holds and its statement: no columns of the model, the annotation alone, a high mark of one, no ordering, and `default_ordering` off so that the model's default ordering does not come back. A query that groups and filters on its count keeps both clauses in the narrowed statement, which [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md) shows.
 
-`exists` serves one caller besides `QuerySet.exists`: `Exists`, the expression, wraps the query that `exists` makes, so that it stands inside another statement ([Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md)). On a union, each part is narrowed the same way and the compound statement selects the constant from each, as [Two queries into one: `combine` and `get_combinator_sql`](combining.md) tells of a compound statement. `get_aggregation` over a window, where the aggregate refers to an annotation that holds one or the where tree filters on one, is always the wrapped case, and [Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](windows.md) has the inner statement.
+`exists` serves one caller besides `QuerySet.exists`: `Exists`, the expression, wraps the query that `exists` makes, so that it stands inside another statement ([Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md)). On a union, each part is narrowed the same way ([Two queries into one: `combine` and `get_combinator_sql`](combining.md)). `get_aggregation` over a window, where the aggregate refers to an annotation that holds one or the where tree filters on one, is always the wrapped case, and [Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](windows.md) has the inner statement.

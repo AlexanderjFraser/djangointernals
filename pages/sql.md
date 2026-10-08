@@ -1,7 +1,7 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
 part: The ORM
-contents: query, expressions, names, joins, where, lookups, related-lookups, functions, aggregates, subqueries, windows, compiler, select, ordering, grouping, combining, writing
+contents: query, expressions, names, joins, where, lookups, functions, related-lookups, compiler, select, ordering, grouping, aggregates, subqueries, windows, combining, writing
 ---
 
 # From QuerySet to SQL
@@ -50,9 +50,32 @@ class Sailor(models.Model):
 
 class Officer(Sailor):
     rank = models.CharField(max_length=10, choices=Rank)
+
+
+class VeteranManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(signed_on__year__lt=2020)
+
+
+class Veteran(Sailor):
+    objects = VeteranManager()
+
+    class Meta:
+        proxy = True
+
+
+# harbour/office/models.py
+class Manifest(models.Model):
+    serial = models.CharField(max_length=8, primary_key=True, default=serials.next_serial)
+    voyage = models.ForeignKey("fleet.Voyage", on_delete=models.CASCADE)
+    crates = models.PositiveIntegerField()
+    kilos_each = models.PositiveIntegerField()
+    kilos = models.GeneratedField(expression=F("crates") * F("kilos_each"), output_field=models.PositiveIntegerField(), db_persist=True)
+    stamped = models.BooleanField(db_default=False)
+    scan = models.FileField(upload_to="manifests/", blank=True)
 ```
 
-Left out are the docstrings, the constraints and the index of a ship, the manager of a sailor and the choices of a rank. A port and a ship are ordered by name unless a queryset says otherwise, and a sailor has no ordering. The models of the office are shown where a section turns on one: a Berth, whose primary key is two columns, and a Manifest, with a column the database computes and another it defaults. The recordings were made in one run, which began with these rows:
+Left out are the docstrings, the constraints and the index of a ship, the manager of a sailor and the choices of a rank, and the office's Berth, whose primary key is two columns, which is shown where a section turns on it. A port and a ship are ordered by name unless a queryset says otherwise, and a sailor has no ordering; a Veteran is a sailor who signed on before 2020, by its manager's filter. The recordings were made in one run, which began with these rows:
 
 ```text recording=sql
 The rows the recording begins with
@@ -67,7 +90,7 @@ The rows the recording begins with
     Manifest: M-0001 (voyage 1, 40 crates of 25 kg, 1000 kg, stamped False)
 ```
 
-The recordings ran on SQLite. In a recording, a line at the left is a line of Python as it was run; where it is an expression, its value follows `->`, or the word "raises" and the exception. The lines set in under it are the calls it set going, nested as they were made, with only the calls the passage is about written down, and `->` there is what a call returned, put into words as it was returned. A line that begins `SQL` is a statement as Django handed it to its cursor, with Django's `%s` for a parameter. An expression is written as its repr, which for most is the call that would make it; a where tree as `(AND: ...)`; a step of a path through the models as `PathInfo(from Sailor to Ship via Sailor.ship, direct, one)`; and an entry of the query's alias map as `Join(fleet_ship, from crew_sailor via Sailor.ship, INNER JOIN, not nullable)`. What such a line shows of SQL's dialect is this backend's.
+The recordings ran on SQLite. In a recording, a line at the left is a line of Python as it was run; where it is an expression, its value follows `->`, or the word "raises" and the exception. The lines set in under it are the calls it set going, nested as they were made, with only the calls the passage is about written down, and `->` there is what a call returned, put into words as it was returned. A line of three dots stands for lines of the block left out. Some lines ask through helpers of the recording's own: a line beginning sql_of( answers with a queryset's statement and its parameters, tail( with the statement from its FROM on and the parameters after the select list's, where_said( with a queryset's where tree, entry( with a child of a queryset's where tree, and brief( or said( with an object in a few words. A line that begins `SQL` is a statement as Django handed it to its cursor, with Django's `%s` for a parameter. An expression is written as its repr, which for most is the call that would make it; a where tree as `(AND: ...)`; a step of a path through the models as `PathInfo(from Sailor to Ship via Sailor.ship, direct, one)`; and an entry of the query's alias map as `Join(fleet_ship, from crew_sailor via Sailor.ship, INNER JOIN, not nullable)`. What such a line shows of SQL's dialect is this backend's.
 
 ## Building: a filter becomes joins and a comparison
 
@@ -128,7 +151,7 @@ bergen_veterans = Sailor.objects.filter(ship__home__name='Bergen', signed_on__ye
 
 `Query.add_q` walks the `Q` with `Query._add_q`, which makes a `WhereNode` for the tree's node and calls `Query.build_filter` for each leaf (`django/db/models/sql/query.py:Query.add_q`, `django/db/models/sql/query.py:Query.build_filter`). For one pair, `build_filter` does three things in turn, and the three are the subjects of the next sections.
 
-**The name is read against the models.** `Query.solve_lookup_type` splits it at each `"__"` and has `Query.names_to_path` walk the words as fields: `"ship"` is a foreign key of Sailor, `"home"` a foreign key of Ship, `"name"` a field of Port, and the walk stops at a word that is no field, leaving `["year", "lt"]` over for `"signed_on"`. What the walk returns is a **path**, one `PathInfo` for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`). `Query.setup_joins` turns the path into joins, and `Query.trim_joins` takes back any join at the end whose only use is a key the previous table already holds, which is why `filter(ship=petrel)` joins nothing and compares the column `"ship_id"` ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](sql/names.md)).
+**The name is read against the models.** `Query.solve_lookup_type` splits it at each `"__"` and has `Query.names_to_path` walk the words as fields: `"ship"` is a foreign key of Sailor, `"home"` a foreign key of Ship, `"name"` a field of Port, and the walk stops at a word that is no field, leaving `["year", "lt"]` over for `"signed_on"`; the `False` that ends each of those lines says the name was not an annotation's, which would stand there in its place. What the walk returns is a **path**, one `PathInfo` for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`). `Query.setup_joins` turns the path into joins, and `Query.trim_joins` takes back any join at the end whose only use is a key the previous table already holds, which is why `filter(ship=petrel)` joins nothing and compares the column `"ship_id"` ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](sql/names.md)).
 
 **The joins go into the alias map.** `Query.join` gives each `Join` an alias, the table's own name the first time a table appears and `T` with a number after that, and keeps it in `Query.alias_map` with a count of how many conditions and columns refer to it; a join made for a condition that is later dropped is left in the map with a count of zero and is not written (`django/db/models/sql/query.py:Query.join`, `django/db/models/sql/datastructures.py:Join`). A join starts as `"INNER JOIN"` unless the relation can have no row on the far side, a nullable foreign key or a reverse relation, in which case it starts as `"LEFT OUTER JOIN"`; and as the conditions are added a `JoinPromoter` counts, for each join, how many of a node's children need a row on the far side, and demotes the join to inner under an `"AND"` or promotes it to outer under an `"OR"` that not every child shares (`django/db/models/sql/query.py:JoinPromoter.update_join_types`). That is what the two conditions above did to the joins of the ship and the port, and [Tables and joins: the alias map and join promotion](sql/joins.md) has the rules.
 
@@ -210,7 +233,7 @@ compiler.as_sql()
     -> ('SELECT "crew_sailor"."id", "crew_sailor"."name", "crew_sailor"."ship_id", "crew_sailor"."signed_on" FROM "crew_sailor" INNER JOIN "fleet_ship" ON ("crew_sailor"."ship_id" = "fleet_ship"."id") INNER JOIN "fleet_port" ON ("fleet_ship"."home_id" = "fleet_port"."id") WHERE ("fleet_port"."name" = %s AND "crew_sailor"."signed_on" < %s) ORDER BY "crew_sailor"."signed_on" DESC LIMIT 5', ('Bergen', '2020-01-01 00:00:00'))
 ```
 
-The clauses are made in an order that is not the statement's. `SQLCompiler.pre_sql_setup` first has `SQLCompiler.get_select` settle the columns, every concrete field of the model where nothing narrows them, then has `SQLCompiler.get_order_by` resolve the ordering, which may join a table of its own and which `get_group_by` has to see, then splits the where tree into the conditions that go into `"WHERE"` and those that compare an aggregate and go into `"HAVING"`, and then has `SQLCompiler.get_group_by` write the grouping (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`). Only after that does `as_sql` read the alias map for the `"FROM"` clause, since the select and the ordering may have added joins, compile the where tree, and put the pieces together as `"SELECT"`, `"FROM"`, `"WHERE"`, `"GROUP BY"`, `"HAVING"`, `"ORDER BY"` and the limit, gathering the parameters in the same order so that each `%s` meets its value (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`). On the way out it puts back the reference counts of the aliases as they were, since writing the statement joined tables for the ordering that the query did not have before. [The compiler: `as_sql`, `execute_sql` and `results_iter`](sql/compiler.md) tells the assembly; [The SELECT clause: `get_select`, the select mask and `klass_info`](sql/select.md), [ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](sql/ordering.md) and [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](sql/grouping.md) tell the clauses.
+The clauses are made in an order that is not the statement's. `SQLCompiler.pre_sql_setup` first has `SQLCompiler.get_select` settle the columns, every concrete field of the model where nothing narrows them, then has `SQLCompiler.get_order_by` resolve the ordering, which may join a table of its own and which `get_group_by` has to see, then splits the where tree into the conditions that go into `"WHERE"` and those that compare an aggregate and go into `"HAVING"`, and then has `SQLCompiler.get_group_by` write the grouping (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`). Only after that does `as_sql` read the alias map for the `"FROM"` clause, since the select and the ordering may have added joins, compile the where tree, and put the pieces together as `"SELECT"`, `"FROM"`, `"WHERE"`, `"GROUP BY"`, `"HAVING"`, `"ORDER BY"` and the limit, gathering the parameters in the same order so that each `%s` meets its value (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`). On the way out it puts back the reference counts of the aliases as they were, since resolving the ordering counts the tables it walks and may join one the query did not have before. [The compiler: `as_sql`, `execute_sql` and `results_iter`](sql/compiler.md) tells the assembly; [The SELECT clause: `get_select`, the select mask and `klass_info`](sql/select.md), [ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](sql/ordering.md) and [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](sql/grouping.md) tell the clauses.
 
 Each node writes its own SQL. `SQLCompiler.compile` calls a node's `as_sql`, or its method for the connection's vendor where it has one, and a node compiles its children the same way: the where tree compiles each lookup, a lookup compiles its left side and prepares its right, and a `Col` writes its alias and column, quoted by the backend (`django/db/models/sql/where.py:WhereNode.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`). The year comparison is the one surprise in the statement above: `YearLt` compares the column itself with the first day of the year, not the year extracted from it, so that an index on the column can serve (`django/db/models/lookups.py:YearLookup.as_sql`).
 

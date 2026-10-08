@@ -206,7 +206,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.ref_alias",
    "line": 78,
-   "sentence": "Each alias has a count in `Query.alias_refcount`, raised by `Query.ref_alias` and lowered by `Query.unref_alias`, and the count says how many things stand on the alias: `join` raises the count of an alias it reuses, `table_alias` starts a new one at one, and `get_initial_alias` raises the base table's each time a caller starts a walk from it: once for each condition of a filter, once for each `F`, once for all the names of a `values` (`django/db/models/sql/query.py:Query.ref_alias`, `django/db/models/sql/query.py:Query.unref_alias`).",
+   "sentence": "Each alias has a count in `Query.alias_refcount`, raised by `Query.ref_alias` and lowered by `Query.unref_alias`, and the count says how many things stand on the alias: `join` raises the count of an alias it reuses, `table_alias` starts a new one at one, and `get_initial_alias` raises the base table's each time a caller starts a walk from it: once for each condition of a filter, once for each `F` that names a path, once for all the names of a `values` (`django/db/models/sql/query.py:Query.ref_alias`, `django/db/models/sql/query.py:Query.unref_alias`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.ref_alias",
@@ -220,7 +220,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.unref_alias",
    "line": 78,
-   "sentence": "Each alias has a count in `Query.alias_refcount`, raised by `Query.ref_alias` and lowered by `Query.unref_alias`, and the count says how many things stand on the alias: `join` raises the count of an alias it reuses, `table_alias` starts a new one at one, and `get_initial_alias` raises the base table's each time a caller starts a walk from it: once for each condition of a filter, once for each `F`, once for all the names of a `values` (`django/db/models/sql/query.py:Query.ref_alias`, `django/db/models/sql/query.py:Query.unref_alias`).",
+   "sentence": "Each alias has a count in `Query.alias_refcount`, raised by `Query.ref_alias` and lowered by `Query.unref_alias`, and the count says how many things stand on the alias: `join` raises the count of an alias it reuses, `table_alias` starts a new one at one, and `get_initial_alias` raises the base table's each time a caller starts a walk from it: once for each condition of a filter, once for each `F` that names a path, once for all the names of a `values` (`django/db/models/sql/query.py:Query.ref_alias`, `django/db/models/sql/query.py:Query.unref_alias`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.unref_alias",
@@ -276,7 +276,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.demote_joins",
    "line": 86,
-   "sentence": "`Query.demote_joins` makes each outer join among its aliases inner; its docstring says the join it hangs from must be demoted as well, and the method then adds that join to its list only where the join is inner already, so it is left as it is; a condition's vote names every join on its path, as the next paragraph tells, so the join a demoted join hangs from is demoted by the same vote (`django/db/models/sql/query.py:Query.demote_joins`).",
+   "sentence": "A demotion by votes reaches it all the same, since a condition's vote names every join on its path (`django/db/models/sql/query.py:Query.demote_joins`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.demote_joins",
@@ -384,20 +384,6 @@
     215
    ],
    "fingerprint": "dcd12e30beb65517"
-  },
-  {
-   "pointer": "django/db/models/sql/where.py:WhereNode.clone",
-   "line": 217,
-   "sentence": "The lookups go through copies and not in place because they are shared: `WhereNode.clone` copies the nodes of a tree and keeps each lookup as it is, so a query and its clones hold the same lookups, and a relabelled copy leaves the clones' lookups as they were (`django/db/models/sql/where.py:WhereNode.clone`).",
-   "tree": "django",
-   "path": "django/db/models/sql/where.py",
-   "symbol": "WhereNode.clone",
-   "kind": "function",
-   "lines": [
-    217,
-    223
-   ],
-   "fingerprint": "6b9fd3802a6b526d"
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_from_clause",

@@ -345,23 +345,9 @@
    "fingerprint": "02e8051f36e2ffb3"
   },
   {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
-   "line": 178,
-   "sentence": "In `SQLCompiler._order_by_pairs`, for a query with a combinator, a name is made an `F` of itself rather than resolved through the first model's field, the comment's reason being that other combined queries might define it differently, and a transform on an annotation's name is refused with `NotImplementedError` (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler._order_by_pairs",
-   "kind": "function",
-   "lines": [
-    339,
-    497
-   ],
-   "fingerprint": "ba998de2fa3ab66a"
-  },
-  {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_order_by",
    "line": 178,
-   "sentence": "In `SQLCompiler.get_order_by` each such expression, once resolved, is looked for among the selected columns: found, it becomes a `Ref` to the column's alias; not found, a column `\"__orderbycol\"` with the number of the position it will take is added as an annotation to every part and selected on the whole, and the ordering refers to that, unless some part has a selection that `values` fixed, in which case `DatabaseError` says that the term does not match any column in the result set (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
+   "sentence": "`SQLCompiler.get_order_by` refers to a selected column by its alias, `\"col2\"`, or by its position where `values` named it, and where no selected column matches it adds one, `\"__orderbycol\"` and a number, as an annotation to every part and to the whole's selection, unless a part's selection was fixed by `values`, which is the `DatabaseError` recorded here; on a backend with `requires_compound_order_by_subquery`, Oracle's, `as_sql` wraps the compound as `SELECT * FROM (...)` and puts the ordering outside (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.get_order_by",
