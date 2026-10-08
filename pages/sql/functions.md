@@ -104,7 +104,7 @@ Lower, Length and Upper registered on CharField for the rest of the recording: t
     models.CharField.get_lookups().get('lower').__name__  ->  'Lower'
 ```
 
-That line is why `"name__lower"` works in every block recorded after it.
+The registration is why `"name__lower"` works in every block recorded after it.
 
 ## The comparison and conversion functions
 

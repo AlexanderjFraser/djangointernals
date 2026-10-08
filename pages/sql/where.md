@@ -162,7 +162,7 @@ The first line adds nothing, tonnage being a column that cannot be null. The sec
 
 ## `split_exclude`: a negated relation becomes a subquery
 
-An exclude across a relation that can reach several rows cannot be a join. `exclude(crew__name='Ada')` joined would produce a row for each sailor of each ship and keep every row whose sailor is not Ada, so the Petrel, whose crew is Ada and Bram, would be kept for Bram. What is wanted is the ships for which no sailor named Ada exists, and `Query.split_exclude` writes that (`django/db/models/sql/query.py:Query.split_exclude`). The docstring gives the shape: `WHERE NOT EXISTS(SELECT 1 FROM child WHERE name = 'foo' AND child.parent_id = parent.id LIMIT 1)`.
+An exclude across a relation that can reach several rows cannot be a join. `exclude(crew__name='Ada')` joined would produce a row for each sailor of each ship and keep every row whose sailor is not Ada, so the Petrel, whose crew is Ada and Bram, would be kept for Bram. What is wanted is the ships for which no sailor named Ada exists, and `Query.split_exclude` writes that (`django/db/models/sql/query.py:Query.split_exclude`). The docstring gives the shape: `WHERE NOT EXISTS(SELECT 1 FROM child WHERE name = 'foo' AND child.parent_id = parent.id LIMIT 1)`. In the recording that follows, no_ada is the queryset of every ship with `exclude(crew__name='Ada')`.
 
 ```text recording=sql
         Query.build_filter(('crew__name', 'Ada'), can_reuse=set(), branch_negated=True, current_negated=True)

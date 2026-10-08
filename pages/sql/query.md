@@ -108,11 +108,11 @@ q.annotations, q.annotation_select, q.deferred_loading, q.group_by, q.combinator
 
 The filter left three tables in the alias map and two lookups in the where tree, with the names of the filter gone: each lookup holds a `Col`, directly or under a transform, which names a table alias and a field, so nothing has to be looked up again when the statement is written ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](names.md)). The ordering is still the string it was given, `'-signed_on'`, since `Query.add_ordering` checks a name and keeps it, and the compiler resolves it when the statement is written ([ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](ordering.md)). The select list is empty and `default_cols` is true, which means every concrete field of the model. And `used_aliases` is empty, though the filter made three aliases: `chain` emptied it when the queryset cloned the query for `order_by`, as [`chain`: a copy ready for the next method](#chain-a-copy-ready-for-the-next-method) tells.
 
-The reference counts say how many things hold each alias: the base table is counted once more each time a condition starts its walk there, which is the second count above, and a join whose count falls to zero stays in the map and is not written ([Tables and joins: the alias map and join promotion](joins.md) has the counting).
+The reference counts say how many things hold each alias: the base table is counted once more each time a condition starts its walk there, which is the count of 2 above, and a join whose count falls to zero stays in the map and is not written ([Tables and joins: the alias map and join promotion](joins.md) has the counting).
 
 ## `__str__` and `sql_with_params`
 
-`Query.sql_with_params` asks for a compiler for the default database and returns what its `as_sql` returns, the statement with `%s` for each parameter and the tuple of parameters; `Query.__str__` returns the first with the second substituted into it by Python's `%` (`django/db/models/sql/query.py:Query.sql_with_params`, `django/db/models/sql/query.py:Query.__str__`). The docstring of `__str__` says what the substitution is not: the values are not quoted as the database would quote them, since quoting is the driver's work at execution. Here the query of [The query after two methods](#the-query-after-two-methods), both ways, in the last two lines of the block quoted there:
+`Query.sql_with_params` asks for a compiler for the default database and returns what its `as_sql` returns, the statement with `%s` for each parameter and the tuple of parameters; `Query.__str__` returns the first with the second substituted into it by Python's `%` (`django/db/models/sql/query.py:Query.sql_with_params`, `django/db/models/sql/query.py:Query.__str__`). The docstring of `__str__` says what the substitution is not: the values are not quoted as the database would quote them, since quoting is the driver's work at execution. Here the query of [The query after two methods](#the-query-after-two-methods), both ways, in the two lines the quote there leaves out:
 
 ```text recording=sql
 The query of Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020).order_by('-signed_on'): what the two methods left on it
@@ -124,7 +124,7 @@ So `str(queryset.query)` is for reading, and is a statement of the default datab
 
 ## `clone`: the containers are copied, and what they hold is shared
 
-`Query.clone` is what makes a queryset's clone cheap. It makes an empty object, gives it the query's class, and copies the instance's dictionary across in one go, so that every attribute the instance has set is on the clone, shared; then it replaces, one by one, the containers that the next method will change in place, with a copy each (`django/db/models/sql/query.py:Query.clone`). Here q is the query of [The query after two methods](#the-query-after-two-methods) and c its clone; each line is a question and its answer:
+`Query.clone` is what makes a queryset's clone cheap. It makes an empty object, gives it the query's class, and copies the instance's dictionary across in one go, so that every attribute the instance has set is on the clone, shared; then it replaces, one by one, the containers that the next method will change in place, with a copy each (`django/db/models/sql/query.py:Query.clone`). Here q is the query of [The query after two methods](#the-query-after-two-methods) and c its clone:
 
 ```text recording=sql
 Query.clone: the containers are copied, and what they hold is shared

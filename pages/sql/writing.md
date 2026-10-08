@@ -264,7 +264,7 @@ Sailor.objects.filter(ship__name='Petrel').update(name=Upper('name'))
       SQL UPDATE "crew_sailor" SET "name" = UPPER("crew_sailor"."name") WHERE "crew_sailor"."id" IN (SELECT "U0"."id" FROM "crew_sailor" "U0" INNER JOIN "fleet_ship" "U1" ON ("U0"."ship_id" = "U1"."id") WHERE "U1"."name" = %s) with params ('Petrel',)
 ```
 
-`count_active_tables` found two, the sailors and the ships. The plain query was chained, given the key to select, and became the value of the `"pk__in"` filter added to the cleared update query, whose `add_fields` of `"pk"` is the `"in"` lookup's doing; the first `reset_refcounts` is `pre_sql_setup`'s, and the second, on the `"U"` aliases, is the subquery's own `as_sql` putting its counts back. The statement updates one table, and the join stands inside the subquery. With the feature switched off, the other road:
+`count_active_tables` found two, the sailors and the ships. The plain query was chained, given the key to select, and became the value of the `"pk__in"` filter added to the cleared update query, whose `add_fields` of `"pk"` is the `"in"` lookup's doing; the first `reset_refcounts` is `pre_sql_setup`'s, and the second, on the `"U"` aliases, is the subquery's own `as_sql` putting its counts back. The statement updates one table, and the join stands inside the subquery. With `update_can_self_select` switched off, the other road:
 
 ```text recording=sql
 Sailor.objects.filter(ship__name='Petrel').update(signed_on=F('signed_on'))
@@ -378,7 +378,7 @@ Sailor.objects.filter(pk__in=Sailor.objects.filter(name='Nobody'))._raw_delete('
     -> 0
 ```
 
-The first delete, on the table itself, was written as it was. The second joined the ships, so the query was cloned, its selection cleared, and put under `"pk__in"` of a new query, which `_as_sql` wrote: the first `clear_select_clause` is `as_sql`'s own, on the clone, and the one under `add_filter` is the `"in"` lookup's, which then selects the key; the join is inside the subquery. The third holds a query of the sailors already, as the value of a filter: SQLite can refer to the table being deleted from in a subquery, so the query was written as it was. With the feature switched off:
+The first delete, on the table itself, was written as it was. The second joined the ships, so the query was cloned, its selection cleared, and put under `"pk__in"` of a new query, which `_as_sql` wrote: the first `clear_select_clause` is `as_sql`'s own, on the clone, and the one under `add_filter` is the `"in"` lookup's, which then selects the key; the join is inside the subquery. The third holds a query of the sailors already, as the value of a filter: SQLite can refer to the table being deleted from in a subquery, so the query was written as it was. With `delete_can_self_reference_subquery` switched off:
 
 ```text recording=sql
 Sailor.objects.filter(pk__in=Sailor.objects.filter(name='Nobody'))._raw_delete('default')

@@ -8,7 +8,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 An aggregate folds a group of rows into one value, and the statement has one row for each group. A **window** applies a function to a set of rows too, but reports the answer on every row: the number of each sailor within the crew of its ship, the sum of the rows before this one, the value in the row above. So a window has to carry three things beside its function: the partition, which rows are reckoned together; an ordering, in which they are reckoned; and a frame, which rows of the partition, counted from the current one, the function sees. It has to say two things about itself: that it is not an aggregate, so that no `"GROUP BY"` is made for it although its function may be `Sum` or `Count`; and that it is a window, so that a condition on it is kept out of the `"WHERE"`, where SQL has no window yet, and tested in a statement wrapped around this one. And it has to be of its function's type. The source is `django/db/models/expressions.py:Window`, and the functions made for windows are the classes of `django/db/models/functions/window.py`.
 
-The recording this section quotes was made from a running Django, on SQLite, over the models of the chapter's opening page. A line at the left is Python that was run, with its value after `->` or the exception it raised; the lines set in under it are the calls it set going, nested as they were made, with `->` what each returned; and a line that begins `SQL` is a statement as Django handed it to its cursor.
+The recordings below were made from a running Django, on SQLite, over the models of the chapter's opening page ([From QuerySet to SQL](../sql.md)). A line at the left is Python that was run, with its value after `->` or the exception it raised; the lines set in under it are the calls it set going, nested as they were made, with `->` what each returned; and a line that begins `SQL` is a statement as Django handed it to its cursor.
 
 ## What a `Window` holds
 
@@ -170,7 +170,7 @@ Here `values_list("name")` had masked the window out of the selection, `"qual0"`
 sql_of(numbered.filter(n=1).order_by('-name'))[0][120:]  ->  '"crew_sailor"."signed_on" AS "col4", ROW_NUMBER() OVER (PARTITION BY "crew_sailor"."ship_id" ORDER BY "crew_sailor"."name") AS "n" FROM "crew_sailor" ORDER BY "crew_sailor"."name" DESC ) "qualify" WHERE "n" = %s ORDER BY "col2" DESC'
 ```
 
-Back in `as_sql`, the limit and the offset are appended as for any other statement, which [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md) tells; the `LIMIT 21` of the `"OR"` statement above is what a queryset's repr asks for, and stands after the outer `"WHERE"` (`django/db/models/query.py:QuerySet.__repr__`).
+Back in `as_sql`, the limit and the offset are appended as for any other statement, which [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md) tells; the `LIMIT 21` of the statement above that filters on `Q(n=1) | Q(hands__gt=1)` is what a queryset's repr asks for, and stands after the outer `"WHERE"` (`django/db/models/query.py:QuerySet.__repr__`).
 
 ```text figure=the-qualify-rewrite
 a condition on a window, which SQL will not take in a WHERE:

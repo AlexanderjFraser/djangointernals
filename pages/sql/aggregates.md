@@ -239,7 +239,7 @@ The row that comes back from `execute_sql` with `SINGLE` is cut to the compiler'
 
 ## `get_count`, `exists` and `has_results`
 
-`Query.get_count` clones the query and returns `get_aggregation` of `Count("*")` under the alias `"__count"`, which is the alias in the statement; everything above holds for it, the wrapped case included (`django/db/models/sql/query.py:Query.get_count`).
+`Query.get_count` clones the query and returns `get_aggregation` of `Count("*")` under the alias `"__count"`; everything above holds for it, the wrapped case included (`django/db/models/sql/query.py:Query.get_count`).
 
 ```text recording=sql
 Ship.objects.annotate(hands=Count('crew')).count()

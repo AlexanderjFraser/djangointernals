@@ -52,7 +52,7 @@
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.as_sql",
    "line": 13,
-   "sentence": "`BaseExpression.as_sql` writes the SQL and parameters of a bound object, by compiling its parts and putting them into a template of its own; a backend may supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "sentence": "`BaseExpression.as_sql` writes the SQL and parameters of a bound object, a `Func` by compiling its parts and putting them into a template of its own; a backend may supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "BaseExpression.as_sql",
@@ -66,7 +66,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.compile",
    "line": 13,
-   "sentence": "`BaseExpression.as_sql` writes the SQL and parameters of a bound object, by compiling its parts and putting them into a template of its own; a backend may supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "sentence": "`BaseExpression.as_sql` writes the SQL and parameters of a bound object, a `Func` by compiling its parts and putting them into a template of its own; a backend may supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.compile",
@@ -108,7 +108,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.names_to_path",
    "line": 154,
-   "sentence": "What the walk returns is a **path**, one `PathInfo` for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`).",
+   "sentence": "What the walk returns is a **path**, one `PathInfo` or more for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.names_to_path",
@@ -122,7 +122,7 @@
   {
    "pointer": "django/db/models/query_utils.py:PathInfo",
    "line": 154,
-   "sentence": "What the walk returns is a **path**, one `PathInfo` for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`).",
+   "sentence": "What the walk returns is a **path**, one `PathInfo` or more for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`).",
    "tree": "django",
    "path": "django/db/models/query_utils.py",
    "symbol": "PathInfo",
@@ -136,7 +136,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.join",
    "line": 156,
-   "sentence": "`Query.join` gives each `Join` an alias, the table's own name the first time a table appears and `T` with a number after that, and keeps it in `Query.alias_map` with a count of how many conditions and columns refer to it; a join made for a condition that is later dropped is left in the map with a count of zero and is not written (`django/db/models/sql/query.py:Query.join`, `django/db/models/sql/datastructures.py:Join`).",
+   "sentence": "`Query.join` gives each `Join` an alias, ordinarily the table's own name the first time a table appears and `T` with a number after that, and keeps it in `Query.alias_map` with a count of how many conditions and columns refer to it; a join made for a condition that is later dropped is left in the map with a count of zero and is not written (`django/db/models/sql/query.py:Query.join`, `django/db/models/sql/datastructures.py:Join`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.join",
@@ -150,7 +150,7 @@
   {
    "pointer": "django/db/models/sql/datastructures.py:Join",
    "line": 156,
-   "sentence": "`Query.join` gives each `Join` an alias, the table's own name the first time a table appears and `T` with a number after that, and keeps it in `Query.alias_map` with a count of how many conditions and columns refer to it; a join made for a condition that is later dropped is left in the map with a count of zero and is not written (`django/db/models/sql/query.py:Query.join`, `django/db/models/sql/datastructures.py:Join`).",
+   "sentence": "`Query.join` gives each `Join` an alias, ordinarily the table's own name the first time a table appears and `T` with a number after that, and keeps it in `Query.alias_map` with a count of how many conditions and columns refer to it; a join made for a condition that is later dropped is left in the map with a count of zero and is not written (`django/db/models/sql/query.py:Query.join`, `django/db/models/sql/datastructures.py:Join`).",
    "tree": "django",
    "path": "django/db/models/sql/datastructures.py",
    "symbol": "Join",
@@ -164,7 +164,7 @@
   {
    "pointer": "django/db/models/sql/query.py:JoinPromoter.update_join_types",
    "line": 156,
-   "sentence": "A join starts as `\"INNER JOIN\"` unless the relation can have no row on the far side, a nullable foreign key or a reverse relation, in which case it starts as `\"LEFT OUTER JOIN\"`; and as the conditions are added a `JoinPromoter` counts, for each join, how many of a node's children need a row on the far side, and demotes the join to inner under an `\"AND\"` or promotes it to outer under an `\"OR\"` that not every child shares (`django/db/models/sql/query.py:JoinPromoter.update_join_types`).",
+   "sentence": "A join starts as `\"INNER JOIN\"` unless the relation can have no row on the far side, a nullable foreign key or a reverse relation, or the join it hangs from is outer already, in which case it starts as `\"LEFT OUTER JOIN\"`; and as the conditions are added a `JoinPromoter` counts, for each join, how many of a node's children need a row on the far side, and demotes the join to inner under an `\"AND\"` or promotes it to outer under an `\"OR\"` that not every child shares (`django/db/models/sql/query.py:JoinPromoter.update_join_types`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "JoinPromoter.update_join_types",
@@ -178,7 +178,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.build_lookup",
    "line": 158,
-   "sentence": "`Query.build_lookup` takes every word but the last for a **transform**, an expression made of the column, and the last for a **lookup**, a comparison of the column, or of the transformed column, with the value: `\"year\"` finds `ExtractYear` in the registry of the datetime field, and `\"lt\"` finds `YearLt` in the registry of `ExtractYear` (`django/db/models/sql/query.py:Query.build_lookup`).",
+   "sentence": "`Query.build_lookup` takes every word but the last for a **transform**, an expression made of the column, and the last for a **lookup**, a comparison of the column, or of the transformed column, with the value: `\"year\"` finds `ExtractYear` in the registry of the datetime field, and `\"lt\"` finds `YearLt` in the registry of `ExtractYear`; a last word that no lookup answers to is taken for one more transform and compared by `\"exact\"`, which is also the lookup where no word is left (`django/db/models/sql/query.py:Query.build_lookup`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.build_lookup",
@@ -192,7 +192,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.resolve_ref",
    "line": 166,
-   "sentence": "`F(\"tonnage\") + 1` is a `CombinedExpression` of an `F` and a `Value`; resolving it against a query of ships turns the `F` into a `Col` of the ships' table through `Query.resolve_ref`, and asks the pair of field types what type the sum is (`django/db/models/sql/query.py:Query.resolve_ref`).",
+   "sentence": "`F(\"tonnage\") + 1` is a `CombinedExpression` of an `F` and a `Value`; resolving it against a query of ships turns the `F` into a `Col` of the ships' table through `Query.resolve_ref`, and the type of the sum, when it is wanted, is asked of the pair of field types (`django/db/models/sql/query.py:Query.resolve_ref`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.resolve_ref",
@@ -248,7 +248,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup",
    "line": 236,
-   "sentence": "`SQLCompiler.pre_sql_setup` first has `SQLCompiler.get_select` settle the columns, every concrete field of the model where nothing narrows them, then has `SQLCompiler.get_order_by` resolve the ordering, which may join a table of its own and which `get_group_by` has to see, then splits the where tree into the conditions that go into `\"WHERE\"` and those that compare an aggregate and go into `\"HAVING\"`, and then has `SQLCompiler.get_group_by` write the grouping (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`).",
+   "sentence": "`SQLCompiler.pre_sql_setup` first has `SQLCompiler.get_select` settle the columns, every concrete field of the model where nothing narrows them, then has `SQLCompiler.get_order_by` resolve the ordering, which may join a table of its own and which `get_group_by` has to see, then splits the where tree into the conditions that go into `\"WHERE\"`, those that compare an aggregate and go into `\"HAVING\"`, and those that compare a window function, which are left for a statement wrapped round this one, and then has `SQLCompiler.get_group_by` write the grouping (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.pre_sql_setup",
@@ -400,18 +400,18 @@
    "fingerprint": "8c91edae506de078"
   },
   {
-   "pointer": "django/db/models/fields/json.py:JSONField",
+   "pointer": "django/db/models/fields/json.py:KeyTransform",
    "line": 288,
-   "sentence": "The lookups and transforms of `django.contrib.postgres`, of a `JSONField` and of a geometry are built on the classes here (`django/db/models/fields/json.py:JSONField`), and [Content types, static files and the other contrib apps](contrib.md) has them.",
+   "sentence": "The lookups and transforms of a JSON field are built on the classes here (`django/db/models/fields/json.py:KeyTransform`), as are those of `django.contrib.postgres` and of a geometry, which [Content types, static files and the other contrib apps](contrib.md) has.",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
-   "symbol": "JSONField",
+   "symbol": "KeyTransform",
    "kind": "class",
    "lines": [
-    25,
-    151
+    475,
+    516
    ],
-   "fingerprint": "5d7e23bf846079d6"
+   "fingerprint": "1cbc28bedb1f53c2"
   }
  ]
 }

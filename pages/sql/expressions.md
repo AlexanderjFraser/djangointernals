@@ -8,7 +8,7 @@ An **expression** is any object with a `resolve_expression` method, which binds 
 
 An expression has five things to do. It must be built without a query, since `F("crates") * F("kilos_each")` is written in a model's `GeneratedField`, a `Q` in a constraint, and both in a migration file long before any queryset exists. It must then be bound to one query, so that the name `"home__name"` becomes a column of a table that query has joined. It must write SQL for one backend, with the backend's spelling of a power or a cast. It must say what type its value is, so that the compiler can convert what the driver returns and a lookup can prepare a value against it. And two of them made the same way must be equal, so that the compiler can see that an ordering names a selected column. The first two are one method, `BaseExpression.resolve_expression`, which copies; the third is `BaseExpression.as_sql`, which the compiler calls through a vendor's method where there is one; the fourth is `BaseExpression.output_field`; the fifth is `Expression.identity` (`django/db/models/expressions.py:BaseExpression`, `django/db/models/expressions.py:Expression`).
 
-The examples are the shipping line of the chapter's opening page, [From QuerySet to SQL](../sql.md): a Ship has a name, a tonnage, a home port and perhaps a captain, a Voyage a date it sailed. In the lines quoted from the recording, q is the query of a queryset of every Ship, annotated that of the same queryset with the annotation `hands=Count('crew')`, plus is `F('tonnage') + 1`, low is `Lower('name')`, resolved is low resolved against q, and compiler is a compiler made for q. Each line is a question put to a running Django, on SQLite, with the repr of its answer after `->` or the exception it raised, or a line of Python run to make something a later line reads.
+The examples are the shipping line of the chapter's opening page, [From QuerySet to SQL](../sql.md): a Ship has a name, a tonnage, a home port and perhaps a captain, a Voyage a date it sailed. In the lines quoted from the recording, q is the query of a queryset of every Ship, annotated is that of the same queryset with the annotation `hands=Count('crew')`, plus is `F('tonnage') + 1`, low is `Lower('name')`, resolved is low resolved against q, and compiler is a compiler made for q. Each line is a question put to a running Django, on SQLite, with the repr of its answer after `->` or the exception it raised, or a line of Python run to make something a later line reads.
 
 ## Built without a query, bound to one
 
@@ -162,20 +162,20 @@ Identity: two expressions made the same way are equal, and hash alike
 
 `Value` holds a Python value that is to go to the database as a parameter (`django/db/models/expressions.py:Value`). It infers its output field from the value's type in `Value._resolve_output_field`, among the classes of `django/db/models/fields/__init__.py`:
 
-| the value's type | the output field |
-|---|---|
-| `str` | `CharField` |
-| `bool`, tested before `int` since a `bool` is one | `BooleanField` |
-| `int` | `IntegerField` |
-| `float` | `FloatField` |
-| `datetime.datetime`, tested before `datetime.date` for the same reason | `DateTimeField` |
-| `datetime.date` | `DateField` |
-| `datetime.time` | `TimeField` |
-| `datetime.timedelta` | `DurationField` |
-| `decimal.Decimal` | `DecimalField` |
-| `bytes` | `BinaryField` |
-| `uuid.UUID` | `UUIDField` |
-| any other, `None`'s among them | none |
+| the output field | the value's type |
+| --- | --- |
+| `CharField` | `str` |
+| `BooleanField` | `bool`, tested before `int` since a `bool` is one |
+| `IntegerField` | `int` |
+| `FloatField` | `float` |
+| `DateTimeField` | `datetime.datetime`, tested before `datetime.date` for the same reason |
+| `DateField` | `datetime.date` |
+| `TimeField` | `datetime.time` |
+| `DurationField` | `datetime.timedelta` |
+| `DecimalField` | `decimal.Decimal` |
+| `BinaryField` | `bytes` |
+| `UUIDField` | `uuid.UUID` |
+| none | any other, `None`'s among them |
 
 ```text recording=sql
 Value: the output field it infers from its value, and the placeholder it writes

@@ -270,7 +270,7 @@ YearLookup: a plain year is compared as bounds on the column itself, so that an 
     connection.ops.year_lookup_bounds_for_date_field(2026), connection.ops.year_lookup_bounds_for_datetime_field(2026)  ->  (['2026-01-01', '2026-12-31'], ['2026-01-01 00:00:00', '2026-12-31 23:59:59.999999'])
 ```
 
-A year of a `DateField` is bounded by two dates, of a `DateTimeField` by two moments to the microsecond, and an ISO year by the Monday its first week begins on and the Sunday its last ends on. Where the right side is an expression, `YearLookup.as_sql` steps aside and the plain lookup writes the extract on the left; and `"sailed__year__in"` is not one of them, so it is the `In` of the extract's integer output field, with the extract written too.
+A year of a `DateField` is bounded by two dates, of a `DateTimeField` by two moments to the microsecond, and an ISO year by the Monday its first week begins on and the Sunday its last ends on. Where the right side is an expression, `YearLookup.as_sql` steps aside and the plain lookup writes the extract on the left; and `"sailed__year__in"` is not one of the five year lookups, so it is the `In` of the extract's integer output field, with the extract written too.
 
 ## Two more bases: `UUIDTextMixin` and `PostgresOperatorLookup`
 
