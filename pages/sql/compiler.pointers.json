@@ -1,0 +1,459 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "compiler.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_compiler",
+   "line": 15,
+   "sentence": "It then asks the connection's operations object for a class by the name the query carries in `Query.compiler`, which is `\"SQLCompiler\"` on `Query` itself and the name of another compiler on each subclass that writes another statement, and it makes one with the query, the connection, the alias and `elide_empty` (`django/db/models/sql/query.py:Query.get_compiler`, `django/db/models/sql/query.py:Query.compiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_compiler",
+   "kind": "function",
+   "lines": [
+    370,
+    377
+   ],
+   "fingerprint": "67a070b12ce95559"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.compiler",
+   "line": 15,
+   "sentence": "It then asks the connection's operations object for a class by the name the query carries in `Query.compiler`, which is `\"SQLCompiler\"` on `Query` itself and the name of another compiler on each subclass that writes another statement, and it makes one with the query, the connection, the alias and `elide_empty` (`django/db/models/sql/query.py:Query.get_compiler`, `django/db/models/sql/query.py:Query.compiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.compiler",
+   "kind": "assignment",
+   "lines": [
+    239,
+    239
+   ],
+   "fingerprint": "52b59e43f036615c"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.compiler",
+   "line": 15,
+   "sentence": "`BaseDatabaseOperations.compiler` imports the module named by `BaseDatabaseOperations.compiler_module` the first time it is asked, keeps it, and returns the attribute of that name; the base class names `django.db.models.sql.compiler`, and a backend that wants compilers of its own names another module, as MySQL's and PostgreSQL's operations do, which is why the query carries a name and not a class (`django/db/backends/base/operations.py:BaseDatabaseOperations.compiler`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.compiler",
+   "kind": "function",
+   "lines": [
+    406,
+    414
+   ],
+   "fingerprint": "32ec2435ad470bf4"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.__init__",
+   "line": 26,
+   "sentence": "`SQLCompiler.__init__` keeps the four things it was given and sets `SQLCompiler.quote_cache` to a dictionary holding `\"*\"` only; then it sets `SQLCompiler.select`, `SQLCompiler.annotation_col_map`, `SQLCompiler.klass_info` and `SQLCompiler._meta_ordering` to `None` (`django/db/models/sql/compiler.py:SQLCompiler.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.__init__",
+   "kind": "function",
+   "lines": [
+    50,
+    66
+   ],
+   "fingerprint": "72135618b6a5316b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.quote_name",
+   "line": 35,
+   "sentence": "`SQLCompiler.quote_name` is a memo around the operations object's `quote_name`: a name already in `quote_cache` comes back from there, and any other is quoted once and kept (`django/db/models/sql/compiler.py:SQLCompiler.quote_name`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.quote_name",
+   "kind": "function",
+   "lines": [
+    570,
+    579
+   ],
+   "fingerprint": "7f76ddc3db2edd6c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.quote_name",
+   "line": 35,
+   "sentence": "The quoting itself is the backend's: on SQLite, `DatabaseOperations.quote_name` wraps a name in double quotes unless it is already so wrapped (`django/db/backends/sqlite3/operations.py:DatabaseOperations.quote_name`), and the base class's raises `NotImplementedError`.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.quote_name",
+   "kind": "function",
+   "lines": [
+    173,
+    176
+   ],
+   "fingerprint": "c92b25dfc54629ec"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias",
+   "line": 37,
+   "sentence": "`SQLCompiler.quote_name_unless_alias` warns with `RemovedInDjango2028Warning` and calls `quote_name` (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.quote_name_unless_alias",
+   "kind": "function",
+   "lines": [
+    582,
+    591
+   ],
+   "fingerprint": "ccafb3f0406ea771"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 37,
+   "sentence": "The release notes of 6.1 deprecate it in favour of the newly introduced `quote_name`, naming the compiler as the object an expression's `as_sql` is handed (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.compile",
+   "line": 39,
+   "sentence": "It looks on the node for a method whose name is `\"as_\"` followed by the connection's vendor, `as_sqlite` for SQLite, and calls that with the compiler and the connection; where there is none it calls the node's `as_sql` (`django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.compile",
+   "kind": "function",
+   "lines": [
+    593,
+    599
+   ],
+   "fingerprint": "85666502e93b2a91"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.setup_query",
+   "line": 43,
+   "sentence": "Then it calls `get_select` and keeps what it returns as `select`, `klass_info` and `annotation_col_map`, and sets `SQLCompiler.col_count` to the length of the select list (`django/db/models/sql/compiler.py:SQLCompiler.setup_query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.setup_query",
+   "kind": "function",
+   "lines": [
+    75,
+    81
+   ],
+   "fingerprint": "a416908bb28580c6"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup",
+   "line": 45,
+   "sentence": "`SQLCompiler.pre_sql_setup` then settles the rest, in an order its docstring does not give but the clauses demand (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.pre_sql_setup",
+   "kind": "function",
+   "lines": [
+    83,
+    97
+   ],
+   "fingerprint": "2e0722a7cf6cf63d"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
+   "line": 70,
+   "sentence": "`SQLCompiler.as_sql` takes two options, `with_limits=True` and `with_col_aliases=False`, and returns the statement and a tuple of its parameters (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    776,
+    1001
+   ],
+   "fingerprint": "ce816411ac549927"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_from_clause",
+   "line": 72,
+   "sentence": "In the plain case `as_sql` first calls `get_distinct`, which resolves the fields of a `\"DISTINCT ON\"` and may join tables for them, and only then `get_from_clause`, whose docstring says it must be called after anything that might change the tables, the select columns, the ordering and the distinct among them: it reads the alias map and writes every entry that is still referenced, and the query's extra tables after them (`django/db/models/sql/compiler.py:SQLCompiler.get_from_clause`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_from_clause",
+   "kind": "function",
+   "lines": [
+    1165,
+    1197
+   ],
+   "fingerprint": "52aaf5940c313a5e"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql",
+   "line": 74,
+   "sentence": "`\"SELECT\"` comes first, with what the operations object's `distinct_sql` returns after it where the query is distinct, which for the base class is `\"DISTINCT\"` alone and a `NotSupportedError` for fields (`django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.distinct_sql",
+   "kind": "function",
+   "lines": [
+    214,
+    225
+   ],
+   "fingerprint": "4ad2932b52b26b8f"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.for_update_sql",
+   "line": 76,
+   "sentence": "What survives goes to the operations object's `for_update_sql`, with the tables of an `\"OF\"` from `get_select_for_update_of_arguments` ([The SELECT clause: `get_select`, the select mask and `klass_info`](select.md)), and the clause is placed after `\"FROM\"` where `for_update_after_from` says so, which its comment says is for MSSQL, and at the end of the statement otherwise (`django/db/backends/base/operations.py:BaseDatabaseOperations.for_update_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.for_update_sql",
+   "kind": "function",
+   "lines": [
+    241,
+    250
+   ],
+   "fingerprint": "af2d07b9d0cf17d4"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 113,
+   "sentence": "`SQLCompiler.execute_sql` takes a result type, which is `MULTI` unless another is given and `NO_RESULTS` where `None` is given, and two options for reading in chunks (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor",
+   "line": 113,
+   "sentence": "Otherwise it takes a cursor from the connection, `BaseDatabaseWrapper.chunked_cursor` when `chunked_fetch` was asked for and `BaseDatabaseWrapper.cursor` otherwise; the base class's `chunked_cursor` is `cursor`, and PostgreSQL's wrapper, which has server-side cursors, is the one that overrides it (`django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor`) ([Database backends](../backends.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.chunked_cursor",
+   "kind": "function",
+   "lines": [
+    669,
+    674
+   ],
+   "fingerprint": "74ee9df67a5c6557"
+  },
+  {
+   "pointer": "django/db/models/sql/constants.py",
+   "line": 123,
+   "sentence": "*The result types of `django/db/models/sql/constants.py`, what each returns, and the callers that pass each at the pin.",
+   "tree": "django",
+   "path": "django/db/models/sql/constants.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    26
+   ],
+   "fingerprint": "c5764a2dde7d39df"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:cursor_iter",
+   "line": 136,
+   "sentence": "The generator of the last line is `cursor_iter`, a function of the module: it asks the cursor for `chunk_size` rows at a time, until what comes back is the features' `empty_fetchmany_value`, and closes the cursor in a `finally` when the iteration ends or is abandoned (`django/db/models/sql/compiler.py:cursor_iter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "cursor_iter",
+   "kind": "function",
+   "lines": [
+    2282,
+    2291
+   ],
+   "fingerprint": "2843a36d01f4a95f"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.has_results",
+   "line": 160,
+   "sentence": "`SQLCompiler.has_results` is `bool` of `execute_sql(SINGLE)`; its docstring says a backend may override it with a faster way of asking whether a query has any rows, and no backend in the tree does (`django/db/models/sql/compiler.py:SQLCompiler.has_results`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.has_results",
+   "kind": "function",
+   "lines": [
+    1612,
+    1617
+   ],
+   "fingerprint": "0ab4af4bd43bf0b2"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.results_iter",
+   "line": 164,
+   "sentence": "`SQLCompiler.results_iter` returns an iterator over the rows, each a list (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.results_iter",
+   "kind": "function",
+   "lines": [
+    1589,
+    1610
+   ],
+   "fingerprint": "a6c2ba8872ad22c3"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_converters",
+   "line": 166,
+   "sentence": "`SQLCompiler.get_converters` walks the expressions by position and collects, for each, the backend's converters followed by the expression's, keeping an entry only where there is at least one; a `ColPairs` counts for as many positions as it has columns, and each column's converters go under its own position (`django/db/models/sql/compiler.py:SQLCompiler.get_converters`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_converters",
+   "kind": "function",
+   "lines": [
+    1538,
+    1558
+   ],
+   "fingerprint": "4d31189ab73f1ebc"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.get_db_converters",
+   "line": 166,
+   "sentence": "The backend's are the operations object's `get_db_converters` of the expression: the base class returns none, and SQLite's `DatabaseOperations.get_db_converters` adds one by the internal type of the expression's output field, for a datetime, a date, a time, a decimal, a UUID and a boolean (`django/db/backends/sqlite3/operations.py:DatabaseOperations.get_db_converters`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.get_db_converters",
+   "kind": "function",
+   "lines": [
+    272,
+    287
+   ],
+   "fingerprint": "9c4b12aa202dc05e"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.get_db_converters",
+   "line": 166,
+   "sentence": "The expression's are `BaseExpression.get_db_converters`: its own `convert_value`, a function chosen by the output field's type that makes a `float`, an `int` or a `decimal.Decimal` of what came back, unless that is the no-op, and then the output field's own converters (`django/db/models/expressions.py:BaseExpression.get_db_converters`); a `Col` adds its target field's where the output field is another field ([Expressions: `resolve_expression` and `as_sql`](expressions.md), [A field: the base class](../models/fields.md)).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.get_db_converters",
+   "kind": "function",
+   "lines": [
+    202,
+    207
+   ],
+   "fingerprint": "d33ed51adc696f83"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.apply_converters",
+   "line": 166,
+   "sentence": "`SQLCompiler.apply_converters` makes a list of each row and, for each position that has converters, runs them in that order, the backend's first (`django/db/models/sql/compiler.py:SQLCompiler.apply_converters`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.apply_converters",
+   "kind": "function",
+   "lines": [
+    1560,
+    1569
+   ],
+   "fingerprint": "0f0d9d6cda01bb58"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.composite_fields_to_tuples",
+   "line": 179,
+   "sentence": "`SQLCompiler.composite_fields_to_tuples` is the last step, taken only where `has_composite_fields` finds a `ColPairs` among the columns: for each, the slice of the row that holds its columns is replaced by one value, the tuple of them, so that a Berth's key comes back as the pair of its port and its number in one cell (`django/db/models/sql/compiler.py:SQLCompiler.composite_fields_to_tuples`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.composite_fields_to_tuples",
+   "kind": "function",
+   "lines": [
+    1576,
+    1587
+   ],
+   "fingerprint": "6962badffbd8b7d4"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.explain",
+   "line": 183,
+   "sentence": "`QuerySet.explain` passes its format and options to `Query.explain` with the queryset's database (`django/db/models/query.py:QuerySet.explain`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.explain",
+   "kind": "function",
+   "lines": [
+    1546,
+    1551
+   ],
+   "fingerprint": "ffa64e2006e08d05"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.explain",
+   "line": 183,
+   "sentence": "`Query.explain` clones the query, refuses with `ValueError` an option whose name does not match `EXPLAIN_OPTIONS_PATTERN`, a word of letters, digits, underscores and hyphens, or holds `\"--\"`, sets `Query.explain_info` on the clone to an `ExplainInfo` of the format and the options, and joins with newlines what the clone's compiler's `explain_query` yields (`django/db/models/sql/query.py:Query.explain`, `django/db/models/sql/query.py:EXPLAIN_OPTIONS_PATTERN`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.explain",
+   "kind": "function",
+   "lines": [
+    689,
+    699
+   ],
+   "fingerprint": "e34ccbc55c021d4f"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:EXPLAIN_OPTIONS_PATTERN",
+   "line": 183,
+   "sentence": "`Query.explain` clones the query, refuses with `ValueError` an option whose name does not match `EXPLAIN_OPTIONS_PATTERN`, a word of letters, digits, underscores and hyphens, or holds `\"--\"`, sets `Query.explain_info` on the clone to an `ExplainInfo` of the format and the options, and joins with newlines what the clone's compiler's `explain_query` yields (`django/db/models/sql/query.py:Query.explain`, `django/db/models/sql/query.py:EXPLAIN_OPTIONS_PATTERN`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "EXPLAIN_OPTIONS_PATTERN",
+   "kind": "assignment",
+   "lines": [
+    69,
+    69
+   ],
+   "fingerprint": "df2d6dcc6db5e319"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.explain_query",
+   "line": 185,
+   "sentence": "`SQLCompiler.explain_query` runs `execute_sql` and reads every row; the comment says some backends return one-element tuples of strings and others tuples of integers and strings, so a row that is not a string is joined into one by spaces, each value through `json.dumps` where the format is JSON and `str` otherwise (`django/db/models/sql/compiler.py:SQLCompiler.explain_query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.explain_query",
+   "kind": "function",
+   "lines": [
+    1693,
+    1704
+   ],
+   "fingerprint": "2d3da1728ae7475f"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.explain_query_prefix",
+   "line": 185,
+   "sentence": "The base class's refuses with `NotSupportedError` where the features object lacks `supports_explaining_query_execution`, which is whether the operations object has an `explain_prefix` at all; refuses a format with `ValueError` unless it is among the features' `supported_explain_formats`, with a message that lists them or says the backend has none; refuses any option the same way; and returns `BaseDatabaseOperations.explain_prefix`, which SQLite's operations set to `\"EXPLAIN QUERY PLAN\"` (`django/db/backends/base/operations.py:BaseDatabaseOperations.explain_query_prefix`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.explain_query_prefix",
+   "kind": "function",
+   "lines": [
+    842,
+    861
+   ],
+   "fingerprint": "171b9bf5c108207a"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql",
+   "line": 200,
+   "sentence": "`SQLAggregateCompiler.as_sql` writes the selected annotations over an inner query compiled with column aliases, as `SELECT ... FROM (...) subquery`, and sets `col_count` to their number; it is the compiler of the `AggregateQuery` that `get_aggregation` makes where the aggregates cannot be put on the query itself (`django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql`) ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](aggregates.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLAggregateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    2258,
+    2279
+   ],
+   "fingerprint": "f6407600aea64394"
+  }
+ ]
+}

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 390">
+  <!-- two halves: on the left what one filter leaves on the query, on the right what the compiler
+       does with it; the query crosses from the one to the other when the queryset is evaluated -->
+  <text class="strong" x="0" y="14">Building, on the <tspan class="name strong">Query</tspan></text>
+  <text class="strong" x="490" y="14">Compiling, in the <tspan class="name strong">SQLCompiler</tspan></text>
+
+  <!-- the left half: the filter's calls, nested as they are made -->
+  <rect class="ground" x="0.5" y="28.5" width="450" height="360" rx="4"/>
+  <text class="name" x="12" y="52">QuerySet.filter(ship__home__name='Bergen')</text>
+  <text class="name" x="30" y="74">Query.add_q</text>
+  <text x="48" y="96"><tspan class="name">Query.build_filter</tspan>, for each name and value</text>
+  <text class="name" x="66" y="118">names_to_path</text>
+  <text x="178" y="118"><tspan class="name">ship</tspan>, <tspan class="name">home</tspan>, <tspan class="name">name</tspan> → a path</text>
+  <text class="name" x="66" y="140">setup_joins</text>
+  <text x="178" y="140">the path → <tspan class="name">Join</tspan>, <tspan class="name">Join</tspan></text>
+  <text class="name" x="66" y="162">trim_joins</text>
+  <text x="178" y="162">a join not needed is unreferenced</text>
+  <text class="name" x="66" y="184">build_lookup</text>
+  <text x="178" y="184">the words left → transforms, a <tspan class="name">Lookup</tspan></text>
+  <text class="name" x="48" y="206">JoinPromoter</text>
+  <text x="178" y="206">each join <tspan class="name">INNER</tspan> or <tspan class="name">LEFT OUTER</tspan></text>
+
+  <!-- what the filter leaves: the query, kept from one method to the next -->
+  <rect class="mark-box" x="12.5" y="230.5" width="426" height="141" rx="4"/>
+  <text class="strong" x="24" y="253">the query holds</text>
+  <text class="name" x="24" y="275">alias_map</text>
+  <text x="130" y="275">the joins</text>
+  <text class="name" x="24" y="297">where</text>
+  <text x="130" y="297">the where tree of lookups</text>
+  <text class="quiet small" x="24" y="319">and what the queryset's other methods leave:</text>
+  <text class="name" x="24" y="337">annotations, select, order_by, group_by,</text>
+  <text class="name" x="24" y="355">low_mark, high_mark</text>
+
+  <!-- the crossing: when the queryset is evaluated, the query makes its compiler -->
+  <path class="mark-line" d="M438.5 301 H470 V69 H479.5"/>
+  <polygon class="head mark" points="489.5,69 479.5,64 479.5,74"/>
+
+  <!-- the right half: the compiler's calls, with the clause each one writes -->
+  <rect class="ground" x="489.5" y="28.5" width="450" height="360" rx="4"/>
+  <text x="502" y="52">the <tspan class="name">QuerySet</tspan> is evaluated</text>
+  <text x="520" y="74"><tspan class="name">Query.get_compiler</tspan> → a <tspan class="name">SQLCompiler</tspan></text>
+  <text class="name" x="520" y="96">SQLCompiler.as_sql</text>
+  <text class="name" x="538" y="118">pre_sql_setup</text>
+  <text class="name" x="556" y="140">get_select</text>
+  <text x="726" y="140"><tspan class="name">SELECT</tspan> …</text>
+  <text class="name" x="556" y="162">get_order_by</text>
+  <text x="726" y="162"><tspan class="name">ORDER BY</tspan> …</text>
+  <text class="name" x="556" y="184">split_having_qualify</text>
+  <text x="726" y="184"><tspan class="name">WHERE</tspan> from <tspan class="name">HAVING</tspan></text>
+  <text class="name" x="556" y="206">get_group_by</text>
+  <text x="726" y="206"><tspan class="name">GROUP BY</tspan> …</text>
+  <text class="name" x="538" y="228">get_from_clause</text>
+  <text x="726" y="228"><tspan class="name">FROM</tspan>, the alias map</text>
+  <text class="name" x="538" y="250">compile(where)</text>
+  <text x="726" y="250"><tspan class="name">WHERE</tspan>, each <tspan class="name">Lookup.as_sql</tspan></text>
+
+  <!-- what the compiler makes -->
+  <rect class="box" x="501.5" y="268.5" width="426" height="59" rx="4"/>
+  <text class="strong" x="513" y="291">the statement and its parameters</text>
+  <text class="quiet small" x="513" y="313"><tspan class="name small">SELECT</tspan>, <tspan class="name small">FROM</tspan>, <tspan class="name small">WHERE</tspan>, <tspan class="name small">GROUP BY</tspan>, <tspan class="name small">HAVING</tspan>, <tspan class="name small">ORDER BY</tspan>, the limit</text>
+
+  <!-- and runs -->
+  <text class="name" x="520" y="350">SQLCompiler.execute_sql</text>
+  <text x="726" y="350">runs it on a cursor</text>
+  <text class="name" x="520" y="372">SQLCompiler.results_iter</text>
+  <text x="726" y="372">the rows, converters applied</text>
+</svg>

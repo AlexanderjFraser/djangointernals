@@ -1,0 +1,463 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "subqueries.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.resolve_expression",
+   "line": 13,
+   "sentence": "For a query the outer query is what it is bound to, and `Query.resolve_expression` makes the copy with `Query.clone` and then does four things to it (`django/db/models/sql/query.py:Query.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.resolve_expression",
+   "kind": "function",
+   "lines": [
+    1260,
+    1288
+   ],
+   "fingerprint": "8ce416530e11fe2b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.bump_prefix",
+   "line": 15,
+   "sentence": "The prefix chosen is added to the `subq_aliases` of both queries, so that a third query resolved against either will avoid it, and the clone's `change_aliases` renames every alias in its map to the prefix and a number, in the map's order, relabelling each reference in the where tree, the select, the group by and the annotations as it goes; a leaf of the where tree is replaced by a relabelled copy, so the clone owns its leaves from here on (`django/db/models/sql/query.py:Query.bump_prefix`, `django/db/models/sql/query.py:Query.change_aliases`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.bump_prefix",
+   "kind": "function",
+   "lines": [
+    1058,
+    1111
+   ],
+   "fingerprint": "779a52e95c3f2ba7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.change_aliases",
+   "line": 15,
+   "sentence": "The prefix chosen is added to the `subq_aliases` of both queries, so that a third query resolved against either will avoid it, and the clone's `change_aliases` renames every alias in its map to the prefix and a number, in the map's order, relabelling each reference in the where tree, the select, the group by and the annotations as it goes; a leaf of the where tree is replaced by a relabelled copy, so the clone owns its leaves from here on (`django/db/models/sql/query.py:Query.bump_prefix`, `django/db/models/sql/query.py:Query.change_aliases`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.change_aliases",
+   "kind": "function",
+   "lines": [
+    1001,
+    1056
+   ],
+   "fingerprint": "ad7505eb1684ab5f"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.as_sql",
+   "line": 17,
+   "sentence": "The flag is what the rest of the chapter reads: `Query.as_sql` puts the statement in parentheses, and clears the ordering on a backend that does not ignore an unnecessary one; the compiler wraps a subquery whose select list has extra columns in another select, and sets the parentheses of a compound statement by it; a tuple comparison against a subquery is refused on some backends by it; and `BaseExpression.contains_subquery` is true of an expression one of whose sources carries it (`django/db/models/sql/query.py:Query.as_sql`, `django/db/models/expressions.py:BaseExpression.contains_subquery`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.as_sql",
+   "kind": "function",
+   "lines": [
+    1308,
+    1321
+   ],
+   "fingerprint": "be9abf8cb7aa5316"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.contains_subquery",
+   "line": 17,
+   "sentence": "The flag is what the rest of the chapter reads: `Query.as_sql` puts the statement in parentheses, and clears the ordering on a backend that does not ignore an unnecessary one; the compiler wraps a subquery whose select list has extra columns in another select, and sets the parentheses of a compound statement by it; a tuple comparison against a subquery is refused on some backends by it; and `BaseExpression.contains_subquery` is true of an expression one of whose sources carries it (`django/db/models/sql/query.py:Query.as_sql`, `django/db/models/expressions.py:BaseExpression.contains_subquery`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.contains_subquery",
+   "kind": "function",
+   "lines": [
+    272,
+    277
+   ],
+   "at": 273,
+   "fingerprint": "2531c2fc5d91ceab"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode._resolve_node",
+   "line": 19,
+   "sentence": "It resolves the clone's where tree against the outer query, leaf by leaf: `WhereNode.resolve_expression` has each leaf's left side and right side resolved where they can be, and that is where an `OuterRef` in a condition becomes a column (`django/db/models/sql/where.py:WhereNode._resolve_node`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode._resolve_node",
+   "kind": "function",
+   "lines": [
+    276,
+    284
+   ],
+   "at": 277,
+   "fingerprint": "10734a04eeb22388"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.__init__",
+   "line": 21,
+   "sentence": "`external_aliases` maps each alias of the outer query's alias map to whether that table stands under an alias other than its own name, and a comment in the constructor says it exists because a query may refer to aliases of an outer query, as one made by `split_exclude` does (`django/db/models/sql/query.py:Query.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.__init__",
+   "kind": "function",
+   "lines": [
+    306,
+    331
+   ],
+   "fingerprint": "d2314f73d9482e87"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.setup_query",
+   "line": 53,
+   "sentence": "`bump_prefix` renames the entries the alias map has, and a query that has asked for no table yet has none: the ships ordered by name and cut to one, `order_by('name')[:1]`, have filtered nothing and selected nothing in particular, so the query's map is empty until the compiler asks for its initial alias at the start of `SQLCompiler.setup_query` (`django/db/models/sql/compiler.py:SQLCompiler.setup_query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.setup_query",
+   "kind": "function",
+   "lines": [
+    75,
+    81
+   ],
+   "fingerprint": "a416908bb28580c6"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_external_cols",
+   "line": 55,
+   "sentence": "`Query.get_external_cols` walks the annotations and the where tree's leaves, yielding each `Col` and, for a nested subquery, its own external columns, and keeps those whose alias is in `external_aliases` (`django/db/models/sql/query.py:Query.get_external_cols`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_external_cols",
+   "kind": "function",
+   "lines": [
+    1290,
+    1296
+   ],
+   "fingerprint": "886ca58788a5386a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_group_by_cols",
+   "line": 55,
+   "sentence": "`Query.get_group_by_cols` returns those columns, so that a grouped outer query groups by the outer columns a subquery refers to rather than by the subquery; but where any of them is marked `possibly_multivalued`, which `ResolvedOuterRef` sets on a column whose name crossed a relation, it returns the wrapper it was given, or the query itself, so that the whole subquery is grouped by (`django/db/models/sql/query.py:Query.get_group_by_cols`) ([GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](grouping.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_group_by_cols",
+   "kind": "function",
+   "lines": [
+    1298,
+    1306
+   ],
+   "fingerprint": "e2c2ca7c97ada9ff"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.output_field",
+   "line": 55,
+   "sentence": "`Query.output_field` is the type a query has as an expression: the target of its one selected column, or the output field of its one selected annotation, and `None` where it selects more or less than one of either (`django/db/models/sql/query.py:Query.output_field`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.output_field",
+   "kind": "function",
+   "lines": [
+    333,
+    339
+   ],
+   "at": 334,
+   "fingerprint": "93a0f2d54dfbee76"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query._subquery_fields_len",
+   "line": 55,
+   "sentence": "Beside it `Query._subquery_fields_len` counts the columns a subquery yields for a lookup to check: the model's key columns where nothing in particular is selected, and otherwise the select list's, a composite key counted by its columns (`django/db/models/sql/query.py:Query._subquery_fields_len`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query._subquery_fields_len",
+   "kind": "function",
+   "lines": [
+    1252,
+    1258
+   ],
+   "at": 1253,
+   "fingerprint": "a55d40a124d2fe8c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:OuterRef",
+   "line": 65,
+   "sentence": "`OuterRef` is an `F` that defers its resolution by one query (`django/db/models/expressions.py:OuterRef`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "OuterRef",
+   "kind": "class",
+   "lines": [
+    983,
+    993
+   ],
+   "fingerprint": "2287234f679098e9"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:OuterRef.resolve_expression",
+   "line": 65,
+   "sentence": "Its `resolve_expression` does not look at the query it is handed at all: it returns a `ResolvedOuterRef` of its name, or, where its name is itself an `OuterRef`, that inner `OuterRef` with one level taken off (`django/db/models/expressions.py:OuterRef.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "OuterRef.resolve_expression",
+   "kind": "function",
+   "lines": [
+    987,
+    990
+   ],
+   "fingerprint": "5c77a0a1c1cd9b38"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:ResolvedOuterRef.resolve_expression",
+   "line": 67,
+   "sentence": "It refuses one thing, an outer expression with a window in it, with `NotSupportedError` ([Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](windows.md)), and marks the column `possibly_multivalued` where the name holds a `\"__\"`, a comment noting that the mark should one day be reserved for the relations that are many (`django/db/models/expressions.py:ResolvedOuterRef.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "ResolvedOuterRef.resolve_expression",
+   "kind": "function",
+   "lines": [
+    963,
+    974
+   ],
+   "fingerprint": "075eeb2afa0350b5"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:ResolvedOuterRef.as_sql",
+   "line": 67,
+   "sentence": "Its `as_sql` raises `ValueError`, saying that the queryset contains a reference to an outer query and may be used in a subquery alone: a queryset filtered with an `OuterRef` cannot be run on its own, and the refusal comes when its statement is written (`django/db/models/expressions.py:ResolvedOuterRef.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "ResolvedOuterRef.as_sql",
+   "kind": "function",
+   "lines": [
+    957,
+    961
+   ],
+   "fingerprint": "37bf990a01b9c9a1"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Subquery",
+   "line": 104,
+   "sentence": "`Subquery` wraps a query so that it can be written as an expression with a template, `\"(%(subquery)s)\"` by default (`django/db/models/expressions.py:Subquery`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Subquery",
+   "kind": "class",
+   "lines": [
+    1816,
+    1884
+   ],
+   "fingerprint": "9f702837d7d32e2c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Subquery.as_sql",
+   "line": 104,
+   "sentence": "`Subquery.as_sql` has the query write itself through `Query.as_sql`, strips the parentheses that method added, and puts the result into the template under the name `\"subquery\"`, with `extra` and whatever the caller passed as the rest of the template's values (`django/db/models/expressions.py:Subquery.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Subquery.as_sql",
+   "kind": "function",
+   "lines": [
+    1873,
+    1881
+   ],
+   "fingerprint": "ae3e41fde05654cc"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Subquery.resolve_expression",
+   "line": 106,
+   "sentence": "A subclass, or a `Subquery` given another template, stays as it is (`django/db/models/expressions.py:Subquery.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Subquery.resolve_expression",
+   "kind": "function",
+   "lines": [
+    1844,
+    1859
+   ],
+   "fingerprint": "de5c8a674d206b6d"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:CharField",
+   "line": 114,
+   "sentence": "With a `CharField` given, the type the query has already, the resolved object is the query; with an `IntegerField` it is the wrapper (`django/db/models/fields/__init__.py:CharField`, `django/db/models/fields/__init__.py:IntegerField`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "CharField",
+   "kind": "class",
+   "lines": [
+    1247,
+    1363
+   ],
+   "fingerprint": "269619c1e2ee1bd2"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:IntegerField",
+   "line": 114,
+   "sentence": "With a `CharField` given, the type the query has already, the resolved object is the query; with an `IntegerField` it is the wrapper (`django/db/models/fields/__init__.py:CharField`, `django/db/models/fields/__init__.py:IntegerField`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "IntegerField",
+   "kind": "class",
+   "lines": [
+    2142,
+    2239
+   ],
+   "fingerprint": "1a3860c3576b2225"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Exists",
+   "line": 120,
+   "sentence": "`Exists` is a `Subquery` with the template `\"EXISTS(%(subquery)s)\"`, a `BooleanField` as its output field, so that it is conditional and can stand in a filter and in a `When`, and `False` as its `empty_result_set_value` (`django/db/models/expressions.py:Exists`, `django/db/models/fields/__init__.py:BooleanField`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Exists",
+   "kind": "class",
+   "lines": [
+    1887,
+    1911
+   ],
+   "fingerprint": "1deb06d0e32e7b75"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:BooleanField",
+   "line": 120,
+   "sentence": "`Exists` is a `Subquery` with the template `\"EXISTS(%(subquery)s)\"`, a `BooleanField` as its output field, so that it is conditional and can stand in a filter and in a `When`, and `False` as its `empty_result_set_value` (`django/db/models/expressions.py:Exists`, `django/db/models/fields/__init__.py:BooleanField`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "BooleanField",
+   "kind": "class",
+   "lines": [
+    1201,
+    1244
+   ],
+   "fingerprint": "cd9f53bce8153c66"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Exists.as_sql",
+   "line": 122,
+   "sentence": "`Exists.as_sql` catches the `EmptyResultSet` an inner query raises when it can match nothing and compiles `Value(False)` in its place, or writes `\"1=0\"` on a backend without boolean expressions in a select list (`django/db/models/expressions.py:Exists.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Exists.as_sql",
+   "kind": "function",
+   "lines": [
+    1904,
+    1911
+   ],
+   "fingerprint": "76b319b2743c1cdb"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Exists.select_format",
+   "line": 122,
+   "sentence": "`Exists.select_format` is for such a backend too: where `supports_boolean_expr_in_select_clause` is off, a selected `Exists` is wrapped as `\"CASE WHEN\"` the subquery `\"THEN 1 ELSE 0 END\"` (`django/db/models/expressions.py:Exists.select_format`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Exists.select_format",
+   "kind": "function",
+   "lines": [
+    1896,
+    1902
+   ],
+   "fingerprint": "f4d772aaf5b4a77d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.resolve_expression",
+   "line": 146,
+   "sentence": "`Query.resolve_lookup_value` resolves any value that has `resolve_expression`, and a queryset has one: `QuerySet.resolve_expression` returns its query resolved against the outer one, with the queryset's database alias, `QuerySet._db`, copied onto it (`django/db/models/query.py:QuerySet.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.resolve_expression",
+   "kind": "function",
+   "lines": [
+    2365,
+    2368
+   ],
+   "fingerprint": "190585a09882cd4b"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.get_prep_lookup",
+   "line": 146,
+   "sentence": "`In.get_prep_lookup` and `Exact.get_prep_lookup` then make the subquery fit the left side: each compares `_subquery_fields_len` with the left side's width and refuses a mismatch with `ValueError`, and where the queryset has `has_select_fields` false, has chosen no columns, each clears its select clause and adds `\"pk\"`; `Exact` first refuses a query that `has_limit_one` denies, and `In` clears the ordering ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](lookups.md), `django/db/models/lookups.py:In.get_prep_lookup`, `django/db/models/lookups.py:Exact.get_prep_lookup`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.get_prep_lookup",
+   "kind": "function",
+   "lines": [
+    506,
+    520
+   ],
+   "fingerprint": "1f0b6f9db0f17ecf"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:Exact.get_prep_lookup",
+   "line": 146,
+   "sentence": "`In.get_prep_lookup` and `Exact.get_prep_lookup` then make the subquery fit the left side: each compares `_subquery_fields_len` with the left side's width and refuses a mismatch with `ValueError`, and where the queryset has `has_select_fields` false, has chosen no columns, each clears its select clause and adds `\"pk\"`; `Exact` first refuses a query that `has_limit_one` denies, and `In` clears the ordering ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](lookups.md), `django/db/models/lookups.py:In.get_prep_lookup`, `django/db/models/lookups.py:Exact.get_prep_lookup`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "Exact.get_prep_lookup",
+   "kind": "function",
+   "lines": [
+    376,
+    394
+   ],
+   "fingerprint": "b49b57c89cd3524a"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.process_rhs",
+   "line": 146,
+   "sentence": "`In.process_rhs` adds one refusal at compile time, a subquery whose queryset was bound to another database than the connection's, with a message that says to evaluate it as a list instead (`django/db/models/lookups.py:In.process_rhs`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.process_rhs",
+   "kind": "function",
+   "lines": [
+    522,
+    546
+   ],
+   "fingerprint": "dfd7c49912fbc025"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clear_ordering",
+   "line": 161,
+   "sentence": "`In.get_prep_lookup` clears it with `clear_default=True`, so that the model's default ordering does not come back either (`django/db/models/sql/query.py:Query.clear_ordering`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clear_ordering",
+   "kind": "function",
+   "lines": [
+    2400,
+    2419
+   ],
+   "fingerprint": "02ed4a008fa1de1e"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries",
+   "line": 161,
+   "sentence": "Then `Query.as_sql` asks the backend: where `ignores_unnecessary_order_by_in_subqueries` is off, as it is for Oracle, it clears the ordering without force, which `clear_ordering` declines to do for a query that is sliced, has distinct fields or asks for a lock, so a sliced subquery keeps its ordering there too (`django/db/backends/base/features.py:BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries",
+   "kind": "assignment",
+   "lines": [
+    79,
+    79
+   ],
+   "fingerprint": "f25220f8c4c3fdce"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
+   "line": 163,
+   "sentence": "So where the query is a subquery and `get_extra_select` added columns, `SQLCompiler.as_sql` wraps the statement in another select that reads the wanted columns alone from it, under the alias `\"subquery\"` ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md), `django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    776,
+    1001
+   ],
+   "fingerprint": "ce816411ac549927"
+  }
+ ]
+}

@@ -1,0 +1,1115 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "expressions.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/expressions.py",
+   "line": 7,
+   "sentence": "This page is the protocol `BaseExpression` gives them all, what the operators of `Combinable` make, how an expression learns its type and its equality, and the small classes of `django/db/models/expressions.py`.",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2235
+   ],
+   "fingerprint": "5e2cd9d23b08da0f"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression",
+   "line": 9,
+   "sentence": "The first two are one method, `BaseExpression.resolve_expression`, which copies; the third is `BaseExpression.as_sql`, which the compiler calls through a vendor's method where there is one; the fourth is `BaseExpression.output_field`; the fifth is `Expression.identity` (`django/db/models/expressions.py:BaseExpression`, `django/db/models/expressions.py:Expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression",
+   "kind": "class",
+   "lines": [
+    174,
+    516
+   ],
+   "fingerprint": "673f31b02a41855a"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Expression",
+   "line": 9,
+   "sentence": "The first two are one method, `BaseExpression.resolve_expression`, which copies; the third is `BaseExpression.as_sql`, which the compiler calls through a vendor's method where there is one; the fourth is `BaseExpression.output_field`; the fifth is `Expression.identity` (`django/db/models/expressions.py:BaseExpression`, `django/db/models/expressions.py:Expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Expression",
+   "kind": "class",
+   "lines": [
+    519,
+    562
+   ],
+   "at": 520,
+   "fingerprint": "146725c46013a10d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:F",
+   "line": 15,
+   "sentence": "Its one source is an `F`, a name and nothing more, and `F` is not even a `BaseExpression`: it has no `as_sql` and no output field, only a `resolve_expression` that asks the query what the name means (`django/db/models/expressions.py:F`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "F",
+   "kind": "class",
+   "lines": [
+    881,
+    943
+   ],
+   "at": 882,
+   "fingerprint": "319af577843147b1"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.resolve_expression",
+   "line": 17,
+   "sentence": "It makes a copy with `BaseExpression.copy`, sets `is_summary` on the copy to its summarize argument, resolves each of the copy's sources with the same arguments, and stores the resolved sources on the copy with `BaseExpression.set_source_expressions` (`django/db/models/expressions.py:BaseExpression.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.resolve_expression",
+   "kind": "function",
+   "lines": [
+    279,
+    315
+   ],
+   "fingerprint": "f0c477de56cd8d0d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression._parse_expressions",
+   "line": 25,
+   "sentence": "`Coalesce('tonnage', 0)` shows the two kinds of leaf: a string became an `F` and the integer a `Value` when the function was made, by `BaseExpression._parse_expressions`, which leaves anything that already has `resolve_expression` alone (`django/db/models/expressions.py:BaseExpression._parse_expressions`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression._parse_expressions",
+   "kind": "function",
+   "lines": [
+    215,
+    223
+   ],
+   "fingerprint": "34d46035d5bae730"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:F.resolve_expression",
+   "line": 45,
+   "sentence": "`F.resolve_expression` is one line: it returns `Query.resolve_ref` for its name (`django/db/models/expressions.py:F.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "F.resolve_expression",
+   "kind": "function",
+   "lines": [
+    905,
+    908
+   ],
+   "fingerprint": "c4fb700deb67f17a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.resolve_ref",
+   "line": 45,
+   "sentence": "Otherwise it splits the name at each `\"__\"`: if the first word is an annotation, the rest are transforms applied to it; if not, `Query.setup_joins` walks the words as fields, joining tables, `Query.trim_joins` takes back a join whose only use is a key the previous table holds, and the function `setup_joins` built turns the final field into a `Col` through `Field.get_col` and applies any transforms that ended the name (`django/db/models/sql/query.py:Query.resolve_ref`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.resolve_ref",
+   "kind": "function",
+   "lines": [
+    2069,
+    2118
+   ],
+   "fingerprint": "e2b6625b4c73decb"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Combinable",
+   "line": 62,
+   "sentence": "`Combinable` is the mixin that gives an expression Python's operators, and `F`, `Expression` and `Subquery` have it among their bases (`django/db/models/expressions.py:Combinable`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Combinable",
+   "kind": "class",
+   "lines": [
+    38,
+    167
+   ],
+   "fingerprint": "dd075377ede07fb2"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Combinable.__and__",
+   "line": 64,
+   "sentence": "And indexing an `F`, `F(\"name\")[0]` or `F(\"name\")[2:4]`, is `F.__getitem__`, which returns a `Sliced` (`django/db/models/expressions.py:Combinable.__and__`, `django/db/models/expressions.py:F.__getitem__`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Combinable.__and__",
+   "kind": "function",
+   "lines": [
+    97,
+    102
+   ],
+   "fingerprint": "ba8b96e8da20ed93"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:F.__getitem__",
+   "line": 64,
+   "sentence": "And indexing an `F`, `F(\"name\")[0]` or `F(\"name\")[2:4]`, is `F.__getitem__`, which returns a `Sliced` (`django/db/models/expressions.py:Combinable.__and__`, `django/db/models/expressions.py:F.__getitem__`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "F.__getitem__",
+   "kind": "function",
+   "lines": [
+    897,
+    898
+   ],
+   "fingerprint": "237207caebeee4b3"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:CombinedExpression.as_sql",
+   "line": 78,
+   "sentence": "`CombinedExpression.as_sql` compiles the two sides, has the backend join them with `BaseDatabaseOperations.combine_expression`, and wraps the result in parentheses so that the precedence of nested expressions is kept (`django/db/models/expressions.py:CombinedExpression.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.combine_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "CombinedExpression.as_sql",
+   "kind": "function",
+   "lines": [
+    764,
+    776
+   ],
+   "fingerprint": "e2778918c9144fc2"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.combine_expression",
+   "line": 78,
+   "sentence": "`CombinedExpression.as_sql` compiles the two sides, has the backend join them with `BaseDatabaseOperations.combine_expression`, and wraps the result in parentheses so that the precedence of nested expressions is kept (`django/db/models/expressions.py:CombinedExpression.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.combine_expression`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.combine_expression",
+   "kind": "function",
+   "lines": [
+    742,
+    750
+   ],
+   "fingerprint": "d5862e9a1bb9ec9d"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.combine_expression",
+   "line": 78,
+   "sentence": "The base operations join the two sides with the connector between; SQLite's write `\"^\"` as the function `\"POWER\"` and `\"#\"` as `\"BITXOR\"`, both functions Django registers with the connection, and MySQL's and Oracle's each rewrite the power and several of the bitwise connectors, Oracle's the modulo as well, and Oracle's refuses `\"#\"` (`django/db/backends/sqlite3/operations.py:DatabaseOperations.combine_expression`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.combine_expression",
+   "kind": "function",
+   "lines": [
+    348,
+    355
+   ],
+   "fingerprint": "ae8cc171f9d74dad"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:CombinedExpression._resolve_output_field",
+   "line": 92,
+   "sentence": "`CombinedExpression._resolve_output_field` asks `_resolve_combined_type` for the connector and the classes of the two sides' output fields, and that function walks a table of triples registered at import from `_connector_combinations`, returning the result class of the first triple whose left and right classes the sides' classes are subclasses of (`django/db/models/expressions.py:CombinedExpression._resolve_output_field`, `django/db/models/expressions.py:_resolve_combined_type`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "CombinedExpression._resolve_output_field",
+   "kind": "function",
+   "lines": [
+    747,
+    762
+   ],
+   "fingerprint": "a44a5ff28c41c6bf"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:_resolve_combined_type",
+   "line": 92,
+   "sentence": "`CombinedExpression._resolve_output_field` asks `_resolve_combined_type` for the connector and the classes of the two sides' output fields, and that function walks a table of triples registered at import from `_connector_combinations`, returning the result class of the first triple whose left and right classes the sides' classes are subclasses of (`django/db/models/expressions.py:CombinedExpression._resolve_output_field`, `django/db/models/expressions.py:_resolve_combined_type`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "_resolve_combined_type",
+   "kind": "function",
+   "lines": [
+    718,
+    725
+   ],
+   "at": 719,
+   "fingerprint": "15cce1095fa88cb2"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py",
+   "line": 92,
+   "sentence": "The field classes are those of `django/db/models/fields/__init__.py`.",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2978
+   ],
+   "fingerprint": "9ed3436cd4b17f2c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:CombinedExpression.resolve_expression",
+   "line": 118,
+   "sentence": "`CombinedExpression.resolve_expression` looks at the resolved sides' internal types: where one is `DurationField` and the other is not, it returns a `DurationExpression` of the sides, and where the connector is `-` and both sides are the same one of `DateField`, `DateTimeField` and `TimeField`, a `TemporalSubtraction` (`django/db/models/expressions.py:CombinedExpression.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "CombinedExpression.resolve_expression",
+   "kind": "function",
+   "lines": [
+    778,
+    808
+   ],
+   "fingerprint": "07bae6360abc3aca"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:DurationExpression.as_sql",
+   "line": 118,
+   "sentence": "`DurationExpression.as_sql` is the plain `as_sql` on a backend whose features have `has_native_duration_field`; elsewhere each side whose type is a duration is passed through the backend's `format_for_duration_arithmetic` and the two are joined by `combine_duration_expression`, which on SQLite is the registered function `\"django_format_dtdelta\"` (`django/db/models/expressions.py:DurationExpression.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "DurationExpression.as_sql",
+   "kind": "function",
+   "lines": [
+    827,
+    842
+   ],
+   "fingerprint": "47cb48d760807f89"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:TemporalSubtraction.as_sql",
+   "line": 118,
+   "sentence": "`TemporalSubtraction` has a `DurationField` for its output and hands both compiled sides to `BaseDatabaseOperations.subtract_temporals`, which refuses with `NotSupportedError` unless `supports_temporal_subtraction` is set (`django/db/models/expressions.py:TemporalSubtraction.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "TemporalSubtraction.as_sql",
+   "kind": "function",
+   "lines": [
+    872,
+    878
+   ],
+   "fingerprint": "658edab817629a1a"
+  },
+  {
+   "pointer": "django/db/models/functions/text.py:Length",
+   "line": 122,
+   "sentence": "An expression's type is a field object, `BaseExpression.output_field`, and it comes from one of three places: declared on the class, as `Length` declares an `IntegerField` and `TemporalSubtraction` a `DurationField` (`django/db/models/functions/text.py:Length`, `django/db/models/fields/__init__.py`); given at construction, since `BaseExpression.__init__` stores an `output_field` it is handed on the instance, over the class's; or inferred from the sources by `BaseExpression._resolve_output_field` the first time the property is read, since it is a `cached_property` (`django/db/models/expressions.py:BaseExpression.output_field`, `django/db/models/expressions.py:BaseExpression._resolve_output_field`).",
+   "tree": "django",
+   "path": "django/db/models/functions/text.py",
+   "symbol": "Length",
+   "kind": "class",
+   "lines": [
+    179,
+    189
+   ],
+   "fingerprint": "37940709315a087e"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py",
+   "line": 122,
+   "sentence": "An expression's type is a field object, `BaseExpression.output_field`, and it comes from one of three places: declared on the class, as `Length` declares an `IntegerField` and `TemporalSubtraction` a `DurationField` (`django/db/models/functions/text.py:Length`, `django/db/models/fields/__init__.py`); given at construction, since `BaseExpression.__init__` stores an `output_field` it is handed on the instance, over the class's; or inferred from the sources by `BaseExpression._resolve_output_field` the first time the property is read, since it is a `cached_property` (`django/db/models/expressions.py:BaseExpression.output_field`, `django/db/models/expressions.py:BaseExpression._resolve_output_field`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2978
+   ],
+   "fingerprint": "9ed3436cd4b17f2c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.output_field",
+   "line": 122,
+   "sentence": "An expression's type is a field object, `BaseExpression.output_field`, and it comes from one of three places: declared on the class, as `Length` declares an `IntegerField` and `TemporalSubtraction` a `DurationField` (`django/db/models/functions/text.py:Length`, `django/db/models/fields/__init__.py`); given at construction, since `BaseExpression.__init__` stores an `output_field` it is handed on the instance, over the class's; or inferred from the sources by `BaseExpression._resolve_output_field` the first time the property is read, since it is a `cached_property` (`django/db/models/expressions.py:BaseExpression.output_field`, `django/db/models/expressions.py:BaseExpression._resolve_output_field`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.output_field",
+   "kind": "function",
+   "lines": [
+    325,
+    333
+   ],
+   "at": 326,
+   "fingerprint": "0054ba2ee95ba863"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression._resolve_output_field",
+   "line": 122,
+   "sentence": "An expression's type is a field object, `BaseExpression.output_field`, and it comes from one of three places: declared on the class, as `Length` declares an `IntegerField` and `TemporalSubtraction` a `DurationField` (`django/db/models/functions/text.py:Length`, `django/db/models/fields/__init__.py`); given at construction, since `BaseExpression.__init__` stores an `output_field` it is handed on the instance, over the class's; or inferred from the sources by `BaseExpression._resolve_output_field` the first time the property is read, since it is a `cached_property` (`django/db/models/expressions.py:BaseExpression.output_field`, `django/db/models/expressions.py:BaseExpression._resolve_output_field`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression._resolve_output_field",
+   "kind": "function",
+   "lines": [
+    346,
+    374
+   ],
+   "fingerprint": "73c703394a564230"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression._resolve_output_field",
+   "line": 124,
+   "sentence": "A comment above the inference calls the guess mostly a bad idea, kept because a lot of code, third-party `Func` subclasses especially, depends on it, and changing it would need a deprecation path (`django/db/models/expressions.py:BaseExpression._resolve_output_field`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression._resolve_output_field",
+   "kind": "function",
+   "lines": [
+    346,
+    374
+   ],
+   "fingerprint": "73c703394a564230"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.convert_value",
+   "line": 137,
+   "sentence": "`BaseExpression.get_db_converters` returns that function, unless it is the noop, and then the output field's own converters after it; the compiler puts the backend's first (`django/db/models/expressions.py:BaseExpression.convert_value`, `django/db/models/sql/compiler.py:SQLCompiler.get_converters`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.convert_value",
+   "kind": "function",
+   "lines": [
+    380,
+    401
+   ],
+   "at": 381,
+   "fingerprint": "a8205664255e9bce"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_converters",
+   "line": 137,
+   "sentence": "`BaseExpression.get_db_converters` returns that function, unless it is the noop, and then the output field's own converters after it; the compiler puts the backend's first (`django/db/models/expressions.py:BaseExpression.convert_value`, `django/db/models/sql/compiler.py:SQLCompiler.get_converters`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_converters",
+   "kind": "function",
+   "lines": [
+    1538,
+    1558
+   ],
+   "fingerprint": "4d31189ab73f1ebc"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.select_format",
+   "line": 144,
+   "sentence": "`BaseExpression.select_format` is the one place the type reaches the select list: it hands the compiled SQL to the output field's `select_format` where the field has one, and `Field.select_format` returns it unchanged, so the hook is for a field such as a geometry that must be selected through a function (`django/db/models/fields/__init__.py:Field.select_format`) ([The SELECT clause: `get_select`, the select mask and `klass_info`](select.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.select_format",
+   "kind": "function",
+   "lines": [
+    598,
+    604
+   ],
+   "fingerprint": "d3ce0068894ad38b"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Expression",
+   "line": 148,
+   "sentence": "`Expression` is `BaseExpression` with `Combinable`, and the class on which equality is defined (`django/db/models/expressions.py:Expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Expression",
+   "kind": "class",
+   "lines": [
+    519,
+    562
+   ],
+   "at": 520,
+   "fingerprint": "146725c46013a10d"
+  },
+  {
+   "pointer": "django/utils/deconstruct.py:deconstructible",
+   "line": 148,
+   "sentence": "It is decorated with `deconstructible`, which replaces the class's `__new__` with one that stores the arguments the constructor was called with on the instance, as `_constructor_args`, and adds a `deconstruct` that gives them back with the class's import path, so that a migration can write the expression down ([A field: the base class](../models/fields.md), `django/utils/deconstruct.py:deconstructible`).",
+   "tree": "django",
+   "path": "django/utils/deconstruct.py",
+   "symbol": "deconstructible",
+   "kind": "function",
+   "lines": [
+    6,
+    61
+   ],
+   "fingerprint": "d681c9784ddce071"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Expression.identity",
+   "line": 150,
+   "sentence": "It binds them to the signature of the class's `__init__` with the defaults filled in, and makes a tuple of the class followed by each parameter's name and value, the value passed through `Expression._identity`: a tuple or a dictionary is taken apart, a bound field becomes its model's label and its name and an unbound one its class, and anything else goes through `make_hashable` (`django/db/models/expressions.py:Expression.identity`, `django/utils/hashable.py:make_hashable`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Expression.identity",
+   "kind": "function",
+   "lines": [
+    540,
+    554
+   ],
+   "at": 541,
+   "fingerprint": "6f67de2b143a8be0"
+  },
+  {
+   "pointer": "django/utils/hashable.py:make_hashable",
+   "line": 150,
+   "sentence": "It binds them to the signature of the class's `__init__` with the defaults filled in, and makes a tuple of the class followed by each parameter's name and value, the value passed through `Expression._identity`: a tuple or a dictionary is taken apart, a bound field becomes its model's label and its name and an unbound one its class, and anything else goes through `make_hashable` (`django/db/models/expressions.py:Expression.identity`, `django/utils/hashable.py:make_hashable`).",
+   "tree": "django",
+   "path": "django/utils/hashable.py",
+   "symbol": "make_hashable",
+   "kind": "function",
+   "lines": [
+    4,
+    26
+   ],
+   "fingerprint": "84bbb423b04e50a4"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:F.__eq__",
+   "line": 160,
+   "sentence": "Two classes define equality their own way: `F.__eq__` compares the class and the name, and `Lookup.identity` is the class, the left side and the right side (`django/db/models/expressions.py:F.__eq__`, `django/db/models/lookups.py:Lookup.identity`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "F.__eq__",
+   "kind": "function",
+   "lines": [
+    936,
+    937
+   ],
+   "fingerprint": "89028f4122b620c7"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:Lookup.identity",
+   "line": 160,
+   "sentence": "Two classes define equality their own way: `F.__eq__` compares the class and the name, and `Lookup.identity` is the class, the left side and the right side (`django/db/models/expressions.py:F.__eq__`, `django/db/models/lookups.py:Lookup.identity`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "Lookup.identity",
+   "kind": "function",
+   "lines": [
+    172,
+    174
+   ],
+   "at": 173,
+   "fingerprint": "fe86683e5c0ceab2"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:OrderBy.reverse_ordering",
+   "line": 162,
+   "sentence": "`OrderBy.reverse_ordering` flips `descending` in place and returns the same object, which is still equal to an `OrderBy` made with the original arguments (`django/db/models/expressions.py:OrderBy.reverse_ordering`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "OrderBy.reverse_ordering",
+   "kind": "function",
+   "lines": [
+    2003,
+    2011
+   ],
+   "fingerprint": "aa2d887c44295b8a"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.as_sql",
+   "line": 166,
+   "sentence": "`BaseExpression.as_sql` is the method every expression must implement, and the base class's raises `NotImplementedError` (`django/db/models/expressions.py:BaseExpression.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.as_sql",
+   "kind": "function",
+   "lines": [
+    225,
+    251
+   ],
+   "fingerprint": "17e138762dccc480"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.compile",
+   "line": 166,
+   "sentence": "It takes the compiler and the connection and returns the SQL with its parameters, compiling its own sources through `SQLCompiler.compile`, which calls a node's method named for the connection's vendor, `as_sqlite`, `as_postgresql`, `as_mysql` or `as_oracle`, where the node has one and `as_sql` where it has not ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md), `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.compile",
+   "kind": "function",
+   "lines": [
+    593,
+    599
+   ],
+   "fingerprint": "85666502e93b2a91"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.check_expression_support",
+   "line": 166,
+   "sentence": "Many `as_sql` methods, `Func.as_sql`, `Value.as_sql`, `When.as_sql` and `Case.as_sql` among them, first call the backend's `check_expression_support`, which does nothing in the base operations and on SQLite refuses `Sum`, `Avg`, `StdDev` and `Variance` over a date, time or datetime column, and `\"DISTINCT\"` on an aggregate of several arguments (`django/db/backends/base/operations.py:BaseDatabaseOperations.check_expression_support`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.check_expression_support`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.check_expression_support",
+   "kind": "function",
+   "lines": [
+    709,
+    718
+   ],
+   "fingerprint": "5b58adbeec0763ff"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.check_expression_support",
+   "line": 166,
+   "sentence": "Many `as_sql` methods, `Func.as_sql`, `Value.as_sql`, `When.as_sql` and `Case.as_sql` among them, first call the backend's `check_expression_support`, which does nothing in the base operations and on SQLite refuses `Sum`, `Avg`, `StdDev` and `Variance` over a date, time or datetime column, and `\"DISTINCT\"` on an aggregate of several arguments (`django/db/backends/base/operations.py:BaseDatabaseOperations.check_expression_support`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.check_expression_support`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.check_expression_support",
+   "kind": "function",
+   "lines": [
+    40,
+    64
+   ],
+   "fingerprint": "5fd10ee1f345be1c"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DecimalField",
+   "line": 168,
+   "sentence": "Its `as_sqlite` calls the class's `as_sql` and wraps the result in `\"CAST(... AS NUMERIC)\"` where the output field is a `DecimalField` (`django/db/models/fields/__init__.py:DecimalField`), since, its docstring says, such an expression must be cast to be filtered properly on SQLite (`django/db/models/expressions.py:SQLiteNumericMixin.as_sqlite`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DecimalField",
+   "kind": "class",
+   "lines": [
+    1741,
+    1934
+   ],
+   "fingerprint": "988979f4cf90bcbb"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:SQLiteNumericMixin.as_sqlite",
+   "line": 168,
+   "sentence": "Its `as_sqlite` calls the class's `as_sql` and wraps the result in `\"CAST(... AS NUMERIC)\"` where the output field is a `DecimalField` (`django/db/models/fields/__init__.py:DecimalField`), since, its docstring says, such an expression must be cast to be filtered properly on SQLite (`django/db/models/expressions.py:SQLiteNumericMixin.as_sqlite`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "SQLiteNumericMixin.as_sqlite",
+   "kind": "function",
+   "lines": [
+    28,
+    35
+   ],
+   "fingerprint": "f3e57cce83fff7e5"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Value",
+   "line": 176,
+   "sentence": "`Value` holds a Python value that is to go to the database as a parameter (`django/db/models/expressions.py:Value`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Value",
+   "kind": "class",
+   "lines": [
+    1147,
+    1241
+   ],
+   "at": 1148,
+   "fingerprint": "7b0e49af3f67225b"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py",
+   "line": 176,
+   "sentence": "It infers its output field from the value's type in `Value._resolve_output_field`, among the classes of `django/db/models/fields/__init__.py`: a `str` is a `CharField`, a `bool` a `BooleanField`, tested before `int` since a `bool` is one, an `int` an `IntegerField`, a `float` a `FloatField`, a `datetime` a `DateTimeField`, tested before `date` for the same reason, then `TimeField`, `DurationField`, `DecimalField`, `BinaryField` and `UUIDField`, and for anything else, `None` among them, nothing.",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2978
+   ],
+   "fingerprint": "9ed3436cd4b17f2c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Value.as_sql",
+   "line": 189,
+   "sentence": "A `None` is written as the literal `\"NULL\"` rather than a parameter, a comment saying that oracledb does not always convert a `None` to the right kind of null; everything else is `\"%s\"` with the value (`django/db/models/expressions.py:Value.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Value.as_sql",
+   "kind": "function",
+   "lines": [
+    1171,
+    1191
+   ],
+   "fingerprint": "d7d15dc40ef2cb6d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Col",
+   "line": 193,
+   "sentence": "`Col` is a column of a table the query has joined: an alias and a target field, with an output field that is the target unless another is given (`django/db/models/expressions.py:Col`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Col",
+   "kind": "class",
+   "lines": [
+    1351,
+    1387
+   ],
+   "fingerprint": "b2ae96c6d6f0ef3a"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.get_col",
+   "line": 193,
+   "sentence": "It is made by `Field.get_col`, which returns the field's `Field.cached_col` when the alias is the table's own name and the output field is the field itself, so that the same `Col` serves every plain query of the model, and a new one otherwise (`django/db/models/fields/__init__.py:Field.get_col`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.get_col",
+   "kind": "function",
+   "lines": [
+    575,
+    582
+   ],
+   "fingerprint": "38ef22d11c3e714b"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:ColPairs",
+   "line": 195,
+   "sentence": "`ColPairs` stands for the columns of a composite primary key as one expression: an alias, the target fields, the source fields and the key as the output field (`django/db/models/expressions.py:ColPairs`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "ColPairs",
+   "kind": "class",
+   "lines": [
+    1390,
+    1444
+   ],
+   "fingerprint": "85d9a4e6f8ee7eb3"
+  },
+  {
+   "pointer": "django/db/models/fields/composite.py:CompositePrimaryKey.get_col",
+   "line": 195,
+   "sentence": "`CompositePrimaryKey.get_col` makes one, so `F(\"pk\")` on such a model resolves to a `ColPairs` (`django/db/models/fields/composite.py:CompositePrimaryKey.get_col`).",
+   "tree": "django",
+   "path": "django/db/models/fields/composite.py",
+   "symbol": "CompositePrimaryKey.get_col",
+   "kind": "function",
+   "lines": [
+    110,
+    116
+   ],
+   "fingerprint": "5e57343cd3ab0896"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Ref",
+   "line": 199,
+   "sentence": "`Ref` is a reference to a selected expression by its alias, `Ref(\"hands\", Count(...))`, and `Ref.as_sql` writes the alias alone, quoted by the backend's `quote_name` (`django/db/models/expressions.py:Ref`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Ref",
+   "kind": "class",
+   "lines": [
+    1447,
+    1485
+   ],
+   "fingerprint": "6499173f6c546ab4"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:RawSQL",
+   "line": 201,
+   "sentence": "`RawSQL` is SQL a program wrote, with its parameters and an output field that is a bare `Field` unless another is given; `RawSQL.as_sql` writes it in parentheses, and it stands whole in a `GROUP BY` (`django/db/models/expressions.py:RawSQL`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "RawSQL",
+   "kind": "class",
+   "lines": [
+    1268,
+    1300
+   ],
+   "fingerprint": "5d698a338b55807a"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:RawSQL.resolve_expression",
+   "line": 201,
+   "sentence": "`RawSQL.resolve_expression` has one task of its own: for each parent model of the query's model, it looks through the SQL for the column names of the parent's own fields and, finding one, resolves that field's name through `Query.resolve_ref`, so that the join to the parent's table is made for SQL the query cannot read (`django/db/models/expressions.py:RawSQL.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "RawSQL.resolve_expression",
+   "kind": "function",
+   "lines": [
+    1286,
+    1300
+   ],
+   "fingerprint": "93b1448fcc3d0f4f"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:When",
+   "line": 210,
+   "sentence": "A `When` is a condition and a result (`django/db/models/expressions.py:When`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "When",
+   "kind": "class",
+   "lines": [
+    1635,
+    1713
+   ],
+   "at": 1636,
+   "fingerprint": "ed4483789b192bd1"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Case",
+   "line": 212,
+   "sentence": "`Case.__init__` takes `When` objects and nothing else, a default parsed the same way as a result, with `None` becoming `Value(None)`, and an output field (`django/db/models/expressions.py:Case`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Case",
+   "kind": "class",
+   "lines": [
+    1716,
+    1813
+   ],
+   "at": 1717,
+   "fingerprint": "8735a6fa36d5910a"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Case.as_sql",
+   "line": 212,
+   "sentence": "Otherwise the template is filled, and the whole is passed through the backend's `unification_cast_sql` for the output field, which is `\"%s\"` in the base operations and on PostgreSQL a cast for the four types that database would otherwise resolve as text (`django/db/models/expressions.py:Case.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.unification_cast_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Case.as_sql",
+   "kind": "function",
+   "lines": [
+    1761,
+    1802
+   ],
+   "fingerprint": "9f106de8d824c2cc"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.unification_cast_sql",
+   "line": 212,
+   "sentence": "Otherwise the template is filled, and the whole is passed through the backend's `unification_cast_sql` for the output field, which is `\"%s\"` in the base operations and on PostgreSQL a cast for the four types that database would otherwise resolve as text (`django/db/models/expressions.py:Case.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.unification_cast_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.unification_cast_sql",
+   "kind": "function",
+   "lines": [
+    115,
+    121
+   ],
+   "fingerprint": "cd714e99a9472eb9"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:ExpressionWrapper",
+   "line": 228,
+   "sentence": "`ExpressionWrapper` gives an expression an output field it lacks or another than its own, and nothing else: `ExpressionWrapper.as_sql` compiles the inner expression (`django/db/models/expressions.py:ExpressionWrapper`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "ExpressionWrapper",
+   "kind": "class",
+   "lines": [
+    1547,
+    1581
+   ],
+   "at": 1548,
+   "fingerprint": "47dd3ec337e8fc48"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:NegatedExpression",
+   "line": 230,
+   "sentence": "`NegatedExpression` is an `ExpressionWrapper` with a `BooleanField`, made by `~` on a conditional expression (`django/db/models/expressions.py:NegatedExpression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "NegatedExpression",
+   "kind": "class",
+   "lines": [
+    1584,
+    1632
+   ],
+   "fingerprint": "c4d6bd0f4b569f75"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.conditional_expression_supported_in_where_clause",
+   "line": 230,
+   "sentence": "`NegatedExpression.as_sql` writes `\"NOT\"` before the inner SQL, or, where the backend's `conditional_expression_supported_in_where_clause` says the expression cannot stand alone in a `\"WHERE\"`, a `CASE WHEN ... = 0 THEN 1 ELSE 0 END`; an inner expression that raises `EmptyResultSet` becomes `True` (`django/db/backends/base/operations.py:BaseDatabaseOperations.conditional_expression_supported_in_where_clause`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.conditional_expression_supported_in_where_clause",
+   "kind": "function",
+   "lines": [
+    720,
+    740
+   ],
+   "fingerprint": "c812540ae971beec"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:OrderBy",
+   "line": 241,
+   "sentence": "`OrderBy` is an expression with a direction, `descending`, and the two modifiers `nulls_first` and `nulls_last`, which `OrderBy.__init__` refuses together, or as `False` (`django/db/models/expressions.py:OrderBy`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "OrderBy",
+   "kind": "class",
+   "lines": [
+    1914,
+    2017
+   ],
+   "at": 1915,
+   "fingerprint": "0eba6462d5f6ec0d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:ExpressionList",
+   "line": 243,
+   "sentence": "`ExpressionList` is a `Func` whose template is its expressions alone, joined by commas, for a place that wants several, such as a window's partition; it writes nothing for no expressions, and skips the numeric cast on SQLite (`django/db/models/expressions.py:ExpressionList`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "ExpressionList",
+   "kind": "class",
+   "lines": [
+    1488,
+    1513
+   ],
+   "fingerprint": "103acda598eb2db4"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:OrderByList.from_param",
+   "line": 243,
+   "sentence": "`OrderByList` is one with `ORDER BY` in front, which turns a string beginning with `-` into a descending `OrderBy` of the name; `OrderByList.from_param` makes one from a string, an expression, or a list or tuple of them, gives `None` for `None` or an empty list, and refuses anything else with `ValueError` naming the parameter (`django/db/models/expressions.py:OrderByList.from_param`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "OrderByList.from_param",
+   "kind": "function",
+   "lines": [
+    1531,
+    1544
+   ],
+   "at": 1532,
+   "fingerprint": "a5943a942d28f319"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:DatabaseDefault",
+   "line": 247,
+   "sentence": "`DatabaseDefault` wraps the expression of a field's `db_default` (`django/db/models/expressions.py:DatabaseDefault`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "DatabaseDefault",
+   "kind": "class",
+   "lines": [
+    1311,
+    1348
+   ],
+   "fingerprint": "f9a802df353cdb34"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_default_keyword_in_insert",
+   "line": 247,
+   "sentence": "`DatabaseDefault.as_sql` writes the keyword `\"DEFAULT\"` where the backend's features have `supports_default_keyword_in_insert`, and compiles the expression where not, which is SQLite's case (`django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_default_keyword_in_insert`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.supports_default_keyword_in_insert",
+   "kind": "assignment",
+   "lines": [
+    57,
+    57
+   ],
+   "fingerprint": "28fe8a93536cd168"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:JSONNull",
+   "line": 253,
+   "sentence": "`JSONNull` is a `Value` of `None` with a `JSONField` for its output: the JSON scalar `null`, as against SQL's `\"NULL\"` (`django/db/models/expressions.py:JSONNull`, `django/db/models/fields/json.py:JSONField`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "JSONNull",
+   "kind": "class",
+   "lines": [
+    1244,
+    1265
+   ],
+   "at": 1245,
+   "fingerprint": "b9cac3a71d8e9cdd"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:JSONField",
+   "line": 253,
+   "sentence": "`JSONNull` is a `Value` of `None` with a `JSONField` for its output: the JSON scalar `null`, as against SQL's `\"NULL\"` (`django/db/models/expressions.py:JSONNull`, `django/db/models/fields/json.py:JSONField`).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "JSONField",
+   "kind": "class",
+   "lines": [
+    25,
+    151
+   ],
+   "fingerprint": "5d7e23bf846079d6"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_json_value",
+   "line": 253,
+   "sentence": "`JSONNull.as_sql` writes a placeholder whose parameter is `None` as the field prepares it, which the base operations' `adapt_json_value` makes the JSON text `null`, and `JSONNull.as_mysql` wraps the placeholder in `\"JSON_EXTRACT\"` so that MySQL reads it as JSON (`django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_json_value`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.adapt_json_value",
+   "kind": "function",
+   "lines": [
+    628,
+    629
+   ],
+   "fingerprint": "b7b4dfc9e375883e"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 255,
+   "sentence": "Using `None` for a top-level JSON `null` in a query on a `JSONField` is deprecated at the same time; when the deprecation ends, a `None` at the top level compiles to `IS NULL` (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Sliced",
+   "line": 259,
+   "sentence": "`Sliced` is what indexing an `F` makes: an `F` of the same name that remembers a start and a length (`django/db/models/expressions.py:Sliced`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Sliced",
+   "kind": "class",
+   "lines": [
+    996,
+    1050
+   ],
+   "fingerprint": "80f006c428f74a69"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.slice_expression",
+   "line": 259,
+   "sentence": "`Sliced.resolve_expression` resolves the name through `Query.resolve_ref` and hands the resolved column, with the start and length, to the output field's `slice_expression`: `Field.slice_expression` refuses with `NotSupportedError`, and `CharField` and `TextField` return a `Substr` (`django/db/models/fields/__init__.py:Field.slice_expression`, `django/db/models/fields/__init__.py:CharField.slice_expression`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.slice_expression",
+   "kind": "function",
+   "lines": [
+    1196,
+    1198
+   ],
+   "fingerprint": "5831faff26cac1b3"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:CharField.slice_expression",
+   "line": 259,
+   "sentence": "`Sliced.resolve_expression` resolves the name through `Query.resolve_ref` and hands the resolved column, with the start and length, to the output field's `slice_expression`: `Field.slice_expression` refuses with `NotSupportedError`, and `CharField` and `TextField` return a `Substr` (`django/db/models/fields/__init__.py:Field.slice_expression`, `django/db/models/fields/__init__.py:CharField.slice_expression`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "CharField.slice_expression",
+   "kind": "function",
+   "lines": [
+    1360,
+    1363
+   ],
+   "fingerprint": "cce324d02c527283"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.contains_aggregate",
+   "line": 268,
+   "sentence": "Four are computed over the sources: `BaseExpression.contains_aggregate`, `contains_over_clause`, `contains_column_references` and `contains_subquery` are each a `cached_property` that is true when any source's is, and a class that is the thing itself sets the attribute instead, so that a `Window` is a window and not an aggregate though its function is one (`django/db/models/expressions.py:BaseExpression.contains_aggregate`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.contains_aggregate",
+   "kind": "function",
+   "lines": [
+    253,
+    257
+   ],
+   "at": 254,
+   "fingerprint": "8ef8f1a36bc174cc"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.prepare_value",
+   "line": 274,
+   "sentence": "| `contains_column_references` | any source's | `Col` true | `SQLInsertCompiler.prepare_value`, which refuses a value with a column in it (`django/db/models/sql/compiler.py:SQLInsertCompiler.prepare_value`) |",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.prepare_value",
+   "kind": "function",
+   "lines": [
+    1744,
+    1771
+   ],
+   "fingerprint": "c3ed087c777ff5e2"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:BooleanField",
+   "line": 276,
+   "sentence": "| `conditional` | whether the output field is a `BooleanField` (`django/db/models/fields/__init__.py:BooleanField`) | `When`, `OrderBy` false; `Q`, `WhereNode` true | `build_filter`, `When`, the operators of `Combinable` |",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "BooleanField",
+   "kind": "class",
+   "lines": [
+    1201,
+    1244
+   ],
+   "fingerprint": "cd9f53bce8153c66"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:AnyValue",
+   "line": 278,
+   "sentence": "| `window_compatible` | false | `Aggregate` and the window functions true; `AnyValue` false again (`django/db/models/aggregates.py:AnyValue`) | `Window.__init__` |",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "AnyValue",
+   "kind": "class",
+   "lines": [
+    226,
+    237
+   ],
+   "fingerprint": "6bb621cc8ca2278b"
+  },
+  {
+   "pointer": "django/db/models/",
+   "line": 286,
+   "sentence": "*The marks, with what sets each away from the base class's value among the classes of `django/db/models/`, and the reader each is for.",
+   "tree": "django",
+   "path": "django/db/models/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e3a8bbfe5524355d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.relabeled_clone",
+   "line": 295,
+   "sentence": "The base class gives every expression the same few ways of being walked and copied, all through its sources, so that a class that implements the pair of source methods has them for free (`django/db/models/expressions.py:BaseExpression.relabeled_clone`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.relabeled_clone",
+   "kind": "function",
+   "lines": [
+    409,
+    417
+   ],
+   "fingerprint": "8f2ac3470a4fd273"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.replace_expressions",
+   "line": 297,
+   "sentence": "`BaseExpression.replace_expressions` takes a dictionary from expressions to replacements: it returns the replacement for the expression itself if the dictionary has one, itself if it has no sources, and otherwise a copy with each source replaced; `F.replace_expressions` also finds `F(\"name\")` for `F(\"name__lower\")` and applies the transforms to the replacement (`django/db/models/expressions.py:BaseExpression.replace_expressions`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.replace_expressions",
+   "kind": "function",
+   "lines": [
+    419,
+    433
+   ],
+   "fingerprint": "49db8acabaabb1b8"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.get_group_by_cols",
+   "line": 303,
+   "sentence": "`BaseExpression.get_group_by_cols` is the expression's answer to what a `GROUP BY` needs of it: itself, unless it contains an aggregate, and then whatever its sources answer (`django/db/models/expressions.py:BaseExpression.get_group_by_cols`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.get_group_by_cols",
+   "kind": "function",
+   "lines": [
+    460,
+    466
+   ],
+   "fingerprint": "e1ed84201e659e13"
+  }
+ ]
+}

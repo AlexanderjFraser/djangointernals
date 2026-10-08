@@ -1,0 +1,855 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "writing.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler",
+   "line": 7,
+   "sentence": "This page is how each statement is written: every value through the field that owns it, a key or a computed column asked back with `\"RETURNING\"` where the backend can, and the joins of a filter moved into a subquery on the primary key, since SQL allows an update or a delete no join (`django/db/models/sql/compiler.py:SQLInsertCompiler`, `django/db/models/sql/compiler.py:SQLUpdateCompiler`, `django/db/models/sql/compiler.py:SQLDeleteCompiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler",
+   "kind": "class",
+   "lines": [
+    1707,
+    1994
+   ],
+   "fingerprint": "f2a0257a1582bda6"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler",
+   "line": 7,
+   "sentence": "This page is how each statement is written: every value through the field that owns it, a key or a computed column asked back with `\"RETURNING\"` where the backend can, and the joins of a filter moved into a subquery on the primary key, since SQL allows an update or a delete no join (`django/db/models/sql/compiler.py:SQLInsertCompiler`, `django/db/models/sql/compiler.py:SQLUpdateCompiler`, `django/db/models/sql/compiler.py:SQLDeleteCompiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler",
+   "kind": "class",
+   "lines": [
+    2057,
+    2254
+   ],
+   "fingerprint": "aec8272a07fb2155"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLDeleteCompiler",
+   "line": 7,
+   "sentence": "This page is how each statement is written: every value through the field that owns it, a key or a computed column asked back with `\"RETURNING\"` where the backend can, and the joins of a filter moved into a subquery on the primary key, since SQL allows an update or a delete no join (`django/db/models/sql/compiler.py:SQLInsertCompiler`, `django/db/models/sql/compiler.py:SQLUpdateCompiler`, `django/db/models/sql/compiler.py:SQLDeleteCompiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLDeleteCompiler",
+   "kind": "class",
+   "lines": [
+    1997,
+    2054
+   ],
+   "fingerprint": "8c91edae506de078"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py",
+   "line": 9,
+   "sentence": "So each has a `Query` subclass that holds what its statement needs beyond a query's joins and where tree, and a compiler of its own, named by the subclass's `Query.compiler` and fetched, like the compiler of a select, from the connection's operations object (`django/db/models/sql/subqueries.py`, `django/db/models/sql/query.py:Query.get_compiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    177
+   ],
+   "fingerprint": "bf3416518f396f67"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_compiler",
+   "line": 9,
+   "sentence": "So each has a `Query` subclass that holds what its statement needs beyond a query's joins and where tree, and a compiler of its own, named by the subclass's `Query.compiler` and fetched, like the compiler of a select, from the connection's operations object (`django/db/models/sql/subqueries.py`, `django/db/models/sql/query.py:Query.get_compiler`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_compiler",
+   "kind": "function",
+   "lines": [
+    370,
+    377
+   ],
+   "fingerprint": "67a070b12ce95559"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.delete",
+   "line": 11,
+   "sentence": "`QuerySet._insert` makes an `InsertQuery` and runs it, for `Model.save` and for `QuerySet.bulk_create`; `QuerySet.update` and `QuerySet._update` chain the queryset's query into an `UpdateQuery`; `QuerySet._raw_delete` turns a clone of the queryset's query into a `DeleteQuery`; and `Collector.delete` uses that for the rows it never fetched and `DeleteQuery.delete_batch` and `UpdateQuery.update_batch` for the instances it holds, by key (`django/db/models/deletion.py:Collector.delete`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.delete",
+   "kind": "function",
+   "lines": [
+    466,
+    552
+   ],
+   "fingerprint": "e04d0d5583b5ecd6"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:InsertQuery.insert_values",
+   "line": 17,
+   "sentence": "`InsertQuery` is made with the conflict mode, an `OnConflict`, which is `OnConflict.IGNORE`, `OnConflict.UPDATE` or `None`, and the fields to update and the unique fields that mode may need; `InsertQuery.insert_values` then gives it the fields to write, the instances, and whether the values are to be taken as they stand on the instances, which a raw save asks for (`django/db/models/sql/subqueries.py:InsertQuery.insert_values`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "InsertQuery.insert_values",
+   "kind": "function",
+   "lines": [
+    161,
+    164
+   ],
+   "fingerprint": "66ada5471cf08f35"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._insert",
+   "line": 17,
+   "sentence": "`QuerySet._insert` makes one and at once calls `SQLInsertCompiler.execute_sql` on its compiler with the fields whose values are to come back (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._insert",
+   "kind": "function",
+   "lines": [
+    2182,
+    2207
+   ],
+   "fingerprint": "5ead6406a35c3646"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql",
+   "line": 17,
+   "sentence": "`QuerySet._insert` makes one and at once calls `SQLInsertCompiler.execute_sql` on its compiler with the fields whose values are to come back (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1949,
+    1994
+   ],
+   "fingerprint": "db88ef7828709403"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql",
+   "line": 21,
+   "sentence": "`SQLInsertCompiler.as_sql` begins with the statement's first words, which the backend's operations write: `\"INSERT INTO\"` from `BaseDatabaseOperations.insert_statement`, or on SQLite `\"INSERT OR IGNORE INTO\"` and on MySQL `\"INSERT IGNORE INTO\"` for `OnConflict.IGNORE` (`django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    1825,
+    1947
+   ],
+   "fingerprint": "915d3dd6e1884b1b"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement",
+   "line": 21,
+   "sentence": "`SQLInsertCompiler.as_sql` begins with the statement's first words, which the backend's operations write: `\"INSERT INTO\"` from `BaseDatabaseOperations.insert_statement`, or on SQLite `\"INSERT OR IGNORE INTO\"` and on MySQL `\"INSERT IGNORE INTO\"` for `OnConflict.IGNORE` (`django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.insert_statement",
+   "kind": "function",
+   "lines": [
+    384,
+    387
+   ],
+   "fingerprint": "26410e0e243e6ef7"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val",
+   "line": 21,
+   "sentence": "`SQLInsertCompiler.pre_save_val` takes the value: the field's `Field.pre_save` with `add=True`, which is the hook by which `auto_now_add` sets the moment of signing on, or the attribute as it stands where the query is raw (`django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`, `django/db/models/fields/__init__.py:Field.pre_save`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.pre_save_val",
+   "kind": "function",
+   "lines": [
+    1773,
+    1780
+   ],
+   "fingerprint": "aefd01cb2cc25928"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.pre_save",
+   "line": 21,
+   "sentence": "`SQLInsertCompiler.pre_save_val` takes the value: the field's `Field.pre_save` with `add=True`, which is the hook by which `auto_now_add` sets the moment of signing on, or the attribute as it stands where the query is raw (`django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`, `django/db/models/fields/__init__.py:Field.pre_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.pre_save",
+   "kind": "function",
+   "lines": [
+    1027,
+    1029
+   ],
+   "fingerprint": "f875aa1bbd8c51ec"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.prepare_value",
+   "line": 23,
+   "sentence": "Then the field's `Field.get_db_prep_save`, with the connection, which hands an expression back as it is and prepares a plain value through the field's `get_db_prep_value` ([A field, the base class](../models/fields.md)) (`django/db/models/sql/compiler.py:SQLInsertCompiler.prepare_value`, `django/db/models/fields/__init__.py:Field.get_db_prep_save`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.prepare_value",
+   "kind": "function",
+   "lines": [
+    1744,
+    1771
+   ],
+   "fingerprint": "c3ed087c777ff5e2"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.get_db_prep_save",
+   "line": 23,
+   "sentence": "Then the field's `Field.get_db_prep_save`, with the connection, which hands an expression back as it is and prepares a plain value through the field's `get_db_prep_value` ([A field, the base class](../models/fields.md)) (`django/db/models/sql/compiler.py:SQLInsertCompiler.prepare_value`, `django/db/models/fields/__init__.py:Field.get_db_prep_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.get_db_prep_save",
+   "kind": "function",
+   "lines": [
+    1048,
+    1052
+   ],
+   "fingerprint": "254f5d517831c32c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.resolve_ref",
+   "line": 34,
+   "sentence": "The second came earlier: resolving `Count(\"ships\")` with `allow_joins=False` refused the join its name needs, in `Query.resolve_ref`, before the aggregate was tested for (`django/db/models/sql/query.py:Query.resolve_ref`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.resolve_ref",
+   "kind": "function",
+   "lines": [
+    2069,
+    2118
+   ],
+   "fingerprint": "e2b6625b4c73decb"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field._get_default",
+   "line": 52,
+   "sentence": "For a field with `db_default` and no `default`, `Field.get_default` returns a `DatabaseDefault` around the default's expression, so an instance made without a value for `\"stamped\"` holds one; `pre_save` returns it and `as_sql` leaves it unprepared (`django/db/models/fields/__init__.py:Field._get_default`, `django/db/models/expressions.py:DatabaseDefault`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field._get_default",
+   "kind": "function",
+   "lines": [
+    1066,
+    1086
+   ],
+   "at": 1067,
+   "fingerprint": "a71ca5772a83b23c"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:DatabaseDefault",
+   "line": 52,
+   "sentence": "For a field with `db_default` and no `default`, `Field.get_default` returns a `DatabaseDefault` around the default's expression, so an instance made without a value for `\"stamped\"` holds one; `pre_save` returns it and `as_sql` leaves it unprepared (`django/db/models/fields/__init__.py:Field._get_default`, `django/db/models/expressions.py:DatabaseDefault`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "DatabaseDefault",
+   "kind": "class",
+   "lines": [
+    1311,
+    1348
+   ],
+   "fingerprint": "f9a802df353cdb34"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert",
+   "line": 52,
+   "sentence": "Where the field stays, because some instance was given a value or it is the last, and the backend has `supports_default_keyword_in_bulk_insert`, each `DatabaseDefault` goes into the statement as an expression, and `DatabaseDefault.as_sql` writes `\"DEFAULT\"`, or compiles the default's own expression where the backend lacks `supports_default_keyword_in_insert`, as SQLite does; where the backend lacks the keyword in a bulk insert, Oracle, each is replaced by the prepared default before the statement is assembled (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert`, `django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_default_keyword_in_insert`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert",
+   "kind": "assignment",
+   "lines": [
+    219,
+    219
+   ],
+   "fingerprint": "b75d89f606235d1f"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_default_keyword_in_insert",
+   "line": 52,
+   "sentence": "Where the field stays, because some instance was given a value or it is the last, and the backend has `supports_default_keyword_in_bulk_insert`, each `DatabaseDefault` goes into the statement as an expression, and `DatabaseDefault.as_sql` writes `\"DEFAULT\"`, or compiles the default's own expression where the backend lacks `supports_default_keyword_in_insert`, as SQLite does; where the backend lacks the keyword in a bulk insert, Oracle, each is replaced by the prepared default before the statement is assembled (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert`, `django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_default_keyword_in_insert`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.supports_default_keyword_in_insert",
+   "kind": "assignment",
+   "lines": [
+    57,
+    57
+   ],
+   "fingerprint": "28fe8a93536cd168"
+  },
+  {
+   "pointer": "django/db/models/fields/generated.py:GeneratedField",
+   "line": 52,
+   "sentence": "Neither `Model._save_table` nor `bulk_create` sends a `GeneratedField` to the compiler: each leaves out every field with `Field.generated` (`django/db/models/fields/generated.py:GeneratedField`).",
+   "tree": "django",
+   "path": "django/db/models/fields/generated.py",
+   "symbol": "GeneratedField",
+   "kind": "class",
+   "lines": [
+    11,
+    207
+   ],
+   "fingerprint": "81ac2813b3dbb1b7"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.db_returning_fields",
+   "line": 54,
+   "sentence": "`Options.db_returning_fields` lists the fields of a model that have `db_returning`: an auto field, a field with a database default, a generated field (`django/db/models/options.py:Options.db_returning_fields`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.db_returning_fields",
+   "kind": "function",
+   "lines": [
+    1040,
+    1052
+   ],
+   "at": 1041,
+   "fingerprint": "f1999ad8b886dcb6"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.assemble_as_sql",
+   "line": 77,
+   "sentence": "`SQLInsertCompiler.assemble_as_sql` turns the fields and the rows of values into rows of placeholders and rows of parameters, one value at a time through `SQLInsertCompiler.field_as_sql` (`django/db/models/sql/compiler.py:SQLInsertCompiler.assemble_as_sql`, `django/db/models/sql/compiler.py:SQLInsertCompiler.field_as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.assemble_as_sql",
+   "kind": "function",
+   "lines": [
+    1782,
+    1823
+   ],
+   "fingerprint": "a192215a605b444b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.field_as_sql",
+   "line": 77,
+   "sentence": "`SQLInsertCompiler.assemble_as_sql` turns the fields and the rows of values into rows of placeholders and rows of parameters, one value at a time through `SQLInsertCompiler.field_as_sql` (`django/db/models/sql/compiler.py:SQLInsertCompiler.assemble_as_sql`, `django/db/models/sql/compiler.py:SQLInsertCompiler.field_as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.field_as_sql",
+   "kind": "function",
+   "lines": [
+    1711,
+    1742
+   ],
+   "fingerprint": "e24788f3f6134f68"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.__init_subclass__",
+   "line": 77,
+   "sentence": "A value whose field is `None` is raw SQL and becomes the placeholder itself; a field with a `get_placeholder_sql` method writes its own, as `BinaryField.get_placeholder_sql` does, and a field class that declares the older `\"get_placeholder\"` instead is given a `get_placeholder_sql` by `Field.__init_subclass__`, which warns with `RemovedInDjango2028Warning` (`django/db/models/fields/__init__.py:Field.__init_subclass__`); an expression is compiled; anything else is `\"%s\"` with the value as its parameter.",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.__init_subclass__",
+   "kind": "function",
+   "lines": [
+    194,
+    218
+   ],
+   "fingerprint": "2ac579297d54be55"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.modify_insert_params",
+   "line": 77,
+   "sentence": "`BaseDatabaseOperations.modify_insert_params` is given each pair last, a hook the comment says is used by Oracle Spatial alone, for a ticket it cites (`django/db/backends/base/operations.py:BaseDatabaseOperations.modify_insert_params`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.modify_insert_params",
+   "kind": "function",
+   "lines": [
+    764,
+    769
+   ],
+   "fingerprint": "487cbf2e1c87afae"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.pk_default_value",
+   "line": 77,
+   "sentence": "The one case with no field at all, which the comment says can only be a model whose primary key is a single auto field, writes one row an instance with `BaseDatabaseOperations.pk_default_value` raw in the key's column, `\"DEFAULT\"` in the base class and `\"NULL\"` on SQLite, MySQL and Oracle (`django/db/backends/base/operations.py:BaseDatabaseOperations.pk_default_value`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.pk_default_value",
+   "kind": "function",
+   "lines": [
+    351,
+    356
+   ],
+   "fingerprint": "37e7ed3a1c87ace2"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.on_conflict_suffix_sql",
+   "line": 79,
+   "sentence": "`BaseDatabaseOperations.on_conflict_suffix_sql` is given the fields, the mode and the columns to update and to match on, and writes nothing in the base class; SQLite's and PostgreSQL's write `ON CONFLICT(...) DO UPDATE SET` with each column set from `\"EXCLUDED\"` for `OnConflict.UPDATE`, PostgreSQL's `ON CONFLICT DO NOTHING` for `OnConflict.IGNORE`, and MySQL's `ON DUPLICATE KEY UPDATE` (`django/db/backends/base/operations.py:BaseDatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.on_conflict_suffix_sql",
+   "kind": "function",
+   "lines": [
+    866,
+    867
+   ],
+   "fingerprint": "5204842dd72b3bb2"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql",
+   "line": 79,
+   "sentence": "`BaseDatabaseOperations.on_conflict_suffix_sql` is given the fields, the mode and the columns to update and to match on, and writes nothing in the base class; SQLite's and PostgreSQL's write `ON CONFLICT(...) DO UPDATE SET` with each column set from `\"EXCLUDED\"` for `OnConflict.UPDATE`, PostgreSQL's `ON CONFLICT DO NOTHING` for `OnConflict.IGNORE`, and MySQL's `ON DUPLICATE KEY UPDATE` (`django/db/backends/base/operations.py:BaseDatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.on_conflict_suffix_sql",
+   "kind": "function",
+   "lines": [
+    389,
+    408
+   ],
+   "fingerprint": "ac440cf9345fb7f8"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_insert_sql",
+   "line": 79,
+   "sentence": "Where columns are to come back and the backend has `can_return_columns_from_insert`, there is one statement: `BaseDatabaseOperations.bulk_insert_sql` writes one `\"VALUES\"` list for all the rows where the backend has `can_return_rows_from_bulk_insert`, and the first row alone otherwise; then the conflict suffix; then `BaseDatabaseOperations.returning_columns`, which writes `\"RETURNING\"` and the columns and may hand back parameters of its own, Oracle's binds, kept as `SQLInsertCompiler.returning_params` (`django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_insert_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.bulk_insert_sql",
+   "kind": "function",
+   "lines": [
+    282,
+    285
+   ],
+   "fingerprint": "0fe61d451d59efda"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns",
+   "line": 79,
+   "sentence": "Where columns are to come back and the backend has `can_return_columns_from_insert`, there is one statement: `BaseDatabaseOperations.bulk_insert_sql` writes one `\"VALUES\"` list for all the rows where the backend has `can_return_rows_from_bulk_insert`, and the first row alone otherwise; then the conflict suffix; then `BaseDatabaseOperations.returning_columns`, which writes `\"RETURNING\"` and the columns and may hand back parameters of its own, Oracle's binds, kept as `SQLInsertCompiler.returning_params` (`django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_insert_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.returning_columns",
+   "kind": "function",
+   "lines": [
+    380,
+    397
+   ],
+   "fingerprint": "ea8ba58ddc4cb141"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.can_return_columns_from_insert",
+   "line": 79,
+   "sentence": "The base class has the two returning features false; SQLite and PostgreSQL set both true, Oracle can return columns but not the rows of a bulk insert, and MySQL's features class answers either for MariaDB alone (`django/db/backends/base/features.py:BaseDatabaseFeatures.can_return_columns_from_insert`, `django/db/backends/mysql/features.py:DatabaseFeatures.can_return_columns_from_insert`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.can_return_columns_from_insert",
+   "kind": "assignment",
+   "lines": [
+    39,
+    39
+   ],
+   "fingerprint": "7535a26481dd6166"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.can_return_columns_from_insert",
+   "line": 79,
+   "sentence": "The base class has the two returning features false; SQLite and PostgreSQL set both true, Oracle can return columns but not the rows of a bulk insert, and MySQL's features class answers either for MariaDB alone (`django/db/backends/base/features.py:BaseDatabaseFeatures.can_return_columns_from_insert`, `django/db/backends/mysql/features.py:DatabaseFeatures.can_return_columns_from_insert`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.can_return_columns_from_insert",
+   "kind": "function",
+   "lines": [
+    156,
+    158
+   ],
+   "at": 157,
+   "fingerprint": "2f7d52861004b584"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql",
+   "line": 160,
+   "sentence": "Where the backend can return them, the rows of a bulk insert for several instances or the columns of an insert for one, `BaseDatabaseOperations.fetch_returned_rows` reads them from the cursor, with the kept parameters; or else, where the first returning field is an `AutoField`, one row is made of `BaseDatabaseOperations.last_insert_id`, which is the last row id the driver's cursor reports in the base class and the current value of the key's sequence on Oracle; and where neither holds, the list is empty (`django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.last_insert_id`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1949,
+    1994
+   ],
+   "fingerprint": "db88ef7828709403"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.last_insert_id",
+   "line": 160,
+   "sentence": "Where the backend can return them, the rows of a bulk insert for several instances or the columns of an insert for one, `BaseDatabaseOperations.fetch_returned_rows` reads them from the cursor, with the kept parameters; or else, where the first returning field is an `AutoField`, one row is made of `BaseDatabaseOperations.last_insert_id`, which is the last row id the driver's cursor reports in the base class and the current value of the key's sequence on Oracle; and where neither holds, the list is empty (`django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.last_insert_id`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.last_insert_id",
+   "kind": "function",
+   "lines": [
+    311,
+    318
+   ],
+   "fingerprint": "e1b6a12bdd44fc4d"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 162,
+   "sentence": "`Model._save_table` starts from `db_returning_fields`, adds every field whose value is an expression, and takes off a field with `db_returning` where the backend cannot return columns, unless the key is set and the field is the auto field; `QuerySet._batched_insert` asks for `db_returning_fields` where the backend can return bulk rows and the conflict mode allows (`django/db/models/base.py:Model._save_table`, `django/db/models/query.py:QuerySet._batched_insert`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
+   "kind": "function",
+   "lines": [
+    1075,
+    1212
+   ],
+   "fingerprint": "52c8d3bbd3d1cbaf"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._batched_insert",
+   "line": 162,
+   "sentence": "`Model._save_table` starts from `db_returning_fields`, adds every field whose value is an expression, and takes off a field with `db_returning` where the backend cannot return columns, unless the key is set and the field is the auto field; `QuerySet._batched_insert` asks for `db_returning_fields` where the backend can return bulk rows and the conflict mode allows (`django/db/models/base.py:Model._save_table`, `django/db/models/query.py:QuerySet._batched_insert`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._batched_insert",
+   "kind": "function",
+   "lines": [
+    2212,
+    2255
+   ],
+   "fingerprint": "d0c71e990bbc6743"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 164,
+   "sentence": "The release notes say that generated fields, and fields assigned expressions, are refreshed from the database after `Model.save` on the backends that support `\"RETURNING\"`, SQLite, PostgreSQL and Oracle, and are marked deferred on MySQL and MariaDB so that the next access fetches them; and that the operations methods for the clause were renamed to `returning_columns` and `fetch_returned_rows`, since they serve an update's `\"RETURNING\"` as well as an insert's (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery._setup_query",
+   "line": 168,
+   "sentence": "`UpdateQuery._setup_query` sets the three empty, and runs both at construction and at the end of `Query.chain`, which calls it on any query class that has it, so that a queryset's query chained into an `UpdateQuery` arrives with its joins and where tree and with these three fresh; `UpdateQuery.clone` copies the related updates (`django/db/models/sql/subqueries.py:UpdateQuery._setup_query`, `django/db/models/sql/query.py:Query.chain`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery._setup_query",
+   "kind": "function",
+   "lines": [
+    58,
+    65
+   ],
+   "fingerprint": "c649e5b374e50cb1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.chain",
+   "line": 168,
+   "sentence": "`UpdateQuery._setup_query` sets the three empty, and runs both at construction and at the end of `Query.chain`, which calls it on any query class that has it, so that a queryset's query chained into an `UpdateQuery` arrives with its joins and where tree and with these three fresh; `UpdateQuery.clone` copies the related updates (`django/db/models/sql/subqueries.py:UpdateQuery._setup_query`, `django/db/models/sql/query.py:Query.chain`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.chain",
+   "kind": "function",
+   "lines": [
+    433,
+    446
+   ],
+   "fingerprint": "1296d8e0bfdf1117"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery.add_update_values",
+   "line": 170,
+   "sentence": "`UpdateQuery.add_update_values` is the entry from `QuerySet.update`, with the keyword arguments as a dictionary (`django/db/models/sql/subqueries.py:UpdateQuery.add_update_values`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery.add_update_values",
+   "kind": "function",
+   "lines": [
+    81,
+    104
+   ],
+   "fingerprint": "31965311872bed04"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery.add_update_fields",
+   "line": 170,
+   "sentence": "The rest go to `UpdateQuery.add_update_fields`, which skips a generated field, resolves a value that has `resolve_expression` at once, with `allow_joins=False` and `for_save=True`, so that, the comment says, the annotations are no longer needed, and appends the triple (`django/db/models/sql/subqueries.py:UpdateQuery.add_update_fields`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery.add_update_fields",
+   "kind": "function",
+   "lines": [
+    106,
+    120
+   ],
+   "fingerprint": "d703a3b45991c217"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:UpdateQuery.update_batch",
+   "line": 170,
+   "sentence": "`UpdateQuery.update_batch` is the `Collector`'s way in for the instances whose foreign key it has to set, to null, to a default or to a value, before the row they point at goes: the values through `add_update_values`, then the keys in chunks of `GET_ITERATOR_CHUNK_SIZE`, each chunk a fresh where tree of `\"pk__in\"` and a statement run for `NO_RESULTS` (`django/db/models/sql/subqueries.py:UpdateQuery.update_batch`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "UpdateQuery.update_batch",
+   "kind": "function",
+   "lines": [
+    72,
+    79
+   ],
+   "fingerprint": "978701c70186cb65"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.as_sql",
+   "line": 174,
+   "sentence": "`SQLUpdateCompiler.as_sql` calls `SQLUpdateCompiler.pre_sql_setup` first, and returns an empty statement where the query has no values; the base `execute_sql` takes an empty statement for `EmptyResultSet`, sends nothing and answers `None` (`django/db/models/sql/compiler.py:SQLUpdateCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    2061,
+    2136
+   ],
+   "fingerprint": "132c3465955032db"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.prepare_database_save",
+   "line": 174,
+   "sentence": "A model instance, anything with `prepare_database_save`, is accepted for a relation field alone and gives the key of the related row, `Model.prepare_database_save` refusing an unsaved instance; for any other field it is `TypeError` (`django/db/models/base.py:Model.prepare_database_save`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.prepare_database_save",
+   "kind": "function",
+   "lines": [
+    1451,
+    1456
+   ],
+   "fingerprint": "b1e6eb57b884536d"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:CharField",
+   "line": 209,
+   "sentence": "An instance for a `CharField` is the `TypeError` (`django/db/models/fields/__init__.py:CharField`); the count is refused for its join, as it was in the insert; the window by `as_sql`; the reverse relation `\"crew\"` by `add_update_values`, as a field that is not concrete.",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "CharField",
+   "kind": "class",
+   "lines": [
+    1247,
+    1363
+   ],
+   "fingerprint": "269619c1e2ee1bd2"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup",
+   "line": 213,
+   "sentence": "`SQLUpdateCompiler.pre_sql_setup` is where a filter that joined other tables is turned into a condition on the table's own key, the docstring's \"format required for (portable) SQL updates\", and where, for an update that will be several statements, the keys are fetched first so that, as the docstring says, they do not change as a result of the progressive updates (`django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.pre_sql_setup",
+   "kind": "function",
+   "lines": [
+    2191,
+    2254
+   ],
+   "fingerprint": "4578ae61945a38c1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_fields",
+   "line": 215,
+   "sentence": "The fields it will select are the primary key's name and, for each related update, the ancestor's key where the path to the ancestor is not primary keys all the way, the comment saying that this branch is reached only for an ancestor outside the primary key chain of a multi-table tree; `Query.add_fields` sets them (`django/db/models/sql/query.py:Query.add_fields`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_fields",
+   "kind": "function",
+   "lines": [
+    2275,
+    2333
+   ],
+   "fingerprint": "efb9650436e6a4e7"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.update_can_self_select",
+   "line": 215,
+   "sentence": "`BaseDatabaseFeatures.update_can_self_select` is true in the base class, and MySQL's features class answers true for MariaDB alone, the comment giving MySQL as the backend that cannot select from the table it updates (`django/db/backends/base/features.py:BaseDatabaseFeatures.update_can_self_select`, `django/db/backends/mysql/features.py:DatabaseFeatures.update_can_self_select`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.update_can_self_select",
+   "kind": "assignment",
+   "lines": [
+    14,
+    14
+   ],
+   "fingerprint": "87cae3e23359726a"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.update_can_self_select",
+   "line": 215,
+   "sentence": "`BaseDatabaseFeatures.update_can_self_select` is true in the base class, and MySQL's features class answers true for MariaDB alone, the comment giving MySQL as the backend that cannot select from the table it updates (`django/db/backends/base/features.py:BaseDatabaseFeatures.update_can_self_select`, `django/db/backends/mysql/features.py:DatabaseFeatures.update_can_self_select`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.update_can_self_select",
+   "kind": "function",
+   "lines": [
+    137,
+    139
+   ],
+   "at": 138,
+   "fingerprint": "dc79c0759d1ee491"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_sql",
+   "line": 315,
+   "sentence": "The docstring says what it returns: the rows affected by the primary update, which is the first non-empty statement that was executed, so that where the main statement was empty and a related one touched rows, that count is the answer (`django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    2138,
+    2157
+   ],
+   "fingerprint": "b50dda2540b1963f"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql",
+   "line": 315,
+   "sentence": "`SQLUpdateCompiler.execute_returning_sql` is for `Model.save`, which wants back a generated column that depends on the fields it set, and a field it set to an expression; it raises `NotImplementedError` where there are related updates, falls back to `execute_sql` and a list of empty tuples, one a row, where no fields are to come back or the backend lacks `can_return_rows_from_update`, and otherwise sets `returning_fields`, runs the one statement on a cursor, fetches the rows with `fetch_returned_rows` and applies the converters (`django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.execute_returning_sql",
+   "kind": "function",
+   "lines": [
+    2159,
+    2189
+   ],
+   "fingerprint": "fbd6b41eb0089497"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:DeleteQuery.delete_batch",
+   "line": 332,
+   "sentence": "`DeleteQuery.delete_batch` takes a list of keys and runs a statement for each chunk of `GET_ITERATOR_CHUNK_SIZE` of them: for each chunk it clears the where tree, adds an `\"in\"` filter on the key's attname, and calls `DeleteQuery.do_query`, which narrows the alias map to the one table, sets the where tree, and runs the compiler for `ROW_COUNT`; the counts are summed (`django/db/models/sql/subqueries.py:DeleteQuery.delete_batch`, `django/db/models/sql/subqueries.py:DeleteQuery.do_query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "DeleteQuery.delete_batch",
+   "kind": "function",
+   "lines": [
+    27,
+    46
+   ],
+   "fingerprint": "a5e44caec44868f2"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:DeleteQuery.do_query",
+   "line": 332,
+   "sentence": "`DeleteQuery.delete_batch` takes a list of keys and runs a statement for each chunk of `GET_ITERATOR_CHUNK_SIZE` of them: for each chunk it clears the where tree, adds an `\"in\"` filter on the key's attname, and calls `DeleteQuery.do_query`, which narrows the alias map to the one table, sets the where tree, and runs the compiler for `ROW_COUNT`; the counts are summed (`django/db/models/sql/subqueries.py:DeleteQuery.delete_batch`, `django/db/models/sql/subqueries.py:DeleteQuery.do_query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "DeleteQuery.do_query",
+   "kind": "function",
+   "lines": [
+    22,
+    25
+   ],
+   "fingerprint": "f2adeb73989eebd4"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._raw_delete",
+   "line": 332,
+   "sentence": "For the rows it never fetched it calls `QuerySet._raw_delete`, which clones the queryset's query, sets the clone's class to `DeleteQuery`, and runs the compiler for `ROW_COUNT` (`django/db/models/query.py:QuerySet._raw_delete`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._raw_delete",
+   "kind": "function",
+   "lines": [
+    1425,
+    1432
+   ],
+   "fingerprint": "f4407e562b0443d1"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLDeleteCompiler.as_sql",
+   "line": 334,
+   "sentence": "`SQLDeleteCompiler.as_sql` has one question to settle: whether the delete can be written against the table alone (`django/db/models/sql/compiler.py:SQLDeleteCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLDeleteCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    2032,
+    2054
+   ],
+   "fingerprint": "b45e6aa272c8fe45"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLDeleteCompiler._as_sql",
+   "line": 334,
+   "sentence": "With a single alias, and either the backend's `delete_can_self_reference_subquery` or no such subquery, `SQLDeleteCompiler._as_sql` writes the query as it is: `\"DELETE FROM\"` the base table, and the where tree compiled, with no `\"WHERE\"` where that raises `FullResultSet` (`django/db/models/sql/compiler.py:SQLDeleteCompiler._as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLDeleteCompiler._as_sql",
+   "kind": "function",
+   "lines": [
+    2024,
+    2030
+   ],
+   "fingerprint": "e0f083b2a6122f61"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.delete_can_self_reference_subquery",
+   "line": 334,
+   "sentence": "`BaseDatabaseFeatures.delete_can_self_reference_subquery` is true in the base class and false for MySQL (`django/db/backends/base/features.py:BaseDatabaseFeatures.delete_can_self_reference_subquery`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.delete_can_self_reference_subquery",
+   "kind": "assignment",
+   "lines": [
+    17,
+    17
+   ],
+   "fingerprint": "cccf11e7ede01599"
+  },
+  {
+   "pointer": "django/db/models/sql/constants.py",
+   "line": 415,
+   "sentence": "The module `django/db/models/sql/constants.py` holds the few constants that the query, the compilers and the queryset share (`django/db/models/sql/constants.py`).",
+   "tree": "django",
+   "path": "django/db/models/sql/constants.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    26
+   ],
+   "fingerprint": "c5764a2dde7d39df"
+  },
+  {
+   "pointer": "django/db/models/sql/constants.py",
+   "line": 415,
+   "sentence": "The module `django/db/models/sql/constants.py` holds the few constants that the query, the compilers and the queryset share (`django/db/models/sql/constants.py`).",
+   "tree": "django",
+   "path": "django/db/models/sql/constants.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    26
+   ],
+   "fingerprint": "c5764a2dde7d39df"
+  }
+ ]
+}

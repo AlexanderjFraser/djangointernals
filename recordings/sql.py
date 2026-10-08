@@ -26,9 +26,14 @@ name, and of those that have a default only the ones that were given another val
 function of one parameter that has no default is written with the value alone. What a call
 returned follows `->`, put into words at the moment it was returned; `raises` names an
 exception, once, at the innermost written-down call it left, and again with its message
-under the line of Python it ended. A call with neither after it returned something the
+under the line of Python it ended; where a caller caught that exception and raised another
+in its place, the message under the line of Python is the one that left the line. A call with neither after it returned something the
 recording does not describe, or is a generator, which returns nothing until it is
-exhausted. A generator's line is written once, where its body first runs.
+exhausted. A generator's line is written once, where its body first runs, and what it calls each time it is
+resumed is written one step deeper than whatever resumed it. A method is sometimes written as
+`Exact.as_sql  (BuiltinLookup.as_sql)`: the class of the object, and in parentheses the class
+whose method ran; where the first class overrides that method, its own ran first, unwritten,
+and reached the written one through `super()`.
 
 A second kind of block puts one question to a running Django on each line: the text before
 `->` is the expression that was evaluated and what follows is the repr of its value, and a
@@ -60,11 +65,18 @@ the query's where tree; `entry(queryset)` is the first child of that tree, a loo
 `said(thing)` is a thing put into words as this docstring describes; `aliases(query)` writes
 the alias map, an entry to a line with its reference count; `converters_said(compiler)` and
 `converter_names(expression)` name the converters by their functions, and the lambdas that
-`BaseExpression.convert_value` returns by that method; and the lines `select[n]: ...`,
-`annotation_col_map: ...` and `klass_info: ...` write down what a compiler holds after its
-`as_sql`, in the order it holds it. Where a lookup, a where tree or a path is put into words,
+`BaseExpression.convert_value` returns by that method, after asking the compiler for its
+statement; and `selection(queryset)` asks the queryset's compiler for its statement and writes
+down what it then holds, as the lines `select[n]: ...`, `annotation_col_map: ...` and
+`klass_info: ...`, in the order it holds them. In a label a set is written sorted; in a
+question's answer a set is written as Python writes it. The parameters a call returned are
+written in the container it returned them in, a list or a tuple. Three `DatabaseError`s in
+the output, for an ordering or a limit inside a compound statement and for an ordering term a
+compound statement does not select, are raised by Django's compiler and not by SQLite. Where a lookup, a where tree or a path is put into words,
 a subquery inside it is written as `Exists(a Query of Sailor)` or `Subquery(...)`. A line
-`SQLCompiler.as_sql  (as above)` stands for a call whose lines the block before it shows.
+`SQLCompiler.as_sql  (as above)` stands for a call whose lines the block before it shows, and
+`JoinPromoter.add_votes(a generator)` for votes handed over as a generator, which cannot be
+written down without being consumed: they are the left side's inner joins.
 
 Three transforms of Django's that no field class registers at import, `Lower`, `Length` and
 `Upper`, are registered on `CharField` early in the recording and stay registered; a block
@@ -82,13 +94,17 @@ What ran is SQLite's part as well as Django's. These are this backend's, and ano
 would differ: `LIKE ... ESCAPE '\\'` for the pattern lookups and `REGEXP` for the regular
 expressions; `django_datetime_extract`, `django_datetime_trunc` and their relatives,
 functions Django registers with SQLite; `MAX` and `MIN` for `Greatest` and `Least`;
-`RAND`; `STRFTIME(...)` for `Now`; `CAST(... AS NUMERIC)` around a decimal; the absence of
-`FOR UPDATE`; the refusal of `DISTINCT ON`, and of an ordering or a limit inside a
-compound statement; a compound statement nested as `SELECT * FROM (...)`; `INSERT OR
-IGNORE`, `ON CONFLICT`, `RETURNING`, and a database default written out as its value;
-`GROUP BY` listing every selected column; dates and datetimes among the parameters as
-text; `0` and `1` for a comparison selected as a column; and the order of rows where a
-statement has no `ORDER BY`, which is the choice of SQLite's planner.
+`RAND`; `STRFTIME(...)` for `Now`; `UUIDV4()` and `UUIDV7()`; `STRING_AGG(... ORDER BY ...)`
+and `GROUP_CONCAT(DISTINCT ...)` for `StringAgg`; `STDDEV_POP`, `VAR_SAMP` and `ANY_VALUE`;
+`POWER` for `**`; `MOD(..., 2)` in a three-way XOR; `COLLATE` with a quoted name; `CAST(... AS
+NUMERIC)` around a decimal; the absence of `FOR UPDATE`; the refusal of `DISTINCT ON`, and
+of an ordering or a limit inside a compound statement; a compound statement nested as
+`SELECT * FROM (...)`; `INSERT OR IGNORE`, `ON CONFLICT`, `RETURNING`, a column whose every
+value is the database default left out of an insert and asked back, and the default written
+out as its value where the column cannot be left out; `BEGIN` passing through the cursor;
+`EXPLAIN QUERY PLAN`; `GROUP BY` listing every selected column; dates and datetimes among
+the parameters as text; `0` and `1` for a comparison selected as a column; and the order of
+rows where a statement has no `ORDER BY`, which is the choice of SQLite's planner.
 
     RECORD_EVERYTHING=django.db.models.sql python recordings/sql.py    every call in the modules with that prefix
 """
@@ -104,6 +120,7 @@ sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != HERE] + [HERE
 import atexit  # noqa: E402
 import datetime  # noqa: E402
 import decimal  # noqa: E402
+import enum  # noqa: E402
 import functools  # noqa: E402
 import inspect  # noqa: E402
 import json  # noqa: E402
@@ -416,12 +433,6 @@ def quietly(statement: str) -> None:
         sys.setprofile(watching)
 
 
-def lines(statement: str) -> None:
-    """A line of Python run with nothing written down but what it binds: for making a thing
-    a block is about, out of the block."""
-    exec(statement, ASKING)
-
-
 # ---------------------------------------------------------------------------------------------
 # Django is set up, the tables are made and the first rows put in them, none of it recorded.
 
@@ -624,6 +635,8 @@ def brief(value) -> str:
         return f"{type(value).__name__}({brief(value.lhs)}, {brief(value.rhs)})"
     if isinstance(value, (BaseExpression, Q, FilteredRelation, F)):
         return repr(value)
+    if isinstance(value, enum.Enum):
+        return f"{type(value).__name__}.{value.name}"
     if isinstance(value, (datetime.date, datetime.timedelta)):
         return repr(value).replace("datetime.timezone.utc", "UTC").replace("datetime.", "")
     if inspect.isclass(value):
@@ -757,9 +770,9 @@ TL = "django.db.models.fields.tuple_lookups"
 
 
 def as_sql_said(frame, value) -> str:
-    """What an as_sql returned: the SQL and its parameters, as (sql, params)."""
+    """What an as_sql returned: the SQL and its parameters, as (sql, params), the parameters in the container they came in."""
     sql, params = value
-    return f"({sql!r}, {brief(tuple(params))})"
+    return f"({sql!r}, {brief(params)})"
 
 
 def sql_only(frame, value) -> str:
@@ -796,6 +809,7 @@ def converter_name(function) -> str:
 
 
 def converters_said(compiler) -> Said:
+    compiler.as_sql()  # so that the compiler holds its select list
     found = compiler.get_converters([s[0] for s in compiler.select[: compiler.col_count]])
     return Said("{" + ", ".join(f"{pos}: [{', '.join(converter_name(c) for c in convs)}]" for pos, (convs, _) in found.items()) + "}")
 
@@ -815,10 +829,13 @@ def sql_of(queryset) -> tuple:
 
 
 def tail(queryset) -> Said:
-    """The same from its FROM clause on: the select list, which is the model's columns, left out."""
+    """The same from its FROM clause on: the select list is left out, and with it the parameters it held."""
     sql, params = sql_of(queryset)
     at = sql.find(" FROM ")
-    return Said(repr((sql[at + 1:] if at >= 0 else sql, params)))
+    if at < 0:
+        return Said(repr((sql, params)))
+    used = len(re.findall(r"(?<!%)%s", sql[:at]))
+    return Said(repr((sql[at + 1:], params[used:])))
 
 
 def entry(queryset, position: int = 0):
@@ -830,7 +847,13 @@ def said(value) -> Said:
     return Said(brief(value))
 
 
-ASKING.update(said=said, tail=tail, aliases=aliases, converters_said=converters_said, converter_names=converter_names, where_said=where_said, sql_of=sql_of, entry=entry, brief=brief, Said=Said)
+def mask_said(mask) -> Said:
+    """A select mask, which is a dictionary of fields nested in fields, with the fields in order of name: the
+    dictionary is built from a set of names, whose order differs from run to run."""
+    return Said("{" + ", ".join(f"{brief(f)}: {mask_said(sub)}" for f, sub in sorted(mask.items(), key=lambda kv: brief(kv[0]))) + "}")
+
+
+ASKING.update(said=said, mask_said=mask_said, tail=tail, aliases=aliases, converters_said=converters_said, converter_names=converter_names, where_said=where_said, sql_of=sql_of, entry=entry, brief=brief, Said=Said)
 
 # ---------------------------------------------------------------------------------------------
 # What a Query holds.
@@ -840,11 +863,11 @@ for name, value in vars(Query(Sailor)).items():
 show("What a new Query holds: vars(Query(Sailor)), an attribute to a line")
 
 for name, value in vars(Query).items():
-    if not name.startswith("__") and not callable(value) and not isinstance(value, (property, functools.cached_property, classmethod, staticmethod)):
+    if not name.startswith("__") and not isinstance(value, (types.FunctionType, property, classmethod, staticmethod)) and type(value).__name__ != "cached_property":
         note(f"{name}: {brief(value)}")
 show("The class attributes a Query falls back on until something sets one on the instance: vars(Query), an attribute to a line")
 
-lines("q = Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020).order_by('-signed_on').query")
+quietly("q = Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020).order_by('-signed_on').query")
 ask("brief(q.model), q.default_cols, q.select, q.order_by, q.default_ordering, q.standard_ordering, q.low_mark, q.high_mark")
 ask("where_said(Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020))")
 ask("list(q.alias_map), q.alias_refcount, q.table_map, sorted(q.used_aliases)")
@@ -854,28 +877,28 @@ ask("str(q)")
 ask("q.sql_with_params()")
 show("The query of Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020).order_by('-signed_on'): what the two methods left on it")
 
-lines("c = q.clone()")
+quietly("c = q.clone()")
 ask("c is q, type(c) is type(q), c.model is q.model")
 ask("c.where is q.where, c.where.children[0] is q.where.children[0], c.where.children[1].lhs is q.where.children[1].lhs")
 ask("c.alias_map is q.alias_map, c.alias_map['fleet_ship'] is q.alias_map['fleet_ship'], c.alias_refcount is q.alias_refcount, c.table_map is q.table_map")
 ask("c.order_by is q.order_by, c.select is q.select, c.deferred_loading is q.deferred_loading, c.annotations is q.annotations, c.used_aliases is q.used_aliases")
-ask("sorted(vars(c)) == sorted(vars(q))")
-lines("d = Ship.objects.select_related('home').annotate(hands=Count('crew')).query")
-lines("e = d.clone()")
+ask("sorted(set(vars(c)) ^ set(vars(q)))")
+quietly("d = Ship.objects.select_related('home').annotate(hands=Count('crew')).query")
+quietly("e = d.clone()")
 ask("e.select_related is d.select_related, e.select_related, e.annotations is d.annotations, e.annotations['hands'] is d.annotations['hands']")
 ask("e.annotation_select_mask is d.annotation_select_mask, e._annotation_select_cache, d._annotation_select_cache is not None")
 show("Query.clone: the containers are copied, and what they hold is shared")
 
-lines("sticky = Sailor.objects.filter(ship__home__name='Bergen').query")
+quietly("sticky = Sailor.objects.filter(ship__home__name='Bergen').query")
 ask("sorted(sticky.used_aliases), sorted(sticky.chain().used_aliases)")
-lines("sticky.filter_is_sticky = True")
+quietly("sticky.filter_is_sticky = True")
 ask("sorted(sticky.chain().used_aliases), sticky.chain().filter_is_sticky")
-lines("u = Ship.objects.filter(tonnage__gt=500).query.chain(klass=UpdateQuery)")
+quietly("u = Ship.objects.filter(tonnage__gt=500).query.chain(klass=UpdateQuery)")
 ask("type(u).__name__, u.compiler, u.values, u.related_updates, u.related_ids, where_said(Ship.objects.filter(tonnage__gt=500))")
 ask("type(Ship.objects.all().query.chain()).__name__, type(u.chain()).__name__, type(u.chain(klass=Query)).__name__")
 show("Query.chain: a clone ready for the next method, with used_aliases emptied unless the filter is sticky, and perhaps of another class")
 
-lines("raw = RawQuery('SELECT id, name FROM crew_sailor WHERE ship_id = %s', 'default', params=[1])")
+quietly("raw = RawQuery('SELECT id, name FROM crew_sailor WHERE ship_id = %s', 'default', params=[1])")
 ask("sorted(vars(raw)), raw.params_type.__name__, str(raw)")
 ask("[row for row in raw]")
 ask("raw.get_columns()")
@@ -892,7 +915,7 @@ BUILDING = watch(
     "Query.setup_joins", "Query.join", "Query.table_alias", "Query.trim_joins", "Query.build_lookup", "Query.try_transform",
     "Query.check_related_objects", "Query.demote_joins", "Query.promote_joins", "JoinPromoter.__init__", "JoinPromoter.add_votes",
     "JoinPromoter.update_join_types",
-) | watch(LK, "Lookup.__init__", "Lookup.get_prep_lookup") | watch(WH, "WhereNode.add", label=lambda f: f"WhereNode.add({brief(f.f_locals['data'])}, {f.f_locals['conn_type']!r})")
+) | watch(LK, "Lookup.__init__", "Lookup.get_prep_lookup") | {("django.utils.tree", "Node.add"): lambda f: f"Node.add({brief(f.f_locals['data'])}, {f.f_locals['conn_type']!r})"}
 BUILDING[(SQ, "Query.names_to_path")] = without("opts")
 BUILDING[(SQ, "Query.setup_joins")] = without("opts")
 BUILDING[(SQ, "Query._add_q")] = lambda f: f"Query._add_q({brief(f.f_locals['q_object'])}, used_aliases={brief(f.f_locals['used_aliases'])})"
@@ -926,10 +949,10 @@ COMPILING = watch(
     ("django.db.backends.utils", "CursorWrapper.execute"): lambda f: "CursorWrapper.execute",
 }
 COMPILING[(SQ, "Query.setup_joins")] = without("opts")
-COMPILING[(LK, "Lookup.process_lhs")] = lambda f: f"{type(f.f_locals['self']).__name__}.process_lhs  (Lookup.process_lhs)"
+COMPILING[(LK, "Lookup.process_lhs")] = lambda f: f"{type(f.f_locals['self']).__name__}.process_lhs" + (f"({given(f, 'compiler', 'connection')})" if given(f, 'compiler', 'connection') else "") + "  (Lookup.process_lhs)"
 COMPILING[(LK, "Lookup.process_rhs")] = lambda f: f"{type(f.f_locals['self']).__name__}.process_rhs  (Lookup.process_rhs)"
 COMPILING[(LK, "BuiltinLookup.as_sql")] = lambda f: f"{type(f.f_locals['self']).__name__}.as_sql  (BuiltinLookup.as_sql)"
-COMPILING[(LK, "BuiltinLookup.process_lhs")] = lambda f: f"{type(f.f_locals['self']).__name__}.process_lhs  (BuiltinLookup.process_lhs)"
+COMPILING[(LK, "BuiltinLookup.process_lhs")] = lambda f: f"{type(f.f_locals['self']).__name__}.process_lhs" + (f"({given(f, 'compiler', 'connection')})" if given(f, 'compiler', 'connection') else "") + "  (BuiltinLookup.process_lhs)"
 COMPILING[(LK, "YearLookup.as_sql")] = lambda f: f"{type(f.f_locals['self']).__name__}.as_sql  (YearLookup.as_sql)"
 COMPILING[(EX, "Func.as_sql")] = lambda f: f"{type(f.f_locals['self']).__name__}.as_sql  (Func.as_sql)"
 COMPILING[(CO, "SQLCompiler.get_select")] = without("with_col_aliases")
@@ -973,7 +996,7 @@ says("django.db.backends.base.operations", "BaseDatabaseOperations.limit_offset_
 says(SQ, "Query.get_compiler", how=lambda f, v: a(type(v).__name__))
 says(CO, "SQLCompiler.get_converters", how=lambda f, v: "{" + ", ".join(f"{pos}: [{', '.join(converter_name(c) for c in convs)}]" for pos, (convs, _) in v.items()) + "}")
 
-lines("by_date = Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020).order_by('-signed_on')[:5]")
+quietly("by_date = Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020).order_by('-signed_on')[:5]")
 with recorded(COMPILING):
     do("compiler = by_date.query.get_compiler('default')")
     do("compiler.as_sql()")
@@ -989,14 +1012,14 @@ show("The compiled query run: execute_sql sends the statement, and results_iter 
 # ---------------------------------------------------------------------------------------------
 # Expressions.
 
-lines("q = Ship.objects.all().query")
+quietly("q = Ship.objects.all().query")
 ask("F('tonnage').resolve_expression(q)")
 ask("F('home').resolve_expression(q), list(q.alias_map)")
 ask("F('home__name').resolve_expression(q), list(q.alias_map)")
 ask("F('name__lower').resolve_expression(q)")
 ask("F('cargo').resolve_expression(q)")
 ask("F('crew').resolve_expression(q), list(q.alias_map)")
-lines("annotated = Ship.objects.annotate(hands=Count('crew')).query")
+quietly("annotated = Ship.objects.annotate(hands=Count('crew')).query")
 ask("F('hands').resolve_expression(annotated)")
 show("F resolved against a query: resolve_ref returns a Col, joining tables as it goes, or the annotation the name refers to")
 
@@ -1009,7 +1032,7 @@ ask("Value(Decimal('1.5')).as_sqlite(None, connection), Value(1.5, output_field=
 ask("Value(480).get_group_by_cols(), Value(480).empty_result_set_value, Value(480).allowed_default")
 show("Value: the output field it infers from its value, and the placeholder it writes")
 
-lines("plus = F('tonnage') + 1")
+quietly("plus = F('tonnage') + 1")
 ask("type(plus).__name__, plus.lhs, plus.connector, plus.rhs, plus.get_source_expressions()")
 ask("type(plus.resolve_expression(q).output_field).__name__, type((F('tonnage') * F('tonnage')).resolve_expression(q).output_field).__name__, type((F('tonnage') + 1.5).resolve_expression(q).output_field).__name__")
 ask("type((F('tonnage') - 1).resolve_expression(q).output_field).__name__")
@@ -1018,6 +1041,8 @@ ask("(F('name') + 1).resolve_expression(q)")
 ask("type((F('sailed') - F('sailed')).resolve_expression(Voyage.objects.all().query)).__name__, type((F('sailed') - F('sailed')).resolve_expression(Voyage.objects.all().query).output_field).__name__")
 ask("type((F('sailed') + datetime.timedelta(days=7)).resolve_expression(Voyage.objects.all().query)).__name__, type((F('sailed') + datetime.timedelta(days=7)).resolve_expression(Voyage.objects.all().query).output_field).__name__")
 ask("(F('tonnage') + 1).resolve_expression(q).as_sql(q.get_compiler('default'), connection)")
+ask("Voyage.objects.all().query.get_compiler('default').compile((F('sailed') + datetime.timedelta(days=7)).resolve_expression(Voyage.objects.all().query))")
+ask("Voyage.objects.all().query.get_compiler('default').compile((F('sailed') - F('sailed')).resolve_expression(Voyage.objects.all().query))")
 ask("(F('tonnage') ** 2).resolve_expression(q).as_sql(q.get_compiler('default'), connection), (F('tonnage') % 7).resolve_expression(q).as_sql(q.get_compiler('default'), connection)")
 ask("(F('tonnage').bitand(4)).resolve_expression(q).as_sql(q.get_compiler('default'), connection), (-F('tonnage')).resolve_expression(q).as_sql(q.get_compiler('default'), connection)")
 ask("F('tonnage') & F('home')")
@@ -1029,10 +1054,11 @@ ask("F('name') == F('name'), F('name') == F('tonnage'), Value(1) == Value(1), Va
 ask("Count('crew') == Count('crew'), Count('crew') == Count('crew', distinct=True), Count('crew').identity")
 ask("Exact(Col('fleet_ship', Ship._meta.get_field('name')), 'x') == Exact(Col('fleet_ship', Ship._meta.get_field('name')), 'x'), Exact(Col('fleet_ship', Ship._meta.get_field('name')), 'x').identity")
 ask("len({F('name'), F('name'), Lower('name'), Lower('name'), Value(1)})")
+ask("OrderBy(F('name')).reverse_ordering() == OrderBy(F('name')), OrderBy(F('name')).reverse_ordering().descending")
 show("Identity: two expressions made the same way are equal, and hash alike")
 
-lines("low = Lower('name')")
-lines("resolved = low.resolve_expression(q)")
+quietly("low = Lower('name')")
+quietly("resolved = low.resolve_expression(q)")
 ask("resolved is low, low.source_expressions, resolved.source_expressions, resolved.is_summary")
 ask("low.get_source_expressions(), resolved.output_field, type(resolved.output_field).__name__")
 ask("Coalesce('tonnage', 0).resolve_expression(q).get_source_expressions()")
@@ -1044,7 +1070,7 @@ ask("Count('crew').contains_aggregate, Window(RowNumber()).contains_over_clause,
 ask("resolved.relabeled_clone({'fleet_ship': 'T9'}), resolved.replace_expressions({F('name'): Value('x')}), low.replace_expressions({F('name'): Value('x')})")
 show("resolve_expression: a copy whose sources are resolved, and what the copy can tell about itself")
 
-lines("compiler = q.get_compiler('default')")
+quietly("compiler = q.get_compiler('default')")
 ask("compiler.compile(Greatest('tonnage', 1000).resolve_expression(q)), compiler.compile(Least('tonnage', 1000).resolve_expression(q))")
 ask("compiler.compile(Cast('tonnage', models.FloatField()).resolve_expression(q)), compiler.compile(Cast('name', models.DateField()).resolve_expression(q))")
 ask("compiler.compile(Func(F('name'), function='UPPER').resolve_expression(q))")
@@ -1069,6 +1095,7 @@ show("as_sql through the compiler: what a Func, a Cast, a Case, an ExpressionWra
 
 ask("Length('name').output_field, Coalesce('tonnage', 0).resolve_expression(q).output_field, type(Coalesce('tonnage', 0).resolve_expression(q).output_field).__name__")
 ask("Coalesce('name', 0).resolve_expression(q).output_field")
+ask("Coalesce(0, 'tonnage').resolve_expression(q).output_field")
 ask("type(Func(F('name'), function='X').resolve_expression(q).output_field).__name__, type(Avg('tonnage').resolve_expression(q).output_field).__name__, type(Sum('tonnage').resolve_expression(q).output_field).__name__")
 ask("Func(Value(None), function='X').output_field")
 ask("Func(Value(None), function='X')._output_field_or_none")
@@ -1156,7 +1183,7 @@ ask("Sailor.objects.filter(name__exact__exact='ada')")
 ask("Sailor.objects.filter(signed_on__yaer=2011)")
 ask("Sailor.objects.filter(ship__contains=1)")
 ask("Sailor.objects.filter(name__ship='Ada')")
-show("build_lookup and try_transform: every word but the last is a transform, the last is a lookup or, failing that, a transform and exact")
+show("build_lookup and try_transform: every word but the last is a transform, the last is a lookup or, failing that, a transform and exact (Lower, Length and Upper being registered on CharField by this recording)")
 
 ask("sql_of(Ship.objects.filter(captain=None)), entry(Ship.objects.filter(captain=None))")
 ask("tail(Ship.objects.filter(captain__exact=None)), tail(Ship.objects.filter(name__iexact=None))")
@@ -1164,7 +1191,7 @@ ask("Ship.objects.filter(captain__gt=None)")
 ask("sql_of(Ship.objects.filter(captain__in=[None, 1]))")
 ask("sql_of(Ship.objects.filter(name=''))")
 ask("connection.features.interprets_empty_strings_as_nulls")
-show("build_lookup with None: exact and iexact become isnull, the other lookups refuse it")
+show("build_lookup with None: exact and iexact become isnull, in drops it from its list, and the other lookups refuse it")
 
 ask("Sailor.objects.all().query.resolve_ref('name')")
 ask("Sailor.objects.all().query.resolve_ref('ship'), Sailor.objects.all().query.resolve_ref('ship__name')")
@@ -1175,7 +1202,7 @@ ask("Sailor.objects.alias(hands=Count('pk')).query.resolve_ref('hands', summariz
 ask("Sailor.objects.all().query.resolve_ref('ship__name', allow_joins=False)")
 ask("Berth.objects.all().query.resolve_ref('pk')")
 ask("Sailor.objects.all().query.resolve_ref('pilots_into')")
-show("resolve_ref: what an F finds under a name")
+show("resolve_ref: what an F finds under a name (Lower and Length being registered on CharField by this recording)")
 
 ask("sql_of(Officer.objects.filter(rank='master'))")
 ask("sql_of(Officer.objects.filter(name='Cora'))")
@@ -1187,27 +1214,27 @@ show("A field the parent holds: names_to_path adds the path to the parent, and j
 # ---------------------------------------------------------------------------------------------
 # Tables, aliases and joins.
 
-lines("once = Voyage.objects.filter(calls__name='Leith', calls__country='Scotland')")
+quietly("once = Voyage.objects.filter(calls__name='Leith', calls__country='Scotland')")
 aliases(ASKING["once"].query)
 ask("tail(once)")
-lines("twice = Voyage.objects.filter(calls__name='Leith').filter(calls__country='Scotland')")
+quietly("twice = Voyage.objects.filter(calls__name='Leith').filter(calls__country='Scotland')")
 aliases(ASKING["twice"].query)
 ask("twice.query.table_map, sorted(twice.query.used_aliases)")
 ask("tail(twice)")
-lines("direct = Sailor.objects.filter(ship__name='Petrel').filter(ship__tonnage__lt=500)")
+quietly("direct = Sailor.objects.filter(ship__name='Petrel').filter(ship__tonnage__lt=500)")
 aliases(ASKING["direct"].query)
 show("The alias map after one filter with two conditions on a many-to-many relation, after two filters, and after two filters across a foreign key")
 
-lines("j = twice.query.alias_map['T4']")
+quietly("j = twice.query.alias_map['T4']")
 ask("j.table_name, j.parent_alias, j.table_alias, j.join_type, j.join_cols, j.nullable, j.filtered_relation, brief(j.join_field)")
 ask("j.identity == twice.query.alias_map['fleet_voyage_calls'].identity, j == twice.query.alias_map['fleet_voyage_calls'], j.relabeled_clone({'T4': 'T9'}).table_alias, j.promote().join_type, j.demote().join_type")
 ask("twice.query.alias_map['fleet_voyage'].identity, twice.query.alias_map['fleet_voyage'].join_type, twice.query.alias_map['fleet_voyage'].parent_alias")
-ask("twice.query.base_table, twice.query.get_initial_alias(), twice.query.alias_refcount['fleet_voyage']")
+ask("twice.query.alias_refcount['fleet_voyage'], twice.query.base_table, twice.query.get_initial_alias(), twice.query.alias_refcount['fleet_voyage']")
 ask("twice.query.count_active_tables()")
 show("A Join and a BaseTable: what each holds, and what makes two joins equal")
 
 ask("tail(Ship.objects.filter(captain__name='Cora'))")
-ask("tail(Ship.objects.annotate(master=F('captain__name')))")
+ask("sql_of(Ship.objects.annotate(master=F('captain__name')))")
 ask("tail(Ship.objects.filter(Q(captain__name='Cora') | Q(tonnage__lt=500)))")
 ask("tail(Ship.objects.filter(Q(captain__name='Cora') | Q(captain__name='Dag')))")
 ask("tail(Ship.objects.filter(Q(captain__name='Cora') | Q(tonnage__lt=500)).filter(captain__signed_on__year=2011))")
@@ -1215,7 +1242,8 @@ ask("tail(Sailor.objects.filter(Q(ship__home__name='Bergen') | Q(name='Dag')))")
 ask("tail(Ship.objects.filter(Q(captain__ship__name='Petrel') | Q(name='Gannet')))")
 ask("tail(Ship.objects.filter(crew__name='Ada'))")
 ask("tail(Ship.objects.filter(~Q(captain__name='Cora') & ~Q(captain__name='Dag')))")
-show("Join types: a nullable foreign key and a reverse relation are joined LEFT OUTER, an AND demotes to INNER, an OR keeps the outer join, and a non-nullable key is never promoted")
+ask("tail(Ship.objects.filter(Q(crew__name='Ada') | Q(tonnage__lt=500)))")
+show("Join types: a nullable foreign key and a reverse relation are joined LEFT OUTER, an AND demotes to INNER, an OR keeps the outer join unless every branch needs it, and a non-nullable key is never promoted")
 
 PROMOTING = watch(SQ, "Query.add_q", "Query._add_q", "Query.join", "Query.promote_joins", "Query.demote_joins", "JoinPromoter.__init__", "JoinPromoter.add_votes", "JoinPromoter.update_join_types")
 PROMOTING[(SQ, "Query._add_q")] = lambda f: f"Query._add_q({brief(f.f_locals['q_object'])}" + (", branch_negated=True" if f.f_locals["branch_negated"] else "") + (", current_negated=True" if f.f_locals["current_negated"] else "") + ")"
@@ -1231,12 +1259,13 @@ aliases(ASKING["narrowed"].query)
 with recorded(PROMOTING):
     do("neither = Ship.objects.filter(~(Q(captain__name='Cora') | Q(captain__name='Dag')))")
 aliases(ASKING["neither"].query)
-show("JoinPromoter: the votes of an OR promote a join, a later AND demotes it, and a negated OR is treated as an AND")
+ask("JoinPromoter('OR', 2, True).effective_connector, JoinPromoter('AND', 2, True).effective_connector, JoinPromoter('OR', 2, False).effective_connector")
+show("JoinPromoter: the votes of an OR promote a join, a later AND demotes it, and a negated OR votes as an AND")
 
-lines("left = Voyage.objects.filter(calls__name='Leith').query")
-lines("right = Voyage.objects.filter(calls__name='Lisbon').query")
+quietly("left = Voyage.objects.filter(calls__name='Leith').query")
+quietly("right = Voyage.objects.filter(calls__name='Lisbon').query")
 ask("list(left.alias_map), list(right.alias_map), right.alias_prefix, sorted(right.subq_aliases)")
-lines("bumped = right.clone(); bumped.bump_prefix(left, exclude={'fleet_voyage'})")
+quietly("bumped = right.clone(); bumped.bump_prefix(left, exclude={'fleet_voyage'})")
 ask("list(bumped.alias_map), bumped.alias_prefix, sorted(bumped.subq_aliases), sorted(left.subq_aliases)")
 ask("bumped.table_map, bumped.alias_refcount, said(bumped.where)")
 ask("list(right.relabeled_clone({'fleet_voyage_calls': 'C1', 'fleet_port': 'C2'}).alias_map), str(right.relabeled_clone({'fleet_voyage_calls': 'C1', 'fleet_port': 'C2'}).where)")
@@ -1267,9 +1296,9 @@ show("build_filter under a negation: an IS NOT NULL is added for a nullable colu
 EXCLUDING = BUILDING | watch(SQ, "Query.split_exclude", "Query.trim_start", "Query.add_filter", "Query.bump_prefix") | {(SQ, "Query.names_to_path"): None}
 del EXCLUDING[(SQ, "Query.names_to_path")]
 EXCLUDING[(SQ, "Query.split_exclude")] = lambda f: f"Query.split_exclude(filter_expr={brief(f.f_locals['filter_expr'])}, can_reuse={brief(f.f_locals['can_reuse'])}, names_with_path={brief([(n, p) for n, p in f.f_locals['names_with_path']])})"
-EXCLUDING[(SQ, "Query.trim_start")] = lambda f: "Query.trim_start"
+EXCLUDING[(SQ, "Query.trim_start")] = lambda f: f"Query.trim_start(names_with_path={brief([(n, p) for n, p in f.f_locals['names_with_path']])})"
 EXCLUDING[(SQ, "Query.bump_prefix")] = lambda f: f"Query.bump_prefix({brief(f.f_locals['other_query'])})"
-for key in [k for k in EXCLUDING if k[1] in ("Query.table_alias", "Query.join", "Query.resolve_lookup_value", "Query.check_related_objects", "Query.trim_joins", "JoinPromoter.__init__", "JoinPromoter.add_votes", "JoinPromoter.update_join_types", "Query.demote_joins", "Query.promote_joins", "Lookup.__init__", "Lookup.get_prep_lookup", "WhereNode.add")]:
+for key in [k for k in EXCLUDING if k[1] in ("Query.table_alias", "Query.join", "Query.resolve_lookup_value", "Query.check_related_objects", "Query.trim_joins", "JoinPromoter.__init__", "JoinPromoter.add_votes", "JoinPromoter.update_join_types", "Query.demote_joins", "Query.promote_joins", "Lookup.__init__", "Lookup.get_prep_lookup", "Node.add")]:
     del EXCLUDING[key]
 says(SQ, "Query.trim_start", "Query.split_exclude")
 says(SQ, "Query.split_exclude", how=lambda f, v: f"({brief(v[0])}, {brief(v[1])})")
@@ -1285,6 +1314,8 @@ ask("tail(Ship.objects.filter(~Q(crew__name='Ada') | Q(tonnage__gt=1000)))")
 ask("tail(Ship.objects.exclude(crew__name='Ada', crew__signed_on__year=2011))")
 ask("tail(Ship.objects.exclude(crew__name='Ada').exclude(crew__name='Bram'))")
 ask("tail(Ship.objects.filter(crew__name='Ada').exclude(crew__name='Bram'))")
+ask("tail(Ship.objects.exclude(captain__pilots_into=None))")
+ask("tail(Ship.objects.filter(Q(crew__name='Ada') & ~Q(crew__name='Bram')))")
 show("What split_exclude writes: a subquery for each excluded condition, OR IS NULL where an outer join precedes the relation, and a filter beside an exclude")
 
 ask("sql_of(Ship.objects.filter(pk__in=[]))")
@@ -1335,10 +1366,10 @@ ask("Ship.objects.extra(where=['tonnage > %s'], params=[500]).query.where.childr
 ask("sql_of(Ship.objects.filter(name='Petrel').extra(where=['tonnage > 0']).filter(pk__in=[]))")
 show("ExtraWhere: SQL a program wrote, taken as it is")
 
-lines("veterans = Ship.objects.annotate(veterans=FilteredRelation('crew', condition=Q(crew__signed_on__year__lt=2020)))")
+quietly("veterans = Ship.objects.annotate(veterans=FilteredRelation('crew', condition=Q(crew__signed_on__year__lt=2020)))")
 ask("veterans.query._filtered_relations['veterans'].relation_name, veterans.query._filtered_relations['veterans'].alias, veterans.query._filtered_relations['veterans'].condition, veterans.query._filtered_relations['veterans'].resolved_condition")
 ask("list(veterans.query.alias_map), tail(veterans)")
-lines("named_veterans = veterans.filter(veterans__name='Ada')")
+quietly("named_veterans = veterans.filter(veterans__name='Ada')")
 aliases(ASKING["named_veterans"].query)
 ask("said(named_veterans.query.alias_map['veterans'].filtered_relation.resolved_condition)")
 ask("tail(named_veterans)")
@@ -1382,8 +1413,8 @@ quietly("list(Manifest.objects.filter(stamped=True))")
 quietly("list(Manifest.objects.filter(stamped__exact=False))")
 show("The statement each standard lookup writes on SQLite, one line of Python and its statement each")
 
-lines("compiler = Ship.objects.all().query.get_compiler('default')")
-lines("tonnage = Ship._meta.get_field('tonnage').get_col('fleet_ship')")
+quietly("compiler = Ship.objects.all().query.get_compiler('default')")
+quietly("tonnage = Ship._meta.get_field('tonnage').get_col('fleet_ship')")
 ask("Exact(tonnage, '480').rhs, Exact(tonnage, '480').lhs, Exact(tonnage, 480).rhs_is_direct_value(), Exact(tonnage, F('id')).rhs_is_direct_value()")
 ask("Exact(tonnage, 'x')")
 ask("Exact(480, 480), Exact(480, 480).lhs")
@@ -1426,8 +1457,8 @@ show("YearLookup: a plain year is compared as bounds on the column itself, so th
 ask("tail(Ship.objects.annotate(v=Value(None, output_field=models.CharField())).filter(v__isnull=True))")
 ask("sql_of(Ship.objects.annotate(v=Value(None, output_field=models.CharField())).filter(v__isnull=False))")
 ask("sql_of(Ship.objects.annotate(v=Value('x')).filter(v__isnull=True))")
-ask("Ship.objects.filter(captain__isnull='yes')")
-ask("tail(Ship.objects.filter(captain__isnull=1))")
+ask("tail(Ship.objects.filter(tonnage__isnull='yes'))")
+ask("tail(Ship.objects.filter(tonnage__isnull=1))")
 show("IsNull: on a Value the answer is known before any SQL is written")
 
 ask("sql_of(Ship.objects.filter(tonnage__gt=2 ** 70))")
@@ -1443,8 +1474,8 @@ show("The lookups IntegerField registers over Field's: a value past the column's
 
 ask("tail(Manifest.objects.filter(stamped=True)), tail(Manifest.objects.filter(stamped=False))")
 ask("tail(Manifest.objects.filter(stamped=1))")
-ask("tail(Ship.objects.annotate(big=Q(tonnage__gt=1000)).filter(big=True))")
-ask("tail(Ship.objects.annotate(big=Q(tonnage__gt=1000)).filter(big=False))")
+ask("sql_of(Ship.objects.annotate(big=Q(tonnage__gt=1000)).filter(big=True))")
+ask("sql_of(Ship.objects.annotate(big=Q(tonnage__gt=1000)).filter(big=False))")
 ask("connection.ops.conditional_expression_supported_in_where_clause(Manifest._meta.get_field('stamped').get_col('office_manifest'))")
 show("Exact with a boolean: a conditional column stands alone in the WHERE, or under NOT")
 
@@ -1476,7 +1507,17 @@ ask("tail(Sailor.objects.filter(ship__gt=1)), tail(Sailor.objects.filter(ship__i
 ask("tail(Ship.objects.filter(captain=cora)), tail(Ship.objects.filter(captain=ada.pk))")
 ask("entry(Sailor.objects.filter(officer=cora)), tail(Sailor.objects.filter(officer=cora))")
 ask("entry(Sailor.objects.filter(ship__home=bergen)), entry(Ship.objects.filter(crew=ada))")
+ask("entry(Sailor.objects.filter(pilots_into=bergen)), entry(Voyage.objects.filter(calls=bergen))")
 show("The lookups registered on ForeignObject: an instance, a key or a queryset on the right of a relation")
+
+ask("entry(Port.objects.filter(berth=(1, 2)))")
+ask("tail(Port.objects.filter(berth=(1, 2)))")
+ask("tail(Port.objects.filter(berth=Berth.objects.get(number=2)))")
+ask("tail(Port.objects.filter(berth__in=[(1, 1), (1, 2)]))")
+ask("tail(Port.objects.filter(berth__in=Berth.objects.filter(metres__gt=100)))")
+ask("tail(Port.objects.filter(berth__isnull=True))")
+ask("tail(Port.objects.filter(berth=Berth.objects.values('pk')[:1]))")
+show("A relation to a composite key: a lookup on the reverse relation from Port to Berth has a ColPairs on its left, and hands the work to a tuple lookup")
 
 ask("entry(Berth.objects.filter(pk=(1, 2))), tail(Berth.objects.filter(pk=(1, 2)))")
 ask("tail(Berth.objects.filter(pk__in=[(1, 1), (1, 2)]))")
@@ -1557,7 +1598,7 @@ ask("entry(Sailor.objects.filter(name__shout='ada')).bilateral_transforms, entry
 ask("tail(Sailor.objects.filter(name__length=3)), tail(Sailor.objects.filter(name__length__gt=3))")
 ask("tail(Sailor.objects.annotate(n=Length('name')).filter(n__gt=3)), tail(Sailor.objects.filter(name__length__gt=F('ship__tonnage')))")
 quietly("models.CharField._unregister_lookup(Shout)")
-show("A Transform as a lookup's left side: a transform registered on CharField for this block, with bilateral=True so that the right side is transformed too")
+show("A Transform as a lookup's left side: a transform registered on CharField for this block, with bilateral=True so that the right side is transformed too; Upper, Lower and Length were registered earlier in the recording")
 
 FUNCTIONS = watch(EX, "Func.as_sql", "Func.__init__", "Value.as_sql") | {
     (CO, "SQLCompiler.compile"): lambda f: f"SQLCompiler.compile({brief(f.f_locals['node'])})",
@@ -1578,7 +1619,7 @@ says(FN_CMP, "Greatest.as_sqlite", "Cast.as_sqlite", "Cast.as_sql", how=as_sql_s
 says(FN_TXT, "ConcatPair.pipes_concat_sql", how=as_sql_said)
 says(CO, "SQLCompiler.compile", how=as_sql_said)
 
-lines("compiler = Ship.objects.all().query.get_compiler('default')")
+quietly("compiler = Ship.objects.all().query.get_compiler('default')")
 with recorded(FUNCTIONS):
     do("biggest = Greatest('tonnage', 1000)")
     do("compiler.compile(biggest.resolve_expression(Ship.objects.all().query))")
@@ -1618,6 +1659,9 @@ show("An Aggregate: a Func with distinct, filter, order_by and default, and the 
 ask("Ship.objects.aggregate(Count('crew'))")
 ask("Ship.objects.aggregate(n=Count('crew', distinct=True))")
 ask("Ship.objects.aggregate(n=Count('crew', filter=Q(crew__signed_on__year__lt=2020)))")
+connection.features.supports_aggregate_filter_clause = False
+ask("Ship.objects.aggregate(n=Count('crew', filter=Q(crew__signed_on__year__lt=2020)))")
+del connection.features.__dict__["supports_aggregate_filter_clause"]
 ask("Ship.objects.aggregate(t=Sum('tonnage'), a=Avg('tonnage'), m=Max('tonnage'), s=StdDev('tonnage'), v=Variance('tonnage', sample=True))")
 ask("Sailor.objects.aggregate(names=StringAgg('name', Value(', '), order_by='-name'))")
 ask("Sailor.objects.aggregate(names=StringAgg('name', Value(','), distinct=True))")
@@ -1627,7 +1671,7 @@ ask("Ship.objects.aggregate(n=Count('crew'), m=Count('crew') * 2)")
 ask("Berth.objects.aggregate(n=Count('pk'))")
 ask("Berth.objects.aggregate(n=Count('pk', distinct=True))")
 ask("connection.features.supports_aggregate_filter_clause, connection.features.supports_aggregate_order_by_clause, connection.features.supports_any_value, connection.features.supports_aggregate_distinct_multiple_argument")
-show("What the aggregates write on SQLite: FILTER, DISTINCT, ORDER BY inside the function, and a default as COALESCE")
+show("What the aggregates write on SQLite: FILTER, DISTINCT, ORDER BY inside the function, and a default as COALESCE; and, with supports_aggregate_filter_clause switched off for one question, the filter as a CASE inside the function")
 
 ask("Ship.objects.annotate(n=Count('crew')).annotate(m=Sum('n'))")
 ask("Ship.objects.annotate(m=Sum(Count('crew')))")
@@ -1675,7 +1719,7 @@ show("get_count: a count is an aggregation of Count('*'), inside a subquery wher
 with recorded(AGGREGATING):
     do("Ship.objects.filter(tonnage__gt=1000).exists()")
     do("Ship.objects.annotate(hands=Count('crew')).filter(hands__gt=1).exists()")
-lines("e = Ship.objects.filter(tonnage__gt=1000).query.exists()")
+quietly("e = Ship.objects.filter(tonnage__gt=1000).query.exists()")
 ask("e.select, e.default_cols, e.annotation_select, e.high_mark, e.order_by, e.default_ordering, str(e)")
 show("Query.exists: the select list cleared, a constant selected under the alias 'a', the ordering dropped and one row asked for")
 
@@ -1688,19 +1732,21 @@ show("Aggregating over a query that matches nothing: each aggregate's empty_resu
 # ---------------------------------------------------------------------------------------------
 # Subqueries.
 
-lines("first_hand = Sailor.objects.filter(ship=OuterRef('pk')).order_by('name').values('name')[:1]")
+quietly("first_hand = Sailor.objects.filter(ship=OuterRef('pk')).order_by('name').values('name')[:1]")
 ask("sql_of(Ship.objects.annotate(first=Subquery(first_hand)))")
 ask("list(Ship.objects.annotate(first=Subquery(first_hand)).values_list('name', 'first'))")
-lines("sub = Subquery(first_hand)")
+quietly("sub = Subquery(first_hand)")
 ask("sub.query is first_hand.query, sub.query.subquery, first_hand.query.subquery, said(sub.get_source_expressions())")
-lines("outer = Ship.objects.all().query")
-lines("resolved = sub.resolve_expression(outer)")
+quietly("outer = Ship.objects.all().query")
+quietly("resolved = sub.resolve_expression(outer)")
 ask("type(resolved).__name__, resolved.subquery, resolved.alias_prefix, list(resolved.alias_map), resolved.external_aliases, sorted(outer.subq_aliases)")
 ask("said(resolved.where)")
 ask("type(Subquery(first_hand, output_field=models.CharField()).resolve_expression(outer)).__name__, type(Subquery(first_hand, output_field=models.IntegerField()).resolve_expression(outer)).__name__")
 ask("type(Subquery(first_hand).resolve_expression(outer).output_field).__name__")
 ask("Subquery(Sailor.objects.filter(ship=OuterRef('pk')).values('name', 'id')[:1]).resolve_expression(outer).output_field")
 ask("resolved.get_external_cols(), resolved.get_group_by_cols(), resolved.contains_subquery, Ship.objects.annotate(first=Subquery(first_hand)).query.annotations['first'].contains_subquery")
+ask("said(Subquery(Sailor.objects.filter(name=OuterRef('crew__name')).values('id')[:1]).resolve_expression(Ship.objects.all().query).get_group_by_cols())")
+ask("list(Ship.objects.order_by('name')[:1].query.alias_map), list(Ship.objects.values('tonnage').query.alias_map)")
 show("Subquery and OuterRef: the inner query is resolved against the outer, keeps aliases of its own, and takes the outer's as external")
 
 RESOLVING = watch(SQ, "Query.resolve_expression", "Query.bump_prefix", "Query.change_aliases", "Query.resolve_ref", "Query.as_sql") | watch(
@@ -1720,15 +1766,16 @@ says(EX, "Subquery.resolve_expression", "OuterRef.resolve_expression", "Resolved
 says(EX, "Subquery.as_sql", how=as_sql_said)
 
 with recorded(RESOLVING):
+    do("first_hand = Sailor.objects.filter(ship=OuterRef('pk')).order_by('name').values('name')[:1]")
     do("with_first = Ship.objects.annotate(first=Subquery(first_hand))")
-    do("tail(with_first)")
-show("A subquery resolved and compiled: OuterRef becomes ResolvedOuterRef when the inner query is resolved, and a Col of the outer table when the where tree is")
+    do("with_first.query.get_compiler('default').as_sql()")
+show("A subquery resolved and compiled: OuterRef becomes a ResolvedOuterRef as the inner filter is built, and a Col of the outer table when the inner query is resolved against the outer")
 
 ask("tail(Ship.objects.filter(Exists(Sailor.objects.filter(ship=OuterRef('pk'), name='Ada'))))")
 ask("sql_of(Ship.objects.annotate(has_ada=Exists(Sailor.objects.filter(ship=OuterRef('pk'), name='Ada'))))[0][:160]")
 ask("list(Ship.objects.annotate(has_ada=Exists(Sailor.objects.filter(ship=OuterRef('pk'), name='Ada'))).values_list('name', 'has_ada'))")
 ask("tail(Ship.objects.filter(Exists(Sailor.objects.none())))")
-ask("sql_of(Ship.objects.annotate(x=Exists(Sailor.objects.none())))[0][:120]")
+ask("sql_of(Ship.objects.annotate(x=Exists(Sailor.objects.none())).values('x'))")
 ask("Exists(Sailor.objects.all()).query.select, Exists(Sailor.objects.all()).query.high_mark, Exists(Sailor.objects.all()).output_field, Exists(Sailor.objects.all()).empty_result_set_value, Subquery(Sailor.objects.all()).empty_result_set_value")
 ask("tail(Ship.objects.filter(Exists(Sailor.objects.filter(ship=OuterRef('pk')).values('name'))))")
 show("Exists: a Subquery whose query is the inner query's exists(), and whose SQL is known when the inner query can match nothing")
@@ -1779,9 +1826,9 @@ QUALIFYING[(CO, "SQLCompiler.get_qualify_sql")] = plain
 QUALIFYING[(SQ, "Query.add_annotation")] = generic
 says(CO, "SQLCompiler.get_qualify_sql", how=lambda f, v: f"({' '.join(v[0])!r}, {brief(tuple(v[1]))})")
 
-lines("numbered = Sailor.objects.annotate(n=Window(RowNumber(), partition_by='ship', order_by='name'))")
+quietly("numbered = Sailor.objects.annotate(n=Window(RowNumber(), partition_by='ship', order_by='name'))")
 with recorded(QUALIFYING):
-    do("sql_of(numbered.filter(n=1))")
+    do("numbered.filter(n=1).query.get_compiler('default').as_sql()")
 ask("list(numbered.filter(n=1).values_list('name', flat=True))")
 show("Filtering on a window: split_having_qualify puts the condition aside, and get_qualify_sql wraps the statement in a subquery")
 
@@ -1793,6 +1840,8 @@ ask("sql_of(Sailor.objects.annotate(n=Window(Count('id'), partition_by='ship')).
 ask("numbered.filter(n=1).query.where.split_having_qualify()")
 ask("numbered.annotate(hands=Count('id')).filter(Q(n=1) | Q(hands__gt=1))")
 ask("numbered.aggregate(m=Max('n'))")
+ask("sql_of(numbered.annotate(hands=Count('id')).filter(Q(n=1) | Q(name='Dag')))")
+ask("sql_of(Sailor.objects.annotate(w=Window(Sum('id'), output_field=models.DecimalField())).values('w'))")
 show("Asked of a filter on a window")
 
 # ---------------------------------------------------------------------------------------------
@@ -1802,8 +1851,8 @@ ask("type(Ship.objects.all().query.get_compiler('default')).__name__, connection
 ask("type(Ship.objects.all().query.get_compiler(connection=connection)).__name__, Ship.objects.all().query.get_compiler('default').using, Ship.objects.all().query.get_compiler(connection=connection).using")
 ask("Ship.objects.all().query.get_compiler()")
 ask("connection.ops.compiler('SQLCompiler').__module__, connection.ops.compiler('SQLInsertCompiler').__name__")
-lines("compiler = Ship.objects.filter(tonnage__gt=100).query.get_compiler('default')")
-ask("compiler.query is Ship.objects.filter(tonnage__gt=100).query, compiler.elide_empty, compiler.select, compiler.klass_info, compiler.annotation_col_map, compiler.quote_cache")
+quietly("compiler = Ship.objects.filter(tonnage__gt=100).query.get_compiler('default')")
+ask("compiler.elide_empty, compiler.select, compiler.klass_info, compiler.annotation_col_map, compiler.quote_cache")
 ask("compiler.quote_name('name'), compiler.quote_name('*'), compiler.quote_name('name') is compiler.quote_name('name'), compiler.quote_cache")
 ask("compiler.quote_name_unless_alias('name')")
 ask("repr(compiler)[:40]")
@@ -1829,7 +1878,7 @@ ask("compiler.query.alias_refcount")
 ask("compiler.query.used_aliases, compiler.query.alias_map['fleet_ship'].table_alias")
 show("as_sql: the statement and its parameters, with every column aliased on request, and the reference counts put back afterwards")
 
-lines("typed = Manifest.objects.annotate(kilos_each_f=Cast('kilos_each', models.FloatField()), half=F('crates') / 2.0, when=Value(datetime.datetime(2026, 4, 10, 9, 0, tzinfo=datetime.UTC), output_field=models.DateTimeField())).query.get_compiler('default')")
+quietly("typed = Manifest.objects.annotate(kilos_each_f=Cast('kilos_each', models.FloatField()), half=F('crates') / 2.0, when=Value(datetime.datetime(2026, 4, 10, 9, 0, tzinfo=datetime.UTC), output_field=models.DateTimeField())).query.get_compiler('default')")
 ask("typed.as_sql()[0]")
 ask("[(brief(expr), sql) for expr, (sql, _), _ in typed.select]")
 ask("converters_said(typed)")
@@ -1850,7 +1899,7 @@ ask("Ship.objects.filter(name='Petrel').query.explain('default')")
 ask("Ship.objects.filter(name='Petrel').explain(format='json')")
 ask("Ship.objects.filter(name='Petrel').explain(**{'bad option': True})")
 ask("Ship.objects.filter(name='Petrel').query.explain_info, Ship.objects.filter(name='Petrel').query.clone().explain_info")
-show("explain: a prefix the backend writes, and the rows that come back joined into text")
+show("explain: a prefix the backend writes, and the rows that come back joined into text, which is what SQLite's planner says")
 
 # ---------------------------------------------------------------------------------------------
 # The SELECT clause.
@@ -1868,7 +1917,7 @@ show("get_select for Ship.objects.all(): every concrete field as a Col, no alias
 
 selection(Ship.objects.values("name", "home__country"))
 ask("Ship.objects.values('name', 'home__country').query.selected, Ship.objects.values('name', 'home__country').query.values_select, Ship.objects.values('name', 'home__country').query.select, Ship.objects.values('name', 'home__country').query.default_cols")
-show("get_select after values: the named columns from Query.selected, each under its name, and no klass_info")
+show("get_select after values: the named columns from Query.selected, each under its name, and a klass_info whose select_fields are their positions")
 
 selection(Ship.objects.annotate(hands=Count("crew"), low=Lower("name")))
 ask("Ship.objects.annotate(hands=Count('crew'), low=Lower('name')).query.annotation_select_mask, Ship.objects.annotate(hands=Count('crew')).alias(low=Lower('name')).query.annotation_select_mask, list(Ship.objects.annotate(hands=Count('crew')).alias(low=Lower('name')).query.annotation_select)")
@@ -1886,15 +1935,15 @@ show("Query.selected after values: the order given, each name with a column's in
 
 selection(Ship.objects.only("name"))
 selection(Sailor.objects.defer("name", "ship"))
-ask("Sailor.objects.only('name').query.deferred_loading, said(Sailor.objects.only('name').query.get_select_mask())")
-ask("said(Sailor.objects.defer('name').query.get_select_mask())")
-ask("said(Sailor.objects.only('ship__name').query.get_select_mask())")
-ask("said(Sailor.objects.select_related('ship').only('name', 'ship__name').query.get_select_mask())")
-ask("said(Sailor.objects.select_related('ship').defer('ship__tonnage').query.get_select_mask())")
-ask("said(Sailor.objects.defer('pilots_into').query.get_select_mask()), tail(Sailor.objects.defer('pilots_into'))")
+ask("Sailor.objects.only('name').query.deferred_loading, mask_said(Sailor.objects.only('name').query.get_select_mask())")
+ask("mask_said(Sailor.objects.defer('name').query.get_select_mask())")
+ask("mask_said(Sailor.objects.only('ship__name').query.get_select_mask())")
+ask("mask_said(Sailor.objects.select_related('ship').only('name', 'ship__name').query.get_select_mask())")
+ask("mask_said(Sailor.objects.select_related('ship').defer('ship__tonnage').query.get_select_mask())")
+ask("mask_said(Sailor.objects.defer('pilots_into').query.get_select_mask()), tail(Sailor.objects.defer('pilots_into'))")
 ask("Sailor.objects.only('name__x').query.get_select_mask()")
 ask("Sailor.objects.defer('cargo').query.get_select_mask()")
-ask("said(Officer.objects.only('rank').query.get_select_mask())")
+ask("mask_said(Officer.objects.only('rank').query.get_select_mask())")
 show("get_select_mask: deferred_loading turned into the fields that will be loaded, model by model, with the primary key always among them")
 
 selection(Officer.objects.all())
@@ -1914,9 +1963,9 @@ ask("Ship.objects.select_related('name')")
 ask("Sailor.objects.select_related('ship').only('name')")
 ask("Sailor.objects.select_related('ship').defer('ship')")
 ask("[len(Ship.objects.select_related(*names).query.get_compiler('default').get_select()[0]) for names in (('home',), ('home', 'captain'), ('captain__ship__home',))]")
-show("get_related_selections: with no names, every non-null forward relation is followed to a depth of max_depth; with names, those and no others")
+show("get_related_selections: with no names, every non-null forward relation is followed, here one deep; with names, those and no others")
 
-lines("c = Ship.objects.annotate(big=Q(tonnage__gt=1000), has_ada=Exists(Sailor.objects.filter(ship=OuterRef('pk'), name='Ada')), nothing=Q(pk__in=[]), nobody=Exists(Sailor.objects.none()), all=~Q(pk__in=[])).query.get_compiler('default')")
+quietly("c = Ship.objects.annotate(big=Q(tonnage__gt=1000), has_ada=Exists(Sailor.objects.filter(ship=OuterRef('pk'), name='Ada')), nothing=Q(pk__in=[]), nobody=Exists(Sailor.objects.none()), all=~Q(pk__in=[])).query.get_compiler('default')")
 ask("c.as_sql()")
 ask("list(Ship.objects.annotate(big=Q(tonnage__gt=1000), nothing=Q(pk__in=[]), nobody=Exists(Sailor.objects.none())).values_list('name', 'big', 'nothing', 'nobody'))")
 ask("connection.features.supports_boolean_expr_in_select_clause")
@@ -1940,13 +1989,13 @@ ask("tail(Ship.objects.order_by(F('tonnage').desc(nulls_last=True))), tail(Ship.
 ask("tail(Ship.objects.annotate(hands=Count('crew')).order_by('-hands')), tail(Ship.objects.alias(hands=Count('crew')).order_by('hands'))")
 ask("tail(Ship.objects.order_by(Value('x')))")
 ask("tail(Ship.objects.reverse()), Ship.objects.reverse().query.standard_ordering, tail(Ship.objects.order_by('-tonnage', 'name').reverse())")
-ask("tail(Ship.objects.extra(order_by=['tonnage']).order_by('name')), Ship.objects.extra(order_by=['tonnage']).query.extra_order_by")
+ask("tail(Ship.objects.order_by('name').extra(order_by=['tonnage'])), Ship.objects.order_by('name').extra(order_by=['tonnage']).query.extra_order_by, tail(Ship.objects.extra(order_by=['tonnage']).order_by('name'))")
 ask("tail(Ship.objects.order_by('name', '-name', 'tonnage', 'tonnage'))")
 ask("Ship.objects.order_by('cargo')")
 ask("Ship.objects.order_by(Count('crew'))")
 ask("Ship.objects.order_by(5)")
 ask("tail(Ship.objects.order_by('pk')), tail(Ship.objects.order_by('home_id')), tail(Ship.objects.order_by('home__pk'))")
-show("Where the ordering comes from, in order of precedence: extra, order_by, the model's Meta.ordering; and what each form of name is turned into")
+show("Where the ordering comes from, in order of precedence: extra, order_by, the model's Meta.ordering; and what each form of name is turned into (Lower being registered on CharField by this recording)")
 
 ask("tail(Sailor.objects.order_by('ship'))")
 ask("tail(Sailor.objects.order_by('-ship'))")
@@ -1955,32 +2004,31 @@ ask("tail(Voyage.objects.order_by('ship__home'))")
 ask("tail(Sailor.objects.order_by('ship__name__lower'))")
 ask("tail(Ship.objects.order_by('captain'))")
 ask("tail(Licence.objects.order_by('port', 'sailor'))")
-show("find_ordering_name: an ordering by a relation becomes the related model's Meta.ordering, prefixed with the relation's name")
+show("find_ordering_name: an ordering by a relation becomes the related model's Meta.ordering, prefixed with the relation's name (Lower being registered on CharField by this recording)")
 
-ORDERING = {k: v for k, v in COMPILING.items() if k[1] in ("SQLCompiler.get_order_by", "SQLCompiler._order_by_pairs", "SQLCompiler.find_ordering_name", "Query.setup_joins", "Query.trim_joins", "SQLCompiler.compile")}
-ORDERING[(CO, "SQLCompiler._order_by_pairs")] = plain
+ORDERING = {k: v for k, v in COMPILING.items() if k[1] in ("SQLCompiler.get_order_by", "SQLCompiler.find_ordering_name", "Query.setup_joins", "Query.trim_joins", "SQLCompiler.compile")}
 ORDERING[(CO, "SQLCompiler.find_ordering_name")] = lambda f: f"SQLCompiler.find_ordering_name(name={f.f_locals['name']!r}, opts={brief(f.f_locals['opts'])}" + (f", alias={f.f_locals['alias']!r}" if f.f_locals["alias"] else "") + (f", default_order={f.f_locals['default_order']!r}" if f.f_locals["default_order"] != "ASC" else "") + ")"
 says(CO, "SQLCompiler.compile", how=as_sql_said)
 
-lines("compiler = Sailor.objects.order_by('-ship', 'name').query.get_compiler('default')")
+quietly("compiler = Sailor.objects.order_by('-ship', 'name').query.get_compiler('default')")
 with recorded(ORDERING):
     do("compiler.pre_sql_setup()")
 show("get_order_by for Sailor.objects.order_by('-ship', 'name'): find_ordering_name follows the relation and comes back with the ship's own ordering")
 
-lines("sliced = Ship.objects.order_by('tonnage')[:1].query")
-lines("sliced.clear_ordering()")
+quietly("sliced = Ship.objects.order_by('tonnage')[:1].query")
+quietly("sliced.clear_ordering()")
 ask("sliced.order_by, sliced.default_ordering")
-lines("sliced.clear_ordering(force=True)")
+quietly("sliced.clear_ordering(force=True)")
 ask("sliced.order_by, sliced.default_ordering, tail(Ship.objects.order_by('tonnage')[:1])")
-lines("kept = Ship.objects.order_by('tonnage').query")
-lines("kept.clear_ordering(clear_default=False)")
+quietly("kept = Ship.objects.order_by('tonnage').query")
+quietly("kept.clear_ordering(clear_default=False)")
 ask("kept.order_by, kept.default_ordering")
-show("clear_ordering: refused without force where the query is sliced, has distinct fields or a lock; and clear_default decides whether Meta.ordering comes back")
+show("clear_ordering: refused without force where the query is sliced, as here, or has distinct fields or a lock; and clear_default decides whether Meta.ordering comes back")
 
 ask("tail(Ship.objects.distinct()), Ship.objects.distinct().query.distinct, Ship.objects.distinct().query.distinct_fields")
-ask("tail(Ship.objects.distinct().order_by('home__country'))")
-ask("tail(Ship.objects.distinct().order_by('name'))")
-ask("tail(Ship.objects.values('tonnage').distinct().order_by('name'))")
+ask("sql_of(Ship.objects.distinct().order_by('home__country'))")
+ask("sql_of(Ship.objects.distinct().order_by('name'))")
+ask("sql_of(Ship.objects.values('tonnage').distinct().order_by('name'))")
 ask("Ship.objects.distinct('name').query.distinct_fields, tail(Ship.objects.distinct('name'))")
 ask("tail(Ship.objects.distinct().annotate(hands=Count('crew')).order_by('hands'))")
 ask("Ship.objects.distinct().order_by('home__country').query.get_compiler('default').pre_sql_setup()[0]")
@@ -2008,6 +2056,7 @@ ask("Ship.objects.values('home', 'name').annotate(hands=Count('crew')).query.gro
 ask("Ship.objects.annotate(hands=Count('crew')).values('home').query.group_by")
 ask("Ship.objects.values(low=Lower('name')).annotate(hands=Count('crew')).query.group_by, Ship.objects.values(low=Lower('name')).annotate(hands=Count('crew')).query.annotations")
 ask("Ship.objects.alias(hands=Count('crew')).query.group_by")
+ask("Sailor.objects.values('signed_on__year').annotate(n=Count('id')).query.group_by, Sailor.objects.values('signed_on__year').annotate(n=Count('id')).query.annotations")
 show("Query.group_by: None where nothing aggregates, True after an annotation that does, and a tuple after values and then annotate")
 
 ask("tail(Ship.objects.annotate(hands=Count('crew')))")
@@ -2020,6 +2069,7 @@ ask("tail(Ship.objects.annotate(hands=Count('crew')).values('name', 'hands'))")
 ask("tail(Ship.objects.annotate(hands=Count('crew')).values('hands'))")
 ask("tail(Ship.objects.values('home__country').annotate(hands=Count('crew')))")
 ask("tail(Ship.objects.values(low=Lower('name')).annotate(hands=Count('crew')))")
+ask("tail(Sailor.objects.values('signed_on__year').annotate(n=Count('id')))")
 ask("tail(Ship.objects.annotate(hands=Count('crew')).annotate(low=Lower('name')))")
 ask("tail(Ship.objects.annotate(hands=Count('crew'), fleet=Window(Count('id'))))")
 show("What get_group_by writes: the minimal set from the query, then every selected column, then what the ordering and the HAVING refer to, and Meta.ordering dropped")
@@ -2033,7 +2083,7 @@ says(CO, "SQLCompiler.collapse_group_by")
 
 with recorded(GROUPING):
     do("grouped = Ship.objects.values('home').annotate(hands=Count('crew')).filter(Q(hands__gt=1) | Q(name='Petrel')).order_by('name')")
-    do("sql_of(grouped)")
+    do("grouped.query.get_compiler('default').as_sql()")
 show("GROUP BY and HAVING assembled: set_values and set_group_by on the query, then split_having_qualify and get_group_by in the compiler")
 
 connection.features.allows_group_by_selected_pks = True
@@ -2063,14 +2113,14 @@ show("split_having_qualify: an AND is split between WHERE and HAVING, and an OR 
 # ---------------------------------------------------------------------------------------------
 # Two queries into one, and compound statements.
 
-MERGING = watch(SQ, "Query.combine", "Query.bump_prefix", "Query.join", "JoinPromoter.__init__", "JoinPromoter.add_votes", "JoinPromoter.update_join_types", "Query.unref_alias") | watch(WH, "WhereNode.add", label=lambda f: f"WhereNode.add({brief(f.f_locals['data'])}, {f.f_locals['conn_type']!r})") | watch(WH, "WhereNode.relabel_aliases")
+MERGING = watch(SQ, "Query.combine", "Query.bump_prefix", "Query.join", "JoinPromoter.__init__", "JoinPromoter.add_votes", "JoinPromoter.update_join_types", "Query.unref_alias") | {("django.utils.tree", "Node.add"): lambda f: f"Node.add({brief(f.f_locals['data'])}, {f.f_locals['conn_type']!r})"} | watch(WH, "WhereNode.relabel_aliases")
 MERGING[(SQ, "Query.combine")] = lambda f: f"Query.combine(rhs={brief(f.f_locals['rhs'])}, connector={f.f_locals['connector']!r})  (of {brief(f.f_locals['self'])})"
 MERGING[(SQ, "Query.bump_prefix")] = lambda f: f"Query.bump_prefix({brief(f.f_locals['other_query'])}, exclude={brief(f.f_locals['exclude'])})"
 MERGING[(SQ, "Query.join")] = lambda f: f"Query.join({brief(f.f_locals['join'])}, reuse={brief(f.f_locals['reuse'])})"
 MERGING[(WH, "WhereNode.relabel_aliases")] = lambda f: f"WhereNode.relabel_aliases({brief(f.f_locals['change_map'])})"
 says(SQ, "Query.join", "JoinPromoter.update_join_types")
 
-lines("to_leith = Voyage.objects.filter(calls__name='Leith'); to_lisbon = Voyage.objects.filter(calls__name='Lisbon')")
+quietly("to_leith = Voyage.objects.filter(calls__name='Leith'); to_lisbon = Voyage.objects.filter(calls__name='Lisbon')")
 with recorded(MERGING):
     do("both = to_leith & to_lisbon")
 aliases(ASKING["both"].query)
@@ -2084,15 +2134,15 @@ show("Query.combine: for an AND the right side's joins are made afresh, for an O
 ask("tail(Ship.objects.order_by('tonnage') | Ship.objects.order_by('name')), tail(Ship.objects.order_by('tonnage') & Ship.objects.all())")
 ask("tail(Ship.objects.filter(Q(captain__name='Cora') | Q(tonnage__lt=500)) & Ship.objects.filter(captain__signed_on__year=2011))")
 ask("tail(Ship.objects.filter(captain__name='Cora') | Ship.objects.filter(tonnage__lt=500))")
-ask("tail(Ship.objects.filter(name='Petrel').extra(select={'a': '1'}) | Ship.objects.filter(name='Gannet'))")
+ask("sql_of(Ship.objects.filter(name='Petrel').extra(select={'a': '1'}) | Ship.objects.filter(name='Gannet'))")
 ask("Ship.objects.extra(select={'a': '1'}) | Ship.objects.extra(select={'b': '2'})")
-ask("tail(Ship.objects.extra(select={'a': '1'}) & Ship.objects.extra(select={'b': '2'}))")
+ask("sql_of(Ship.objects.extra(select={'a': '1'}) & Ship.objects.extra(select={'b': '2'}))")
 ask("Ship.objects.all().query.combine(Sailor.objects.all().query, 'AND')")
 ask("Ship.objects.all()[:1].query.combine(Ship.objects.all().query, 'AND')")
 ask("Ship.objects.distinct().query.combine(Ship.objects.all().query, 'AND')")
 show("What combine takes from the right side: its ordering where it has one, its select, its extra, and the join promotion of the two where trees")
 
-lines("old = Sailor.objects.filter(signed_on__year__lt=2020); on_petrel = Sailor.objects.filter(ship=petrel); dag = Sailor.objects.filter(name='Dag')")
+quietly("old = Sailor.objects.filter(signed_on__year__lt=2020); on_petrel = Sailor.objects.filter(ship=petrel); dag = Sailor.objects.filter(name='Dag')")
 ask("sql_of(old.union(on_petrel))")
 ask("sql_of(old.union(on_petrel, all=True))")
 ask("sql_of(old.intersection(on_petrel))")
@@ -2116,7 +2166,7 @@ ask("str(old.union(on_petrel).query.exists())")
 ask("old.order_by('name').union(on_petrel)")
 ask("old[:1].union(on_petrel)")
 ask("connection.ops.set_operators, connection.features.supports_select_union, connection.features.supports_select_intersection, connection.features.supports_select_difference, connection.features.supports_slicing_ordering_in_compound, connection.features.supports_parentheses_in_compound, connection.features.requires_compound_order_by_subquery")
-show("get_combinator_sql on SQLite: the parts joined by the operator, a nested compound wrapped as a subquery, an empty part left out, and ORDER BY by position")
+show("get_combinator_sql on SQLite: the parts joined by the operator, a nested compound wrapped as a subquery, an empty part left out, and ORDER BY by the parts' column aliases, or by position after values")
 
 COMBINING = {k: v for k, v in COMPILING.items() if k[1] in ("SQLCompiler.as_sql", "SQLCompiler.get_combinator_sql", "SQLCompiler.get_order_by", "SQLCompiler.pre_sql_setup")}
 COMBINING[(CO, "SQLCompiler.get_combinator_sql")] = generic
@@ -2128,7 +2178,7 @@ says(CO, "SQLCompiler.get_combinator_sql", how=lambda f, v: f"({' '.join(v[0])!r
 says(CO, "SQLCompiler._get_combinator_part_sql", how=as_sql_said)
 
 with recorded(COMBINING):
-    do("sql_of(old.union(on_petrel).values('name').order_by('signed_on'))")
+    do("old.union(on_petrel).values('name').order_by('signed_on').query.get_compiler('default').as_sql()")
 show("A compound statement compiled: each part compiled by a compiler of its own with the outer query's selection, and an ORDER BY column the parts did not select added to each")
 
 # ---------------------------------------------------------------------------------------------
@@ -2155,7 +2205,7 @@ INSERTING[("django.db.backends.base.operations", "BaseDatabaseOperations.returni
 INSERTING[("django.db.backends.base.operations", "BaseDatabaseOperations.fetch_returned_rows")] = lambda f: "BaseDatabaseOperations.fetch_returned_rows"
 says(CO, "SQLInsertCompiler.prepare_value", "SQLInsertCompiler.pre_save_val", "SQLInsertCompiler.execute_sql")
 says(CO, "SQLInsertCompiler.field_as_sql", how=as_sql_said)
-says(CO, "SQLInsertCompiler.assemble_as_sql", how=lambda f, v: f"({brief([list(r) for r in v[0]])}, {brief(v[1])})")
+says(CO, "SQLInsertCompiler.assemble_as_sql", how=lambda f, v: f"({brief(v[0])}, {brief(v[1])})")
 says(CO, "SQLInsertCompiler.as_sql", how=lambda f, v: "[" + ", ".join(f"({sql!r}, {brief(tuple(params))})" for sql, params in v) + "]")
 says("django.db.backends.sqlite3.operations", "DatabaseOperations.insert_statement", "DatabaseOperations.on_conflict_suffix_sql")
 says("django.db.backends.base.operations", "BaseDatabaseOperations.bulk_insert_sql", "BaseDatabaseOperations.returning_columns", "BaseDatabaseOperations.fetch_returned_rows")
@@ -2171,7 +2221,12 @@ show("SQLInsertCompiler for two rows: bulk_insert_sql writes one VALUES list for
 
 with recorded(INSERTING):
     do("Manifest.objects.create(voyage=spring, crates=12, kilos_each=80)")
-show("An insert with a database default and a generated column on SQLite: the default is written out as a value, and the generated column is asked back")
+show("An insert with a database default and a generated column: the column whose every value is the default is left out of the INSERT, and both are asked back with RETURNING")
+
+with recorded(INSERTING):
+    do("Manifest.objects.bulk_create([Manifest(voyage=spring, crates=1, kilos_each=1), Manifest(voyage=spring, crates=2, kilos_each=2, stamped=True)])")
+quietly("Manifest.objects.filter(serial__in=['M-0002', 'M-0003', 'M-0004'])._raw_delete('default')")
+show("An insert where one row leaves the database default and another gives a value, on SQLite: the column cannot be left out, so the default is written out as its expression")
 
 with recorded(INSERTING):
     do("Logbook.objects.bulk_create([Logbook(pk=1, title='Log 1, again')], ignore_conflicts=True)")
@@ -2241,12 +2296,12 @@ ask("Ship.objects.filter(pk=1).update(tonnage=F('home__id'))")
 ask("UpdateQuery(Ship).update_batch([1, 2], {'tonnage': F('tonnage')}, 'default')")
 show("Asked of an update: a model instance, an aggregate, a window, a relation, a generated column and a composite key as values")
 
-lines("compiler = Manifest.objects.filter(serial='M-0001').query.chain(klass=UpdateQuery).get_compiler('default')")
-lines("compiler.query.add_update_values({'crates': 40})")
+quietly("compiler = Manifest.objects.filter(serial='M-0001').query.chain(klass=UpdateQuery).get_compiler('default')")
+quietly("compiler.query.add_update_values({'crates': 40})")
 with recorded(UPDATING):
     do("compiler.execute_returning_sql([Manifest._meta.get_field('kilos')])")
 ask("connection.features.can_return_rows_from_update")
-show("execute_returning_sql: an update that asks for columns back, which Model.save uses for a generated column")
+show("execute_returning_sql: an update that asks for columns back")
 
 DELETING = watch(CO, "SQLDeleteCompiler.as_sql", "SQLDeleteCompiler._as_sql", "SQLCompiler.execute_sql") | watch(SUB, "DeleteQuery.do_query", "DeleteQuery.delete_batch") | watch(SQ, "Query.add_filter", "Query.clear_where", "Query.clear_select_clause")
 DELETING[(CO, "SQLDeleteCompiler.as_sql")] = plain
@@ -2263,7 +2318,7 @@ with recorded(DELETING):
     do("Port.objects.filter(name__in=['Oban', 'Mull', 'Skagen'])._raw_delete('default')")
     do("Sailor.objects.filter(ship__name='Nobody')._raw_delete('default')")
     do("Sailor.objects.filter(pk__in=Sailor.objects.filter(name='Nobody'))._raw_delete('default')")
-show("SQLDeleteCompiler: a plain DELETE where the query has one table, and a subquery on the primary key where it has joins or refers to its own table")
+show("SQLDeleteCompiler: a plain DELETE where the query has one table, which here deletes the three ports the insert blocks made; a subquery on the primary key where it has joins; and nothing more on SQLite for a reference to its own table")
 
 connection.features.delete_can_self_reference_subquery = False
 with recorded(DELETING):

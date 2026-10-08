@@ -1,0 +1,417 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "joins.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.__init__",
+   "line": 15,
+   "sentence": "`Query.alias_map` is a dictionary from each alias to its entry, in the order the entries were made, and the first entry is the table the statement selects from (`django/db/models/sql/query.py:Query.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.__init__",
+   "kind": "function",
+   "lines": [
+    306,
+    331
+   ],
+   "fingerprint": "d2314f73d9482e87"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_initial_alias",
+   "line": 15,
+   "sentence": "`Query.base_table` is the first key, kept as a cached property that `clone` drops so that a clone works it out again, and `Query.get_initial_alias` is how a method that is about to join gets it: the first key, with its count raised by one, or, on a query that has no entry yet, a `BaseTable` of the model's table put in through `join` (`django/db/models/sql/query.py:Query.get_initial_alias`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_initial_alias",
+   "kind": "function",
+   "lines": [
+    1113,
+    1125
+   ],
+   "fingerprint": "edea199be6ada238"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join",
+   "line": 30,
+   "sentence": "A `Join` holds what the compiler needs to write one `\"JOIN\"` clause: the name of the table joined, the alias it is joined under, the alias of the table it hangs from, the join type, the field or rel the join is made along, whether the join is nullable, and the filtered relation it carries, where it carries one (`django/db/models/sql/datastructures.py:Join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join",
+   "kind": "class",
+   "lines": [
+    27,
+    178
+   ],
+   "fingerprint": "147a65d252c06f75"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignObject.get_joining_fields",
+   "line": 30,
+   "sentence": "From the field it takes, as it is made, the pairs of fields the `\"ON\"` clause compares, through the field's `get_joining_fields`, a pair for each column of the key, and keeps their column names as `Join.join_cols`; a rel answers with its field's pairs the other way round (`django/db/models/fields/related.py:ForeignObject.get_joining_fields`, `django/db/models/fields/reverse_related.py:ForeignObjectRel.get_joining_fields`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignObject.get_joining_fields",
+   "kind": "function",
+   "lines": [
+    854,
+    857
+   ],
+   "fingerprint": "6b7e97f18d161638"
+  },
+  {
+   "pointer": "django/db/models/fields/reverse_related.py:ForeignObjectRel.get_joining_fields",
+   "line": 30,
+   "sentence": "From the field it takes, as it is made, the pairs of fields the `\"ON\"` clause compares, through the field's `get_joining_fields`, a pair for each column of the key, and keeps their column names as `Join.join_cols`; a rel answers with its field's pairs the other way round (`django/db/models/fields/related.py:ForeignObject.get_joining_fields`, `django/db/models/fields/reverse_related.py:ForeignObjectRel.get_joining_fields`).",
+   "tree": "django",
+   "path": "django/db/models/fields/reverse_related.py",
+   "symbol": "ForeignObjectRel.get_joining_fields",
+   "kind": "function",
+   "lines": [
+    194,
+    195
+   ],
+   "fingerprint": "5763e686912b1f22"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 32,
+   "sentence": "`Join` no longer falls back to a field's `\"get_joining_columns\"`, and that method of `ForeignObject` and `ForeignObjectRel` is gone, as is `\"get_reverse_joining_columns\"` of `ForeignObject` (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join.as_sql",
+   "line": 34,
+   "sentence": "For each pair it asks the backend's `prepare_join_on_clause` for the two sides as expressions, a `Col` of each alias and field in the base implementation, compiles them and writes them with `=` between (`django/db/models/sql/datastructures.py:Join.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_join_on_clause`).",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join.as_sql",
+   "kind": "function",
+   "lines": [
+    76,
+    133
+   ],
+   "fingerprint": "e5695c5129142fd0"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_join_on_clause",
+   "line": 34,
+   "sentence": "For each pair it asks the backend's `prepare_join_on_clause` for the two sides as expressions, a `Col` of each alias and field in the base implementation, compiles them and writes them with `=` between (`django/db/models/sql/datastructures.py:Join.as_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_join_on_clause`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.prepare_join_on_clause",
+   "kind": "function",
+   "lines": [
+    869,
+    873
+   ],
+   "fingerprint": "98e63d3103608c96"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignObject.get_extra_restriction",
+   "line": 34,
+   "sentence": "After the pairs it adds, in parentheses, whatever the field's `get_extra_restriction` returns, a hook that returns `None` on `ForeignObject` and that a relation of `django.contrib.contenttypes` uses to restrict a join to one content type, and then the filtered relation's condition, compiled, unless the condition matches every row (`django/db/models/fields/related.py:ForeignObject.get_extra_restriction`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignObject.get_extra_restriction",
+   "kind": "function",
+   "lines": [
+    877,
+    889
+   ],
+   "fingerprint": "096f2e0cbdf4a44d"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 36,
+   "sentence": "Table and `\"JOIN\"` aliases are now quoted systematically, as are the aliases of annotations, so that a special character in one cannot collide with the SQL around it: the recording writes `\"crew_sailor\" \"T3\"` (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:BaseTable",
+   "line": 45,
+   "sentence": "A `BaseTable` holds only a table's name and its alias, and its identity is those two with the class; it writes the name, and the alias after it where the two differ (`django/db/models/sql/datastructures.py:BaseTable`).",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "BaseTable",
+   "kind": "class",
+   "lines": [
+    181,
+    222
+   ],
+   "fingerprint": "0afd2129b8278621"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.table_alias",
+   "line": 61,
+   "sentence": "`Query.table_alias` gives a table an alias (`django/db/models/sql/query.py:Query.table_alias`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.table_alias",
+   "kind": "function",
+   "lines": [
+    900,
+    925
+   ],
+   "fingerprint": "5a7b0799198af938"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.join",
+   "line": 63,
+   "sentence": "`Query.join` is given a `Join` or a `BaseTable` and returns its alias, after either reusing an entry of the map or adding one (`django/db/models/sql/query.py:Query.join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.join",
+   "kind": "function",
+   "lines": [
+    1135,
+    1187
+   ],
+   "fingerprint": "393249a14721bc0e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.setup_joins",
+   "line": 65,
+   "sentence": "Which joins may be reused is decided by the caller, and `setup_joins` is the caller that matters: for a step of a path that can reach several rows for one row of the model it leaves, a reverse foreign key or a many-to-many relation, it passes the set it was given, and for any other step it passes `None`, so that an equal join is always reused (`django/db/models/sql/query.py:Query.setup_joins`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.setup_joins",
+   "kind": "function",
+   "lines": [
+    1898,
+    2013
+   ],
+   "fingerprint": "03a5136e0ffb24f1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.ref_alias",
+   "line": 85,
+   "sentence": "Each alias has a count in `Query.alias_refcount`, raised by `Query.ref_alias` and lowered by `Query.unref_alias`, and the count says how many things stand on the alias: `join` raises the count of an alias it reuses, `table_alias` starts a new one at one, and `get_initial_alias` raises the base table's each time a name is walked from it (`django/db/models/sql/query.py:Query.ref_alias`, `django/db/models/sql/query.py:Query.unref_alias`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.ref_alias",
+   "kind": "function",
+   "lines": [
+    927,
+    929
+   ],
+   "fingerprint": "1783d0947a31bfc3"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.unref_alias",
+   "line": 85,
+   "sentence": "Each alias has a count in `Query.alias_refcount`, raised by `Query.ref_alias` and lowered by `Query.unref_alias`, and the count says how many things stand on the alias: `join` raises the count of an alias it reuses, `table_alias` starts a new one at one, and `get_initial_alias` raises the base table's each time a name is walked from it (`django/db/models/sql/query.py:Query.ref_alias`, `django/db/models/sql/query.py:Query.unref_alias`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.unref_alias",
+   "kind": "function",
+   "lines": [
+    931,
+    933
+   ],
+   "fingerprint": "3b65c2ffe1e42bfc"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.reset_refcounts",
+   "line": 85,
+   "sentence": "And the compiler joins tables of its own for an ordering or a selected relation when the statement is written, and puts every count back to what it was, through `Query.reset_refcounts`, before `as_sql` returns, so that the query is as it was for the next evaluation (`django/db/models/sql/query.py:Query.reset_refcounts`, [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.reset_refcounts",
+   "kind": "function",
+   "lines": [
+    992,
+    999
+   ],
+   "fingerprint": "ede0848b690f10fa"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.join",
+   "line": 91,
+   "sentence": "A new join is outer where the join it hangs from is outer or the join is nullable, and inner otherwise; the docstring of `join` says that a join is always made outer when its left side is outer, to make sure chains like an outer join followed by an inner one are not made (`django/db/models/sql/query.py:Query.join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.join",
+   "kind": "function",
+   "lines": [
+    1135,
+    1187
+   ],
+   "fingerprint": "393249a14721bc0e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.promote_joins",
+   "line": 93,
+   "sentence": "`Query.promote_joins` is given aliases and makes each outer, where the join is nullable or the join it hangs from is outer and it is not outer already, skipping the base table; when it has promoted one it adds to its list every join that hangs from it, so that no inner join is left under an outer one, since, the docstring says, promoting the first without the second would change nothing in the result (`django/db/models/sql/query.py:Query.promote_joins`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.promote_joins",
+   "kind": "function",
+   "lines": [
+    935,
+    971
+   ],
+   "fingerprint": "2e0523116fadb11a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.demote_joins",
+   "line": 93,
+   "sentence": "`Query.demote_joins` makes each outer join among its aliases inner; its docstring says the join it hangs from must be demoted as well, and the method then adds that join to its list only where the join is inner already, so it is left as it is; a condition's vote names every join on its path, as the next paragraph tells, so the join a demoted join hangs from is demoted by the same vote (`django/db/models/sql/query.py:Query.demote_joins`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.demote_joins",
+   "kind": "function",
+   "lines": [
+    973,
+    990
+   ],
+   "fingerprint": "9fca5403a40f1540"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query._add_q",
+   "line": 95,
+   "sentence": "`Query._add_q` makes a `JoinPromoter` for each node of the `Q` it walks, with the node's connector, the number of its children, and whether the node is negated, and after it has built the children's clauses it has the promoter settle the joins (`django/db/models/sql/query.py:Query._add_q`, `django/db/models/sql/query.py:JoinPromoter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query._add_q",
+   "kind": "function",
+   "lines": [
+    1699,
+    1738
+   ],
+   "fingerprint": "745048ceec69c995"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:JoinPromoter",
+   "line": 95,
+   "sentence": "`Query._add_q` makes a `JoinPromoter` for each node of the `Q` it walks, with the node's connector, the number of its children, and whether the node is negated, and after it has built the children's clauses it has the promoter settle the joins (`django/db/models/sql/query.py:Query._add_q`, `django/db/models/sql/query.py:JoinPromoter`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "JoinPromoter",
+   "kind": "class",
+   "lines": [
+    2818,
+    2907
+   ],
+   "fingerprint": "57aff8bdadbd7dfe"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:JoinPromoter.update_join_types",
+   "line": 97,
+   "sentence": "`JoinPromoter.update_join_types` then reads the counts against the node's **effective connector**: the node's own, or the other one where the node is negated, so that `NOT (a AND b)` is treated as `a OR b` and `NOT (a OR b)` as `a AND b` (`django/db/models/sql/query.py:JoinPromoter.update_join_types`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "JoinPromoter.update_join_types",
+   "kind": "function",
+   "lines": [
+    2852,
+    2907
+   ],
+   "fingerprint": "164ca9f3f8dd6ea1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_q",
+   "line": 97,
+   "sentence": "Last, `Query.add_q`, which called `_add_q` on the whole tree, demotes every join that was inner before the tree was added: a comment there says the new tree is joined to the existing conditions by `\"AND\"`, so an existing inner join must stay inner, and an existing outer one may be demoted (`django/db/models/sql/query.py:Query.add_q`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_q",
+   "kind": "function",
+   "lines": [
+    1670,
+    1691
+   ],
+   "fingerprint": "1c3dbd7a200a67d7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.bump_prefix",
+   "line": 204,
+   "sentence": "`Query.bump_prefix` is given the outer query and changes the inner query's prefix to a letter the outer does not use (`django/db/models/sql/query.py:Query.bump_prefix`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.bump_prefix",
+   "kind": "function",
+   "lines": [
+    1058,
+    1111
+   ],
+   "fingerprint": "779a52e95c3f2ba7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.change_aliases",
+   "line": 216,
+   "sentence": "`Query.change_aliases` does the renaming, given a mapping from old alias to new (`django/db/models/sql/query.py:Query.change_aliases`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.change_aliases",
+   "kind": "function",
+   "lines": [
+    1001,
+    1056
+   ],
+   "fingerprint": "ad7505eb1684ab5f"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.relabel_aliases",
+   "line": 216,
+   "sentence": "Then it relabels every place an alias is written: the where tree, through `WhereNode.relabel_aliases`, which has each lookup make a relabelled clone of itself; the grouping, where it is a tuple; the select; and the annotations (`django/db/models/sql/where.py:WhereNode.relabel_aliases`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.relabel_aliases",
+   "kind": "function",
+   "lines": [
+    203,
+    215
+   ],
+   "fingerprint": "dcd12e30beb65517"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_from_clause",
+   "line": 220,
+   "sentence": "`SQLCompiler.get_from_clause` reads the map when the statement is written and returns the pieces of the `\"FROM\"` clause with their parameters: for each entry whose count is not zero, in the map's order, what `BaseTable.as_sql` or `Join.as_sql` writes (`django/db/models/sql/compiler.py:SQLCompiler.get_from_clause`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_from_clause",
+   "kind": "function",
+   "lines": [
+    1165,
+    1197
+   ],
+   "fingerprint": "52aaf5940c313a5e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_extra",
+   "line": 220,
+   "sentence": "After the entries come the tables of `Query.extra_tables`, those a queryset's `extra` named: each is given an alias by `table_alias` without creating one, and appended after a comma, quoted, unless the table is already joined and written, which the method tells by a count above one; a join of the table that is in the map with a count of zero is written as a bare table this way (`django/db/models/sql/query.py:Query.add_extra`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_extra",
+   "kind": "function",
+   "lines": [
+    2473,
+    2504
+   ],
+   "fingerprint": "a83f51799103b9ad"
+  }
+ ]
+}

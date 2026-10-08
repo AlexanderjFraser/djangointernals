@@ -1,0 +1,617 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "aggregates.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate",
+   "line": 13,
+   "sentence": "On the class, `Aggregate.contains_aggregate` is `True`, where `BaseExpression` computes it from the sources; `window_compatible` is `True`, so that an aggregate may be the function a `Window` runs over its partition ([Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](windows.md)); `empty_result_set_value`, the answer for no rows, is `None`; `allow_distinct` and `allow_order_by` are `False`, and each subclass turns on what its function accepts; and `name` is what the class is called in a message and in a default alias (`django/db/models/aggregates.py:Aggregate`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate",
+   "kind": "class",
+   "lines": [
+    75,
+    223
+   ],
+   "fingerprint": "14143de20ffad2b4"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.__init__",
+   "line": 15,
+   "sentence": "It keeps `distinct` as given, wraps the filter in an `AggregateFilter`, keeps the default as given until the aggregate is resolved, and turns the ordering into an `AggregateOrderBy` through `OrderByList.from_param`, which takes a string, an expression, or a list or tuple of either and raises `ValueError` for anything else; the arguments go to `Func.__init__` (`django/db/models/aggregates.py:Aggregate.__init__`, `django/db/models/expressions.py:OrderByList.from_param`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.__init__",
+   "kind": "function",
+   "lines": [
+    84,
+    106
+   ],
+   "fingerprint": "c577c84f985307d6"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:OrderByList.from_param",
+   "line": 15,
+   "sentence": "It keeps `distinct` as given, wraps the filter in an `AggregateFilter`, keeps the default as given until the aggregate is resolved, and turns the ordering into an `AggregateOrderBy` through `OrderByList.from_param`, which takes a string, an expression, or a list or tuple of either and raises `ValueError` for anything else; the arguments go to `Func.__init__` (`django/db/models/aggregates.py:Aggregate.__init__`, `django/db/models/expressions.py:OrderByList.from_param`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "OrderByList.from_param",
+   "kind": "function",
+   "lines": [
+    1531,
+    1544
+   ],
+   "at": 1532,
+   "fingerprint": "a5943a942d28f319"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.get_source_expressions",
+   "line": 24,
+   "sentence": "`Aggregate.get_source_fields`, from which the output field is inferred, leaves them out, since a comment says they have nothing to do with it (`django/db/models/aggregates.py:Aggregate.get_source_expressions`, `django/db/models/aggregates.py:Aggregate.get_source_fields`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.get_source_expressions",
+   "kind": "function",
+   "lines": [
+    113,
+    115
+   ],
+   "fingerprint": "d4e363550b0bc970"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.get_source_fields",
+   "line": 24,
+   "sentence": "`Aggregate.get_source_fields`, from which the output field is inferred, leaves them out, since a comment says they have nothing to do with it (`django/db/models/aggregates.py:Aggregate.get_source_expressions`, `django/db/models/aggregates.py:Aggregate.get_source_fields`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.get_source_fields",
+   "kind": "function",
+   "lines": [
+    108,
+    111
+   ],
+   "fingerprint": "1a41e94a6aeacd57"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.default_alias",
+   "line": 26,
+   "sentence": "So a count of `\"crew\"` is `\"crew__count\"`, and a count with a filter, which has two sources that are not `None`, needs an alias as the sum of an arithmetic expression does (`django/db/models/aggregates.py:Aggregate.default_alias`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.default_alias",
+   "kind": "function",
+   "lines": [
+    162,
+    169
+   ],
+   "at": 163,
+   "fingerprint": "9dc9a4c58d6873a0"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.as_sql",
+   "line": 36,
+   "sentence": "`Aggregate.as_sql` fills the three slots, and the backend's features decide two of them (`django/db/models/aggregates.py:Aggregate.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.as_sql",
+   "kind": "function",
+   "lines": [
+    174,
+    213
+   ],
+   "fingerprint": "7cf27e5868a27e5f"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_distinct_multiple_argument",
+   "line": 36,
+   "sentence": "It first refuses, with `NotSupportedError`, `distinct` on an aggregate of more than one argument where `supports_aggregate_distinct_multiple_argument` is off, which on SQLite it is (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_distinct_multiple_argument`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_aggregate_distinct_multiple_argument",
+   "kind": "assignment",
+   "lines": [
+    275,
+    275
+   ],
+   "fingerprint": "99f1fbf130c5860e"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:AggregateOrderBy",
+   "line": 36,
+   "sentence": "SQLite has the clause from version 3.44 (`django/db/models/aggregates.py:AggregateOrderBy`, `django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_aggregate_order_by_clause`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "AggregateOrderBy",
+   "kind": "class",
+   "lines": [
+    62,
+    72
+   ],
+   "fingerprint": "3a9dfa8e665cec84"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_aggregate_order_by_clause",
+   "line": 36,
+   "sentence": "SQLite has the clause from version 3.44 (`django/db/models/aggregates.py:AggregateOrderBy`, `django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_aggregate_order_by_clause`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.supports_aggregate_order_by_clause",
+   "kind": "assignment",
+   "lines": [
+    36,
+    36
+   ],
+   "fingerprint": "91609547d906cc3e"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:AggregateFilter",
+   "line": 38,
+   "sentence": "Where the clause is supported it is written after the closing parenthesis, `\" FILTER (WHERE \"`, the condition and `\")\"` (`django/db/models/aggregates.py:AggregateFilter`, `django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_filter_clause`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "AggregateFilter",
+   "kind": "class",
+   "lines": [
+    40,
+    59
+   ],
+   "fingerprint": "9058d90257ea49e9"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_filter_clause",
+   "line": 38,
+   "sentence": "Where the clause is supported it is written after the closing parenthesis, `\" FILTER (WHERE \"`, the condition and `\")\"` (`django/db/models/aggregates.py:AggregateFilter`, `django/db/backends/base/features.py:BaseDatabaseFeatures.supports_aggregate_filter_clause`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_aggregate_filter_clause",
+   "kind": "assignment",
+   "lines": [
+    266,
+    266
+   ],
+   "fingerprint": "5cb856ccacce1441"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.resolve_expression",
+   "line": 59,
+   "sentence": "`Aggregate.resolve_expression` is `BaseExpression.resolve_expression`, a copy whose sources are resolved, with three things added, and one argument dropped: it does not pass `for_save` on, since a comment says aggregates are not allowed in an update (`django/db/models/aggregates.py:Aggregate.resolve_expression`, `django/db/models/expressions.py:BaseExpression.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.resolve_expression",
+   "kind": "function",
+   "lines": [
+    121,
+    160
+   ],
+   "fingerprint": "cc3501faaea21bfa"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.resolve_expression",
+   "line": 59,
+   "sentence": "`Aggregate.resolve_expression` is `BaseExpression.resolve_expression`, a copy whose sources are resolved, with three things added, and one argument dropped: it does not pass `for_save` on, since a comment says aggregates are not allowed in an update (`django/db/models/aggregates.py:Aggregate.resolve_expression`, `django/db/models/expressions.py:BaseExpression.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.resolve_expression",
+   "kind": "function",
+   "lines": [
+    279,
+    315
+   ],
+   "fingerprint": "f0c477de56cd8d0d"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.resolve_ref",
+   "line": 61,
+   "sentence": "An `F` inside an aggregate resolves differently under the mark: `Query.resolve_ref` with `summarize=True` answers a name that is a selected annotation with a `Ref` to it, and refuses with `FieldError` a name that is an annotation `QuerySet.alias` left unselected, telling the caller to promote it with `annotate`; without the mark it answers with the annotation itself (`django/db/models/sql/query.py:Query.resolve_ref`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.resolve_ref",
+   "kind": "function",
+   "lines": [
+    2069,
+    2118
+   ],
+   "fingerprint": "e2b6625b4c73decb"
+  },
+  {
+   "pointer": "django/db/models/functions/comparison.py:Coalesce",
+   "line": 75,
+   "sentence": "A default that is an expression is resolved first and given the aggregate's output field where it has none of its own; a plain value is wrapped in a `Value` with that field (`django/db/models/functions/comparison.py:Coalesce`).",
+   "tree": "django",
+   "path": "django/db/models/functions/comparison.py",
+   "symbol": "Coalesce",
+   "kind": "class",
+   "lines": [
+    70,
+    101
+   ],
+   "fingerprint": "7ef704a457354921"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.get_group_by_cols",
+   "line": 77,
+   "sentence": "`Aggregate.get_group_by_cols` returns an empty list: an aggregate puts no column into the grouping, where an expression without one puts itself (`django/db/models/aggregates.py:Aggregate.get_group_by_cols`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.get_group_by_cols",
+   "kind": "function",
+   "lines": [
+    171,
+    172
+   ],
+   "fingerprint": "c5a4786e83ffb9d5"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Count",
+   "line": 81,
+   "sentence": "Its output field is declared on the class, an `IntegerField`, its `empty_result_set_value` is 0, and it allows `distinct` (`django/db/models/aggregates.py:Count`, `django/db/models/expressions.py:Star`, `django/db/models/fields/__init__.py:IntegerField`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Count",
+   "kind": "class",
+   "lines": [
+    295,
+    325
+   ],
+   "fingerprint": "9c9ddaabfed30406"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Star",
+   "line": 81,
+   "sentence": "Its output field is declared on the class, an `IntegerField`, its `empty_result_set_value` is 0, and it allows `distinct` (`django/db/models/aggregates.py:Count`, `django/db/models/expressions.py:Star`, `django/db/models/fields/__init__.py:IntegerField`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Star",
+   "kind": "class",
+   "lines": [
+    1303,
+    1308
+   ],
+   "fingerprint": "4a538baf5d451a6d"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:IntegerField",
+   "line": 81,
+   "sentence": "Its output field is declared on the class, an `IntegerField`, its `empty_result_set_value` is 0, and it allows `distinct` (`django/db/models/aggregates.py:Count`, `django/db/models/expressions.py:Star`, `django/db/models/fields/__init__.py:IntegerField`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "IntegerField",
+   "kind": "class",
+   "lines": [
+    2142,
+    2239
+   ],
+   "fingerprint": "1a3860c3576b2225"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Count.resolve_expression",
+   "line": 81,
+   "sentence": "It is the one class of the module with `allows_composite_expressions` set, so that `BaseExpression.resolve_expression` lets a `ColPairs`, the column pair a composite primary key resolves to, through; `Count.resolve_expression` then puts the first column of the pair in its place, a comment saying that a composite key is counted by its first column, and refuses `distinct` on one with `ValueError` (`django/db/models/aggregates.py:Count.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Count.resolve_expression",
+   "kind": "function",
+   "lines": [
+    311,
+    325
+   ],
+   "fingerprint": "3f254345af26ed70"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py",
+   "line": 108,
+   "sentence": "*The aggregate classes of `django/db/models/aggregates.py`: the function each writes, what its constructor accepts, and where its output field comes from.",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    468
+   ],
+   "fingerprint": "5306e824e61be06d"
+  },
+  {
+   "pointer": "django/db/models/functions/mixins.py:FixDurationInputMixin",
+   "line": 110,
+   "sentence": "`Sum` and `Avg` carry `FixDurationInputMixin`, whose `as_mysql` and `as_oracle` see to an aggregate of durations on those two backends; `Avg`, `StdDev` and `Variance` carry `NumericOutputFieldMixin`, whose `_resolve_output_field` is the rule the table gives (`django/db/models/functions/mixins.py:FixDurationInputMixin`, `django/db/models/functions/mixins.py:NumericOutputFieldMixin`).",
+   "tree": "django",
+   "path": "django/db/models/functions/mixins.py",
+   "symbol": "FixDurationInputMixin",
+   "kind": "class",
+   "lines": [
+    28,
+    52
+   ],
+   "fingerprint": "7c7ed5a8d08b1206"
+  },
+  {
+   "pointer": "django/db/models/functions/mixins.py:NumericOutputFieldMixin",
+   "line": 110,
+   "sentence": "`Sum` and `Avg` carry `FixDurationInputMixin`, whose `as_mysql` and `as_oracle` see to an aggregate of durations on those two backends; `Avg`, `StdDev` and `Variance` carry `NumericOutputFieldMixin`, whose `_resolve_output_field` is the rule the table gives (`django/db/models/functions/mixins.py:FixDurationInputMixin`, `django/db/models/functions/mixins.py:NumericOutputFieldMixin`).",
+   "tree": "django",
+   "path": "django/db/models/functions/mixins.py",
+   "symbol": "NumericOutputFieldMixin",
+   "kind": "class",
+   "lines": [
+    55,
+    62
+   ],
+   "fingerprint": "ea7d7a7ab55297a9"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:StringAgg",
+   "line": 112,
+   "sentence": "`StringAgg` takes an expression and a delimiter, wraps the delimiter in a `StringAggDelimiter`, a `Func` of one expression whose template is the expression alone, and passes both to `Aggregate.__init__`, so that it is an aggregate of two sources (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:StringAggDelimiter`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "StringAgg",
+   "kind": "class",
+   "lines": [
+    371,
+    449
+   ],
+   "fingerprint": "a85105a8a0f93ec3"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:StringAggDelimiter",
+   "line": 112,
+   "sentence": "`StringAgg` takes an expression and a delimiter, wraps the delimiter in a `StringAggDelimiter`, a `Func` of one expression whose template is the expression alone, and passes both to `Aggregate.__init__`, so that it is an aggregate of two sources (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:StringAggDelimiter`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "StringAggDelimiter",
+   "kind": "class",
+   "lines": [
+    352,
+    368
+   ],
+   "fingerprint": "efc4dd8f8a6b9770"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:StringAgg.as_sqlite",
+   "line": 112,
+   "sentence": "`StringAgg.as_sqlite` has three ways: with `distinct` and the delimiter `Value(\",\")` it drops the delimiter from the sources and writes `\"GROUP_CONCAT\"`, which is what let the second recorded statement above pass the check on `distinct` with several arguments; on SQLite before 3.44 it writes `\"GROUP_CONCAT\"` with the delimiter; otherwise `\"STRING_AGG\"` (`django/db/models/aggregates.py:StringAgg.as_sqlite`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "StringAgg.as_sqlite",
+   "kind": "function",
+   "lines": [
+    422,
+    449
+   ],
+   "fingerprint": "c11f778d64690dcf"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:AnyValue",
+   "line": 114,
+   "sentence": "`AnyValue` writes `\"ANY_VALUE\"` of one expression, refuses to be compiled where `supports_any_value` is off, and is the one aggregate with `window_compatible` set to `False` (`django/db/models/aggregates.py:AnyValue`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "AnyValue",
+   "kind": "class",
+   "lines": [
+    226,
+    237
+   ],
+   "fingerprint": "6bb621cc8ca2278b"
+  },
+  {
+   "pointer": "docs/topics/db/aggregation.txt",
+   "line": 114,
+   "sentence": "The documentation of aggregation gives its use: a selected column that is neither grouped by nor aggregated, on a backend that rejects one (`docs/topics/db/aggregation.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/aggregation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    750
+   ],
+   "fingerprint": "cde353287eaf48dc"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:BitAggregate",
+   "line": 114,
+   "sentence": "`BitAnd`, `BitOr` and `BitXor` are a `BitAggregate` each, with the function on the subclass; `BitAggregate.__init__` writes down whether a default was given, since `Aggregate.resolve_expression` will set `default` to `None`, and `BitAggregate.as_sql` refuses the aggregate where `supports_bit_aggregations` is off and the default where `supports_default_in_bit_aggregations` is (`django/db/models/aggregates.py:BitAggregate`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "BitAggregate",
+   "kind": "class",
+   "lines": [
+    247,
+    277
+   ],
+   "fingerprint": "ed6b654826a7c990"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 116,
+   "sentence": "`StringAgg` and `AnyValue` are in `django.db.models`; `StringAgg` was PostgreSQL's before, and the `order_by` argument of `Aggregate`, with `allow_order_by`, came in with it (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 118,
+   "sentence": "`BitAnd`, `BitOr` and `BitXor` are in `django.db.models`, from `django.contrib.postgres`; and `StringAgg` accepts `distinct=True` on SQLite, with the delimiter `Value(\",\")` only (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
+   "line": 122,
+   "sentence": "`Query.get_aggregation` takes the database alias and a dictionary from aliases to aggregates, and returns a dictionary from the same aliases to values, having sent one statement or none (`django/db/models/sql/query.py:Query.get_aggregation`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_aggregation",
+   "kind": "function",
+   "lines": [
+    458,
+    650
+   ],
+   "fingerprint": "92e28f95e3a4502a"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:AggregateQuery",
+   "line": 126,
+   "sentence": "The **wrapped case** makes a clone of the query the inner query of an `AggregateQuery`, whose compiler selects the aggregates from the clone's statement in parentheses (`django/db/models/sql/subqueries.py:AggregateQuery`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "AggregateQuery",
+   "kind": "class",
+   "lines": [
+    167,
+    177
+   ],
+   "fingerprint": "af23418697b9b8ed"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query._gen_cols",
+   "line": 153,
+   "sentence": "Where that leaves the inner query selecting nothing, the primary key is selected, for the sake of a count over a slice (`django/db/models/sql/query.py:Query._gen_cols`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query._gen_cols",
+   "kind": "function",
+   "lines": [
+    2047,
+    2063
+   ],
+   "at": 2048,
+   "fingerprint": "2d6c6b6291791370"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql",
+   "line": 177,
+   "sentence": "`SQLAggregateCompiler.as_sql` is the whole of the outer compiler: it compiles each selected annotation of the `AggregateQuery`, has the inner query's compiler write its statement with `with_col_aliases=True`, so that every column has a name the outer statement can use, and writes `\"SELECT\"`, the aggregates, `\"FROM (\"`, the inner statement and `\") subquery\"`; the aggregates are given no aliases, the result being read by position (`django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLAggregateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    2258,
+    2279
+   ],
+   "fingerprint": "f6407600aea64394"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.__init__",
+   "line": 222,
+   "sentence": "Before the compiler is made, the method gathers each selected aggregate's `empty_result_set_value`, and sets the compiler's `elide_empty` to whether none of them is `NotImplemented`: with it set, which a comment at `SQLCompiler.__init__` explains for this very case, a where tree that can match nothing makes `SQLCompiler.as_sql` raise `EmptyResultSet` and `SQLCompiler.execute_sql` answer with nothing, and the gathered values are the answer; without it, `as_sql` writes `\"0 = 1\"` for the where clause and the statement is sent, so that an expression with no answer of its own, a sum with one added to it, gets the database's (`django/db/models/sql/compiler.py:SQLCompiler.__init__`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.__init__",
+   "kind": "function",
+   "lines": [
+    50,
+    66
+   ],
+   "fingerprint": "72135618b6a5316b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 222,
+   "sentence": "Before the compiler is made, the method gathers each selected aggregate's `empty_result_set_value`, and sets the compiler's `elide_empty` to whether none of them is `NotImplemented`: with it set, which a comment at `SQLCompiler.__init__` explains for this very case, a where tree that can match nothing makes `SQLCompiler.as_sql` raise `EmptyResultSet` and `SQLCompiler.execute_sql` answer with nothing, and the gathered values are the answer; without it, `as_sql` writes `\"0 = 1\"` for the where clause and the statement is sent, so that an expression with no answer of its own, a sum with one added to it, gets the database's (`django/db/models/sql/compiler.py:SQLCompiler.__init__`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/models/functions/comparison.py:Coalesce.empty_result_set_value",
+   "line": 222,
+   "sentence": "`Count` answers 0, `Aggregate` answers `None`, a `Coalesce` answers with the first of its sources that has an answer other than `None`, and a `Value` with its value, which is how a default reaches the dictionary without a statement (`django/db/models/functions/comparison.py:Coalesce.empty_result_set_value`).",
+   "tree": "django",
+   "path": "django/db/models/functions/comparison.py",
+   "symbol": "Coalesce.empty_result_set_value",
+   "kind": "function",
+   "lines": [
+    80,
+    86
+   ],
+   "at": 81,
+   "fingerprint": "cb4417c3e8b6bd73"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_count",
+   "line": 237,
+   "sentence": "`Query.get_count` clones the query and returns `get_aggregation` of `Count(\"*\")` under the alias `\"__count\"`, which is the alias in the statement; everything above holds for it, the wrapped case included (`django/db/models/sql/query.py:Query.get_count`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_count",
+   "kind": "function",
+   "lines": [
+    652,
+    657
+   ],
+   "fingerprint": "27f170863228f0d5"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.exists",
+   "line": 259,
+   "sentence": "`Query.exists` makes the narrowed query that answers whether any row matches (`django/db/models/sql/query.py:Query.exists`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.exists",
+   "kind": "function",
+   "lines": [
+    662,
+    682
+   ],
+   "fingerprint": "9bf05dfcb121746b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.has_results",
+   "line": 259,
+   "sentence": "`Query.has_results` makes that query and asks its compiler's `SQLCompiler.has_results`, which is whether `execute_sql` with `SINGLE` returned a row (`django/db/models/sql/query.py:Query.has_results`, `django/db/models/sql/compiler.py:SQLCompiler.has_results`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.has_results",
+   "kind": "function",
+   "lines": [
+    684,
+    687
+   ],
+   "fingerprint": "82e2c9436e15b8e4"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.has_results",
+   "line": 259,
+   "sentence": "`Query.has_results` makes that query and asks its compiler's `SQLCompiler.has_results`, which is whether `execute_sql` with `SINGLE` returned a row (`django/db/models/sql/query.py:Query.has_results`, `django/db/models/sql/compiler.py:SQLCompiler.has_results`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.has_results",
+   "kind": "function",
+   "lines": [
+    1612,
+    1617
+   ],
+   "fingerprint": "0ab4af4bd43bf0b2"
+  }
+ ]
+}

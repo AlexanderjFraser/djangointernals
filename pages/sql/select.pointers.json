@@ -1,0 +1,462 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "select.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select",
+   "line": 15,
+   "sentence": "`SQLCompiler.get_select` returns three things: a list with, for each column, the expression, its SQL with its parameters, and its alias or `None`; the `klass_info`; and a dictionary from each alias to the position of its column, which the compiler keeps as `SQLCompiler.annotation_col_map` (`django/db/models/sql/compiler.py:SQLCompiler.get_select`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_select",
+   "kind": "function",
+   "lines": [
+    241,
+    337
+   ],
+   "fingerprint": "ade92c6fb31c93cb"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_default_columns",
+   "line": 34,
+   "sentence": "`SQLCompiler.get_default_columns` returns a `Col` for each concrete field of a model, under the alias of the table it is read from (`django/db/models/sql/compiler.py:SQLCompiler.get_default_columns`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_default_columns",
+   "kind": "function",
+   "lines": [
+    1003,
+    1052
+   ],
+   "fingerprint": "7fb7629e8c13a914"
+  },
+  {
+   "pointer": "django/db/models/fields/composite.py:unnest",
+   "line": 34,
+   "sentence": "It keeps a dictionary of the models it has joined, seeded with `None` for the starting alias, and unnests the mask into a set of fields, so that a composite primary key in the mask counts as each of its columns (`django/db/models/fields/composite.py:unnest`).",
+   "tree": "django",
+   "path": "django/db/models/fields/composite.py",
+   "symbol": "unnest",
+   "kind": "function",
+   "lines": [
+    168,
+    177
+   ],
+   "fingerprint": "08d1c7d148553efc"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.get_col",
+   "line": 36,
+   "sentence": "What is left is given an alias by `Query.join_parent_model`, the start alias for the model's own fields and the alias of a join to the parent's table for an inherited one, which it makes through `setup_joins` the first time it meets each parent ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](names.md)); and the field's `get_col` makes the column, which is the field's own cached `Col` where the alias is the table's name and a new one otherwise (`django/db/models/fields/__init__.py:Field.get_col`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.get_col",
+   "kind": "function",
+   "lines": [
+    575,
+    582
+   ],
+   "fingerprint": "38ef22d11c3e714b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_values",
+   "line": 57,
+   "sentence": "`Query.set_values` is what `QuerySet.values` and `QuerySet.values_list` leave on the query, and it decides the select list in full (`django/db/models/sql/query.py:Query.set_values`) ([`values` and `values_list`: rows as dictionaries and tuples](../querysets/values.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_values",
+   "kind": "function",
+   "lines": [
+    2597,
+    2670
+   ],
+   "fingerprint": "9e40cfce72b34b7f"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_fields",
+   "line": 61,
+   "sentence": "`Query.add_fields` turns names into the select tuple (`django/db/models/sql/query.py:Query.add_fields`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_fields",
+   "kind": "function",
+   "lines": [
+    2275,
+    2333
+   ],
+   "fingerprint": "efb9650436e6a4e7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clear_select_clause",
+   "line": 99,
+   "sentence": "`Query.has_select_fields` is whether `selected` is set (`django/db/models/sql/query.py:Query.clear_select_clause`, `django/db/models/sql/query.py:Query.has_select_fields`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clear_select_clause",
+   "kind": "function",
+   "lines": [
+    2240,
+    2247
+   ],
+   "fingerprint": "f1477d3ad97b1ec1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.has_select_fields",
+   "line": 99,
+   "sentence": "`Query.has_select_fields` is whether `selected` is set (`django/db/models/sql/query.py:Query.clear_select_clause`, `django/db/models/sql/query.py:Query.has_select_fields`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.has_select_fields",
+   "kind": "function",
+   "lines": [
+    2593,
+    2595
+   ],
+   "at": 2594,
+   "fingerprint": "f8fce7369f77f37b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.annotation_select",
+   "line": 103,
+   "sentence": "`Query.annotations` is every annotation, under its alias, and `Query.annotation_select` is those that are selected: a property that returns the whole dictionary where `Query.annotation_select_mask` is `None`, and otherwise the entries whose alias is in the mask, kept in `Query._annotation_select_cache` until the mask changes (`django/db/models/sql/query.py:Query.annotation_select`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.annotation_select",
+   "kind": "function",
+   "lines": [
+    2672,
+    2690
+   ],
+   "at": 2673,
+   "fingerprint": "575afb685506d2cc"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_annotation_mask",
+   "line": 103,
+   "sentence": "`Query.set_annotation_mask` sets the mask to a set of the names, or to `None`, and clears the cache; where `selected` is set, it also prunes from `selected` each reference to an annotation now masked and appends a reference for each name, so that an annotation selected after `values` takes its place at the end (`django/db/models/sql/query.py:Query.set_annotation_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_annotation_mask",
+   "kind": "function",
+   "lines": [
+    2559,
+    2576
+   ],
+   "fingerprint": "fcc74f829ea53be7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_annotation",
+   "line": 105,
+   "sentence": "`Query.add_annotation` is what `QuerySet.annotate` and `QuerySet.alias` call for each expression (`django/db/models/sql/query.py:Query.add_annotation`) ([Annotations, ordering and the other methods that change the query](../querysets/methods.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_annotation",
+   "kind": "function",
+   "lines": [
+    1240,
+    1250
+   ],
+   "fingerprint": "a5bcec852f20fe4b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_extra",
+   "line": 123,
+   "sentence": "The select half of `Query.add_extra` checks each name with `check_alias`, makes the SQL a string, and pairs it with its parameters by counting the `%s` placeholders in it, a `%%s` not counting, so that each entry keeps the parameters that are its own; the pairs go into `Query.extra` (`django/db/models/sql/query.py:Query.add_extra`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_extra",
+   "kind": "function",
+   "lines": [
+    2473,
+    2504
+   ],
+   "fingerprint": "a83f51799103b9ad"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.check_alias",
+   "line": 125,
+   "sentence": "It refuses with `ValueError` an alias that matches `FORBIDDEN_ALIAS_PATTERN`: quotation marks, among which the comment counts square brackets, whitespace, control characters, a semicolon, a hash and the comment markers `\"--\"`, `\"/*\"` and `\"*/\"` (`django/db/models/sql/query.py:Query.check_alias`, `django/db/models/sql/query.py:FORBIDDEN_ALIAS_PATTERN`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.check_alias",
+   "kind": "function",
+   "lines": [
+    1222,
+    1238
+   ],
+   "fingerprint": "ec1a78726396fa30"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:FORBIDDEN_ALIAS_PATTERN",
+   "line": 125,
+   "sentence": "It refuses with `ValueError` an alias that matches `FORBIDDEN_ALIAS_PATTERN`: quotation marks, among which the comment counts square brackets, whitespace, control characters, a semicolon, a hash and the comment markers `\"--\"`, `\"/*\"` and `\"*/\"` (`django/db/models/sql/query.py:Query.check_alias`, `django/db/models/sql/query.py:FORBIDDEN_ALIAS_PATTERN`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "FORBIDDEN_ALIAS_PATTERN",
+   "kind": "assignment",
+   "lines": [
+    63,
+    65
+   ],
+   "fingerprint": "59d5cbde950386cd"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 135,
+   "sentence": "The release notes of 6.0 say that using a percent sign in a column alias or annotation is deprecated (`docs/releases/6.0.txt`), and the comment in `check_alias` says that when the deprecation ends the pattern will refuse it and the message will name percent signs.",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.deferred_loading",
+   "line": 139,
+   "sentence": "With the flag `True` the names are the fields to leave out, and with it `False` they are the only fields to load; a new query has an empty set and `True`, which is nothing deferred (`django/db/models/sql/query.py:Query.deferred_loading`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.deferred_loading",
+   "kind": "assignment",
+   "lines": [
+    302,
+    302
+   ],
+   "fingerprint": "85b318d11bbbd532"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_deferred_loading",
+   "line": 139,
+   "sentence": "`Query.add_deferred_loading` is what `QuerySet.defer` calls: in the deferring mode it adds the names; in the only mode it removes them from the set to load, and where nothing is left of that set it goes back to deferring, with the names that were not in it, so that `only(\"name\")` followed by `defer(\"name\", \"ship\")` ends deferring the ship alone (`django/db/models/sql/query.py:Query.add_deferred_loading`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_deferred_loading",
+   "kind": "function",
+   "lines": [
+    2510,
+    2533
+   ],
+   "fingerprint": "1e09d991fbffe835"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_immediate_loading",
+   "line": 139,
+   "sentence": "`Query.add_immediate_loading` is what `QuerySet.only` calls: it replaces `\"pk\"` with the primary key's name, and in the deferring mode keeps the names less those already deferred, which the docstring puts as immediate loading overriding earlier immediate loading but respecting earlier deferrals; in the only mode the names replace the set (`django/db/models/sql/query.py:Query.add_immediate_loading`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_immediate_loading",
+   "kind": "function",
+   "lines": [
+    2535,
+    2557
+   ],
+   "fingerprint": "3ee230d1396ae749"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_select_mask",
+   "line": 141,
+   "sentence": "`Query.get_select_mask` turns the pair into the **select mask**: a dictionary from each field that will be loaded to a mask of the same shape for the model it leads to, with `{}` for a field that leads nowhere or to a model loaded whole (`django/db/models/sql/query.py:Query.get_select_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_select_mask",
+   "kind": "function",
+   "lines": [
+    878,
+    898
+   ],
+   "fingerprint": "12cc09c364725f50"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query._get_defer_select_mask",
+   "line": 141,
+   "sentence": "A name left over after that must be a filtered relation's alias, which is descended into under the key of the alias and its relation; any other is put to the options' `get_field`, which raises `FieldDoesNotExist` (`django/db/models/sql/query.py:Query._get_defer_select_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query._get_defer_select_mask",
+   "kind": "function",
+   "lines": [
+    817,
+    859
+   ],
+   "fingerprint": "c35a130122c2b70d"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query._get_only_select_mask",
+   "line": 141,
+   "sentence": "`Query._get_only_select_mask` begins with the primary key as well and then takes only the names: each is a field of the options, with the same error for a wrong one, and one with more under it must be a relation and is descended into the same way (`django/db/models/sql/query.py:Query._get_only_select_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query._get_only_select_mask",
+   "kind": "function",
+   "lines": [
+    861,
+    876
+   ],
+   "fingerprint": "3ab7c89fa94897cd"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_select_related",
+   "line": 170,
+   "sentence": "`Query.select_related` is `False`, `True`, or a dictionary of names nested at each `\"__\"`, which `Query.add_select_related` builds from the names given to `QuerySet.select_related` (`django/db/models/sql/query.py:Query.add_select_related`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_select_related",
+   "kind": "function",
+   "lines": [
+    2457,
+    2471
+   ],
+   "fingerprint": "bc8e3a1938ae2c9f"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.select_related",
+   "line": 172,
+   "sentence": "Asking for `True`, by calling `select_related` with no arguments, warns with `RemovedInDjango2028Warning` (`django/db/models/query.py:QuerySet.select_related`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.select_related",
+   "kind": "function",
+   "lines": [
+    1832,
+    1862
+   ],
+   "fingerprint": "9458464d1c83ae80"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 172,
+   "sentence": "The release notes of 6.1 say that calling it with no arguments to select all non-nullable related fields is deprecated, and that the related fields should be named, or the `FETCH_PEERS` fetch mode used (`docs/releases/6.1.txt`) ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
+   "line": 174,
+   "sentence": "`SQLCompiler.get_related_selections` fills in the rest of the select list and returns the `klass_info` of each related model (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_related_selections",
+   "kind": "function",
+   "lines": [
+    1199,
+    1430
+   ],
+   "fingerprint": "798f338c8c039880"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:select_related_descend",
+   "line": 176,
+   "sentence": "Then `select_related_descend` decides whether to follow the field (`django/db/models/query_utils.py:select_related_descend`): not where it is no relation; not where it is the link to a parent model, which the comment says is always joined and need not be followed; in an unrestricted walk, only where the field cannot be null; in a restricted one, only where the field was named, and then with `FieldError` where the mask has entries but not this field, the error that says a field cannot be both deferred and traversed.",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "select_related_descend",
+   "kind": "function",
+   "lines": [
+    431,
+    466
+   ],
+   "fingerprint": "5558eed7ff66ae8d"
+  },
+  {
+   "pointer": "django/db/models/fields/mixins.py:FieldCacheMixin.set_cached_value",
+   "line": 176,
+   "sentence": "For a field that is followed, a `klass_info` is made with the related model, the field, `\"reverse\"` as `False`, and two setters: `\"local_setter\"` is the field's `FieldCacheMixin.set_cached_value`, which puts the related instance in the instance's cache, and `\"remote_setter\"` is the rel's, which puts the instance in the related instance's cache, where the field is unique, and a function that does nothing otherwise (`django/db/models/fields/mixins.py:FieldCacheMixin.set_cached_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/mixins.py",
+   "symbol": "FieldCacheMixin.set_cached_value",
+   "kind": "function",
+   "lines": [
+    30,
+    31
+   ],
+   "fingerprint": "a5218766316f0c4b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
+   "line": 180,
+   "sentence": "For each requested name that is a filtered relation's alias, `setup_joins` resolves the alias, the model is the one the joins end at, and the `klass_info` is made as for a reverse relation: `\"local_setter\"` is a function the method defines that sets the reverse cache when there is a related instance, where the alias is reached in two joins or fewer, and a function that does nothing otherwise, and `\"remote_setter\"` is a function that sets the instance on the related one as an attribute under the alias (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_related_selections",
+   "kind": "function",
+   "lines": [
+    1199,
+    1430
+   ],
+   "fingerprint": "798f338c8c039880"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent",
+   "line": 182,
+   "sentence": "`SQLCompiler.get_select_from_parent` is the one step after the walk, a class method that goes down the tree and, for each `klass_info` reached from a parent, puts the parent's positions in front of its own, so that a child's instance can be built from the parent's columns and its own (`django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_select_from_parent",
+   "kind": "function",
+   "lines": [
+    234,
+    239
+   ],
+   "at": 235,
+   "fingerprint": "077fac720933bcd0"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.select_format",
+   "line": 240,
+   "sentence": "`WhereNode.output_field` is a boolean field, and its `select_format`, like that of `Exists`, wraps the SQL as `CASE WHEN ... THEN 1 ELSE 0 END` where the features object lacks `supports_boolean_expr_in_select_clause`, which the comment says is Oracle's case; on SQLite the condition stands as it is (`django/db/models/sql/where.py:WhereNode.select_format`, `django/db/models/expressions.py:Exists.select_format`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.select_format",
+   "kind": "function",
+   "lines": [
+    302,
+    308
+   ],
+   "fingerprint": "64b2c8bd7ecddf06"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Exists.select_format",
+   "line": 240,
+   "sentence": "`WhereNode.output_field` is a boolean field, and its `select_format`, like that of `Exists`, wraps the SQL as `CASE WHEN ... THEN 1 ELSE 0 END` where the features object lacks `supports_boolean_expr_in_select_clause`, which the comment says is Oracle's case; on SQLite the condition stands as it is (`django/db/models/sql/where.py:WhereNode.select_format`, `django/db/models/expressions.py:Exists.select_format`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Exists.select_format",
+   "kind": "function",
+   "lines": [
+    1896,
+    1902
+   ],
+   "fingerprint": "f4d772aaf5b4a77d"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments",
+   "line": 252,
+   "sentence": "`SQLCompiler.get_select_for_update_of_arguments` is the one other reader of `klass_info` in the compiler: for each name in `Query.select_for_update_of`, `\"self\"` or a path of relation names, it walks the tree, the parents of each model included, to the model the name reaches, takes the first selected column of that model, and returns the column compiled where the features object has `select_for_update_of_column` and the table's alias quoted otherwise; a name that reaches no model is refused with `FieldError` listing every path the tree offers (`django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_select_for_update_of_arguments",
+   "kind": "function",
+   "lines": [
+    1432,
+    1536
+   ],
+   "fingerprint": "abef0b1b0b2d25ad"
+  }
+ ]
+}

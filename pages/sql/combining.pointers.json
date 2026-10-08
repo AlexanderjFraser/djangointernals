@@ -1,0 +1,446 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "combining.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.combine",
+   "line": 17,
+   "sentence": "`Query.combine` is called on the left side's query, which the queryset has cloned, with the right side's query and a connector, `\"AND\"`, `\"OR\"` or `\"XOR\"`; its docstring promises that the right side is not modified (`django/db/models/sql/query.py:Query.combine`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.combine",
+   "kind": "function",
+   "lines": [
+    701,
+    815
+   ],
+   "fingerprint": "33c485d2faf041da"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.bump_prefix",
+   "line": 27,
+   "sentence": "The comment at this point of `combine` gives that as the reason for what it does first: it clones the right side and has the clone move every alias but the base table's to a prefix the left side does not use, through `Query.bump_prefix`, so that no alias of the two queries can coincide (`django/db/models/sql/query.py:Query.bump_prefix`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.bump_prefix",
+   "kind": "function",
+   "lines": [
+    1058,
+    1111
+   ],
+   "fingerprint": "779a52e95c3f2ba7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:JoinPromoter.add_votes",
+   "line": 33,
+   "sentence": "The promoter is made for two children under the connector, and the aliases of the left side's inner joins are voted in first (`django/db/models/sql/query.py:JoinPromoter.add_votes`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "JoinPromoter.add_votes",
+   "kind": "function",
+   "lines": [
+    2845,
+    2850
+   ],
+   "fingerprint": "7c39e241bd952a93"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join.relabeled_clone",
+   "line": 33,
+   "sentence": "Then, for each entry of the right side's alias map after the first, which is its base table: the join is relabelled with the renamings made so far, so that a join whose parent was renamed hangs from the new name (`django/db/models/sql/datastructures.py:Join.relabeled_clone`); it is handed to `Query.join` with the set of aliases that may be reused, and `join` returns an alias, an existing one where a join equal to this one is among those, a new one otherwise, and a new join gets its type there, outer where it is nullable or its parent is outer and inner otherwise (`django/db/models/sql/query.py:Query.join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join.relabeled_clone",
+   "kind": "function",
+   "lines": [
+    135,
+    150
+   ],
+   "fingerprint": "bdc4e1be157ff3ee"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.join",
+   "line": 33,
+   "sentence": "Then, for each entry of the right side's alias map after the first, which is its base table: the join is relabelled with the renamings made so far, so that a join whose parent was renamed hangs from the new name (`django/db/models/sql/datastructures.py:Join.relabeled_clone`); it is handed to `Query.join` with the set of aliases that may be reused, and `join` returns an alias, an existing one where a join equal to this one is among those, a new one otherwise, and a new join gets its type there, outer where it is nullable or its parent is outer and inner otherwise (`django/db/models/sql/query.py:Query.join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.join",
+   "kind": "function",
+   "lines": [
+    1135,
+    1187
+   ],
+   "fingerprint": "393249a14721bc0e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:JoinPromoter.update_join_types",
+   "line": 33,
+   "sentence": "The right side's votes go in last, and `JoinPromoter.update_join_types` settles every voted join: under `\"AND\"` each is demoted to inner; under `\"OR\"` a join voted for by fewer than both sides is promoted to outer and one voted for by both is demoted (`django/db/models/sql/query.py:JoinPromoter.update_join_types`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "JoinPromoter.update_join_types",
+   "kind": "function",
+   "lines": [
+    2852,
+    2907
+   ],
+   "fingerprint": "164ca9f3f8dd6ea1"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join.identity",
+   "line": 77,
+   "sentence": "`Query.join` found, for each of the right side's joins, an equal join already in the map, two joins being equal by their table, parent alias, field and filtered relation (`django/db/models/sql/datastructures.py:Join.identity`), and returned its alias without touching the join's type, so both voted.",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join.identity",
+   "kind": "function",
+   "lines": [
+    152,
+    160
+   ],
+   "at": 153,
+   "fingerprint": "960e9aa92e91ad36"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.relabel_aliases",
+   "line": 100,
+   "sentence": "Then it clones the right side's where tree, relabels the clone with the renamings, and adds it to its own tree under the connector (`django/db/models/sql/where.py:WhereNode.relabel_aliases`, `django/utils/tree.py:Node.add`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.relabel_aliases",
+   "kind": "function",
+   "lines": [
+    203,
+    215
+   ],
+   "fingerprint": "dcd12e30beb65517"
+  },
+  {
+   "pointer": "django/utils/tree.py:Node.add",
+   "line": 100,
+   "sentence": "Then it clones the right side's where tree, relabels the clone with the renamings, and adds it to its own tree under the connector (`django/db/models/sql/where.py:WhereNode.relabel_aliases`, `django/utils/tree.py:Node.add`).",
+   "tree": "django",
+   "path": "django/utils/tree.py",
+   "symbol": "Node.add",
+   "kind": "function",
+   "lines": [
+    89,
+    122
+   ],
+   "fingerprint": "8045244c417bb21c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_select",
+   "line": 102,
+   "sentence": "The masks of the two are unioned, and the right side's extra tables are appended (`django/db/models/sql/query.py:Query.set_select`, `django/db/models/sql/query.py:Query.set_extra_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_select",
+   "kind": "function",
+   "lines": [
+    2264,
+    2266
+   ],
+   "fingerprint": "f24cb0f06c497602"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_extra_mask",
+   "line": 102,
+   "sentence": "The masks of the two are unioned, and the right side's extra tables are appended (`django/db/models/sql/query.py:Query.set_select`, `django/db/models/sql/query.py:Query.set_extra_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_extra_mask",
+   "kind": "function",
+   "lines": [
+    2582,
+    2591
+   ],
+   "fingerprint": "f4c87efb2caf1cfe"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query",
+   "line": 121,
+   "sentence": "`Query` has three class attributes for a compound: `Query.combinator`, `None` or `\"union\"`, `\"intersection\"` or `\"difference\"`; `Query.combinator_all`, false unless a union was asked to keep duplicates; and `Query.combined_queries`, the tuple of the parts, empty for any other query (`django/db/models/sql/query.py:Query`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query",
+   "kind": "class",
+   "lines": [
+    232,
+    2801
+   ],
+   "fingerprint": "2b700a61f27d823d"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clone",
+   "line": 123,
+   "sentence": "`Query.clone` clones each part (`django/db/models/sql/query.py:Query.clone`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clone",
+   "kind": "function",
+   "lines": [
+    388,
+    431
+   ],
+   "fingerprint": "d19834614eed8eda"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clear_ordering",
+   "line": 123,
+   "sentence": "`Query.clear_ordering` clears each part's ordering without force, passing on its own `clear_default=True` or `clear_default=False`; the comment says that the ordering of the parts is cleared with `clear_default=False` when `union` and its analogues are called, so that a later `clear_default=True` has to percolate (`django/db/models/sql/query.py:Query.clear_ordering`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clear_ordering",
+   "kind": "function",
+   "lines": [
+    2400,
+    2419
+   ],
+   "fingerprint": "02ed4a008fa1de1e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_empty",
+   "line": 123,
+   "sentence": "`Query.set_empty` adds a `NothingNode` to each part's where tree as well as to the query's own (`django/db/models/sql/query.py:Query.set_empty`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_empty",
+   "kind": "function",
+   "lines": [
+    2189,
+    2192
+   ],
+   "fingerprint": "184bfcec3c7cbaa8"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
+   "line": 127,
+   "sentence": "Where the query has a combinator, `SQLCompiler.as_sql` asks the backend's features whether it supports the operation, `supports_select_union` and its two fellows, which the base class has true, and raises `NotSupportedError` otherwise; then it calls `SQLCompiler.get_combinator_sql` with the combinator and `combinator_all` (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/backends/base/features.py:BaseDatabaseFeatures.supports_select_union`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    776,
+    1001
+   ],
+   "fingerprint": "ce816411ac549927"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_select_union",
+   "line": 127,
+   "sentence": "Where the query has a combinator, `SQLCompiler.as_sql` asks the backend's features whether it supports the operation, `supports_select_union` and its two fellows, which the base class has true, and raises `NotSupportedError` otherwise; then it calls `SQLCompiler.get_combinator_sql` with the combinator and `combinator_all` (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/backends/base/features.py:BaseDatabaseFeatures.supports_select_union`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_select_union",
+   "kind": "assignment",
+   "lines": [
+    257,
+    257
+   ],
+   "fingerprint": "edbb368cf88c1a96"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql",
+   "line": 129,
+   "sentence": "`get_combinator_sql` makes a compiler for each part, with the connection and the `elide_empty` of the compiler itself (`django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_combinator_sql",
+   "kind": "function",
+   "lines": [
+    601,
+    652
+   ],
+   "fingerprint": "d7fe2adcd1279e2f"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_slicing_ordering_in_compound",
+   "line": 129,
+   "sentence": "The base class has the feature false; the backends for PostgreSQL, MySQL and Oracle set it true, and SQLite's leaves it (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_slicing_ordering_in_compound`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_slicing_ordering_in_compound",
+   "kind": "assignment",
+   "lines": [
+    260,
+    260
+   ],
+   "fingerprint": "b41d5d982552a6b7"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.set_operators",
+   "line": 131,
+   "sentence": "The operator is the backend's: `BaseDatabaseOperations.set_operators` maps the three names to `\"UNION\"`, `\"INTERSECT\"` and `\"EXCEPT\"`, and a union with `combinator_all` gets `\" ALL\"` (`django/db/backends/base/operations.py:BaseDatabaseOperations.set_operators`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.set_operators",
+   "kind": "assignment",
+   "lines": [
+    42,
+    46
+   ],
+   "fingerprint": "b6e9896a9fe4038b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler._get_combinator_part_sql",
+   "line": 133,
+   "sentence": "`_get_combinator_part_sql` does two things to a part (`django/db/models/sql/compiler.py:SQLCompiler._get_combinator_part_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler._get_combinator_part_sql",
+   "kind": "function",
+   "lines": [
+    654,
+    678
+   ],
+   "fingerprint": "086b5da09929d91e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_values",
+   "line": 133,
+   "sentence": "Where the whole has `Query.selected`, which `values` or `values_list` on the combined queryset sets, and the part has none, the part's query is cloned and given the whole's selection through `Query.set_values`; the comment's rule is that if the columns list is limited, all combined queries must have the same columns list (`django/db/models/sql/query.py:Query.set_values`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_values",
+   "kind": "function",
+   "lines": [
+    2597,
+    2670
+   ],
+   "fingerprint": "9e40cfce72b34b7f"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_parentheses_in_compound",
+   "line": 133,
+   "sentence": "A part that is itself a compound is wrapped as `SELECT * FROM (...)` where the backend lacks `supports_parentheses_in_compound`, which SQLite's features class sets false, and put in parentheses where the whole is a subquery or the backend lacks slicing and ordering in a compound; a plain part is put in parentheses where the whole is a subquery and the backend has that feature (`django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_parentheses_in_compound`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.supports_parentheses_in_compound",
+   "kind": "assignment",
+   "lines": [
+    30,
+    30
+   ],
+   "fingerprint": "02e8051f36e2ffb3"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
+   "line": 170,
+   "sentence": "In `SQLCompiler._order_by_pairs`, for a query with a combinator, a name is made an `F` of itself rather than resolved through the first model's field, the comment's reason being that other combined queries might define it differently, and a transform in a name is refused with `NotImplementedError` (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler._order_by_pairs",
+   "kind": "function",
+   "lines": [
+    339,
+    497
+   ],
+   "fingerprint": "ba998de2fa3ab66a"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_order_by",
+   "line": 170,
+   "sentence": "In `SQLCompiler.get_order_by` each such expression, once resolved, is looked for among the selected columns: found, it becomes a `Ref` to the column's alias; not found, a column `\"__orderbycol\"` with the number of the position it will take is added as an annotation to every part and selected on the whole, and the ordering refers to that, unless some part has a selection that `values` fixed, in which case `DatabaseError` says that the term does not match any column in the result set (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_order_by",
+   "kind": "function",
+   "lines": [
+    499,
+    558
+   ],
+   "fingerprint": "c479119e478ae75f"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 218,
+   "sentence": "The release notes give what follows from it: `union`, `intersection` and `difference` raise `DatabaseError` when a field of the model's ordering is not among the columns that `values` or `values_list` selected, and calling `order_by` with no arguments after combining clears the default ordering (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.resolve_expression",
+   "line": 222,
+   "sentence": "A combined query stands inside another as any query does, with its parts resolved alongside it: `Query.resolve_expression` makes a clone with its alias prefix bumped and marked as a subquery, and resolves each part the same way, so that each part's aliases are moved to the new prefix too; `Query.as_sql` clears the ordering of the query and of each part where the backend does not ignore an unnecessary `\"ORDER BY\"` in a subquery, and puts the whole in parentheses (`django/db/models/sql/query.py:Query.resolve_expression`, `django/db/models/sql/query.py:Query.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.resolve_expression",
+   "kind": "function",
+   "lines": [
+    1260,
+    1288
+   ],
+   "fingerprint": "8ce416530e11fe2b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.as_sql",
+   "line": 222,
+   "sentence": "A combined query stands inside another as any query does, with its parts resolved alongside it: `Query.resolve_expression` makes a clone with its alias prefix bumped and marked as a subquery, and resolves each part the same way, so that each part's aliases are moved to the new prefix too; `Query.as_sql` clears the ordering of the query and of each part where the backend does not ignore an unnecessary `\"ORDER BY\"` in a subquery, and puts the whole in parentheses (`django/db/models/sql/query.py:Query.resolve_expression`, `django/db/models/sql/query.py:Query.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.as_sql",
+   "kind": "function",
+   "lines": [
+    1308,
+    1321
+   ],
+   "fingerprint": "be9abf8cb7aa5316"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.get_prep_lookup",
+   "line": 228,
+   "sentence": "Each part's table is `\"U0\"`, the prefix the resolving gave it, and the `\"in\"` lookup cleared the ordering before that, through `Query.clear_ordering`, which reached the parts (`django/db/models/lookups.py:In.get_prep_lookup`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.get_prep_lookup",
+   "kind": "function",
+   "lines": [
+    506,
+    520
+   ],
+   "fingerprint": "1f0b6f9db0f17ecf"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.exists",
+   "line": 232,
+   "sentence": "`Query.exists` on a union makes each part the part's own `exists(limit=False)`, so that every part selects the constant under the alias `\"a\"` and none is limited, and limits the whole to one row; `Query.get_aggregation`, for a count, wraps a query that has a combinator in a subquery and counts its rows (`django/db/models/sql/query.py:Query.exists`, `django/db/models/sql/query.py:Query.get_aggregation`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.exists",
+   "kind": "function",
+   "lines": [
+    662,
+    682
+   ],
+   "fingerprint": "9bf05dfcb121746b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
+   "line": 232,
+   "sentence": "`Query.exists` on a union makes each part the part's own `exists(limit=False)`, so that every part selects the constant under the alias `\"a\"` and none is limited, and limits the whole to one row; `Query.get_aggregation`, for a count, wraps a query that has a combinator in a subquery and counts its rows (`django/db/models/sql/query.py:Query.exists`, `django/db/models/sql/query.py:Query.get_aggregation`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_aggregation",
+   "kind": "function",
+   "lines": [
+    458,
+    650
+   ],
+   "fingerprint": "92e28f95e3a4502a"
+  }
+ ]
+}
