@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 384">
+  <!-- an update whose filter joins another table: the call, then the work of pre_sql_setup that both
+       roads share, then a fork into the two roads, side by side, each ending in the statement it sends -->
+  <text class="name strong" x="0" y="14">Sailor.objects.filter(ship__name='Petrel').update(…)</text>
+
+  <!-- what pre_sql_setup does before the roads part -->
+  <rect class="box" x="0.5" y="28.5" width="939" height="105" rx="4"/>
+  <text class="name strong" x="12" y="51">SQLUpdateCompiler.pre_sql_setup</text>
+  <text x="12" y="73"><tspan class="name">Query.count_active_tables</tspan> → 2: the filter joined the ships</text>
+  <text x="12" y="95">a plain <tspan class="name">Query</tspan> chained from the <tspan class="name">UpdateQuery</tspan>: the joins and the where tree kept, <tspan class="name">SELECT</tspan> the primary key</text>
+  <text x="12" y="117">the <tspan class="name">UpdateQuery</tspan>'s own where tree cleared</text>
+
+  <!-- the fork -->
+  <path class="line" d="M470.5 133.5 V148.5 M225.5 148.5 H714.5 M225.5 148.5 V163.5 M714.5 148.5 V163.5"/>
+  <polygon class="head" points="225.5,173.5 220.5,163.5 230.5,163.5"/>
+  <polygon class="head" points="714.5,173.5 709.5,163.5 719.5,163.5"/>
+
+  <!-- the left road: the keys fetched by a statement of their own, then named in the update -->
+  <rect class="ground" x="0.5" y="173.5" width="450" height="209" rx="4"/>
+  <text class="strong" x="12" y="196">related updates, or <tspan class="name strong">update_can_self_select</tspan> off</text>
+  <text x="12" y="220">the plain query is run first, <tspan class="name">MULTI</tspan></text>
+  <text class="name" x="12" y="242">SELECT "crew_sailor"."id" FROM "crew_sailor"</text>
+  <text class="name" x="28" y="260">INNER JOIN "fleet_ship" …</text>
+  <text class="name" x="28" y="278">WHERE "fleet_ship"."name" = %s</text>
+  <text x="12" y="302">→ <tspan class="name">[(1,), (2,)]</tspan></text>
+  <text x="12" y="326">the update names the keys</text>
+  <text class="name" x="12" y="348">UPDATE "crew_sailor" SET …</text>
+  <text class="name" x="28" y="366">WHERE "crew_sailor"."id" IN <tspan class="mark">(%s, %s)</tspan></text>
+
+  <!-- the right road: the select for the keys goes into the update as a subquery -->
+  <rect class="ground" x="489.5" y="173.5" width="450" height="209" rx="4"/>
+  <text class="strong" x="502" y="196">neither: <tspan class="name strong">update_can_self_select</tspan> on</text>
+  <text x="502" y="220">the plain query becomes the value of <tspan class="name">"pk__in"</tspan></text>
+  <text class="name" x="502" y="242">UPDATE "crew_sailor" SET …</text>
+  <text class="name" x="518" y="260">WHERE "crew_sailor"."id" IN</text>
+  <text class="name mark" x="534" y="278">(SELECT "U0"."id" FROM "crew_sailor" "U0"</text>
+  <text class="name mark" x="550" y="296">INNER JOIN "fleet_ship" "U1" …</text>
+  <text class="name mark" x="550" y="314">WHERE "U1"."name" = %s)</text>
+  <text class="quiet small" x="502" y="338">the select's aliases moved to a prefix of their own</text>
+</svg>

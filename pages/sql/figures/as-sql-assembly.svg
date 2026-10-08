@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 330">
+  <!-- two panels: on the left the ten steps of as_sql in the order they run, each with the clause
+       it settles; on the right the parts of the statement in the order they are written, each with
+       the number of the step that made it. The two the caption names cross between the panels. -->
+  <text class="strong" x="0" y="14">The order <tspan class="name strong">as_sql</tspan> makes the clauses</text>
+  <text class="strong" x="406" y="14">The order the statement has them</text>
+
+  <!-- the left panel: the steps, numbered, in the order they run -->
+  <rect class="ground" x="0.5" y="28.5" width="371" height="300" rx="4"/>
+
+  <text class="strong" text-anchor="end" x="26" y="52">1</text>
+  <text class="name" x="36" y="52">setup_query</text>
+  <text class="name" x="52" y="72">get_select</text>
+  <text x="204" y="72">the select list</text>
+
+  <text class="strong" text-anchor="end" x="26" y="92">2</text>
+  <text class="name" x="36" y="92">get_order_by</text>
+  <text class="name" x="204" y="92">ORDER BY</text>
+
+  <text class="strong" text-anchor="end" x="26" y="112">3</text>
+  <text class="name" x="36" y="112">split_having_qualify</text>
+  <text x="204" y="112"><tspan class="name">WHERE</tspan> from <tspan class="name">HAVING</tspan></text>
+
+  <text class="strong" text-anchor="end" x="26" y="132">4</text>
+  <text class="name" x="36" y="132">get_extra_select</text>
+  <text x="204" y="132">columns <tspan class="name">DISTINCT</tspan> needs</text>
+
+  <text class="strong" text-anchor="end" x="26" y="152">5</text>
+  <text class="name" x="36" y="152">get_group_by</text>
+  <text class="name" x="204" y="152">GROUP BY</text>
+
+  <text class="strong" text-anchor="end" x="26" y="172">6</text>
+  <text class="name" x="36" y="172">get_distinct</text>
+  <text class="name" x="204" y="172">DISTINCT ON</text>
+
+  <text class="strong" text-anchor="end" x="26" y="192">7</text>
+  <text class="name" x="36" y="192">get_from_clause</text>
+  <text x="204" y="192"><tspan class="name">FROM</tspan>, after the joins</text>
+
+  <text class="strong" text-anchor="end" x="26" y="212">8</text>
+  <text class="name" x="36" y="212">compile(where)</text>
+  <text class="name" x="204" y="212">WHERE</text>
+  <text class="name" x="36" y="232">compile(having)</text>
+  <text class="name" x="204" y="232">HAVING</text>
+  <text class="name" x="36" y="252">for_update_sql</text>
+  <text class="name" x="204" y="252">FOR UPDATE</text>
+
+  <text class="strong" text-anchor="end" x="26" y="272">9</text>
+  <text class="name" x="36" y="272">explain_query_prefix</text>
+  <text class="name" x="204" y="272">EXPLAIN</text>
+  <text class="name" x="36" y="292">limit_offset_sql</text>
+  <text class="name" x="204" y="292">LIMIT, OFFSET</text>
+
+  <text class="strong" text-anchor="end" x="26" y="312">10</text>
+  <text class="name" x="36" y="312">reset_refcounts</text>
+  <text x="204" y="312">the counts put back</text>
+
+  <!-- the right panel: the parts of the statement in order, each with the step that made it -->
+  <rect class="box" x="405.5" y="28.5" width="240" height="300" rx="4"/>
+
+  <text class="name" x="418" y="52">[EXPLAIN]</text>
+  <text class="strong" text-anchor="end" x="633" y="52">9</text>
+  <text class="name" x="418" y="73.5">SELECT</text>
+  <text class="strong" text-anchor="end" x="633" y="73.5">1</text>
+  <text class="name" x="418" y="95">DISTINCT [ON]</text>
+  <text class="strong" text-anchor="end" x="633" y="95">6</text>
+  <text x="418" y="116.5">the select list</text>
+  <text class="strong" text-anchor="end" x="633" y="116.5">1</text>
+  <text x="418" y="138">the extra selects</text>
+  <text class="strong" text-anchor="end" x="633" y="138">4</text>
+  <text class="name" x="418" y="159.5">FROM</text>
+  <text class="quiet small" x="459" y="159.5">the alias map</text>
+  <text class="strong" text-anchor="end" x="633" y="159.5">7</text>
+  <text class="name" x="418" y="181">[FOR UPDATE]</text>
+  <text class="quiet small" x="522" y="181">on some backends</text>
+  <text class="strong" text-anchor="end" x="633" y="181">8</text>
+  <text class="name" x="418" y="202.5">WHERE</text>
+  <text class="strong" text-anchor="end" x="633" y="202.5">3, 8</text>
+  <text class="name" x="418" y="224">GROUP BY</text>
+  <text class="strong" text-anchor="end" x="633" y="224">5</text>
+  <text class="name" x="418" y="245.5">HAVING</text>
+  <text class="strong" text-anchor="end" x="633" y="245.5">3, 8</text>
+  <text class="name" x="418" y="267">ORDER BY</text>
+  <text class="strong" text-anchor="end" x="633" y="267">2</text>
+  <text class="name" x="418" y="288.5">LIMIT, OFFSET</text>
+  <text class="strong" text-anchor="end" x="633" y="288.5">9</text>
+  <text class="name" x="418" y="310">[FOR UPDATE]</text>
+  <text class="strong" text-anchor="end" x="633" y="310">8</text>
+
+  <!-- the two crossings the caption names: the select list, settled first and written third;
+       the from clause, made after the joins and written before the where -->
+  <path class="mark-line" d="M320 67 H385.5 V111.5 H395.5"/>
+  <polygon class="head mark" points="405.5,111.5 395.5,106.5 395.5,116.5"/>
+  <path class="mark-line" d="M332 187 H385.5 V154.5 H395.5"/>
+  <polygon class="head mark" points="405.5,154.5 395.5,149.5 395.5,159.5"/>
+</svg>

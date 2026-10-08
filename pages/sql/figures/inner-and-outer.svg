@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 390">
+  <!-- two columns: the outer query on the left, the inner query resolved against it on the right;
+       each a panel of what the Query holds, and under it the statement written from it -->
+  <text class="strong" x="0" y="14">The outer query, a <tspan class="name strong">Query</tspan> of Ship</text>
+  <text class="strong" x="490" y="14">The inner query, a <tspan class="name strong">Query</tspan> of Sailor, resolved against it</text>
+
+  <!-- the outer query -->
+  <rect class="box" x="0.5" y="28.5" width="450" height="106" rx="4"/>
+  <text class="name" x="12" y="52">alias_map</text>
+  <text class="name" x="154" y="52">fleet_ship</text>
+  <text class="name" x="12" y="74">subq_aliases</text>
+  <text class="name" x="154" y="74">T, U</text>
+  <text class="name" x="12" y="96">alias_prefix</text>
+  <text class="name" x="154" y="96">T</text>
+  <text class="name" x="12" y="118">annotations</text>
+  <text x="154" y="118"><tspan class="name">first</tspan><tspan class="quiet small">, the inner query</tspan></text>
+
+  <!-- the outer statement, with the inner one standing in its select list -->
+  <text class="name" x="12" y="162">SELECT "fleet_ship"."id", "fleet_ship"."name", ...,</text>
+  <text class="name" x="67" y="184">(<tspan class="quiet">the inner statement</tspan>) AS "first"</text>
+  <text class="name" x="12" y="206">FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC</text>
+
+  <!-- the inner query -->
+  <rect class="box" x="489.5" y="28.5" width="450" height="106" rx="4"/>
+  <text class="name" x="502" y="52">alias_map</text>
+  <text class="name" x="644" y="52">U0<tspan x="672">crew_sailor</tspan></text>
+  <text x="644" y="74"><tspan class="name">U1</tspan><tspan class="name" x="672">fleet_ship</tspan><tspan class="quiet small">, count 0</tspan></text>
+  <text class="name" x="502" y="96">alias_prefix</text>
+  <text class="name" x="644" y="96">U</text>
+  <text class="name" x="700" y="96">subquery</text>
+  <text class="name" x="780" y="96">True</text>
+  <text class="name" x="502" y="118">external_aliases</text>
+  <text x="644" y="118"><tspan class="name">fleet_ship</tspan><tspan class="quiet small">, not aliased</tspan></text>
+
+  <!-- the inner statement, with a column of the outer table in its where clause -->
+  <text class="name" x="502" y="162">(SELECT "U0"."name" AS "name"</text>
+  <text class="name" x="510" y="184">FROM "crew_sailor" "U0"</text>
+  <text class="name" x="510" y="206">WHERE "U0"."ship_id" = <tspan class="mark">("fleet_ship"."id")</tspan></text>
+  <text class="name" x="510" y="228">ORDER BY 1 ASC LIMIT 1)</text>
+
+  <!-- how the column came to be there: the OuterRef, in two steps -->
+  <text class="quiet small" x="502" y="262">the <tspan class="name small">OuterRef</tspan> became the column in two steps</text>
+  <text class="name" x="502" y="284">OuterRef('pk')</text>
+  <path class="line" d="M538 292 V307"/>
+  <polygon class="head" points="538,317 533,307 543,307"/>
+  <text class="quiet small" x="550" y="308">as the inner filter is built</text>
+  <text class="name" x="502" y="332">ResolvedOuterRef('pk')</text>
+  <path class="line" d="M538 340 V355"/>
+  <polygon class="head" points="538,365 533,355 543,355"/>
+  <text class="quiet small" x="550" y="356">as the inner query is resolved</text>
+  <text class="name mark" x="502" y="380">Col(fleet_ship, fleet.Ship.id)</text>
+
+  <!-- the column refers to the outer query's table -->
+  <path class="mark-line" d="M490 375 H98 V223"/>
+  <polygon class="head mark" points="98,213 93,223 103,223"/>
+  <text class="quiet small" x="110" y="369">a column of the outer table, written inside the inner statement</text>
+</svg>

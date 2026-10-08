@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.set_group_by",
-   "line": 39,
+   "line": 40,
    "sentence": "`Query.set_group_by` turns the select list and the selected annotations into the tuple (`django/db/models/sql/query.py:Query.set_group_by`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -51,7 +51,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.set_values",
-   "line": 43,
+   "line": 44,
    "sentence": "In `set_values` the call comes where `group_by` is `True`, after every concrete field of the model has been added to the select, so that the tuple holds every column and the fields the caller named only decide what is selected of each group; where `group_by` is a tuple already, `set_values` replaces a `Ref` whose alias is no longer among the selected names by the annotation's own expression (`django/db/models/sql/query.py:Query.set_values`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -65,7 +65,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.exists",
-   "line": 43,
+   "line": 44,
    "sentence": "`Query.exists` does the same as `set_values` for `True` before it clears the select clause, which is how a grouped query keeps its `\"GROUP BY\"` in the statement that asks whether any row matches (`django/db/models/sql/query.py:Query.exists`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -79,7 +79,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_group_by",
-   "line": 47,
+   "line": 48,
    "sentence": "`SQLCompiler.get_group_by` returns the clause as a list of pairs of SQL and parameters, one for each expression grouped by (`django/db/models/sql/compiler.py:SQLCompiler.get_group_by`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -93,8 +93,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.get_group_by_cols",
-   "line": 49,
-   "sentence": "**From the having**, each column `WhereNode.get_group_by_cols` collects from the having tree, where a lookup collects from its two sides, so that a comparison of an aggregate contributes nothing and a comparison of a column contributes the column (`django/db/models/sql/where.py:WhereNode.get_group_by_cols`, `django/db/models/lookups.py:Lookup.get_group_by_cols`).",
+   "line": 50,
+   "sentence": "**From the having**, each column `WhereNode.get_group_by_cols` collects from the having tree, where a lookup collects from its left side, and from its right side too where that is an expression, so that a comparison of an aggregate contributes nothing and a comparison of a column contributes the column (`django/db/models/sql/where.py:WhereNode.get_group_by_cols`, `django/db/models/lookups.py:Lookup.get_group_by_cols`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.get_group_by_cols",
@@ -107,8 +107,8 @@
   },
   {
    "pointer": "django/db/models/lookups.py:Lookup.get_group_by_cols",
-   "line": 49,
-   "sentence": "**From the having**, each column `WhereNode.get_group_by_cols` collects from the having tree, where a lookup collects from its two sides, so that a comparison of an aggregate contributes nothing and a comparison of a column contributes the column (`django/db/models/sql/where.py:WhereNode.get_group_by_cols`, `django/db/models/lookups.py:Lookup.get_group_by_cols`).",
+   "line": 50,
+   "sentence": "**From the having**, each column `WhereNode.get_group_by_cols` collects from the having tree, where a lookup collects from its left side, and from its right side too where that is an expression, so that a comparison of an aggregate contributes nothing and a comparison of a column contributes the column (`django/db/models/sql/where.py:WhereNode.get_group_by_cols`, `django/db/models/lookups.py:Lookup.get_group_by_cols`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "Lookup.get_group_by_cols",
@@ -121,7 +121,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_select_index",
-   "line": 51,
+   "line": 52,
    "sentence": "A pair already written is not written twice (`django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_select_index`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -135,7 +135,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.collapse_group_by",
-   "line": 90,
+   "line": 94,
    "sentence": "`SQLCompiler.collapse_group_by` does one thing, and only where the backend's `allows_group_by_selected_pks` is set (`django/db/models/sql/compiler.py:SQLCompiler.collapse_group_by`, `django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_selected_pks`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -149,7 +149,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_selected_pks",
-   "line": 90,
+   "line": 94,
    "sentence": "`SQLCompiler.collapse_group_by` does one thing, and only where the backend's `allows_group_by_selected_pks` is set (`django/db/models/sql/compiler.py:SQLCompiler.collapse_group_by`, `django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_selected_pks`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -163,7 +163,7 @@
   },
   {
    "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.allows_group_by_selected_pks",
-   "line": 90,
+   "line": 94,
    "sentence": "The feature is set on PostgreSQL, and on MySQL unless it is MariaDB with `\"ONLY_FULL_GROUP_BY\"` in its SQL mode; SQLite and Oracle have it off, and the recording switched it on for one block (`django/db/backends/mysql/features.py:DatabaseFeatures.allows_group_by_selected_pks`).",
    "tree": "django",
    "path": "django/db/backends/mysql/features.py",
@@ -178,7 +178,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_select_index",
-   "line": 99,
+   "line": 103,
    "sentence": "`allows_group_by_select_index` is the other feature, set on every backend but Oracle, and it decides whether a selected expression is written as its position (`django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_select_index`, `django/db/backends/oracle/features.py:DatabaseFeatures.allows_group_by_select_index`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -192,7 +192,7 @@
   },
   {
    "pointer": "django/db/backends/oracle/features.py:DatabaseFeatures.allows_group_by_select_index",
-   "line": 99,
+   "line": 103,
    "sentence": "`allows_group_by_select_index` is the other feature, set on every backend but Oracle, and it decides whether a selected expression is written as its position (`django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_select_index`, `django/db/backends/oracle/features.py:DatabaseFeatures.allows_group_by_select_index`).",
    "tree": "django",
    "path": "django/db/backends/oracle/features.py",
@@ -206,7 +206,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
-   "line": 109,
+   "line": 113,
    "sentence": "`get_group_by` reads the attribute and, where it is set, adds nothing from the ordering; and `SQLCompiler.as_sql`, once it has written a `\"GROUP BY\"`, sets the ordering to `None` where the attribute is set, so that the `\"ORDER BY\"` is not written either (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`, `django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -220,7 +220,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 109,
+   "line": 113,
    "sentence": "`get_group_by` reads the attribute and, where it is set, adds nothing from the ordering; and `SQLCompiler.as_sql`, once it has written a `\"GROUP BY\"`, sets the ordering to `None` where the attribute is set, so that the `\"ORDER BY\"` is not written either (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`, `django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -234,7 +234,7 @@
   },
   {
    "pointer": "docs/topics/db/aggregation.txt",
-   "line": 111,
+   "line": 115,
    "sentence": "The documentation of aggregation gives the rule, that `\"GROUP BY\"` queries do not use the model's default ordering, and the reason beside it: a column the statement orders by has to be grouped by as well, so that an ordering by name would make the groups pairs of the grouped value and the name (`docs/topics/db/aggregation.txt`).",
    "tree": "django",
    "path": "docs/topics/db/aggregation.txt",
@@ -248,7 +248,7 @@
   },
   {
    "pointer": "docs/releases/3.1.txt",
-   "line": 111,
+   "line": 115,
    "sentence": "The release notes of 3.1 record the change (`docs/releases/3.1.txt`).",
    "tree": "django",
    "path": "docs/releases/3.1.txt",
@@ -262,7 +262,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.split_having_qualify",
-   "line": 115,
+   "line": 119,
    "sentence": "`pre_sql_setup` calls it with `must_group_by=True` where the query's `group_by` is not `None`; `Query.get_aggregation` calls it with nothing, to learn whether the query filters on an aggregate already (`django/db/models/sql/where.py:WhereNode.split_having_qualify`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -276,7 +276,7 @@
   },
   {
    "pointer": "django/utils/tree.py:Node.create",
-   "line": 119,
+   "line": 123,
    "sentence": "Each list that is not empty becomes a node with this node's connector and negation, made by `Node.create`, and the three are returned (`django/utils/tree.py:Node.create`).",
    "tree": "django",
    "path": "django/utils/tree.py",
@@ -291,7 +291,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.contains_aggregate",
-   "line": 151,
+   "line": 155,
    "sentence": "The marks the method reads are `WhereNode.contains_aggregate` and `WhereNode.contains_over_clause`, each a cached property computed once for a tree by walking its nodes to their leaves and asking each leaf for the attribute of the same name; a `NothingNode` and an `ExtraWhere` answer `False` to both, the second with a comment calling its SQL a black box (`django/db/models/sql/where.py:WhereNode.contains_aggregate`, `django/db/models/sql/where.py:ExtraWhere`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -306,7 +306,7 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:ExtraWhere",
-   "line": 151,
+   "line": 155,
    "sentence": "The marks the method reads are `WhereNode.contains_aggregate` and `WhereNode.contains_over_clause`, each a cached property computed once for a tree by walking its nodes to their leaves and asking each leaf for the attribute of the same name; a `NothingNode` and an `ExtraWhere` answer `False` to both, the second with a comment calling its SQL a black box (`django/db/models/sql/where.py:WhereNode.contains_aggregate`, `django/db/models/sql/where.py:ExtraWhere`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -320,7 +320,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 155,
+   "line": 159,
    "sentence": "It writes the clauses in the statement's order: once the `\"WHERE\"` is written, the grouping; and where there is one, a `distinct` with fields is refused with `NotImplementedError`, the ordering is replaced, where the query has none, by what the backend's `force_no_ordering` returns, and the model's ordering is dropped as told above; then, where there is a having part, the backend's `force_group_by` is written where no grouping was, and `\"HAVING\"` with the condition (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -334,7 +334,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.force_no_ordering",
-   "line": 155,
+   "line": 159,
    "sentence": "MySQL's `force_no_ordering` returns an ordering by `\"NULL\"`, which a docstring says keeps MySQL from ordering by the grouped columns of its own accord, and SQLite's `force_group_by` returns `\"GROUP BY TRUE\"` on a version before 3.39, so that a `\"HAVING\"` without a `\"GROUP BY\"` is accepted (`django/db/backends/base/operations.py:BaseDatabaseOperations.force_no_ordering`, `django/db/backends/mysql/operations.py:DatabaseOperations.force_no_ordering`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.force_group_by`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -348,7 +348,7 @@
   },
   {
    "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.force_no_ordering",
-   "line": 155,
+   "line": 159,
    "sentence": "MySQL's `force_no_ordering` returns an ordering by `\"NULL\"`, which a docstring says keeps MySQL from ordering by the grouped columns of its own accord, and SQLite's `force_group_by` returns `\"GROUP BY TRUE\"` on a version before 3.39, so that a `\"HAVING\"` without a `\"GROUP BY\"` is accepted (`django/db/backends/base/operations.py:BaseDatabaseOperations.force_no_ordering`, `django/db/backends/mysql/operations.py:DatabaseOperations.force_no_ordering`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.force_group_by`).",
    "tree": "django",
    "path": "django/db/backends/mysql/operations.py",
@@ -362,7 +362,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.force_group_by",
-   "line": 155,
+   "line": 159,
    "sentence": "MySQL's `force_no_ordering` returns an ordering by `\"NULL\"`, which a docstring says keeps MySQL from ordering by the grouped columns of its own accord, and SQLite's `force_group_by` returns `\"GROUP BY TRUE\"` on a version before 3.39, so that a `\"HAVING\"` without a `\"GROUP BY\"` is accepted (`django/db/backends/base/operations.py:BaseDatabaseOperations.force_no_ordering`, `django/db/backends/mysql/operations.py:DatabaseOperations.force_no_ordering`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.force_group_by`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/operations.py",

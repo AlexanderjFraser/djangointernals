@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 625">
+  <!-- one join down the page: its entry in the alias map as it was made, after the first filter and
+       after the second, with the votes of each filter in a panel between; the join type on the right -->
+
+  <!-- the join as it was made: outer, being nullable -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="56" rx="4"/>
+  <text x="12" y="22"><tspan class="name">alias_map['crew_sailor']</tspan>, as the join was made</text>
+  <text class="quiet small" x="12" y="40">hangs from <tspan class="name small">fleet_ship</tspan> along <tspan class="name small">Ship.captain</tspan>, nullable</text>
+  <text class="name strong" x="505" y="22">LEFT OUTER JOIN</text>
+  <text class="quiet small" x="505" y="40">to start with</text>
+
+  <path class="line" d="M24 56.5 V70.5"/>
+  <polygon class="head" points="24,80.5 19,70.5 29,70.5"/>
+
+  <!-- the first filter: an OR of two conditions, one of which stands on the join -->
+  <rect class="box" x="0.5" y="80.5" width="645" height="210" rx="4"/>
+  <text class="name strong" x="12" y="102">Ship.objects.filter(Q(captain__name='Cora') | Q(tonnage__lt=500))</text>
+  <text class="strong" x="30" y="124">the <tspan class="name strong">OR</tspan> node, 2 children</text>
+  <text class="quiet small" x="290" y="124">votes for</text>
+  <text class="name" x="48" y="144">captain__name='Cora'</text>
+  <text class="name" x="290" y="144">fleet_ship, crew_sailor</text>
+  <text class="name" x="48" y="164">tonnage__lt=500</text>
+  <text class="name" x="290" y="164">fleet_ship</text>
+  <path class="line" d="M48 176.5 H597.5"/>
+  <text class="name" x="48" y="192">crew_sailor</text>
+  <text x="290" y="192">1 of 2</text>
+  <text x="345" y="192">promote</text>
+  <text class="quiet" x="420" y="192">outer already</text>
+  <text class="name" x="48" y="212">fleet_ship</text>
+  <text x="290" y="212">2 of 2</text>
+  <text x="345" y="212">demote</text>
+  <text class="quiet" x="420" y="212">the base table: left as it is</text>
+  <text x="48" y="232">returns <tspan class="name">{fleet_ship}</tspan> as its vote to the <tspan class="name">AND</tspan> node around it</text>
+  <text x="30" y="252">the <tspan class="name">AND</tspan> node around it, 1 child: demotes <tspan class="name">fleet_ship</tspan></text>
+  <text x="30" y="272"><tspan class="name">add_q</tspan>: demotes what was inner before: nothing</text>
+
+  <path class="line" d="M24 290.5 V304.5"/>
+  <polygon class="head" points="24,314.5 19,304.5 29,304.5"/>
+
+  <!-- the join after the first filter: promoted, which changed nothing -->
+  <rect class="ground" x="0.5" y="314.5" width="645" height="56" rx="4"/>
+  <text x="12" y="336"><tspan class="name">alias_map['crew_sailor']</tspan> after the first filter</text>
+  <text class="name strong" x="505" y="336">LEFT OUTER JOIN</text>
+  <text class="quiet small" x="505" y="354">referenced 1</text>
+
+  <path class="line" d="M24 370.5 V384.5"/>
+  <polygon class="head" points="24,394.5 19,384.5 29,384.5"/>
+
+  <!-- the second filter: an AND of one condition, which stands on the join -->
+  <rect class="box" x="0.5" y="394.5" width="645" height="150" rx="4"/>
+  <text x="12" y="416">and then <tspan class="name strong">.filter(captain__signed_on__year=2011)</tspan></text>
+  <text class="strong" x="30" y="438">the <tspan class="name strong">AND</tspan> node, 1 child</text>
+  <text class="quiet small" x="290" y="438">votes for</text>
+  <text class="name" x="48" y="458">captain__signed_on__year=2011</text>
+  <text class="name" x="290" y="458">fleet_ship, crew_sailor</text>
+  <path class="line" d="M48 470.5 H597.5"/>
+  <text class="name" x="48" y="486">crew_sailor</text>
+  <text x="290" y="486">1 of 1</text>
+  <text x="345" y="486">demote</text>
+  <text class="quiet" x="420" y="486">→ <tspan class="name">INNER JOIN</tspan></text>
+  <text class="name" x="48" y="506">fleet_ship</text>
+  <text x="290" y="506">1 of 1</text>
+  <text x="345" y="506">demote</text>
+  <text class="quiet" x="420" y="506">the base table</text>
+  <text x="30" y="526"><tspan class="name">add_q</tspan>: demotes what was inner before: nothing</text>
+
+  <path class="line" d="M24 544.5 V558.5"/>
+  <polygon class="head" points="24,568.5 19,558.5 29,558.5"/>
+
+  <!-- the join after the second filter: demoted to inner, which is what the figure is about -->
+  <rect class="mark-box" x="0.5" y="568.5" width="645" height="56" rx="4"/>
+  <text x="12" y="590"><tspan class="name">alias_map['crew_sailor']</tspan> after the second</text>
+  <text class="name strong mark" x="505" y="590">INNER JOIN</text>
+  <text class="quiet small" x="505" y="608">referenced 2</text>
+</svg>

@@ -52,7 +52,7 @@
   {
    "pointer": "django/db/models/fields/__init__.py:Field.get_col",
    "line": 36,
-   "sentence": "What is left is given an alias by `Query.join_parent_model`, the start alias for the model's own fields and the alias of a join to the parent's table for an inherited one, which it makes through `setup_joins` the first time it meets each parent ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](names.md)); and the field's `get_col` makes the column, which is the field's own cached `Col` where the alias is the table's name and a new one otherwise (`django/db/models/fields/__init__.py:Field.get_col`).",
+   "sentence": "What is left is given an alias by `Query.join_parent_model`, the start alias for the model's own fields and the alias of a join to the parent's table for an inherited one, which it makes through `setup_joins` the first time it meets each parent ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](names.md)); and the field's `get_col` makes the column, which is the field's own cached `Col` where the alias is the table's name and the output field is the field itself, and a new one otherwise; `ForeignKey.get_col` passes its target field as the output field, so a foreign key's column is made afresh each time (`django/db/models/fields/__init__.py:Field.get_col`, `django/db/models/fields/related.py:ForeignKey.get_col`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field.get_col",
@@ -64,9 +64,23 @@
    "fingerprint": "38ef22d11c3e714b"
   },
   {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.get_col",
+   "line": 36,
+   "sentence": "What is left is given an alias by `Query.join_parent_model`, the start alias for the model's own fields and the alias of a join to the parent's table for an inherited one, which it makes through `setup_joins` the first time it meets each parent ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](names.md)); and the field's `get_col` makes the column, which is the field's own cached `Col` where the alias is the table's name and the output field is the field itself, and a new one otherwise; `ForeignKey.get_col` passes its target field as the output field, so a foreign key's column is made afresh each time (`django/db/models/fields/__init__.py:Field.get_col`, `django/db/models/fields/related.py:ForeignKey.get_col`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.get_col",
+   "kind": "function",
+   "lines": [
+    1341,
+    1348
+   ],
+   "fingerprint": "4a1304569500fe9b"
+  },
+  {
    "pointer": "django/db/models/sql/query.py:Query.set_values",
    "line": 57,
-   "sentence": "`Query.set_values` is what `QuerySet.values` and `QuerySet.values_list` leave on the query, and it decides the select list in full (`django/db/models/sql/query.py:Query.set_values`) ([`values` and `values_list`: rows as dictionaries and tuples](../querysets/values.md)).",
+   "sentence": "`Query.set_values` is what `QuerySet.values` and `QuerySet.values_list` call to fill it (`django/db/models/sql/query.py:Query.set_values`) ([`values` and `values_list`: rows as dictionaries and tuples](../querysets/values.md)).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.set_values",
@@ -264,7 +278,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.get_select_mask",
    "line": 141,
-   "sentence": "`Query.get_select_mask` turns the pair into the **select mask**: a dictionary from each field that will be loaded to a mask of the same shape for the model it leads to, with `{}` for a field that leads nowhere or to a model loaded whole (`django/db/models/sql/query.py:Query.get_select_mask`).",
+   "sentence": "`Query.get_select_mask` turns the pair into the select mask: a dictionary from each field that will be loaded to a mask of the same shape for the model it leads to, `{}` where nothing is narrowed further (`django/db/models/sql/query.py:Query.get_select_mask`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.get_select_mask",
@@ -278,7 +292,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query._get_defer_select_mask",
    "line": 141,
-   "sentence": "A name left over after that must be a filtered relation's alias, which is descended into under the key of the alias and its relation; any other is put to the options' `get_field`, which raises `FieldDoesNotExist` (`django/db/models/sql/query.py:Query._get_defer_select_mask`).",
+   "sentence": "The deferring walk, `Query._get_defer_select_mask`, keeps every concrete field and every related object of the model except those named, descends into a relation whose name has more under it, skips a many-to-many field named for deferral, since, the comment says, a virtual field cannot be effectively deferred and was historically allowed to be passed, and takes a name left over for a filtered relation's alias or else puts it to the options' `get_field`, which raises `FieldDoesNotExist` (`django/db/models/sql/query.py:Query._get_defer_select_mask`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query._get_defer_select_mask",
@@ -292,7 +306,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query._get_only_select_mask",
    "line": 141,
-   "sentence": "`Query._get_only_select_mask` begins with the primary key as well and then takes only the names: each is a field of the options, with the same error for a wrong one, and one with more under it must be a relation and is descended into the same way (`django/db/models/sql/query.py:Query._get_only_select_mask`).",
+   "sentence": "The only walk, `Query._get_only_select_mask`, keeps the names alone, descending the same way; it has no branch for a filtered relation, which `QuerySet.only` refuses before the query is reached (`django/db/models/sql/query.py:Query._get_only_select_mask`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query._get_only_select_mask",
@@ -390,7 +404,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
    "line": 180,
-   "sentence": "For each requested name that is a filtered relation's alias, `setup_joins` resolves the alias, the model is the one the joins end at, and the `klass_info` is made as for a reverse relation: `\"local_setter\"` is a function the method defines that sets the reverse cache when there is a related instance, where the alias is reached in two joins or fewer, and a function that does nothing otherwise, and `\"remote_setter\"` is a function that sets the instance on the related one as an attribute under the alias (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
+   "sentence": "For each requested name that is a filtered relation's alias, `setup_joins` resolves the alias, the model is the one the joins end at, and the `klass_info` is made as for a reverse relation: `\"local_setter\"` is a function the method defines that sets the reverse cache when there is a related instance, where the alias is reached in two joins or fewer, and a function that does nothing otherwise, and `\"remote_setter\"` is a function that sets the related instance on the instance as an attribute under the alias (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.get_related_selections",
@@ -443,6 +457,20 @@
     1902
    ],
    "fingerprint": "f4d772aaf5b4a77d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Exists.as_sql",
+   "line": 240,
+   "sentence": "A `WhereNode` lets it through, and `get_select` catches it and, since a `WhereNode` has no `empty_result_set_value`, writes the constant `0`; an `Exists` catches it in its own `as_sql` and compiles `Value(False)`, a parameter (`django/db/models/expressions.py:Exists.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Exists.as_sql",
+   "kind": "function",
+   "lines": [
+    1904,
+    1911
+   ],
+   "fingerprint": "76b319b2743c1cdb"
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments",

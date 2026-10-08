@@ -52,7 +52,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.add_extra",
    "line": 15,
-   "sentence": "`Query.extra_order_by` is what `QuerySet.extra` was given as its `order_by`, a list of strings that `Query.add_extra` stores as it is (`django/db/models/sql/query.py:Query.add_extra`).",
+   "sentence": "`Query.extra_order_by` is what `QuerySet.extra` was given as its `order_by`, a list of strings, stored as it was given by `Query.add_extra` where it has anything (`django/db/models/sql/query.py:Query.add_extra`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.add_extra",
@@ -94,7 +94,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.add_ordering",
    "line": 27,
-   "sentence": "`Query.add_ordering` looks at each item as it takes it, and refuses two kinds at once (`django/db/models/sql/query.py:Query.add_ordering`).",
+   "sentence": "`Query.add_ordering` looks at each item as it takes it, and three things are refused there rather than left for the compiler (`django/db/models/sql/query.py:Query.add_ordering`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.add_ordering",
@@ -121,7 +121,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
-   "line": 48,
+   "line": 53,
    "sentence": "`SQLCompiler._order_by_pairs` is a generator that yields, for each item of the ordering, an `OrderBy` and a flag saying whether it refers to the select list (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -135,7 +135,7 @@
   },
   {
    "pointer": "django/db/models/options.py:Options",
-   "line": 48,
+   "line": 53,
    "sentence": "`Query.extra_order_by` is taken where it has anything; failing that, `Query.order_by` where `Query.default_ordering` is off, whether or not it has anything; failing that, `Query.order_by` where it has anything; failing that, the model's `Options.ordering`, which the compiler notes by keeping it in `_meta_ordering`, so that the other clauses can tell that the ordering is the model's and not the query's; and failing all four, nothing (`django/db/models/options.py:Options`).",
    "tree": "django",
    "path": "django/db/models/options.py",
@@ -149,7 +149,7 @@
   },
   {
    "pointer": "django/db/models/sql/constants.py",
-   "line": 56,
+   "line": 61,
    "sentence": "`Query.standard_ordering` chooses between the two rows of `ORDER_DIR`, a table of `django/db/models/sql/constants.py` that gives for `\"ASC\"` the pair `(\"ASC\", \"DESC\")` and for `\"DESC\"` the reverse (`django/db/models/sql/constants.py:ORDER_DIR`).",
    "tree": "django",
    "path": "django/db/models/sql/constants.py",
@@ -163,7 +163,7 @@
   },
   {
    "pointer": "django/db/models/sql/constants.py:ORDER_DIR",
-   "line": 56,
+   "line": 61,
    "sentence": "`Query.standard_ordering` chooses between the two rows of `ORDER_DIR`, a table of `django/db/models/sql/constants.py` that gives for `\"ASC\"` the pair `(\"ASC\", \"DESC\")` and for `\"DESC\"` the reverse (`django/db/models/sql/constants.py:ORDER_DIR`).",
    "tree": "django",
    "path": "django/db/models/sql/constants.py",
@@ -177,7 +177,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:get_order_dir",
-   "line": 56,
+   "line": 61,
    "sentence": "The first of the pair is the direction of a name with no sign, the second of a name with `\"-\"`, which is what `get_order_dir`, a function of the query's module, returns for a name (`django/db/models/sql/query.py:get_order_dir`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -191,7 +191,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:PositionRef",
-   "line": 64,
+   "line": 69,
    "sentence": "Before the items, `_order_by_pairs` reads the select list, which `SQLCompiler.setup_query` has settled already, into a dictionary from each selected expression, and from each alias, to a `PositionRef`: a `Ref` that holds the column's position in the select list, counted from one, and writes that number as its SQL (`django/db/models/sql/compiler.py:PositionRef`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -205,7 +205,7 @@
   },
   {
    "pointer": "django/db/models/functions/math.py:Random",
-   "line": 88,
+   "line": 94,
    "sentence": "The lines are, in turn: two names, one through a relation, each a column with a direction; `\"?\"`, which SQLite writes as `\"RAND()\"`, a function Django registers with it, where `Random.function` is `\"RANDOM\"` and MySQL and Oracle are given a name each (`django/db/models/functions/math.py:Random`); an expression, and the same transform reached by a name, which come to the same column; two expressions with a nulls modifier each; an annotation that is selected, written by its position, 6, and one that `alias` kept out of the select list, written out in full; and a `Value`, cast to its type, as the comment says a constant must be for its output field to be resolved.",
    "tree": "django",
    "path": "django/db/models/functions/math.py",
@@ -219,8 +219,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name",
-   "line": 94,
-   "sentence": "`SQLCompiler.find_ordering_name` takes a name of the ordering, the options to start from, the alias to start from, the default direction and the set of joins seen, the first and last of these given on a recursive call (`django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name`).",
+   "line": 100,
+   "sentence": "`SQLCompiler.find_ordering_name` takes a name of the ordering, the options to start from, the alias to start from, the default direction and the set of joins seen, the alias and the set given only on a recursive call (`django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.find_ordering_name",
@@ -233,7 +233,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler._setup_joins",
-   "line": 94,
+   "line": 100,
    "sentence": "It reads the direction off the name with `get_order_dir`, splits the name with `Query.get_names_to_join`, which keeps a filtered relation's alias whole, and hands the words to `SQLCompiler._setup_joins`, a wrapper of `Query.setup_joins` that starts from the base table where no alias was given and answers with the last join's alias (`django/db/models/sql/compiler.py:SQLCompiler._setup_joins`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -247,8 +247,8 @@
   },
   {
    "pointer": "django/db/models/options.py:Options",
-   "line": 107,
-   "sentence": "It takes each item of the related model's `Options.ordering` and calls itself with it (`django/db/models/options.py:Options`), starting from the joined alias and with its own direction as the default, so that `\"-ship\"` orders by the ship's name descending, as the second line shows; an item that is an expression is given the direction with `asc()` or `desc()`, and one that is an `OrderBy` already is kept.",
+   "line": 113,
+   "sentence": "It takes each item of the related model's `Options.ordering` (`django/db/models/options.py:Options`): a name it calls itself with, starting from the joined alias and with its own direction as the default, so that `\"-ship\"` orders by the ship's name descending, as the line with `'-ship'` shows; an expression is given the direction with `asc()` or `desc()`, and one that is an `OrderBy` already is kept, and neither recurses.",
    "tree": "django",
    "path": "django/db/models/options.py",
    "symbol": "Options",
@@ -261,7 +261,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.prefix_references",
-   "line": 107,
+   "line": 113,
    "sentence": "What comes back is prefixed: `BaseExpression.prefix_references` makes a copy in which every `F` has the relation's name and `\"__\"` put before its own, so that an `F(\"name\")` in the ship's ordering becomes `F(\"ship__name\")` and resolves from the sailor (`django/db/models/expressions.py:BaseExpression.prefix_references`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -275,7 +275,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.trim_joins",
-   "line": 111,
+   "line": 117,
    "sentence": "The other ending is the plain one: `Query.trim_joins` takes back the joins a key already held, and for each target column the method yields one `OrderBy` of the column, through the transform function, with the direction (`django/db/models/sql/query.py:Query.trim_joins`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -289,7 +289,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_order_by",
-   "line": 154,
+   "line": 160,
    "sentence": "`SQLCompiler.get_order_by` takes what `_order_by_pairs` yields and returns a list of pairs, each the resolved `OrderBy` and a tuple of its SQL, its parameters and the flag (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -303,7 +303,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.add_select_col",
-   "line": 156,
+   "line": 162,
    "sentence": "Not finding it, the method adds the expression to every part as an annotation under `\"__orderbycol\"` and the column's number, with `Query.add_annotation`, and to the compound query with `Query.add_select_col`, and refers to that; a part that has select fields of its own, which `values` leaves, cannot be added to, and the method raises `DatabaseError` (`django/db/models/sql/query.py:Query.add_select_col`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -317,7 +317,7 @@
   },
   {
    "pointer": "django/utils/hashable.py:make_hashable",
-   "line": 167,
+   "line": 173,
    "sentence": "The comment says what this means: the same column is not added twice, and the direction is not taken into account, so the second of `\"name\"` and `\"-name\"` is the one that goes (`django/utils/hashable.py:make_hashable`).",
    "tree": "django",
    "path": "django/utils/hashable.py",
@@ -331,7 +331,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:OrderBy",
-   "line": 175,
+   "line": 181,
    "sentence": "`OrderBy` is an expression of one source, with a direction and at most one nulls modifier, and its constructor refuses with `ValueError` both modifiers at once, either given as `False`, and a source that has no `resolve_expression` (`django/db/models/expressions.py:OrderBy`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -346,7 +346,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:OrderBy.as_sql",
-   "line": 181,
+   "line": 187,
    "sentence": "`OrderBy.as_sql` writes the template `\"%(expression)s %(ordering)s\"`, the compiled source and `\"ASC\"` or `\"DESC\"`, after it has settled the modifier by two features of the backend (`django/db/models/expressions.py:OrderBy.as_sql`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -360,7 +360,7 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_order_by_nulls_modifier",
-   "line": 181,
+   "line": 187,
    "sentence": "The source's parameters are repeated once for each `\"%(expression)s\"` in the template, since the emulation writes the expression twice (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_order_by_nulls_modifier`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
@@ -374,7 +374,7 @@
   },
   {
    "pointer": "django/db/backends/mysql/features.py",
-   "line": 187,
+   "line": 193,
    "sentence": "Of Django's own backends, MySQL alone sets `supports_order_by_nulls_modifier` off, and MySQL and SQLite set `order_by_nulls_first` on (`django/db/backends/mysql/features.py`, `django/db/backends/sqlite3/features.py`).",
    "tree": "django",
    "path": "django/db/backends/mysql/features.py",
@@ -388,7 +388,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/features.py",
-   "line": 187,
+   "line": 193,
    "sentence": "Of Django's own backends, MySQL alone sets `supports_order_by_nulls_modifier` off, and MySQL and SQLite set `order_by_nulls_first` on (`django/db/backends/mysql/features.py`, `django/db/backends/sqlite3/features.py`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/features.py",
@@ -402,7 +402,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.add_distinct_fields",
-   "line": 204,
+   "line": 210,
    "sentence": "`QuerySet.distinct` leaves two things on the query through `Query.add_distinct_fields`: `Query.distinct` set to `True`, and `Query.distinct_fields` set to the names it was given, an empty tuple where it was given none (`django/db/models/sql/query.py:Query.add_distinct_fields`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -416,7 +416,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_distinct",
-   "line": 217,
+   "line": 223,
    "sentence": "`SQLCompiler.get_distinct` returns the compiled columns of `distinct_fields` and their parameters, and `as_sql` calls it in the plain branch before `get_from_clause`, the docstring saying why: the method can alter the tables of the query (`django/db/models/sql/compiler.py:SQLCompiler.get_distinct`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -430,7 +430,7 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql",
-   "line": 219,
+   "line": 225,
    "sentence": "`SQLCompiler.as_sql` hands them to `BaseDatabaseOperations.distinct_sql`, whose base form returns `[\"DISTINCT\"]` for no fields and raises `NotSupportedError` for any, the message the question with `distinct('name')` shows; PostgreSQL's operations write `\"DISTINCT ON (...)\"` round the fields instead (`django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql`, `django/db/backends/postgresql/operations.py:DatabaseOperations.distinct_sql`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -444,7 +444,7 @@
   },
   {
    "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.distinct_sql",
-   "line": 219,
+   "line": 225,
    "sentence": "`SQLCompiler.as_sql` hands them to `BaseDatabaseOperations.distinct_sql`, whose base form returns `[\"DISTINCT\"]` for no fields and raises `NotSupportedError` for any, the message the question with `distinct('name')` shows; PostgreSQL's operations write `\"DISTINCT ON (...)\"` round the fields instead (`django/db/backends/base/operations.py:BaseDatabaseOperations.distinct_sql`, `django/db/backends/postgresql/operations.py:DatabaseOperations.distinct_sql`).",
    "tree": "django",
    "path": "django/db/backends/postgresql/operations.py",
@@ -458,7 +458,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 219,
+   "line": 225,
    "sentence": "And a query with distinct fields that also groups is refused by `as_sql` with `NotImplementedError`, its message saying that `annotate()` with `distinct(fields)` is not implemented (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -472,7 +472,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_extra_select",
-   "line": 221,
+   "line": 227,
    "sentence": "`SQLCompiler.get_extra_select` is called by `pre_sql_setup` with the ordering and the select list, and where the query is distinct and has no distinct fields it goes through the ordering and, for each `OrderBy` that does not refer to the select list and whose SQL, with the direction taken off, is not the SQL of a selected column, adds the expression to the select list with no alias (`django/db/models/sql/compiler.py:SQLCompiler.get_extra_select`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -486,7 +486,7 @@
   },
   {
    "pointer": "docs/ref/models/querysets.txt",
-   "line": 223,
+   "line": 229,
    "sentence": "The documentation of `distinct` warns of what the extra select does to the rows: the columns of an `order_by`, or of the model's own ordering, are among those the database compares for duplicates, and an ordering by a related model can make rows distinct that would otherwise be one (`docs/ref/models/querysets.txt`).",
    "tree": "django",
    "path": "docs/ref/models/querysets.txt",
@@ -500,7 +500,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 229,
+   "line": 235,
    "sentence": "An ordering the query was given is kept in both (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.get_group_by`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -514,7 +514,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_group_by",
-   "line": 229,
+   "line": 235,
    "sentence": "An ordering the query was given is kept in both (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.get_group_by`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -528,7 +528,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.orderby_issubset_groupby",
-   "line": 231,
+   "line": 237,
    "sentence": "`Query.get_aggregation` wraps the query as a subquery where it is sliced, distinct, grouped, combined or aggregated already, among other cases, and has the inner query's ordering cleared, without force, only where `Query.orderby_issubset_groupby` says it may (`django/db/models/sql/query.py:Query.orderby_issubset_groupby`, `django/db/models/sql/query.py:Query.get_aggregation`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -543,7 +543,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
-   "line": 231,
+   "line": 237,
    "sentence": "`Query.get_aggregation` wraps the query as a subquery where it is sliced, distinct, grouped, combined or aggregated already, among other cases, and has the inner query's ordering cleared, without force, only where `Query.orderby_issubset_groupby` says it may (`django/db/models/sql/query.py:Query.orderby_issubset_groupby`, `django/db/models/sql/query.py:Query.get_aggregation`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -557,8 +557,8 @@
   },
   {
    "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries",
-   "line": 239,
-   "sentence": "`Query.exists` clears the ordering by force, as `get_aggregation` does on the query it runs; a query given as the value of `in` has its ordering cleared by the lookup, and a query compiled as a subquery drops its ordering where the backend's `ignores_unnecessary_order_by_in_subqueries` says it would be ignored anyway, keeping it under a slice ([Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md), `django/db/backends/base/features.py:BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries`).",
+   "line": 245,
+   "sentence": "`Query.exists` clears the ordering by force, as `get_aggregation` does on the query it runs; a query given as the value of `in` has its ordering cleared, without force, by the lookup, so that a sliced one keeps it; and a query compiled as a subquery drops its ordering, without force, where the backend's `ignores_unnecessary_order_by_in_subqueries` is off, the comment naming Oracle, which raises an error on one, and keeps it where the feature is on, as the base features and SQLite's say, for the database to ignore ([Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md), `django/db/backends/base/features.py:BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries`).",
    "tree": "django",
    "path": "django/db/backends/base/features.py",
    "symbol": "BaseDatabaseFeatures.ignores_unnecessary_order_by_in_subqueries",

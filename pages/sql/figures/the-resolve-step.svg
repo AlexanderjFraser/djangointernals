@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 264">
+  <!-- two rows, each an expression as built on the left and the copy resolve_expression makes of it on the right;
+       under each copy, the query's alias map after the step; under the first original, that it is unchanged -->
+  <text class="strong" x="0" y="14">unresolved, built with no query</text>
+  <text class="strong" x="352" y="14">the resolved copy</text>
+
+  <!-- row 1: Lower('name'), which is low -->
+  <rect class="box" x="0.5" y="28.5" width="150" height="60" rx="4"/>
+  <text class="name" x="12" y="52">Lower</text>
+  <text class="name" x="28" y="72">F(name)</text>
+
+  <!-- the step, labelled once -->
+  <text class="name" x="170" y="46">resolve_expression(q)</text>
+  <path class="line" d="M150.5 58.5 H342"/>
+  <polygon class="head" points="352,58.5 342,53.5 342,63.5"/>
+
+  <rect class="mark-box" x="352.5" y="28.5" width="293" height="60" rx="4"/>
+  <text class="name" x="364" y="52">Lower</text>
+  <text class="name" x="380" y="72">Col(fleet_ship, fleet.Ship.name)</text>
+
+  <!-- the original is unchanged -->
+  <text x="0" y="108"><tspan class="name">low</tspan> is left as it was:</text>
+  <text x="0" y="126"><tspan class="name">low.source_expressions</tspan> is still <tspan class="name">[F(name)]</tspan></text>
+
+  <!-- the query's alias map after the step -->
+  <text class="name" x="352" y="108">q.alias_map</text>
+  <text class="name" x="368" y="126">fleet_ship</text>
+
+  <!-- row 2: a name across a relation -->
+  <rect class="box" x="0.5" y="156.5" width="150" height="40" rx="4"/>
+  <text class="name" x="12" y="181">F(home__name)</text>
+
+  <path class="line" d="M150.5 176.5 H342"/>
+  <polygon class="head" points="352,176.5 342,171.5 342,181.5"/>
+
+  <rect class="mark-box" x="352.5" y="156.5" width="293" height="40" rx="4"/>
+  <text class="name" x="364" y="181">Col(fleet_port, fleet.Port.name)</text>
+
+  <!-- the alias map gained the port's table on the way -->
+  <text class="name" x="352" y="216">q.alias_map</text>
+  <text class="name" x="368" y="234">fleet_ship</text>
+  <text class="name mark" x="368" y="252">fleet_port</text>
+  <text class="quiet small" x="456" y="252">joined on the way</text>
+</svg>

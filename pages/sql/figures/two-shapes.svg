@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 345">
+  <!-- two halves: the plain case on the left, the wrapped case on the right; in each, the call,
+       then the statement it sends. The query's own statement is the accent box in both: on the
+       left it is the whole statement, on the right it sits inside the AggregateQuery's -->
+  <text class="strong" x="0" y="14">The plain case</text>
+  <text class="strong" x="490" y="14">The wrapped case</text>
+
+  <!-- the left half: the call, then the query's own statement with the aggregates in its select list -->
+  <text class="name" x="0" y="42">Ship.objects.aggregate(total=Sum('tonnage'),</text>
+  <text class="name" x="179.4" y="60">ships=Count('id'))</text>
+
+  <rect class="mark-box" x="0.5" y="76.5" width="450" height="117" rx="4"/>
+  <text x="12" y="99">the query itself, its select list replaced</text>
+  <text class="name" x="12" y="121">SELECT SUM("fleet_ship"."tonnage") AS "total",</text>
+  <text class="name" x="66.6" y="139">COUNT("fleet_ship"."id") AS "ships"</text>
+  <text class="name" x="12" y="157">FROM "fleet_ship"</text>
+  <text class="quiet small" x="12" y="179">written by <tspan class="name small">SQLCompiler</tspan></text>
+
+  <!-- the right half: the call, then the AggregateQuery's statement around the clone's -->
+  <text class="name" x="490" y="42">Ship.objects.annotate(hands=Count('crew'))</text>
+  <text class="name" x="583.6" y="60">.aggregate(most=Max('hands'))</text>
+
+  <rect class="box" x="489.5" y="76.5" width="450" height="268" rx="4"/>
+  <text x="502" y="99">an <tspan class="name">AggregateQuery</tspan> around a clone of the query</text>
+  <text class="name" x="502" y="121">SELECT MAX("hands")</text>
+  <text class="name" x="502" y="139">FROM (</text>
+
+  <!-- inside the parentheses: the clone of the query, its grouping kept -->
+  <rect class="mark-box" x="501.5" y="151.5" width="426" height="135" rx="4"/>
+  <text x="514" y="174">the clone of the query</text>
+  <text class="name" x="514" y="196">SELECT COUNT("crew_sailor"."id") AS "hands"</text>
+  <text class="name" x="514" y="214">FROM "fleet_ship"</text>
+  <text class="name" x="514" y="232">LEFT OUTER JOIN "crew_sailor" ON (...)</text>
+  <text class="name" x="514" y="250">GROUP BY "fleet_ship"."id"</text>
+  <text class="quiet small" x="514" y="272">written by <tspan class="name small">SQLCompiler</tspan>, <tspan class="name small" dx="4">with_col_aliases=True</tspan></text>
+
+  <text class="name" x="502" y="308">) subquery</text>
+  <text class="quiet small" x="502" y="330">written by <tspan class="name small">SQLAggregateCompiler</tspan></text>
+</svg>

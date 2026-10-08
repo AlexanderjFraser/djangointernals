@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 660">
+  <!-- four alias maps, each a chain of joins hanging from the base table, with its where tree under it:
+       the left side; the right side's clone with its aliases bumped; and the left side's map after
+       combine under AND, where the right side's joins arrive as a second branch of new outer joins,
+       and under OR, where each is found equal to a join already there -->
+
+  <!-- the left side -->
+  <text x="0" y="14">The left side, <tspan class="name">to_leith</tspan></text>
+  <rect class="box" x="0.5" y="28.5" width="118" height="52" rx="4"/>
+  <text class="name" x="12" y="50">fleet_voyage</text>
+  <text class="name small quiet" x="12" y="68">BaseTable</text>
+  <path class="line" d="M118.5 54.5 H148.5"/>
+  <rect class="box" x="148.5" y="28.5" width="164" height="52" rx="4"/>
+  <text class="name" x="160" y="50">fleet_voyage_calls</text>
+  <text class="name small quiet" x="160" y="68">INNER JOIN</text>
+  <path class="line" d="M312.5 54.5 H342.5"/>
+  <rect class="box" x="342.5" y="28.5" width="102" height="52" rx="4"/>
+  <text class="name" x="354" y="50">fleet_port</text>
+  <text class="name small quiet" x="354" y="68">INNER JOIN</text>
+  <text class="quiet small" x="0" y="102">where</text>
+  <text class="name" x="44" y="102">fleet_port.name = 'Leith'</text>
+
+  <!-- the right side: a clone, every alias but the base table's moved to the prefix U -->
+  <text x="0" y="142">The right side, <tspan class="name">to_lisbon</tspan>: a clone, its aliases bumped</text>
+  <rect class="box" x="0.5" y="156.5" width="118" height="52" rx="4"/>
+  <text class="name" x="12" y="178">fleet_voyage</text>
+  <text class="name small quiet" x="12" y="196">BaseTable</text>
+  <path class="line" d="M118.5 182.5 H148.5"/>
+  <rect class="box" x="148.5" y="156.5" width="196" height="52" rx="4"/>
+  <text class="name mark" x="160" y="178">U1</text>
+  <text class="name" x="188" y="178">fleet_voyage_calls</text>
+  <text class="name small quiet" x="160" y="196">INNER JOIN</text>
+  <path class="line" d="M344.5 182.5 H374.5"/>
+  <rect class="box" x="374.5" y="156.5" width="133" height="52" rx="4"/>
+  <text class="name mark" x="386" y="178">U2</text>
+  <text class="name" x="414" y="178">fleet_port</text>
+  <text class="name small quiet" x="386" y="196">INNER JOIN</text>
+  <text class="quiet small" x="12" y="228">kept: the base table is excluded</text>
+  <text class="quiet small" x="0" y="248">where</text>
+  <text class="name" x="44" y="248">U2.name = 'Lisbon'</text>
+
+  <!-- under AND: the left side's chain as it was, and under it a second branch from the base table,
+       the right side's two joins made again under new aliases and outer -->
+  <text x="0" y="292">Combined under <tspan class="name">AND</tspan>, <tspan class="name">reuse = set()</tspan>: every join made again</text>
+  <rect class="box" x="0.5" y="306.5" width="118" height="52" rx="4"/>
+  <text class="name" x="12" y="328">fleet_voyage</text>
+  <text class="name small quiet" x="12" y="346">BaseTable</text>
+  <path class="line" d="M118.5 332.5 H148.5"/>
+  <rect class="box" x="148.5" y="306.5" width="164" height="52" rx="4"/>
+  <text class="name" x="160" y="328">fleet_voyage_calls</text>
+  <text class="name small quiet" x="160" y="346">INNER JOIN</text>
+  <path class="line" d="M312.5 332.5 H342.5"/>
+  <rect class="box" x="342.5" y="306.5" width="102" height="52" rx="4"/>
+  <text class="name" x="354" y="328">fleet_port</text>
+  <text class="name small quiet" x="354" y="346">INNER JOIN</text>
+
+  <path class="line" d="M133.5 332.5 V404.5 H148.5"/>
+  <rect class="mark-box" x="148.5" y="378.5" width="196" height="52" rx="4"/>
+  <text class="name" x="160" y="400">T4</text>
+  <text class="name" x="188" y="400">fleet_voyage_calls</text>
+  <text class="name small quiet" x="160" y="418">LEFT OUTER JOIN</text>
+  <path class="line" d="M344.5 404.5 H374.5"/>
+  <rect class="mark-box" x="374.5" y="378.5" width="133" height="52" rx="4"/>
+  <text class="name" x="386" y="400">T5</text>
+  <text class="name" x="414" y="400">fleet_port</text>
+  <text class="name small quiet" x="386" y="418">LEFT OUTER JOIN</text>
+
+  <!-- where the right side's two joins went -->
+  <path class="mark-line" d="M246.5 464.5 V440.5"/>
+  <polygon class="head mark" points="246.5,430.5 241.5,440.5 251.5,440.5"/>
+  <text class="name mark" x="254.5" y="458">U1</text>
+  <path class="mark-line" d="M441 464.5 V440.5"/>
+  <polygon class="head mark" points="441,430.5 436,440.5 446,440.5"/>
+  <text class="name mark" x="449" y="458">U2</text>
+
+  <text class="quiet small" x="0" y="488">where</text>
+  <text class="name" x="44" y="488">fleet_port.name = 'Leith' <tspan class="strong">AND</tspan> T5.name = 'Lisbon'</text>
+
+  <!-- under OR: the left side's chain, unchanged; the right side's two joins each found equal to one
+       already there and given its alias -->
+  <text x="0" y="528">Combined under <tspan class="name">OR</tspan>, <tspan class="name">reuse</tspan> = every alias: each join found again</text>
+  <rect class="box" x="0.5" y="542.5" width="118" height="52" rx="4"/>
+  <text class="name" x="12" y="564">fleet_voyage</text>
+  <text class="name small quiet" x="12" y="582">BaseTable</text>
+  <path class="line" d="M118.5 568.5 H148.5"/>
+  <rect class="box" x="148.5" y="542.5" width="164" height="52" rx="4"/>
+  <text class="name" x="160" y="564">fleet_voyage_calls</text>
+  <text class="name small quiet" x="160" y="582">INNER JOIN</text>
+  <path class="line" d="M312.5 568.5 H342.5"/>
+  <rect class="box" x="342.5" y="542.5" width="102" height="52" rx="4"/>
+  <text class="name" x="354" y="564">fleet_port</text>
+  <text class="name small quiet" x="354" y="582">INNER JOIN</text>
+
+  <!-- where the right side's two joins went -->
+  <path class="mark-line" d="M230.5 628.5 V604.5"/>
+  <polygon class="head mark" points="230.5,594.5 225.5,604.5 235.5,604.5"/>
+  <text class="name mark" x="238.5" y="622">U1</text>
+  <path class="mark-line" d="M393.5 628.5 V604.5"/>
+  <polygon class="head mark" points="393.5,594.5 388.5,604.5 398.5,604.5"/>
+  <text class="name mark" x="401.5" y="622">U2</text>
+
+  <text class="quiet small" x="0" y="652">where</text>
+  <text class="name" x="44" y="652">fleet_port.name = 'Leith' <tspan class="strong">OR</tspan> fleet_port.name = 'Lisbon'</text>
+</svg>

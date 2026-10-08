@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 472">
+  <!-- two cases side by side, each a column: the filter, its where tree as nested boxes (a node is a
+       box, a connector's box holds its children, a leaf is a filled box), the rule the method applies,
+       and under it the three parts it returns, drawn the same way and in the same column, so that a
+       piece reappears under itself; the leaf with the aggregate is in the accent, since it is what
+       the method follows into the having part -->
+
+  <!-- left: an OR of the two conditions -->
+  <text class="name strong" x="0" y="14">filter(Q(hands__gt=1) | Q(name='Petrel'))</text>
+
+  <!-- the tree: AND holding OR holding the two leaves -->
+  <rect class="ground" x="0.5" y="30.5" width="189" height="152" rx="4"/>
+  <text class="name" x="12" y="50">AND</text>
+  <rect class="ground" x="12.5" y="58.5" width="165" height="112" rx="4"/>
+  <text class="name" x="24" y="78">OR</text>
+  <rect class="mark-box" x="24.5" y="86.5" width="141" height="32" rx="4"/>
+  <text class="name" x="36" y="107">COUNT(...) &gt; 1</text>
+  <rect class="box" x="24.5" y="126.5" width="141" height="32" rx="4"/>
+  <text class="name" x="36" y="147">name = 'Petrel'</text>
+
+  <!-- the rule -->
+  <text x="0" y="212">the <tspan class="name">OR</tspan> must remain connected: it goes whole</text>
+
+  <!-- the three parts -->
+  <text class="name strong" x="0" y="246">WHERE</text>
+  <text class="quiet" x="80" y="246">nothing</text>
+
+  <text class="name strong" x="0" y="276">HAVING</text>
+  <rect class="ground" x="0.5" y="286.5" width="189" height="152" rx="4"/>
+  <text class="name" x="12" y="306">AND</text>
+  <rect class="ground" x="12.5" y="314.5" width="165" height="112" rx="4"/>
+  <text class="name" x="24" y="334">OR</text>
+  <rect class="mark-box" x="24.5" y="342.5" width="141" height="32" rx="4"/>
+  <text class="name" x="36" y="363">COUNT(...) &gt; 1</text>
+  <rect class="box" x="24.5" y="382.5" width="141" height="32" rx="4"/>
+  <text class="name" x="36" y="403">name = 'Petrel'</text>
+
+  <text class="name strong" x="0" y="466">QUALIFY</text>
+  <text class="quiet" x="80" y="466">nothing</text>
+
+  <!-- right: an AND of the same two conditions -->
+  <text class="name strong" x="366" y="14">filter(hands__gt=1, name='Petrel')</text>
+
+  <!-- the tree: AND holding the two leaves -->
+  <rect class="ground" x="366.5" y="30.5" width="165" height="112" rx="4"/>
+  <text class="name" x="378" y="50">AND</text>
+  <rect class="mark-box" x="378.5" y="58.5" width="141" height="32" rx="4"/>
+  <text class="name" x="390" y="79">COUNT(...) &gt; 1</text>
+  <rect class="box" x="378.5" y="98.5" width="141" height="32" rx="4"/>
+  <text class="name" x="390" y="119">name = 'Petrel'</text>
+
+  <!-- the rule -->
+  <text x="366" y="212">the <tspan class="name">AND</tspan> may be divided, child by child</text>
+
+  <!-- the three parts -->
+  <text class="name strong" x="366" y="246">WHERE</text>
+  <rect class="ground" x="366.5" y="256.5" width="165" height="72" rx="4"/>
+  <text class="name" x="378" y="276">AND</text>
+  <rect class="box" x="378.5" y="284.5" width="141" height="32" rx="4"/>
+  <text class="name" x="390" y="305">name = 'Petrel'</text>
+
+  <text class="name strong" x="366" y="356">HAVING</text>
+  <rect class="ground" x="366.5" y="366.5" width="165" height="72" rx="4"/>
+  <text class="name" x="378" y="386">AND</text>
+  <rect class="mark-box" x="378.5" y="394.5" width="141" height="32" rx="4"/>
+  <text class="name" x="390" y="415">COUNT(...) &gt; 1</text>
+
+  <text class="name strong" x="366" y="466">QUALIFY</text>
+  <text class="quiet" x="446" y="466">nothing</text>
+</svg>

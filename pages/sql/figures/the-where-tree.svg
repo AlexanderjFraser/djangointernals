@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 326">
+  <!-- the tree as nested boxes: the root node holds two nodes, and each node holds its lookups;
+       directly under each node and each lookup, the SQL it wrote, with the connector and the
+       parentheses a node adds of its own in the accent -->
+  <rect class="box" x="0.5" y="0.5" width="645" height="324" rx="4"/>
+  <text x="12" y="22"><tspan class="name strong">WhereNode</tspan> <tspan class="name">AND</tspan></text>
+  <text class="quiet small" x="12" y="40">writes</text>
+  <text class="name" x="56" y="40"><tspan class="mark">(</tspan>("fleet_port"."name" = %s OR "fleet_ship"."tonnage" &gt; %s)</text>
+  <text class="name" x="56" y="58"><tspan class="mark">AND</tspan> NOT ("fleet_ship"."name" = %s)<tspan class="mark">)</tspan></text>
+
+  <!-- the OR node and its two lookups -->
+  <rect class="ground" x="24.5" y="72.5" width="597" height="134" rx="4"/>
+  <text x="36" y="94"><tspan class="name strong">WhereNode</tspan> <tspan class="name">OR</tspan></text>
+  <text class="quiet small" x="36" y="112">writes</text>
+  <text class="name" x="80" y="112"><tspan class="mark">(</tspan>"fleet_port"."name" = %s <tspan class="mark">OR</tspan> "fleet_ship"."tonnage" &gt; %s<tspan class="mark">)</tspan></text>
+  <text class="name" x="48" y="134">Exact(Col(fleet_port, Port.name), 'Bergen')</text>
+  <text class="quiet small" x="48" y="152">writes</text>
+  <text class="name" x="92" y="152">"fleet_port"."name" = %s</text>
+  <text class="name" x="48" y="174">IntegerGreaterThan(Col(fleet_ship, Ship.tonnage), 1000)</text>
+  <text class="quiet small" x="48" y="192">writes</text>
+  <text class="name" x="92" y="192">"fleet_ship"."tonnage" &gt; %s</text>
+
+  <!-- the negated node and its one lookup -->
+  <rect class="ground" x="24.5" y="218.5" width="597" height="94" rx="4"/>
+  <text x="36" y="240"><tspan class="name strong">WhereNode</tspan> <tspan class="name">AND</tspan>, negated</text>
+  <text class="quiet small" x="36" y="258">writes</text>
+  <text class="name" x="80" y="258"><tspan class="mark">NOT (</tspan>"fleet_ship"."name" = %s<tspan class="mark">)</tspan></text>
+  <text class="name" x="48" y="280">Exact(Col(fleet_ship, Ship.name), 'Skua')</text>
+  <text class="quiet small" x="48" y="298">writes</text>
+  <text class="name" x="92" y="298">"fleet_ship"."name" = %s</text>
+</svg>
