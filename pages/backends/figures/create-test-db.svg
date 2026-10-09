@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 600">
+  <!-- the steps of create_test_db down the left; beside them two lanes, what "NAME" holds and the state
+       of the connection, each cut into spans that begin at the step that changes it -->
+
+  <!-- the heads of the three columns -->
+  <text class="name strong" x="0" y="16">create_test_db</text>
+  <text class="name strong" x="297" y="16">"NAME"</text>
+  <text class="quiet small" x="297" y="33">in <tspan class="name small">DATABASES</tspan>,</text>
+  <text class="quiet small" x="297" y="49">and on the connection</text>
+  <text class="strong" x="493" y="16">the connection</text>
+
+  <!-- the lane of "NAME": the real database's until step 4, the test database's from it -->
+  <rect class="ground" x="296.5" y="62.5" width="184" height="190" rx="4"/>
+  <text class="name small" x="309" y="80">"harbour.sqlite3"</text>
+  <text class="quiet small" x="309" y="98">the real database's</text>
+
+  <rect class="mark-box" x="296.5" y="260.5" width="184" height="302" rx="4"/>
+  <text class="name small mark" x="309" y="278">"test_harbour.sqlite3"</text>
+  <text class="small" x="309" y="296">the test database's,</text>
+  <text class="small" x="309" y="312">in both places</text>
+
+  <!-- the lane of the connection: as it was, closed at step 3, open from step 5 -->
+  <rect class="ground" x="492.5" y="62.5" width="153" height="152" rx="4"/>
+  <text class="small" x="505" y="80">as it was</text>
+
+  <rect class="ground dashed" x="492.5" y="222.5" width="153" height="68" rx="4"/>
+  <text class="small" x="505" y="240">closed</text>
+
+  <rect class="ground" x="492.5" y="298.5" width="153" height="264" rx="4"/>
+  <text class="small" x="505" y="316">open, on the</text>
+  <text class="small" x="505" y="332">test database</text>
+
+  <!-- 1: the name -->
+  <text class="strong" x="0" y="80">1</text>
+  <text class="name" x="20" y="80">_get_test_db_name</text>
+  <text class="quiet small" x="20" y="98"><tspan class="name small">"NAME"</tspan> in <tspan class="name small">"TEST"</tspan>, or <tspan class="name small">"test_"</tspan> + <tspan class="name small">"NAME"</tspan></text>
+
+  <!-- 2: the database -->
+  <text class="strong" x="0" y="136">2</text>
+  <text class="name" x="20" y="136">_create_test_db</text>
+  <text class="quiet small" x="20" y="154"><tspan class="name small">CREATE DATABASE</tspan>, on a second connection</text>
+  <text class="quiet small" x="20" y="170">that has no <tspan class="name small">"NAME"</tspan>; one already there is</text>
+  <text class="quiet small" x="20" y="186">kept with <tspan class="name small">keepdb</tspan>, or dropped and made</text>
+  <text class="quiet small" x="20" y="202">again with <tspan class="name small">autoclobber</tspan> or on <tspan class="name small">"yes"</tspan></text>
+
+  <!-- 3: the close -->
+  <text class="strong" x="0" y="240">3</text>
+  <text class="name" x="20" y="240">close</text>
+
+  <!-- 4: the switch of "NAME", which the figure is about -->
+  <text class="strong mark" x="0" y="278">4</text>
+  <text class="mark" x="20" y="278"><tspan class="name mark">"NAME"</tspan> set to the test name</text>
+
+  <!-- 5: the schema -->
+  <text class="strong" x="0" y="316">5</text>
+  <text class="name" x="20" y="316">migrate, run_syncdb=True</text>
+  <text class="quiet small" x="20" y="334">the tables: by the migrations,</text>
+  <text class="quiet small" x="20" y="350">or from the models</text>
+  <text class="quiet small" x="20" y="366">(<tspan class="name small">"MIGRATE"</tspan> <tspan class="name small">False</tspan> in <tspan class="name small">"TEST"</tspan>: every</text>
+  <text class="quiet small" x="20" y="382">application taken as one without migrations)</text>
+
+  <!-- 6 to 8: the rest -->
+  <text class="strong" x="0" y="420">6</text>
+  <text class="name" x="20" y="420">createcachetable</text>
+  <text class="quiet small" x="20" y="438">the tables of the database caches</text>
+
+  <text class="strong" x="0" y="476">7</text>
+  <text class="name" x="20" y="476">ensure_connection</text>
+  <text class="quiet small" x="20" y="494">opens it, if nothing has</text>
+
+  <text class="strong" x="0" y="532">8</text>
+  <text class="name" x="20" y="532">mark_expected_failures_and_skips</text>
+  <text class="quiet small" x="20" y="550">only in Django's own test suite</text>
+
+  <!-- what it returns -->
+  <text x="20" y="592">→ the test name</text>
+</svg>

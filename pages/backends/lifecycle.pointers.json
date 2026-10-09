@@ -1,0 +1,711 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "lifecycle.md",
+ "pointers": [
+  {
+   "pointer": "docs/ref/databases.txt",
+   "line": 9,
+   "sentence": "A connection to a database is costly to open and can die while it is held; Django's documentation gives the first as the reason to keep connections between requests, and a server that drops idle clients or restarts as the second (`docs/ref/databases.txt`).",
+   "tree": "django",
+   "path": "docs/ref/databases.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1305
+   ],
+   "fingerprint": "cbc28768aa410929"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.__init__",
+   "line": 9,
+   "sentence": "The connection object outlives any number of driver's connections: its attribute `connection` is the driver's connection while it is open and, outside an atomic block, `None` once it is closed, as it is when the object is made (`django/db/backends/base/base.py:BaseDatabaseWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    53,
+    119
+   ],
+   "fingerprint": "274f00b243041080"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection",
+   "line": 40,
+   "sentence": "`BaseDatabaseWrapper.ensure_connection` calls `BaseDatabaseWrapper.connect` if the driver's connection is `None`, unless `BaseDatabaseWrapper.in_atomic_block` and `BaseDatabaseWrapper.closed_in_transaction` are both set, when it refuses ([Closed inside an atomic block](#closed-inside-an-atomic-block)), and otherwise does nothing (`django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.ensure_connection",
+   "kind": "function",
+   "lines": [
+    270,
+    279
+   ],
+   "at": 271,
+   "fingerprint": "11d0697684ee76e0"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._cursor",
+   "line": 42,
+   "sentence": "A second cursor finds the driver's connection open, and its `ensure_connection` returns at once; each cursor is a driver's cursor of its own, made on the one driver's connection (`django/db/backends/base/base.py:BaseDatabaseWrapper._cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._cursor",
+   "kind": "function",
+   "lines": [
+    294,
+    298
+   ],
+   "fingerprint": "12c2eba5a8954111"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
+   "line": 58,
+   "sentence": "`BaseDatabaseWrapper.connect` assumes that the connection is closed, and takes its steps in an order in which the later ones rely on the earlier (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`):",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.connect",
+   "kind": "function",
+   "lines": [
+    236,
+    261
+   ],
+   "at": 237,
+   "fingerprint": "c5345148a50b5e4c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/_functions.py:register",
+   "line": 63,
+   "sentence": "`BaseDatabaseWrapper.get_connection_params` turns the settings into the driver's arguments, and `BaseDatabaseWrapper.get_new_connection` opens the driver's connection with them; on SQLite it also registers Django's functions with the driver's connection (`django/db/backends/sqlite3/_functions.py:register`) ([SQLite](sqlite.md)).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/_functions.py",
+   "symbol": "register",
+   "kind": "function",
+   "lines": [
+    46,
+    116
+   ],
+   "fingerprint": "ee98566d52adc303"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.init_connection_state",
+   "line": 65,
+   "sentence": "PostgreSQL's and Oracle's commit their setup where autocommit is off; Oracle's comment says this is so that the changes are kept (`django/db/backends/oracle/base.py:DatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    311,
+    352
+   ],
+   "fingerprint": "f47201b5d65867a2"
+  },
+  {
+   "pointer": "django/contrib/postgres/apps.py:PostgresConfig.ready",
+   "line": 66,
+   "sentence": "`connection_created` is sent, with the connection's class as the sender and the connection as `connection`; `django.contrib.postgres` connects a receiver that registers hstore and citext for each new PostgreSQL connection but the one with no database (`django/contrib/postgres/apps.py:PostgresConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/apps.py",
+   "symbol": "PostgresConfig.ready",
+   "kind": "function",
+   "lines": [
+    56,
+    89
+   ],
+   "fingerprint": "8cddf2829aab5052"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.get_new_connection",
+   "line": 71,
+   "sentence": "`connect` leaves three steps to the backend, and the base class implements only the third, as the version check (`django/db/backends/base/base.py:BaseDatabaseWrapper.get_new_connection`, `django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`):",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    215,
+    220
+   ],
+   "fingerprint": "9d618f118edf3513"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state",
+   "line": 71,
+   "sentence": "`connect` leaves three steps to the backend, and the base class implements only the third, as the version check (`django/db/backends/base/base.py:BaseDatabaseWrapper.get_new_connection`, `django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`):",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    222,
+    226
+   ],
+   "fingerprint": "7bf5cd4ad43a9b2d"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 75,
+   "sentence": "| SQLite (`django/db/backends/sqlite3/base.py:DatabaseWrapper`) | the file's name and `\"OPTIONS\"`, Django's own two options taken out, with the driver's guard against sharing between threads turned off; an empty `\"NAME\"` refused | the driver's connect; Django's functions registered; foreign keys turned on; the init commands run | the base class's version check alone |",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper",
+   "line": 76,
+   "sentence": "| PostgreSQL (`django/db/backends/postgresql/base.py:DatabaseWrapper`) | the settings and `\"OPTIONS\"`, Django's own options taken out; under psycopg 3 the adapters, and no prepared statements unless asked | a connection from the pool where there is one, the driver's connect otherwise | the version check; the session's time zone and role, unless a pool set them |",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    98,
+    560
+   ],
+   "fingerprint": "6e79256dca4b500c"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper",
+   "line": 77,
+   "sentence": "| MySQL (`django/db/backends/mysql/base.py:DatabaseWrapper`) | Django's converters, `\"utf8mb4\"`, the settings, a flag to count the rows an update matched, the isolation level checked; then `\"OPTIONS\"` | the driver's connect | the version check; one statement for `\"SET SQL_AUTO_IS_NULL = 0\"`, where the server has it on, and the isolation level |",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    103,
+    441
+   ],
+   "fingerprint": "401ead3287ea5a8e"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper",
+   "line": 78,
+   "sentence": "| Oracle (`django/db/backends/oracle/base.py:DatabaseWrapper`) | `\"OPTIONS\"`, without `\"use_returning_into\"` | a connection from the pool where there is one, the driver's connect otherwise | the version check; the session's territory, date formats and, under `USE_TZ`, time zone; a test of how `\"LIKE\"` can be written, once for each connection object; the statement cache |",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    115,
+    408
+   ],
+   "fingerprint": "22cc98ee5f135cd7"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state",
+   "line": 84,
+   "sentence": "The base class's `init_connection_state` checks the version only for an alias not yet in `RAN_DB_VERSION_CHECK`, a set at the module's level, and adds the alias once the check has passed (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    222,
+    226
+   ],
+   "fingerprint": "7bf5cd4ad43a9b2d"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py",
+   "line": 84,
+   "sentence": "Here the connection `\"default\"` is opened after both aliases have passed the check, and its `init_connection_state` asks nothing; base_module is the module `django/db/backends/base/base.py`:",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    789
+   ],
+   "fingerprint": "e3e63238ea9d22c5"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported",
+   "line": 99,
+   "sentence": "`BaseDatabaseWrapper.check_database_version_supported` compares `BaseDatabaseWrapper.get_database_version` with `BaseDatabaseFeatures.minimum_database_version`, and refuses an older server with `NotSupportedError` (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`) ([What a database can do: `BaseDatabaseFeatures`](features.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.check_database_version_supported",
+   "kind": "function",
+   "lines": [
+    190,
+    204
+   ],
+   "fingerprint": "8b19411895e85531"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version",
+   "line": 99,
+   "sentence": "The other three need an open connection, and ask through a cached property of the connection object that takes one with `BaseDatabaseWrapper.temporary_connection`, MySQL's alone by a statement (`django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version`, `django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`, `django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.pg_version",
+   "kind": "function",
+   "lines": [
+    554,
+    557
+   ],
+   "at": 555,
+   "fingerprint": "eba4be16bbc96a5e"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data",
+   "line": 99,
+   "sentence": "The other three need an open connection, and ask through a cached property of the connection object that takes one with `BaseDatabaseWrapper.temporary_connection`, MySQL's alone by a statement (`django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version`, `django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`, `django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper.mysql_server_data",
+   "kind": "function",
+   "lines": [
+    396,
+    418
+   ],
+   "at": 397,
+   "fingerprint": "020ddeaf0782ce2a"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version",
+   "line": 99,
+   "sentence": "The other three need an open connection, and ask through a cached property of the connection object that takes one with `BaseDatabaseWrapper.temporary_connection`, MySQL's alone by a statement (`django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version`, `django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`, `django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.oracle_version",
+   "kind": "function",
+   "lines": [
+    401,
+    404
+   ],
+   "at": 402,
+   "fingerprint": "1556d87eeee5cd94"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close",
+   "line": 121,
+   "sentence": "`BaseDatabaseWrapper.close` checks that this thread may use the connection, drops the callbacks held for a commit, and returns at once if the connection is not open, or was closed already inside a block (`django/db/backends/base/base.py:BaseDatabaseWrapper.close`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    343,
+    361
+   ],
+   "at": 344,
+   "fingerprint": "99b42f02b5cc1949"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.close",
+   "line": 123,
+   "sentence": "SQLite's `DatabaseWrapper.close` replaces `close` itself, and ignores a close of a database in memory, which, its comment says, closing would destroy (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    220,
+    227
+   ],
+   "at": 221,
+   "fingerprint": "317a4a75947883f9"
+  },
+  {
+   "pointer": "django/db/__init__.py:close_old_connections",
+   "line": 127,
+   "sentence": "`close_old_connections`, a receiver of `request_started` and `request_finished` ([Connections by alias: `DATABASES` and `ConnectionHandler`](connections.md)), calls `BaseDatabaseWrapper.close_if_unusable_or_obsolete` on each connection this thread has made (`django/db/__init__.py:close_old_connections`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": "close_old_connections",
+   "kind": "function",
+   "lines": [
+    57,
+    59
+   ],
+   "fingerprint": "f5cf044cab3a61cd"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "line": 127,
+   "sentence": "`close_if_unusable_or_obsolete` leaves a closed connection alone, and asks of an open one, in this order (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`):",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "kind": "function",
+   "lines": [
+    591,
+    616
+   ],
+   "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:convert_exception_to_response",
+   "line": 169,
+   "sentence": "Under ASGI, the response for an exception, a 404's or a 500's page, is made on the request's own thread and not on one of a shared pool, so that, the release notes say, a connection used while the response is made is managed by `close_old_connections` (`django/core/handlers/exception.py:convert_exception_to_response`, `docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "convert_exception_to_response",
+   "kind": "function",
+   "lines": [
+    25,
+    61
+   ],
+   "fingerprint": "b436496b20e4ff34"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 169,
+   "sentence": "Under ASGI, the response for an exception, a 404's or a 500's page, is made on the request's own thread and not on one of a shared pool, so that, the release notes say, a connection used while the response is made is managed by `close_old_connections` (`django/core/handlers/exception.py:convert_exception_to_response`, `docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/db/utils.py:DatabaseErrorWrapper.__exit__",
+   "line": 198,
+   "sentence": "`DatabaseErrorWrapper.__exit__` sets `errors_occurred` for each driver's error it translates but a `DataError` or an `IntegrityError`, here the misspelt statement's `OperationalError` (`django/db/utils.py:DatabaseErrorWrapper.__exit__`) ([Cursors: executing a statement, the query log and execute wrappers](cursors.md)).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "DatabaseErrorWrapper.__exit__",
+   "kind": "function",
+   "lines": [
+    73,
+    94
+   ],
+   "fingerprint": "e9acaa10060a41fa"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_health_check_failed",
+   "line": 202,
+   "sentence": "If `BaseDatabaseWrapper.is_usable` says no it closes the connection, and outside an atomic block the `ensure_connection` after it opens another (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_health_check_failed`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_health_check_failed",
+   "kind": "function",
+   "lines": [
+    578,
+    589
+   ],
+   "fingerprint": "77c76d4ece0ba6c1"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.is_usable",
+   "line": 232,
+   "sentence": "What a check costs is the backend's `is_usable`, whose docstring in the base class asks it not to raise, since an exception there may prevent Django from recycling an unusable connection (`django/db/backends/base/base.py:BaseDatabaseWrapper.is_usable`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.is_usable",
+   "kind": "function",
+   "lines": [
+    565,
+    576
+   ],
+   "fingerprint": "1298f0294112d03a"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.is_usable",
+   "line": 232,
+   "sentence": "PostgreSQL's runs `\"SELECT 1\"` on a driver's cursor, not Django's (`django/db/backends/postgresql/base.py:DatabaseWrapper.is_usable`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.is_usable",
+   "kind": "function",
+   "lines": [
+    498,
+    508
+   ],
+   "fingerprint": "fb67cb33c15fc1bd"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 262,
+   "sentence": "At the outermost block's exit, if the block was entered under autocommit, `connection` is set to `None` and `BaseDatabaseWrapper.in_atomic_block` cleared, and the next query opens a new connection (`django/db/transaction.py:Atomic.__exit__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection",
+   "line": 264,
+   "sentence": "Where it finds no connection while `in_atomic_block` and `closed_in_transaction` are both set, `ensure_connection` refuses outright, with a `ProgrammingError` that says a new connection cannot be opened in an atomic block (`django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.ensure_connection",
+   "kind": "function",
+   "lines": [
+    270,
+    279
+   ],
+   "at": 271,
+   "fingerprint": "11d0697684ee76e0"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._close",
+   "line": 264,
+   "sentence": "The base class's `close` keeps the driver's connection, so that refusal is reached where the backend's own close sets `connection` to `None`, as PostgreSQL's `DatabaseWrapper._close` does for a pooled connection (`django/db/backends/postgresql/base.py:DatabaseWrapper._close`), and after a block entered with autocommit already off.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._close",
+   "kind": "function",
+   "lines": [
+    394,
+    408
+   ],
+   "fingerprint": "9ad12f4add8365e3"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 264,
+   "sentence": "Such a block sets `in_atomic_block` itself as it is entered, and its exit, finding the connection closed, sets `connection` to `None` and leaves the flag set (`django/db/transaction.py:Atomic.__enter__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.temporary_connection",
+   "line": 268,
+   "sentence": "`BaseDatabaseWrapper.temporary_connection` gives a cursor, and afterwards closes the connection only if it opened it, to avoid leaving a connection dangling, its docstring says, outside the request cycle (`django/db/backends/base/base.py:BaseDatabaseWrapper.temporary_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.temporary_connection",
+   "kind": "function",
+   "lines": [
+    684,
+    699
+   ],
+   "at": 685,
+   "fingerprint": "5fdde092f1c96495"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._nodb_cursor",
+   "line": 288,
+   "sentence": "`BaseDatabaseWrapper._nodb_cursor` gives a cursor on another connection altogether: a new wrapper of the same class, with the same settings but `\"NAME\"` set to `None`, under the alias `NO_DB_ALIAS`, closed when the cursor is done (`django/db/backends/base/base.py:BaseDatabaseWrapper._nodb_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._nodb_cursor",
+   "kind": "function",
+   "lines": [
+    701,
+    715
+   ],
+   "at": 702,
+   "fingerprint": "7e99edac613fcc34"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._nodb_cursor",
+   "line": 288,
+   "sentence": "PostgreSQL's backend connects to the database `\"postgres\"` for a name of `None`, and if that fails warns and falls back to the first PostgreSQL database configured (`django/db/backends/postgresql/base.py:DatabaseWrapper._nodb_cursor`) ([PostgreSQL](postgresql.md)); MySQL's connects to no database; SQLite's and Oracle's creation do not use it ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._nodb_cursor",
+   "kind": "function",
+   "lines": [
+    516,
+    552
+   ],
+   "at": 517,
+   "fingerprint": "f9e361771c2af60a"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.validate_thread_sharing",
+   "line": 292,
+   "sentence": "`connections` gives each thread its own connection for an alias ([Connections by alias: `DATABASES` and `ConnectionHandler`](connections.md)), but a connection object can still be handed to another thread: the connection keeps the identity of the thread that made it, and the check compares the calling thread's with it (`django/db/backends/base/base.py:BaseDatabaseWrapper.validate_thread_sharing`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.validate_thread_sharing",
+   "kind": "function",
+   "lines": [
+    637,
+    650
+   ],
+   "fingerprint": "d7ceaad7c4c550cf"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerTestCase._start_server_thread",
+   "line": 311,
+   "sentence": "`LiveServerTestCase` hands each connection to such a database to its server's thread with a permission to share it, and takes the permission back when the thread is stopped; the server's threads put the connection in place of their own (`django/test/testcases.py:LiveServerTestCase._start_server_thread`, `django/core/servers/basehttp.py:ThreadedWSGIServer.process_request_thread`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerTestCase._start_server_thread",
+   "kind": "function",
+   "lines": [
+    1837,
+    1852
+   ],
+   "at": 1838,
+   "fingerprint": "a1493084bcf198ba"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:ThreadedWSGIServer.process_request_thread",
+   "line": 311,
+   "sentence": "`LiveServerTestCase` hands each connection to such a database to its server's thread with a permission to share it, and takes the permission back when the thread is stopped; the server's threads put the connection in place of their own (`django/test/testcases.py:LiveServerTestCase._start_server_thread`, `django/core/servers/basehttp.py:ThreadedWSGIServer.process_request_thread`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "ThreadedWSGIServer.process_request_thread",
+   "kind": "function",
+   "lines": [
+    98,
+    104
+   ],
+   "fingerprint": "0a9553986b15225b"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params",
+   "line": 311,
+   "sentence": "SQLite's `DatabaseWrapper.get_connection_params` turns the driver's own guard off for every connection because, its comment says, the driver's setting cannot be changed once a connection is open; the guarding is left to `allow_thread_sharing` (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    154,
+    198
+   ],
+   "fingerprint": "115b31b8e0cc0c53"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pool",
+   "line": 315,
+   "sentence": "Each backend's `pool` property makes the pool the first time it is asked for, and keeps it in a dictionary on the class, so every thread's connection for the alias uses the one pool: PostgreSQL's keyed by the alias, Oracle's by the alias and the user (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.pool",
+   "kind": "function",
+   "lines": [
+    193,
+    236
+   ],
+   "at": 194,
+   "fingerprint": "dcc252b28ea1a815"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.pool",
+   "line": 315,
+   "sentence": "Each backend's `pool` property makes the pool the first time it is asked for, and keeps it in a dictionary on the class, so every thread's connection for the alias uses the one pool: PostgreSQL's keyed by the alias, Oracle's by the alias and the user (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.pool",
+   "kind": "function",
+   "lines": [
+    258,
+    283
+   ],
+   "at": 259,
+   "fingerprint": "ce0c7c3290369faf"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._close",
+   "line": 317,
+   "sentence": "PostgreSQL's `DatabaseWrapper._close` gives the connection back to the pool and sets `connection` to `None` itself (`django/db/backends/postgresql/base.py:DatabaseWrapper._close`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._close",
+   "kind": "function",
+   "lines": [
+    394,
+    408
+   ],
+   "fingerprint": "9ad12f4add8365e3"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.init_connection_state",
+   "line": 317,
+   "sentence": "PostgreSQL's `DatabaseWrapper.init_connection_state` sets no time zone or role under a pool, because, a comment says, the pool itself calls `DatabaseWrapper._configure_connection` after it opens a connection (`django/db/backends/postgresql/base.py:DatabaseWrapper.init_connection_state`, `django/db/backends/postgresql/base.py:DatabaseWrapper._configure_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    410,
+    417
+   ],
+   "fingerprint": "6e1ad967f6fb4f89"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._configure_connection",
+   "line": 317,
+   "sentence": "PostgreSQL's `DatabaseWrapper.init_connection_state` sets no time zone or role under a pool, because, a comment says, the pool itself calls `DatabaseWrapper._configure_connection` after it opens a connection (`django/db/backends/postgresql/base.py:DatabaseWrapper.init_connection_state`, `django/db/backends/postgresql/base.py:DatabaseWrapper._configure_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._configure_connection",
+   "kind": "function",
+   "lines": [
+    381,
+    392
+   ],
+   "fingerprint": "997d5c84fa523ad7"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.close_if_health_check_failed",
+   "line": 319,
+   "sentence": "Both backends' `DatabaseWrapper.close_if_health_check_failed` return at once under a pool, their comment saying that the pool only returns healthy connections (`django/db/backends/oracle/base.py:DatabaseWrapper.close_if_health_check_failed`); PostgreSQL's gives the pool its own check where `\"CONN_HEALTH_CHECKS\"` is on and the options name none.",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.close_if_health_check_failed",
+   "kind": "function",
+   "lines": [
+    395,
+    399
+   ],
+   "fingerprint": "0b3fbea55f71b6b2"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.get_connection_params",
+   "line": 319,
+   "sentence": "PostgreSQL's backend also refuses a pool under psycopg2, in its `DatabaseWrapper.get_connection_params` (`django/db/backends/postgresql/base.py:DatabaseWrapper.get_connection_params`), and without the package psycopg_pool, when the pool is made.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    250,
+    315
+   ],
+   "fingerprint": "fee1304f1abbcd36"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.close_pool",
+   "line": 321,
+   "sentence": "`close_pool`, which those two backends alone define, closes the pool and forgets it, so that the next `pool` makes another (`django/db/backends/postgresql/base.py:DatabaseWrapper.close_pool`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.close_pool",
+   "kind": "function",
+   "lines": [
+    238,
+    241
+   ],
+   "fingerprint": "5d9fff7e797bd87a"
+  }
+ ]
+}

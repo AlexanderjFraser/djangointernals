@@ -1,0 +1,298 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "on-commit.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/db/transactions.txt",
+   "line": 9,
+   "sentence": "Some work has to follow a change to the database and must not happen unless the change is kept; Django's documentation gives a background task, an email and a cache invalidation as examples (`docs/topics/db/transactions.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/transactions.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    715
+   ],
+   "fingerprint": "fce19bd320802338"
+  },
+  {
+   "pointer": "django/db/transaction.py:on_commit",
+   "line": 13,
+   "sentence": "`django.db.transaction.on_commit` takes the function, an alias (`using=None` for `\"default\"`) and `robust=False`, and calls `BaseDatabaseWrapper.on_commit` on the alias's connection (`django/db/transaction.py:on_commit`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "on_commit",
+   "kind": "function",
+   "lines": [
+    142,
+    147
+   ],
+   "fingerprint": "3da73f7bf5d3fcab"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.on_commit",
+   "line": 13,
+   "sentence": "The method refuses anything that cannot be called with `TypeError`, and then does one of three things (`django/db/backends/base/base.py:BaseDatabaseWrapper.on_commit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.on_commit",
+   "kind": "function",
+   "lines": [
+    727,
+    747
+   ],
+   "fingerprint": "dfd7de6dc3423273"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 31,
+   "sentence": "The set therefore holds the savepoint of every block then open, and rolling back to one drops the callbacks of the blocks inside it too (`django/db/transaction.py:Atomic.__enter__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 35,
+   "sentence": "Where the exit of an outermost block entered in autocommit commits, the callbacks run in its `finally`, as autocommit is turned on again (`django/db/transaction.py:Atomic.__exit__`):",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit",
+   "line": 55,
+   "sentence": "`BaseDatabaseWrapper.commit` sets `BaseDatabaseWrapper.run_commit_hooks_on_set_autocommit_on`, and `BaseDatabaseWrapper.set_autocommit`, when it turns autocommit on with the flag set, calls `BaseDatabaseWrapper.run_and_clear_commit_hooks` and then clears the flag (`django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.set_autocommit",
+   "kind": "function",
+   "lines": [
+    457,
+    492
+   ],
+   "fingerprint": "43c78eb71aa8a61b"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.run_and_clear_commit_hooks",
+   "line": 55,
+   "sentence": "`run_and_clear_commit_hooks` refuses inside an atomic block, puts an empty list in the place of `run_on_commit`, and calls the callbacks it took, in the order they were registered (`django/db/backends/base/base.py:BaseDatabaseWrapper.run_and_clear_commit_hooks`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.run_and_clear_commit_hooks",
+   "kind": "function",
+   "lines": [
+    749,
+    766
+   ],
+   "fingerprint": "6bffb76d193ca05b"
+  },
+  {
+   "pointer": "docs/topics/db/transactions.txt",
+   "line": 57,
+   "sentence": "Django's documentation gives the reason the callbacks wait for autocommit and do not run in `commit` itself: a query made in a callback would otherwise open an implicit transaction and keep the connection from going back into autocommit (`docs/topics/db/transactions.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/transactions.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    715
+   ],
+   "fingerprint": "fce19bd320802338"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 59,
+   "sentence": "Under autocommit turned off by hand, an atomic block's callbacks are kept as in any other block, and its exit, which leaves the commit to the code, runs none of them (`django/db/transaction.py:Atomic.__exit__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.savepoint_rollback",
+   "line": 85,
+   "sentence": "`BaseDatabaseWrapper.savepoint_rollback` keeps only the tuples of `BaseDatabaseWrapper.run_on_commit` whose set does not hold the savepoint's name (`django/db/backends/base/base.py:BaseDatabaseWrapper.savepoint_rollback`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.savepoint_rollback",
+   "kind": "function",
+   "lines": [
+    404,
+    420
+   ],
+   "at": 405,
+   "fingerprint": "4e27ad3a45d33296"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.rollback",
+   "line": 98,
+   "sentence": "`BaseDatabaseWrapper.rollback` empties the list, so a transaction rolled back, by its outermost block or by hand, runs none of its callbacks (`django/db/backends/base/base.py:BaseDatabaseWrapper.rollback`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.rollback",
+   "kind": "function",
+   "lines": [
+    332,
+    341
+   ],
+   "at": 333,
+   "fingerprint": "5412fd263fc3d7fc"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close",
+   "line": 98,
+   "sentence": "`BaseDatabaseWrapper.close` empties it before it looks for a connection to close, even where it then finds none, though SQLite's `close` does not call it for a database in memory (`django/db/backends/base/base.py:BaseDatabaseWrapper.close`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.close`); and `BaseDatabaseWrapper.connect` empties it last, after sending `connection_created` (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`; [Opening and closing a connection](lifecycle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    343,
+    361
+   ],
+   "at": 344,
+   "fingerprint": "99b42f02b5cc1949"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.close",
+   "line": 98,
+   "sentence": "`BaseDatabaseWrapper.close` empties it before it looks for a connection to close, even where it then finds none, though SQLite's `close` does not call it for a database in memory (`django/db/backends/base/base.py:BaseDatabaseWrapper.close`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.close`); and `BaseDatabaseWrapper.connect` empties it last, after sending `connection_created` (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`; [Opening and closing a connection](lifecycle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    220,
+    227
+   ],
+   "at": 221,
+   "fingerprint": "317a4a75947883f9"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
+   "line": 98,
+   "sentence": "`BaseDatabaseWrapper.close` empties it before it looks for a connection to close, even where it then finds none, though SQLite's `close` does not call it for a database in memory (`django/db/backends/base/base.py:BaseDatabaseWrapper.close`, `django/db/backends/sqlite3/base.py:DatabaseWrapper.close`); and `BaseDatabaseWrapper.connect` empties it last, after sending `connection_created` (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`; [Opening and closing a connection](lifecycle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.connect",
+   "kind": "function",
+   "lines": [
+    236,
+    261
+   ],
+   "at": 237,
+   "fingerprint": "c5345148a50b5e4c"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.run_and_clear_commit_hooks",
+   "line": 120,
+   "sentence": "A callback registered with `robust=True` is called inside a `try`: an `Exception` from it is logged with its traceback to the logger `\"django.db.backends.base\"`, and the next callback runs (`django/db/backends/base/base.py:BaseDatabaseWrapper.run_and_clear_commit_hooks`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.run_and_clear_commit_hooks",
+   "kind": "function",
+   "lines": [
+    749,
+    766
+   ],
+   "fingerprint": "6bffb76d193ca05b"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 138,
+   "sentence": "Registered without `robust=True`, a failing callback's exception leaves `BaseDatabaseWrapper.run_and_clear_commit_hooks`, then `BaseDatabaseWrapper.set_autocommit`, then the `finally` of the outermost block's `Atomic.__exit__`, and the `with` statement raises it (`django/db/transaction.py:Atomic.__exit__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "docs/topics/db/transactions.txt",
+   "line": 156,
+   "sentence": "Django's documentation likens this to calling the functions one after another without `on_commit`: a failure stops the ones after it (`docs/topics/db/transactions.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/transactions.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    715
+   ],
+   "fingerprint": "fce19bd320802338"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.on_commit",
+   "line": 156,
+   "sentence": "The function `on_commit` calls at once, outside a block, is treated the same way (`django/db/backends/base/base.py:BaseDatabaseWrapper.on_commit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.on_commit",
+   "kind": "function",
+   "lines": [
+    727,
+    747
+   ],
+   "fingerprint": "dfd7de6dc3423273"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._fixture_setup",
+   "line": 162,
+   "sentence": "Where its databases support transactions, `TestCase` runs each test inside an atomic block that it rolls back, so no transaction of a test commits and no callback runs (`django/test/testcases.py:TestCase._fixture_setup`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._fixture_setup",
+   "kind": "function",
+   "lines": [
+    1471,
+    1490
+   ],
+   "at": 1472,
+   "fingerprint": "4587adfeecbac258"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase.captureOnCommitCallbacks",
+   "line": 162,
+   "sentence": "It calls them inside the test's block, where a callback that registers another only adds it to the list, so it goes on until those it called have added no more (`django/test/testcases.py:TestCase.captureOnCommitCallbacks`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase.captureOnCommitCallbacks",
+   "kind": "function",
+   "lines": [
+    1509,
+    1540
+   ],
+   "at": 1511,
+   "fingerprint": "2ed90c9074077e10"
+  }
+ ]
+}

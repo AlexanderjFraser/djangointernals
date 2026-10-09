@@ -45,7 +45,7 @@ create: an instance is made and saved with force_insert
 
 Three things in a `create` are the queryset's doing. It sets `QuerySet._for_write` before it reads `QuerySet.db`, so that the alias it gives the save is the one for a write: the alias the queryset was given, or else the router's answer for a write ([Clones: how a queryset is built](chaining.md)). It passes `force_insert=True`, which makes the save insert into the model's own table with no update tried first. For a model of one table, then, a `create` given the key of a row that exists is an insert that the database refuses. And when the save is done it stores the queryset's fetch mode, `QuerySet._fetch_mode`, in the new instance's state, as `ModelState.fetch_mode` (`django/db/models/base.py:ModelState`) ([Deferred fields and fetch modes in a queryset](deferred.md)).
 
-The save ran inside `mark_for_rollback_on_error`, which opens no transaction and, where an exception passes through it inside a block of `atomic`, marks the connection as needing a rollback (`django/db/transaction.py:mark_for_rollback_on_error`) ([Database backends](../backends.md)). Under it the statement was sent by `QuerySet._insert`, and the key the database chose came back with it and was set on the instance. The last line shows the key there, with the state a save leaves behind it.
+The save ran inside `mark_for_rollback_on_error`, which opens no transaction and, where an exception passes through it inside a block of `atomic`, marks the connection as needing a rollback (`django/db/transaction.py:mark_for_rollback_on_error`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#mark_for_rollback_on_error)). Under it the statement was sent by `QuerySet._insert`, and the key the database chose came back with it and was set on the instance. The last line shows the key there, with the state a save leaves behind it.
 
 Nothing else of the queryset takes part. Its query is not read, so a condition on the queryset puts no value on the new instance. The manager at the far end of a foreign key does put its own instance among the values, by overriding `create` to add it to the arguments (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager.create`) ([Reading and setting related objects](../models/related-objects.md)).
 
@@ -86,7 +86,7 @@ Port.objects.get_or_create(name='Skagen', defaults={'country': lambda: 'Denmark'
     -> (<Port: Skagen>, True)
 ```
 
-`atomic` begins a transaction where none is open, as here, and makes a savepoint inside one that is (`django/db/transaction.py:Atomic.__enter__`) ([Database backends](../backends.md)). On SQLite the `"BEGIN"` passes through Django's cursor and so is written as a statement, where the commit is written as a call.
+`atomic` begins a transaction where none is open, as here, and makes a savepoint inside one that is (`django/db/transaction.py:Atomic.__enter__`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#entering-a-block-atomic__enter)). On SQLite the `"BEGIN"` passes through Django's cursor and so is written as a statement, where the commit is written as a call.
 
 ### The values for the new instance: `_extract_model_params`
 

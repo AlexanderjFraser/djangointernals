@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 558">
+  <!-- what was recorded, and the two columns: the way in down the left, the way out up the right -->
+  <text x="0" y="14">One <tspan class="name">DateTimeField</tspan> value on SQLite, a sailor's <tspan class="name">signed_on</tspan></text>
+  <text x="0" y="48"><tspan class="strong">The way in</tspan><tspan class="quiet small" dx="8">into an UPDATE, read downwards</tspan></text>
+  <text x="323" y="48"><tspan class="strong">The way out</tspan><tspan class="quiet small" dx="8">out of a SELECT, read upwards</tspan></text>
+
+  <!-- the value given, and the value returned -->
+  <text x="162" y="76" text-anchor="middle">an aware datetime, 18:30 in Oslo</text>
+  <path class="line" d="M162 86 V96"/>
+  <polygon class="head" points="162,106 157,96 167,96"/>
+  <text x="485" y="76" text-anchor="middle">an aware datetime, 17:30 UTC</text>
+  <polygon class="head" points="485,86 480,96 490,96"/>
+  <path class="line" d="M485 96 V106"/>
+
+  <!-- the field -->
+  <rect class="box" x="0.5" y="106.5" width="645" height="76" rx="4"/>
+  <text class="strong" x="14" y="128">the field</text>
+  <text class="name" x="14" y="150">DateTimeField.get_db_prep_value</text>
+  <text class="name" x="337" y="150">from_db_value</text>
+  <text class="small" x="337" y="168">where the field has one: none here</text>
+
+  <path class="line" d="M162 183 V200"/>
+  <polygon class="head" points="162,210 157,200 167,200"/>
+  <polygon class="head" points="485,183 480,193 490,193"/>
+  <path class="line" d="M485 193 V210"/>
+
+  <!-- the operations object: where the time zone is taken off and put back -->
+  <rect class="mark-box" x="0.5" y="210.5" width="645" height="124" rx="4"/>
+  <text class="strong" x="14" y="232">the operations object</text>
+  <text class="name" x="14" y="254">adapt_datetimefield_value</text>
+  <text class="small" x="14" y="272">the value made naive in the connection's</text>
+  <text class="small" x="14" y="288">time zone (UTC), and written as text</text>
+  <text class="name" x="337" y="254">convert_datetimefield_value</text>
+  <text class="small" x="337" y="272">named by <tspan class="name small">get_db_converters</tspan>, it makes the</text>
+  <text class="small" x="337" y="288">value aware in the connection's time zone;</text>
+  <text class="small" x="337" y="304"><tspan class="name small">SQLCompiler.apply_converters</tspan> calls it,</text>
+  <text class="small" x="337" y="320">and then the field's</text>
+
+  <path class="line" d="M162 335 V352"/>
+  <polygon class="head" points="162,362 157,352 167,352"/>
+  <polygon class="head" points="485,335 480,345 490,345"/>
+  <path class="line" d="M485 345 V362"/>
+
+  <!-- the driver -->
+  <rect class="box" x="0.5" y="362.5" width="645" height="108" rx="4"/>
+  <text class="strong" x="14" y="384">the driver, <tspan class="name">sqlite3</tspan></text>
+  <text x="14" y="406">binds the text as it is</text>
+  <text class="small" x="14" y="424">the adapters Django registered with it are</text>
+  <text class="small" x="14" y="440">for a date, a datetime or a Decimal that</text>
+  <text class="small" x="14" y="456">reaches it as one</text>
+  <text class="name" x="337" y="406">parse_datetime</text>
+  <text class="small" x="337" y="424">called as the converter Django registered for</text>
+  <text class="small" x="337" y="440">the column's declared type, <tspan class="name small">"datetime"</tspan>;</text>
+  <text class="small" x="337" y="456">it makes a naive datetime</text>
+
+  <path class="line" d="M162 471 V488"/>
+  <polygon class="head" points="162,498 157,488 167,488"/>
+  <polygon class="head" points="485,471 480,481 490,481"/>
+  <path class="line" d="M485 481 V498"/>
+
+  <!-- the database -->
+  <rect class="box" x="0.5" y="498.5" width="645" height="58" rx="4"/>
+  <text class="strong" x="14" y="520">the database</text>
+  <text x="14" y="542">stores the text <tspan class="name">2026-03-14 17:30:00</tspan></text>
+  <text x="337" y="542">returns the text</text>
+</svg>

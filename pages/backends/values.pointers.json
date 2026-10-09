@@ -1,0 +1,647 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "values.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/fields/__init__.py:DateTimeField.get_db_prep_value",
+   "line": 11,
+   "sentence": "On the way in, a field class's override of `Field.get_db_prep_value` gives the value to the operations object's **adapter** for its kind, `adapt_datetimefield_value` for a datetime, which returns what this backend's driver should be handed, and the driver turns that into what it binds (`django/db/models/fields/__init__.py:DateTimeField.get_db_prep_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DateTimeField.get_db_prep_value",
+   "kind": "function",
+   "lines": [
+    1722,
+    1726
+   ],
+   "fingerprint": "dca8fdebf326d65b"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DateTimeField.get_db_prep_value",
+   "line": 36,
+   "sentence": "A datetime goes into a statement through `DateTimeField.get_db_prep_value`, which prepares the value, unless told it is prepared, and returns what the operations object's `adapt_datetimefield_value` makes of it (`django/db/models/fields/__init__.py:DateTimeField.get_db_prep_value`); what comes before that is [A field: the base class](../models/fields.md)'s.",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DateTimeField.get_db_prep_value",
+   "kind": "function",
+   "lines": [
+    1722,
+    1726
+   ],
+   "fingerprint": "dca8fdebf326d65b"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.adapt_datetimefield_value",
+   "line": 51,
+   "sentence": "SQLite's adapter makes an aware datetime naive in the connection's time zone, here UTC, so that 18:30 in Oslo became 17:30, and returns `str` of it, which the driver binds and SQLite stores (`django/db/backends/sqlite3/operations.py:DatabaseOperations.adapt_datetimefield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.adapt_datetimefield_value",
+   "kind": "function",
+   "lines": [
+    246,
+    260
+   ],
+   "fingerprint": "48e2842ad1b3df5d"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DateField.get_db_prep_value",
+   "line": 55,
+   "sentence": "`BaseDatabaseOperations` has an adapter for a date, a time, a datetime, a duration, a decimal, an integer, an IP address and a JSON value, and the field class of that kind calls it from its override of `Field.get_db_prep_value`, as `DateField` does (`django/db/models/fields/__init__.py:DateField.get_db_prep_value`, `django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_datefield_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DateField.get_db_prep_value",
+   "kind": "function",
+   "lines": [
+    1581,
+    1585
+   ],
+   "fingerprint": "2a7281c113f4ecdd"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_datefield_value",
+   "line": 55,
+   "sentence": "`BaseDatabaseOperations` has an adapter for a date, a time, a datetime, a duration, a decimal, an integer, an IP address and a JSON value, and the field class of that kind calls it from its override of `Field.get_db_prep_value`, as `DateField` does (`django/db/models/fields/__init__.py:DateField.get_db_prep_value`, `django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_datefield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.adapt_datefield_value",
+   "kind": "function",
+   "lines": [
+    575,
+    582
+   ],
+   "fingerprint": "e847c1ddffe5aab9"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DecimalField.get_db_prep_value",
+   "line": 55,
+   "sentence": "`BaseDatabaseOperations.adapt_decimalfield_value` is handed the field's digits and places with the value and returns the value, and no backend overrides it (`django/db/models/fields/__init__.py:DecimalField.get_db_prep_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DecimalField.get_db_prep_value",
+   "kind": "function",
+   "lines": [
+    1916,
+    1920
+   ],
+   "fingerprint": "9cd8426d22c5d080"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:UUIDField.get_db_prep_value",
+   "line": 69,
+   "sentence": "`UUIDField.get_db_prep_value` uses no adapter: where `BaseDatabaseFeatures.has_native_uuid_field` is true, as on PostgreSQL and MariaDB, it hands down the `uuid.UUID`, and elsewhere the string of its 32 hexadecimal digits (`django/db/models/fields/__init__.py:UUIDField.get_db_prep_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "UUIDField.get_db_prep_value",
+   "kind": "function",
+   "lines": [
+    2836,
+    2844
+   ],
+   "fingerprint": "3ec9dd795a8b4336"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.validate_autopk_value",
+   "line": 71,
+   "sentence": "An automatic key passes through no adapter, but on a save it passes through `BaseDatabaseOperations.validate_autopk_value`, called from `AutoFieldMixin.get_db_prep_save`: the base class's returns the value, and MySQL's refuses 0 unless the server's SQL mode allows it, as [MySQL and MariaDB](mysql.md) tells (`django/db/backends/base/operations.py:BaseDatabaseOperations.validate_autopk_value`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.validate_autopk_value",
+   "kind": "function",
+   "lines": [
+    545,
+    551
+   ],
+   "fingerprint": "f54e048a5a4ab3c5"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_unknown_value",
+   "line": 73,
+   "sentence": "For a value with no field behind it there is `BaseDatabaseOperations.adapt_unknown_value`, which goes by the value's type alone: a datetime, tested before a date since it is one, a date, a time and a decimal each to its adapter, and anything else back as it is (`django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_unknown_value`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.adapt_unknown_value",
+   "kind": "function",
+   "lines": [
+    553,
+    570
+   ],
+   "fingerprint": "068300b6867d3301"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:RawQuery._execute_query",
+   "line": 73,
+   "sentence": "Its one caller is the `RawQuery` behind `QuerySet.raw`, which passes each of its parameters through it, since the type each is meant for is not known (`django/db/models/sql/query.py:RawQuery._execute_query`); a datetime given to a raw query reaches the adapter a field's would:",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "RawQuery._execute_query",
+   "kind": "function",
+   "lines": [
+    209,
+    226
+   ],
+   "fingerprint": "4cc7f41b675e4247"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py",
+   "line": 84,
+   "sentence": "SQLite's backend registers adapters with the driver, through `sqlite3.register_adapter`, as `django.db.backends.sqlite3.base` is imported: `str` for a `decimal.Decimal`, `adapt_date` for a `datetime.date`, which writes its ISO form, and `adapt_datetime` for a `datetime.datetime`, which writes the ISO form with a space before the time (`django/db/backends/sqlite3/base.py`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    378
+   ],
+   "fingerprint": "b3222792e267daa3"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:OracleParam",
+   "line": 94,
+   "sentence": "Oracle's cursor, beneath Django's, wraps each parameter in an `OracleParam`, which with `USE_TZ` on makes a datetime an `Oracle_datetime`, a class whose docstring says it tells the driver to save the microseconds too, and which turns `True` and `False` into 1 and 0 on a server older than 23 (`django/db/backends/oracle/base.py:OracleParam`); [Oracle](oracle.md) has the cursor.",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "OracleParam",
+   "kind": "class",
+   "lines": [
+    411,
+    462
+   ],
+   "fingerprint": "7acda1c5e01dde7f"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params",
+   "line": 118,
+   "sentence": "SQLite's backend opens each connection with `\"detect_types\"` set to `sqlite3.PARSE_DECLTYPES` and `sqlite3.PARSE_COLNAMES` unless the alias's `\"OPTIONS\"` give another value (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`); with them, the driver calls the converter registered under the name of the type each column was declared with, with the column's raw bytes.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    154,
+    198
+   ],
+   "fingerprint": "115b31b8e0cc0c53"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:decoder",
+   "line": 118,
+   "sentence": "The backend registers converters with `sqlite3.register_converter` as its module is imported: the method `__eq__` of `b\"1\"` under `\"bool\"`, true for those bytes and false for any others, and under `\"date\"`, `\"time\"`, `\"datetime\"` and `\"timestamp\"` a `decoder` around one of Django's parsers, which decodes the bytes to a string first (`django/db/backends/sqlite3/base.py:decoder`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "decoder",
+   "kind": "function",
+   "lines": [
+    28,
+    32
+   ],
+   "fingerprint": "9b21fc1fe74d9f50"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_datetimefield_value",
+   "line": 120,
+   "sentence": "SQLite's converters take values of both kinds: `DatabaseOperations.convert_datetimefield_value` parses a value that is not yet a datetime and leaves one the driver parsed, and the converters for dates and times do the same (`django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_datetimefield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.convert_datetimefield_value",
+   "kind": "function",
+   "lines": [
+    289,
+    295
+   ],
+   "fingerprint": "5a364c37a9531e72"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.get_db_converters",
+   "line": 122,
+   "sentence": "SQLite's `DatabaseOperations.get_db_converters` chooses by the internal type of the column's output field (`django/db/backends/sqlite3/operations.py:DatabaseOperations.get_db_converters`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.get_db_converters",
+   "kind": "function",
+   "lines": [
+    272,
+    287
+   ],
+   "fingerprint": "9c4b12aa202dc05e"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_booleanfield_value",
+   "line": 140,
+   "sentence": "Those run all the same, and with no declared type a boolean reaches its converter as an integer: `DatabaseOperations.convert_booleanfield_value` makes `bool` of any value equal to 1 or 0, the driver's `False` among them (`django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_booleanfield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.convert_booleanfield_value",
+   "kind": "function",
+   "lines": [
+    345,
+    346
+   ],
+   "fingerprint": "61df155939fd5907"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Value.as_sqlite",
+   "line": 153,
+   "sentence": "`Value.as_sqlite` had cast the parameter to `\"REAL\"`, and the backend registers no converter with the driver for a decimal, so the driver returned a float (`django/db/models/expressions.py:Value.as_sqlite`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Value.as_sqlite",
+   "kind": "function",
+   "lines": [
+    1193,
+    1203
+   ],
+   "fingerprint": "6b4a97da9cc319e9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.get_decimalfield_converter",
+   "line": 153,
+   "sentence": "`DatabaseOperations.get_decimalfield_converter` makes a converter for each expression (`django/db/backends/sqlite3/operations.py:DatabaseOperations.get_decimalfield_converter`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.get_decimalfield_converter",
+   "kind": "function",
+   "lines": [
+    315,
+    338
+   ],
+   "fingerprint": "e647aa1fc6b5af0e"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_uuidfield_value",
+   "line": 155,
+   "sentence": "SQLite's `DatabaseOperations.convert_uuidfield_value` makes a `uuid.UUID` of the 32 hexadecimal digits (`django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_uuidfield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.convert_uuidfield_value",
+   "kind": "function",
+   "lines": [
+    340,
+    343
+   ],
+   "fingerprint": "51bda833c639233a"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DurationField.get_db_converters",
+   "line": 155,
+   "sentence": "`DurationField.get_db_converters` adds `BaseDatabaseOperations.convert_durationfield_value`, which makes a `datetime.timedelta` of the microseconds, where the features lack `BaseDatabaseFeatures.has_native_duration_field` (`django/db/models/fields/__init__.py:DurationField.get_db_converters`); `JSONField.from_db_value` passes the text to `json.loads` with the field's decoder (`django/db/models/fields/json.py:JSONField.from_db_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DurationField.get_db_converters",
+   "kind": "function",
+   "lines": [
+    1979,
+    1983
+   ],
+   "fingerprint": "e9969d0911b15de3"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:JSONField.from_db_value",
+   "line": 155,
+   "sentence": "`DurationField.get_db_converters` adds `BaseDatabaseOperations.convert_durationfield_value`, which makes a `datetime.timedelta` of the microseconds, where the features lack `BaseDatabaseFeatures.has_native_duration_field` (`django/db/models/fields/__init__.py:DurationField.get_db_converters`); `JSONField.from_db_value` passes the text to `json.loads` with the field's decoder (`django/db/models/fields/json.py:JSONField.from_db_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "JSONField.from_db_value",
+   "kind": "function",
+   "lines": [
+    87,
+    97
+   ],
+   "fingerprint": "aec8d7efeaeb6db1"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/psycopg_any.py:get_adapters_template",
+   "line": 170,
+   "sentence": "Django's adapters map for psycopg 3 loads `\"jsonb\"` as text, the comment's reason being to avoid a round trip through `json.dumps` and `json.loads` when a `JSONField` has a decoder of its own, and `\"inet\"` and `\"cidr\"` as text rather than Python's address objects (`django/db/backends/postgresql/psycopg_any.py:get_adapters_template`); under psycopg2 the backend does the same for `\"jsonb\"` (`django/db/backends/postgresql/base.py:DatabaseWrapper.get_new_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/psycopg_any.py",
+   "symbol": "get_adapters_template",
+   "kind": "function",
+   "lines": [
+    60,
+    76
+   ],
+   "at": 61,
+   "fingerprint": "895c997bffc244e6"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.get_new_connection",
+   "line": 170,
+   "sentence": "Django's adapters map for psycopg 3 loads `\"jsonb\"` as text, the comment's reason being to avoid a round trip through `json.dumps` and `json.loads` when a `JSONField` has a decoder of its own, and `\"inet\"` and `\"cidr\"` as text rather than Python's address objects (`django/db/backends/postgresql/psycopg_any.py:get_adapters_template`); under psycopg2 the backend does the same for `\"jsonb\"` (`django/db/backends/postgresql/base.py:DatabaseWrapper.get_new_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    317,
+    355
+   ],
+   "at": 318,
+   "fingerprint": "2be73ca5df2ab8bd"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:django_conversions",
+   "line": 170,
+   "sentence": "MySQL's `django_conversions` reads a TIME column with `typecast_time`, the comment saying that the driver returns one as a `datetime.timedelta`, those columns being signed and holding days, where Django expects a time (`django/db/backends/mysql/base.py:django_conversions`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "django_conversions",
+   "kind": "assignment",
+   "lines": [
+    45,
+    48
+   ],
+   "fingerprint": "c584123bca592ac3"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.timezone",
+   "line": 175,
+   "sentence": "That zone is `BaseDatabaseWrapper.timezone`: `datetime.UTC`, unless the alias's `\"TIME_ZONE\"` names a zone and then a `zoneinfo.ZoneInfo` of it, and `None` with `USE_TZ` off; its docstring says that a datetime read from the database is always returned in it (`django/db/backends/base/base.py:BaseDatabaseWrapper.timezone`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.timezone",
+   "kind": "function",
+   "lines": [
+    134,
+    155
+   ],
+   "at": 135,
+   "fingerprint": "d5c364c6fb979e34"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.check_settings",
+   "line": 186,
+   "sentence": "Without `USE_TZ` neither property reads the alias's value, and `BaseDatabaseWrapper.check_settings`, the first step of `BaseDatabaseWrapper.connect`, refuses an alias's `\"TIME_ZONE\"` as the connection opens, before the driver's connection is made, here for an alias naming Oslo's (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_settings`):",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.check_settings",
+   "kind": "function",
+   "lines": [
+    263,
+    268
+   ],
+   "fingerprint": "8efdee40b90e14db"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.convert_datetimefield_value",
+   "line": 201,
+   "sentence": "Their adapters make an aware value naive in the connection's zone, and their `DatabaseOperations.convert_datetimefield_value` makes the naive value the driver returns aware in the same zone (`django/db/backends/mysql/operations.py:DatabaseOperations.convert_datetimefield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.convert_datetimefield_value",
+   "kind": "function",
+   "lines": [
+    298,
+    301
+   ],
+   "fingerprint": "f4a37d742f1944d0"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.get_db_converters",
+   "line": 201,
+   "sentence": "MySQL's and Oracle's `DatabaseOperations.get_db_converters` name it only with `USE_TZ` on, and SQLite's checks the setting inside it (`django/db/backends/mysql/operations.py:DatabaseOperations.get_db_converters`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.get_db_converters",
+   "kind": "function",
+   "lines": [
+    281,
+    291
+   ],
+   "fingerprint": "e51de20f0e9184ee"
+  },
+  {
+   "pointer": "docs/ref/settings.txt",
+   "line": 201,
+   "sentence": "So on these backends the alias's `\"TIME_ZONE\"` changes what every stored datetime means, and the documentation says it must be set where the database holds local times that another system wrote or expects to find (`docs/ref/settings.txt`).",
+   "tree": "django",
+   "path": "docs/ref/settings.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4179
+   ],
+   "fingerprint": "23ab897ca680e6a7"
+  },
+  {
+   "pointer": "docs/topics/i18n/timezones.txt",
+   "line": 205,
+   "sentence": "PostgreSQL's `\"timestamp with time zone\"` stores an instant, and the server writes each value back in the session's time zone (`docs/topics/i18n/timezones.txt`).",
+   "tree": "django",
+   "path": "docs/topics/i18n/timezones.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    710
+   ],
+   "fingerprint": "d89e6ac4150e7aeb"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._configure_timezone",
+   "line": 205,
+   "sentence": "`DatabaseWrapper._configure_timezone` sets the session's zone to `timezone_name` where the server reports another, with the operations object's `DatabaseOperations.set_time_zone_sql` (`django/db/backends/postgresql/base.py:DatabaseWrapper._configure_timezone`, `django/db/backends/postgresql/operations.py:DatabaseOperations.set_time_zone_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._configure_timezone",
+   "kind": "function",
+   "lines": [
+    364,
+    371
+   ],
+   "fingerprint": "127fe2ec3590b3d3"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.set_time_zone_sql",
+   "line": 205,
+   "sentence": "`DatabaseWrapper._configure_timezone` sets the session's zone to `timezone_name` where the server reports another, with the operations object's `DatabaseOperations.set_time_zone_sql` (`django/db/backends/postgresql/base.py:DatabaseWrapper._configure_timezone`, `django/db/backends/postgresql/operations.py:DatabaseOperations.set_time_zone_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.set_time_zone_sql",
+   "kind": "function",
+   "lines": [
+    197,
+    198
+   ],
+   "fingerprint": "cbc2aee5720c748a"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/psycopg_any.py:BaseTzLoader",
+   "line": 207,
+   "sentence": "Under psycopg 3 each connection's adapters map loads `\"timestamptz\"` with a subclass of `BaseTzLoader` that `register_tzloader` makes for the connection's `timezone`: it loads with psycopg's own loader and puts that zone on the value in place of the offset (`django/db/backends/postgresql/psycopg_any.py:BaseTzLoader`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/psycopg_any.py",
+   "symbol": "BaseTzLoader",
+   "kind": "class",
+   "lines": [
+    28,
+    41
+   ],
+   "fingerprint": "1270adb69922591d"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.create_cursor",
+   "line": 207,
+   "sentence": "`DatabaseWrapper.create_cursor` registers the loader again on a cursor where the connection's holds another zone; under psycopg2 it gives each cursor, with `USE_TZ` on, `DatabaseWrapper.tzinfo_factory`, which returns the connection's zone (`django/db/backends/postgresql/base.py:DatabaseWrapper.create_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.create_cursor",
+   "kind": "function",
+   "lines": [
+    419,
+    452
+   ],
+   "at": 420,
+   "fingerprint": "0851baab2a468c37"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.ensure_timezone",
+   "line": 209,
+   "sentence": "`BaseDatabaseWrapper.ensure_timezone`, whose one caller is the test framework's receiver of `setting_changed`, makes an open connection agree again after the settings change: the base class's does nothing, and PostgreSQL's closes the pool and runs `_configure_timezone` (`django/db/backends/postgresql/base.py:DatabaseWrapper.ensure_timezone`, `django/test/signals.py:update_connections_time_zone`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.ensure_timezone",
+   "kind": "function",
+   "lines": [
+    357,
+    362
+   ],
+   "fingerprint": "5a88ea67b80d7cc7"
+  },
+  {
+   "pointer": "django/test/signals.py:update_connections_time_zone",
+   "line": 209,
+   "sentence": "`BaseDatabaseWrapper.ensure_timezone`, whose one caller is the test framework's receiver of `setting_changed`, makes an open connection agree again after the settings change: the base class's does nothing, and PostgreSQL's closes the pool and runs `_configure_timezone` (`django/db/backends/postgresql/base.py:DatabaseWrapper.ensure_timezone`, `django/test/signals.py:update_connections_time_zone`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "update_connections_time_zone",
+   "kind": "function",
+   "lines": [
+    59,
+    84
+   ],
+   "at": 60,
+   "fingerprint": "aee47acac2ab7f2e"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations._convert_tznames_to_sql",
+   "line": 213,
+   "sentence": "SQLite's operations object gives Django's functions both names as parameters, the zone to compute in and the connection's (`django/db/backends/sqlite3/operations.py:DatabaseOperations._convert_tznames_to_sql`):",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations._convert_tznames_to_sql",
+   "kind": "function",
+   "lines": [
+    92,
+    95
+   ],
+   "fingerprint": "887d38102cb9ed85"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/_functions.py:_sqlite_datetime_parse",
+   "line": 224,
+   "sentence": "`_sqlite_datetime_parse` reads the stored text with `typecast_timestamp`, which keeps no time zone information, gives the result the connection's zone and moves it into the zone the SQL names, with `split_tzname_delta` for a name that carries an offset (`django/db/backends/sqlite3/_functions.py:_sqlite_datetime_parse`, `django/db/backends/utils.py:split_tzname_delta`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/_functions.py",
+   "symbol": "_sqlite_datetime_parse",
+   "kind": "function",
+   "lines": [
+    119,
+    138
+   ],
+   "fingerprint": "45b90cb2a27a4b56"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:split_tzname_delta",
+   "line": 224,
+   "sentence": "`_sqlite_datetime_parse` reads the stored text with `typecast_timestamp`, which keeps no time zone information, gives the result the connection's zone and moves it into the zone the SQL names, with `split_tzname_delta` for a name that carries an offset (`django/db/backends/sqlite3/_functions.py:_sqlite_datetime_parse`, `django/db/backends/utils.py:split_tzname_delta`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "split_tzname_delta",
+   "kind": "function",
+   "lines": [
+    195,
+    206
+   ],
+   "fingerprint": "3edfb6ede40cf7eb"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations._convert_sql_to_tz",
+   "line": 224,
+   "sentence": "MySQL's operations object writes `\"CONVERT_TZ\"` from the connection's zone (`django/db/backends/mysql/operations.py:DatabaseOperations._convert_sql_to_tz`), which, the comment in `DatabaseWrapper.mysql_server_data` says, returns null where UTC is not loaded into the server's time zone table; the backend asks the server once whether UTC converts, and the features' `BaseDatabaseFeatures.has_zoneinfo_database` is the answer (`django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations._convert_sql_to_tz",
+   "kind": "function",
+   "lines": [
+    91,
+    98
+   ],
+   "fingerprint": "80f1805227f1304e"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data",
+   "line": 224,
+   "sentence": "MySQL's operations object writes `\"CONVERT_TZ\"` from the connection's zone (`django/db/backends/mysql/operations.py:DatabaseOperations._convert_sql_to_tz`), which, the comment in `DatabaseWrapper.mysql_server_data` says, returns null where UTC is not loaded into the server's time zone table; the backend asks the server once whether UTC converts, and the features' `BaseDatabaseFeatures.has_zoneinfo_database` is the answer (`django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper.mysql_server_data",
+   "kind": "function",
+   "lines": [
+    396,
+    418
+   ],
+   "at": 397,
+   "fingerprint": "020ddeaf0782ce2a"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations._convert_sql_to_tz",
+   "line": 224,
+   "sentence": "Oracle's operations object names the connection's zone in each conversion (`django/db/backends/oracle/operations.py:DatabaseOperations._convert_sql_to_tz`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations._convert_sql_to_tz",
+   "kind": "function",
+   "lines": [
+    129,
+    145
+   ],
+   "fingerprint": "e93ad10a3542faa3"
+  },
+  {
+   "pointer": "django/db/models/functions/datetime.py:TruncBase.convert_value",
+   "line": 226,
+   "sentence": "`TruncBase.convert_value` then calls `BaseDatabaseOperations.convert_trunc_expression` (`django/db/models/functions/datetime.py:TruncBase.convert_value`), which, for a datetime output with `USE_TZ` on, drops that zone and makes the value aware in the zone the truncation was computed in, the `TruncBase.tzinfo` it was given or, where that is `None` as here, the current zone (`django/db/backends/base/operations.py:BaseDatabaseOperations.convert_trunc_expression`):",
+   "tree": "django",
+   "path": "django/db/models/functions/datetime.py",
+   "symbol": "TruncBase.convert_value",
+   "kind": "function",
+   "lines": [
+    366,
+    367
+   ],
+   "fingerprint": "e1857ee41654b750"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.convert_trunc_expression",
+   "line": 226,
+   "sentence": "`TruncBase.convert_value` then calls `BaseDatabaseOperations.convert_trunc_expression` (`django/db/models/functions/datetime.py:TruncBase.convert_value`), which, for a datetime output with `USE_TZ` on, drops that zone and makes the value aware in the zone the truncation was computed in, the `TruncBase.tzinfo` it was given or, where that is `None` as here, the current zone (`django/db/backends/base/operations.py:BaseDatabaseOperations.convert_trunc_expression`):",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.convert_trunc_expression",
+   "kind": "function",
+   "lines": [
+    690,
+    707
+   ],
+   "fingerprint": "efc563a7c2bfccd0"
+  }
+ ]
+}

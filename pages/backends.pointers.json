@@ -1,0 +1,456 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "backends.md",
+ "pointers": [
+  {
+   "pointer": "django/db/utils.py:DatabaseErrorWrapper",
+   "line": 11,
+   "sentence": "Django leans on that API for the shape of a connection and a cursor and for the names of the error classes a driver defines (`django/db/utils.py:DatabaseErrorWrapper`); the drivers still differ in the placeholders they take and the types they convert.",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "DatabaseErrorWrapper",
+   "kind": "class",
+   "lines": [
+    53,
+    103
+   ],
+   "fingerprint": "20e9871627eab2d3"
+  },
+  {
+   "pointer": "django/db/utils.py:load_backend",
+   "line": 13,
+   "sentence": "The setting `DATABASES` gives each database an **alias**, `\"default\"` and any others, and names its package in `\"ENGINE\"`; `load_backend` imports that package's `base` module, and the class it defines as `DatabaseWrapper` is the way in for everything else (`django/db/utils.py:load_backend`, `django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "load_backend",
+   "kind": "function",
+   "lines": [
+    106,
+    138
+   ],
+   "fingerprint": "c5d7dd7e87c7dce4"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 13,
+   "sentence": "The setting `DATABASES` gives each database an **alias**, `\"default\"` and any others, and names its package in `\"ENGINE\"`; `load_backend` imports that package's `base` module, and the class it defines as `DatabaseWrapper` is the way in for everything else (`django/db/utils.py:load_backend`, `django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/db/backends/",
+   "line": 13,
+   "sentence": "The four that Django ships are under `django/db/backends/`, beside `django.db.backends.dummy`, which stands in when no database is configured.",
+   "tree": "django",
+   "path": "django/db/backends/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "f5d81d8628b99425"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionHandler.create_connection",
+   "line": 13,
+   "sentence": "A backend from elsewhere is any package whose `base` module defines a `DatabaseWrapper`: that is the one name Django takes from it, and it reaches everything else through that class's attributes (`django/db/utils.py:ConnectionHandler.create_connection`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    194,
+    197
+   ],
+   "fingerprint": "e282a592616e0111"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionHandler",
+   "line": 17,
+   "sentence": "The ORM reaches a database through `django.db.connections`, an instance of `ConnectionHandler`: a mapping from an alias to a **connection**, an instance of the backend's `DatabaseWrapper`, such as SQLite's (`django/db/utils.py:ConnectionHandler`, `django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionHandler",
+   "kind": "class",
+   "lines": [
+    141,
+    197
+   ],
+   "fingerprint": "1b274d9d800d59c2"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 17,
+   "sentence": "The ORM reaches a database through `django.db.connections`, an instance of `ConnectionHandler`: a mapping from an alias to a **connection**, an instance of the backend's `DatabaseWrapper`, such as SQLite's (`django/db/utils.py:ConnectionHandler`, `django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/utils/connection.py:BaseConnectionHandler.__getitem__",
+   "line": 17,
+   "sentence": "It fills in the defaults of every alias's settings when it first reads `DATABASES`, makes a connection the first time an alias is asked for, and keeps what it made in storage local to the thread, so that two threads asking for `\"default\"` are given two connections; a comment on the class calls connections \"truly thread-critical\" (`django/utils/connection.py:BaseConnectionHandler.__getitem__`, `django/db/utils.py:ConnectionHandler.thread_critical`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "BaseConnectionHandler.__getitem__",
+   "kind": "function",
+   "lines": [
+    56,
+    64
+   ],
+   "fingerprint": "85dcb79d857fcb0e"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionHandler.thread_critical",
+   "line": 17,
+   "sentence": "It fills in the defaults of every alias's settings when it first reads `DATABASES`, makes a connection the first time an alias is asked for, and keeps what it made in storage local to the thread, so that two threads asking for `\"default\"` are given two connections; a comment on the class calls connections \"truly thread-critical\" (`django/utils/connection.py:BaseConnectionHandler.__getitem__`, `django/db/utils.py:ConnectionHandler.thread_critical`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionHandler.thread_critical",
+   "kind": "assignment",
+   "lines": [
+    148,
+    148
+   ],
+   "fingerprint": "048235ea8eda22d8"
+  },
+  {
+   "pointer": "django/utils/connection.py:ConnectionProxy",
+   "line": 17,
+   "sentence": "`django.db.connection`, the name much code reaches for, is a proxy that looks up `connections[\"default\"]` each time it is used (`django/utils/connection.py:ConnectionProxy`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "ConnectionProxy",
+   "kind": "class",
+   "lines": [
+    7,
+    27
+   ],
+   "fingerprint": "608ab426ee5e8883"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper",
+   "line": 19,
+   "sentence": "A connection is a `BaseDatabaseWrapper` underneath, and most of what it does is inherited from that class: it opens the driver's connection when a cursor or the state of autocommit is first wanted, makes cursors, keeps the state of the transaction, commits, rolls back and closes (`django/db/backends/base/base.py:BaseDatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    30,
+    789
+   ],
+   "fingerprint": "8fc19fca2556dd9a"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.__init__",
+   "line": 21,
+   "sentence": "The backend's `DatabaseWrapper` names their classes as class attributes, and `BaseDatabaseWrapper.__init__` makes one of each for every connection it makes; the schema editor alone is made when it is asked for (`django/db/backends/base/base.py:BaseDatabaseWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    53,
+    119
+   ],
+   "fingerprint": "274f00b243041080"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper",
+   "line": 35,
+   "sentence": "A **cursor**, in this chapter, is what `BaseDatabaseWrapper.cursor` returns: Django's `CursorWrapper` around the **driver's cursor** (`django/db/backends/utils.py:CursorWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper",
+   "kind": "class",
+   "lines": [
+    17,
+    114
+   ],
+   "fingerprint": "e2f37165f49affd0"
+  },
+  {
+   "pointer": "django/db/utils.py:DatabaseErrorWrapper",
+   "line": 35,
+   "sentence": "Django's cursor refuses a statement while the transaction is broken, passes it through any execute wrappers that have been installed, and turns an exception of one of the driver's error classes, or of a subclass of one, into Django's class of that class's name, so that code above the backend catches `IntegrityError` from `django.db` and not the driver's own (`django/db/utils.py:DatabaseErrorWrapper`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "DatabaseErrorWrapper",
+   "kind": "class",
+   "lines": [
+    53,
+    103
+   ],
+   "fingerprint": "20e9871627eab2d3"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 145,
+   "sentence": "The compiler asks the connection for a cursor, and here that is the moment the connection is opened: nothing before it, not making the connection, not building the queryset and not compiling it, touched the database; on some backends compiling a query can open the connection first, to learn the server's version (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._cursor",
+   "line": 145,
+   "sentence": "`BaseDatabaseWrapper._cursor` gives a health check its chance first, which does nothing unless the alias has `\"CONN_HEALTH_CHECKS\"` on, and then calls `ensure_connection`, which finds the driver's connection to be `None` and calls `connect` (`django/db/backends/base/base.py:BaseDatabaseWrapper._cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._cursor",
+   "kind": "function",
+   "lines": [
+    294,
+    298
+   ],
+   "fingerprint": "12c2eba5a8954111"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
+   "line": 147,
+   "sentence": "Then it sends `connection_created` with the connection, for any receiver that wants to prepare each new connection, and empties the connection's list of callbacks held for a commit (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.connect",
+   "kind": "function",
+   "lines": [
+    236,
+    261
+   ],
+   "at": 237,
+   "fingerprint": "c5345148a50b5e4c"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._prepare_cursor",
+   "line": 149,
+   "sentence": "`create_cursor` asks the driver's connection for one, and SQLite's backend asks for its own subclass of the driver's cursor, `SQLiteCursorWrapper`; `_prepare_cursor` checks that this thread may use the connection and wraps the driver's cursor in Django's, a `CursorWrapper`, or a `CursorDebugWrapper` that times and logs each statement when the setting DEBUG is on or the connection's `force_debug_cursor` has been set (`django/db/backends/base/base.py:BaseDatabaseWrapper._prepare_cursor`, `django/db/backends/utils.py:CursorDebugWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._prepare_cursor",
+   "kind": "function",
+   "lines": [
+    283,
+    292
+   ],
+   "fingerprint": "6ff7386cb5704ea7"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorDebugWrapper",
+   "line": 149,
+   "sentence": "`create_cursor` asks the driver's connection for one, and SQLite's backend asks for its own subclass of the driver's cursor, `SQLiteCursorWrapper`; `_prepare_cursor` checks that this thread may use the connection and wraps the driver's cursor in Django's, a `CursorWrapper`, or a `CursorDebugWrapper` that times and logs each statement when the setting DEBUG is on or the connection's `force_debug_cursor` has been set (`django/db/backends/base/base.py:BaseDatabaseWrapper._prepare_cursor`, `django/db/backends/utils.py:CursorDebugWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorDebugWrapper",
+   "kind": "class",
+   "lines": [
+    117,
+    163
+   ],
+   "fingerprint": "e40081a8855fde14"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:SQLiteCursorWrapper.convert_query",
+   "line": 183,
+   "sentence": "The `SQL` line stands where it does because the recording's own execute wrapper, outermost of the wrappers that `_execute_with_wrappers` calls, writes it; then `_execute` hands the statement to the driver's cursor, where SQLite's backend rewrites each `\"%s\"` as SQLite's `\"?\"`, and the driver binds `'Petrel'` in its place (`django/db/backends/sqlite3/base.py:SQLiteCursorWrapper.convert_query`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "SQLiteCursorWrapper.convert_query",
+   "kind": "function",
+   "lines": [
+    372,
+    378
+   ],
+   "fingerprint": "3adfff69c0023651"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_datetimefield_value",
+   "line": 185,
+   "sentence": "The rows come back through two kinds of converter: one that SQLite's backend registered with the driver turns the stored text of each sailor's signed_on into a `datetime` with no time zone, and one the operations object names for the column, `DatabaseOperations.convert_datetimefield_value`, makes it aware in the connection's time zone (`django/db/backends/sqlite3/operations.py:DatabaseOperations.convert_datetimefield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.convert_datetimefield_value",
+   "kind": "function",
+   "lines": [
+    289,
+    295
+   ],
+   "fingerprint": "5a364c37a9531e72"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 204,
+   "sentence": "When the handler has finished with the request it sends `request_finished`, and `close_old_connections`, a receiver connected in `django/db/__init__.py`, asks each connection this thread has made whether it should be closed (`django/db/__init__.py:close_old_connections`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/__init__.py:close_old_connections",
+   "line": 204,
+   "sentence": "When the handler has finished with the request it sends `request_finished`, and `close_old_connections`, a receiver connected in `django/db/__init__.py`, asks each connection this thread has made whether it should be closed (`django/db/__init__.py:close_old_connections`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": "close_old_connections",
+   "kind": "function",
+   "lines": [
+    57,
+    59
+   ],
+   "fingerprint": "f5cf044cab3a61cd"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "line": 204,
+   "sentence": "`\"CONN_MAX_AGE\"` is 0 unless the alias says otherwise, so the time to close came as the connection opened, and `BaseDatabaseWrapper.close_if_unusable_or_obsolete` closes it; the next request will open another (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "kind": "function",
+   "lines": [
+    591,
+    616
+   ],
+   "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit",
+   "line": 208,
+   "sentence": "A comment in the base class gives PEP 249's default as autocommit off, and `connect` sets it as the alias's `\"AUTOCOMMIT\"` says, which is on unless the alias says otherwise, so that each statement is a transaction of its own, committed by the database as the statement ends (`django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.set_autocommit",
+   "kind": "function",
+   "lines": [
+    457,
+    492
+   ],
+   "fingerprint": "43c78eb71aa8a61b"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic",
+   "line": 208,
+   "sentence": "An atomic block inside another makes a **savepoint** instead, and as it is left releases the savepoint or rolls back to it, so that an inner block that fails undoes its own work and leaves the work of the blocks around it (`django/db/transaction.py:Atomic`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic",
+   "kind": "class",
+   "lines": [
+    155,
+    326
+   ],
+   "fingerprint": "02eff72571d8dbd8"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction",
+   "line": 247,
+   "sentence": "The state lives on the connection, not on the block: whether an atomic block is open, the stack of savepoint names, the stack of open blocks, and `needs_rollback`, which marks a transaction that must be rolled back before the connection runs another statement (`django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.validate_no_broken_transaction",
+   "kind": "function",
+   "lines": [
+    519,
+    524
+   ],
+   "fingerprint": "69fd85bfecd66e6f"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 251,
+   "sentence": "Its connection class has tables of its own: the column type of each kind of field (`data_types`) and the SQL of each comparison (`operators`) (`django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures",
+   "line": 251,
+   "sentence": "The **features** are flags on the connection's `BaseDatabaseWrapper.features` that code above the backend reads before it chooses what to ask for: whether an insert can hand back the key it made, whether a table can be created inside a transaction and dropped again by its rollback, whether `SELECT ... FOR UPDATE` takes `\"NOWAIT\"` (`django/db/backends/base/features.py:BaseDatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    5,
+    487
+   ],
+   "fingerprint": "a8914b1e6836492e"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations",
+   "line": 251,
+   "sentence": "The **operations object** writes most of the fragments of SQL that differ and that something above it asks for by name: a quoted name, a limit, the year of a date, the words that ignore a conflict; it also adapts values on their way in and names the converters for their way out (`django/db/backends/base/operations.py:BaseDatabaseOperations`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations",
+   "kind": "class",
+   "lines": [
+    21,
+    910
+   ],
+   "fingerprint": "28b8234c2b0aa366"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.quote_name",
+   "line": 263,
+   "sentence": "The quoting of names is the operations object's `quote_name`: double quotes, MySQL's backticks, and on Oracle double quotes around a name put into capitals, because Oracle keeps a name given without quotes in capitals and the backend's comment chooses to make every name so (`django/db/backends/oracle/operations.py:DatabaseOperations.quote_name`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.quote_name",
+   "kind": "function",
+   "lines": [
+    384,
+    395
+   ],
+   "fingerprint": "dbc48f8066dc1ddc"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper",
+   "line": 263,
+   "sentence": "The case-insensitive match is the wrapper's `operators` and the operations object's `lookup_cast`, which the lookup asks for: a `\"LIKE\"` with an escape character on SQLite, both sides in capitals on PostgreSQL and Oracle, and on MySQL a plain `\"LIKE\"`, MySQL's case-sensitive match being the one that is written differently (`django/db/backends/mysql/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    103,
+    441
+   ],
+   "fingerprint": "401ead3287ea5a8e"
+  }
+ ]
+}

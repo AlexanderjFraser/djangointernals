@@ -1,0 +1,574 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "creation.md",
+ "pointers": [
+  {
+   "pointer": "django/test/utils.py:setup_databases",
+   "line": 9,
+   "sentence": "The runner decides which aliases need a database and in what order, and calls each one's creation: `setup_databases` and `teardown_databases` are [The test framework](../testing.md)'s (`django/test/utils.py:setup_databases`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_databases",
+   "kind": "function",
+   "lines": [
+    189,
+    261
+   ],
+   "fingerprint": "a994f743d9f2fba8"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation",
+   "line": 9,
+   "sentence": "The wrapper makes a creation for each connection from the backend's `BaseDatabaseWrapper.creation_class`, and the creation keeps the connection (`django/db/backends/base/creation.py:BaseDatabaseCreation`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation",
+   "kind": "class",
+   "lines": [
+    19,
+    409
+   ],
+   "fingerprint": "2e5cf3cdab4ccb73"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db",
+   "line": 15,
+   "sentence": "`BaseDatabaseCreation.create_test_db` takes a verbosity, `autoclobber=False` and `keepdb=False`, and returns the name of the test database (`django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.create_test_db",
+   "kind": "function",
+   "lines": [
+    45,
+    129
+   ],
+   "fingerprint": "dc7cb1465332c24b"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation._get_test_db_name",
+   "line": 66,
+   "sentence": "`BaseDatabaseCreation._get_test_db_name` is the `\"TEST\"` dictionary's `\"NAME\"`, or `\"test_\"` before the alias's `\"NAME\"` (`django/db/backends/base/creation.py:BaseDatabaseCreation._get_test_db_name`, `django/db/backends/base/creation.py:TEST_DATABASE_PREFIX`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation._get_test_db_name",
+   "kind": "function",
+   "lines": [
+    203,
+    212
+   ],
+   "fingerprint": "5bfe79434ff0d745"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:TEST_DATABASE_PREFIX",
+   "line": 66,
+   "sentence": "`BaseDatabaseCreation._get_test_db_name` is the `\"TEST\"` dictionary's `\"NAME\"`, or `\"test_\"` before the alias's `\"NAME\"` (`django/db/backends/base/creation.py:BaseDatabaseCreation._get_test_db_name`, `django/db/backends/base/creation.py:TEST_DATABASE_PREFIX`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "TEST_DATABASE_PREFIX",
+   "kind": "assignment",
+   "lines": [
+    16,
+    16
+   ],
+   "fingerprint": "37274df7ba351aca"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation._create_test_db",
+   "line": 68,
+   "sentence": "Otherwise, unless `autoclobber=True`, the person running the tests is asked whether to delete the old test database; it is then dropped and made again, and a refusal, or an error in either statement, ends the process (`django/db/backends/base/creation.py:BaseDatabaseCreation._create_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation._create_test_db",
+   "kind": "function",
+   "lines": [
+    217,
+    262
+   ],
+   "fingerprint": "2252dad534ecb088"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/creation.py:DatabaseCreation._execute_create_test_db",
+   "line": 68,
+   "sentence": "PostgreSQL's and MySQL's `_execute_create_test_db` let only the error that the database exists through to that question, and end the process at once on any other (`django/db/backends/postgresql/creation.py:DatabaseCreation._execute_create_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/creation.py",
+   "symbol": "DatabaseCreation._execute_create_test_db",
+   "kind": "function",
+   "lines": [
+    40,
+    55
+   ],
+   "fingerprint": "b85246fdadc0ce0d"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation._create_test_db",
+   "line": 68,
+   "sentence": "SQLite's makes nothing: it removes an old file, asking as the base class does, and the new file appears when migrate first connects (`django/db/backends/sqlite3/creation.py:DatabaseCreation._create_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation._create_test_db",
+   "kind": "function",
+   "lines": [
+    25,
+    52
+   ],
+   "fingerprint": "075987ea0e80e294"
+  },
+  {
+   "pointer": "django/db/backends/oracle/creation.py:DatabaseCreation._maindb_connection",
+   "line": 70,
+   "sentence": "`\"NAME\"` is set in two places, in `settings.DATABASES` for the alias and in the connection's `settings_dict`: the connection reads its own dictionary when it opens; other code reads the setting, as Oracle's creation does when it makes its administrative connection (`django/db/backends/oracle/creation.py:DatabaseCreation._maindb_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/creation.py",
+   "symbol": "DatabaseCreation._maindb_connection",
+   "kind": "function",
+   "lines": [
+    15,
+    29
+   ],
+   "at": 16,
+   "fingerprint": "d96d0e10e5805710"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionHandler.create_connection",
+   "line": 70,
+   "sentence": "Both are changed in place and never replaced: a connection that another thread makes later is made from the connection handler's settings ([Connections by alias: `DATABASES` and `ConnectionHandler`](connections.md)), the same dictionaries, and so opens the test database as well (`django/db/utils.py:ConnectionHandler.create_connection`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    194,
+    197
+   ],
+   "fingerprint": "e282a592616e0111"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.sync_apps",
+   "line": 72,
+   "sentence": "`create_test_db` calls the migrate command for the alias with `run_syncdb=True`, which makes the tables of applications without migrations from their models (`django/core/management/commands/migrate.py:Command.sync_apps`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.sync_apps",
+   "kind": "function",
+   "lines": [
+    431,
+    487
+   ],
+   "fingerprint": "a6f11620b77eee0b"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.destroy_test_db",
+   "line": 87,
+   "sentence": "`BaseDatabaseCreation.destroy_test_db` closes the connection, takes the test database's name from `\"NAME\"`, or from a clone's settings where it is given a suffix, and has `BaseDatabaseCreation._destroy_test_db` remove it unless `keepdb=True`; then, where it is given the old name, it puts that back in both places (`django/db/backends/base/creation.py:BaseDatabaseCreation.destroy_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.destroy_test_db",
+   "kind": "function",
+   "lines": [
+    308,
+    341
+   ],
+   "fingerprint": "1a29b7e2659b124e"
+  },
+  {
+   "pointer": "django/test/utils.py:teardown_databases",
+   "line": 87,
+   "sentence": "The runner destroys each clone by its suffix and then the test database, with the name it kept (`django/test/utils.py:teardown_databases`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "teardown_databases",
+   "kind": "function",
+   "lines": [
+    383,
+    394
+   ],
+   "fingerprint": "ff4778b162e61ae9"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation._destroy_test_db",
+   "line": 101,
+   "sentence": "The base `_destroy_test_db` sends `\"DROP DATABASE\"` on a cursor of a second connection, its comment saying a database cannot be dropped while connected to it (`django/db/backends/base/creation.py:BaseDatabaseCreation._destroy_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation._destroy_test_db",
+   "kind": "function",
+   "lines": [
+    343,
+    354
+   ],
+   "fingerprint": "321c62fd0014039b"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/creation.py:DatabaseCreation.sql_table_creation_suffix",
+   "line": 123,
+   "sentence": "The base class's suffix is empty, and PostgreSQL's and MySQL's write their options from these keys (`django/db/backends/postgresql/creation.py:DatabaseCreation.sql_table_creation_suffix`, `django/db/backends/mysql/creation.py:DatabaseCreation.sql_table_creation_suffix`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/creation.py",
+   "symbol": "DatabaseCreation.sql_table_creation_suffix",
+   "kind": "function",
+   "lines": [
+    21,
+    31
+   ],
+   "fingerprint": "5c4e1748f15b8438"
+  },
+  {
+   "pointer": "django/db/backends/mysql/creation.py:DatabaseCreation.sql_table_creation_suffix",
+   "line": 123,
+   "sentence": "The base class's suffix is empty, and PostgreSQL's and MySQL's write their options from these keys (`django/db/backends/postgresql/creation.py:DatabaseCreation.sql_table_creation_suffix`, `django/db/backends/mysql/creation.py:DatabaseCreation.sql_table_creation_suffix`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/creation.py",
+   "symbol": "DatabaseCreation.sql_table_creation_suffix",
+   "kind": "function",
+   "lines": [
+    11,
+    18
+   ],
+   "fingerprint": "8387532bbe7f701d"
+  },
+  {
+   "pointer": "django/test/utils.py:get_unique_databases_and_mirrors",
+   "line": 123,
+   "sentence": "Without `\"DEPENDENCIES\"`, an alias other than `\"default\"` whose database differs from `\"default\"`'s waits for `\"default\"`; and `\"default\"` is put first among the aliases of one database, a comment saying data migrations use the default alias (`django/test/utils.py:get_unique_databases_and_mirrors`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "get_unique_databases_and_mirrors",
+   "kind": "function",
+   "lines": [
+    327,
+    380
+   ],
+   "fingerprint": "554cb74b18ffd755"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.test_db_signature",
+   "line": 127,
+   "sentence": "The runner groups the aliases by `BaseDatabaseCreation.test_db_signature`, a tuple of the settings that say which database an alias reaches: the base class's is the host, the port, the engine and the test database's name (`django/db/backends/base/creation.py:BaseDatabaseCreation.test_db_signature`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.test_db_signature",
+   "kind": "function",
+   "lines": [
+    388,
+    400
+   ],
+   "fingerprint": "de6d83e72ff002e4"
+  },
+  {
+   "pointer": "django/test/utils.py:setup_databases",
+   "line": 127,
+   "sentence": "For each group the runner calls `BaseDatabaseCreation.create_test_db` on the first alias and `BaseDatabaseCreation.set_as_test_mirror` on the rest, which copies the first one's `\"NAME\"`; then it does the same for each alias whose `\"TEST\"` names a `\"MIRROR\"`, so that a replica in the settings reads the test database of the alias it replicates (`django/test/utils.py:setup_databases`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_databases",
+   "kind": "function",
+   "lines": [
+    189,
+    261
+   ],
+   "fingerprint": "a994f743d9f2fba8"
+  },
+  {
+   "pointer": "django/db/backends/oracle/creation.py:DatabaseCreation.set_as_test_mirror",
+   "line": 127,
+   "sentence": "Oracle's `set_as_test_mirror` copies the user and the password instead (`django/db/backends/oracle/creation.py:DatabaseCreation.set_as_test_mirror`), and Oracle's signature adds the test user.",
+   "tree": "django",
+   "path": "django/db/backends/oracle/creation.py",
+   "symbol": "DatabaseCreation.set_as_test_mirror",
+   "kind": "function",
+   "lines": [
+    154,
+    160
+   ],
+   "fingerprint": "4a0b592a1c288a17"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation.test_db_signature",
+   "line": 127,
+   "sentence": "SQLite's signature is the real database's name and the test database's, or the alias in place of the latter where the test database is in memory, its docstring saying that in-memory databases are distinct even with one `\"TEST\"` name (`django/db/backends/sqlite3/creation.py:DatabaseCreation.test_db_signature`):",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation.test_db_signature",
+   "kind": "function",
+   "lines": [
+    114,
+    128
+   ],
+   "fingerprint": "cd1cad85f3f3aca9"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._fixture_setup",
+   "line": 137,
+   "sentence": "Flushing takes with it the rows that migrations wrote, and a class that sets `TransactionTestCase.serialized_rollback` has them put back before each of its tests (`django/test/testcases.py:TransactionTestCase._fixture_setup`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._fixture_setup",
+   "kind": "function",
+   "lines": [
+    1210,
+    1230
+   ],
+   "at": 1211,
+   "fingerprint": "37a9bba0dc08639c"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner._get_databases",
+   "line": 137,
+   "sentence": "Once all the test databases are made, its comment saying this is to account for mirrors and routing, `setup_databases` serializes each one whose alias is in its argument serialized_aliases, or every one where it is given none, and keeps the text on the connection; the runner names only the aliases that tests setting `serialized_rollback` use (`django/test/runner.py:DiscoverRunner._get_databases`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner._get_databases",
+   "kind": "function",
+   "lines": [
+    1139,
+    1151
+   ],
+   "fingerprint": "16b3a07e456661bc"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string",
+   "line": 139,
+   "sentence": "`BaseDatabaseCreation.serialize_db_to_string` writes as JSON every row of every model that can migrate on the connection and that the router allows there, in order of its primary key, for each application that has migrations and is not in `TEST_NON_SERIALIZED_APPS`; its docstring says it is meant for the test runner and will not handle large amounts of data (`django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.serialize_db_to_string",
+   "kind": "function",
+   "lines": [
+    138,
+    171
+   ],
+   "fingerprint": "aaed265f2576f933"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string",
+   "line": 141,
+   "sentence": "`BaseDatabaseCreation.deserialize_db_from_string` loads the rows back inside an atomic block, which a comment says handles forward references and cycles, and inside `BaseDatabaseWrapper.constraint_checks_disabled`, which another comment says is because MySQL does not support deferred checks, and then hands the tables it wrote to the connection's `BaseDatabaseWrapper.check_constraints` (`django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.deserialize_db_from_string",
+   "kind": "function",
+   "lines": [
+    173,
+    192
+   ],
+   "fingerprint": "886ef41ab80b5aa9"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.get_test_db_clone_settings",
+   "line": 145,
+   "sentence": "A clone's settings are `BaseDatabaseCreation.get_test_db_clone_settings`: a copy of the connection's, with the suffix after `\"NAME\"`, which by then, its comment says, is the test database's own (`django/db/backends/base/creation.py:BaseDatabaseCreation.get_test_db_clone_settings`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.get_test_db_clone_settings",
+   "kind": "function",
+   "lines": [
+    286,
+    297
+   ],
+   "fingerprint": "e912d5b798068571"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation._clone_test_db",
+   "line": 147,
+   "sentence": "SQLite's copies the file, to the name with the suffix before its extension, or writes a database in memory to a file where the way the workers are started needs one (`django/db/backends/sqlite3/creation.py:DatabaseCreation._clone_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation._clone_test_db",
+   "kind": "function",
+   "lines": [
+    74,
+    107
+   ],
+   "fingerprint": "6e3ce087ed3729de"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/creation.py:DatabaseCreation._clone_test_db",
+   "line": 147,
+   "sentence": "PostgreSQL's makes the clone with `\"CREATE DATABASE\"` from the test database as its template, closing the connection and its pool first, since, its comment says, the statement requires the connections to the template to be closed (`django/db/backends/postgresql/creation.py:DatabaseCreation._clone_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/creation.py",
+   "symbol": "DatabaseCreation._clone_test_db",
+   "kind": "function",
+   "lines": [
+    57,
+    87
+   ],
+   "fingerprint": "41d26f4f9cf03316"
+  },
+  {
+   "pointer": "django/db/backends/mysql/creation.py:DatabaseCreation._clone_test_db",
+   "line": 147,
+   "sentence": "MySQL's makes an empty database and pipes mysqldump of the test database into the mysql client, both command lines built by its `DatabaseClient.settings_to_cmd_args_env` (`django/db/backends/mysql/creation.py:DatabaseCreation._clone_test_db`, `django/db/backends/mysql/creation.py:DatabaseCreation._clone_db`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/creation.py",
+   "symbol": "DatabaseCreation._clone_test_db",
+   "kind": "function",
+   "lines": [
+    31,
+    60
+   ],
+   "fingerprint": "07d2d03ba859784a"
+  },
+  {
+   "pointer": "django/db/backends/mysql/creation.py:DatabaseCreation._clone_db",
+   "line": 147,
+   "sentence": "MySQL's makes an empty database and pipes mysqldump of the test database into the mysql client, both command lines built by its `DatabaseClient.settings_to_cmd_args_env` (`django/db/backends/mysql/creation.py:DatabaseCreation._clone_test_db`, `django/db/backends/mysql/creation.py:DatabaseCreation._clone_db`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/creation.py",
+   "symbol": "DatabaseCreation._clone_db",
+   "kind": "function",
+   "lines": [
+    62,
+    100
+   ],
+   "fingerprint": "26e449809815611d"
+  },
+  {
+   "pointer": "django/test/runner.py:_init_worker",
+   "line": 154,
+   "sentence": "Each worker process, as it starts, calls `BaseDatabaseCreation.setup_worker_connection` with its number for each alias the tests use, or for every alias where the suite names none (`django/test/runner.py:_init_worker`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "_init_worker",
+   "kind": "function",
+   "lines": [
+    473,
+    524
+   ],
+   "fingerprint": "ffa01dd6338820a5"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.setup_worker_connection",
+   "line": 154,
+   "sentence": "The base class's updates the connection's `settings_dict` with the clone's settings and closes the connection; its comment says the update must be in place, because with a new dictionary assigned, new threads would connect to the default database instead of the clone (`django/db/backends/base/creation.py:BaseDatabaseCreation.setup_worker_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.setup_worker_connection",
+   "kind": "function",
+   "lines": [
+    402,
+    409
+   ],
+   "fingerprint": "2636f7893e24a7d8"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation._get_test_db_name",
+   "line": 158,
+   "sentence": "SQLite's backend takes a missing `\"TEST\"` name as `\":memory:\"`, and makes it the name `\"file:memorydb_default?mode=memory&cache=shared\"` for `\"default\"`, with the alias in it (`django/db/backends/sqlite3/creation.py:DatabaseCreation._get_test_db_name`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation._get_test_db_name",
+   "kind": "function",
+   "lines": [
+    19,
+    23
+   ],
+   "fingerprint": "d3901fcda4b453c7"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params",
+   "line": 158,
+   "sentence": "It is a URI, which the backend always asks the driver to open as one (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`); its `\"mode=memory\"` is what `DatabaseCreation.is_in_memory_db` looks for; the alias in it gives each alias a database of its own, as the signature does; and the testing documentation says the shared cache lets tests share the database between threads (`docs/topics/testing/overview.txt`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    154,
+    198
+   ],
+   "fingerprint": "115b31b8e0cc0c53"
+  },
+  {
+   "pointer": "docs/topics/testing/overview.txt",
+   "line": 158,
+   "sentence": "It is a URI, which the backend always asks the driver to open as one (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`); its `\"mode=memory\"` is what `DatabaseCreation.is_in_memory_db` looks for; the alias in it gives each alias a database of its own, as the signature does; and the testing documentation says the shared cache lets tests share the database between threads (`docs/topics/testing/overview.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/overview.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    399
+   ],
+   "fingerprint": "5d93d7bb7a79af85"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.close",
+   "line": 174,
+   "sentence": "SQLite's `DatabaseWrapper.close` does nothing for a database in memory, its comment saying that closing the connection destroys the database (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`; [SQLite](sqlite.md)).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    220,
+    227
+   ],
+   "at": 221,
+   "fingerprint": "317a4a75947883f9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation._clone_test_db",
+   "line": 186,
+   "sentence": "Under spawn or forkserver, `DatabaseCreation._clone_test_db` writes the database with the driver's `sqlite3.Connection.backup` to a file named for the alias and the suffix (`django/db/backends/sqlite3/creation.py:DatabaseCreation._clone_test_db`, `django/db/backends/sqlite3/creation.py:DatabaseCreation.get_test_db_clone_settings`); any other start method raises `NotSupportedError`.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation._clone_test_db",
+   "kind": "function",
+   "lines": [
+    74,
+    107
+   ],
+   "fingerprint": "6e3ce087ed3729de"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation.get_test_db_clone_settings",
+   "line": 186,
+   "sentence": "Under spawn or forkserver, `DatabaseCreation._clone_test_db` writes the database with the driver's `sqlite3.Connection.backup` to a file named for the alias and the suffix (`django/db/backends/sqlite3/creation.py:DatabaseCreation._clone_test_db`, `django/db/backends/sqlite3/creation.py:DatabaseCreation.get_test_db_clone_settings`); any other start method raises `NotSupportedError`.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation.get_test_db_clone_settings",
+   "kind": "function",
+   "lines": [
+    54,
+    72
+   ],
+   "fingerprint": "32f4b1a917ab85d8"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation.setup_worker_connection",
+   "line": 194,
+   "sentence": "In the worker, SQLite's `DatabaseCreation.setup_worker_connection`, under spawn or forkserver, opens the clone's file read-only, copies it with the same `sqlite3.Connection.backup` into a new database in memory, sets that as `\"NAME\"`, and connects before it closes the copy (`django/db/backends/sqlite3/creation.py:DatabaseCreation.setup_worker_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation.setup_worker_connection",
+   "kind": "function",
+   "lines": [
+    130,
+    158
+   ],
+   "fingerprint": "5f37af4c7aca9422"
+  },
+  {
+   "pointer": "django/db/backends/oracle/creation.py:DatabaseCreation._switch_to_test_user",
+   "line": 208,
+   "sentence": "Oracle has no separate databases under one user, the docstring of `DatabaseCreation._switch_to_test_user` says, so Oracle's backend makes a test database a user of its own; [Oracle](oracle.md) tells how the user and its tablespaces are made (`django/db/backends/oracle/creation.py:DatabaseCreation._switch_to_test_user`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/creation.py",
+   "symbol": "DatabaseCreation._switch_to_test_user",
+   "kind": "function",
+   "lines": [
+    129,
+    152
+   ],
+   "fingerprint": "7c256dfd65881a94"
+  }
+ ]
+}

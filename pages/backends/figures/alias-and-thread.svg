@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 707">
+  <!-- the handler's two parts, named first -->
+  <text class="strong" x="0" y="14"><tspan class="name">connections</tspan>: the one <tspan class="name">ConnectionHandler</tspan> of the process</text>
+  <text x="0" y="44"><tspan class="strong">settings</tspan></text>
+  <text x="72" y="44"><tspan class="name">DATABASES</tspan>, its defaults filled in once, the first time it is read</text>
+  <text x="0" y="66"><tspan class="strong">storage</tspan></text>
+  <text x="72" y="66"><tspan class="name">Local(thread_critical=True)</tspan>: what one thread puts there, no other thread sees</text>
+
+  <!-- three columns: each thread's storage at the sides, the settings they share between them -->
+  <text class="strong" x="0" y="104">the main thread</text>
+  <text class="quiet small" x="0" y="122">its storage</text>
+  <text class="strong" x="188" y="104">settings</text>
+  <text class="quiet small" x="188" y="122">one dictionary for each alias, held by</text>
+  <text class="quiet small" x="188" y="138">every thread's connection for that alias</text>
+  <text class="strong" x="487" y="104">a second thread</text>
+  <text class="quiet small" x="487" y="122">its storage</text>
+
+  <!-- the alias "default": a connection in each thread, both holding the one dictionary -->
+  <text class="name" x="0" y="168">"default"</text>
+  <text class="name" x="188" y="168">"default"</text>
+  <text class="name" x="487" y="168">"default"</text>
+
+  <rect class="mark-box" x="0.5" y="176.5" width="158" height="44" rx="4"/>
+  <text x="13" y="203">a <tspan class="name">DatabaseWrapper</tspan></text>
+  <path class="line" d="M158.5 198.5 H178.5"/>
+  <polygon class="head" points="188.5,198.5 178.5,193.5 178.5,203.5"/>
+
+  <rect class="box" x="188.5" y="176.5" width="269" height="98" rx="4"/>
+  <text class="name" x="201" y="200">"ENGINE":</text>
+  <text class="name" x="216.6" y="220">"django.db.backends.sqlite3",</text>
+  <text class="name" x="201" y="240">"NAME": "harbour.sqlite3",</text>
+  <text class="name" x="201" y="260">"CONN_MAX_AGE": 0, …</text>
+
+  <path class="line" d="M487.5 198.5 H467.5"/>
+  <polygon class="head" points="457.5,198.5 467.5,193.5 467.5,203.5"/>
+  <rect class="mark-box" x="487.5" y="176.5" width="158" height="44" rx="4"/>
+  <text x="500" y="203">a <tspan class="name">DatabaseWrapper</tspan></text>
+
+  <!-- the alias "archive": only the main thread has asked for it -->
+  <text class="name" x="0" y="304">"archive"</text>
+  <text class="name" x="188" y="304">"archive"</text>
+
+  <rect class="mark-box" x="0.5" y="312.5" width="158" height="44" rx="4"/>
+  <text x="13" y="339">a <tspan class="name">DatabaseWrapper</tspan></text>
+  <path class="line" d="M158.5 334.5 H178.5"/>
+  <polygon class="head" points="188.5,334.5 178.5,329.5 178.5,339.5"/>
+
+  <rect class="box" x="188.5" y="312.5" width="269" height="78" rx="4"/>
+  <text class="name" x="201" y="336">"ENGINE":</text>
+  <text class="name" x="216.6" y="356">"django.db.backends.sqlite3",</text>
+  <text class="name" x="201" y="376">"NAME": "archive.sqlite3", …</text>
+
+  <!-- a thread that runs an event loop -->
+  <rect class="ground" x="0.5" y="414.5" width="645" height="44" rx="4"/>
+  <text x="14" y="441"><tspan class="strong">a thread running an event loop</tspan>: a store of its own for each asyncio context</text>
+
+  <!-- the subscript: the storage first, then the settings, then a new connection -->
+  <text class="strong" x="0" y="496"><tspan class="name">connections["archive"]</tspan>, asked on a thread</text>
+
+  <rect class="ground" x="0.5" y="510.5" width="300" height="40" rx="4"/>
+  <text x="14" y="535">in this thread's storage?</text>
+  <path class="line" d="M300.5 530.5 H360"/>
+  <polygon class="head" points="370,530.5 360,525.5 360,535.5"/>
+  <text class="quiet small" x="322" y="524">yes</text>
+  <rect class="ground" x="370.5" y="510.5" width="275" height="40" rx="4"/>
+  <text x="383" y="535">that connection</text>
+
+  <path class="line" d="M150 551 V570.5"/>
+  <polygon class="head" points="150,580.5 145,570.5 155,570.5"/>
+  <text class="quiet small" x="160" y="569">no</text>
+
+  <rect class="ground" x="0.5" y="580.5" width="300" height="40" rx="4"/>
+  <text x="14" y="605">an alias of the settings?</text>
+  <path class="line" d="M300.5 600.5 H360"/>
+  <polygon class="head" points="370,600.5 360,595.5 360,605.5"/>
+  <text class="quiet small" x="324" y="594">no</text>
+  <rect class="ground" x="370.5" y="580.5" width="275" height="40" rx="4"/>
+  <text x="383" y="605">raises <tspan class="name">ConnectionDoesNotExist</tspan></text>
+
+  <path class="line" d="M150 621 V640.5"/>
+  <polygon class="head" points="150,650.5 145,640.5 155,640.5"/>
+  <text class="quiet small" x="160" y="639">yes</text>
+
+  <rect class="box" x="0.5" y="650.5" width="645" height="56" rx="4"/>
+  <text x="14" y="673"><tspan class="name">create_connection("archive")</tspan>: <tspan class="name">load_backend(ENGINE).DatabaseWrapper(...)</tspan></text>
+  <text x="14" y="695">kept in this thread's storage and returned; nothing is opened</text>
+</svg>

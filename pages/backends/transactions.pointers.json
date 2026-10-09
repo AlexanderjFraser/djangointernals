@@ -1,0 +1,577 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "transactions.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
+   "line": 9,
+   "sentence": "PEP 249, which Django's drivers follow, has a driver open its connection with autocommit off, so that statements gather in a transaction until the program commits; `BaseDatabaseWrapper.connect` turns autocommit on, unless the alias's `\"AUTOCOMMIT\"` is `False` (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.connect",
+   "kind": "function",
+   "lines": [
+    236,
+    261
+   ],
+   "at": 237,
+   "fingerprint": "c5345148a50b5e4c"
+  },
+  {
+   "pointer": "docs/topics/db/transactions.txt",
+   "line": 9,
+   "sentence": "Django's documentation gives the reason: the SQL standard has each statement begin a transaction that must be committed or rolled back explicitly, which is not always convenient, and most databases offer autocommit to spare it (`docs/topics/db/transactions.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/transactions.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    715
+   ],
+   "fingerprint": "fce19bd320802338"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic",
+   "line": 11,
+   "sentence": "A block entered inside another makes a savepoint, unless it was made with `savepoint=False` or the transaction is already marked broken, and as it is left releases the savepoint, or rolls back to it and then releases it, so that a failure in an inner block undoes that block's work alone (`django/db/transaction.py:Atomic`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic",
+   "kind": "class",
+   "lines": [
+    155,
+    326
+   ],
+   "fingerprint": "02eff72571d8dbd8"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit",
+   "line": 36,
+   "sentence": "`set_autocommit` refuses inside an atomic block, which Django's documentation says would break atomicity: `BaseDatabaseWrapper.validate_no_atomic_block` raises `TransactionManagementError` (`django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.set_autocommit",
+   "kind": "function",
+   "lines": [
+    457,
+    492
+   ],
+   "fingerprint": "43c78eb71aa8a61b"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.save_base",
+   "line": 51,
+   "sentence": "A model whose parent has a table of its own is saved table by table, and `Model.save_base` wraps that save in `atomic(savepoint=False)` (`django/db/models/base.py:Model.save_base`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.save_base",
+   "kind": "function",
+   "lines": [
+    956,
+    1024
+   ],
+   "fingerprint": "60f9f7bb293fe492"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._set_autocommit",
+   "line": 55,
+   "sentence": "`BaseDatabaseWrapper._set_autocommit` raises `NotImplementedError`, and each backend's throws the driver's own switch (`django/db/backends/base/base.py:BaseDatabaseWrapper._set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._set_autocommit",
+   "kind": "function",
+   "lines": [
+    442,
+    448
+   ],
+   "fingerprint": "33372a551c480e3d"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._set_autocommit",
+   "line": 55,
+   "sentence": "PostgreSQL's and Oracle's set the autocommit attribute of the driver's connection, and MySQL's calls the driver connection's autocommit method (`django/db/backends/postgresql/base.py:DatabaseWrapper._set_autocommit`, `django/db/backends/mysql/base.py:DatabaseWrapper._set_autocommit`, `django/db/backends/oracle/base.py:DatabaseWrapper._set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._set_autocommit",
+   "kind": "function",
+   "lines": [
+    485,
+    487
+   ],
+   "fingerprint": "74999c1157ed4507"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper._set_autocommit",
+   "line": 55,
+   "sentence": "PostgreSQL's and Oracle's set the autocommit attribute of the driver's connection, and MySQL's calls the driver connection's autocommit method (`django/db/backends/postgresql/base.py:DatabaseWrapper._set_autocommit`, `django/db/backends/mysql/base.py:DatabaseWrapper._set_autocommit`, `django/db/backends/oracle/base.py:DatabaseWrapper._set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper._set_autocommit",
+   "kind": "function",
+   "lines": [
+    289,
+    291
+   ],
+   "fingerprint": "fdea4563c9ae8ecc"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper._set_autocommit",
+   "line": 55,
+   "sentence": "PostgreSQL's and Oracle's set the autocommit attribute of the driver's connection, and MySQL's calls the driver connection's autocommit method (`django/db/backends/postgresql/base.py:DatabaseWrapper._set_autocommit`, `django/db/backends/mysql/base.py:DatabaseWrapper._set_autocommit`, `django/db/backends/oracle/base.py:DatabaseWrapper._set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper._set_autocommit",
+   "kind": "function",
+   "lines": [
+    374,
+    376
+   ],
+   "fingerprint": "74999c1157ed4507"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._set_autocommit",
+   "line": 57,
+   "sentence": "SQLite's `DatabaseWrapper._set_autocommit` sets the driver connection's isolation_level, to `None` for autocommit and to the empty string, the driver's own default, for none (`django/db/backends/sqlite3/base.py:DatabaseWrapper._set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._set_autocommit",
+   "kind": "function",
+   "lines": [
+    237,
+    247
+   ],
+   "fingerprint": "ad287e40ceee81cf"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit",
+   "line": 57,
+   "sentence": "SQLite's backend is the one of the four with `DatabaseWrapper._start_transaction_under_autocommit`, which sends `\"BEGIN\"` through Django's cursor, with the mode that `\"OPTIONS\"` names as `\"transaction_mode\"` where it names one ([SQLite](sqlite.md)), and leaves the driver in its autocommit (`django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._start_transaction_under_autocommit",
+   "kind": "function",
+   "lines": [
+    321,
+    331
+   ],
+   "fingerprint": "9be10b45e65c4515"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.commit",
+   "line": 59,
+   "sentence": "`commit` also sets `BaseDatabaseWrapper.run_commit_hooks_on_set_autocommit_on`; `rollback` sets `BaseDatabaseWrapper.needs_rollback` back to `False` and empties `BaseDatabaseWrapper.run_on_commit` (`django/db/backends/base/base.py:BaseDatabaseWrapper.commit`, `django/db/backends/base/base.py:BaseDatabaseWrapper.rollback`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.commit",
+   "kind": "function",
+   "lines": [
+    322,
+    330
+   ],
+   "at": 323,
+   "fingerprint": "52a42fc9b04ab8ac"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.rollback",
+   "line": 59,
+   "sentence": "`commit` also sets `BaseDatabaseWrapper.run_commit_hooks_on_set_autocommit_on`; `rollback` sets `BaseDatabaseWrapper.needs_rollback` back to `False` and empties `BaseDatabaseWrapper.run_on_commit` (`django/db/backends/base/base.py:BaseDatabaseWrapper.commit`, `django/db/backends/base/base.py:BaseDatabaseWrapper.rollback`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.rollback",
+   "kind": "function",
+   "lines": [
+    332,
+    341
+   ],
+   "at": 333,
+   "fingerprint": "5412fd263fc3d7fc"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.__init__",
+   "line": 63,
+   "sentence": "`BaseDatabaseWrapper.__init__` sets the state on each connection, autocommit starting as `False`, PEP 249's default (`django/db/backends/base/base.py:BaseDatabaseWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    53,
+    119
+   ],
+   "fingerprint": "274f00b243041080"
+  },
+  {
+   "pointer": "django/db/transaction.py",
+   "line": 81,
+   "sentence": "Apart from `atomic`, `mark_for_rollback_on_error` and `non_atomic_requests`, each told in a section of its own, the functions of `django.db.transaction` each take an alias, `using=None` meaning `\"default\"`, find the connection with `get_connection`, and call the connection's method of the same name; `savepoint_create` calls `BaseDatabaseWrapper.savepoint`, and the deprecated `savepoint` calls `savepoint_create` (`django/db/transaction.py`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    359
+   ],
+   "fingerprint": "d3e0d2dd56cd6158"
+  },
+  {
+   "pointer": "django/db/transaction.py:atomic",
+   "line": 85,
+   "sentence": "`atomic(using=None, savepoint=True, durable=False)` makes an `Atomic` of its three arguments; called with a function in place of an alias, as the bare decorator `@atomic` is, it wraps the function in an `Atomic` for `\"default\"` (`django/db/transaction.py:atomic`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "atomic",
+   "kind": "function",
+   "lines": [
+    329,
+    336
+   ],
+   "fingerprint": "945efcd8e1d1b64c"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 87,
+   "sentence": "`Atomic.__enter__` goes in four steps (`django/db/transaction.py:Atomic.__enter__`):",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.savepoint",
+   "line": 119,
+   "sentence": "`BaseDatabaseWrapper.savepoint` makes a savepoint and returns its name, or returns `None` and sends nothing where `BaseDatabaseWrapper._savepoint_allowed` says no (`django/db/backends/base/base.py:BaseDatabaseWrapper.savepoint`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.savepoint",
+   "kind": "function",
+   "lines": [
+    383,
+    402
+   ],
+   "at": 384,
+   "fingerprint": "6e40affa02a96853"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.savepoint_create_sql",
+   "line": 119,
+   "sentence": "The statement is written by the connection's operations object (`BaseDatabaseWrapper.ops`): `BaseDatabaseOperations.savepoint_create_sql` writes `\"SAVEPOINT\"` and the name quoted by `quote_name`, and its siblings `BaseDatabaseOperations.savepoint_commit_sql` and `BaseDatabaseOperations.savepoint_rollback_sql` write `\"RELEASE SAVEPOINT\"` and `\"ROLLBACK TO SAVEPOINT\"`; none of the four backends overrides them (`django/db/backends/base/operations.py:BaseDatabaseOperations.savepoint_create_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.savepoint_create_sql",
+   "kind": "function",
+   "lines": [
+    438,
+    444
+   ],
+   "fingerprint": "1ea01e588734223b"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._savepoint_allowed",
+   "line": 121,
+   "sentence": "The check is the flag `BaseDatabaseFeatures.uses_savepoints`, one of the connection's features, and autocommit off, a comment saying savepoints cannot be made outside a transaction (`django/db/backends/base/base.py:BaseDatabaseWrapper._savepoint_allowed`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._savepoint_allowed",
+   "kind": "function",
+   "lines": [
+    377,
+    379
+   ],
+   "fingerprint": "b175b2e317a53ef9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._savepoint_allowed",
+   "line": 121,
+   "sentence": "SQLite's asks for `BaseDatabaseWrapper.in_atomic_block` instead, its comment saying that with autocommit on savepoints make no sense, except inside atomic blocks (`django/db/backends/sqlite3/base.py:DatabaseWrapper._savepoint_allowed`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._savepoint_allowed",
+   "kind": "function",
+   "lines": [
+    229,
+    235
+   ],
+   "fingerprint": "b9639383731efaa2"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper._savepoint_commit",
+   "line": 133,
+   "sentence": "Oracle's backend never sends `\"RELEASE SAVEPOINT\"`: its `DatabaseWrapper._savepoint_commit` sends nothing and, where queries are logged, logs a line marked as faked, the comment saying that Oracle cannot release savepoints and that the line keeps the count of queries the same as on the other backends (`django/db/backends/oracle/base.py:DatabaseWrapper._savepoint_commit`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper._savepoint_commit",
+   "kind": "function",
+   "lines": [
+    365,
+    372
+   ],
+   "fingerprint": "9aa235d728e10fa9"
+  },
+  {
+   "pointer": "django/db/transaction.py:savepoint",
+   "line": 135,
+   "sentence": "The release notes of 6.1 deprecate it in favour of `savepoint_create`, and the deprecation timeline removes it in 2028 (`django/db/transaction.py:savepoint`, `docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "savepoint",
+   "kind": "function",
+   "lines": [
+    52,
+    58
+   ],
+   "fingerprint": "d7a03525aa08212b"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 135,
+   "sentence": "The release notes of 6.1 deprecate it in favour of `savepoint_create`, and the deprecation timeline removes it in 2028 (`django/db/transaction.py:savepoint`, `docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 139,
+   "sentence": "`Atomic.__exit__` first takes the block off the stacks: it pops `BaseDatabaseWrapper.atomic_blocks`, and pops the block's entry from `BaseDatabaseWrapper.savepoint_ids` where that stack has one (`django/db/transaction.py:Atomic.__exit__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "docs/topics/db/transactions.txt",
+   "line": 229,
+   "sentence": "Django's documentation says that on PostgreSQL every later statement in it fails until the transaction ends, and that after a `DatabaseError` inside a block the transaction is broken and is rolled back at the block's end (`docs/topics/db/transactions.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/transactions.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    715
+   ],
+   "fingerprint": "fce19bd320802338"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper._execute",
+   "line": 229,
+   "sentence": "Django refuses such statements itself, on every backend: `CursorWrapper._execute`, `CursorWrapper._executemany` and `CursorWrapper.callproc` each call `BaseDatabaseWrapper.validate_no_broken_transaction` before the statement reaches the driver, and while `needs_rollback` is set it raises `TransactionManagementError` from `BaseDatabaseWrapper.rollback_exc` (`django/db/backends/utils.py:CursorWrapper._execute`, `django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper._execute",
+   "kind": "function",
+   "lines": [
+    94,
+    105
+   ],
+   "fingerprint": "7d23debb1b13c6c9"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction",
+   "line": 229,
+   "sentence": "Django refuses such statements itself, on every backend: `CursorWrapper._execute`, `CursorWrapper._executemany` and `CursorWrapper.callproc` each call `BaseDatabaseWrapper.validate_no_broken_transaction` before the statement reaches the driver, and while `needs_rollback` is set it raises `TransactionManagementError` from `BaseDatabaseWrapper.rollback_exc` (`django/db/backends/utils.py:CursorWrapper._execute`, `django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.validate_no_broken_transaction",
+   "kind": "function",
+   "lines": [
+    519,
+    524
+   ],
+   "fingerprint": "69fd85bfecd66e6f"
+  },
+  {
+   "pointer": "django/db/transaction.py:mark_for_rollback_on_error",
+   "line": 255,
+   "sentence": "`mark_for_rollback_on_error` is a context manager that opens nothing: it lets an exception pass through and, on its way, where it is an `Exception` and an atomic block is open, sets `BaseDatabaseWrapper.needs_rollback` and stores the exception as `BaseDatabaseWrapper.rollback_exc` (`django/db/transaction.py:mark_for_rollback_on_error`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "mark_for_rollback_on_error",
+   "kind": "function",
+   "lines": [
+    113,
+    139
+   ],
+   "at": 114,
+   "fingerprint": "833269fbe04c5776"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.update",
+   "line": 255,
+   "sentence": "Its callers are `Model.save_base` for a model without parents, `QuerySet.update`, and `Collector.delete` where it deletes one object that can be deleted fast (`django/db/models/query.py:QuerySet.update`, `django/db/models/deletion.py:Collector.delete`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.update",
+   "kind": "function",
+   "lines": [
+    1436,
+    1476
+   ],
+   "fingerprint": "1af0f8397db76c35"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.delete",
+   "line": 255,
+   "sentence": "Its callers are `Model.save_base` for a model without parents, `QuerySet.update`, and `Collector.delete` where it deletes one object that can be deleted fast (`django/db/models/query.py:QuerySet.update`, `django/db/models/deletion.py:Collector.delete`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.delete",
+   "kind": "function",
+   "lines": [
+    466,
+    552
+   ],
+   "fingerprint": "e04d0d5583b5ecd6"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.set_rollback",
+   "line": 259,
+   "sentence": "`BaseDatabaseWrapper.set_rollback` sets `BaseDatabaseWrapper.needs_rollback` by hand and `BaseDatabaseWrapper.get_rollback` returns it; both raise `TransactionManagementError` outside an atomic block, with the message that the rollback flag does not work outside one (`django/db/backends/base/base.py:BaseDatabaseWrapper.set_rollback`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.set_rollback",
+   "kind": "function",
+   "lines": [
+    502,
+    510
+   ],
+   "fingerprint": "78a0b881b8301abc"
+  },
+  {
+   "pointer": "django/db/transaction.py:set_rollback",
+   "line": 259,
+   "sentence": "The docstring of `django.db.transaction.set_rollback` says what each value is for: `True` makes the innermost enclosing block made with `savepoint=True`, the default, roll back as it exits, without an exception; `False` prevents that rollback, and is to be used only after rolling back to a known-good state, as otherwise the block is broken and data may be corrupted (`django/db/transaction.py:set_rollback`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "set_rollback",
+   "kind": "function",
+   "lines": [
+    98,
+    110
+   ],
+   "fingerprint": "830b9943e6ce69c3"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 274,
+   "sentence": "`atomic(durable=True)` makes a block that must be outermost: `Atomic.__enter__` raises `RuntimeError` where a block is already open, before it changes anything (`django/db/transaction.py:Atomic.__enter__`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._enter_atomics",
+   "line": 294,
+   "sentence": "`TestCase` sets it on the blocks it opens around a class of tests and around each test, so a durable block that code under a test opens directly inside them is let through, and one opened inside another block of the test's code is refused (`django/test/testcases.py:TestCase._enter_atomics`) ([The test framework](../testing.md)).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._enter_atomics",
+   "kind": "function",
+   "lines": [
+    1392,
+    1401
+   ],
+   "at": 1393,
+   "fingerprint": "75520657b16c94f3"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__enter__",
+   "line": 313,
+   "sentence": "An atomic block entered later, with autocommit still off, pretends, as its entry does in that case: `BaseDatabaseWrapper.commit_on_exit` is `False`, and even the outermost block makes a savepoint, unless it was made with `savepoint=False`, and releases it as it ends, leaving the commit of the driver's transaction to the code (`django/db/transaction.py:Atomic.__enter__`, `django/db/transaction.py:Atomic.__exit__`):",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__enter__",
+   "kind": "function",
+   "lines": [
+    195,
+    235
+   ],
+   "fingerprint": "eba32b8e2252527e"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic.__exit__",
+   "line": 313,
+   "sentence": "An atomic block entered later, with autocommit still off, pretends, as its entry does in that case: `BaseDatabaseWrapper.commit_on_exit` is `False`, and even the outermost block makes a savepoint, unless it was made with `savepoint=False`, and releases it as it ends, leaving the commit of the driver's transaction to the code (`django/db/transaction.py:Atomic.__enter__`, `django/db/transaction.py:Atomic.__exit__`):",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic.__exit__",
+   "kind": "function",
+   "lines": [
+    237,
+    326
+   ],
+   "fingerprint": "6501ca352228dcae"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "line": 332,
+   "sentence": "Django's documentation asks the code to end the transaction before it turns autocommit on again, and `BaseDatabaseWrapper.close_if_unusable_or_obsolete` closes a connection whose autocommit differs from its alias's `\"AUTOCOMMIT\"` at a request's start and end (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`) ([Opening and closing a connection](lifecycle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "kind": "function",
+   "lines": [
+    591,
+    616
+   ],
+   "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.make_view_atomic",
+   "line": 336,
+   "sentence": "Where it is `True`, `BaseHandler.make_view_atomic` wraps the view in `atomic` for that alias before calling it, so that a view that returns commits its work and one that raises rolls it back; the handler's side is in [The centre of the chain](../handlers/view.md) (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.make_view_atomic",
+   "kind": "function",
+   "lines": [
+    347,
+    356
+   ],
+   "fingerprint": "b70830155a851958"
+  },
+  {
+   "pointer": "django/db/transaction.py:_non_atomic_requests",
+   "line": 336,
+   "sentence": "`non_atomic_requests` marks a view to be left out, for `\"default\"` when it is used bare and for the alias it is given otherwise: `_non_atomic_requests` wraps the view in a function that carries the set of aliases to leave out, the view's own set with the alias added where the view already has one, so the decorator can be stacked for several aliases (`django/db/transaction.py:_non_atomic_requests`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "_non_atomic_requests",
+   "kind": "function",
+   "lines": [
+    339,
+    350
+   ],
+   "fingerprint": "5ee6f0732dc71723"
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 840 408">
+  <!-- the heads of the three columns -->
+  <text class="strong" x="0" y="16">the blocks</text>
+  <text class="strong" x="230" y="16">sent</text>
+  <text class="strong" x="480" y="16">the connection afterwards</text>
+
+  <!-- the outer block, which holds the other two -->
+  <rect class="box" x="0.5" y="30.5" width="839" height="376" rx="4"/>
+  <text class="name" x="14" y="54">with atomic():<tspan class="quiet" dx="16"># outer</tspan></text>
+  <text x="14" y="76">enter</text>
+  <text class="name" x="230" y="76">BEGIN</text>
+  <text class="name" x="480" y="76">in_atomic_block=True, atomic_blocks=[outer]</text>
+
+  <!-- the inner block: a savepoint -->
+  <rect class="ground" x="20.5" y="90.5" width="799" height="122" rx="4"/>
+  <text class="name" x="34" y="114">with atomic():<tspan class="quiet" dx="16"># inner</tspan></text>
+  <text x="34" y="136">enter</text>
+  <text class="name" x="230" y="136">SAVEPOINT "s(the thread)_x1"</text>
+  <text class="name" x="480" y="136">savepoint_ids=["s(the thread)_x1"]</text>
+  <text x="34" y="158">exit</text>
+  <text class="name" x="230" y="158">RELEASE SAVEPOINT</text>
+  <text class="name" x="480" y="158">savepoint_ids=[]</text>
+  <text x="34" y="180">exit, an exception</text>
+  <text x="230" y="180"><tspan class="name">ROLLBACK TO SAVEPOINT</tspan>,</text>
+  <text x="230" y="198">then <tspan class="name">RELEASE SAVEPOINT</tspan></text>
+  <text class="name" x="480" y="180">savepoint_ids=[]</text>
+
+  <!-- the unsaved block: no savepoint, and a failure only marks the transaction -->
+  <rect class="ground" x="20.5" y="224.5" width="799" height="82" rx="4"/>
+  <text class="name" x="34" y="248">with atomic(savepoint=False):<tspan class="quiet" dx="16"># unsaved</tspan></text>
+  <text x="34" y="270">enter</text>
+  <text class="quiet" x="230" y="270">nothing</text>
+  <text class="name" x="480" y="270">savepoint_ids=[None]</text>
+  <text x="34" y="292">exit, an exception</text>
+  <text class="quiet" x="230" y="292">nothing</text>
+  <text class="name mark" x="480" y="292">needs_rollback=True</text>
+
+  <!-- the outer block's ways out -->
+  <text x="14" y="330">exit</text>
+  <text class="name" x="230" y="330">COMMIT</text>
+  <text class="name" x="480" y="330">in_atomic_block=False, atomic_blocks=[]</text>
+  <text x="14" y="352">exit, an exception</text>
+  <text x="14" y="370">or <tspan class="name mark">needs_rollback</tspan> set</text>
+  <text class="name" x="230" y="352">ROLLBACK</text>
+  <text class="name" x="480" y="352">in_atomic_block=False, needs_rollback=False</text>
+  <text x="14" y="392">then, either way</text>
+  <text class="quiet" x="230" y="392">nothing</text>
+  <text class="name" x="480" y="392">autocommit=True</text>
+</svg>

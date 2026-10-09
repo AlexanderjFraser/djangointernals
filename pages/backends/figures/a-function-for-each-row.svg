@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 470">
+  <!-- three lanes, time running down: Django's Python at the left, set against the right edge of its lane;
+       the driver's two calls as bars; SQLite at the right. An accent arrow is SQLite calling back into Python. -->
+  <text class="strong" x="192" y="14" text-anchor="end">Django</text>
+  <text class="quiet small" x="192" y="32" text-anchor="end">in Python</text>
+  <text class="strong" x="244.5" y="14" text-anchor="middle">the driver</text>
+  <text class="quiet small" x="244.5" y="32" text-anchor="middle"><tspan class="name small">sqlite3</tspan> (C)</text>
+  <text class="strong" x="340" y="14">SQLite</text>
+  <text class="quiet small" x="340" y="32">the library (C)</text>
+  <path class="line" d="M0 44.5 H646"/>
+
+  <!-- the arrows first, so that the bars stand over them -->
+  <!-- the execute: the statement in, two rows read, a call back for each -->
+  <path class="line" d="M200 67.5 H228.5"/>
+  <polygon class="head" points="238.5,67.5 228.5,62.5 228.5,72.5"/>
+  <path class="line" d="M250.5 99.5 H320"/>
+  <polygon class="head" points="330,99.5 320,94.5 320,104.5"/>
+
+  <path class="mark-line" d="M330 151.5 H210"/>
+  <polygon class="head mark" points="200,151.5 210,146.5 210,156.5"/>
+  <path class="line" d="M200 177.5 H320"/>
+  <polygon class="head" points="330,177.5 320,172.5 320,182.5"/>
+
+  <path class="mark-line" d="M330 229.5 H210"/>
+  <polygon class="head mark" points="200,229.5 210,224.5 210,234.5"/>
+  <path class="line" d="M200 255.5 H320"/>
+  <polygon class="head" points="330,255.5 320,250.5 320,260.5"/>
+
+  <path class="line" d="M238.5 287.5 H210"/>
+  <polygon class="head" points="200,287.5 210,282.5 210,292.5"/>
+
+  <!-- the fetch: the rows left read, a call back for each -->
+  <path class="line" d="M200 331.5 H228.5"/>
+  <polygon class="head" points="238.5,331.5 228.5,326.5 228.5,336.5"/>
+  <path class="line" d="M250.5 363.5 H320"/>
+  <polygon class="head" points="330,363.5 320,358.5 320,368.5"/>
+
+  <path class="mark-line" d="M330 389.5 H210"/>
+  <polygon class="head mark" points="200,389.5 210,384.5 210,394.5"/>
+  <path class="line" d="M200 415.5 H320"/>
+  <polygon class="head" points="330,415.5 320,410.5 320,420.5"/>
+
+  <path class="line" d="M238.5 447.5 H210"/>
+  <polygon class="head" points="200,447.5 210,442.5 210,452.5"/>
+
+  <!-- the driver's two calls -->
+  <rect class="box" x="238.5" y="58.5" width="12" height="240" rx="4"/>
+  <rect class="box" x="238.5" y="322.5" width="12" height="136" rx="4"/>
+
+  <!-- Django's side -->
+  <text x="192" y="72" text-anchor="end">the statement</text>
+  <text class="name" x="192" y="156" text-anchor="end">_sqlite_datetime_extract</text>
+  <text x="192" y="182" text-anchor="end">returns 6</text>
+  <text class="name" x="192" y="234" text-anchor="end">_sqlite_datetime_extract</text>
+  <text x="192" y="260" text-anchor="end">returns 3</text>
+  <text x="192" y="336" text-anchor="end">fetch the rows</text>
+  <text class="name" x="192" y="394" text-anchor="end">_sqlite_datetime_extract</text>
+  <text x="192" y="420" text-anchor="end">returns 6, 4, 4</text>
+
+  <!-- the driver's side -->
+  <text class="name" x="262" y="72">sqlite3.Cursor.execute</text>
+  <text class="quiet small" x="290" y="93.5" text-anchor="middle">runs</text>
+  <text x="262" y="292">execute returns</text>
+  <text class="name" x="262" y="336">sqlite3.Cursor.fetchmany</text>
+  <text x="262" y="452">the one row that matched: Bram</text>
+
+  <!-- SQLite's side -->
+  <text class="name" x="340" y="104">WHERE django_datetime_extract(...) = 3</text>
+  <text x="340" y="130">reads a row: <tspan class="name">'2011-06-01 08:00:00'</tspan></text>
+  <text x="340" y="156">calls back</text>
+  <text x="340" y="182">6 = 3? no</text>
+  <text x="340" y="208">reads a row: <tspan class="name">'2026-03-14 17:30:00'</tspan></text>
+  <text x="340" y="234">calls back</text>
+  <text x="340" y="260">3 = 3? yes: the first row</text>
+  <text x="340" y="368">reads the three rows left</text>
+  <text x="340" y="394">calls back, once for each</text>
+  <text x="340" y="420">none is 3</text>
+</svg>

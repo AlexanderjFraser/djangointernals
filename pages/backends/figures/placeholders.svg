@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 345">
+  <!-- three stages down the page: the statement and parameters as Oracle's compiler wrote them, as
+       _fix_for_params leaves them, and what _param_generator hands the driver; the placeholders are in
+       semibold, and the value given twice, its two places and its one name are in the accent -->
+
+  <!-- what the compiler wrote -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="104" rx="4"/>
+  <text class="quiet small" x="14" y="22">what Oracle's compiler wrote for two ports</text>
+  <text class="name" x="14" y="46">INSERT INTO "FLEET_PORT" ("NAME", "COUNTRY")</text>
+  <text class="name" x="14" y="66">SELECT * FROM (SELECT <tspan class="strong">%s</tspan> col_0, <tspan class="strong mark">%s</tspan> col_1 UNION ALL SELECT <tspan class="strong">%s</tspan>, <tspan class="strong mark">%s</tspan>)</text>
+  <text class="name" x="14" y="90">('Hull', <tspan class="mark">'England'</tspan>, 'Whitby', <tspan class="mark">'England'</tspan>)</text>
+
+  <!-- _fix_for_params, as execute calls it -->
+  <path class="line" d="M24 105 V150.5"/>
+  <polygon class="head" points="24,160.5 19,150.5 29,150.5"/>
+  <text class="name" x="40" y="128">FormatStylePlaceholderCursor._fix_for_params</text>
+  <text class="quiet small" x="40" y="146">with <tspan class="name small">unify_by_values=True</tspan>, as <tspan class="name small">execute</tspan> calls it</text>
+
+  <!-- what it leaves -->
+  <rect class="ground" x="0.5" y="160.5" width="645" height="82" rx="4"/>
+  <text class="name" x="14" y="184">INSERT INTO "FLEET_PORT" ("NAME", "COUNTRY")</text>
+  <text class="name" x="14" y="204">SELECT * FROM (SELECT <tspan class="strong">:arg0</tspan> col_0, <tspan class="strong mark">:arg1</tspan> col_1 UNION ALL SELECT <tspan class="strong">:arg2</tspan>, <tspan class="strong mark">:arg1</tspan>)</text>
+  <text class="name" x="14" y="228">{':arg0': an OracleParam, <tspan class="mark">':arg1'</tspan>: an OracleParam, ':arg2': an OracleParam}</text>
+
+  <!-- _param_generator -->
+  <path class="line" d="M24 243 V274.5"/>
+  <polygon class="head" points="24,284.5 19,274.5 29,274.5"/>
+  <text class="name" x="40" y="268">FormatStylePlaceholderCursor._param_generator</text>
+
+  <!-- what the driver's cursor would be handed -->
+  <rect class="ground" x="0.5" y="284.5" width="645" height="60" rx="4"/>
+  <text class="quiet small" x="14" y="306">what the driver's cursor would be handed with that statement</text>
+  <text class="name" x="14" y="330">{':arg0': 'Hull', <tspan class="mark">':arg1': 'England'</tspan>, ':arg2': 'Whitby'}</text>
+</svg>

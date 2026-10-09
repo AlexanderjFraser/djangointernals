@@ -101,7 +101,7 @@ Ship._meta.get_field('tonnage').__reduce__()[0].__name__, Ship._meta.get_field('
 
 `Field.get_internal_type`, in the base class, returns the name of the field's class. `CharField`, like other field classes, declares the method again, to return the string `"CharField"` whatever the class of the object, and the difference matters to a class built on it: a project's subclass of `CharField` answers `"CharField"` without doing anything, and gets the column its parent gets. The comment in `db_type` sets out the two ways a field class has of choosing its column: return, from `get_internal_type`, the name of the built-in class it most resembles, or override `db_type` and write the type out.
 
-A check for the column is found in the same way, by the internal type in a dictionary of the backend's (`Field.db_check`, from `BaseDatabaseWrapper.data_type_check_constraints`), and the schema editor asks for the two together, through `Field.db_parameters`. So are words that follow the type (`Field.db_type_suffix`, from `BaseDatabaseWrapper.data_types_suffix`) and the type to name in a `Cast` where that differs (`Field.cast_db_type`, from `BaseDatabaseOperations.cast_data_types`). The format strings are filled from `Field.db_type_parameters`, the field's `__dict__` ([Database backends](../backends.md)).
+A check for the column is found in the same way, by the internal type in a dictionary of the backend's (`Field.db_check`, from `BaseDatabaseWrapper.data_type_check_constraints`), and the schema editor asks for the two together, through `Field.db_parameters`. So are words that follow the type (`Field.db_type_suffix`, from `BaseDatabaseWrapper.data_types_suffix`) and the type to name in a `Cast` where that differs (`Field.cast_db_type`, from `BaseDatabaseOperations.cast_data_types`). The format strings are filled from `Field.db_type_parameters`, the field's `__dict__` ([Column types: from a field to a column](../backends/column-types.md)).
 
 `Field.rel_db_type` answers a different question, the type for a column of another table that points at this field. In the base class that is the field's own type, and an automatic key answers with the type of the plain integer class of its size (`django/db/models/fields/__init__.py:BigAutoField.rel_db_type`).
 
@@ -261,7 +261,7 @@ Sailor._meta.get_field('signed_on').get_db_converters(connection), hasattr(model
 models.JSONField().get_db_converters(connection)[0].__qualname__, hasattr(models.JSONField, 'from_db_value')  ->  ('JSONField.from_db_value', True)
 ```
 
-A field class can also take part by overriding `get_db_converters`, as `DurationField` and `ForeignKey` do, each to add a function for backends that need it. The rest of the conversion on the way out is the backend's own, chosen by the field's internal type ([Database backends](../backends.md)).
+A field class can also take part by overriding `get_db_converters`, as `DurationField` and `ForeignKey` do, each to add a function for backends that need it. The rest of the conversion on the way out is the backend's own, chosen by the field's internal type ([Values in and out: adapters, converters and time zones](../backends/values.md)).
 
 ### `Field.to_python`
 

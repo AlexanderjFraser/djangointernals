@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 655">
+  <!-- a sequence down the page, from the ORM to the database; each layer a box, the arrow between
+       two layers at the left, labelled where it is a lookup or a call -->
+
+  <!-- the ORM -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="56" rx="4"/>
+  <text class="strong" x="14" y="23">the ORM</text>
+  <text x="14" y="45">a statement with <tspan class="name">"%s"</tspan> for each parameter, and Python values</text>
+
+  <path class="line" d="M40 57 V76.5"/>
+  <polygon class="head" points="40,86.5 35,76.5 45,76.5"/>
+
+  <!-- the handler -->
+  <rect class="box" x="0.5" y="86.5" width="645" height="56" rx="4"/>
+  <text class="name strong" x="14" y="109">django.db.connections</text>
+  <text x="14" y="131">a <tspan class="name">ConnectionHandler</tspan>: one connection per alias, per thread, made on first use</text>
+
+  <path class="line" d="M40 143 V162.5"/>
+  <polygon class="head" points="40,172.5 35,162.5 45,162.5"/>
+  <text class="name" x="56" y="162">["default"]</text>
+
+  <!-- the connection, which the figure is about -->
+  <rect class="mark-box" x="0.5" y="172.5" width="645" height="158" rx="4"/>
+  <text x="14" y="196"><tspan class="strong">the connection</tspan>: the backend's <tspan class="name">DatabaseWrapper</tspan><tspan class="quiet"> (<tspan class="name">BaseDatabaseWrapper</tspan> underneath)</tspan></text>
+
+  <!-- its helper objects -->
+  <text class="name" x="28" y="224">.ops  .features  .introspection</text>
+  <text class="name" x="28" y="244">.creation  .client  .validation</text>
+  <path class="line" d="M288 212 V248"/>
+  <text x="300" y="235">made with the connection</text>
+  <text class="name" x="28" y="272">.schema_editor()</text>
+  <text x="300" y="272">made when asked for</text>
+
+  <!-- the driver's connection -->
+  <text class="name" x="28" y="300">.connection</text>
+  <text x="300" y="300">the driver's connection: <tspan class="name">None</tspan> until a cursor,</text>
+  <text x="300" y="318">or the state of autocommit, is first wanted</text>
+
+  <path class="line" d="M40 331 V350.5"/>
+  <polygon class="head" points="40,360.5 35,350.5 45,350.5"/>
+  <text class="name" x="56" y="350">cursor()</text>
+
+  <!-- Django's cursor -->
+  <rect class="box" x="0.5" y="360.5" width="645" height="56" rx="4"/>
+  <text x="14" y="383"><tspan class="strong">Django's cursor</tspan>: <tspan class="name">CursorWrapper</tspan></text>
+  <text x="14" y="405">refuses a statement in a broken transaction; execute wrappers; errors translated</text>
+
+  <path class="line" d="M40 417 V436.5"/>
+  <polygon class="head" points="40,446.5 35,436.5 45,436.5"/>
+
+  <!-- the backend's own cursor, where the backend has one: dashed, as not every backend does -->
+  <rect class="box dashed" x="0.5" y="446.5" width="645" height="56" rx="4"/>
+  <text x="14" y="469"><tspan class="strong">the backend's own cursor class</tspan>, where it has one</text>
+  <text x="14" y="491">on SQLite and Oracle, Django's <tspan class="name">"%s"</tspan> rewritten as the driver's placeholders</text>
+
+  <path class="line" d="M40 503 V522.5"/>
+  <polygon class="head" points="40,532.5 35,522.5 45,522.5"/>
+
+  <!-- the driver's cursor -->
+  <rect class="ground" x="0.5" y="532.5" width="645" height="56" rx="4"/>
+  <text x="14" y="555"><tspan class="strong">the driver's cursor</tspan> (<tspan class="name">sqlite3</tspan>, <tspan class="name">psycopg</tspan>, <tspan class="name">MySQLdb</tspan>, <tspan class="name">oracledb</tspan>)</text>
+  <text x="14" y="577">its own placeholders, and its own conversions of types</text>
+
+  <path class="line" d="M40 589 V608.5"/>
+  <polygon class="head" points="40,618.5 35,608.5 45,608.5"/>
+
+  <!-- the database -->
+  <rect class="ground" x="0.5" y="618.5" width="645" height="36" rx="4"/>
+  <text class="strong" x="14" y="641">the database</text>
+</svg>

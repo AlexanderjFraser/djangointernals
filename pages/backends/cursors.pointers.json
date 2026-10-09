@@ -1,0 +1,826 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "cursors.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._cursor",
+   "line": 13,
+   "sentence": "`_cursor` gives the health check its turn, opens the driver's connection if none is open ([Opening and closing a connection](lifecycle.md)), and then, inside the connection's translation of errors, asks the backend's `BaseDatabaseWrapper.create_cursor` for the driver's cursor and hands that to `BaseDatabaseWrapper._prepare_cursor` (`django/db/backends/base/base.py:BaseDatabaseWrapper._cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._cursor",
+   "kind": "function",
+   "lines": [
+    294,
+    298
+   ],
+   "fingerprint": "12c2eba5a8954111"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.create_cursor",
+   "line": 15,
+   "sentence": "SQLite's is a `SQLiteCursorWrapper`, a subclass of sqlite3's cursor class (`django/db/backends/sqlite3/base.py:DatabaseWrapper.create_cursor`); MySQL's is a second `CursorWrapper`, the backend's own, which holds a cursor of MySQLdb's and reclassifies some of its errors (`django/db/backends/mysql/base.py:DatabaseWrapper.create_cursor`); Oracle's is a `FormatStylePlaceholderCursor`, which holds a cursor of the driver's (`django/db/backends/oracle/base.py:DatabaseWrapper.create_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.create_cursor",
+   "kind": "function",
+   "lines": [
+    217,
+    218
+   ],
+   "fingerprint": "9cbf4deac8d7276d"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.create_cursor",
+   "line": 15,
+   "sentence": "SQLite's is a `SQLiteCursorWrapper`, a subclass of sqlite3's cursor class (`django/db/backends/sqlite3/base.py:DatabaseWrapper.create_cursor`); MySQL's is a second `CursorWrapper`, the backend's own, which holds a cursor of MySQLdb's and reclassifies some of its errors (`django/db/backends/mysql/base.py:DatabaseWrapper.create_cursor`); Oracle's is a `FormatStylePlaceholderCursor`, which holds a cursor of the driver's (`django/db/backends/oracle/base.py:DatabaseWrapper.create_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper.create_cursor",
+   "kind": "function",
+   "lines": [
+    278,
+    281
+   ],
+   "at": 279,
+   "fingerprint": "6c8bfdc7b6d50f09"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.create_cursor",
+   "line": 15,
+   "sentence": "SQLite's is a `SQLiteCursorWrapper`, a subclass of sqlite3's cursor class (`django/db/backends/sqlite3/base.py:DatabaseWrapper.create_cursor`); MySQL's is a second `CursorWrapper`, the backend's own, which holds a cursor of MySQLdb's and reclassifies some of its errors (`django/db/backends/mysql/base.py:DatabaseWrapper.create_cursor`); Oracle's is a `FormatStylePlaceholderCursor`, which holds a cursor of the driver's (`django/db/backends/oracle/base.py:DatabaseWrapper.create_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.create_cursor",
+   "kind": "function",
+   "lines": [
+    354,
+    356
+   ],
+   "at": 355,
+   "fingerprint": "262a11f1f329dafc"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.create_cursor",
+   "line": 15,
+   "sentence": "PostgreSQL's is a cursor declared on the server when it is given a name, and otherwise one of the class chosen as the connection opened, under psycopg 3 the backend's `Cursor`, or its `ServerBindingCursor` where `\"server_side_binding\"` is `True` (`django/db/backends/postgresql/base.py:DatabaseWrapper.create_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.create_cursor",
+   "kind": "function",
+   "lines": [
+    419,
+    452
+   ],
+   "at": 420,
+   "fingerprint": "0851baab2a468c37"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper.__init__",
+   "line": 17,
+   "sentence": "Django's cursor keeps the driver's cursor as `CursorWrapper.cursor`, beside the connection as `CursorWrapper.db` (`django/db/backends/utils.py:CursorWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    18,
+    20
+   ],
+   "fingerprint": "f707dd12b380b2a6"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._prepare_cursor",
+   "line": 19,
+   "sentence": "`_prepare_cursor` checks that this thread may use the connection, and then wraps (`django/db/backends/base/base.py:BaseDatabaseWrapper._prepare_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._prepare_cursor",
+   "kind": "function",
+   "lines": [
+    283,
+    292
+   ],
+   "fingerprint": "6ff7386cb5704ea7"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper._execute_with_wrappers",
+   "line": 46,
+   "sentence": "`_execute_with_wrappers` makes a dictionary of context, the connection under `\"connection\"` and Django's cursor under `\"cursor\"`, puts the connection's execute wrappers, callables installed to stand around its statements, around the method that does the work, and calls the result (`django/db/backends/utils.py:CursorWrapper._execute_with_wrappers`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper._execute_with_wrappers",
+   "kind": "function",
+   "lines": [
+    88,
+    92
+   ],
+   "fingerprint": "647abe2aaa8dc82f"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper._execute",
+   "line": 48,
+   "sentence": "`_execute` is the innermost layer (`django/db/backends/utils.py:CursorWrapper._execute`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper._execute",
+   "kind": "function",
+   "lines": [
+    94,
+    105
+   ],
+   "fingerprint": "7d23debb1b13c6c9"
+  },
+  {
+   "pointer": "docs/ref/applications.txt",
+   "line": 61,
+   "sentence": "Django's documentation gives the reason: such a query runs as every management command starts, slowing it, and may cache stale data or fail where migrations are pending (`docs/ref/applications.txt`).",
+   "tree": "django",
+   "path": "docs/ref/applications.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    553
+   ],
+   "fingerprint": "8267965c77c4bc34"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.disable_constraint_checking",
+   "line": 99,
+   "sentence": "On SQLite, then, a fetch chained onto `CursorWrapper.execute` is the driver's own method, outside Django's translation of errors, as in SQLite's `DatabaseWrapper.disable_constraint_checking` (`django/db/backends/sqlite3/base.py:DatabaseWrapper.disable_constraint_checking`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.disable_constraint_checking",
+   "kind": "function",
+   "lines": [
+    249,
+    256
+   ],
+   "fingerprint": "ad96dfdcc3ae0222"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.__init__",
+   "line": 103,
+   "sentence": "It is called with five arguments, the next layer inward, the statement, its parameters, whether it is an `executemany`, and the dictionary of context, and is expected to call the next layer with the other four and return what that returns; so it may look, change the statement or its parameters, or not call the next layer at all (`django/db/backends/base/base.py:BaseDatabaseWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    53,
+    119
+   ],
+   "fingerprint": "274f00b243041080"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.execute_wrapper",
+   "line": 103,
+   "sentence": "`BaseDatabaseWrapper.execute_wrapper` is a context manager that appends a wrapper to the list and, as it is left, pops the last one: the list is a stack, kept in order by the nesting of `with` statements (`django/db/backends/base/base.py:BaseDatabaseWrapper.execute_wrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.execute_wrapper",
+   "kind": "function",
+   "lines": [
+    768,
+    778
+   ],
+   "at": 769,
+   "fingerprint": "182a95b95f728f70"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper._execute_with_wrappers",
+   "line": 105,
+   "sentence": "It takes the list in reverse and binds each wrapper to the layer inside it, so the wrapper installed first is outermost and the one installed last is handed `CursorWrapper._execute` or `CursorWrapper._executemany` itself (`django/db/backends/utils.py:CursorWrapper._execute_with_wrappers`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper._execute_with_wrappers",
+   "kind": "function",
+   "lines": [
+    88,
+    92
+   ],
+   "fingerprint": "647abe2aaa8dc82f"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection",
+   "line": 148,
+   "sentence": "It does not see `CursorWrapper.callproc`, which calls no wrapper; a commit or a rollback, which are calls on the driver's connection; or what a backend sends to the driver directly as a connection opens, such as SQLite's first `\"PRAGMA\"` statements and PostgreSQL's setting of the time zone (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection`) ([Opening and closing a connection](lifecycle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    203,
+    215
+   ],
+   "at": 204,
+   "fingerprint": "1e3f6e43a55de133"
+  },
+  {
+   "pointer": "django/db/utils.py",
+   "line": 152,
+   "sentence": "`django/db/utils.py` declares Django's copy of PEP 249's exceptions, all but its warning class: `Error`; under it `InterfaceError` and `DatabaseError`; and under `DatabaseError` those that name a kind of failure, `DataError`, `OperationalError`, `IntegrityError`, `InternalError`, `ProgrammingError` and `NotSupportedError`.",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    282
+   ],
+   "fingerprint": "fd635f28832f6d0f"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 152,
+   "sentence": "`django.db` exports them all (`django/db/__init__.py`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 152,
+   "sentence": "PEP 249 has a driver's module define classes of the same names, and the translation depends on it: the backend's `DatabaseWrapper` names its driver's module as its class attribute `Database`, which `DatabaseErrorWrapper.__init__` requires to define PEP 249's exceptions (`django/db/backends/sqlite3/base.py:DatabaseWrapper`, `django/db/utils.py:DatabaseErrorWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/db/utils.py:DatabaseErrorWrapper.__init__",
+   "line": 152,
+   "sentence": "PEP 249 has a driver's module define classes of the same names, and the translation depends on it: the backend's `DatabaseWrapper` names its driver's module as its class attribute `Database`, which `DatabaseErrorWrapper.__init__` requires to define PEP 249's exceptions (`django/db/backends/sqlite3/base.py:DatabaseWrapper`, `django/db/utils.py:DatabaseErrorWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "DatabaseErrorWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    59,
+    65
+   ],
+   "fingerprint": "466aa78c8d05ac0d"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.wrap_database_errors",
+   "line": 154,
+   "sentence": "`BaseDatabaseWrapper.wrap_database_errors` is the translator: a `DatabaseErrorWrapper` made once for each connection, used as a context manager around a call into the driver and as a decorator of a method of the driver's (`django/db/backends/base/base.py:BaseDatabaseWrapper.wrap_database_errors`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.wrap_database_errors",
+   "kind": "function",
+   "lines": [
+    661,
+    667
+   ],
+   "at": 662,
+   "fingerprint": "713ca84634837bf2"
+  },
+  {
+   "pointer": "django/db/utils.py:DatabaseErrorWrapper.__exit__",
+   "line": 154,
+   "sentence": "At the first that the exception is an instance of, it makes Django's class with the same arguments and raises it with the driver's traceback, from the driver's exception, which becomes its `__cause__` (`django/db/utils.py:DatabaseErrorWrapper.__exit__`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "DatabaseErrorWrapper.__exit__",
+   "kind": "function",
+   "lines": [
+    73,
+    94
+   ],
+   "fingerprint": "e9acaa10060a41fa"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "line": 158,
+   "sentence": "Where it is set, the connection is asked whether it still works at the next start or end of a request, and closed if it does not (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`) ([Opening and closing a connection](lifecycle.md)); a commit or a rollback that succeeds clears it.",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "kind": "function",
+   "lines": [
+    591,
+    616
+   ],
+   "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._commit",
+   "line": 184,
+   "sentence": "The same translator stands around the calls that open the driver's connection, make a cursor, roll back, close and change autocommit, and around a commit on every backend but Oracle (`django/db/backends/base/base.py:BaseDatabaseWrapper._commit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._commit",
+   "kind": "function",
+   "lines": [
+    300,
+    303
+   ],
+   "fingerprint": "95e69c0a3b060409"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:CursorWrapper.execute",
+   "line": 184,
+   "sentence": "MySQL's `CursorWrapper` raises Django's `IntegrityError` where MySQLdb raises `OperationalError` with a code in `CursorWrapper.codes_for_integrityerror`, those of a column that cannot be null, an unsigned value out of range and a check constraint, which the comment says seem misclassified (`django/db/backends/mysql/base.py:CursorWrapper.execute`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "CursorWrapper.execute",
+   "kind": "function",
+   "lines": [
+    75,
+    84
+   ],
+   "fingerprint": "1b2e8e5c719298d5"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:wrap_oracle_errors",
+   "line": 184,
+   "sentence": "Oracle's `wrap_oracle_errors` does the same for a transaction rolled back by a broken foreign key or a duplicate key, around its cursor's statements and, in the translator's place, around its commit, so that any other exception of a commit on Oracle leaves untranslated (`django/db/backends/oracle/base.py:wrap_oracle_errors`, `django/db/backends/oracle/base.py:DatabaseWrapper._commit`) ([MySQL and MariaDB](mysql.md), [Oracle](oracle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "wrap_oracle_errors",
+   "kind": "function",
+   "lines": [
+    71,
+    94
+   ],
+   "at": 72,
+   "fingerprint": "05818e0da1542f58"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper._commit",
+   "line": 184,
+   "sentence": "Oracle's `wrap_oracle_errors` does the same for a transaction rolled back by a broken foreign key or a duplicate key, around its cursor's statements and, in the translator's place, around its commit, so that any other exception of a commit on Oracle leaves untranslated (`django/db/backends/oracle/base.py:wrap_oracle_errors`, `django/db/backends/oracle/base.py:DatabaseWrapper._commit`) ([MySQL and MariaDB](mysql.md), [Oracle](oracle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper._commit",
+   "kind": "function",
+   "lines": [
+    358,
+    361
+   ],
+   "fingerprint": "d4ddf9c8df6a0c26"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper",
+   "line": 188,
+   "sentence": "`CursorWrapper.callproc`, `CursorWrapper.execute` and `CursorWrapper.executemany` are methods of Django's cursor (`django/db/backends/utils.py:CursorWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper",
+   "kind": "class",
+   "lines": [
+    17,
+    114
+   ],
+   "fingerprint": "e2f37165f49affd0"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper.__getattr__",
+   "line": 188,
+   "sentence": "`CursorWrapper.__getattr__` hands on everything else from the driver's cursor: those that `CursorWrapper.WRAP_ERROR_ATTRS` names, `\"fetchone\"`, `\"fetchmany\"`, `\"fetchall\"` and `\"nextset\"`, wrapped in the connection's translation of errors, and the rest, the count of rows, the description of the columns, the method that closes it, as the driver has it (`django/db/backends/utils.py:CursorWrapper.__getattr__`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper.__getattr__",
+   "kind": "function",
+   "lines": [
+    30,
+    35
+   ],
+   "fingerprint": "4ec7d6f971eb1b8a"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper.__exit__",
+   "line": 190,
+   "sentence": "`CursorWrapper.__enter__` returns it, and `CursorWrapper.__exit__` closes the driver's cursor and ignores any exception of the driver's that the close raises; the comment gives both reasons, that closing rather than passing the `with` through to the driver's cursor avoids behaviour peculiar to a backend, and that errors in cleanup code are not useful (`django/db/backends/utils.py:CursorWrapper.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper.__exit__",
+   "kind": "function",
+   "lines": [
+    44,
+    51
+   ],
+   "fingerprint": "fcf1fcef10b9a78a"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper.callproc",
+   "line": 192,
+   "sentence": "Then it warns before the apps are ready, refuses in a broken transaction, and calls the driver's method inside the translation (`django/db/backends/utils.py:CursorWrapper.callproc`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper.callproc",
+   "kind": "function",
+   "lines": [
+    56,
+    76
+   ],
+   "fingerprint": "0fa75fc0b0df1d22"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:CursorMixin.callproc",
+   "line": 192,
+   "sentence": "Under psycopg 3 the PostgreSQL backend's cursor classes supply `callproc` themselves, as a `\"SELECT\"` from the function (`django/db/backends/postgresql/base.py:CursorMixin.callproc`) ([PostgreSQL](postgresql.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "CursorMixin.callproc",
+   "kind": "function",
+   "lines": [
+    570,
+    584
+   ],
+   "fingerprint": "7911763ffabdd888"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pattern_ops",
+   "line": 196,
+   "sentence": "Where there are parameters, a percent sign meant literally is written twice, `\"%%\"`, as in the patterns a backend keeps for `\"LIKE\"`, PostgreSQL's `\"LIKE '%%' || {}\"` among them (`django/db/backends/postgresql/base.py:DatabaseWrapper.pattern_ops`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.pattern_ops",
+   "kind": "assignment",
+   "lines": [
+    172,
+    179
+   ],
+   "fingerprint": "9656f8daa7db2d01"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:SQLiteCursorWrapper.convert_query",
+   "line": 198,
+   "sentence": "SQLite's `SQLiteCursorWrapper.convert_query` writes each `\"%s\"` not preceded by a percent sign as `\"?\"` and each `\"%%\"` as `\"%\"`, and with a dictionary writes each `\"%(name)s\"` as `\":name\"` (`django/db/backends/sqlite3/base.py:SQLiteCursorWrapper.convert_query`); [SQLite](sqlite.md).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "SQLiteCursorWrapper.convert_query",
+   "kind": "function",
+   "lines": [
+    372,
+    378
+   ],
+   "fingerprint": "3adfff69c0023651"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.get_connection_params",
+   "line": 199,
+   "sentence": "PostgreSQL's backend rewrites nothing, since psycopg 3 and psycopg2 both take `\"%s\"` and `\"%(name)s\"`; `Cursor` has the driver write the values into the statement before sending it, and `ServerBindingCursor` has it send them beside the statement for the server to bind (`django/db/backends/postgresql/base.py:DatabaseWrapper.get_connection_params`); [PostgreSQL](postgresql.md).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    250,
+    315
+   ],
+   "fingerprint": "fee1304f1abbcd36"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:CursorWrapper.execute",
+   "line": 200,
+   "sentence": "MySQL's backend rewrites nothing, since MySQLdb takes the same two styles and writes the values, quoted, into the statement before sending it (`django/db/backends/mysql/base.py:CursorWrapper.execute`); [MySQL and MariaDB](mysql.md).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "CursorWrapper.execute",
+   "kind": "function",
+   "lines": [
+    75,
+    84
+   ],
+   "fingerprint": "1b2e8e5c719298d5"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:FormatStylePlaceholderCursor._fix_for_params",
+   "line": 201,
+   "sentence": "Oracle's `FormatStylePlaceholderCursor._fix_for_params` writes the placeholders of a sequence as `\":arg0\"`, `\":arg1\"` and on, giving equal values of one type a single placeholder in an `execute`, and each `\"%(name)s\"` as `\":name\"` (`django/db/backends/oracle/base.py:FormatStylePlaceholderCursor._fix_for_params`); [Oracle](oracle.md).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "FormatStylePlaceholderCursor._fix_for_params",
+   "kind": "function",
+   "lines": [
+    587,
+    628
+   ],
+   "fingerprint": "a72b2596fb56624a"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper._execute",
+   "line": 215,
+   "sentence": "Given `None`, `CursorWrapper._execute` sends the statement alone, and SQLite's and Oracle's cursors pass it on without reading its percent signs, as do the drivers of PostgreSQL and MySQL, so `\"%%\"` reaches the database as two characters (`django/db/backends/utils.py:CursorWrapper._execute`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper._execute",
+   "kind": "function",
+   "lines": [
+    94,
+    105
+   ],
+   "fingerprint": "7d23debb1b13c6c9"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorDebugWrapper.debug_sql",
+   "line": 219,
+   "sentence": "`CursorDebugWrapper` is a `CursorWrapper` whose `execute` and `executemany` run the parent's inside `CursorDebugWrapper.debug_sql`, a context manager that reads a monotonic clock before and after and writes its record in a `finally`, so a statement that raised is recorded with the rest (`django/db/backends/utils.py:CursorDebugWrapper.debug_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorDebugWrapper.debug_sql",
+   "kind": "function",
+   "lines": [
+    128,
+    163
+   ],
+   "at": 129,
+   "fingerprint": "5a50e7f00f0f5de8"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.last_executed_query",
+   "line": 244,
+   "sentence": "The base class's `last_executed_query` returns the statement and its parameters as text, in the form `\"QUERY = %r - PARAMS = %r\"` (`django/db/backends/base/operations.py:BaseDatabaseOperations.last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    287,
+    309
+   ],
+   "fingerprint": "0bcee7ad15dcc4e5"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.last_executed_query",
+   "line": 244,
+   "sentence": "MySQL's returns the statement MySQLdb sent, values and all, and PostgreSQL's the one psycopg sent where the values are bound on the client, or one psycopg composes where they are bound on the server (`django/db/backends/mysql/operations.py:DatabaseOperations.last_executed_query`, `django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    161,
+    166
+   ],
+   "fingerprint": "01f436a9c07f7e48"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query",
+   "line": 244,
+   "sentence": "MySQL's returns the statement MySQLdb sent, values and all, and PostgreSQL's the one psycopg sent where the values are bound on the client, or one psycopg composes where they are bound on the server (`django/db/backends/mysql/operations.py:DatabaseOperations.last_executed_query`, `django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    300,
+    309
+   ],
+   "more": [
+    [
+     313,
+     318
+    ]
+   ],
+   "fingerprint": "dcd6aab08b8f9691"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.last_executed_query",
+   "line": 244,
+   "sentence": "SQLite's puts the quoted values into the statement, and returns the statement as it is where the parameters are `None` or empty; Oracle's takes the driver's statement, which keeps `\":arg0\"` and the rest, and replaces each with its value's text (`django/db/backends/sqlite3/operations.py:DatabaseOperations.last_executed_query`, `django/db/backends/oracle/operations.py:DatabaseOperations.last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    155,
+    171
+   ],
+   "fingerprint": "951edc3f9aaacd60"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.last_executed_query",
+   "line": 244,
+   "sentence": "SQLite's puts the quoted values into the statement, and returns the statement as it is where the parameters are `None` or empty; Oracle's takes the driver's statement, which keeps `\":arg0\"` and the rest, and replaces each with its value's text (`django/db/backends/sqlite3/operations.py:DatabaseOperations.last_executed_query`, `django/db/backends/oracle/operations.py:DatabaseOperations.last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    328,
+    350
+   ],
+   "fingerprint": "22cc68d040e2bad2"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.queries",
+   "line": 246,
+   "sentence": "`BaseDatabaseWrapper.queries` returns a copy as a list, and warns where the log is full (`django/db/backends/base/base.py:BaseDatabaseWrapper.queries`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.queries",
+   "kind": "function",
+   "lines": [
+    173,
+    181
+   ],
+   "at": 174,
+   "fingerprint": "a173853039eb9b79"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 246,
+   "sentence": "`reset_queries` empties the log of every connection this thread has made, and `django/db/__init__.py` connects it to `request_started`, so that with `settings.DEBUG` on a connection's log holds the statements since the current request began (`django/db/__init__.py:reset_queries`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/__init__.py:reset_queries",
+   "line": 246,
+   "sentence": "`reset_queries` empties the log of every connection this thread has made, and `django/db/__init__.py` connects it to `request_started`, so that with `settings.DEBUG` on a connection's log holds the statements since the current request began (`django/db/__init__.py:reset_queries`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": "reset_queries",
+   "kind": "function",
+   "lines": [
+    47,
+    49
+   ],
+   "fingerprint": "ac1a034b891429d6"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:debug_transaction",
+   "line": 267,
+   "sentence": "A commit, a rollback and turning autocommit off are not statements through a cursor but calls on the driver's connection, which `debug_transaction` records in `queries_log` and to the logger as `\"COMMIT\"`, `\"ROLLBACK\"` and `\"BEGIN\"`, where `queries_logged` holds as they end; `BaseDatabaseWrapper._commit`, `BaseDatabaseWrapper._rollback` and `BaseDatabaseWrapper.set_autocommit` use it (`django/db/backends/utils.py:debug_transaction`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "debug_transaction",
+   "kind": "function",
+   "lines": [
+    166,
+    192
+   ],
+   "at": 167,
+   "fingerprint": "e98489c2cebdaf39"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._savepoint",
+   "line": 267,
+   "sentence": "A savepoint is a statement through a cursor, as on SQLite is the `\"BEGIN\"` of an atomic block, and the debug cursor records them (`django/db/backends/base/base.py:BaseDatabaseWrapper._savepoint`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._savepoint",
+   "kind": "function",
+   "lines": [
+    365,
+    367
+   ],
+   "fingerprint": "3998283b92355f05"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper._savepoint_commit",
+   "line": 288,
+   "sentence": "Oracle, which does not release savepoints, appends a line marked as faked to `queries_log` where the release would be, when `queries_logged` holds (`django/db/backends/oracle/base.py:DatabaseWrapper._savepoint_commit`) ([Transactions: autocommit, `atomic` and savepoints](transactions.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper._savepoint_commit",
+   "kind": "function",
+   "lines": [
+    365,
+    372
+   ],
+   "fingerprint": "9aa235d728e10fa9"
+  },
+  {
+   "pointer": "docs/ref/logging.txt",
+   "line": 290,
+   "sentence": "Django's documentation says SQL logging is enabled only when `settings.DEBUG` is true (`docs/ref/logging.txt`); the code's condition is `queries_logged`, which `force_debug_cursor` makes true as well.",
+   "tree": "django",
+   "path": "docs/ref/logging.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    473
+   ],
+   "fingerprint": "019119a1512c5f6c"
+  },
+  {
+   "pointer": "django/test/utils.py:CaptureQueriesContext",
+   "line": 290,
+   "sentence": "The test framework sets it: `CaptureQueriesContext`, which `assertNumQueries` uses, sets it for the length of its block and meanwhile disconnects `reset_queries`, and the test runner's option `\"--debug-sql\"` sets it on every connection (`django/test/utils.py:CaptureQueriesContext`, `django/test/utils.py:setup_databases`) ([The test framework](../testing.md)).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "CaptureQueriesContext",
+   "kind": "class",
+   "lines": [
+    719,
+    757
+   ],
+   "fingerprint": "b4ae629c6be1fc50"
+  },
+  {
+   "pointer": "django/test/utils.py:setup_databases",
+   "line": 290,
+   "sentence": "The test framework sets it: `CaptureQueriesContext`, which `assertNumQueries` uses, sets it for the length of its block and meanwhile disconnects `reset_queries`, and the test runner's option `\"--debug-sql\"` sets it on every connection (`django/test/utils.py:CaptureQueriesContext`, `django/test/utils.py:setup_databases`) ([The test framework](../testing.md)).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_databases",
+   "kind": "function",
+   "lines": [
+    189,
+    261
+   ],
+   "fingerprint": "a994f743d9f2fba8"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor",
+   "line": 294,
+   "sentence": "It is meant to return a cursor that tries to avoid caching in the database where the database supports one, and a regular cursor otherwise; the base class's returns `cursor()` (`django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.chunked_cursor",
+   "kind": "function",
+   "lines": [
+    669,
+    674
+   ],
+   "fingerprint": "74ee9df67a5c6557"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.chunked_cursor",
+   "line": 316,
+   "sentence": "Its `DatabaseWrapper.chunked_cursor` hands `BaseDatabaseWrapper._cursor` a name made of the thread's identifier, the current asyncio task's identity or `\"sync\"`, and a count kept on the connection, and its `DatabaseWrapper.create_cursor`, given a name, opens a cursor declared on the server, holdable past the end of a transaction where the connection is in autocommit (`django/db/backends/postgresql/base.py:DatabaseWrapper.chunked_cursor`) ([PostgreSQL](postgresql.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.chunked_cursor",
+   "kind": "function",
+   "lines": [
+    457,
+    483
+   ],
+   "at": 458,
+   "fingerprint": "bd3fea3c6666e0a0"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 316,
+   "sentence": "SQLite's, MySQL's and Oracle's are the base's, and `BaseDatabaseFeatures.can_use_chunked_reads` is true on all four, so on each the compiler hands back `cursor_iter`'s generator unread rather than reading it into a list, and `cursor_iter` stops at the features' `BaseDatabaseFeatures.empty_fetchmany_value`, which MySQL's give as `()` (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`, `django/db/backends/mysql/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures",
+   "line": 316,
+   "sentence": "SQLite's, MySQL's and Oracle's are the base's, and `BaseDatabaseFeatures.can_use_chunked_reads` is true on all four, so on each the compiler hands back `cursor_iter`'s generator unread rather than reading it into a list, and `cursor_iter` stops at the features' `BaseDatabaseFeatures.empty_fetchmany_value`, which MySQL's give as `()` (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`, `django/db/backends/mysql/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    7,
+    248
+   ],
+   "fingerprint": "1091882f953f88f6"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 316,
+   "sentence": "What a chunk costs is the driver's affair: Django's documentation says MySQL's driver loads the whole result into memory, Oracle's always reads through a cursor on the server, and SQLite's can fetch results in batches (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  }
+ ]
+}

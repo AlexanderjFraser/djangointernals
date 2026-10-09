@@ -1,0 +1,576 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "sqlite.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 9,
+   "sentence": "The database's version is that of the library the driver has loaded, which `DatabaseWrapper.get_database_version` reads without a statement, and `DatabaseWrapper.is_usable` answers `True` without one, so a health check never finds a SQLite connection unusable (`django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.check_expression_support",
+   "line": 11,
+   "sentence": "SQLite's types are its own: dates and times are stored as text, as `DatabaseOperations.check_expression_support` says when it refuses `Sum` or `Avg` over them (`django/db/backends/sqlite3/operations.py:DatabaseOperations.check_expression_support`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.check_expression_support",
+   "kind": "function",
+   "lines": [
+    40,
+    64
+   ],
+   "fingerprint": "5fd10ee1f345be1c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params",
+   "line": 15,
+   "sentence": "`DatabaseWrapper.get_connection_params` makes the keyword arguments of `sqlite3.connect` from the alias's settings (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    154,
+    198
+   ],
+   "fingerprint": "115b31b8e0cc0c53"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection",
+   "line": 19,
+   "sentence": "`DatabaseWrapper.get_new_connection` opens the driver's connection, has `register` put Django's functions into it, and sends on it directly, past Django's cursor, `\"PRAGMA foreign_keys = ON\"`, `\"PRAGMA legacy_alter_table = OFF\"` and each init command, its surrounding spaces stripped, that is not empty (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection`, `django/db/backends/sqlite3/_functions.py:register`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    203,
+    215
+   ],
+   "at": 204,
+   "fingerprint": "1e3f6e43a55de133"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/_functions.py:register",
+   "line": 19,
+   "sentence": "`DatabaseWrapper.get_new_connection` opens the driver's connection, has `register` put Django's functions into it, and sends on it directly, past Django's cursor, `\"PRAGMA foreign_keys = ON\"`, `\"PRAGMA legacy_alter_table = OFF\"` and each init command, its surrounding spaces stripped, that is not empty (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection`, `django/db/backends/sqlite3/_functions.py:register`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/_functions.py",
+   "symbol": "register",
+   "kind": "function",
+   "lines": [
+    46,
+    116
+   ],
+   "fingerprint": "ee98566d52adc303"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit",
+   "line": 42,
+   "sentence": "The transaction mode is spent where an atomic block begins: SQLite's outermost block begins with a `\"BEGIN\"` sent through Django's cursor, for the reason [Transactions: autocommit, `atomic` and savepoints](transactions.md) gives, and `DatabaseWrapper._start_transaction_under_autocommit` puts the mode after it (`django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit`):",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._start_transaction_under_autocommit",
+   "kind": "function",
+   "lines": [
+    321,
+    331
+   ],
+   "fingerprint": "9be10b45e65c4515"
+  },
+  {
+   "pointer": "docs/ref/databases.txt",
+   "line": 57,
+   "sentence": "Without a mode the statement is a bare `\"BEGIN\"`, and Django's documentation names `\"DEFERRED\"` the default; it recommends `\"IMMEDIATE\"` so that a transaction waits for the driver's timeout before failing with \"database is locked\" (`docs/ref/databases.txt`).",
+   "tree": "django",
+   "path": "docs/ref/databases.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1305
+   ],
+   "fingerprint": "cbc28768aa410929"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/_functions.py:register",
+   "line": 61,
+   "sentence": "`register` gives SQLite functions written in Python under SQL names, through the driver's `sqlite3.Connection.create_function` and `sqlite3.Connection.create_aggregate` (`django/db/backends/sqlite3/_functions.py:register`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/_functions.py",
+   "symbol": "register",
+   "kind": "function",
+   "lines": [
+    46,
+    116
+   ],
+   "fingerprint": "ee98566d52adc303"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations",
+   "line": 61,
+   "sentence": "The operations object writes each such operation as a call to one of them, with the column or expression among its arguments: `DatabaseOperations.datetime_extract_sql`, for one, writes `\"django_datetime_extract\"`, which `_sqlite_datetime_extract` answers (`django/db/backends/sqlite3/operations.py:DatabaseOperations`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations",
+   "kind": "class",
+   "lines": [
+    29,
+    414
+   ],
+   "fingerprint": "ed71b9537a469ce2"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations._convert_tznames_to_sql",
+   "line": 63,
+   "sentence": "Both are `None` where `USE_TZ` is off or no zone is asked for (`django/db/backends/sqlite3/operations.py:DatabaseOperations._convert_tznames_to_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations._convert_tznames_to_sql",
+   "kind": "function",
+   "lines": [
+    92,
+    95
+   ],
+   "fingerprint": "887d38102cb9ed85"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/_functions.py:_sqlite_datetime_parse",
+   "line": 63,
+   "sentence": "`_sqlite_datetime_parse` reads the stored text, gives it the connection's zone and converts it into the other (`django/db/backends/sqlite3/_functions.py:_sqlite_datetime_parse`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/_functions.py",
+   "symbol": "_sqlite_datetime_parse",
+   "kind": "function",
+   "lines": [
+    119,
+    138
+   ],
+   "fingerprint": "45b90cb2a27a4b56"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.operators",
+   "line": 65,
+   "sentence": "`\"regexp\"` is `_sqlite_regexp`, Python's `re.search`: SQLite's operator `\"REGEXP\"` calls a function of that name, which `DatabaseWrapper.operators` writes for the `\"regex\"` lookup and, with Python's flag `\"(?i)\"` before the pattern, for `\"iregex\"`, so a regular expression on SQLite is Python's (`django/db/backends/sqlite3/base.py:DatabaseWrapper.operators`, `docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.operators",
+   "kind": "assignment",
+   "lines": [
+    108,
+    123
+   ],
+   "fingerprint": "484a5ab0d97482ea"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 65,
+   "sentence": "`\"regexp\"` is `_sqlite_regexp`, Python's `re.search`: SQLite's operator `\"REGEXP\"` calls a function of that name, which `DatabaseWrapper.operators` writes for the `\"regex\"` lookup and, with Python's flag `\"(?i)\"` before the pattern, for `\"iregex\"`, so a regular expression on SQLite is Python's (`django/db/backends/sqlite3/base.py:DatabaseWrapper.operators`, `docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/functions/math.py:Random.as_sqlite",
+   "line": 65,
+   "sentence": "`\"RAND\"` replaces `\"RANDOM\"`, which, the comment in `register` says, returns a 64-bit integer and not a number from nought up to one (`django/db/models/functions/math.py:Random.as_sqlite`).",
+   "tree": "django",
+   "path": "django/db/models/functions/math.py",
+   "symbol": "Random.as_sqlite",
+   "kind": "function",
+   "lines": [
+    171,
+    172
+   ],
+   "fingerprint": "cc9fe91078d2d70b"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py",
+   "line": 67,
+   "sentence": "Their `finalize`, called once at the group's end, computes the answer from the whole list: with `statistics.pstdev` and its fellows, by taking the first value, or by folding a bitwise operator over the values that are not null (`django/db/models/aggregates.py`, `django/db/backends/sqlite3/_functions.py:ListAggregate`):",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    468
+   ],
+   "fingerprint": "5306e824e61be06d"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/_functions.py:ListAggregate",
+   "line": 67,
+   "sentence": "Their `finalize`, called once at the group's end, computes the answer from the whole list: with `statistics.pstdev` and its fellows, by taking the first value, or by folding a bitwise operator over the values that are not null (`django/db/models/aggregates.py`, `django/db/backends/sqlite3/_functions.py:ListAggregate`):",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/_functions.py",
+   "symbol": "ListAggregate",
+   "kind": "class",
+   "lines": [
+    519,
+    520
+   ],
+   "fingerprint": "bb3abb1d34ed8501"
+  },
+  {
+   "pointer": "django/db/models/functions/datetime.py:TimezoneMixin.get_tzname",
+   "line": 99,
+   "sentence": "The month is taken after the conversion to Oslo's time, for the reason the comment of `TimezoneMixin.get_tzname` gives: a conversion must happen before a function is applied (`django/db/models/functions/datetime.py:TimezoneMixin.get_tzname`).",
+   "tree": "django",
+   "path": "django/db/models/functions/datetime.py",
+   "symbol": "TimezoneMixin.get_tzname",
+   "kind": "function",
+   "lines": [
+    28,
+    39
+   ],
+   "fingerprint": "95b5b14fe40cb993"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:SQLiteCursorWrapper",
+   "line": 123,
+   "sentence": "Django's statements mark a parameter with `\"%s\"`, or with `\"%(name)s\"` where the parameters are a dictionary, and `sqlite3` takes neither style (`django/db/backends/sqlite3/base.py:SQLiteCursorWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "SQLiteCursorWrapper",
+   "kind": "class",
+   "lines": [
+    340,
+    378
+   ],
+   "fingerprint": "31ce39bcd9f66fa8"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper",
+   "line": 123,
+   "sentence": "`DatabaseWrapper.create_cursor` asks the driver's connection for a cursor of the class `SQLiteCursorWrapper`, a subclass of `sqlite3.Cursor`, so the conversion runs beneath Django's `CursorWrapper`, after the execute wrappers have seen the statement in Django's form (`django/db/backends/utils.py:CursorWrapper`) ([Cursors: executing a statement, the query log and execute wrappers](cursors.md)).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper",
+   "kind": "class",
+   "lines": [
+    17,
+    114
+   ],
+   "fingerprint": "e2f37165f49affd0"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.last_executed_query",
+   "line": 145,
+   "sentence": "The driver binds the values in C, out of Python's reach, as its comment says (`django/db/backends/sqlite3/operations.py:DatabaseOperations.last_executed_query`), so the backend has SQLite write them: `DatabaseOperations._quote_params_for_last_executed_query` runs `\"SELECT QUOTE(?), ...\"`, in batches within SQLite's limits of parameters and of columns, on a cursor of the driver's connection and not Django's, which, the comment says, would log the statement in turn and recurse without end (`django/db/backends/sqlite3/operations.py:DatabaseOperations._quote_params_for_last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    155,
+    171
+   ],
+   "fingerprint": "951edc3f9aaacd60"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations._quote_params_for_last_executed_query",
+   "line": 145,
+   "sentence": "The driver binds the values in C, out of Python's reach, as its comment says (`django/db/backends/sqlite3/operations.py:DatabaseOperations.last_executed_query`), so the backend has SQLite write them: `DatabaseOperations._quote_params_for_last_executed_query` runs `\"SELECT QUOTE(?), ...\"`, in batches within SQLite's limits of parameters and of columns, on a cursor of the driver's connection and not Django's, which, the comment says, would log the statement in turn and recurse without end (`django/db/backends/sqlite3/operations.py:DatabaseOperations._quote_params_for_last_executed_query`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations._quote_params_for_last_executed_query",
+   "kind": "function",
+   "lines": [
+    129,
+    153
+   ],
+   "fingerprint": "7941f6390d410835"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/creation.py:DatabaseCreation.is_in_memory_db",
+   "line": 161,
+   "sentence": "Django takes a `\"NAME\"` of `\":memory:\"`, or any name with `\"mode=memory\"` in it, for a database that SQLite keeps in memory: `DatabaseWrapper.is_in_memory_db` asks `DatabaseCreation.is_in_memory_db`, which never says so of a `pathlib.Path` (`django/db/backends/sqlite3/creation.py:DatabaseCreation.is_in_memory_db`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/creation.py",
+   "symbol": "DatabaseCreation.is_in_memory_db",
+   "kind": "function",
+   "lines": [
+    13,
+    17
+   ],
+   "at": 14,
+   "fingerprint": "b2d3b6489127e2b3"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.close",
+   "line": 161,
+   "sentence": "Closing the connection would destroy such a database, says the comment of `DatabaseWrapper.close`, which ignores the request to prevent the accidental loss of data: after checking the thread, it does nothing (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    220,
+    227
+   ],
+   "at": 221,
+   "fingerprint": "317a4a75947883f9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk",
+   "line": 179,
+   "sentence": "SQLite's schema editor writes every foreign key inside its column's definition, with `\"DEFERRABLE INITIALLY DEFERRED\"` at its end ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), so a key is checked when its transaction commits, and the features declare `DatabaseFeatures.can_defer_constraint_checks` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk`, `django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.sql_create_inline_fk",
+   "kind": "assignment",
+   "lines": [
+    18,
+    21
+   ],
+   "fingerprint": "d4d64ba45a5cde9b"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures",
+   "line": 179,
+   "sentence": "SQLite's schema editor writes every foreign key inside its column's definition, with `\"DEFERRABLE INITIALLY DEFERRED\"` at its end ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), so a key is checked when its transaction commits, and the features declare `DatabaseFeatures.can_defer_constraint_checks` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk`, `django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    13,
+    177
+   ],
+   "fingerprint": "04a54865287f03a8"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.check_constraints",
+   "line": 181,
+   "sentence": "`DatabaseWrapper.check_constraints` runs `\"PRAGMA foreign_key_check\"` and raises `IntegrityError` at the first violation (`django/db/backends/sqlite3/base.py:DatabaseWrapper.check_constraints`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.check_constraints",
+   "kind": "function",
+   "lines": [
+    262,
+    316
+   ],
+   "fingerprint": "1bd9510422826736"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__enter__",
+   "line": 191,
+   "sentence": "`DatabaseSchemaEditor.__enter__` turns the checks off before the base class opens its atomic block, the comment saying some of SQLite's alterations need them off, and raises `NotSupportedError` where they stay on, so inside a transaction the editor can be entered only if the checks were turned off before the transaction began; `DatabaseSchemaEditor.__exit__` checks every table, lets the base class finish, and turns them on (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__enter__`, `django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.__enter__",
+   "kind": "function",
+   "lines": [
+    28,
+    39
+   ],
+   "fingerprint": "0fd8b75ba0902ccc"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__",
+   "line": 191,
+   "sentence": "`DatabaseSchemaEditor.__enter__` turns the checks off before the base class opens its atomic block, the comment saying some of SQLite's alterations need them off, and raises `NotSupportedError` where they stay on, so inside a transaction the editor can be entered only if the checks were turned off before the transaction began; `DatabaseSchemaEditor.__exit__` checks every table, lets the base class finish, and turns them on (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__enter__`, `django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.__exit__",
+   "kind": "function",
+   "lines": [
+    41,
+    44
+   ],
+   "fingerprint": "dd0a1f0f6514bd6c"
+  },
+  {
+   "pointer": "django/core/management/commands/loaddata.py:Command.handle",
+   "line": 193,
+   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/loaddata.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    92,
+    110
+   ],
+   "fingerprint": "2c8a31bb895001a7"
+  },
+  {
+   "pointer": "django/core/management/commands/loaddata.py:Command.loaddata",
+   "line": 193,
+   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/loaddata.py",
+   "symbol": "Command.loaddata",
+   "kind": "function",
+   "lines": [
+    140,
+    196
+   ],
+   "fingerprint": "78cfb9e7f7af289c"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string",
+   "line": 193,
+   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.deserialize_db_from_string",
+   "kind": "function",
+   "lines": [
+    173,
+    192
+   ],
+   "fingerprint": "886ef41ab80b5aa9"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._fixture_teardown",
+   "line": 207,
+   "sentence": "On SQLite a `TestCase`, whose transactions never commit, calls `check_constraints` as each test ends, unless the connection is marked for rollback (`django/test/testcases.py:TestCase._fixture_teardown`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._fixture_teardown",
+   "kind": "function",
+   "lines": [
+    1492,
+    1500
+   ],
+   "fingerprint": "6268309c5aeebd01"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures",
+   "line": 211,
+   "sentence": "The version is the library's and is known when the module is imported, so a flag that depends on it is a class attribute: `DatabaseFeatures.supports_aggregate_order_by_clause` is true from SQLite 3.44.0 (`django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    13,
+    177
+   ],
+   "fingerprint": "04a54865287f03a8"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.force_group_by",
+   "line": 211,
+   "sentence": "Below 3.39 the operations object writes `\"GROUP BY TRUE\"` before a `\"HAVING\"` that has no grouping (`django/db/backends/sqlite3/operations.py:DatabaseOperations.force_group_by`), and `DatabaseFeatures.minimum_database_version`, 3.37, is the oldest the version check lets open.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.force_group_by",
+   "kind": "function",
+   "lines": [
+    410,
+    411
+   ],
+   "fingerprint": "f67a82dfc732f9fa"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 213,
+   "sentence": "It was 3.31.0 (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.max_query_params",
+   "line": 215,
+   "sentence": "`DatabaseFeatures.max_query_params` is a property, asked again at each read, that opens the connection if it must and asks the driver's connection how many parameters one statement may have, a limit set when the library is compiled, 32766 by default, which a connection may lower for itself (`django/db/backends/sqlite3/features.py:DatabaseFeatures.max_query_params`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.max_query_params",
+   "kind": "function",
+   "lines": [
+    152,
+    161
+   ],
+   "at": 153,
+   "fingerprint": "957024c60ae114f3"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_batch_size",
+   "line": 215,
+   "sentence": "`BaseDatabaseOperations.bulk_batch_size` divides it by the fields of a row, so that, where it is 32766, a `bulk_create` of ports, two fields each, sends at most 16383 at once (`django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_batch_size`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.bulk_batch_size",
+   "kind": "function",
+   "lines": [
+    80,
+    96
+   ],
+   "fingerprint": "4d8692233178f68c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor",
+   "line": 219,
+   "sentence": "SQLite's schema editor remakes the table where SQLite's `\"ALTER TABLE\"` falls short, as [Altering a column, and SQLite's table remake](alter-field.md) tells (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    15,
+    502
+   ],
+   "fingerprint": "fa6d71a7d8f27b6c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.quote_value",
+   "line": 221,
+   "sentence": "Defaults go into SQLite's statements as literals ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), written by `DatabaseSchemaEditor.quote_value`, which passes the value through `sqlite3.adapt`, then writes it by its type, a string in single quotes with each quote doubled and bytes in hexadecimal, and refuses with `ValueError` a type it does not know (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.quote_value`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.quote_value",
+   "kind": "function",
+   "lines": [
+    46,
+    75
+   ],
+   "fingerprint": "13072454e08bbc17"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/client.py:DatabaseClient.settings_to_cmd_args_env",
+   "line": 225,
+   "sentence": "`DatabaseClient.settings_to_cmd_args_env` gives dbshell the command `\"sqlite3\"`, SQLite's own shell, with the alias's `\"NAME\"` and dbshell's parameters after it, and no environment (`django/db/backends/sqlite3/client.py:DatabaseClient.settings_to_cmd_args_env`); [The connection object: `BaseDatabaseWrapper` and what a backend provides](wrapper.md) has how dbshell runs it.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/client.py",
+   "symbol": "DatabaseClient.settings_to_cmd_args_env",
+   "kind": "function",
+   "lines": [
+    7,
+    10
+   ],
+   "at": 8,
+   "fingerprint": "421d5576f75bbb94"
+  }
+ ]
+}

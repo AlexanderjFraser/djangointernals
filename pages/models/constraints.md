@@ -10,7 +10,7 @@ A table carries rules that the database enforces on every row, whatever program 
 
 Those objects are descriptions. Each holds the arguments it was made with. None holds a model, a table or a connection: every method that needs one is handed it. And none of the SQL methods sends a statement: each returns a clause or a statement to a schema editor, and the editor decides what is sent. The one method that sends anything itself is a constraint's `validate`.
 
-A **schema editor** is the database backend's object that turns a model, a field, a constraint or an index into statements that change the schema, and sends them. Its statements are sent as its `with` block runs, and those it has put off are sent when the block is left without an error (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor`) ([Database backends](../backends.md)).
+A **schema editor** is the database backend's object that turns a model, a field, a constraint or an index into statements that change the schema, and sends them. Its statements are sent as its `with` block runs, and those it has put off are sent when the block is left without an error (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor`) ([The schema editor: `BaseDatabaseSchemaEditor`](../backends/schema.md)).
 
 The example is the ship of a shipping line, with one constraint of each kind and one index:
 

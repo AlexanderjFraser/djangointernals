@@ -180,7 +180,7 @@ Q.check: the condition is put to the database, with values in place of columns
 
 None of the three statements has a table in it. In the third the condition compares one name with another through an `F`, and both were found among the annotations. In the fourth line the dictionary lacks the name: `add_q` raises `FieldError`, and the one choice it can offer is `"_check"`.
 
-Where the connection is inside an `atomic` block, `check` runs the statement in an `atomic` block of its own, and outside one it opens nothing (`django/db/transaction.py:atomic`) ([Database backends](../backends.md)).
+Where the connection is inside an `atomic` block, `check` runs the statement in an `atomic` block of its own, and outside one it opens nothing (`django/db/transaction.py:atomic`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md)).
 
 ```text recording=querysets
 with transaction.atomic(): checked = Q(tonnage__gt=0).check({'tonnage': 480})

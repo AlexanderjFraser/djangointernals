@@ -1,0 +1,810 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "postgresql.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/postgresql/base.py",
+   "line": 13,
+   "sentence": "`django/db/backends/postgresql/base.py` imports psycopg under the name `Database` where it can and psycopg2 where it cannot, raising `ImproperlyConfigured` with neither, and then refuses, with `ImproperlyConfigured` again, a psycopg2 older than 2.9.9 or a psycopg 3 older than 3.1.12, as `psycopg_version` reads them (`django/db/backends/postgresql/base.py:psycopg_version`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    624
+   ],
+   "fingerprint": "6bed565f8e0a9b96"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:psycopg_version",
+   "line": 13,
+   "sentence": "`django/db/backends/postgresql/base.py` imports psycopg under the name `Database` where it can and psycopg2 where it cannot, raising `ImproperlyConfigured` with neither, and then refuses, with `ImproperlyConfigured` again, a psycopg2 older than 2.9.9 or a psycopg 3 older than 3.1.12, as `psycopg_version` reads them (`django/db/backends/postgresql/base.py:psycopg_version`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "psycopg_version",
+   "kind": "function",
+   "lines": [
+    33,
+    36
+   ],
+   "at": 34,
+   "fingerprint": "220c6b1fa53c1ce4"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/psycopg_any.py",
+   "line": 15,
+   "sentence": "`django/db/backends/postgresql/psycopg_any.py` makes the same choice and exports one set of names under either driver, `IsolationLevel` and `mogrify` among them, which the backend's modules, `django.contrib.postgres` and the PostGIS backend import ([Content types, static files and the other contrib apps](../contrib.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/psycopg_any.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    120
+   ],
+   "fingerprint": "283547d637c2c40f"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.adapt_integerfield_value",
+   "line": 17,
+   "sentence": "Some of the backend exists only under psycopg 3: a pool of connections, refused under psycopg2 with `ImproperlyConfigured`; server-side binding, ignored under psycopg2; the map of adapters and the threshold for preparing statements that each connection is handed; Django's own subclasses of the driver's cursor; and the values of integer fields, other than auto fields and keys to them, handed to the driver typed for their column, as psycopg's Int2, Int4 or Int8 (`django/db/backends/postgresql/operations.py:DatabaseOperations.adapt_integerfield_value`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.adapt_integerfield_value",
+   "kind": "function",
+   "lines": [
+    322,
+    325
+   ],
+   "fingerprint": "13d0ea5d9e24897e"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.get_connection_params",
+   "line": 21,
+   "sentence": "`DatabaseWrapper.get_connection_params` makes the keyword arguments of the driver's `connect` from the alias's `\"OPTIONS\"`, passed on whole but for four keys it always takes out, so that a key the method does not handle, such as `\"sslmode\"`, reaches the driver as one of PostgreSQL's own connection parameters (`django/db/backends/postgresql/base.py:DatabaseWrapper.get_connection_params`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    250,
+    315
+   ],
+   "fingerprint": "fee1304f1abbcd36"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/psycopg_any.py:get_adapters_template",
+   "line": 27,
+   "sentence": "Under psycopg 3 the method adds `\"context\"`, a map of adapters made once for each value of `USE_TZ` and time zone (`django/db/backends/postgresql/psycopg_any.py:get_adapters_template`) ([Values in and out: adapters, converters and time zones](values.md)), and `\"prepare_threshold\"`, `None` unless the options give one, which turns off psycopg's preparing of statements on the server, the comment says to keep connection poolers working.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/psycopg_any.py",
+   "symbol": "get_adapters_template",
+   "kind": "function",
+   "lines": [
+    60,
+    76
+   ],
+   "at": 61,
+   "fingerprint": "895c997bffc244e6"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper._nodb_cursor",
+   "line": 37,
+   "sentence": "The connection that `BaseDatabaseWrapper._nodb_cursor` makes copies the alias's settings with `\"NAME\"` set to `None` but shares their dictionary of options (`django/db/backends/base/base.py:BaseDatabaseWrapper._nodb_cursor`), so once creating or destroying a test database has opened it, the alias has lost its service; and when destroying the test database has put back an empty `\"NAME\"`, the alias's next connection is refused.",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper._nodb_cursor",
+   "kind": "function",
+   "lines": [
+    701,
+    715
+   ],
+   "at": 702,
+   "fingerprint": "7e99edac613fcc34"
+  },
+  {
+   "pointer": "docs/ref/databases.txt",
+   "line": 37,
+   "sentence": "Django's documentation says a service name is not supported for testing (`docs/ref/databases.txt`).",
+   "tree": "django",
+   "path": "docs/ref/databases.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1305
+   ],
+   "fingerprint": "cbc28768aa410929"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.get_new_connection",
+   "line": 41,
+   "sentence": "`DatabaseWrapper.get_new_connection` settles the isolation level first (`django/db/backends/postgresql/base.py:DatabaseWrapper.get_new_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    317,
+    355
+   ],
+   "at": 318,
+   "fingerprint": "2be73ca5df2ab8bd"
+  },
+  {
+   "pointer": "docs/ref/databases.txt",
+   "line": 41,
+   "sentence": "With none in the options the connection records `IsolationLevel.READ_COMMITTED` and says nothing to the driver, Django's documentation saying that it defaults to READ COMMITTED like PostgreSQL itself (`docs/ref/databases.txt`); a level named there must be a value of `IsolationLevel`, or the method refuses with `ImproperlyConfigured`, and is set on the driver's connection once that is open.",
+   "tree": "django",
+   "path": "docs/ref/databases.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1305
+   ],
+   "fingerprint": "cbc28768aa410929"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.init_connection_state",
+   "line": 43,
+   "sentence": "`DatabaseWrapper.init_connection_state` runs the base class's version check and then `DatabaseWrapper._configure_connection`, except on a connection from a pool, which the pool configures itself, having been made with that method as its callback (`django/db/backends/postgresql/base.py:DatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    410,
+    417
+   ],
+   "fingerprint": "6e1ad967f6fb4f89"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._configure_connection",
+   "line": 43,
+   "sentence": "`_configure_connection` sets the session's time zone through `DatabaseWrapper._configure_timezone`, where the session's differs from the connection's, `BaseDatabaseWrapper.timezone_name` ([Values in and out: adapters, converters and time zones](values.md)), and its role through `DatabaseWrapper._configure_role`, with `\"SET ROLE\"`, wherever the options name `\"assume_role\"`; the comment says the role is for a login whose credentials are not those of the role that owns the database's objects (`django/db/backends/postgresql/base.py:DatabaseWrapper._configure_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._configure_connection",
+   "kind": "function",
+   "lines": [
+    381,
+    392
+   ],
+   "fingerprint": "997d5c84fa523ad7"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.compose_sql",
+   "line": 43,
+   "sentence": "`_configure_role` writes the role into its statement before sending it, with `DatabaseOperations.compose_sql`, which has `mogrify` merge the parameters through the driver (`django/db/backends/postgresql/operations.py:DatabaseOperations.compose_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.compose_sql",
+   "kind": "function",
+   "lines": [
+    194,
+    195
+   ],
+   "fingerprint": "a9f3c36e6ff7926e"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version",
+   "line": 45,
+   "sentence": "`DatabaseWrapper.pg_version` is the server's version as the driver's connection reports it, a number such as 170000 for 17.0, read through `BaseDatabaseWrapper.temporary_connection` and kept as a cached property (`django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.pg_version",
+   "kind": "function",
+   "lines": [
+    554,
+    557
+   ],
+   "at": 555,
+   "fingerprint": "eba4be16bbc96a5e"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported",
+   "line": 45,
+   "sentence": "`DatabaseWrapper.get_database_version` divides it by ten thousand into a pair, and `BaseDatabaseWrapper.check_database_version_supported` refuses with `NotSupportedError` a server older than `DatabaseFeatures.minimum_database_version`, the first time each alias opens in a process (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`, `django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.check_database_version_supported",
+   "kind": "function",
+   "lines": [
+    190,
+    204
+   ],
+   "fingerprint": "8b19411895e85531"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state",
+   "line": 45,
+   "sentence": "`DatabaseWrapper.get_database_version` divides it by ten thousand into a pair, and `BaseDatabaseWrapper.check_database_version_supported` refuses with `NotSupportedError` a server older than `DatabaseFeatures.minimum_database_version`, the first time each alias opens in a process (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`, `django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    222,
+    226
+   ],
+   "fingerprint": "7bf5cd4ad43a9b2d"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 47,
+   "sentence": "`DatabaseFeatures.minimum_database_version` is `(16,)`: the release notes of 6.2 drop PostgreSQL 15, whose upstream support ends in November 2027 (`docs/releases/6.2.txt`, `django/db/backends/postgresql/features.py:DatabaseFeatures.minimum_database_version`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.minimum_database_version",
+   "line": 47,
+   "sentence": "`DatabaseFeatures.minimum_database_version` is `(16,)`: the release notes of 6.2 drop PostgreSQL 15, whose upstream support ends in November 2027 (`docs/releases/6.2.txt`, `django/db/backends/postgresql/features.py:DatabaseFeatures.minimum_database_version`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.minimum_database_version",
+   "kind": "assignment",
+   "lines": [
+    10,
+    10
+   ],
+   "fingerprint": "25d3bb1c415019eb"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:Cursor",
+   "line": 51,
+   "sentence": "The backend's cursor classes, each `CursorMixin` on a class of psycopg 3's, make the choice (`django/db/backends/postgresql/base.py:Cursor`, `django/db/backends/postgresql/base.py:ServerBindingCursor`):",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "Cursor",
+   "kind": "class",
+   "lines": [
+    589,
+    590
+   ],
+   "more": [
+    [
+     615,
+     615
+    ]
+   ],
+   "fingerprint": "ed455db9ff44f10a"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:ServerBindingCursor",
+   "line": 51,
+   "sentence": "The backend's cursor classes, each `CursorMixin` on a class of psycopg 3's, make the choice (`django/db/backends/postgresql/base.py:Cursor`, `django/db/backends/postgresql/base.py:ServerBindingCursor`):",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "ServerBindingCursor",
+   "kind": "class",
+   "lines": [
+    586,
+    587
+   ],
+   "fingerprint": "a87eda1cc7ce4693"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.django_test_expected_failures",
+   "line": 57,
+   "sentence": "Under it, parameters passed to expressions in the select list and the grouping are not recognised as the same values, and the features expect Django's test of such a query to fail (ticket 34255) (`django/db/backends/postgresql/features.py:DatabaseFeatures.django_test_expected_failures`); `DatabaseOperations.last_executed_query` composes the statement for the log with `compose_sql` (`django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query`); and `DatabaseFeatures.max_query_params` becomes 65,535, where it is otherwise none, so that a bulk insert is cut into batches (`django/db/backends/postgresql/features.py:DatabaseFeatures.max_query_params`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.django_test_expected_failures",
+   "kind": "function",
+   "lines": [
+    126,
+    148
+   ],
+   "at": 127,
+   "fingerprint": "7785cd3a0fc81ae7"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query",
+   "line": 57,
+   "sentence": "Under it, parameters passed to expressions in the select list and the grouping are not recognised as the same values, and the features expect Django's test of such a query to fail (ticket 34255) (`django/db/backends/postgresql/features.py:DatabaseFeatures.django_test_expected_failures`); `DatabaseOperations.last_executed_query` composes the statement for the log with `compose_sql` (`django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query`); and `DatabaseFeatures.max_query_params` becomes 65,535, where it is otherwise none, so that a bulk insert is cut into batches (`django/db/backends/postgresql/features.py:DatabaseFeatures.max_query_params`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.last_executed_query",
+   "kind": "function",
+   "lines": [
+    300,
+    309
+   ],
+   "more": [
+    [
+     313,
+     318
+    ]
+   ],
+   "fingerprint": "dcd6aab08b8f9691"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.max_query_params",
+   "line": 57,
+   "sentence": "Under it, parameters passed to expressions in the select list and the grouping are not recognised as the same values, and the features expect Django's test of such a query to fail (ticket 34255) (`django/db/backends/postgresql/features.py:DatabaseFeatures.django_test_expected_failures`); `DatabaseOperations.last_executed_query` composes the statement for the log with `compose_sql` (`django/db/backends/postgresql/operations.py:DatabaseOperations.last_executed_query`); and `DatabaseFeatures.max_query_params` becomes 65,535, where it is otherwise none, so that a bulk insert is cut into batches (`django/db/backends/postgresql/features.py:DatabaseFeatures.max_query_params`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.max_query_params",
+   "kind": "function",
+   "lines": [
+    155,
+    159
+   ],
+   "at": 156,
+   "fingerprint": "9a073d0220e6f062"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.chunked_cursor",
+   "line": 59,
+   "sentence": "`DatabaseWrapper.chunked_cursor`, the only override of the base class's among the four backends, asks `BaseDatabaseWrapper._cursor` for a cursor named `\"_django_curs_\"` and then the thread's identifier, `\"sync\"` and a count the connection keeps in `DatabaseWrapper._named_cursor_idx`, so that no two cursors of a connection, or of two threads, share a name (`django/db/backends/postgresql/base.py:DatabaseWrapper.chunked_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.chunked_cursor",
+   "kind": "function",
+   "lines": [
+    457,
+    483
+   ],
+   "at": 458,
+   "fingerprint": "bd3fea3c6666e0a0"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.create_cursor",
+   "line": 59,
+   "sentence": "`DatabaseWrapper.create_cursor`, given a name, makes a cursor declared on the server, whose rows stay there until each fetch of `cursor_iter` takes the next chunk ([The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)) (`django/db/backends/postgresql/base.py:DatabaseWrapper.create_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.create_cursor",
+   "kind": "function",
+   "lines": [
+    419,
+    452
+   ],
+   "at": 420,
+   "fingerprint": "0851baab2a468c37"
+  },
+  {
+   "pointer": "docs/ref/databases.txt",
+   "line": 59,
+   "sentence": "`QuerySet.iterator` asks for such a read unless the alias sets `\"DISABLE_SERVER_SIDE_CURSORS\"` ([Evaluation and the result cache](../querysets/evaluation.md)), which Django's documentation says a connection pooler in transaction pooling mode needs, since a cursor held open past its transaction may be asked for its next rows on another connection, where it does not exist (`docs/ref/databases.txt`).",
+   "tree": "django",
+   "path": "docs/ref/databases.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1305
+   ],
+   "fingerprint": "cbc28768aa410929"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:CursorDebugWrapper",
+   "line": 61,
+   "sentence": "`DatabaseWrapper.make_debug_cursor` makes the backend's own `CursorDebugWrapper`, which puts the driver's `\"COPY\"` in the query log: `copy` under psycopg 3 (`django/db/backends/postgresql/base.py:CursorDebugWrapper`), `copy_expert` and `copy_to` under psycopg2.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "CursorDebugWrapper",
+   "kind": "class",
+   "lines": [
+    609,
+    612
+   ],
+   "more": [
+    [
+     617,
+     624
+    ]
+   ],
+   "fingerprint": "3434a1cc49980a85"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper._nodb_cursor",
+   "line": 65,
+   "sentence": "PostgreSQL's `DatabaseWrapper._nodb_cursor` catches a database error raised before it has given out a cursor, a failure to connect and not of the caller's statement, and warns with a `RuntimeWarning` that Django, which uses `\"postgres\"` to avoid running initialization queries against the production database, will use the first PostgreSQL database instead (`django/db/backends/postgresql/base.py:DatabaseWrapper._nodb_cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper._nodb_cursor",
+   "kind": "function",
+   "lines": [
+    516,
+    552
+   ],
+   "at": 517,
+   "fingerprint": "f9e361771c2af60a"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.deferrable_sql",
+   "line": 69,
+   "sentence": "Django's schema editor ends a foreign key on PostgreSQL with `\"DEFERRABLE INITIALLY DEFERRED\"`, `DatabaseOperations.deferrable_sql`, which the base class leaves empty, so the database checks the key at the commit (`django/db/backends/postgresql/operations.py:DatabaseOperations.deferrable_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.deferrable_sql",
+   "kind": "function",
+   "lines": [
+    150,
+    151
+   ],
+   "fingerprint": "5e34962bccab9070"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.check_constraints",
+   "line": 69,
+   "sentence": "What its callers run after their writes, `DatabaseWrapper.check_constraints`, sends `\"SET CONSTRAINTS ALL IMMEDIATE\"`, which checks whatever is pending and raises `IntegrityError` for a row that breaks a constraint, and then `\"SET CONSTRAINTS ALL DEFERRED\"`, whatever tables it was given (`django/db/backends/postgresql/base.py:DatabaseWrapper.check_constraints`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.check_constraints",
+   "kind": "function",
+   "lines": [
+    489,
+    496
+   ],
+   "fingerprint": "30c9da5a45896bf0"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._fixture_teardown",
+   "line": 69,
+   "sentence": "`TestCase` calls it too, before rolling back each test, where `DatabaseFeatures.can_defer_constraint_checks` is true and the connection is usable and not marked for rollback, so that a test that left a broken key fails although nothing it wrote is committed (`django/test/testcases.py:TestCase._fixture_teardown`, `django/test/testcases.py:TestCase._should_check_constraints`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._fixture_teardown",
+   "kind": "function",
+   "lines": [
+    1492,
+    1500
+   ],
+   "fingerprint": "6268309c5aeebd01"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._should_check_constraints",
+   "line": 69,
+   "sentence": "`TestCase` calls it too, before rolling back each test, where `DatabaseFeatures.can_defer_constraint_checks` is true and the connection is usable and not marked for rollback, so that a test that left a broken key fails although nothing it wrote is committed (`django/test/testcases.py:TestCase._fixture_teardown`, `django/test/testcases.py:TestCase._should_check_constraints`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._should_check_constraints",
+   "kind": "function",
+   "lines": [
+    1502,
+    1507
+   ],
+   "fingerprint": "6403372f8615b3f6"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.is_usable",
+   "line": 71,
+   "sentence": "`DatabaseWrapper.is_usable` runs `\"SELECT 1\"` on a cursor of the driver's connection, past Django's cursor, and answers false for any error of the driver's, as the base class's docstring asks so that an unusable connection is closed rather than raised over (`django/db/backends/postgresql/base.py:DatabaseWrapper.is_usable`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.is_usable",
+   "kind": "function",
+   "lines": [
+    498,
+    508
+   ],
+   "fingerprint": "fb67cb33c15fc1bd"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures",
+   "line": 75,
+   "sentence": "PostgreSQL's `DatabaseFeatures` sets most flags as class attributes, and those that depend on the server's version or the alias's options as properties, most of them cached (`django/db/backends/postgresql/features.py:DatabaseFeatures`): `DatabaseFeatures.is_postgresql_18`, read from `pg_version`, decides `supports_uuid7_function`, `supports_virtual_generated_columns` and whether `UUID4.as_postgresql` writes `\"GEN_RANDOM_UUID\"`, and `DatabaseFeatures.uses_server_side_binding` decides `max_query_params`.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    9,
+    192
+   ],
+   "fingerprint": "811d8a2c9c6c44b6"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/compiler.py:SQLInsertCompiler.assemble_as_sql",
+   "line": 79,
+   "sentence": "PostgreSQL's `DatabaseOperations` names its own compiler module, whose insert compiler sends the rows of a bulk insert of more than one row as arrays through `\"UNNEST\"`, where its fields and values allow (`django/db/backends/postgresql/compiler.py:SQLInsertCompiler.assemble_as_sql`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)), and departs from the base class in the dialect of what it writes, as the queryset of voyages that [Database backends](../backends.md) compiles for the four backends shows (`django/db/backends/postgresql/operations.py:DatabaseOperations`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/compiler.py",
+   "symbol": "SQLInsertCompiler.assemble_as_sql",
+   "kind": "function",
+   "lines": [
+    29,
+    61
+   ],
+   "fingerprint": "58e143c437bc6442"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations",
+   "line": 79,
+   "sentence": "PostgreSQL's `DatabaseOperations` names its own compiler module, whose insert compiler sends the rows of a bulk insert of more than one row as arrays through `\"UNNEST\"`, where its fields and values allow (`django/db/backends/postgresql/compiler.py:SQLInsertCompiler.assemble_as_sql`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)), and departs from the base class in the dialect of what it writes, as the queryset of voyages that [Database backends](../backends.md) compiles for the four backends shows (`django/db/backends/postgresql/operations.py:DatabaseOperations`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations",
+   "kind": "class",
+   "lines": [
+    27,
+    405
+   ],
+   "fingerprint": "82c8ec2e3babbcc2"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast",
+   "line": 81,
+   "sentence": "`DatabaseOperations.lookup_cast` casts the column to text for `\"iexact\"`, the pattern lookups and the regular expressions, so that, its comment says, a text lookup can be given a number, reads an address's column through `\"HOST\"` instead, and wraps either in `\"UPPER\"` for `\"iexact\"`, `\"icontains\"`, `\"istartswith\"` and `\"iendswith\"`, which the comment says is faster (`django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`); `DatabaseWrapper.operators` gives `\"LIKE UPPER(%s)\"` for the right side (`django/db/backends/postgresql/base.py:DatabaseWrapper.operators`); and the lookup escapes the value and adds its wildcards ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.lookup_cast",
+   "kind": "function",
+   "lines": [
+    158,
+    181
+   ],
+   "fingerprint": "9ceb999dbf030af9"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.operators",
+   "line": 81,
+   "sentence": "`DatabaseOperations.lookup_cast` casts the column to text for `\"iexact\"`, the pattern lookups and the regular expressions, so that, its comment says, a text lookup can be given a number, reads an address's column through `\"HOST\"` instead, and wraps either in `\"UPPER\"` for `\"iexact\"`, `\"icontains\"`, `\"istartswith\"` and `\"iendswith\"`, which the comment says is faster (`django/db/backends/postgresql/operations.py:DatabaseOperations.lookup_cast`); `DatabaseWrapper.operators` gives `\"LIKE UPPER(%s)\"` for the right side (`django/db/backends/postgresql/base.py:DatabaseWrapper.operators`); and the lookup escapes the value and adds its wildcards ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.operators",
+   "kind": "assignment",
+   "lines": [
+    144,
+    159
+   ],
+   "fingerprint": "6de7dd0d398558c2"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations._extract_format_re",
+   "line": 81,
+   "sentence": "The part of the date, MONTH, that the filter on `\"sailed__month\"` asks for, is written into the statement, since, the comment says, the format of `\"EXTRACT\"` cannot be passed as a parameter (`django/db/backends/postgresql/operations.py:DatabaseOperations._extract_format_re`, `django/db/backends/postgresql/operations.py:DatabaseOperations.date_extract_sql`); the 3 it is compared with stands among the parameters as psycopg's Int4, made by `DatabaseOperations.adapt_integerfield_value`.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations._extract_format_re",
+   "kind": "assignment",
+   "lines": [
+    85,
+    85
+   ],
+   "fingerprint": "b715ec3061604303"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.date_extract_sql",
+   "line": 81,
+   "sentence": "The part of the date, MONTH, that the filter on `\"sailed__month\"` asks for, is written into the statement, since, the comment says, the format of `\"EXTRACT\"` cannot be passed as a parameter (`django/db/backends/postgresql/operations.py:DatabaseOperations._extract_format_re`, `django/db/backends/postgresql/operations.py:DatabaseOperations.date_extract_sql`); the 3 it is compared with stands among the parameters as psycopg's Int4, made by `DatabaseOperations.adapt_integerfield_value`.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.date_extract_sql",
+   "kind": "function",
+   "lines": [
+    87,
+    100
+   ],
+   "fingerprint": "bbd6426c98625de2"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_iexact_query",
+   "line": 94,
+   "sentence": "`DatabaseOperations.distinct_sql` writes `\"DISTINCT ON\"` for the fields `QuerySet.distinct` names, which the base class refuses with `NotSupportedError`; `DatabaseOperations.sql_flush` empties the tables with one `\"TRUNCATE\"` ([Introspection: reading the schema back](introspection.md)); and `DatabaseOperations.prep_for_iexact_query` leaves the value of `\"iexact\"`, an equality, `\"= UPPER(%s)\"`, as it is, where the base class's, which SQLite's backend keeps, escapes it as for `\"LIKE\"`, under a comment saying that `\"iexact\"` need not be written with `\"LIKE\"` (`django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_iexact_query`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_like_query`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.prep_for_iexact_query",
+   "kind": "assignment",
+   "lines": [
+    543,
+    543
+   ],
+   "fingerprint": "249dc97869a61fe9"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_like_query",
+   "line": 94,
+   "sentence": "`DatabaseOperations.distinct_sql` writes `\"DISTINCT ON\"` for the fields `QuerySet.distinct` names, which the base class refuses with `NotSupportedError`; `DatabaseOperations.sql_flush` empties the tables with one `\"TRUNCATE\"` ([Introspection: reading the schema back](introspection.md)); and `DatabaseOperations.prep_for_iexact_query` leaves the value of `\"iexact\"`, an equality, `\"= UPPER(%s)\"`, as it is, where the base class's, which SQLite's backend keeps, escapes it as for `\"LIKE\"`, under a comment saying that `\"iexact\"` need not be written with `\"LIKE\"` (`django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_iexact_query`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prep_for_like_query`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.prep_for_like_query",
+   "kind": "function",
+   "lines": [
+    537,
+    539
+   ],
+   "fingerprint": "239b87fc9f150dff"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor",
+   "line": 98,
+   "sentence": "PostgreSQL's `DatabaseSchemaEditor` departs from the base class in how it executes a statement, in the indexes it adds for text columns and in how it changes an auto field (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor`); with `DatabaseFeatures.can_rollback_ddl` true, its changes are rolled back with the transaction they are made in (`django/db/backends/postgresql/features.py:DatabaseFeatures.can_rollback_ddl`) ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    7,
+    380
+   ],
+   "fingerprint": "59a7afeeb9c94269"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.can_rollback_ddl",
+   "line": 98,
+   "sentence": "PostgreSQL's `DatabaseSchemaEditor` departs from the base class in how it executes a statement, in the indexes it adds for text columns and in how it changes an auto field (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor`); with `DatabaseFeatures.can_rollback_ddl` true, its changes are rolled back with the transaction they are made in (`django/db/backends/postgresql/features.py:DatabaseFeatures.can_rollback_ddl`) ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.can_rollback_ddl",
+   "kind": "assignment",
+   "lines": [
+    33,
+    33
+   ],
+   "fingerprint": "f5c4de3e1b054824"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.execute",
+   "line": 98,
+   "sentence": "`DatabaseSchemaEditor.execute` merges a statement's parameters into it with `compose_sql` and hands the base class's `execute` the result with `None` for parameters, its comment saying PostgreSQL won't merge them on the server; `DatabaseSchemaEditor.quote_value`, which the base class uses to write a value into a statement's text, quotes through the driver (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.execute`, `django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.quote_value`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor.execute",
+   "kind": "function",
+   "lines": [
+    42,
+    48
+   ],
+   "fingerprint": "a1b72bae8bbeaddb"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.quote_value",
+   "line": 98,
+   "sentence": "`DatabaseSchemaEditor.execute` merges a statement's parameters into it with `compose_sql` and hands the base class's `execute` the result with `None` for parameters, its comment saying PostgreSQL won't merge them on the server; `DatabaseSchemaEditor.quote_value`, which the base class uses to write a value into a statement's text, quotes through the driver (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.execute`, `django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.quote_value`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor.quote_value",
+   "kind": "function",
+   "lines": [
+    58,
+    59
+   ],
+   "fingerprint": "3d1f4985d38fd3cc"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor._create_like_index_sql",
+   "line": 100,
+   "sentence": "A column of type `\"varchar\"` or `\"text\"` with an index, from `db_index` or from `unique`, gets a second index with an operator class for matching patterns, `\"varchar_pattern_ops\"` or `\"text_pattern_ops\"`, named, like an index Django makes for the field, from the table, the column and a digest of them, with `\"_like\"` as its suffix (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor._create_like_index_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor._create_like_index_sql",
+   "kind": "function",
+   "lines": [
+    83,
+    120
+   ],
+   "fingerprint": "0a2128255d944350"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor._alter_field",
+   "line": 106,
+   "sentence": "`DatabaseSchemaEditor._field_indexes_sql` adds the index to what the base class makes for a field; `DatabaseSchemaEditor._alter_field` adds it when a field gains an index or uniqueness or an indexed text column changes type, and drops it when a unique field becomes neither unique nor indexed (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor._alter_field`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor._alter_field",
+   "kind": "function",
+   "lines": [
+    263,
+    303
+   ],
+   "fingerprint": "30c4941946b78d70"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._create_index_name",
+   "line": 106,
+   "sentence": "Every name the editor makes for an index or constraint is shortened, where it is too long, to fit within the operations object's `max_name_length`, 63 (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._create_index_name`) ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._create_index_name",
+   "kind": "function",
+   "lines": [
+    1556,
+    1586
+   ],
+   "fingerprint": "3641395509477264"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.data_types_suffix",
+   "line": 108,
+   "sentence": "An auto field's column is an identity column, `DatabaseWrapper.data_types_suffix` putting `\"GENERATED BY DEFAULT AS IDENTITY\"` after its type, as in the `\"CREATE TABLE\"` above (`django/db/backends/postgresql/base.py:DatabaseWrapper.data_types_suffix`) ([Column types: from a field to a column](column-types.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.data_types_suffix",
+   "kind": "assignment",
+   "lines": [
+    139,
+    143
+   ],
+   "fingerprint": "d65cc358b977dcdb"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor._alter_column_type_sql",
+   "line": 108,
+   "sentence": "The base class writes that suffix only where it creates a column, and a change of type writes the type alone, so `DatabaseSchemaEditor._alter_column_type_sql` gives a column that becomes an auto field its identity with `DatabaseSchemaEditor.sql_add_identity`, and takes it from one that stops being one with `DatabaseSchemaEditor.sql_drop_indentity`, so spelt, dropping too the sequence that a `\"serial\"` column made by a Django older than 4.1 has (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor._alter_column_type_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor._alter_column_type_sql",
+   "kind": "function",
+   "lines": [
+    152,
+    261
+   ],
+   "fingerprint": "fed692862372fa7c"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/introspection.py:DatabaseIntrospection",
+   "line": 112,
+   "sentence": "PostgreSQL's `DatabaseIntrospection` reads the server's own catalogues (`django/db/backends/postgresql/introspection.py:DatabaseIntrospection`) ([Introspection: reading the schema back](introspection.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/introspection.py",
+   "symbol": "DatabaseIntrospection",
+   "kind": "class",
+   "lines": [
+    13,
+    325
+   ],
+   "fingerprint": "ef5fe80d05f5454f"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/creation.py:DatabaseCreation",
+   "line": 112,
+   "sentence": "Its `DatabaseCreation` creates a test database with the encoding and the template that the `\"TEST\"` setting names, and a copy for each parallel worker with the test database as its template (`django/db/backends/postgresql/creation.py:DatabaseCreation`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/creation.py",
+   "symbol": "DatabaseCreation",
+   "kind": "class",
+   "lines": [
+    9,
+    91
+   ],
+   "fingerprint": "d91730eab8151851"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/client.py:DatabaseClient.settings_to_cmd_args_env",
+   "line": 116,
+   "sentence": "PostgreSQL's `DatabaseClient` runs `\"psql\"` (`django/db/backends/postgresql/client.py:DatabaseClient.settings_to_cmd_args_env`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/client.py",
+   "symbol": "DatabaseClient.settings_to_cmd_args_env",
+   "kind": "function",
+   "lines": [
+    9,
+    54
+   ],
+   "at": 10,
+   "fingerprint": "4b724c0738fe2c12"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/client.py:DatabaseClient.runshell",
+   "line": 125,
+   "sentence": "`DatabaseClient.runshell` ignores the interrupt signal while psql runs and puts its handler back afterwards, so that, the comment says, an interrupt passes to psql to abort a query (`django/db/backends/postgresql/client.py:DatabaseClient.runshell`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/client.py",
+   "symbol": "DatabaseClient.runshell",
+   "kind": "function",
+   "lines": [
+    56,
+    64
+   ],
+   "fingerprint": "00829fd247accb7a"
+  }
+ ]
+}

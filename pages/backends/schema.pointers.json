@@ -1,0 +1,712 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "schema.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/operations/models.py:CreateModel.database_forwards",
+   "line": 9,
+   "sentence": "The methods that make each kind of change are handed the model class of the table they change, which in a migration is rendered from the migration's state of the model (`django/db/migrations/operations/models.py:CreateModel.database_forwards`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "CreateModel.database_forwards",
+   "kind": "function",
+   "lines": [
+    97,
+    111
+   ],
+   "fingerprint": "57f65d23a8c77d36"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.apply_migration",
+   "line": 11,
+   "sentence": "Migrations are the main user: each operation's `Operation.database_forwards` calls the editor's methods, inside an editor that `MigrationExecutor.apply_migration` opens for each migration (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`) ([Migrations](../migrations.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.apply_migration",
+   "kind": "function",
+   "lines": [
+    241,
+    266
+   ],
+   "fingerprint": "4d2361bf6621e0b6"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.sync_apps",
+   "line": 11,
+   "sentence": "Given `--run-syncdb`, the command migrate creates the tables of apps that have no migrations in one editor, which is how a test database gets its tables when the alias's `\"TEST\"` dictionary sets `\"MIGRATE\"` to false (`django/core/management/commands/migrate.py:Command.sync_apps`) ([Test databases: `BaseDatabaseCreation`](creation.md)); and `MigrationLoader.collect_sql`, behind the command sqlmigrate, uses editors that collect their statements instead of sending them.",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.sync_apps",
+   "kind": "function",
+   "lines": [
+    431,
+    487
+   ],
+   "fingerprint": "a6f11620b77eee0b"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.schema_editor",
+   "line": 11,
+   "sentence": "`BaseDatabaseWrapper.schema_editor` makes an instance of the class the backend names as `BaseDatabaseWrapper.SchemaEditorClass`, and raises `NotImplementedError` where it names none (`django/db/backends/base/base.py:BaseDatabaseWrapper.schema_editor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.schema_editor",
+   "kind": "function",
+   "lines": [
+    717,
+    725
+   ],
+   "fingerprint": "0232c405403354b1"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__init__",
+   "line": 15,
+   "sentence": "It sets `BaseDatabaseSchemaEditor.atomic_migration` true only where that option is true and the features also have `BaseDatabaseFeatures.can_rollback_ddl`, which says a rollback undoes DDL: SQLite's and PostgreSQL's have it, MySQL's and Oracle's do not (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.__init__",
+   "kind": "function",
+   "lines": [
+    154,
+    162
+   ],
+   "fingerprint": "70e6ecd354b037b2"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__exit__",
+   "line": 17,
+   "sentence": "`BaseDatabaseSchemaEditor.__exit__` sends each deferred statement if nothing raised in the block, then leaves the atomic block with the exception it was given, so that everything the editor sent commits with the outermost atomic block, or rolls back (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.__exit__",
+   "kind": "function",
+   "lines": [
+    173,
+    178
+   ],
+   "fingerprint": "7cd75e1b563e948d"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__",
+   "line": 50,
+   "sentence": "A deferred statement that fails raises out of `__exit__` with the atomic block never left, and on SQLite with the foreign key checks still off, since `DatabaseSchemaEditor.__exit__` turns them on only after the base class's exit returns (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.__exit__",
+   "kind": "function",
+   "lines": [
+    41,
+    44
+   ],
+   "fingerprint": "dd0a1f0f6514bd6c"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.execute",
+   "line": 54,
+   "sentence": "`BaseDatabaseSchemaEditor.execute` is the one way out for a statement that changes the schema, and it begins with a refusal: when it is not collecting, the connection is inside an atomic block and the features lack `can_rollback_ddl`, it raises `TransactionManagementError`, saying that executing DDL statements while in a transaction on databases that can't perform a rollback is prohibited (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.execute`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.execute",
+   "kind": "function",
+   "lines": [
+    182,
+    211
+   ],
+   "fingerprint": "d1e2f9a3dcef8cfb"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.apply",
+   "line": 54,
+   "sentence": "The editor opens no such block on those backends, but `Migration.apply` does, around an operation that is to be atomic, as a `RunPython` is by default (`django/db/migrations/migration.py:Migration.apply`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.apply",
+   "kind": "function",
+   "lines": [
+    94,
+    137
+   ],
+   "fingerprint": "7cc890cf93bf975f"
+  },
+  {
+   "pointer": "django/db/migrations/operations/special.py:RunPython.database_forwards",
+   "line": 54,
+   "sentence": "The refusal stops the function a `RunPython` runs, which is handed the editor, from changing the schema inside that block on MySQL or Oracle (`django/db/migrations/operations/special.py:RunPython.database_forwards`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/special.py",
+   "symbol": "RunPython.database_forwards",
+   "kind": "function",
+   "lines": [
+    191,
+    203
+   ],
+   "fingerprint": "3e11177b0849c491"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper._execute",
+   "line": 56,
+   "sentence": "Given `None` for its parameters, as each deferred statement is, Django's cursor hands the statement to the driver with none at all, so no `\"%\"` in it is taken for a placeholder (`django/db/backends/utils.py:CursorWrapper._execute`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper._execute",
+   "kind": "function",
+   "lines": [
+    94,
+    105
+   ],
+   "fingerprint": "7d23debb1b13c6c9"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.execute",
+   "line": 56,
+   "sentence": "PostgreSQL's editor writes the parameters into the text itself (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor.execute`) ([PostgreSQL](postgresql.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor.execute",
+   "kind": "function",
+   "lines": [
+    42,
+    48
+   ],
+   "fingerprint": "a1b72bae8bbeaddb"
+  },
+  {
+   "pointer": "django/db/backends/mysql/schema.py:DatabaseSchemaEditor.quote_value",
+   "line": 58,
+   "sentence": "The base class raises `NotImplementedError`, its docstring saying the method is not safe against injection from user code and is meant for SQL scripts and defaults; each of the four backends' editors provides one, MySQL's by asking the driver's connection to escape the value (`django/db/backends/mysql/schema.py:DatabaseSchemaEditor.quote_value`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/schema.py",
+   "symbol": "DatabaseSchemaEditor.quote_value",
+   "kind": "function",
+   "lines": [
+    43,
+    51
+   ],
+   "fingerprint": "add2bece90581dd0"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.table_sql",
+   "line": 77,
+   "sentence": "`BaseDatabaseSchemaEditor.table_sql` writes the statement (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.table_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.table_sql",
+   "kind": "function",
+   "lines": [
+    216,
+    314
+   ],
+   "fingerprint": "5fe013236cc2659d"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.db_type_suffix",
+   "line": 77,
+   "sentence": "For each of the model's own fields it asks `BaseDatabaseSchemaEditor.column_sql` for the column's definition and adds what that leaves out: the check `Field.db_parameters` gives for the field's type, the suffix of the type from `Field.db_type_suffix`, here `\"AUTOINCREMENT\"`, and a relation's foreign key (`django/db/models/fields/__init__.py:Field.db_type_suffix`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.db_type_suffix",
+   "kind": "function",
+   "lines": [
+    957,
+    958
+   ],
+   "fingerprint": "68e660672e8b930a"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.create_model",
+   "line": 81,
+   "sentence": "Last it calls itself for the table of each many-to-many field whose model Django made (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.create_model`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.create_model",
+   "kind": "function",
+   "lines": [
+    516,
+    549
+   ],
+   "fingerprint": "ea26fb16db360be4"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.sync_apps",
+   "line": 83,
+   "sentence": "`Command.sync_apps` creates the tables of the apps without migrations that are not there yet, in a single editor, the comment after its loop saying the deferred SQL is executed when the editor's context is left: by then every table of the block exists (`django/core/management/commands/migrate.py:Command.sync_apps`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.sync_apps",
+   "kind": "function",
+   "lines": [
+    431,
+    487
+   ],
+   "fingerprint": "a6f11620b77eee0b"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.column_sql",
+   "line": 106,
+   "sentence": "`BaseDatabaseSchemaEditor.column_sql` returns a column's definition and its parameters, or `None` for both where the field has no column, as a many-to-many field has none (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.column_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.column_sql",
+   "kind": "function",
+   "lines": [
+    385,
+    410
+   ],
+   "fingerprint": "f7dfac43353589c6"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.db_parameters",
+   "line": 106,
+   "sentence": "It reads `Field.db_parameters`: the type under `\"type\"`, the check under `\"check\"`, which it leaves to its callers, and for a text field or a relation to one the collation under `\"collation\"` (`django/db/models/fields/__init__.py:Field.db_parameters`, `django/db/models/fields/__init__.py:CharField.db_parameters`, `django/db/models/fields/__init__.py:TextField.db_parameters`, `django/db/models/fields/related.py:ForeignKey.db_parameters`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.db_parameters",
+   "kind": "function",
+   "lines": [
+    944,
+    955
+   ],
+   "fingerprint": "4d4c5f4c138f3ec2"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:CharField.db_parameters",
+   "line": 106,
+   "sentence": "It reads `Field.db_parameters`: the type under `\"type\"`, the check under `\"check\"`, which it leaves to its callers, and for a text field or a relation to one the collation under `\"collation\"` (`django/db/models/fields/__init__.py:Field.db_parameters`, `django/db/models/fields/__init__.py:CharField.db_parameters`, `django/db/models/fields/__init__.py:TextField.db_parameters`, `django/db/models/fields/related.py:ForeignKey.db_parameters`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "CharField.db_parameters",
+   "kind": "function",
+   "lines": [
+    1326,
+    1329
+   ],
+   "fingerprint": "04fd6dfc647130be"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:TextField.db_parameters",
+   "line": 106,
+   "sentence": "It reads `Field.db_parameters`: the type under `\"type\"`, the check under `\"check\"`, which it leaves to its callers, and for a text field or a relation to one the collation under `\"collation\"` (`django/db/models/fields/__init__.py:Field.db_parameters`, `django/db/models/fields/__init__.py:CharField.db_parameters`, `django/db/models/fields/__init__.py:TextField.db_parameters`, `django/db/models/fields/related.py:ForeignKey.db_parameters`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "TextField.db_parameters",
+   "kind": "function",
+   "lines": [
+    2554,
+    2557
+   ],
+   "fingerprint": "04fd6dfc647130be"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.db_parameters",
+   "line": 106,
+   "sentence": "It reads `Field.db_parameters`: the type under `\"type\"`, the check under `\"check\"`, which it leaves to its callers, and for a text field or a relation to one the collation under `\"collation\"` (`django/db/models/fields/__init__.py:Field.db_parameters`, `django/db/models/fields/__init__.py:CharField.db_parameters`, `django/db/models/fields/__init__.py:TextField.db_parameters`, `django/db/models/fields/related.py:ForeignKey.db_parameters`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.db_parameters",
+   "kind": "function",
+   "lines": [
+    1322,
+    1328
+   ],
+   "fingerprint": "030e887858c31ac2"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._iter_column_sql",
+   "line": 106,
+   "sentence": "`BaseDatabaseSchemaEditor._iter_column_sql` gives these clauses first, in this order (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._iter_column_sql`):",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._iter_column_sql",
+   "kind": "function",
+   "lines": [
+    318,
+    383
+   ],
+   "fingerprint": "bed53e64506389de"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._effective_default",
+   "line": 118,
+   "sentence": "`BaseDatabaseSchemaEditor._effective_default` settles the value a column must hold in rows that already exist: the field's default where it has one; nothing for a generated field; the empty string, or empty bytes for a `BinaryField`, for a field that may not be null but may be blank and whose type allows the empty string; the moment of the call for a field given auto_now or auto_now_add; otherwise nothing (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._effective_default`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._effective_default",
+   "kind": "function",
+   "lines": [
+    474,
+    498
+   ],
+   "at": 475,
+   "fingerprint": "bf8d623e798246b6"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.get_db_prep_save",
+   "line": 118,
+   "sentence": "`BaseDatabaseSchemaEditor.effective_default` passes it through `Field.get_db_prep_save` (`django/db/models/fields/__init__.py:Field.get_db_prep_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.get_db_prep_save",
+   "kind": "function",
+   "lines": [
+    1048,
+    1052
+   ],
+   "fingerprint": "254f5d517831c32c"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_field",
+   "line": 120,
+   "sentence": "`BaseDatabaseSchemaEditor.add_field` asks for one and takes it away: the column is created with the effective default as its `\"DEFAULT\"`, which the database writes into every existing row, and the next statement drops it, unless the field has a database default, the backend's editor says it cannot be dropped, or there was none (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_field`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.add_field",
+   "kind": "function",
+   "lines": [
+    760,
+    847
+   ],
+   "fingerprint": "bcde2e053561f247"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.db_default_sql",
+   "line": 122,
+   "sentence": "A database default is compiled as an expression, a `Value` into that placeholder and anything else in parentheses (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.db_default_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.db_default_sql",
+   "kind": "function",
+   "lines": [
+    442,
+    459
+   ],
+   "fingerprint": "1e19690d68caa49d"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.add_field",
+   "line": 122,
+   "sentence": "MySQL's editor has rules of its own for the defaults of text, blob and JSON columns ([MySQL and MariaDB](mysql.md)); SQLite's builds the table again to add a column with an effective default, its comment saying SQLite's `\"ALTER TABLE\"` does not support `\"DROP DEFAULT\"` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.add_field`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.add_field",
+   "kind": "function",
+   "lines": [
+    302,
+    331
+   ],
+   "fingerprint": "058f1c189c961abd"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.remove_field",
+   "line": 126,
+   "sentence": "`BaseDatabaseSchemaEditor.remove_field` drops a relation's foreign key constraints first, finding their names in the database, the comment saying MySQL requires their explicit deletion; then it sends `\"DROP COLUMN\"` and takes off the list every deferred statement that refers to the column (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.remove_field`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.remove_field",
+   "kind": "function",
+   "lines": [
+    849,
+    879
+   ],
+   "fingerprint": "834cab1c18f77065"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.add_field",
+   "line": 145,
+   "sentence": "SQLite's editor uses those statements only for such columns: it adds with them a column that may be null, is neither a primary key nor unique, and has no effective default and no database default other than a `Value`, drops one that is not a primary key, not unique, not indexed and not a foreign key, and for any other column builds the table again (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.add_field`, `django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.remove_field`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.add_field",
+   "kind": "function",
+   "lines": [
+    302,
+    331
+   ],
+   "fingerprint": "058f1c189c961abd"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.remove_field",
+   "line": 145,
+   "sentence": "SQLite's editor uses those statements only for such columns: it adds with them a column that may be null, is neither a primary key nor unique, and has no effective default and no database default other than a `Value`, drops one that is not a primary key, not unique, not indexed and not a foreign key, and for any other column builds the table again (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.add_field`, `django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.remove_field`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.remove_field",
+   "kind": "function",
+   "lines": [
+    333,
+    358
+   ],
+   "fingerprint": "2fe9a294239ca2dd"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model",
+   "line": 147,
+   "sentence": "`BaseDatabaseSchemaEditor.delete_model` drops the tables of the model's many-to-many fields whose models Django made, then its own with `BaseDatabaseSchemaEditor.sql_delete_table`, and takes off the list every deferred statement that refers to the table (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.delete_model`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.delete_model",
+   "kind": "function",
+   "lines": [
+    551,
+    570
+   ],
+   "fingerprint": "aed68722d2714d55"
+  },
+  {
+   "pointer": "django/db/models/indexes.py:Index.create_sql",
+   "line": 151,
+   "sentence": "An `Index` or a constraint hands the editor its fields or expressions, its condition compiled with the values written in by `quote_value`, and its name (`django/db/models/indexes.py:Index.create_sql`).",
+   "tree": "django",
+   "path": "django/db/models/indexes.py",
+   "symbol": "Index.create_sql",
+   "kind": "function",
+   "lines": [
+    186,
+    224
+   ],
+   "fingerprint": "7a74beee1ea8e4bf"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_index",
+   "line": 153,
+   "sentence": "`BaseDatabaseSchemaEditor.add_constraint` and `BaseDatabaseSchemaEditor.remove_constraint` send what the constraint returns, if anything (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_index`, `django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_constraint`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.add_index",
+   "kind": "function",
+   "lines": [
+    572,
+    581
+   ],
+   "fingerprint": "92f070dee046c819"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_constraint",
+   "line": 153,
+   "sentence": "`BaseDatabaseSchemaEditor.add_constraint` and `BaseDatabaseSchemaEditor.remove_constraint` send what the constraint returns, if anything (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_index`, `django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.add_constraint`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.add_constraint",
+   "kind": "function",
+   "lines": [
+    602,
+    608
+   ],
+   "fingerprint": "d80926c39134d39a"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._delete_composed_index",
+   "line": 155,
+   "sentence": "`BaseDatabaseSchemaEditor.alter_unique_together` adds each new entry with `_create_unique_sql` and drops each old one through `BaseDatabaseSchemaEditor._delete_composed_index`, which takes the entry's statement off the deferred statements if it is still there, and otherwise asks the database for the constraint, taking, where the features have `allows_multiple_constraints_on_same_fields`, the one with the name the editor would have given it, and raising `ValueError` unless it is left with one (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._delete_composed_index`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._delete_composed_index",
+   "kind": "function",
+   "lines": [
+    658,
+    710
+   ],
+   "fingerprint": "caeb7955288df03e"
+  },
+  {
+   "pointer": "django/db/backends/ddl_references.py:Statement",
+   "line": 159,
+   "sentence": "So it is kept as a `Statement`, a template and its parts by name, and written out when it is sent as the template filled in with each part's text (`django/db/backends/ddl_references.py:Statement`).",
+   "tree": "django",
+   "path": "django/db/backends/ddl_references.py",
+   "symbol": "Statement",
+   "kind": "class",
+   "lines": [
+    194,
+    236
+   ],
+   "fingerprint": "fd6c9d41d9352bd8"
+  },
+  {
+   "pointer": "django/db/backends/ddl_references.py",
+   "line": 161,
+   "sentence": "All but the `Table` are subclasses of `TableColumns`, a table and its columns, which writes out nothing of its own (`django/db/backends/ddl_references.py`).",
+   "tree": "django",
+   "path": "django/db/backends/ddl_references.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    270
+   ],
+   "fingerprint": "e524094cfd33d8c2"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.alter_db_table",
+   "line": 165,
+   "sentence": "That method sends `BaseDatabaseSchemaEditor.sql_rename_table` unless the names are equal, or differ only in case where the features have `ignores_table_name_case`, records the rename where it is collecting, and tells each deferred `Statement` (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.alter_db_table`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.alter_db_table",
+   "kind": "function",
+   "lines": [
+    712,
+    737
+   ],
+   "fingerprint": "445467056cd67c83"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._create_index_sql",
+   "line": 175,
+   "sentence": "The function that `BaseDatabaseSchemaEditor._create_index_sql` hands to its `IndexName` makes the name the first time it is written out, here after the rename, and keeps it, so that one written out before a rename keeps the old table's (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._create_index_sql`); `_delete_index_sql` writes out the name of each deferred statement on its table, to compare with the index it drops.",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._create_index_sql",
+   "kind": "function",
+   "lines": [
+    1613,
+    1665
+   ],
+   "fingerprint": "6b37d525393cab75"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._create_index_name",
+   "line": 179,
+   "sentence": "`BaseDatabaseSchemaEditor._create_index_name` makes the names the editor chooses, for an index, a foreign key, a unique constraint, a check or a primary key, from the table's name, the columns' names joined with underscores, and a digest followed by a suffix (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._create_index_name`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._create_index_name",
+   "kind": "function",
+   "lines": [
+    1556,
+    1586
+   ],
+   "fingerprint": "3641395509477264"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:split_identifier",
+   "line": 179,
+   "sentence": "`split_identifier` first drops any schema before the table's name, and the digest is eight hexadecimal digits of an MD5 of the whole table's name and columns' names, made by `names_digest` (`django/db/backends/utils.py:split_identifier`, `django/db/backends/utils.py:names_digest`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "split_identifier",
+   "kind": "function",
+   "lines": [
+    269,
+    280
+   ],
+   "fingerprint": "200ba2a500d11f20"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:names_digest",
+   "line": 179,
+   "sentence": "`split_identifier` first drops any schema before the table's name, and the digest is eight hexadecimal digits of an MD5 of the whole table's name and columns' names, made by `names_digest` (`django/db/backends/utils.py:split_identifier`, `django/db/backends/utils.py:names_digest`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "names_digest",
+   "kind": "function",
+   "lines": [
+    304,
+    312
+   ],
+   "fingerprint": "b29247abf013ab8e"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:truncate_name",
+   "line": 199,
+   "sentence": "`truncate_name`, Django's other way of shortening a name, used for the table name Django makes for a model and the names Oracle's operations object quotes, keeps the first characters and puts four digits of an MD5 of the whole name in place of the rest; Oracle's limit is 30 (`django/db/backends/utils.py:truncate_name`, `django/db/backends/oracle/operations.py:DatabaseOperations.max_name_length`):",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "truncate_name",
+   "kind": "function",
+   "lines": [
+    283,
+    301
+   ],
+   "fingerprint": "9e20654628ced1b8"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.max_name_length",
+   "line": 199,
+   "sentence": "`truncate_name`, Django's other way of shortening a name, used for the table name Django makes for a model and the names Oracle's operations object quotes, keeps the first characters and puts four digits of an MD5 of the whole name in place of the rest; Oracle's limit is 30 (`django/db/backends/utils.py:truncate_name`, `django/db/backends/oracle/operations.py:DatabaseOperations.max_name_length`):",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.max_name_length",
+   "kind": "function",
+   "lines": [
+    370,
+    371
+   ],
+   "fingerprint": "c3efa1935b9f374c"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._constraint_names",
+   "line": 209,
+   "sentence": "`BaseDatabaseSchemaEditor._constraint_names` asks introspection's `get_constraints` for the table, a dictionary from each constraint's name to its columns and its kind, and returns the names whose columns are exactly those given, in order, or any where none are given, and whose kind is the one asked for, less any it is told to exclude (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._constraint_names`) ([Introspection: reading the schema back](introspection.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._constraint_names",
+   "kind": "function",
+   "lines": [
+    2045,
+    2093
+   ],
+   "fingerprint": "87b05a64c41f2016"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor",
+   "line": 215,
+   "sentence": "SQLite's (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`) builds a table again for most changes; PostgreSQL's (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor`) keeps identity columns and sequences right when a column's type changes; MySQL's (`django/db/backends/mysql/schema.py:DatabaseSchemaEditor`) has its own templates for altering and renaming and its own rules for defaults; and Oracle's (`django/db/backends/oracle/schema.py:DatabaseSchemaEditor`), where Oracle refuses a change of a column's type, copies the column into a new one.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    15,
+    502
+   ],
+   "fingerprint": "fa6d71a7d8f27b6c"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/schema.py:DatabaseSchemaEditor",
+   "line": 215,
+   "sentence": "SQLite's (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`) builds a table again for most changes; PostgreSQL's (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor`) keeps identity columns and sequences right when a column's type changes; MySQL's (`django/db/backends/mysql/schema.py:DatabaseSchemaEditor`) has its own templates for altering and renaming and its own rules for defaults; and Oracle's (`django/db/backends/oracle/schema.py:DatabaseSchemaEditor`), where Oracle refuses a change of a column's type, copies the column into a new one.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    7,
+    380
+   ],
+   "fingerprint": "59a7afeeb9c94269"
+  },
+  {
+   "pointer": "django/db/backends/mysql/schema.py:DatabaseSchemaEditor",
+   "line": 215,
+   "sentence": "SQLite's (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`) builds a table again for most changes; PostgreSQL's (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor`) keeps identity columns and sequences right when a column's type changes; MySQL's (`django/db/backends/mysql/schema.py:DatabaseSchemaEditor`) has its own templates for altering and renaming and its own rules for defaults; and Oracle's (`django/db/backends/oracle/schema.py:DatabaseSchemaEditor`), where Oracle refuses a change of a column's type, copies the column into a new one.",
+   "tree": "django",
+   "path": "django/db/backends/mysql/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    6,
+    249
+   ],
+   "fingerprint": "391ca7a1067a233f"
+  },
+  {
+   "pointer": "django/db/backends/oracle/schema.py:DatabaseSchemaEditor",
+   "line": 215,
+   "sentence": "SQLite's (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`) builds a table again for most changes; PostgreSQL's (`django/db/backends/postgresql/schema.py:DatabaseSchemaEditor`) keeps identity columns and sequences right when a column's type changes; MySQL's (`django/db/backends/mysql/schema.py:DatabaseSchemaEditor`) has its own templates for altering and renaming and its own rules for defaults; and Oracle's (`django/db/backends/oracle/schema.py:DatabaseSchemaEditor`), where Oracle refuses a change of a column's type, copies the column into a new one.",
+   "tree": "django",
+   "path": "django/db/backends/oracle/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    13,
+    256
+   ],
+   "fingerprint": "28f40bcdf5acdade"
+  }
+ ]
+}

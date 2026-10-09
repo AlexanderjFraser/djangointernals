@@ -1,0 +1,718 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "oracle.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/oracle/base.py",
+   "line": 13,
+   "sentence": "`django/db/backends/oracle/base.py` imports `oracledb` as `Database`, and raises `ImproperlyConfigured` where it is missing.",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    669
+   ],
+   "fingerprint": "fea2aed7e2fa2103"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:_setup_environment",
+   "line": 13,
+   "sentence": "Loading it has `_setup_environment` set two variables of the process's environment, once, for every connection after: `\"NLS_LANG\"` to `\".AL32UTF8\"`, since, the comment says, Oracle takes the client's character set from the environment, and `\"ORA_NCHAR_LITERAL_REPLACE\"` to `\"TRUE\"`, which, the next comment says, keeps Unicode from being mangled by a database character set that may not be Unicode (`django/db/backends/oracle/base.py:_setup_environment`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "_setup_environment",
+   "kind": "function",
+   "lines": [
+    29,
+    45
+   ],
+   "fingerprint": "83bee68436c02ccf"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 15,
+   "sentence": "The oldest `oracledb` supported rises from 2.3.0 to 4.0.2 (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.get_new_connection",
+   "line": 19,
+   "sentence": "`DatabaseWrapper.get_connection_params` is every key of `\"OPTIONS\"` but `\"use_returning_into\"`, which Django reads itself, and `DatabaseWrapper.get_new_connection` passes them to `oracledb.connect` with the alias's `\"USER\"` and `\"PASSWORD\"` and the address `dsn` makes (`django/db/backends/oracle/base.py:DatabaseWrapper.get_new_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    300,
+    309
+   ],
+   "at": 301,
+   "fingerprint": "a518558dfff50771"
+  },
+  {
+   "pointer": "django/db/backends/oracle/utils.py:dsn",
+   "line": 19,
+   "sentence": "Given a `\"PORT\"`, `dsn` has `oracledb.makedsn` write a descriptor of the host, `\"localhost\"` where `\"HOST\"` is empty, the port, and `\"NAME\"` as the database's SID; given none, it returns `\"NAME\"` as it stands (`django/db/backends/oracle/utils.py:dsn`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/utils.py",
+   "symbol": "dsn",
+   "kind": "function",
+   "lines": [
+    95,
+    99
+   ],
+   "fingerprint": "7af7b1d8d2dd49b0"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.pool",
+   "line": 19,
+   "sentence": "With `\"pool\"` set in `\"OPTIONS\"`, the connection comes from a pool that `oracledb.create_pool` makes, kept on the class, one for each alias and user (`django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.pool",
+   "kind": "function",
+   "lines": [
+    258,
+    283
+   ],
+   "at": 259,
+   "fingerprint": "ce0c7c3290369faf"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.init_connection_state",
+   "line": 21,
+   "sentence": "Last, where the alias has autocommit off, it commits, so that, the comment says, the changes are kept (`django/db/backends/oracle/base.py:DatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    311,
+    352
+   ],
+   "fingerprint": "f47201b5d65867a2"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:_UninitializedOperatorsDescriptor",
+   "line": 25,
+   "sentence": "It defines `__get__` alone, so the instance's own attribute hides it from then on (`django/db/backends/oracle/base.py:_UninitializedOperatorsDescriptor`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "_UninitializedOperatorsDescriptor",
+   "kind": "class",
+   "lines": [
+    97,
+    106
+   ],
+   "fingerprint": "d78e409f3e26edd0"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:FormatStylePlaceholderCursor",
+   "line": 29,
+   "sentence": "It stands between Django's cursor and the driver's: `DatabaseWrapper.create_cursor` returns one, which holds the driver's cursor and the connection, rewrites each statement in `FormatStylePlaceholderCursor.execute` and `FormatStylePlaceholderCursor.executemany` before calling the driver inside `wrap_oracle_errors`, and passes any attribute it does not define to the driver's cursor (`django/db/backends/oracle/base.py:FormatStylePlaceholderCursor`) ([Cursors: executing a statement, the query log and execute wrappers](cursors.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "FormatStylePlaceholderCursor",
+   "kind": "class",
+   "lines": [
+    489,
+    669
+   ],
+   "fingerprint": "25faf968e80bd134"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:FormatStylePlaceholderCursor._fix_for_params",
+   "line": 67,
+   "sentence": "A last `\";\"` or `\"/\"` is cut off first: the comment says the driver wants no `\";\"` after SQL and no `\"/\"` after PL/SQL, and that a statement keeps them in case it is handed to SQL*Plus (`django/db/backends/oracle/base.py:FormatStylePlaceholderCursor._fix_for_params`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "FormatStylePlaceholderCursor._fix_for_params",
+   "kind": "function",
+   "lines": [
+    587,
+    628
+   ],
+   "fingerprint": "a72b2596fb56624a"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:OracleParam",
+   "line": 71,
+   "sentence": "`_fix_for_params` ends by having `FormatStylePlaceholderCursor._format_params` wrap each parameter in an `OracleParam`, which settles the value to bind, held, despite its name, as `OracleParam.force_bytes`, which `FormatStylePlaceholderCursor._param_generator` hands the driver, and the driver's type to declare for it, if any, `OracleParam.input_size`, which `FormatStylePlaceholderCursor._guess_input_sizes` declares to the driver's cursor (`django/db/backends/oracle/base.py:OracleParam`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "OracleParam",
+   "kind": "class",
+   "lines": [
+    411,
+    462
+   ],
+   "fingerprint": "7acda1c5e01dde7f"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:FormatStylePlaceholderCursor._output_type_handler",
+   "line": 84,
+   "sentence": "The driver asks `FormatStylePlaceholderCursor._output_type_handler` about each column before fetching it, and for a `\"NUMBER\"` the handler has the value fetched as a string and converted by the column's precision and scale: an integer or a decimal never passes through a `float` (`django/db/backends/oracle/base.py:FormatStylePlaceholderCursor._output_type_handler`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "FormatStylePlaceholderCursor._output_type_handler",
+   "kind": "function",
+   "lines": [
+    515,
+    552
+   ],
+   "at": 516,
+   "fingerprint": "27ffa639f3cee431"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.deferrable_sql",
+   "line": 88,
+   "sentence": "`wrap_oracle_errors` is for the constraints the server checks at the commit: Oracle's operations object makes each foreign key `\" DEFERRABLE INITIALLY DEFERRED\"` (`django/db/backends/oracle/operations.py:DatabaseOperations.deferrable_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.deferrable_sql",
+   "kind": "function",
+   "lines": [
+    289,
+    290
+   ],
+   "fingerprint": "5e34962bccab9070"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:wrap_oracle_errors",
+   "line": 88,
+   "sentence": "`wrap_oracle_errors`, around the driver's calls in `FormatStylePlaceholderCursor.execute` and `FormatStylePlaceholderCursor.executemany` and in `DatabaseWrapper._commit`, turns that case into Django's `IntegrityError` and raises any other unchanged (`django/db/backends/oracle/base.py:wrap_oracle_errors`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "wrap_oracle_errors",
+   "kind": "function",
+   "lines": [
+    71,
+    94
+   ],
+   "at": 72,
+   "fingerprint": "05818e0da1542f58"
+  },
+  {
+   "pointer": "django/db/backends/oracle/features.py:DatabaseFeatures",
+   "line": 92,
+   "sentence": "Oracle stores the empty string as null, and `DatabaseFeatures.interprets_empty_strings_as_nulls` says so; Oracle's is the one backend in the tree that sets it (`django/db/backends/oracle/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    6,
+    249
+   ],
+   "fingerprint": "b0f0bd2f9200f5d7"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.get_db_converters",
+   "line": 92,
+   "sentence": "Django's convention runs the other way, a text field with no value holding `\"\"`, so the backend makes null mean the empty string for every field that allows one: its column, unless it is the primary key, is nullable whatever the field's `null` says, and a null read back becomes `\"\"`, `b\"\"` for a `BinaryField`, so that a text field with `null=True` gives back `\"\"` whether `None` or `\"\"` was saved (`django/db/backends/oracle/operations.py:DatabaseOperations.get_db_converters`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.get_db_converters",
+   "kind": "function",
+   "lines": [
+    213,
+    240
+   ],
+   "fingerprint": "6d04e030e8d9bbeb"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._iter_column_sql",
+   "line": 96,
+   "sentence": "| a column (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._iter_column_sql`) | made `\"NULL\"`; `BaseDatabaseSchemaEditor._alter_column_null_sql` leaves it so | the schema editor's |",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._iter_column_sql",
+   "kind": "function",
+   "lines": [
+    318,
+    383
+   ],
+   "fingerprint": "bed53e64506389de"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.get_db_prep_save",
+   "line": 97,
+   "sentence": "| a foreign key (`django/db/models/fields/related.py:ForeignKey.get_db_prep_save`, `django/db/models/fields/related.py:ForeignKey.get_db_converters`) | `\"\"` is saved as null, and read back as `None` | the query's |",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.get_db_prep_save",
+   "kind": "function",
+   "lines": [
+    1273,
+    1283
+   ],
+   "fingerprint": "c107f41dbb31eb63"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.get_db_converters",
+   "line": 97,
+   "sentence": "| a foreign key (`django/db/models/fields/related.py:ForeignKey.get_db_prep_save`, `django/db/models/fields/related.py:ForeignKey.get_db_converters`) | `\"\"` is saved as null, and read back as `None` | the query's |",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.get_db_converters",
+   "kind": "function",
+   "lines": [
+    1335,
+    1339
+   ],
+   "fingerprint": "ee075378ed3be137"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.build_lookup",
+   "line": 98,
+   "sentence": "| a filter, `\"exact\"` or `\"iexact\"` with `\"\"` (`django/db/models/sql/query.py:Query.build_lookup`) | becomes `\"isnull\"` with `True` | `\"default\"`'s |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.build_lookup",
+   "kind": "function",
+   "lines": [
+    1415,
+    1459
+   ],
+   "fingerprint": "2d27f7e73b8a1fa4"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.is_nullable",
+   "line": 99,
+   "sentence": "| a join (`django/db/models/sql/query.py:Query.is_nullable`) | the field counts as nullable | `\"default\"`'s |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.is_nullable",
+   "kind": "function",
+   "lines": [
+    2785,
+    2801
+   ],
+   "fingerprint": "4189b6bbb248b665"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager",
+   "line": 100,
+   "sentence": "| a reverse foreign key's manager (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`) | an instance whose key is `\"\"` has no related objects | the manager's database |",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_reverse_many_to_one_manager",
+   "kind": "function",
+   "lines": [
+    714,
+    1025
+   ],
+   "fingerprint": "14f78879f0b63ad3"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._perform_unique_checks",
+   "line": 101,
+   "sentence": "| unique checks (`django/db/models/base.py:Model._perform_unique_checks`, `django/db/models/constraints.py:UniqueConstraint.validate`) | `\"\"` is skipped as `None` is | `\"default\"`'s; the database `validate` is given |",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._perform_unique_checks",
+   "kind": "function",
+   "lines": [
+    1552,
+    1606
+   ],
+   "fingerprint": "f6c8a7399b25634c"
+  },
+  {
+   "pointer": "django/db/models/constraints.py:UniqueConstraint.validate",
+   "line": 101,
+   "sentence": "| unique checks (`django/db/models/base.py:Model._perform_unique_checks`, `django/db/models/constraints.py:UniqueConstraint.validate`) | `\"\"` is skipped as `None` is | `\"default\"`'s; the database `validate` is given |",
+   "tree": "django",
+   "path": "django/db/models/constraints.py",
+   "symbol": "UniqueConstraint.validate",
+   "kind": "function",
+   "lines": [
+    585,
+    699
+   ],
+   "fingerprint": "c7af07c5058b1201"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field._get_default",
+   "line": 102,
+   "sentence": "| a field's default (`django/db/models/fields/__init__.py:Field._get_default`) | `\"\"`, not `None`, for a nullable field that accepts `\"\"` and has no default of its own | `\"default\"`'s |",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field._get_default",
+   "kind": "function",
+   "lines": [
+    1066,
+    1086
+   ],
+   "at": 1067,
+   "fingerprint": "a71ca5772a83b23c"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field._check_null_allowed_for_primary_keys",
+   "line": 106,
+   "sentence": "Where `\"default\"` is such a backend, the check that a primary key is not nullable is not made at all, since, its comment says, it cannot be made reliably where null and `\"\"` are one (`django/db/models/fields/__init__.py:Field._check_null_allowed_for_primary_keys`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field._check_null_allowed_for_primary_keys",
+   "kind": "function",
+   "lines": [
+    496,
+    517
+   ],
+   "fingerprint": "279c0d5652b63be0"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.quote_name",
+   "line": 110,
+   "sentence": "The comment's reason: a quoted name is case-sensitive, as SQL92 requires, Oracle keeps an unquoted one in capitals, and making every name capitals is simpler (`django/db/backends/oracle/operations.py:DatabaseOperations.quote_name`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.quote_name",
+   "kind": "function",
+   "lines": [
+    384,
+    395
+   ],
+   "fingerprint": "dbc48f8066dc1ddc"
+  },
+  {
+   "pointer": "django/db/backends/oracle/features.py:DatabaseFeatures.truncates_names",
+   "line": 116,
+   "sentence": "`truncate_name` keeps the start of a name and ends it with four characters of a digest of the whole ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), so `DatabaseFeatures.truncates_names` is true, and the model check of long column names passes over the backend (`django/db/backends/oracle/features.py:DatabaseFeatures.truncates_names`, `django/db/models/base.py:Model._check_long_column_names`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/features.py",
+   "symbol": "DatabaseFeatures.truncates_names",
+   "kind": "assignment",
+   "lines": [
+    32,
+    32
+   ],
+   "fingerprint": "26bf90e924b2332d"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._check_long_column_names",
+   "line": 116,
+   "sentence": "`truncate_name` keeps the start of a name and ends it with four characters of a digest of the whole ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), so `DatabaseFeatures.truncates_names` is true, and the model check of long column names passes over the backend (`django/db/backends/oracle/features.py:DatabaseFeatures.truncates_names`, `django/db/models/base.py:Model._check_long_column_names`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._check_long_column_names",
+   "kind": "function",
+   "lines": [
+    2409,
+    2487
+   ],
+   "at": 2410,
+   "fingerprint": "67b4d43df1554270"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.contribute_to_class",
+   "line": 116,
+   "sentence": "A model's default table name is cut by the `\"default\"` connection's limit as the class is made (`django/db/models/options.py:Options.contribute_to_class`), and names read back are put in lower case (`django/db/backends/oracle/introspection.py:DatabaseIntrospection.identifier_converter`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.contribute_to_class",
+   "kind": "function",
+   "lines": [
+    185,
+    249
+   ],
+   "fingerprint": "99f2ba7634e3d0b9"
+  },
+  {
+   "pointer": "django/db/backends/oracle/introspection.py:DatabaseIntrospection.identifier_converter",
+   "line": 116,
+   "sentence": "A model's default table name is cut by the `\"default\"` connection's limit as the class is made (`django/db/models/options.py:Options.contribute_to_class`), and names read back are put in lower case (`django/db/backends/oracle/introspection.py:DatabaseIntrospection.identifier_converter`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/introspection.py",
+   "symbol": "DatabaseIntrospection.identifier_converter",
+   "kind": "function",
+   "lines": [
+    220,
+    222
+   ],
+   "fingerprint": "151cb1b8f0262f88"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.bulk_insert_sql",
+   "line": 120,
+   "sentence": "The comments give the reasons: the subquery because an identity column makes Oracle add its sequence's next value, which cannot stand in a `\"UNION\"`, and the aliases `\"col_0\"`, `\"col_1\"` on the first select to avoid `\"ORA-00918\"`, a column ambiguously defined, where two columns hold the same value (`django/db/backends/oracle/operations.py:DatabaseOperations.bulk_insert_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.bulk_insert_sql",
+   "kind": "function",
+   "lines": [
+    662,
+    688
+   ],
+   "fingerprint": "fc89eb9aa7d70a67"
+  },
+  {
+   "pointer": "django/db/backends/oracle/utils.py:BulkInsertMapper",
+   "line": 120,
+   "sentence": "Each placeholder is wrapped in the conversion `BulkInsertMapper.types` gives the internal type of the field, or of the field a foreign key points at; a type it does not list, a `\"CharField\"`'s, keeps `\"%s\"` (`django/db/backends/oracle/utils.py:BulkInsertMapper`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/utils.py",
+   "symbol": "BulkInsertMapper",
+   "kind": "class",
+   "lines": [
+    65,
+    92
+   ],
+   "fingerprint": "60d77914e266e657"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.returning_columns",
+   "line": 122,
+   "sentence": "`DatabaseFeatures.can_return_columns_from_insert` is true and `BaseDatabaseFeatures.can_return_rows_from_bulk_insert` is left false, so only the insert of one row asks for its key back, with `\"RETURNING ... INTO %s\"` and a `BoundVar` for each column as the parameter (`django/db/backends/oracle/operations.py:DatabaseOperations.returning_columns`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.returning_columns",
+   "kind": "function",
+   "lines": [
+    292,
+    309
+   ],
+   "fingerprint": "dc7ebea0789fe446"
+  },
+  {
+   "pointer": "django/db/backends/oracle/utils.py:BoundVar",
+   "line": 122,
+   "sentence": "When `OracleParam` meets one, `BoundVar.bind_parameter` makes a variable on the driver's cursor, of the type `BoundVar.types` gives the field, `str` where it gives none; the server writes the new row's values into it, and `DatabaseOperations.fetch_returned_rows` reads them back with `BoundVar.get_value` (`django/db/backends/oracle/utils.py:BoundVar`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/utils.py",
+   "symbol": "BoundVar",
+   "kind": "class",
+   "lines": [
+    7,
+    41
+   ],
+   "fingerprint": "e862203ef7b4d03d"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.data_types",
+   "line": 122,
+   "sentence": "A model with nothing to insert but its key gets `\"NULL\"` for it from `DatabaseOperations.pk_default_value`, where the base class writes `\"DEFAULT\"`; an `AutoField`'s column is `\"NUMBER(11) GENERATED BY DEFAULT ON NULL AS IDENTITY\"` (`django/db/backends/oracle/base.py:DatabaseWrapper.data_types`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.data_types",
+   "kind": "assignment",
+   "lines": [
+    126,
+    154
+   ],
+   "fingerprint": "92150e52961e49ea"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.__init__",
+   "line": 130,
+   "sentence": "`\"use_returning_into\"` set false in `\"OPTIONS\"` turns off `DatabaseFeatures.can_return_columns_from_insert` and `DatabaseFeatures.can_return_rows_from_update` (`django/db/backends/oracle/base.py:DatabaseWrapper.__init__`); `DatabaseOperations.last_insert_id` then reads the key as the current value of the sequence behind the column (`django/db/backends/oracle/operations.py:DatabaseOperations.last_insert_id`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    246,
+    252
+   ],
+   "fingerprint": "7962417f375793b4"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.last_insert_id",
+   "line": 130,
+   "sentence": "`\"use_returning_into\"` set false in `\"OPTIONS\"` turns off `DatabaseFeatures.can_return_columns_from_insert` and `DatabaseFeatures.can_return_rows_from_update` (`django/db/backends/oracle/base.py:DatabaseWrapper.__init__`); `DatabaseOperations.last_insert_id` then reads the key as the current value of the sequence behind the column (`django/db/backends/oracle/operations.py:DatabaseOperations.last_insert_id`) ([Inserts: returned keys, conflicts and batch sizes](inserts.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.last_insert_id",
+   "kind": "function",
+   "lines": [
+    352,
+    355
+   ],
+   "fingerprint": "b6f41be498c2feca"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations._tzname_re",
+   "line": 134,
+   "sentence": "In Oracle's operations object a time zone is written into the statement, never passed as a parameter, because, the comment says, Oracle crashes with `\"ORA-03113\"` when it is; the name is checked against a pattern first (`django/db/backends/oracle/operations.py:DatabaseOperations._tzname_re`, `django/db/backends/oracle/operations.py:DatabaseOperations._convert_sql_to_tz`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations._tzname_re",
+   "kind": "assignment",
+   "lines": [
+    123,
+    123
+   ],
+   "fingerprint": "5afe25db4aa4e53f"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations._convert_sql_to_tz",
+   "line": 134,
+   "sentence": "In Oracle's operations object a time zone is written into the statement, never passed as a parameter, because, the comment says, Oracle crashes with `\"ORA-03113\"` when it is; the name is checked against a pattern first (`django/db/backends/oracle/operations.py:DatabaseOperations._tzname_re`, `django/db/backends/oracle/operations.py:DatabaseOperations._convert_sql_to_tz`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations._convert_sql_to_tz",
+   "kind": "function",
+   "lines": [
+    129,
+    145
+   ],
+   "fingerprint": "e93ad10a3542faa3"
+  },
+  {
+   "pointer": "django/db/backends/oracle/functions.py",
+   "line": 140,
+   "sentence": "Before Oracle 23, `Avg` and `Sum` of a duration are taken over seconds, with `IntervalToSeconds` and `SecondsToInterval` of `django/db/backends/oracle/functions.py` (`django/db/models/functions/mixins.py:FixDurationInputMixin.as_oracle`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/functions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    26
+   ],
+   "fingerprint": "d8ea016326352dbe"
+  },
+  {
+   "pointer": "django/db/models/functions/mixins.py:FixDurationInputMixin.as_oracle",
+   "line": 140,
+   "sentence": "Before Oracle 23, `Avg` and `Sum` of a duration are taken over seconds, with `IntervalToSeconds` and `SecondsToInterval` of `django/db/backends/oracle/functions.py` (`django/db/models/functions/mixins.py:FixDurationInputMixin.as_oracle`).",
+   "tree": "django",
+   "path": "django/db/models/functions/mixins.py",
+   "symbol": "FixDurationInputMixin.as_oracle",
+   "kind": "function",
+   "lines": [
+    35,
+    52
+   ],
+   "fingerprint": "ceeacaa9c78c995f"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version",
+   "line": 144,
+   "sentence": "Several flags of Oracle's `DatabaseFeatures` depend on the server's version, read through `DatabaseWrapper.oracle_version`, which opens a connection to ask where none is open, and closes it again (`django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.oracle_version",
+   "kind": "function",
+   "lines": [
+    401,
+    404
+   ],
+   "at": 402,
+   "fingerprint": "1556d87eeee5cd94"
+  },
+  {
+   "pointer": "django/db/backends/oracle/features.py:DatabaseFeatures",
+   "line": 144,
+   "sentence": "From Oracle 21, `supports_json_negative_indexing`, `supports_primitives_in_json_field`, `supports_frame_exclusion` and `supports_bit_aggregations` are true; from 23, `supports_boolean_expr_in_select_clause`, `supports_comparing_boolean_expr` and `supports_aggregation_over_interval_types` too, and `bare_select_suffix` is empty, `\" FROM DUAL\"` before; then `supports_tuple_lookups` from 23.4, `supports_stored_generated_columns` from 23.7, `supports_uuid4_function` from 23.9 and `supports_uuid4_function_in_default` from 23.26.2 (`django/db/backends/oracle/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    6,
+    249
+   ],
+   "fingerprint": "b0f0bd2f9200f5d7"
+  },
+  {
+   "pointer": "django/db/backends/oracle/schema.py:DatabaseSchemaEditor",
+   "line": 148,
+   "sentence": "Oracle's `DatabaseSchemaEditor` changes a column with `\"MODIFY\"` where the base class writes `\"ALTER COLUMN\"`, drops a table with `\"CASCADE CONSTRAINTS\"`, and calls a stored generated column `\"MATERIALIZED\"` (`django/db/backends/oracle/schema.py:DatabaseSchemaEditor`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/schema.py",
+   "symbol": "DatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    13,
+    256
+   ],
+   "fingerprint": "28f40bcdf5acdade"
+  },
+  {
+   "pointer": "django/db/backends/oracle/validation.py:DatabaseValidation.check_field_type",
+   "line": 148,
+   "sentence": "A column of a large object, which the comment says Oracle cannot index, gets no index from `DatabaseSchemaEditor._field_should_be_indexed`, and `DatabaseValidation.check_field_type` warns of a field that asks for one (`django/db/backends/oracle/validation.py:DatabaseValidation.check_field_type`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/validation.py",
+   "symbol": "DatabaseValidation.check_field_type",
+   "kind": "function",
+   "lines": [
+    6,
+    22
+   ],
+   "fingerprint": "754c2b138a47b5c0"
+  },
+  {
+   "pointer": "django/db/backends/oracle/schema.py:DatabaseSchemaEditor.alter_field",
+   "line": 150,
+   "sentence": "`DatabaseSchemaEditor.alter_field` tries the base class's change and, where Oracle refuses it, reads the error and tries another way (`django/db/backends/oracle/schema.py:DatabaseSchemaEditor.alter_field`): for a type Oracle will not change to in place, `\"ORA-22858\"` or `\"ORA-22859\"`, `DatabaseSchemaEditor._alter_field_type_workaround` copies the values into a new column of the new type, which takes the old one's place, and a change refused for an identity column or a primary key, `\"ORA-30675\"`, `\"ORA-30673\"` or `\"ORA-43923\"`, has the identity or the key dropped first ([Altering a column, and SQLite's table remake](alter-field.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/schema.py",
+   "symbol": "DatabaseSchemaEditor.alter_field",
+   "kind": "function",
+   "lines": [
+    73,
+    101
+   ],
+   "fingerprint": "4b441e34fd8e68ef"
+  },
+  {
+   "pointer": "django/db/backends/oracle/creation.py:DatabaseCreation",
+   "line": 154,
+   "sentence": "Oracle has no separate databases under one user, the docstring of `DatabaseCreation._switch_to_test_user` says, so a test database is a user with a tablespace and a temporary tablespace of its own, and the alias's `\"NAME\"` stays as it was, which `DatabaseCreation._get_test_db_name` returns (`django/db/backends/oracle/creation.py:DatabaseCreation`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/creation.py",
+   "symbol": "DatabaseCreation",
+   "kind": "class",
+   "lines": [
+    12,
+    471
+   ],
+   "fingerprint": "9964e1aab13f0af3"
+  },
+  {
+   "pointer": "django/db/backends/oracle/creation.py:DatabaseCreation._get_test_db_params",
+   "line": 154,
+   "sentence": "The names and sizes come from keys of `\"TEST\"` that only Oracle reads (`django/db/backends/oracle/creation.py:DatabaseCreation._get_test_db_params`):",
+   "tree": "django",
+   "path": "django/db/backends/oracle/creation.py",
+   "symbol": "DatabaseCreation._get_test_db_params",
+   "kind": "function",
+   "lines": [
+    369,
+    384
+   ],
+   "fingerprint": "3d1ba1949d55832f"
+  },
+  {
+   "pointer": "django/db/backends/oracle/client.py:DatabaseClient",
+   "line": 178,
+   "sentence": "`DatabaseClient.settings_to_cmd_args_env` builds dbshell's command line: `\"sqlplus\"`, `\"-L\"`, a connect string of the user, the password in double quotes and the `dsn` the connection uses, then the arguments given after it; where `\"rlwrap\"` is on the path it goes in front, and where the block below was recorded it was not (`django/db/backends/oracle/client.py:DatabaseClient`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/client.py",
+   "symbol": "DatabaseClient",
+   "kind": "class",
+   "lines": [
+    6,
+    27
+   ],
+   "fingerprint": "47266f4046271299"
+  }
+ ]
+}

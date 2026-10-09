@@ -1,0 +1,557 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "inserts.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/query.py:QuerySet._batched_insert",
+   "line": 13,
+   "sentence": "`QuerySet._batched_insert` asks `BaseDatabaseOperations.bulk_batch_size`, before it writes any of its batches, how many instances one statement may carry, given the fields and the instances, and takes the smaller of the answer and the caller's batch size, and never less than one (`django/db/models/query.py:QuerySet._batched_insert`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._batched_insert",
+   "kind": "function",
+   "lines": [
+    2212,
+    2255
+   ],
+   "fingerprint": "d0c71e990bbc6743"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_batch_size",
+   "line": 13,
+   "sentence": "Where the features give no `BaseDatabaseFeatures.max_query_params`, or there are no fields, it answers with the number of instances; otherwise it divides the limit by the number of columns, a `CompositePrimaryKey` counting as its columns, and rounds down, one parameter to each value of each row (`django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_batch_size`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.bulk_batch_size",
+   "kind": "function",
+   "lines": [
+    80,
+    96
+   ],
+   "fingerprint": "4d8692233178f68c"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.in_bulk",
+   "line": 34,
+   "sentence": "The same method sizes the batches of `QuerySet.bulk_update` ([`bulk_create` and `bulk_update`](../querysets/bulk.md)), of `QuerySet.in_bulk` (`django/db/models/query.py:QuerySet.in_bulk`) and of the collector of a delete (`django/db/models/deletion.py:Collector.get_del_batches`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.in_bulk",
+   "kind": "function",
+   "lines": [
+    1275,
+    1378
+   ],
+   "fingerprint": "a12a52b1b14b0be4"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.get_del_batches",
+   "line": 34,
+   "sentence": "The same method sizes the batches of `QuerySet.bulk_update` ([`bulk_create` and `bulk_update`](../querysets/bulk.md)), of `QuerySet.in_bulk` (`django/db/models/query.py:QuerySet.in_bulk`) and of the collector of a delete (`django/db/models/deletion.py:Collector.get_del_batches`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.get_del_batches",
+   "kind": "function",
+   "lines": [
+    256,
+    269
+   ],
+   "fingerprint": "1490580a788b3434"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql",
+   "line": 38,
+   "sentence": "`SQLInsertCompiler.as_sql` asks first for the opening words, `BaseDatabaseOperations.insert_statement`, given the conflict mode: `\"INSERT INTO\"` in the base class, which SQLite's and MySQL's change only where a conflict is to be ignored (`django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    1825,
+    1947
+   ],
+   "fingerprint": "915d3dd6e1884b1b"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_insert_sql",
+   "line": 40,
+   "sentence": "Where the rows go in one statement, `BaseDatabaseOperations.bulk_insert_sql` writes them, given the fields and the rows of placeholders: `\"VALUES\"` and each row in parentheses, in the base class (`django/db/backends/base/operations.py:BaseDatabaseOperations.bulk_insert_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.bulk_insert_sql",
+   "kind": "function",
+   "lines": [
+    282,
+    285
+   ],
+   "fingerprint": "0fe61d451d59efda"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.bulk_insert_sql",
+   "line": 40,
+   "sentence": "PostgreSQL's `DatabaseOperations.bulk_insert_sql` writes `\"SELECT * FROM\"` and an array for each column where its own compiler has sent an `InsertUnnest`, and the base class's rows otherwise (`django/db/backends/postgresql/operations.py:DatabaseOperations.bulk_insert_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.bulk_insert_sql",
+   "kind": "function",
+   "lines": [
+    153,
+    156
+   ],
+   "fingerprint": "11c5f2aa35ec334e"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.bulk_insert_sql",
+   "line": 40,
+   "sentence": "Oracle's writes each row as a `\"SELECT\"` of its placeholders (followed by `\" FROM DUAL\"` before Oracle 23), wrapped where the field's type calls for it in a conversion from `BulkInsertMapper`, and selects from the rows joined by `\"UNION ALL\"`; its comments say that the union stands in a subquery because Oracle adds a sequence's next value to an insert into a table with an identity column, and a sequence's next value cannot be used with `\"UNION\"` (`django/db/backends/oracle/operations.py:DatabaseOperations.bulk_insert_sql`) ([Oracle](oracle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.bulk_insert_sql",
+   "kind": "function",
+   "lines": [
+    662,
+    688
+   ],
+   "fingerprint": "fc89eb9aa7d70a67"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures",
+   "line": 60,
+   "sentence": "Three features say what a backend can do with a new row that collides with an old one: `BaseDatabaseFeatures.supports_ignore_conflicts`, pass over the new row; `BaseDatabaseFeatures.supports_update_conflicts`, update the old row from the new; and `BaseDatabaseFeatures.supports_update_conflicts_with_target`, name in that update the columns whose collision sets it off, the conflict's target (`django/db/backends/base/features.py:BaseDatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    5,
+    487
+   ],
+   "fingerprint": "a8914b1e6836492e"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.on_conflict_suffix_sql",
+   "line": 60,
+   "sentence": "The compiler gives the mode to `insert_statement` and to `BaseDatabaseOperations.on_conflict_suffix_sql`, the second with the columns to update and the target's; the base class's suffix is empty (`django/db/backends/base/operations.py:BaseDatabaseOperations.on_conflict_suffix_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.on_conflict_suffix_sql",
+   "kind": "function",
+   "lines": [
+    866,
+    867
+   ],
+   "fingerprint": "5204842dd72b3bb2"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement",
+   "line": 67,
+   "sentence": "*The SQL of a conflict on each backend (`django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/postgresql/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/mysql/operations.py:DatabaseOperations.insert_statement`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.insert_statement",
+   "kind": "function",
+   "lines": [
+    384,
+    387
+   ],
+   "fingerprint": "26410e0e243e6ef7"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql",
+   "line": 67,
+   "sentence": "*The SQL of a conflict on each backend (`django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/postgresql/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/mysql/operations.py:DatabaseOperations.insert_statement`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.on_conflict_suffix_sql",
+   "kind": "function",
+   "lines": [
+    389,
+    408
+   ],
+   "fingerprint": "ac440cf9345fb7f8"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.on_conflict_suffix_sql",
+   "line": 67,
+   "sentence": "*The SQL of a conflict on each backend (`django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/postgresql/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/mysql/operations.py:DatabaseOperations.insert_statement`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.on_conflict_suffix_sql",
+   "kind": "function",
+   "lines": [
+    377,
+    395
+   ],
+   "fingerprint": "69fb91df724e9bce"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.insert_statement",
+   "line": 67,
+   "sentence": "*The SQL of a conflict on each backend (`django/db/backends/sqlite3/operations.py:DatabaseOperations.insert_statement`, `django/db/backends/sqlite3/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/postgresql/operations.py:DatabaseOperations.on_conflict_suffix_sql`, `django/db/backends/mysql/operations.py:DatabaseOperations.insert_statement`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.insert_statement",
+   "kind": "function",
+   "lines": [
+    373,
+    376
+   ],
+   "fingerprint": "5f3a36be6b75366d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._batched_insert",
+   "line": 84,
+   "sentence": "It asked for nothing back, since `QuerySet._batched_insert` asks for the returning fields only where conflicts are not being ignored (`django/db/models/query.py:QuerySet._batched_insert`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._batched_insert",
+   "kind": "function",
+   "lines": [
+    2212,
+    2255
+   ],
+   "fingerprint": "d0c71e990bbc6743"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.on_conflict_suffix_sql",
+   "line": 86,
+   "sentence": "MySQL's `DatabaseOperations.on_conflict_suffix_sql` gives the new row an alias on MySQL, the comment saying that MySQL does not support `\"VALUES()\"` there, and uses `\"VALUE()\"` on MariaDB (`django/db/backends/mysql/operations.py:DatabaseOperations.on_conflict_suffix_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.on_conflict_suffix_sql",
+   "kind": "function",
+   "lines": [
+    395,
+    419
+   ],
+   "fingerprint": "01d5546478c0cd28"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 93,
+   "sentence": "On MySQL and MariaDB `\"INSERT IGNORE\"` passes over more than a duplicate key: the documentation of `bulk_create` warns that it turns certain other errors into warnings, invalid values and violations of a column's not-null among them, even in strict mode (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql",
+   "line": 97,
+   "sentence": "Once the statements have run, `SQLInsertCompiler.execute_sql` has `BaseDatabaseOperations.fetch_returned_rows` read the rows from the cursor where the backend can return them, by `BaseDatabaseFeatures.can_return_rows_from_bulk_insert` for several rows and `BaseDatabaseFeatures.can_return_columns_from_insert` for one; otherwise, where the first field to return is an `AutoField`, it makes one row of what `last_insert_id` returns, and where it is not, returns nothing (`django/db/models/sql/compiler.py:SQLInsertCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1949,
+    1994
+   ],
+   "fingerprint": "db88ef7828709403"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns",
+   "line": 99,
+   "sentence": "`BaseDatabaseOperations.returning_columns` writes `\"RETURNING\"` and each column qualified by its table, with no parameters, and `fetch_returned_rows` asks the cursor for all its rows (`django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.returning_columns",
+   "kind": "function",
+   "lines": [
+    380,
+    397
+   ],
+   "fingerprint": "ea8ba58ddc4cb141"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.returning_columns",
+   "line": 99,
+   "sentence": "Oracle's `DatabaseOperations.returning_columns` adds `\"INTO\"` and a variable for each column, for the database to fill, and its `DatabaseOperations.fetch_returned_rows` reads them back (`django/db/backends/oracle/operations.py:DatabaseOperations.returning_columns`) ([Oracle](oracle.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.returning_columns",
+   "kind": "function",
+   "lines": [
+    292,
+    309
+   ],
+   "fingerprint": "dc7ebea0789fe446"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.last_insert_id",
+   "line": 101,
+   "sentence": "The base class's `last_insert_id` is the driver's cursor's last row id, which every backend but Oracle's keeps (`django/db/backends/base/operations.py:BaseDatabaseOperations.last_insert_id`); Oracle's asks the database for the sequence behind the key's column and then for its current value (`django/db/backends/oracle/operations.py:DatabaseOperations.last_insert_id`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.last_insert_id",
+   "kind": "function",
+   "lines": [
+    311,
+    318
+   ],
+   "fingerprint": "e1b6a12bdd44fc4d"
+  },
+  {
+   "pointer": "django/db/backends/oracle/operations.py:DatabaseOperations.last_insert_id",
+   "line": 101,
+   "sentence": "The base class's `last_insert_id` is the driver's cursor's last row id, which every backend but Oracle's keeps (`django/db/backends/base/operations.py:BaseDatabaseOperations.last_insert_id`); Oracle's asks the database for the sequence behind the key's column and then for its current value (`django/db/backends/oracle/operations.py:DatabaseOperations.last_insert_id`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/operations.py",
+   "symbol": "DatabaseOperations.last_insert_id",
+   "kind": "function",
+   "lines": [
+    352,
+    355
+   ],
+   "fingerprint": "b6f41be498c2feca"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._assign_returned_values",
+   "line": 118,
+   "sentence": "Where a key comes back this way and other fields were asked for too, they cannot come with it: `Model._assign_returned_values` sets the key and takes the others out of the instance's dictionary, which its comment calls stale, so that each is fetched when next read (`django/db/models/base.py:Model._assign_returned_values`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._assign_returned_values",
+   "kind": "function",
+   "lines": [
+    1267,
+    1274
+   ],
+   "fingerprint": "fd8cf507b6e68fda"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.as_sql",
+   "line": 120,
+   "sentence": "`BaseDatabaseOperations.returning_columns` and `BaseDatabaseOperations.fetch_returned_rows` serve an update's `\"RETURNING\"` too, which `SQLUpdateCompiler.as_sql` writes and `SQLUpdateCompiler.execute_returning_sql` reads back for `Model.save` where the backend has `BaseDatabaseFeatures.can_return_rows_from_update`: SQLite and PostgreSQL do, Oracle does unless `\"use_returning_into\"` is off, and MySQL's features class, for MariaDB too, does not (`django/db/models/sql/compiler.py:SQLUpdateCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql`) ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    2061,
+    2136
+   ],
+   "fingerprint": "132c3465955032db"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql",
+   "line": 120,
+   "sentence": "`BaseDatabaseOperations.returning_columns` and `BaseDatabaseOperations.fetch_returned_rows` serve an update's `\"RETURNING\"` too, which `SQLUpdateCompiler.as_sql` writes and `SQLUpdateCompiler.execute_returning_sql` reads back for `Model.save` where the backend has `BaseDatabaseFeatures.can_return_rows_from_update`: SQLite and PostgreSQL do, Oracle does unless `\"use_returning_into\"` is off, and MySQL's features class, for MariaDB too, does not (`django/db/models/sql/compiler.py:SQLUpdateCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql`) ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.execute_returning_sql",
+   "kind": "function",
+   "lines": [
+    2159,
+    2189
+   ],
+   "fingerprint": "fbd6b41eb0089497"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.field_as_sql",
+   "line": 124,
+   "sentence": "`SQLInsertCompiler.field_as_sql` writes each value's placeholder: a field with a placeholder method writes its own, an expression is compiled, and anything else is `\"%s\"` with the value as its parameter (`django/db/models/sql/compiler.py:SQLInsertCompiler.field_as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.field_as_sql",
+   "kind": "function",
+   "lines": [
+    1711,
+    1742
+   ],
+   "fingerprint": "e24788f3f6134f68"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.binary_placeholder_sql",
+   "line": 124,
+   "sentence": "`BinaryField.get_placeholder_sql` asks `BaseDatabaseOperations.binary_placeholder_sql`, given the value and the compiler, which compiles an expression and writes `\"%s\"` for anything else; MySQL's writes `\"_binary %s\"`, its syntax for binary content, for a value that is neither `None` nor an expression (`django/db/backends/base/operations.py:BaseDatabaseOperations.binary_placeholder_sql`, `django/db/backends/mysql/operations.py:DatabaseOperations.binary_placeholder_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.binary_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    755,
+    762
+   ],
+   "fingerprint": "cc224e928e8e3d03"
+  },
+  {
+   "pointer": "django/db/backends/mysql/operations.py:DatabaseOperations.binary_placeholder_sql",
+   "line": 124,
+   "sentence": "`BinaryField.get_placeholder_sql` asks `BaseDatabaseOperations.binary_placeholder_sql`, given the value and the compiler, which compiles an expression and writes `\"%s\"` for anything else; MySQL's writes `\"_binary %s\"`, its syntax for binary content, for a value that is neither `None` nor an expression (`django/db/backends/base/operations.py:BaseDatabaseOperations.binary_placeholder_sql`, `django/db/backends/mysql/operations.py:DatabaseOperations.binary_placeholder_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/operations.py",
+   "symbol": "DatabaseOperations.binary_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    308,
+    313
+   ],
+   "fingerprint": "12328aef675c3931"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.modify_insert_params",
+   "line": 126,
+   "sentence": "`BaseDatabaseOperations.modify_insert_params` is given each placeholder and its parameters last, and returns the parameters as they are; only Oracle's spatial backend overrides it (`django/db/backends/base/operations.py:BaseDatabaseOperations.modify_insert_params`, `django/contrib/gis/db/backends/oracle/operations.py:OracleOperations.modify_insert_params`) ([Content types, static files and the other contrib apps](../contrib.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.modify_insert_params",
+   "kind": "function",
+   "lines": [
+    764,
+    769
+   ],
+   "fingerprint": "487cbf2e1c87afae"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/oracle/operations.py:OracleOperations.modify_insert_params",
+   "line": 126,
+   "sentence": "`BaseDatabaseOperations.modify_insert_params` is given each placeholder and its parameters last, and returns the parameters as they are; only Oracle's spatial backend overrides it (`django/db/backends/base/operations.py:BaseDatabaseOperations.modify_insert_params`, `django/contrib/gis/db/backends/oracle/operations.py:OracleOperations.modify_insert_params`) ([Content types, static files and the other contrib apps](../contrib.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/oracle/operations.py",
+   "symbol": "OracleOperations.modify_insert_params",
+   "kind": "function",
+   "lines": [
+    230,
+    236
+   ],
+   "fingerprint": "7609d666955980df"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.pk_default_value",
+   "line": 130,
+   "sentence": "`BaseDatabaseOperations.pk_default_value` is the value of an insert with no field to write, which the compiler's comment says can only be a model whose primary key is a single auto field: the statement names the key's column, and each instance's row holds this value, `\"DEFAULT\"` in the base class and so on PostgreSQL, `\"NULL\"` on SQLite, MySQL and Oracle (`django/db/backends/base/operations.py:BaseDatabaseOperations.pk_default_value`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.pk_default_value",
+   "kind": "function",
+   "lines": [
+    351,
+    356
+   ],
+   "fingerprint": "37e7ed3a1c87ace2"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.autoinc_sql",
+   "line": 130,
+   "sentence": "`BaseDatabaseOperations.autoinc_sql` is a hook for a backend that needs statements after a table is made to give an auto field its values; no backend of Django's overrides it, their auto fields' column types being identity columns on PostgreSQL and Oracle, `\"AUTO_INCREMENT\"` on MySQL and `\"AUTOINCREMENT\"` on SQLite (`django/db/backends/base/operations.py:BaseDatabaseOperations.autoinc_sql`) ([Column types: from a field to a column](column-types.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.autoinc_sql",
+   "kind": "function",
+   "lines": [
+    71,
+    78
+   ],
+   "fingerprint": "145bb480a8da60a8"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/compiler.py",
+   "line": 134,
+   "sentence": "PostgreSQL's and MySQL's name modules of their own, and each module imports the base's compilers that it does not change and lists them beside its own, so that every name a query may ask for is there (`django/db/backends/postgresql/compiler.py`, `django/db/backends/mysql/compiler.py`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/compiler.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    61
+   ],
+   "fingerprint": "1e70f1d7152cb0ce"
+  },
+  {
+   "pointer": "django/db/backends/mysql/compiler.py",
+   "line": 134,
+   "sentence": "PostgreSQL's and MySQL's name modules of their own, and each module imports the base's compilers that it does not change and lists them beside its own, so that every name a query may ask for is there (`django/db/backends/postgresql/compiler.py`, `django/db/backends/mysql/compiler.py`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/compiler.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    69
+   ],
+   "fingerprint": "e8fb133fe8fb7bc2"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/compiler.py:SQLInsertCompiler.assemble_as_sql",
+   "line": 138,
+   "sentence": "PostgreSQL's `SQLInsertCompiler` overrides `assemble_as_sql` alone, to send the rows of a bulk insert as arrays through `\"UNNEST\"`, one parameter to a column, which the comment says reduces the time spent planning the query (`django/db/backends/postgresql/compiler.py:SQLInsertCompiler.assemble_as_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/compiler.py",
+   "symbol": "SQLInsertCompiler.assemble_as_sql",
+   "kind": "function",
+   "lines": [
+    29,
+    61
+   ],
+   "fingerprint": "58e143c437bc6442"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/compiler.py:InsertUnnest",
+   "line": 138,
+   "sentence": "In place of the rows of placeholders it returns an `InsertUnnest`, a list of one placeholder for each column, each cast to an array of the column's type, which writes itself as `\"UNNEST\"` of them; and in place of the rows of parameters a single row, of a list of values for each column (`django/db/backends/postgresql/compiler.py:InsertUnnest`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/compiler.py",
+   "symbol": "InsertUnnest",
+   "kind": "class",
+   "lines": [
+    18,
+    25
+   ],
+   "fingerprint": "00d8401d452bf875"
+  },
+  {
+   "pointer": "django/db/backends/mysql/compiler.py:SQLDeleteCompiler.as_sql",
+   "line": 144,
+   "sentence": "MySQL's `SQLDeleteCompiler.as_sql` writes a delete over joined tables in MySQL's own syntax, which its comment prefers to the base class's subquery on the key since MySQL and MariaDB plan it better (`django/db/backends/mysql/compiler.py:SQLDeleteCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/compiler.py",
+   "symbol": "SQLDeleteCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    18,
+    41
+   ],
+   "fingerprint": "4645343a64b8c60b"
+  },
+  {
+   "pointer": "django/db/backends/mysql/compiler.py:SQLUpdateCompiler.as_sql",
+   "line": 146,
+   "sentence": "MySQL's `SQLUpdateCompiler.as_sql` adds `\"ORDER BY\"` to the base class's statement where the queryset was given an ordering with `order_by` (`django/db/backends/mysql/compiler.py:SQLUpdateCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/compiler.py",
+   "symbol": "SQLUpdateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    45,
+    69
+   ],
+   "fingerprint": "e4fbdd14f5e9f3d4"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 146,
+   "sentence": "The documentation gives the use, updating a unique field in an order that avoids a conflict on the way, and says the ordering is ignored on other databases (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  }
+ ]
+}

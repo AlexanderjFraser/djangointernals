@@ -87,7 +87,7 @@ First the two lists of names are turned into fields with `Options.get_field` (`d
 
 *The checks of `QuerySet._check_bulk_create_options`, in the order it makes them; the first that fails ends the call. With `ignore_conflicts=True` only the first two are made, with neither option only the first, and in both the two lists of fields are not looked at.*
 
-`BaseDatabaseFeatures` starts with the first of the three features true and the other two false (`django/db/backends/base/features.py:BaseDatabaseFeatures`); which backend changes which is in [Database backends](../backends.md). SQLite's has all three, as the last line here shows, with the feature that decides whether rows are asked back:
+`BaseDatabaseFeatures` starts with the first of the three features true and the other two false (`django/db/backends/base/features.py:BaseDatabaseFeatures`); which backend changes which is in [What a database can do: `BaseDatabaseFeatures`](../backends/features.md#chosen-flags-on-the-four-backends). SQLite's has all three, as the last line here shows, with the feature that decides whether rows are asked back:
 
 ```text recording=querysets
 Logbook.objects.bulk_create([Logbook(title='x')], update_conflicts=True, update_fields=['title'])  ->  raises ValueError: Unique fields that can trigger the upsert must be provided.
@@ -173,7 +173,7 @@ mixed = Logbook.objects.bulk_create([Logbook(pk=40, title='Rough log'), Logbook(
 [(book.pk, book.title) for book in mixed]  ->  [(40, 'Rough log'), (41, 'Fair log')]
 ```
 
-One logbook was given the key 40 and the other none. The first statement has an `"id"` among its columns and the second has not; both asked for the key back, and the instances came out with 40 and 41. Around the two inserts there is a transaction: `bulk_create` opens a block of `atomic` when both lists have instances in them, and only then. The block is made with `savepoint=False`, so inside a transaction already open it would make no savepoint (`django/db/transaction.py:Atomic.__enter__`) ([Database backends](../backends.md)).
+One logbook was given the key 40 and the other none. The first statement has an `"id"` among its columns and the second has not; both asked for the key back, and the instances came out with 40 and 41. Around the two inserts there is a transaction: `bulk_create` opens a block of `atomic` when both lists have instances in them, and only then. The block is made with `savepoint=False`, so inside a transaction already open it would make no savepoint (`django/db/transaction.py:Atomic.__enter__`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#entering-a-block-atomic__enter)).
 
 Before either insert, and inside the block where there is one, comes `QuerySet._handle_order_with_respect_to`, which has something to do only for a model that has an `Options.order_with_respect_to`. Where a save asks the database for an instance's next position with a query of its own, this method asks once for all the instances, and numbers those that have no position (`django/db/models/query.py:QuerySet._handle_order_with_respect_to`).
 
@@ -353,7 +353,7 @@ Sailor.objects.bulk_update([ada, bram], ['name', 'ship', 'signed_on'])  ->  rais
   SQL UPDATE "crew_sailor" SET "name" = CASE WHEN ("crew_sailor"."id" = %s) THEN %s WHEN ("crew_sailor"."id" = %s) THEN %s ELSE NULL END, "ship_id" = CASE WHEN ("crew_sailor"."id" = %s) THEN %s WHEN ("crew_sailor"."id" = %s) THEN %s ELSE NULL END, "signed_on" = CASE WHEN ("crew_sailor"."id" = %s) THEN %s WHEN ("crew_sailor"."id" = %s) THEN %s ELSE NULL END WHERE "crew_sailor"."id" IN (%s, %s) with params (1, 'Ada', 2, 'Bram', 1, 1, 2, 1, 1, '2026-04-10 09:00:00', 2, '2026-04-10 09:00:00', 1, 2)
 ```
 
-With one field the size reckoned is three instances to a batch, and the two sailors went in one statement of six parameters. With three fields it is two, and the one statement for the two sailors has fourteen parameters where ten were reckoned: SQLite refused it. Which backends give a limit, and what each counts against it, is in [Database backends](../backends.md).
+With one field the size reckoned is three instances to a batch, and the two sailors went in one statement of six parameters. With three fields it is two, and the one statement for the two sailors has fourteen parameters where ten were reckoned: SQLite refused it. Which backends give a limit, and what each counts against it, is in [Inserts: returned keys, conflicts and batch sizes](../backends/inserts.md#how-many-rows-to-a-statement-bulk_batch_size).
 
 The expressions for every batch are built before the first statement is sent. Then, inside a block of `atomic` without a savepoint, which is opened even for a single batch, there is one `update` for each:
 

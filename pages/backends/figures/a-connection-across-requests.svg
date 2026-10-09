@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 652">
+  <!-- one thread's connection, down the page: two requests as bands, and between them the questions
+       that close_old_connections has asked at each end and start of a request -->
+
+  <!-- the connection object, made before any request uses it -->
+  <text x="0" y="14"><tspan class="name">connections["default"]</tspan>, first asked for in a thread</text>
+  <text x="0" y="34">the connection is made; its <tspan class="name">.connection</tspan> is <tspan class="name">None</tspan></text>
+
+  <!-- the first request -->
+  <rect class="box" x="0.5" y="50.5" width="605" height="177" rx="4"/>
+  <text x="14" y="73">a request starts</text>
+  <text class="name" x="180" y="73">close_old_connections</text>
+  <text class="quiet" x="180" y="91">nothing open: nothing asked</text>
+
+  <text x="14" y="119">the first cursor</text>
+  <text x="180" y="119"><tspan class="name">ensure_connection</tspan> → <tspan class="name">connect</tspan></text>
+  <text x="180" y="137">the driver's connection opened;</text>
+  <text x="180" y="155"><tspan class="name">close_at</tspan>: now plus <tspan class="name">"CONN_MAX_AGE"</tspan>, or <tspan class="name">None</tspan> for <tspan class="name">None</tspan></text>
+
+  <text x="14" y="183">more cursors</text>
+  <text x="180" y="183">the same driver's connection</text>
+
+  <text x="14" y="211">the request ends</text>
+  <text class="name" x="180" y="211">close_old_connections</text>
+
+  <!-- the end of the first request asks the questions -->
+  <path class="line" d="M262 228 V247.5"/>
+  <polygon class="head" points="262,257.5 257,247.5 267,247.5"/>
+
+  <!-- the questions, which the figure is about -->
+  <rect class="mark-box" x="0.5" y="257.5" width="605" height="209" rx="4"/>
+  <text x="14" y="280"><tspan class="name strong">close_if_unusable_or_obsolete</tspan><tspan class="quiet"> asks of an open connection, in this order</tspan></text>
+  <text x="14" y="306">autocommit not as <tspan class="name">"AUTOCOMMIT"</tspan> says?</text>
+  <text class="strong" x="360" y="306">close</text>
+  <text x="14" y="328"><tspan class="name">errors_occurred</tspan>, and <tspan class="name">is_usable()</tspan> says no?</text>
+  <text class="strong" x="360" y="328">close</text>
+  <text x="14" y="350"><tspan class="name">close_at</tspan> passed?</text>
+  <text class="strong" x="360" y="350">close</text>
+  <text x="14" y="372">none of these</text>
+  <text class="strong" x="360" y="372">keep</text>
+
+  <!-- what the age question does, by the setting -->
+  <path class="line" d="M14 388.5 H592"/>
+  <text class="name" x="14" y="410">"CONN_MAX_AGE": 0</text>
+  <text x="180" y="410"><tspan class="name">close_at</tspan> passed as it opened: closed</text>
+  <text class="name" x="14" y="430">"CONN_MAX_AGE": 60</text>
+  <text x="180" y="430">kept until 60 seconds after it opened</text>
+  <text class="name" x="14" y="450">"CONN_MAX_AGE": None</text>
+  <text x="180" y="450">never closed for its age</text>
+
+  <!-- the start of the next request asks them again -->
+  <path class="line" d="M262 476.5 V496"/>
+  <polygon class="head" points="262,466.5 257,476.5 267,476.5"/>
+
+  <!-- the next request -->
+  <rect class="box" x="0.5" y="496.5" width="605" height="135" rx="4"/>
+  <text x="14" y="519">the next request starts</text>
+  <text class="name" x="180" y="519">close_old_connections</text>
+
+  <text x="14" y="547">the first cursor</text>
+  <text class="quiet" x="180" y="547">kept:</text>
+  <text x="236" y="547">a health check, where <tspan class="name">"CONN_HEALTH_CHECKS"</tspan> is on;</text>
+  <text x="236" y="565"><tspan class="name">is_usable()</tspan> says no? close, and connect again</text>
+  <text class="quiet" x="180" y="587">closed:</text>
+  <text class="name" x="236" y="587">connect</text>
+
+  <text x="14" y="615">the request ends</text>
+  <text class="name" x="180" y="615">close_old_connections</text>
+
+  <!-- and its end asks the same questions: the line leaves the band's foot and comes back round to the box -->
+  <path class="line" d="M262 632 V646.5 H626.5 V362 H615.5"/>
+  <polygon class="head" points="605.5,362 615.5,357 615.5,367"/>
+</svg>

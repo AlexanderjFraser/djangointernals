@@ -1,0 +1,568 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "features.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__init__",
+   "line": 9,
+   "sentence": "The compiler writes a `\"FOR UPDATE\"` only where `BaseDatabaseFeatures.has_select_for_update` is true, `bulk_create` asks for the new rows' keys only where `BaseDatabaseFeatures.can_return_rows_from_bulk_insert` is, and the schema editor runs a migration inside a transaction only where `BaseDatabaseFeatures.can_rollback_ddl` is (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.__init__",
+   "kind": "function",
+   "lines": [
+    154,
+    162
+   ],
+   "fingerprint": "70e6ecd354b037b2"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures",
+   "line": 9,
+   "sentence": "Each such question is a flag of the connection's features object, an instance of the backend's own subclass of `BaseDatabaseFeatures` (`django/db/backends/base/features.py:BaseDatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    5,
+    487
+   ],
+   "fingerprint": "a8914b1e6836492e"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/features.py:BaseSpatialFeatures",
+   "line": 9,
+   "sentence": "GeoDjango's spatial backends add the flags of `BaseSpatialFeatures` (`django/contrib/gis/db/backends/base/features.py:BaseSpatialFeatures`), and a backend may declare flags of its own besides, which only its own code and its vendor methods read, as the database function `UUID4` reads PostgreSQL's `is_postgresql_18` in `UUID4.as_postgresql` (`django/db/models/functions/uuid.py:UUID4.as_postgresql`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/features.py",
+   "symbol": "BaseSpatialFeatures",
+   "kind": "class",
+   "lines": [
+    8,
+    109
+   ],
+   "fingerprint": "3ecc7dc515e3ef2a"
+  },
+  {
+   "pointer": "django/db/models/functions/uuid.py:UUID4.as_postgresql",
+   "line": 9,
+   "sentence": "GeoDjango's spatial backends add the flags of `BaseSpatialFeatures` (`django/contrib/gis/db/backends/base/features.py:BaseSpatialFeatures`), and a backend may declare flags of its own besides, which only its own code and its vendor methods read, as the database function `UUID4` reads PostgreSQL's `is_postgresql_18` in `UUID4.as_postgresql` (`django/db/models/functions/uuid.py:UUID4.as_postgresql`).",
+   "tree": "django",
+   "path": "django/db/models/functions/uuid.py",
+   "symbol": "UUID4.as_postgresql",
+   "kind": "function",
+   "lines": [
+    16,
+    21
+   ],
+   "fingerprint": "27a3ea1844addcd0"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.__init__",
+   "line": 13,
+   "sentence": "`BaseDatabaseWrapper.__init__` makes the features object as it makes the connection, from `BaseDatabaseWrapper.features_class`, and the object keeps the connection it was made for (`django/db/backends/base/features.py:BaseDatabaseFeatures.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.__init__",
+   "kind": "function",
+   "lines": [
+    459,
+    460
+   ],
+   "fingerprint": "2cc8284c765ed71b"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_aggregate_order_by_clause",
+   "line": 17,
+   "sentence": "SQLite's `DatabaseFeatures.supports_aggregate_order_by_clause` is set in the class body by comparing the library's version with 3.44.0, when the module is imported (`django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_aggregate_order_by_clause`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.supports_aggregate_order_by_clause",
+   "kind": "assignment",
+   "lines": [
+    36,
+    36
+   ],
+   "fingerprint": "91609547d906cc3e"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.can_introspect_json_field",
+   "line": 26,
+   "sentence": "Some are another flag read under a second name: SQLite's `DatabaseFeatures.can_introspect_json_field` and `DatabaseFeatures.has_json_object_function` are its `supports_json_field` (`django/db/backends/sqlite3/features.py:DatabaseFeatures.can_introspect_json_field`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.can_introspect_json_field",
+   "kind": "assignment",
+   "lines": [
+    173,
+    173
+   ],
+   "fingerprint": "3e0fa8d7a55f06af"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.max_query_params",
+   "line": 26,
+   "sentence": "SQLite's `DatabaseFeatures.max_query_params` is a property that makes sure the connection is open and asks the driver's connection for the number of parameters a statement may hold: 32766 unless the library was compiled with another limit, or less where the connection has lowered its own (`django/db/backends/sqlite3/features.py:DatabaseFeatures.max_query_params`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.max_query_params",
+   "kind": "function",
+   "lines": [
+    152,
+    161
+   ],
+   "at": 153,
+   "fingerprint": "957024c60ae114f3"
+  },
+  {
+   "pointer": "django/utils/functional.py:cached_property.__get__",
+   "line": 28,
+   "sentence": "A **`cached_property`** works its value out at the first read and puts it in the object's own dictionary, where every later read finds it without calling the method again (`django/utils/functional.py:cached_property.__get__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "cached_property.__get__",
+   "kind": "function",
+   "lines": [
+    39,
+    48
+   ],
+   "fingerprint": "cfaf951e3011b6da"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.__init__",
+   "line": 30,
+   "sentence": "Oracle's `DatabaseWrapper.__init__` sets `BaseDatabaseFeatures.can_return_columns_from_insert` and `BaseDatabaseFeatures.can_return_rows_from_update` on its features object to the alias's `\"OPTIONS\"` entry `\"use_returning_into\"`, true unless the setting gives it, and its `DatabaseWrapper.get_connection_params` leaves the entry out of the driver's arguments; an attribute set on the object hides the class's for that one connection (`django/db/backends/oracle/base.py:DatabaseWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    246,
+    252
+   ],
+   "fingerprint": "7962417f375793b4"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_selected_pks_on_model",
+   "line": 32,
+   "sentence": "Where the backend has `BaseDatabaseFeatures.allows_group_by_selected_pks`, the compiler drops from a grouping the other columns of a table whose primary key is grouped, and `BaseDatabaseFeatures.allows_group_by_selected_pks_on_model` allows that only for a managed model, since an unmanaged one could stand for a view, on which the database might not allow that (`django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_selected_pks_on_model`, `django/db/models/sql/compiler.py:SQLCompiler.collapse_group_by`) ([GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](../sql/grouping.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.allows_group_by_selected_pks_on_model",
+   "kind": "function",
+   "lines": [
+    484,
+    487
+   ],
+   "fingerprint": "96a85e2d07bb5178"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.collapse_group_by",
+   "line": 32,
+   "sentence": "Where the backend has `BaseDatabaseFeatures.allows_group_by_selected_pks`, the compiler drops from a grouping the other columns of a table whose primary key is grouped, and `BaseDatabaseFeatures.allows_group_by_selected_pks_on_model` allows that only for a managed model, since an unmanaged one could stand for a view, on which the database might not allow that (`django/db/backends/base/features.py:BaseDatabaseFeatures.allows_group_by_selected_pks_on_model`, `django/db/models/sql/compiler.py:SQLCompiler.collapse_group_by`) ([GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](../sql/grouping.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.collapse_group_by",
+   "kind": "function",
+   "lines": [
+    202,
+    232
+   ],
+   "fingerprint": "8a2cf38c3c829862"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version",
+   "line": 38,
+   "sentence": "PostgreSQL's `DatabaseWrapper.pg_version` is the server's version as one number, 170000 for 17.0, read from the driver's connection (`django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version`); its features compare it in `DatabaseFeatures.is_postgresql_18`, which other flags read in turn (`django/db/backends/postgresql/features.py:DatabaseFeatures.is_postgresql_18`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.pg_version",
+   "kind": "function",
+   "lines": [
+    554,
+    557
+   ],
+   "at": 555,
+   "fingerprint": "eba4be16bbc96a5e"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.is_postgresql_18",
+   "line": 38,
+   "sentence": "PostgreSQL's `DatabaseWrapper.pg_version` is the server's version as one number, 170000 for 17.0, read from the driver's connection (`django/db/backends/postgresql/base.py:DatabaseWrapper.pg_version`); its features compare it in `DatabaseFeatures.is_postgresql_18`, which other flags read in turn (`django/db/backends/postgresql/features.py:DatabaseFeatures.is_postgresql_18`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.is_postgresql_18",
+   "kind": "function",
+   "lines": [
+    181,
+    183
+   ],
+   "at": 182,
+   "fingerprint": "3c9435754f72155b"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.max_query_params",
+   "line": 38,
+   "sentence": "Some of PostgreSQL's flags read the alias's options instead: `DatabaseFeatures.uses_server_side_binding`, whether psycopg 3 is the driver and `\"server_side_binding\"` is `True`, decides `DatabaseFeatures.max_query_params` (`django/db/backends/postgresql/features.py:DatabaseFeatures.max_query_params`) ([PostgreSQL](postgresql.md)).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.max_query_params",
+   "kind": "function",
+   "lines": [
+    155,
+    159
+   ],
+   "at": 156,
+   "fingerprint": "9a073d0220e6f062"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data",
+   "line": 40,
+   "sentence": "MySQL's `DatabaseWrapper.mysql_server_data` runs one statement for everything the backend wants to know of the server: the version string, the SQL mode, the default storage engine, whether `\"SQL_AUTO_IS_NULL\"` is on, whether table names are kept in lower case, and whether the server's time zone tables are loaded; `DatabaseWrapper.mysql_version` and `DatabaseWrapper.mysql_is_mariadb` are worked out from it and cached in turn (`django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper.mysql_server_data",
+   "kind": "function",
+   "lines": [
+    396,
+    418
+   ],
+   "at": 397,
+   "fingerprint": "020ddeaf0782ce2a"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures",
+   "line": 40,
+   "sentence": "That is how one features class answers for two databases: MySQL's `DatabaseFeatures.can_return_columns_from_insert` is whether the server is MariaDB and `DatabaseFeatures.has_select_for_update_of` whether it is not (`django/db/backends/mysql/features.py:DatabaseFeatures`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures",
+   "kind": "class",
+   "lines": [
+    7,
+    248
+   ],
+   "fingerprint": "1091882f953f88f6"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version",
+   "line": 42,
+   "sentence": "Oracle's `DatabaseWrapper.oracle_version` is the driver's connection's version string as a tuple of numbers, and its features compare it for frame exclusion in a window, a `\"SELECT\"` without `\"FROM DUAL\"`, tuple lookups and stored generated columns among others (`django/db/backends/oracle/base.py:DatabaseWrapper.oracle_version`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.oracle_version",
+   "kind": "function",
+   "lines": [
+    401,
+    404
+   ],
+   "at": 402,
+   "fingerprint": "1556d87eeee5cd94"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_database_version",
+   "line": 42,
+   "sentence": "SQLite's `DatabaseWrapper.get_database_version` is the library's version as the driver reports it (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_database_version`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_database_version",
+   "kind": "function",
+   "lines": [
+    200,
+    201
+   ],
+   "fingerprint": "3d38e29945ffb22f"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported",
+   "line": 46,
+   "sentence": "`BaseDatabaseWrapper.check_database_version_supported` compares the backend's `BaseDatabaseWrapper.get_database_version` with it and raises `NotSupportedError` where the version is older; a backend that leaves the flag at `None` is never checked (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.check_database_version_supported",
+   "kind": "function",
+   "lines": [
+    190,
+    204
+   ],
+   "fingerprint": "8b19411895e85531"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state",
+   "line": 46,
+   "sentence": "`BaseDatabaseWrapper.init_connection_state` calls it for each alias until it passes once in a process, keeping the aliases that have passed in `RAN_DB_VERSION_CHECK` (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.init_connection_state",
+   "kind": "function",
+   "lines": [
+    222,
+    226
+   ],
+   "fingerprint": "7bf5cd4ad43a9b2d"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.minimum_database_version",
+   "line": 46,
+   "sentence": "The values are SQLite 3.37, PostgreSQL 16 and Oracle 19 as class attributes, and on MySQL a `cached_property` that answers 10.11 for MariaDB and 8.4 for MySQL (`django/db/backends/mysql/features.py:DatabaseFeatures.minimum_database_version`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.minimum_database_version",
+   "kind": "function",
+   "lines": [
+    65,
+    70
+   ],
+   "at": 66,
+   "fingerprint": "7f9f6b2b033b0ece"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 48,
+   "sentence": "PostgreSQL's minimum is 16: the release notes of 6.2 drop PostgreSQL 15, whose upstream support ends in November 2027 (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 48,
+   "sentence": "Those of 6.1 raised SQLite to 3.37.0, MySQL to 8.4 and MariaDB to 10.11 (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/backends/base/features.py:BaseDatabaseFeatures.supports_transactions",
+   "line": 52,
+   "sentence": "It is a `cached_property` that, on a cursor of the connection, creates a table, turns autocommit off, inserts a row, rolls back, turns autocommit on, counts the rows and drops the table; the database supports transactions if the count is nought (`django/db/backends/base/features.py:BaseDatabaseFeatures.supports_transactions`).",
+   "tree": "django",
+   "path": "django/db/backends/base/features.py",
+   "symbol": "BaseDatabaseFeatures.supports_transactions",
+   "kind": "function",
+   "lines": [
+    470,
+    482
+   ],
+   "at": 471,
+   "fingerprint": "6d73c4edd555381d"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.supports_transactions",
+   "line": 54,
+   "sentence": "None of the backends Django ships runs that probe: SQLite's, PostgreSQL's and Oracle's set the flag true, the dummy backend's sets it false, and MySQL's reads the server's data (`django/db/backends/mysql/features.py:DatabaseFeatures.supports_transactions`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.supports_transactions",
+   "kind": "function",
+   "lines": [
+    185,
+    190
+   ],
+   "at": 186,
+   "fingerprint": "a29b8832d51ce5c4"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_json_field",
+   "line": 56,
+   "sentence": "The probe that runs on SQLite is its `DatabaseFeatures.supports_json_field`, which executes a `\"SELECT\"` of SQLite's JSON function inside an atomic block and answers false if the database raises `OperationalError` (`django/db/backends/sqlite3/features.py:DatabaseFeatures.supports_json_field`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": "DatabaseFeatures.supports_json_field",
+   "kind": "function",
+   "lines": [
+    163,
+    171
+   ],
+   "at": 164,
+   "fingerprint": "3e3559fbe177ba68"
+  },
+  {
+   "pointer": "django/db/backends/oracle/features.py:DatabaseFeatures.supports_collation_on_charfield",
+   "line": 69,
+   "sentence": "Oracle's `DatabaseFeatures.supports_collation_on_charfield` is another such probe (`django/db/backends/oracle/features.py:DatabaseFeatures.supports_collation_on_charfield`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/features.py",
+   "symbol": "DatabaseFeatures.supports_collation_on_charfield",
+   "kind": "function",
+   "lines": [
+    194,
+    204
+   ],
+   "at": 195,
+   "fingerprint": "286bf2fa8c617f29"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Window.as_sql",
+   "line": 73,
+   "sentence": "Expressions read them as they compile, to refuse or to write something else: `Window.as_sql` raises `NotSupportedError` on a backend without `BaseDatabaseFeatures.supports_over_clause`, and where `BaseDatabaseFeatures.supports_aggregate_filter_clause` is false an aggregate's filter raises it too, which `Aggregate.as_sql` catches to write the filter as a `\"CASE\"` (`django/db/models/expressions.py:Window.as_sql`, `django/db/models/aggregates.py:Aggregate.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Window.as_sql",
+   "kind": "function",
+   "lines": [
+    2064,
+    2095
+   ],
+   "fingerprint": "7e03e45ac2dbfbe1"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:Aggregate.as_sql",
+   "line": 73,
+   "sentence": "Expressions read them as they compile, to refuse or to write something else: `Window.as_sql` raises `NotSupportedError` on a backend without `BaseDatabaseFeatures.supports_over_clause`, and where `BaseDatabaseFeatures.supports_aggregate_filter_clause` is false an aggregate's filter raises it too, which `Aggregate.as_sql` catches to write the filter as a `\"CASE\"` (`django/db/models/expressions.py:Window.as_sql`, `django/db/models/aggregates.py:Aggregate.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate.as_sql",
+   "kind": "function",
+   "lines": [
+    174,
+    213
+   ],
+   "fingerprint": "7cf27e5868a27e5f"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.get",
+   "line": 75,
+   "sentence": "The queryset reads them where it chooses before it compiles: for conflicts and returned rows in `bulk_create` ([`bulk_create` and `bulk_update`](../querysets/bulk.md)), and in `QuerySet.get`, which limits the rows it fetches unless the query locks them on a backend that cannot lock a sliced query (`django/db/models/query.py:QuerySet.get`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.get",
+   "kind": "function",
+   "lines": [
+    726,
+    759
+   ],
+   "fingerprint": "7af2c1f495fa5cf2"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager",
+   "line": 75,
+   "sentence": "`Model._save_table` reads `BaseDatabaseFeatures.can_return_columns_from_insert` to choose what a save asks back ([Saving an instance](../models/saving.md)), and the manager of a many-to-many relation adds rows to an automatic table with conflicts ignored where `BaseDatabaseFeatures.supports_ignore_conflicts` holds (`django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_forward_many_to_many_manager",
+   "kind": "function",
+   "lines": [
+    1075,
+    1714
+   ],
+   "fingerprint": "b93cf4954deac4f9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._savepoint_allowed",
+   "line": 75,
+   "sentence": "The operations object, which writes the database's SQL, reads its own connection's flags, `BaseDatabaseOperations.bulk_batch_size` dividing `BaseDatabaseFeatures.max_query_params`, and the connection reads `BaseDatabaseFeatures.uses_savepoints` before each savepoint on every backend but SQLite, whose connection asks only whether it is inside an atomic block (`django/db/backends/sqlite3/base.py:DatabaseWrapper._savepoint_allowed`) ([Transactions: autocommit, `atomic` and savepoints](transactions.md)).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._savepoint_allowed",
+   "kind": "function",
+   "lines": [
+    229,
+    235
+   ],
+   "fingerprint": "b9639383731efaa2"
+  },
+  {
+   "pointer": "django/test/testcases.py:skipUnlessDBFeature",
+   "line": 77,
+   "sentence": "And the test framework reads `BaseDatabaseFeatures.supports_transactions` and `uses_savepoints` for `TestCase`, and any flag by name through `skipUnlessDBFeature` and its relatives, which a test gives as strings (`django/test/testcases.py:skipUnlessDBFeature`) ([The test framework](../testing.md)).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "skipUnlessDBFeature",
+   "kind": "function",
+   "lines": [
+    1632,
+    1638
+   ],
+   "fingerprint": "f7677dac56288648"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.mark_expected_failures_and_skips",
+   "line": 77,
+   "sentence": "`BaseDatabaseFeatures.django_test_skips` and `BaseDatabaseFeatures.django_test_expected_failures` name tests of Django's own suite to skip or to expect to fail on the database, and are read only when that suite runs (`django/db/backends/base/creation.py:BaseDatabaseCreation.mark_expected_failures_and_skips`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.mark_expected_failures_and_skips",
+   "kind": "function",
+   "lines": [
+    356,
+    365
+   ],
+   "fingerprint": "89494912f0d6d4f0"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/features.py",
+   "line": 113,
+   "sentence": "*Chosen flags of `BaseDatabaseFeatures` on the four database backends Django ships (`django/db/backends/sqlite3/features.py`, `django/db/backends/postgresql/features.py`, `django/db/backends/mysql/features.py`, `django/db/backends/oracle/features.py`). \"By version\" is the server's, or on SQLite the library's; \"none\" is `None`, no limit.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/features.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    177
+   ],
+   "fingerprint": "37720bdebb28f92b"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/features.py",
+   "line": 113,
+   "sentence": "*Chosen flags of `BaseDatabaseFeatures` on the four database backends Django ships (`django/db/backends/sqlite3/features.py`, `django/db/backends/postgresql/features.py`, `django/db/backends/mysql/features.py`, `django/db/backends/oracle/features.py`). \"By version\" is the server's, or on SQLite the library's; \"none\" is `None`, no limit.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    192
+   ],
+   "fingerprint": "9bdfde402f3fe488"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py",
+   "line": 113,
+   "sentence": "*Chosen flags of `BaseDatabaseFeatures` on the four database backends Django ships (`django/db/backends/sqlite3/features.py`, `django/db/backends/postgresql/features.py`, `django/db/backends/mysql/features.py`, `django/db/backends/oracle/features.py`). \"By version\" is the server's, or on SQLite the library's; \"none\" is `None`, no limit.",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    248
+   ],
+   "fingerprint": "2ba36dd9d8eaf5ab"
+  },
+  {
+   "pointer": "django/db/backends/oracle/features.py",
+   "line": 113,
+   "sentence": "*Chosen flags of `BaseDatabaseFeatures` on the four database backends Django ships (`django/db/backends/sqlite3/features.py`, `django/db/backends/postgresql/features.py`, `django/db/backends/mysql/features.py`, `django/db/backends/oracle/features.py`). \"By version\" is the server's, or on SQLite the library's; \"none\" is `None`, no limit.",
+   "tree": "django",
+   "path": "django/db/backends/oracle/features.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    249
+   ],
+   "fingerprint": "52bbeeae9a8cf96c"
+  }
+ ]
+}

@@ -1,0 +1,509 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "routers.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/db/multi-db.txt",
+   "line": 11,
+   "sentence": "Django's guide to several databases calls the first rule the objects' being sticky to their original database (`docs/topics/db/multi-db.txt`).",
+   "tree": "django",
+   "path": "docs/topics/db/multi-db.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    802
+   ],
+   "fingerprint": "65d37fae46a22ee4"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 49,
+   "sentence": "`django.db` makes the router as it is imported, with no routers of its own (`django/db/__init__.py`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter.routers",
+   "line": 49,
+   "sentence": "`ConnectionRouter.__init__` keeps what it was given, and `ConnectionRouter.routers`, a cached property, builds the list the first time it is read: from `DATABASE_ROUTERS` where the router was given nothing, an entry that is a string being imported with `import_string` and called with no arguments, and an entry that is anything else being taken as it is (`django/db/utils.py:ConnectionRouter.routers`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter.routers",
+   "kind": "function",
+   "lines": [
+    207,
+    218
+   ],
+   "at": 208,
+   "fingerprint": "52e57763f1219823"
+  },
+  {
+   "pointer": "django/test/signals.py:clear_routers_cache",
+   "line": 51,
+   "sentence": "A change to the setting after the first question is not seen by `django.db.router`, except where the test framework's receiver of `setting_changed` puts the list of a newly made `ConnectionRouter` in place of the old one (`django/test/signals.py:clear_routers_cache`) ([Overriding settings](../startup/overrides.md)).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "clear_routers_cache",
+   "kind": "function",
+   "lines": [
+    87,
+    90
+   ],
+   "at": 88,
+   "fingerprint": "f7b6df296eae82ee"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter._router_func",
+   "line": 55,
+   "sentence": "`ConnectionRouter._router_func` is a function called twice in the class's body, once with each name, and what it returns is bound in the class as `ConnectionRouter.db_for_read` and `ConnectionRouter.db_for_write` (`django/db/utils.py:ConnectionRouter._router_func`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter._router_func",
+   "kind": "function",
+   "lines": [
+    220,
+    239
+   ],
+   "fingerprint": "757ed371864f7e39"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelState",
+   "line": 55,
+   "sentence": "When the routers are done, a hint `\"instance\"` whose `ModelState.db` is set decides: its alias is the answer (`django/db/models/base.py:ModelState`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelState",
+   "kind": "class",
+   "lines": [
+    485,
+    505
+   ],
+   "fingerprint": "6bc511a8b15682d9"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.from_db",
+   "line": 72,
+   "sentence": "An instance's alias is in its state because Django puts it there: `Model.from_db` records the alias a row was read from, and `Model.save_base` the alias an instance was saved to (`django/db/models/base.py:Model.from_db`, `django/db/models/base.py:Model.save_base`) ([An instance and its state](../models/instances.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.from_db",
+   "kind": "function",
+   "lines": [
+    624,
+    637
+   ],
+   "at": 625,
+   "fingerprint": "10b19b1dcf6af41d"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.save_base",
+   "line": 72,
+   "sentence": "An instance's alias is in its state because Django puts it there: `Model.from_db` records the alias a row was read from, and `Model.save_base` the alias an instance was saved to (`django/db/models/base.py:Model.from_db`, `django/db/models/base.py:Model.save_base`) ([An instance and its state](../models/instances.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.save_base",
+   "kind": "function",
+   "lines": [
+    956,
+    1024
+   ],
+   "fingerprint": "60f9f7bb293fe492"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._add_hints",
+   "line": 74,
+   "sentence": "Django's own callers of `db_for_read` and `db_for_write` give no hint but `\"instance\"`, or none at all, and a queryset passes on the hints its manager was made with and any that `QuerySet._add_hints` has added since (`django/db/models/query.py:QuerySet._add_hints`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._add_hints",
+   "kind": "function",
+   "lines": [
+    2372,
+    2377
+   ],
+   "fingerprint": "821ee3b0d7957261"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter.allow_relation",
+   "line": 78,
+   "sentence": "`ConnectionRouter.allow_relation` takes two instances and the hints, and asks the routers in order in the same way, with one difference: any answer that is not `None` is final, so a router's `False` refuses the relation where in `db_for_read` it would have sent the question on (`django/db/utils.py:ConnectionRouter.allow_relation`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter.allow_relation",
+   "kind": "function",
+   "lines": [
+    244,
+    255
+   ],
+   "fingerprint": "08087df9d763aebb"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelState",
+   "line": 78,
+   "sentence": "When no router answers, the relation is allowed if the two instances' `ModelState.db` are equal (`django/db/models/base.py:ModelState`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelState",
+   "kind": "class",
+   "lines": [
+    485,
+    505
+   ],
+   "fingerprint": "6bc511a8b15682d9"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__set__",
+   "line": 100,
+   "sentence": "`ForwardManyToOneDescriptor.__set__` asked with the ship first and the sailor second, and raised `ValueError` at the refusal, before it set the foreign key's value or its cache: Ada's ship is still the Petrel, read from `\"default\"` because the descriptor's queryset carried Ada as its hint (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__set__`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_queryset`) ([Reading and setting related objects](../models/related-objects.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ForwardManyToOneDescriptor.__set__",
+   "kind": "function",
+   "lines": [
+    294,
+    368
+   ],
+   "fingerprint": "91c247782442f310"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_queryset",
+   "line": 100,
+   "sentence": "`ForwardManyToOneDescriptor.__set__` asked with the ship first and the sailor second, and raised `ValueError` at the refusal, before it set the foreign key's value or its cache: Ada's ship is still the Petrel, read from `\"default\"` because the descriptor's queryset carried Ada as its hint (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__set__`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_queryset`) ([Reading and setting related objects](../models/related-objects.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ForwardManyToOneDescriptor.get_queryset",
+   "kind": "function",
+   "lines": [
+    169,
+    172
+   ],
+   "fingerprint": "c043650615a59cf0"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager",
+   "line": 100,
+   "sentence": "`ReverseOneToOneDescriptor.__set__` does the same at the other end of a one-to-one field, and a many-to-many manager asks `allow_relation` of each instance it is given to add, in `_get_target_ids`, and refuses with a message that names both databases (`django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`) ([Many-to-many relations](../models/many-to-many.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_forward_many_to_many_manager",
+   "kind": "function",
+   "lines": [
+    1075,
+    1714
+   ],
+   "fingerprint": "b93cf4954deac4f9"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter.allow_migrate",
+   "line": 104,
+   "sentence": "`ConnectionRouter.allow_migrate` takes an alias, an application's label and the hints, and asks the routers in order as `allow_relation` does: the first answer that is not `None` is final, and with none the answer is `True` (`django/db/utils.py:ConnectionRouter.allow_migrate`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter.allow_migrate",
+   "kind": "function",
+   "lines": [
+    257,
+    269
+   ],
+   "fingerprint": "38f22d4bbe9f36ce"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter.allow_migrate_model",
+   "line": 104,
+   "sentence": "`ConnectionRouter.allow_migrate_model` puts the question for one model: the model's `Options.app_label`, its `Options.model_name` as the hint `model_name`, and the model itself as the hint `model` (`django/db/utils.py:ConnectionRouter.allow_migrate_model`, `django/db/models/options.py:Options`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter.allow_migrate_model",
+   "kind": "function",
+   "lines": [
+    271,
+    277
+   ],
+   "fingerprint": "14fdac266a1da110"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options",
+   "line": 104,
+   "sentence": "`ConnectionRouter.allow_migrate_model` puts the question for one model: the model's `Options.app_label`, its `Options.model_name` as the hint `model_name`, and the model itself as the hint `model` (`django/db/utils.py:ConnectionRouter.allow_migrate_model`, `django/db/models/options.py:Options`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options",
+   "kind": "class",
+   "lines": [
+    90,
+    1052
+   ],
+   "fingerprint": "53c718b2cb5253fa"
+  },
+  {
+   "pointer": "django/db/utils.py:ConnectionRouter.get_migratable_models",
+   "line": 104,
+   "sentence": "`ConnectionRouter.get_migratable_models` returns the models of one application that `allow_migrate_model` lets into one database, leaving out those swapped out and, unless `include_auto_created=True` is given, those created automatically (`django/db/utils.py:ConnectionRouter.get_migratable_models`, `django/apps/config.py:AppConfig.get_models`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionRouter.get_migratable_models",
+   "kind": "function",
+   "lines": [
+    279,
+    282
+   ],
+   "fingerprint": "3a692d50f95de6ee"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.get_models",
+   "line": 104,
+   "sentence": "`ConnectionRouter.get_migratable_models` returns the models of one application that `allow_migrate_model` lets into one database, leaving out those swapped out and, unless `include_auto_created=True` is given, those created automatically (`django/db/utils.py:ConnectionRouter.get_migratable_models`, `django/apps/config.py:AppConfig.get_models`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.get_models",
+   "kind": "function",
+   "lines": [
+    241,
+    260
+   ],
+   "fingerprint": "de79d3f2f8fdae6e"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.allow_migrate_model",
+   "line": 113,
+   "sentence": "A migration's operation on a model's table puts the question through `Operation.allow_migrate_model`, which first refuses a model that `Options.can_migrate` says no to, a proxy, a model that has been swapped out, one that is not managed, or one that needs a vendor or features the connection lacks, and asks the router only after that (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`, `django/db/models/options.py:Options.can_migrate`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.allow_migrate_model",
+   "kind": "function",
+   "lines": [
+    148,
+    158
+   ],
+   "fingerprint": "6d23b8aa4e2c47a2"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.can_migrate",
+   "line": 113,
+   "sentence": "A migration's operation on a model's table puts the question through `Operation.allow_migrate_model`, which first refuses a model that `Options.can_migrate` says no to, a proxy, a model that has been swapped out, one that is not managed, or one that needs a vendor or features the connection lacks, and asks the router only after that (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`, `django/db/models/options.py:Options.can_migrate`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.can_migrate",
+   "kind": "function",
+   "lines": [
+    395,
+    411
+   ],
+   "fingerprint": "5e6e429df3af28a2"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:CreateModel.database_forwards",
+   "line": 113,
+   "sentence": "The model an operation passes is the one of the migration's state, a historical model, which the guide to several databases warns may lack the class's own attributes, methods and managers, so that a router reading the hint `model` should rely on its `_meta` alone (`django/db/migrations/operations/models.py:CreateModel.database_forwards`, `docs/topics/db/multi-db.txt`) ([Migrations](../migrations.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "CreateModel.database_forwards",
+   "kind": "function",
+   "lines": [
+    97,
+    111
+   ],
+   "fingerprint": "57f65d23a8c77d36"
+  },
+  {
+   "pointer": "docs/topics/db/multi-db.txt",
+   "line": 113,
+   "sentence": "The model an operation passes is the one of the migration's state, a historical model, which the guide to several databases warns may lack the class's own attributes, methods and managers, so that a router reading the hint `model` should rely on its `_meta` alone (`django/db/migrations/operations/models.py:CreateModel.database_forwards`, `docs/topics/db/multi-db.txt`) ([Migrations](../migrations.md)).",
+   "tree": "django",
+   "path": "docs/topics/db/multi-db.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    802
+   ],
+   "fingerprint": "65d37fae46a22ee4"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.handle",
+   "line": 115,
+   "sentence": "The command makemigrations checks the history of migrations in each database that some model may be migrated to, where routers are installed, and it asks with `model_name=` the model's `Options.object_name`, where `allow_migrate_model` and the migration executor pass the lower-case `Options.model_name` (`django/core/management/commands/makemigrations.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    105,
+    264
+   ],
+   "at": 106,
+   "fingerprint": "2f341adcb6f6e802"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.db",
+   "line": 142,
+   "sentence": "`QuerySet.db` asks again each time it is read, and asks `db_for_write` once a method that writes, or `QuerySet.select_for_update`, has marked the queryset (`django/db/models/query.py:QuerySet.db`) ([Clones: how a queryset is built](../querysets/chaining.md)); `RawQuerySet.db` asks only `db_for_read` (`django/db/models/query.py:RawQuerySet.db`) ([Raw querysets](../querysets/raw.md)); and `BaseManager.db` asks `db_for_read` with the manager's hints, which `db_manager` sets with or without an alias (`django/db/models/manager.py:BaseManager.db`, `django/db/models/manager.py:BaseManager.db_manager`) ([Managers](../models/managers.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.db",
+   "kind": "function",
+   "lines": [
+    2171,
+    2176
+   ],
+   "at": 2172,
+   "fingerprint": "1f13b69c0fc42893"
+  },
+  {
+   "pointer": "django/db/models/query.py:RawQuerySet.db",
+   "line": 142,
+   "sentence": "`QuerySet.db` asks again each time it is read, and asks `db_for_write` once a method that writes, or `QuerySet.select_for_update`, has marked the queryset (`django/db/models/query.py:QuerySet.db`) ([Clones: how a queryset is built](../querysets/chaining.md)); `RawQuerySet.db` asks only `db_for_read` (`django/db/models/query.py:RawQuerySet.db`) ([Raw querysets](../querysets/raw.md)); and `BaseManager.db` asks `db_for_read` with the manager's hints, which `db_manager` sets with or without an alias (`django/db/models/manager.py:BaseManager.db`, `django/db/models/manager.py:BaseManager.db_manager`) ([Managers](../models/managers.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "RawQuerySet.db",
+   "kind": "function",
+   "lines": [
+    2563,
+    2566
+   ],
+   "at": 2564,
+   "fingerprint": "7901a2e3bf64f774"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.db",
+   "line": 142,
+   "sentence": "`QuerySet.db` asks again each time it is read, and asks `db_for_write` once a method that writes, or `QuerySet.select_for_update`, has marked the queryset (`django/db/models/query.py:QuerySet.db`) ([Clones: how a queryset is built](../querysets/chaining.md)); `RawQuerySet.db` asks only `db_for_read` (`django/db/models/query.py:RawQuerySet.db`) ([Raw querysets](../querysets/raw.md)); and `BaseManager.db` asks `db_for_read` with the manager's hints, which `db_manager` sets with or without an alias (`django/db/models/manager.py:BaseManager.db`, `django/db/models/manager.py:BaseManager.db_manager`) ([Managers](../models/managers.md)).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.db",
+   "kind": "function",
+   "lines": [
+    142,
+    144
+   ],
+   "at": 143,
+   "fingerprint": "ec8417d212998ab9"
+  },
+  {
+   "pointer": "django/db/models/manager.py:BaseManager.db_manager",
+   "line": 142,
+   "sentence": "`QuerySet.db` asks again each time it is read, and asks `db_for_write` once a method that writes, or `QuerySet.select_for_update`, has marked the queryset (`django/db/models/query.py:QuerySet.db`) ([Clones: how a queryset is built](../querysets/chaining.md)); `RawQuerySet.db` asks only `db_for_read` (`django/db/models/query.py:RawQuerySet.db`) ([Raw querysets](../querysets/raw.md)); and `BaseManager.db` asks `db_for_read` with the manager's hints, which `db_manager` sets with or without an alias (`django/db/models/manager.py:BaseManager.db`, `django/db/models/manager.py:BaseManager.db_manager`) ([Managers](../models/managers.md)).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.db_manager",
+   "kind": "function",
+   "lines": [
+    136,
+    140
+   ],
+   "fingerprint": "b51c90b44ae7b5e4"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.save",
+   "line": 144,
+   "sentence": "Beyond the queryset and the manager, `Model.save`, `Model.delete` and the related managers, given no alias, ask `db_for_write` with their instance as the hint (`django/db/models/base.py:Model.save`, `django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`) ([Saving an instance](../models/saving.md)), and the command migrate, the test databases, dumpdata and loaddata ask through `allow_migrate_model` whether a model is kept in a database before they make its table or write out or load its rows (`django/core/management/commands/migrate.py:Command.sync_apps`, `django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.save",
+   "kind": "function",
+   "lines": [
+    847,
+    915
+   ],
+   "fingerprint": "8403ee1903e1064e"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager",
+   "line": 144,
+   "sentence": "Beyond the queryset and the manager, `Model.save`, `Model.delete` and the related managers, given no alias, ask `db_for_write` with their instance as the hint (`django/db/models/base.py:Model.save`, `django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`) ([Saving an instance](../models/saving.md)), and the command migrate, the test databases, dumpdata and loaddata ask through `allow_migrate_model` whether a model is kept in a database before they make its table or write out or load its rows (`django/core/management/commands/migrate.py:Command.sync_apps`, `django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_forward_many_to_many_manager",
+   "kind": "function",
+   "lines": [
+    1075,
+    1714
+   ],
+   "fingerprint": "b93cf4954deac4f9"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.sync_apps",
+   "line": 144,
+   "sentence": "Beyond the queryset and the manager, `Model.save`, `Model.delete` and the related managers, given no alias, ask `db_for_write` with their instance as the hint (`django/db/models/base.py:Model.save`, `django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`) ([Saving an instance](../models/saving.md)), and the command migrate, the test databases, dumpdata and loaddata ask through `allow_migrate_model` whether a model is kept in a database before they make its table or write out or load its rows (`django/core/management/commands/migrate.py:Command.sync_apps`, `django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.sync_apps",
+   "kind": "function",
+   "lines": [
+    431,
+    487
+   ],
+   "fingerprint": "a6f11620b77eee0b"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string",
+   "line": 144,
+   "sentence": "Beyond the queryset and the manager, `Model.save`, `Model.delete` and the related managers, given no alias, ask `db_for_write` with their instance as the hint (`django/db/models/base.py:Model.save`, `django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager`) ([Saving an instance](../models/saving.md)), and the command migrate, the test databases, dumpdata and loaddata ask through `allow_migrate_model` whether a model is kept in a database before they make its table or write out or load its rows (`django/core/management/commands/migrate.py:Command.sync_apps`, `django/db/backends/base/creation.py:BaseDatabaseCreation.serialize_db_to_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.serialize_db_to_string",
+   "kind": "function",
+   "lines": [
+    138,
+    171
+   ],
+   "fingerprint": "aaed265f2576f933"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 148,
+   "sentence": "`django.db.connection` is a `ConnectionProxy` for `connections[\"default\"]` (`django/db/__init__.py`), and a cursor taken from it runs on `\"default\"` whatever the router would say.",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/transaction.py:get_connection",
+   "line": 148,
+   "sentence": "The functions of `django.db.transaction` take `\"default\"` where they are given no alias, without asking (`django/db/transaction.py:get_connection`) ([Transactions: autocommit, `atomic` and savepoints](transactions.md)).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "get_connection",
+   "kind": "function",
+   "lines": [
+    22,
+    29
+   ],
+   "fingerprint": "0f3753effb3c4d22"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.changeform_view",
+   "line": 167,
+   "sentence": "A block meant to hold a model's writes names the model's alias, `atomic(using=router.db_for_write(Logbook))`, as Django's admin does for the model it edits (`django/contrib/admin/options.py:ModelAdmin.changeform_view`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.changeform_view",
+   "kind": "function",
+   "lines": [
+    2060,
+    2066
+   ],
+   "at": 2061,
+   "fingerprint": "2f96ca80965e6a96"
+  }
+ ]
+}
