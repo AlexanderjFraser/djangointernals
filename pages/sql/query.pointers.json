@@ -10,7 +10,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.__init__",
    "line": 13,
-   "sentence": "`Query.__init__` takes a model and sets up a handful of containers, all of them empty (`django/db/models/sql/query.py:Query.__init__`).",
+   "sentence": "`Query.__init__` keeps a model and `alias_cols` and sets up a handful of containers, all of them empty (`django/db/models/sql/query.py:Query.__init__`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.__init__",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.base_table",
    "line": 30,
-   "sentence": "Everything else a query can hold is a class attribute of `Query`, which an instance reads until a method sets its own, apart from `base_table`, a cached property worked out from the alias map the first time it is read (`django/db/models/sql/query.py:Query.base_table`).",
+   "sentence": "Most of what else a query can hold is a class attribute of `Query`, which an instance reads until a method sets its own; `base_table` is a cached property, worked out from the alias map the first time it is read (`django/db/models/sql/query.py:Query.base_table`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.base_table",
@@ -39,7 +39,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.get_meta",
    "line": 92,
-   "sentence": "`Query.model` is the model class, and `Query.get_meta` returns its options, from which `names_to_path` starts walking a name; the docstring says a subclass may start elsewhere, and none in Django does (`django/db/models/sql/query.py:Query.get_meta`).",
+   "sentence": "`Query.model` is the model class, and `Query.get_meta` returns its options, from which `Query.build_filter` starts walking a name; the docstring says a subclass may start elsewhere, and none in Django does (`django/db/models/sql/query.py:Query.get_meta`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.get_meta",
@@ -79,6 +79,34 @@
    "fingerprint": "ec92eec8a34fc1d0"
   },
   {
+   "pointer": "django/db/models/sql/query.py:Query.add_ordering",
+   "line": 109,
+   "sentence": "The ordering is still the string it was given, `'-signed_on'`, since `Query.add_ordering` checks a name and keeps it (`django/db/models/sql/query.py:Query.add_ordering`), and the compiler resolves it when the statement is written ([ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](ordering.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_ordering",
+   "kind": "function",
+   "lines": [
+    2335,
+    2370
+   ],
+   "fingerprint": "7d65037c119d224c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_initial_alias",
+   "line": 111,
+   "sentence": "The reference counts say how many things hold each alias: the base table is counted once more each time a condition starts its walk there (`django/db/models/sql/query.py:Query.get_initial_alias`), which is the count of 2 above, and a join whose count falls to zero stays in the map and is not written ([Tables and joins: the alias map and join promotion](joins.md) has the counting).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_initial_alias",
+   "kind": "function",
+   "lines": [
+    1113,
+    1125
+   ],
+   "fingerprint": "edea199be6ada238"
+  },
+  {
    "pointer": "django/db/models/sql/query.py:Query.sql_with_params",
    "line": 115,
    "sentence": "`Query.sql_with_params` asks for a compiler for the default database and returns what its `as_sql` returns, the statement with `%s` for each parameter and the tuple of parameters; `Query.__str__` returns the first with the second substituted into it by Python's `%` (`django/db/models/sql/query.py:Query.sql_with_params`, `django/db/models/sql/query.py:Query.__str__`).",
@@ -109,7 +137,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.clone",
    "line": 127,
-   "sentence": "It makes an empty object, gives it the query's class, and copies the instance's dictionary across in one go, so that every attribute the instance has set is on the clone, shared; then it replaces, one by one, the containers that the next method will change in place, with a copy each (`django/db/models/sql/query.py:Query.clone`).",
+   "sentence": "It makes an empty object, gives it the query's class, and copies the instance's dictionary across in one go, so that every attribute the instance has set is on the clone, shared; then it replaces a number of the containers, one by one, with a copy each (`django/db/models/sql/query.py:Query.clone`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.clone",
@@ -137,7 +165,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.relabeled_clone",
    "line": 147,
-   "sentence": "And `Query.relabeled_clone` clones and then renames aliases throughout the clone with `change_aliases`, the relabelling every expression offers, which is reached when a tree that holds the query, as a `Subquery` or as the right side of a lookup, is relabelled (`django/db/models/sql/query.py:Query.relabeled_clone`); the renaming a query gets when it is put inside another is `bump_prefix`'s, and [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md) has it.",
+   "sentence": "And `Query.relabeled_clone` clones and then renames aliases throughout the clone with `change_aliases`, the relabelling every expression offers, which is reached when a tree that holds the query, as a `Subquery` or as the right side of a lookup, is relabelled (`django/db/models/sql/query.py:Query.relabeled_clone`); the renaming a query gets when it is put inside another is `Query.bump_prefix`'s, and [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](subqueries.md) has it.",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.relabeled_clone",
@@ -165,7 +193,7 @@
   {
    "pointer": "django/db/models/sql/subqueries.py:UpdateQuery._setup_query",
    "line": 151,
-   "sentence": "And where the clone's class has a `_setup_query`, it calls it, which is how an `UpdateQuery` comes to have its list of values to set and its related updates after a change of class, since `__init__` did not run (`django/db/models/sql/subqueries.py:UpdateQuery._setup_query`).",
+   "sentence": "And where the clone's class has a `_setup_query`, it calls it, which is how an `UpdateQuery` comes to have its list of values to set and its related updates after a change of class, since `UpdateQuery.__init__` did not run (`django/db/models/sql/subqueries.py:UpdateQuery._setup_query`).",
    "tree": "django",
    "path": "django/db/models/sql/subqueries.py",
    "symbol": "UpdateQuery._setup_query",
@@ -175,6 +203,48 @@
     65
    ],
    "fingerprint": "c649e5b374e50cb1"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup",
+   "line": 161,
+   "sentence": "Here, in lines the quote leaves out, sticky is the query of a filter across two relations, asked before and after `filter_is_sticky` was set on it by hand, and u is a query of ships chained into an `UpdateQuery`, which the update compiler chains back into a plain `Query` when it needs to select the keys to update (`django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup`; [INSERT, UPDATE and DELETE: the insert, update and delete compilers](writing.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.pre_sql_setup",
+   "kind": "function",
+   "lines": [
+    2191,
+    2254
+   ],
+   "fingerprint": "4578ae61945a38c1"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.setup_joins",
+   "line": 163,
+   "sentence": "The point of emptying `used_aliases` is join reuse: a join across a relation that can reach several rows may be reused by a later condition of the same `filter` call and not by a later call, which is why two calls that each cross a many-to-many relation join its table twice and one call with two conditions joins it once (`django/db/models/sql/query.py:Query.setup_joins`; [Tables and joins: the alias map and join promotion](joins.md) has the rule).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.setup_joins",
+   "kind": "function",
+   "lines": [
+    1898,
+    2013
+   ],
+   "fingerprint": "03a5136e0ffb24f1"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._next_is_sticky",
+   "line": 163,
+   "sentence": "A **sticky filter**, a queryset whose query has `filter_is_sticky` set, is the many-to-many manager's way of crossing that line once: it leaves the set in place for the one method that follows, so that a filter on a voyage's ports of call that goes back across the relation shares the join the manager made (`django/db/models/query.py:QuerySet._next_is_sticky`; [Clones: how a queryset is built](../querysets/chaining.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._next_is_sticky",
+   "kind": "function",
+   "lines": [
+    2332,
+    2344
+   ],
+   "fingerprint": "d38966c09241f28f"
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.set_limits",
@@ -189,6 +259,20 @@
     2218
    ],
    "fingerprint": "4f48332c8b4c0701"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.limit_offset_sql",
+   "line": 167,
+   "sentence": "The compiler hands the marks to the backend's operations object ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md)), which on SQLite writes `LIMIT 5` for marks of zero and five (`django/db/backends/base/operations.py:BaseDatabaseOperations.limit_offset_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.limit_offset_sql",
+   "kind": "function",
+   "lines": [
+    260,
+    270
+   ],
+   "fingerprint": "4a58d004258cab95"
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.set_empty",
@@ -221,7 +305,7 @@
   {
    "pointer": "django/db/models/sql/query.py:RawQuery",
    "line": 173,
-   "sentence": "A `RawQuery` holds the SQL a program wrote, its parameters and the alias of a database, and executes itself: `RawQuery._execute_query` adapts each parameter with the backend's `adapt_unknown_value`, since the type a value is meant for is not known, takes a cursor and runs the statement; iterating a `RawQuery` executes it afresh each time, and `RawQuery.get_columns` executes it where it has not been run, to read the column names from the cursor's description (`django/db/models/sql/query.py:RawQuery`).",
+   "sentence": "A `RawQuery` holds the SQL a program wrote, its parameters and the alias of a database, and executes itself: `RawQuery._execute_query` adapts each parameter with the backend's `BaseDatabaseOperations.adapt_unknown_value`, since the type a value is meant for is not known, takes a cursor and runs the statement; iterating a `RawQuery` executes it afresh each time, and `RawQuery.get_columns` executes it where it has not been run, to read the column names from the cursor's description (`django/db/models/sql/query.py:RawQuery`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "RawQuery",
