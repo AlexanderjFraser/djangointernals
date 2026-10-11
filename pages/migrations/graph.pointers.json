@@ -1,0 +1,236 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "graph.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph",
+   "line": 9,
+   "sentence": "Migrations have to be applied in an order, and the numbers in their files' names do not give it: the numbering is a convention that helps in listing the files, and makes no migration depend on another (`django/db/migrations/graph.py:MigrationGraph`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph",
+   "kind": "class",
+   "lines": [
+    64,
+    336
+   ],
+   "fingerprint": "adb7c51972761410"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration",
+   "line": 9,
+   "sentence": "What gives the order is each migration's dependencies, which name the migrations that must be applied before it, and its `Migration.run_before`, which names those to be applied after it, a dependency declared from the other end (`django/db/migrations/migration.py:Migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration",
+   "kind": "class",
+   "lines": [
+    9,
+    222
+   ],
+   "fingerprint": "e3b2aefccdfdf0c8"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.__init__",
+   "line": 15,
+   "sentence": "A `MigrationGraph` is two dictionaries with the same keys, a **key** being the pair of an application's label and a migration's name (`django/db/migrations/graph.py:MigrationGraph.__init__`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.__init__",
+   "kind": "function",
+   "lines": [
+    87,
+    89
+   ],
+   "fingerprint": "a173b096906092b8"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:Node",
+   "line": 15,
+   "sentence": "`MigrationGraph.node_map` maps a key to a **node**, a `Node`, which holds the edges (`django/db/migrations/graph.py:Node`): `Node.parents` is the set of the nodes this one depends on, its **parents**, and `Node.children` the set of those that depend on it, so that an edge can be followed from either end.",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "Node",
+   "kind": "class",
+   "lines": [
+    9,
+    43
+   ],
+   "at": 10,
+   "fingerprint": "ac7a02f85dcae2d1"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.add_dependency",
+   "line": 17,
+   "sentence": "`MigrationGraph.add_node` enters a key in both dictionaries, and `MigrationGraph.add_dependency`, given a child's key and a parent's key, puts each of the two nodes in the other's set (`django/db/migrations/graph.py:MigrationGraph.add_dependency`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.add_dependency",
+   "kind": "function",
+   "lines": [
+    102,
+    123
+   ],
+   "fingerprint": "54f9ecc8b8992d09"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.iterative_dfs",
+   "line": 44,
+   "sentence": "Both call `MigrationGraph.iterative_dfs`, which follows `Node.parents` for the first and, with `forwards=False`, `Node.children` for the second (`django/db/migrations/graph.py:MigrationGraph.iterative_dfs`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.iterative_dfs",
+   "kind": "function",
+   "lines": [
+    222,
+    240
+   ],
+   "fingerprint": "65f4e6563ea57a2d"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.leaf_nodes",
+   "line": 60,
+   "sentence": "`MigrationGraph.root_nodes` and `MigrationGraph.leaf_nodes` say where an application's history begins and ends, and look at edges within the application only: a **root node** has no parent in its own application, a **leaf node** no child in its own (`django/db/migrations/graph.py:MigrationGraph.leaf_nodes`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.leaf_nodes",
+   "kind": "function",
+   "lines": [
+    255,
+    269
+   ],
+   "fingerprint": "b049730a0fdcf242"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.check_key",
+   "line": 67,
+   "sentence": "A dependency may have `\"__first__\"` or `\"__latest__\"` in place of a migration's name; where the loader makes a key of one, the key is the first of the root nodes, or of the leaf nodes, of the application it names (`django/db/migrations/loader.py:MigrationLoader.check_key`; [Finding migrations: `MigrationLoader`](loader.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.check_key",
+   "kind": "function",
+   "lines": [
+    171,
+    199
+   ],
+   "fingerprint": "3336c8fc5c9e09b6"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.make_state",
+   "line": 79,
+   "sentence": "`MigrationGraph.make_state` builds the project state as it stands once a node's migration has run: it makes a `ProjectState` with no model states ([Project state: `ProjectState` and its model states](state.md)) and calls `Migration.mutate_state` of each migration of the node's forwards plan on it, in order, with `preserve=False`, which changes that one state in place (`django/db/migrations/graph.py:MigrationGraph.make_state`, `django/db/migrations/migration.py:Migration.mutate_state`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.make_state",
+   "kind": "function",
+   "lines": [
+    316,
+    333
+   ],
+   "fingerprint": "13787f52f67e7796"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.mutate_state",
+   "line": 79,
+   "sentence": "`MigrationGraph.make_state` builds the project state as it stands once a node's migration has run: it makes a `ProjectState` with no model states ([Project state: `ProjectState` and its model states](state.md)) and calls `Migration.mutate_state` of each migration of the node's forwards plan on it, in order, with `preserve=False`, which changes that one state in place (`django/db/migrations/graph.py:MigrationGraph.make_state`, `django/db/migrations/migration.py:Migration.mutate_state`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.mutate_state",
+   "kind": "function",
+   "lines": [
+    80,
+    92
+   ],
+   "fingerprint": "b71490f439ab590c"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.project_state",
+   "line": 90,
+   "sentence": "`make_state` gives the new state the labels it is passed as `ProjectState.real_apps`, the applications whose models are to come from the main registry when the state is rendered; its one caller in Django, `MigrationLoader.project_state`, passes the unmigrated applications, those with no package of migrations (`django/db/migrations/loader.py:MigrationLoader.project_state`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.project_state",
+   "kind": "function",
+   "lines": [
+    402,
+    411
+   ],
+   "fingerprint": "9d3963f48b459154"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.add_dependency",
+   "line": 94,
+   "sentence": "`MigrationGraph.add_dependency`, given a key that is no node, first makes a `DummyNode` for it and links it like any other: a node whose migration in `MigrationGraph.nodes` is `None`, carrying the message of the error it stands for and the migration that named it, which is what `add_dependency` is passed a migration for (`django/db/migrations/graph.py:MigrationGraph.add_dependency`, `django/db/migrations/graph.py:DummyNode`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.add_dependency",
+   "kind": "function",
+   "lines": [
+    102,
+    123
+   ],
+   "fingerprint": "54f9ecc8b8992d09"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:DummyNode",
+   "line": 94,
+   "sentence": "`MigrationGraph.add_dependency`, given a key that is no node, first makes a `DummyNode` for it and links it like any other: a node whose migration in `MigrationGraph.nodes` is `None`, carrying the message of the error it stands for and the migration that named it, which is what `add_dependency` is passed a migration for (`django/db/migrations/graph.py:MigrationGraph.add_dependency`, `django/db/migrations/graph.py:DummyNode`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "DummyNode",
+   "kind": "class",
+   "lines": [
+    46,
+    61
+   ],
+   "fingerprint": "0ae56b807ced90b7"
+  },
+  {
+   "pointer": "django/db/migrations/exceptions.py:NodeNotFoundError",
+   "line": 94,
+   "sentence": "`MigrationGraph.validate_consistency` raises that error for a dummy node still in the graph: a `NodeNotFoundError`, a `LookupError` whose `NodeNotFoundError.node` is the missing key and `NodeNotFoundError.origin` the migration (`django/db/migrations/exceptions.py:NodeNotFoundError`).",
+   "tree": "django",
+   "path": "django/db/migrations/exceptions.py",
+   "symbol": "NodeNotFoundError",
+   "kind": "class",
+   "lines": [
+    40,
+    52
+   ],
+   "fingerprint": "94764478ddc0f8c7"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.build_graph",
+   "line": 103,
+   "sentence": "The loader passes `skip_validation=True` with every edge and makes the check once, after the last of them (`django/db/migrations/loader.py:MigrationLoader.build_graph`; [Finding migrations: `MigrationLoader`](loader.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.build_graph",
+   "kind": "function",
+   "lines": [
+    274,
+    342
+   ],
+   "fingerprint": "3fe42e1de66c86ba"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.ensure_not_cyclic",
+   "line": 107,
+   "sentence": "It follows children from each node it has not yet visited, keeping the path it is on, and when a child is already on the path it raises `CircularDependencyError` (`django/db/migrations/graph.py:MigrationGraph.ensure_not_cyclic`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.ensure_not_cyclic",
+   "kind": "function",
+   "lines": [
+    271,
+    294
+   ],
+   "fingerprint": "c496a8b9d9aaf52a"
+  }
+ ]
+}

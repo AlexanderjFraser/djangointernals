@@ -1,0 +1,279 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "squashing.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/migration.py:Migration",
+   "line": 7,
+   "sentence": "A squashed migration is one migration that stands in for a run of others, which it names in `Migration.replaces` (`django/db/migrations/migration.py:Migration`). squashmigrations writes one; `MigrationLoader.replace_migration` decides for each database whether the graph holds it or the migrations it replaces; and `MigrationExecutor.record_migration` and `MigrationExecutor.check_replacements` keep the rows of `\"django_migrations\"` in step with both.",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration",
+   "kind": "class",
+   "lines": [
+    9,
+    222
+   ],
+   "fingerprint": "e3b2aefccdfdf0c8"
+  },
+  {
+   "pointer": "django/core/management/commands/squashmigrations.py:Command.handle",
+   "line": 17,
+   "sentence": "squashmigrations takes an application's label and the name of the last migration to squash, and optionally, before that, the name of the first (`django/core/management/commands/squashmigrations.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/squashmigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    61,
+    239
+   ],
+   "fingerprint": "a22a49f38efb75c3"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration",
+   "line": 37,
+   "sentence": "The new migration is an instance of a subclass of `Migration` (`django/db/migrations/migration.py:Migration`) made on the spot, with those dependencies and operations and with `Migration.replaces` set to the keys of the run, in its order (`django/core/management/commands/squashmigrations.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration",
+   "kind": "class",
+   "lines": [
+    9,
+    222
+   ],
+   "fingerprint": "e3b2aefccdfdf0c8"
+  },
+  {
+   "pointer": "django/core/management/commands/squashmigrations.py:Command.handle",
+   "line": 37,
+   "sentence": "The new migration is an instance of a subclass of `Migration` (`django/db/migrations/migration.py:Migration`) made on the spot, with those dependencies and operations and with `Migration.replaces` set to the keys of the run, in its order (`django/core/management/commands/squashmigrations.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/squashmigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    61,
+    239
+   ],
+   "fingerprint": "a22a49f38efb75c3"
+  },
+  {
+   "pointer": "django/db/migrations/writer.py:MigrationWriter.as_string",
+   "line": 57,
+   "sentence": "`MigrationWriter.as_string` swaps each import of a module that has a part beginning with a digit, as the migration modules Django names have, for a line of a comment above the class, and sets `MigrationWriter.needs_manual_porting`, on which the command, above verbosity 0, says that functions must be copied by hand (`django/db/migrations/writer.py:MigrationWriter.as_string`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "MigrationWriter.as_string",
+   "kind": "function",
+   "lines": [
+    129,
+    216
+   ],
+   "fingerprint": "b1f35a28754c5503"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.build_graph",
+   "line": 61,
+   "sentence": "Then, unless its `MigrationLoader.replace_migrations` is false, it calls `MigrationLoader.replace_migration` for each (`django/db/migrations/loader.py:MigrationLoader.build_graph`; [Finding migrations: `MigrationLoader`](loader.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.build_graph",
+   "kind": "function",
+   "lines": [
+    274,
+    342
+   ],
+   "fingerprint": "3fe42e1de66c86ba"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.replace_migration",
+   "line": 63,
+   "sentence": "`replace_migration` looks each replaced key up in `MigrationLoader.applied_migrations`, the rows the recorder read, or nothing for a loader with no connection (`django/db/migrations/loader.py:MigrationLoader.replace_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.replace_migration",
+   "kind": "function",
+   "lines": [
+    235,
+    272
+   ],
+   "fingerprint": "af5a61256ac2515f"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.remove_replaced_nodes",
+   "line": 65,
+   "sentence": "Then the graph: where all are applied or none, `MigrationGraph.remove_replaced_nodes` takes the replaced nodes out and moves every edge between one of them and a node outside the set onto the replacing node (`django/db/migrations/graph.py:MigrationGraph.remove_replaced_nodes`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.remove_replaced_nodes",
+   "kind": "function",
+   "lines": [
+    125,
+    159
+   ],
+   "fingerprint": "8dfc972293e4cc29"
+  },
+  {
+   "pointer": "django/db/migrations/graph.py:MigrationGraph.remove_replacement_node",
+   "line": 65,
+   "sentence": "Where some are applied, `MigrationGraph.remove_replacement_node` takes out the replacing node instead and gives its children, such as a migration made since the squash, to the last of the replaced nodes still in the graph, those that are a parent of no other replaced node (`django/db/migrations/graph.py:MigrationGraph.remove_replacement_node`).",
+   "tree": "django",
+   "path": "django/db/migrations/graph.py",
+   "symbol": "MigrationGraph.remove_replacement_node",
+   "kind": "function",
+   "lines": [
+    161,
+    194
+   ],
+   "fingerprint": "eebbbfaaa40aaba6"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys",
+   "line": 105,
+   "sentence": "`replace_migration` first calls itself for each such key; `MigrationLoader._resolve_replaced_migration_keys` then follows them through `MigrationLoader.disk_migrations` down to keys that name no replacing migration, and the rows of those decide (`django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys`). squashmigrations makes such a migration unasked: for its loader no migration is applied, so an earlier replacing migration stands in the graph in place of its run and is squashed like any other.",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader._resolve_replaced_migration_keys",
+   "kind": "function",
+   "lines": [
+    224,
+    233
+   ],
+   "fingerprint": "f03c09968c1fc163"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 107,
+   "sentence": "The release notes say that squashed migrations can themselves be squashed before they are turned into normal migrations (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.build_graph",
+   "line": 121,
+   "sentence": "`build_graph` raises it again, if the missing key is one that replacing migrations replace and none of them is in the graph, saying that Django tried to replace the migration and could not because some of the replaced migrations are already applied (`django/db/migrations/loader.py:MigrationLoader.build_graph`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.build_graph",
+   "kind": "function",
+   "lines": [
+    274,
+    342
+   ],
+   "fingerprint": "3fe42e1de66c86ba"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.record_migration",
+   "line": 125,
+   "sentence": "When a replacing migration is applied, `MigrationExecutor.record_migration` calls itself for each key the migration replaces and then writes the migration's own row; unapplying deletes the same rows (`django/db/migrations/executor.py:MigrationExecutor.record_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.record_migration",
+   "kind": "function",
+   "lines": [
+    268,
+    277
+   ],
+   "fingerprint": "7531d2580920b2d4"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.check_replacements",
+   "line": 137,
+   "sentence": "`MigrationExecutor.check_replacements` writes it: it reads the table again, and for each key of `MigrationLoader.replacements` that has no row it asks `MigrationLoader.all_replaced_applied` whether every migration the key replaces has one, following a replaced replacing migration down, and if so records the key (`django/db/migrations/executor.py:MigrationExecutor.check_replacements`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.check_replacements",
+   "kind": "function",
+   "lines": [
+    294,
+    308
+   ],
+   "fingerprint": "2694a974c352196f"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.check_consistent_history",
+   "line": 160,
+   "sentence": "It raises where an applied migration has a parent that is not, reading the rows itself, and passes over a parent that is a replacing migration with no row where all it replaces is applied (`django/db/migrations/loader.py:MigrationLoader.check_consistent_history`). migrate runs that check before it plans, so before `check_replacements` has run.",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.check_consistent_history",
+   "kind": "function",
+   "lines": [
+    344,
+    370
+   ],
+   "fingerprint": "b49921d8d31505ed"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.migration_plan",
+   "line": 164,
+   "sentence": "`MigrationExecutor.migration_plan`, meeting a target that is no node while its loader replaces, sets `MigrationLoader.replace_migrations` to `False`, has the loader build the graph again and starts over (`django/db/migrations/executor.py:MigrationExecutor.migration_plan`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.migration_plan",
+   "kind": "function",
+   "lines": [
+    22,
+    73
+   ],
+   "fingerprint": "0b200b8888846fae"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 166,
+   "sentence": "The migrate command sees to the opposite case: a name that finds a replacing migration which is on disk and not in the graph, as a partly applied one is, is turned into the last of the keys it replaces (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "docs/topics/migrations.txt",
+   "line": 170,
+   "sentence": "Django's documentation gives the steps: delete the replaced files, point any dependency on one of them at the squashed migration, and take `replaces` out of it (`docs/topics/migrations.txt`).",
+   "tree": "django",
+   "path": "docs/topics/migrations.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    998
+   ],
+   "fingerprint": "af456c9acfde3077"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 172,
+   "sentence": "`migrate --prune` deletes the rows of the named application's migrations that have no file; where a replacing migration still lists one of them it deletes none, and says that such a migration may not be recorded as applied: run migrate again, and remove `replaces` (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  }
+ ]
+}

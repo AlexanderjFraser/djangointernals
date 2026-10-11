@@ -1,0 +1,424 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "migrate.md",
+ "pointers": [
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 11,
+   "sentence": "It calls `BaseDatabaseWrapper.prepare_database`, a hook, empty in the base class, for a backend with a database to check or prepare first, and makes the executor, whose loader builds the graph from the migration files and reads which migrations are applied (`django/core/management/commands/migrate.py:Command.handle`, `django/db/backends/base/base.py:BaseDatabaseWrapper.prepare_database`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.prepare_database",
+   "line": 11,
+   "sentence": "It calls `BaseDatabaseWrapper.prepare_database`, a hook, empty in the base class, for a backend with a database to check or prepare first, and makes the executor, whose loader builds the graph from the migration files and reads which migrations are applied (`django/core/management/commands/migrate.py:Command.handle`, `django/db/backends/base/base.py:BaseDatabaseWrapper.prepare_database`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.prepare_database",
+   "kind": "function",
+   "lines": [
+    654,
+    659
+   ],
+   "fingerprint": "b80090eb7ff5f71d"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 13,
+   "sentence": "`MigrationLoader.detect_conflicts` returns the applications with more than one leaf node (a migration on which no other migration of the application depends), and for any the command raises `CommandError` and names the remedy ([The makemigrations command](makemigrations.md)) (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 37,
+   "sentence": "A migration that replaces others, a squashed one, may stand in the graph in their place; while only some of them are applied it is left out, and a name that finds it gives the last of the migrations it replaces as the target ([Squashed migrations: `replaces` and the squashmigrations command](squashing.md)) (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 41,
+   "sentence": "`--prune`, `--plan` and `--check` each end migrate before anything is applied (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.describe_operation",
+   "line": 43,
+   "sentence": "`--plan` prints the plan: each migration, and under it a line for each of its operations from `Command.describe_operation`, which says IRREVERSIBLE where a `RunPython` or a `RunSQL` is to run backwards and was given nothing to run (`django/core/management/commands/migrate.py:Command.describe_operation`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.describe_operation",
+   "kind": "function",
+   "lines": [
+    489,
+    511
+   ],
+   "at": 490,
+   "fingerprint": "4cd142b6121d0019"
+  },
+  {
+   "pointer": "django/core/management/sql.py:emit_pre_migrate_signal",
+   "line": 47,
+   "sentence": "`emit_pre_migrate_signal` sends `pre_migrate` once for each application of the main registry that has a models module (`django/core/management/sql.py:emit_pre_migrate_signal`).",
+   "tree": "django",
+   "path": "django/core/management/sql.py",
+   "symbol": "emit_pre_migrate_signal",
+   "kind": "function",
+   "lines": [
+    22,
+    39
+   ],
+   "fingerprint": "b891b95ae40c9074"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.migration_progress_callback",
+   "line": 49,
+   "sentence": "The executor reports each migration to `Command.migration_progress_callback`, which prints its line, at verbosity 2 with the time it took and at verbosity 0 not at all (`django/core/management/commands/migrate.py:Command.migration_progress_callback`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.migration_progress_callback",
+   "kind": "function",
+   "lines": [
+    391,
+    429
+   ],
+   "fingerprint": "1c80173f4e69ac6d"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 51,
+   "sentence": "The state the executor returns is changed before `post_migrate` is sent, since a receiver may ask its registry for any model (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/db/migrations/state.py:ProjectState.clear_delayed_apps_cache",
+   "line": 51,
+   "sentence": "`ProjectState.clear_delayed_apps_cache` discards a registry that an operation re-rendered only in part, the models near its change and not those further off, so that the next read renders every model state afresh (`django/db/migrations/state.py:ProjectState.clear_delayed_apps_cache`).",
+   "tree": "django",
+   "path": "django/db/migrations/state.py",
+   "symbol": "ProjectState.clear_delayed_apps_cache",
+   "kind": "function",
+   "lines": [
+    586,
+    588
+   ],
+   "fingerprint": "d0e722c76b910267"
+  },
+  {
+   "pointer": "docs/ref/signals.txt",
+   "line": 71,
+   "sentence": "Django's reference tells a receiver to take its models from apps (`docs/ref/signals.txt`).",
+   "tree": "django",
+   "path": "docs/ref/signals.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    771
+   ],
+   "fingerprint": "6bc37fc786712004"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:inject_rename_contenttypes_operations",
+   "line": 73,
+   "sentence": "Django connects one receiver to `pre_migrate`, `inject_rename_contenttypes_operations`, whose work is to put an operation of its own after each `RenameModel` in the migrations of the plan it is handed, for the executor to run ([Content types, static files and the other contrib apps](../contrib.md)) (`django/contrib/contenttypes/management/__init__.py:inject_rename_contenttypes_operations`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "inject_rename_contenttypes_operations",
+   "kind": "function",
+   "lines": [
+    54,
+    97
+   ],
+   "fingerprint": "fb0d8e1674a7cf07"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/apps.py:ContentTypesConfig.ready",
+   "line": 73,
+   "sentence": "To `post_migrate`, contenttypes connects `create_contenttypes`, auth `create_permissions` and `rename_permissions_after_model_rename` ([Authentication, sessions and messages](../auth.md)), and sites `create_default_site` (`django/contrib/contenttypes/apps.py:ContentTypesConfig.ready`, `django/contrib/auth/apps.py:AuthConfig.ready`, `django/contrib/sites/apps.py:SitesConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/apps.py",
+   "symbol": "ContentTypesConfig.ready",
+   "kind": "function",
+   "lines": [
+    18,
+    22
+   ],
+   "fingerprint": "2b8d9d7f9ab433ca"
+  },
+  {
+   "pointer": "django/contrib/auth/apps.py:AuthConfig.ready",
+   "line": 73,
+   "sentence": "To `post_migrate`, contenttypes connects `create_contenttypes`, auth `create_permissions` and `rename_permissions_after_model_rename` ([Authentication, sessions and messages](../auth.md)), and sites `create_default_site` (`django/contrib/contenttypes/apps.py:ContentTypesConfig.ready`, `django/contrib/auth/apps.py:AuthConfig.ready`, `django/contrib/sites/apps.py:SitesConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/auth/apps.py",
+   "symbol": "AuthConfig.ready",
+   "kind": "function",
+   "lines": [
+    18,
+    35
+   ],
+   "fingerprint": "c5e2565bc4196afa"
+  },
+  {
+   "pointer": "django/contrib/sites/apps.py:SitesConfig.ready",
+   "line": 73,
+   "sentence": "To `post_migrate`, contenttypes connects `create_contenttypes`, auth `create_permissions` and `rename_permissions_after_model_rename` ([Authentication, sessions and messages](../auth.md)), and sites `create_default_site` (`django/contrib/contenttypes/apps.py:ContentTypesConfig.ready`, `django/contrib/auth/apps.py:AuthConfig.ready`, `django/contrib/sites/apps.py:SitesConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/sites/apps.py",
+   "symbol": "SitesConfig.ready",
+   "kind": "function",
+   "lines": [
+    15,
+    17
+   ],
+   "fingerprint": "347fb2512e31b056"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 75,
+   "sentence": "Before the executor, unless verbosity is 0, the command then looks for changes in the models that no migration has: an autodetector, of the class in `Command.autodetector`, is given the loader's `MigrationLoader.project_state` as its from-state and `ProjectState.from_apps` of the main registry as its to-state, and a notice names the applications in what its `MigrationAutodetector.changes` returns, if anything ([The autodetector: comparing two project states](autodetector.md)) (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.sync_apps",
+   "line": 84,
+   "sentence": "`Command.sync_apps` reads the names of the tables the database has, asks `ConnectionRouter.get_migratable_models` for each application's models, sets aside those whose table is there, and in one schema editor calls `BaseDatabaseSchemaEditor.create_model` for each of the rest that `Options.can_migrate` allows (`django/core/management/commands/migrate.py:Command.sync_apps`, `django/db/models/options.py:Options.can_migrate`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.sync_apps",
+   "kind": "function",
+   "lines": [
+    431,
+    487
+   ],
+   "fingerprint": "a6f11620b77eee0b"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.can_migrate",
+   "line": 84,
+   "sentence": "`Command.sync_apps` reads the names of the tables the database has, asks `ConnectionRouter.get_migratable_models` for each application's models, sets aside those whose table is there, and in one schema editor calls `BaseDatabaseSchemaEditor.create_model` for each of the rest that `Options.can_migrate` allows (`django/core/management/commands/migrate.py:Command.sync_apps`, `django/db/models/options.py:Options.can_migrate`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.can_migrate",
+   "kind": "function",
+   "lines": [
+    395,
+    411
+   ],
+   "fingerprint": "5e6e429df3af28a2"
+  },
+  {
+   "pointer": "docs/topics/migrations.txt",
+   "line": 96,
+   "sentence": "So yard's tables, whose foreign keys name fleet's, were made first, which Django's documentation says may work and is not supported (`docs/topics/migrations.txt`).",
+   "tree": "django",
+   "path": "docs/topics/migrations.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    998
+   ],
+   "fingerprint": "af456c9acfde3077"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.get_check_kwargs",
+   "line": 100,
+   "sentence": "`Command.get_check_kwargs` gives the alias to the system checks that run first, so that the checks kept for databases run, for that alias alone ([The system checks](../commands/checks.md)) (`django/core/management/commands/migrate.py:Command.get_check_kwargs`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.get_check_kwargs",
+   "kind": "function",
+   "lines": [
+    93,
+    95
+   ],
+   "fingerprint": "ef44140c57e12af5"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.allow_migrate_model",
+   "line": 100,
+   "sentence": "An operation on a model or a field that changes a table asks it, in its database half, whether the model belongs on the connection, and sends nothing where it does not ([Operations: the base class and its two halves](operations.md), [Routing between databases: `ConnectionRouter`](../backends/routers.md)) (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.allow_migrate_model",
+   "kind": "function",
+   "lines": [
+    148,
+    158
+   ],
+   "fingerprint": "6d23b8aa4e2c47a2"
+  },
+  {
+   "pointer": "django/core/management/commands/showmigrations.py:Command.handle",
+   "line": 110,
+   "sentence": "showmigrations has two listings (`django/core/management/commands/showmigrations.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/showmigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    57,
+    67
+   ],
+   "fingerprint": "7b15ed8662956963"
+  },
+  {
+   "pointer": "django/core/management/commands/showmigrations.py:Command.show_list",
+   "line": 110,
+   "sentence": "The default, `--list`, is by application: `Command.show_list` prints the nodes of each application named, or else of every migrated one, in the order of the `MigrationGraph.forwards_plan` of its leaf nodes, and marks each by two readings of what is applied, the loader's and, apart from it, a recorder's `MigrationRecorder.applied_migrations` (`django/core/management/commands/showmigrations.py:Command.show_list`).",
+   "tree": "django",
+   "path": "django/core/management/commands/showmigrations.py",
+   "symbol": "Command.show_list",
+   "kind": "function",
+   "lines": [
+    80,
+    133
+   ],
+   "fingerprint": "28808fede9a0bc6d"
+  },
+  {
+   "pointer": "django/core/management/commands/showmigrations.py:Command.show_plan",
+   "line": 118,
+   "sentence": "`Command.show_plan` takes the forwards plan of every leaf node, or of the leaf nodes of the applications named, keeps each node once, and marks it `\"[X]\"` where its key is in the loader's `MigrationLoader.applied_migrations` (`django/core/management/commands/showmigrations.py:Command.show_plan`).",
+   "tree": "django",
+   "path": "django/core/management/commands/showmigrations.py",
+   "symbol": "Command.show_plan",
+   "kind": "function",
+   "lines": [
+    135,
+    177
+   ],
+   "fingerprint": "b6da2b17e8ffbdbe"
+  },
+  {
+   "pointer": "django/core/management/commands/sqlmigrate.py:Command.handle",
+   "line": 122,
+   "sentence": "sqlmigrate prints the statements one migration would send (`django/core/management/commands/sqlmigrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/sqlmigrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    40,
+    83
+   ],
+   "fingerprint": "3985270afb3f16f6"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.collect_sql",
+   "line": 122,
+   "sentence": "`collect_sql` has the migration apply or unapply itself, from the state of the migrations it depends on, whatever the database has had, to a schema editor whose `BaseDatabaseSchemaEditor.execute` keeps each statement it is handed as text in place of sending it ([Finding migrations: `MigrationLoader`](loader.md)) (`django/db/migrations/loader.py:MigrationLoader.collect_sql`, `django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.execute`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.collect_sql",
+   "kind": "function",
+   "lines": [
+    413,
+    433
+   ],
+   "fingerprint": "a49ebbcd02433407"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.execute",
+   "line": 122,
+   "sentence": "`collect_sql` has the migration apply or unapply itself, from the state of the migrations it depends on, whatever the database has had, to a schema editor whose `BaseDatabaseSchemaEditor.execute` keeps each statement it is handed as text in place of sending it ([Finding migrations: `MigrationLoader`](loader.md)) (`django/db/migrations/loader.py:MigrationLoader.collect_sql`, `django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.execute`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.execute",
+   "kind": "function",
+   "lines": [
+    182,
+    211
+   ],
+   "fingerprint": "d1e2f9a3dcef8cfb"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.apply",
+   "line": 138,
+   "sentence": "`Migration.apply` and `Migration.unapply`, told to collect, write a comment naming each operation, as in the lines printed here, and another in place of calling the database half of a `RunPython`, whose `RunPython.reduces_to_sql` is false (`django/db/migrations/migration.py:Migration.apply`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.apply",
+   "kind": "function",
+   "lines": [
+    94,
+    137
+   ],
+   "fingerprint": "7cc890cf93bf975f"
+  },
+  {
+   "pointer": "django/core/management/base.py:BaseCommand.execute",
+   "line": 140,
+   "sentence": "`\"BEGIN;\"` and `\"COMMIT;\"` are not statements the editor collected: `BaseCommand.execute` writes the string that `handle` returns, and where the command's `BaseCommand.output_transaction` is true puts the connection's `BaseDatabaseOperations.start_transaction_sql` and `BaseDatabaseOperations.end_transaction_sql` around it (`django/core/management/base.py:BaseCommand.execute`). sqlmigrate sets the attribute for each run: true where the migration's `Migration.atomic` is true and the features have `BaseDatabaseFeatures.can_rollback_ddl`, as SQLite's do.",
+   "tree": "django",
+   "path": "django/core/management/base.py",
+   "symbol": "BaseCommand.execute",
+   "kind": "function",
+   "lines": [
+    446,
+    481
+   ],
+   "fingerprint": "9157a074291f8af1"
+  }
+ ]
+}

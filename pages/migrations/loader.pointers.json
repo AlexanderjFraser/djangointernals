@@ -1,0 +1,293 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "loader.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader",
+   "line": 9,
+   "sentence": "Making a loader builds all of it, since `MigrationLoader.__init__` calls `build_graph` unless given `load=False` (`django/db/migrations/loader.py:MigrationLoader`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader",
+   "kind": "class",
+   "lines": [
+    21,
+    433
+   ],
+   "fingerprint": "a70c417a04f4e5b4"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.__init__",
+   "line": 9,
+   "sentence": "Each command of this chapter makes at least one: migrate through its executor, which hands the loader its own connection (`django/db/migrations/executor.py:MigrationExecutor.__init__`), the others directly.",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.__init__",
+   "kind": "function",
+   "lines": [
+    16,
+    20
+   ],
+   "fingerprint": "4fdd6bad644289a4"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.handle",
+   "line": 11,
+   "sentence": "A loader given `None` for its connection reads none: `build_graph` gives it an empty `applied_migrations` and sends no statement, and what it describes is the files alone. makemigrations makes the loader of `Command.handle` so (`django/core/management/commands/makemigrations.py:Command.handle`; [The makemigrations command](makemigrations.md)), and so do squashmigrations and optimizemigration, the other two commands that write migration files.",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    105,
+    264
+   ],
+   "at": 106,
+   "fingerprint": "2f341adcb6f6e802"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.migrations_module",
+   "line": 15,
+   "sentence": "`MigrationLoader.migrations_module` answers for a label with a pair: the dotted name of a module, and whether the setting `MIGRATION_MODULES` gave it (`django/db/migrations/loader.py:MigrationLoader.migrations_module`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.migrations_module",
+   "kind": "function",
+   "lines": [
+    61,
+    72
+   ],
+   "at": 62,
+   "fingerprint": "192c662ce59822cb"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 15,
+   "sentence": "The setting is a dict by label, empty by default (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.load_disk",
+   "line": 19,
+   "sentence": "`MigrationLoader.load_disk` goes through the installed applications, imports the module that `migrations_module` names for each, and puts the label in one of two sets (`django/db/migrations/loader.py:MigrationLoader.load_disk`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.load_disk",
+   "kind": "function",
+   "lines": [
+    74,
+    140
+   ],
+   "fingerprint": "63c435c13fb40599"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration",
+   "line": 23,
+   "sentence": "It imports each of the rest and requires one thing of it, an attribute `Migration`, which in a migration file is a subclass of Django's class of that name; a module without one raises `BadMigrationError` (`django/db/migrations/migration.py:Migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration",
+   "kind": "class",
+   "lines": [
+    9,
+    222
+   ],
+   "fingerprint": "e3b2aefccdfdf0c8"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.build_graph",
+   "line": 27,
+   "sentence": "`MigrationLoader.build_graph` calls `load_disk`, has the recorder read the applied migrations unless the loader has no connection ([What has been applied: `MigrationRecorder` and the table `\"django_migrations\"`](recorder.md)), and fills a new `MigrationGraph` in three passes over `disk_migrations`: the nodes, then the dependencies inside each application, then the rest (`django/db/migrations/loader.py:MigrationLoader.build_graph`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.build_graph",
+   "kind": "function",
+   "lines": [
+    274,
+    342
+   ],
+   "fingerprint": "3fe42e1de66c86ba"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.add_internal_dependencies",
+   "line": 51,
+   "sentence": "The dependencies inside an application go in before those between applications so that a dependency on `\"__first__\"` finds the right root node (`django/db/migrations/loader.py:MigrationLoader.add_internal_dependencies`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.add_internal_dependencies",
+   "kind": "function",
+   "lines": [
+    201,
+    209
+   ],
+   "fingerprint": "73ac3f08fccdd196"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration",
+   "line": 51,
+   "sentence": "`MigrationLoader.add_internal_dependencies` adds an edge for each dependency that carries the migration's own label, but for one named `\"__first__\"`; `MigrationLoader.add_external_dependencies` takes the dependencies on other applications, each through `MigrationLoader.check_key`, and then `Migration.run_before` (`django/db/migrations/migration.py:Migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration",
+   "kind": "class",
+   "lines": [
+    9,
+    222
+   ],
+   "fingerprint": "e3b2aefccdfdf0c8"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.check_key",
+   "line": 57,
+   "sentence": "It is given the dependency and the label of the application that asks, and returns a key, or `None` for a dependency to be dropped (`django/db/migrations/loader.py:MigrationLoader.check_key`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.check_key",
+   "kind": "function",
+   "lines": [
+    171,
+    199
+   ],
+   "fingerprint": "3336c8fc5c9e09b6"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration",
+   "line": 77,
+   "sentence": "The class's comment offers, as a use, a third-party application's migrations made to run after a project's replacement for the user model (`django/db/migrations/migration.py:Migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration",
+   "kind": "class",
+   "lines": [
+    9,
+    222
+   ],
+   "fingerprint": "e3b2aefccdfdf0c8"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.add_external_dependencies",
+   "line": 77,
+   "sentence": "`MigrationLoader.add_external_dependencies` passes each key through `check_key` and adds the edge with the migration named as the child and this one as its parent (`django/db/migrations/loader.py:MigrationLoader.add_external_dependencies`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.add_external_dependencies",
+   "kind": "function",
+   "lines": [
+    211,
+    222
+   ],
+   "fingerprint": "59ba456ca53ab33f"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.check_consistent_history",
+   "line": 97,
+   "sentence": "The connection is its argument, and it reads the rows with a recorder of its own, so a loader made with no connection can be asked (`django/db/migrations/loader.py:MigrationLoader.check_consistent_history`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.check_consistent_history",
+   "kind": "function",
+   "lines": [
+    344,
+    370
+   ],
+   "fingerprint": "b49921d8d31505ed"
+  },
+  {
+   "pointer": "docs/topics/migrations.txt",
+   "line": 97,
+   "sentence": "Django's documentation says that editing dependencies by hand can make such a history, and calls it a strong indication that they are incorrect (`docs/topics/migrations.txt`).",
+   "tree": "django",
+   "path": "docs/topics/migrations.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    998
+   ],
+   "fingerprint": "af456c9acfde3077"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.detect_conflicts",
+   "line": 103,
+   "sentence": "It returns a dict from each such label to the sorted names of its leaf nodes (`django/db/migrations/loader.py:MigrationLoader.detect_conflicts`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.detect_conflicts",
+   "kind": "function",
+   "lines": [
+    386,
+    400
+   ],
+   "fingerprint": "3cc51f333db3d155"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.get_migration",
+   "line": 107,
+   "sentence": "`MigrationLoader.get_migration` takes a label and a whole name and returns the migration at that key in the graph's `MigrationGraph.nodes` (`django/db/migrations/loader.py:MigrationLoader.get_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.get_migration",
+   "kind": "function",
+   "lines": [
+    142,
+    144
+   ],
+   "fingerprint": "c0ed8f0f5dc2f1ad"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.get_migration_by_prefix",
+   "line": 107,
+   "sentence": "`MigrationLoader.get_migration_by_prefix` takes the beginning of a name, as typed on a command line, and searches `disk_migrations`: one match is returned, several raise `AmbiguityError`, none raises `KeyError` (`django/db/migrations/loader.py:MigrationLoader.get_migration_by_prefix`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.get_migration_by_prefix",
+   "kind": "function",
+   "lines": [
+    146,
+    169
+   ],
+   "fingerprint": "34c34bd65d44d0eb"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.project_state",
+   "line": 111,
+   "sentence": "`MigrationLoader.project_state` calls `MigrationGraph.make_state` and adds one thing to its arguments: the loader's `unmigrated_apps`, for the state's `ProjectState.real_apps`, an empty graph aside (`django/db/migrations/loader.py:MigrationLoader.project_state`; [The migration graph: `MigrationGraph`](graph.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.project_state",
+   "kind": "function",
+   "lines": [
+    402,
+    411
+   ],
+   "fingerprint": "9d3963f48b459154"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.collect_sql",
+   "line": 113,
+   "sentence": "`MigrationLoader.collect_sql` is how sqlmigrate has a migration's statements without sending them: for each pair of a plan it opens a schema editor on the loader's connection with `collect_sql=True`, under which `BaseDatabaseSchemaEditor.execute` keeps each statement it is given and sends none, has the migration apply or unapply itself, and gathers what the editor kept, so a loader made with no connection cannot be asked (`django/db/migrations/loader.py:MigrationLoader.collect_sql`; [The migrate command, showmigrations and sqlmigrate](migrate.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.collect_sql",
+   "kind": "function",
+   "lines": [
+    413,
+    433
+   ],
+   "fingerprint": "a49ebbcd02433407"
+  }
+ ]
+}

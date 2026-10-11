@@ -1,0 +1,196 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "recorder.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/recorder.py:MigrationRecorder",
+   "line": 9,
+   "sentence": "The docstring of `MigrationRecorder` names the difficulty: the table is itself used in creating models' tables, so it is the one thing that cannot be done through migrations (`django/db/migrations/recorder.py:MigrationRecorder`).",
+   "tree": "django",
+   "path": "django/db/migrations/recorder.py",
+   "symbol": "MigrationRecorder",
+   "kind": "class",
+   "lines": [
+    9,
+    111
+   ],
+   "fingerprint": "ae688326ad463cb0"
+  },
+  {
+   "pointer": "django/db/migrations/recorder.py:MigrationRecorder.Migration",
+   "line": 13,
+   "sentence": "`MigrationRecorder.Migration` is a `classproperty`: its first read defines a model class and keeps it in `MigrationRecorder._migration_class`, and every later read returns the class kept (`django/db/migrations/recorder.py:MigrationRecorder.Migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/recorder.py",
+   "symbol": "MigrationRecorder.Migration",
+   "kind": "function",
+   "lines": [
+    24,
+    46
+   ],
+   "at": 25,
+   "fingerprint": "fae342140e2f5068"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.get_containing_app_config",
+   "line": 13,
+   "sentence": "A model's class statement asks the main registry which application its module is in, and the registry refuses until the applications are loaded (`django/apps/registry.py:Apps.get_containing_app_config`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_containing_app_config",
+   "kind": "function",
+   "lines": [
+    251,
+    268
+   ],
+   "fingerprint": "685d245c52b92940"
+  },
+  {
+   "pointer": "django/db/migrations/state.py:ProjectState.from_apps",
+   "line": 15,
+   "sentence": "A model registers in the registry its options name ([The registry and its models](../startup/registry.md#registries-other-than-the-main-one)), so the main registry never has this one, and makemigrations, which reads the models off the main registry, makes no migration for it (`django/db/migrations/state.py:ProjectState.from_apps`).",
+   "tree": "django",
+   "path": "django/db/migrations/state.py",
+   "symbol": "ProjectState.from_apps",
+   "kind": "function",
+   "lines": [
+    594,
+    601
+   ],
+   "at": 595,
+   "fingerprint": "b89a355f966afda6"
+  },
+  {
+   "pointer": "django/db/migrations/recorder.py:MigrationRecorder.has_table",
+   "line": 19,
+   "sentence": "A yes is thus remembered for the recorder's life, and a no is asked again each time (`django/db/migrations/recorder.py:MigrationRecorder.has_table`).",
+   "tree": "django",
+   "path": "django/db/migrations/recorder.py",
+   "symbol": "MigrationRecorder.has_table",
+   "kind": "function",
+   "lines": [
+    56,
+    67
+   ],
+   "fingerprint": "e31e089361ac2aa4"
+  },
+  {
+   "pointer": "django/db/migrations/recorder.py:MigrationRecorder.ensure_schema",
+   "line": 21,
+   "sentence": "A `DatabaseError` from that is raised again as `MigrationSchemaMissing`, itself a `DatabaseError`, with the database's message in its own (`django/db/migrations/recorder.py:MigrationRecorder.ensure_schema`).",
+   "tree": "django",
+   "path": "django/db/migrations/recorder.py",
+   "symbol": "MigrationRecorder.ensure_schema",
+   "kind": "function",
+   "lines": [
+    69,
+    82
+   ],
+   "fingerprint": "427723443f05cea0"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.migrate",
+   "line": 23,
+   "sentence": "`ensure_schema` is the first thing `MigrationRecorder.record_applied` and `MigrationRecorder.record_unapplied` do, and `MigrationExecutor.migrate` calls it before carrying out a plan, unless the plan it is given is empty: its comment says the table must be there to record what is applied, but is not to be made when there is nothing to apply (`django/db/migrations/executor.py:MigrationExecutor.migrate`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.migrate",
+   "kind": "function",
+   "lines": [
+    96,
+    147
+   ],
+   "fingerprint": "eb23d7f9c233b25e"
+  },
+  {
+   "pointer": "django/db/migrations/recorder.py:MigrationRecorder.applied_migrations",
+   "line": 35,
+   "sentence": "`MigrationRecorder.applied_migrations` returns a dictionary from each row's key to the row, an instance of the model; where there is no table it returns an empty one and makes none (`django/db/migrations/recorder.py:MigrationRecorder.applied_migrations`).",
+   "tree": "django",
+   "path": "django/db/migrations/recorder.py",
+   "symbol": "MigrationRecorder.applied_migrations",
+   "kind": "function",
+   "lines": [
+    84,
+    97
+   ],
+   "fingerprint": "8c639be31cb9d381"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.record_migration",
+   "line": 49,
+   "sentence": "`MigrationExecutor.record_migration` writes the row of a key with `MigrationRecorder.record_applied`, or deletes it with `MigrationRecorder.record_unapplied` (`django/db/migrations/executor.py:MigrationExecutor.record_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.record_migration",
+   "kind": "function",
+   "lines": [
+    268,
+    277
+   ],
+   "fingerprint": "7531d2580920b2d4"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 49,
+   "sentence": "The other caller of `record_unapplied` is migrate with `--prune`, for rows of the application it is given whose migrations are not on disk ([The migrate command, showmigrations and sqlmigrate](migrate.md)) (`django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/core/management/commands/showmigrations.py:Command.show_list",
+   "line": 51,
+   "sentence": "`MigrationLoader.check_consistent_history` reads the table for itself, on the connection it is given, to hold the rows against the graph ([Finding migrations: `MigrationLoader`](loader.md)). showmigrations reads it too, for its list (`django/core/management/commands/showmigrations.py:Command.show_list`).",
+   "tree": "django",
+   "path": "django/core/management/commands/showmigrations.py",
+   "symbol": "Command.show_list",
+   "kind": "function",
+   "lines": [
+    80,
+    133
+   ],
+   "fingerprint": "28808fede9a0bc6d"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.check_replacements",
+   "line": 53,
+   "sentence": "A migration that replaces others (a squashed one) is the exception on both sides: `record_migration` first writes or deletes the rows of those it replaces, and `MigrationExecutor.check_replacements` writes that migration's own row, where it has none, once all it replaces is applied (`django/db/migrations/executor.py:MigrationExecutor.check_replacements`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.check_replacements",
+   "kind": "function",
+   "lines": [
+    294,
+    308
+   ],
+   "fingerprint": "2694a974c352196f"
+  },
+  {
+   "pointer": "django/core/management/commands/showmigrations.py:Command.show_list",
+   "line": 57,
+   "sentence": "Django's readers use the keys of the dictionary `MigrationRecorder.applied_migrations` returns, and a row's time in one place: showmigrations, in its list, prints it from `--verbosity 2` up, but not for a migration that replaces others (`django/core/management/commands/showmigrations.py:Command.show_list`).",
+   "tree": "django",
+   "path": "django/core/management/commands/showmigrations.py",
+   "symbol": "Command.show_list",
+   "kind": "function",
+   "lines": [
+    80,
+    133
+   ],
+   "fingerprint": "28808fede9a0bc6d"
+  }
+ ]
+}

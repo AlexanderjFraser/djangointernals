@@ -1,0 +1,278 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "executor.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.__init__",
+   "line": 9,
+   "sentence": "The **executor** is made for a connection and keeps three things beside it (`django/db/migrations/executor.py:MigrationExecutor.__init__`): a loader made with that connection, which reads the migration files into the graph and asks the database which migrations are **applied**, those with a row in the table `\"django_migrations\"` ([Finding migrations: `MigrationLoader`](loader.md)); a recorder, which writes and deletes those rows ([What has been applied: `MigrationRecorder` and the table `\"django_migrations\"`](recorder.md)); and a progress callback, or `None`.",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.__init__",
+   "kind": "function",
+   "lines": [
+    16,
+    20
+   ],
+   "fingerprint": "4fdd6bad644289a4"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.migration_plan",
+   "line": 13,
+   "sentence": "`MigrationExecutor.migration_plan` takes the targets in turn (`django/db/migrations/executor.py:MigrationExecutor.migration_plan`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.migration_plan",
+   "kind": "function",
+   "lines": [
+    22,
+    73
+   ],
+   "fingerprint": "0b200b8888846fae"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.migrate",
+   "line": 34,
+   "sentence": "`MigrationExecutor.migrate` takes the targets and, optionally, a plan, a state and the two flags for faking; given no plan it makes one from the targets (`django/db/migrations/executor.py:MigrationExecutor.migrate`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.migrate",
+   "kind": "function",
+   "lines": [
+    96,
+    147
+   ],
+   "fingerprint": "eb23d7f9c233b25e"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor._create_project_state",
+   "line": 40,
+   "sentence": "With `with_applied_migrations=True` it then goes through the full plan and has each applied migration run its operations' state halves on the state, the halves that change a project state and no database (`django/db/migrations/executor.py:MigrationExecutor._create_project_state`, `django/db/migrations/migration.py:Migration.mutate_state`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor._create_project_state",
+   "kind": "function",
+   "lines": [
+    75,
+    94
+   ],
+   "fingerprint": "45618a1c83ea2f92"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.mutate_state",
+   "line": 40,
+   "sentence": "With `with_applied_migrations=True` it then goes through the full plan and has each applied migration run its operations' state halves on the state, the halves that change a project state and no database (`django/db/migrations/executor.py:MigrationExecutor._create_project_state`, `django/db/migrations/migration.py:Migration.mutate_state`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.mutate_state",
+   "kind": "function",
+   "lines": [
+    80,
+    92
+   ],
+   "fingerprint": "b71490f439ab590c"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor._migrate_all_forwards",
+   "line": 42,
+   "sentence": "`_migrate_all_forwards` then goes through the full plan and calls `MigrationExecutor.apply_migration` at each migration that is in the plan, the plan's own order deciding nothing (`django/db/migrations/executor.py:MigrationExecutor._migrate_all_forwards`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor._migrate_all_forwards",
+   "kind": "function",
+   "lines": [
+    149,
+    174
+   ],
+   "fingerprint": "2569287b1e8bc115"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.apply_migration",
+   "line": 62,
+   "sentence": "`MigrationExecutor.apply_migration` opens one schema editor for the whole migration, asking `BaseDatabaseWrapper.schema_editor` for it with the migration's `Migration.atomic`, and inside the editor's `with` block calls `Migration.apply`, which runs each operation's state half and then its database half (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`, `django/db/migrations/migration.py:Migration.apply`; [A migration: its operations, its dependencies and how it is applied](migration.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.apply_migration",
+   "kind": "function",
+   "lines": [
+    241,
+    266
+   ],
+   "fingerprint": "4d2361bf6621e0b6"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.apply",
+   "line": 62,
+   "sentence": "`MigrationExecutor.apply_migration` opens one schema editor for the whole migration, asking `BaseDatabaseWrapper.schema_editor` for it with the migration's `Migration.atomic`, and inside the editor's `with` block calls `Migration.apply`, which runs each operation's state half and then its database half (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`, `django/db/migrations/migration.py:Migration.apply`; [A migration: its operations, its dependencies and how it is applied](migration.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.apply",
+   "kind": "function",
+   "lines": [
+    94,
+    137
+   ],
+   "fingerprint": "7cc890cf93bf975f"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.record_migration",
+   "line": 64,
+   "sentence": "`MigrationExecutor.record_migration` has the recorder write the migration's row or, with `forward=False`, delete it; for a replacing migration it first does the same for each migration it replaces (`django/db/migrations/executor.py:MigrationExecutor.record_migration`; [Squashed migrations: `replaces` and the squashmigrations command](squashing.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.record_migration",
+   "kind": "function",
+   "lines": [
+    268,
+    277
+   ],
+   "fingerprint": "7531d2580920b2d4"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.unapply",
+   "line": 104,
+   "sentence": "`Migration.unapply` must be given the project state as it was before its migration (`django/db/migrations/migration.py:Migration.unapply`), and an operation has a state half that runs forwards and none that runs backwards (`django/db/migrations/operations/base.py:Operation`): that state is not had by undoing a later one, and is built from the start of the history.",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.unapply",
+   "kind": "function",
+   "lines": [
+    139,
+    198
+   ],
+   "fingerprint": "d5047ef0b7e60cfb"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation",
+   "line": 104,
+   "sentence": "`Migration.unapply` must be given the project state as it was before its migration (`django/db/migrations/migration.py:Migration.unapply`), and an operation has a state half that runs forwards and none that runs backwards (`django/db/migrations/operations/base.py:Operation`): that state is not had by undoing a later one, and is built from the start of the history.",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation",
+   "kind": "class",
+   "lines": [
+    16,
+    177
+   ],
+   "fingerprint": "a8c3fa47364533ae"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor._migrate_all_backwards",
+   "line": 104,
+   "sentence": "So `MigrationExecutor._migrate_all_backwards` makes two passes: the first computes the state before each migration of the plan, and the second unapplies them (`django/db/migrations/executor.py:MigrationExecutor._migrate_all_backwards`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor._migrate_all_backwards",
+   "kind": "function",
+   "lines": [
+    176,
+    239
+   ],
+   "fingerprint": "62be8c0caf9ac3d0"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.unapply_migration",
+   "line": 133,
+   "sentence": "`unapply_migration` opens a schema editor as `MigrationExecutor.apply_migration` does, calls `Migration.unapply` inside the block, and has the row deleted after the block, whatever the editor deferred (`django/db/migrations/executor.py:MigrationExecutor.unapply_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.unapply_migration",
+   "kind": "function",
+   "lines": [
+    279,
+    292
+   ],
+   "fingerprint": "509d70daf2b67b90"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 137,
+   "sentence": "At a verbosity of 1 or more the command migrate prints a line for each pair ([The migrate command, showmigrations and sqlmigrate](migrate.md)); it hands `MigrationExecutor.migrate` a state already rendered (`django/core/management/commands/migrate.py:Command.handle`), so its line about rendering appears only for a plan that runs backwards.",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.apply_migration",
+   "line": 141,
+   "sentence": "With `fake=True` a migration's operations do nothing to the database and its row still changes: `MigrationExecutor.apply_migration` opens no schema editor and has the row written, and `MigrationExecutor.unapply_migration` likewise has the row deleted (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`, `django/db/migrations/executor.py:MigrationExecutor.unapply_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.apply_migration",
+   "kind": "function",
+   "lines": [
+    241,
+    266
+   ],
+   "fingerprint": "4d2361bf6621e0b6"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.unapply_migration",
+   "line": 141,
+   "sentence": "With `fake=True` a migration's operations do nothing to the database and its row still changes: `MigrationExecutor.apply_migration` opens no schema editor and has the row written, and `MigrationExecutor.unapply_migration` likewise has the row deleted (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`, `django/db/migrations/executor.py:MigrationExecutor.unapply_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.unapply_migration",
+   "kind": "function",
+   "lines": [
+    279,
+    292
+   ],
+   "fingerprint": "509d70daf2b67b90"
+  },
+  {
+   "pointer": "docs/ref/django-admin.txt",
+   "line": 143,
+   "sentence": "The command's `--fake-initial` is for a database that had its tables before migrations were used on it (`docs/ref/django-admin.txt`).",
+   "tree": "django",
+   "path": "docs/ref/django-admin.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2229
+   ],
+   "fingerprint": "b82578e5a4b8e2e9"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.detect_soft_applied",
+   "line": 143,
+   "sentence": "With `fake_initial=True` and without `fake=True`, `apply_migration` first asks `MigrationExecutor.detect_soft_applied` whether the database already has what the migration would create, and fakes that migration if the answer is yes (`django/db/migrations/executor.py:MigrationExecutor.detect_soft_applied`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.detect_soft_applied",
+   "kind": "function",
+   "lines": [
+    310,
+    413
+   ],
+   "fingerprint": "3bc4bd7d4f4d7f41"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.initial",
+   "line": 143,
+   "sentence": "`Migration.initial` settles which migrations are looked at (`django/db/migrations/migration.py:Migration.initial`): with `initial = True` the method looks; with `initial = False` it answers no; with `None`, the default, it looks unless the migration depends on a migration of its own application.",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.initial",
+   "kind": "assignment",
+   "lines": [
+    49,
+    49
+   ],
+   "fingerprint": "4231da7f0df88d72"
+  }
+ ]
+}

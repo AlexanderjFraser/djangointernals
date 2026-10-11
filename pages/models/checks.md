@@ -43,7 +43,7 @@ What waits there is not the function that was handed over but that function insi
 
 A function that is none of these gets `"models.E022"`, with the function's own repr in the text; the one a many-to-many field leaves for a through model named by a string is such a function. Every message ends by saying which half of the reference failed: the application is not installed, or it is installed and has no model of that name.
 
-The function that does the work takes the registry as an argument, and the migrations use it too. Each registry they build for a state of the project's models is checked with it as it is made, and a message there is raised as a `ValueError` (`django/db/migrations/state.py:StateApps.__init__`) ([Migrations](../migrations.md)).
+The function that does the work takes the registry as an argument, and the migrations use it too. Each registry they build for a state of the project's models is checked with it as it is made, and a message there is raised as a `ValueError` (`django/db/migrations/state.py:StateApps.__init__`) ([Historical models: `StateApps` and rendering](../migrations/historical-models.md)).
 
 ## `Model.check`, in order
 

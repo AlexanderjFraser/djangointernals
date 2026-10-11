@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 402">
+  <!-- two columns, one for each class. Each runs down from what the class is made from, through the one
+       metaclass, which is the band across both, into the registry the class is registered in. The classes
+       stand side by side with their lines level, so that what one has and the other lacks can be read across -->
+
+  <!-- what each is made from: a model state, and a class statement -->
+  <rect class="ground" x="0.5" y="0.5" width="311" height="80" rx="4"/>
+  <text class="strong" x="14" y="22">the project state</text>
+  <text class="name" x="14" y="44">models[("crew", "sailor")]</text>
+  <text x="14" y="66">a model state <tspan class="quiet small">(name, fields, options, bases, managers)</tspan></text>
+
+  <rect class="ground" x="335.5" y="0.5" width="310" height="80" rx="4"/>
+  <text class="name strong" x="349" y="22">harbour/crew/models.py</text>
+  <text class="name" x="349" y="44">class Sailor</text>
+
+  <!-- how each reaches the metaclass -->
+  <path class="line" d="M155.5 80.5 V114.5"/>
+  <polygon class="head" points="155.5,124.5 150.5,114.5 160.5,114.5"/>
+  <text class="name" x="168" y="98">ModelState.render</text>
+  <text x="168" y="115">calls <tspan class="name">type</tspan></text>
+
+  <path class="line" d="M490.5 80.5 V114.5"/>
+  <polygon class="head" points="490.5,124.5 485.5,114.5 495.5,114.5"/>
+  <text x="503" y="107">the class statement</text>
+
+  <!-- the metaclass, the same for both -->
+  <rect class="box" x="0.5" y="124.5" width="645" height="36" rx="4"/>
+  <text x="323" y="147" text-anchor="middle"><tspan class="name">ModelBase.__new__</tspan> registers the class</text>
+
+  <path class="line" d="M155.5 160.5 V180.5"/>
+  <polygon class="head" points="155.5,190.5 150.5,180.5 160.5,180.5"/>
+  <path class="line" d="M490.5 160.5 V180.5"/>
+  <polygon class="head" points="490.5,190.5 485.5,180.5 495.5,180.5"/>
+
+  <!-- the state's registry, and in it the historical model -->
+  <rect class="ground" x="0.5" y="190.5" width="311" height="211" rx="4"/>
+  <text x="14" y="213">the state's registry, a <tspan class="name">StateApps</tspan></text>
+  <rect class="mark-box" x="12.5" y="225.5" width="287" height="164" rx="4"/>
+  <text class="strong" x="26" y="248">the historical model crew.Sailor</text>
+  <text class="name" x="26" y="272">__module__</text>
+  <text class="name" x="118" y="272">"__fake__"</text>
+  <text class="quiet" x="26" y="296">has</text>
+  <text x="72" y="296">clones of the fields</text>
+  <text x="72" y="316">the options</text>
+  <text x="72" y="336">a plain <tspan class="name">Manager</tspan></text>
+  <text class="quiet" x="26" y="356">lacks</text>
+  <text x="72" y="356">Sailor's <tspan class="name">__str__</tspan></text>
+  <text x="72" y="376">the manager's method aboard</text>
+
+  <!-- the main registry, and in it the model that models.py defines -->
+  <rect class="ground" x="335.5" y="190.5" width="310" height="211" rx="4"/>
+  <text x="349" y="213">the main registry, <tspan class="name">django.apps.apps</tspan></text>
+  <rect class="box" x="347.5" y="225.5" width="286" height="164" rx="4"/>
+  <text class="strong" x="361" y="248">the model crew.Sailor</text>
+  <text class="name" x="361" y="272">__module__</text>
+  <text class="name" x="453" y="272">"harbour.crew.models"</text>
+  <text class="quiet" x="361" y="296">has</text>
+  <text x="407" y="296">the fields</text>
+  <text x="407" y="316">the options</text>
+  <text x="407" y="336">a manager with the method aboard</text>
+  <text x="407" y="356">a <tspan class="name">__str__</tspan> of its own</text>
+</svg>

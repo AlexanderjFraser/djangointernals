@@ -1,0 +1,301 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "operations.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.mutate_state",
+   "line": 9,
+   "sentence": "Django needs to know what the models were at any point of the history without going near a database: the project state that makemigrations compares the models with is made by running state halves alone (`django/db/migrations/migration.py:Migration.mutate_state`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.mutate_state",
+   "kind": "function",
+   "lines": [
+    80,
+    92
+   ],
+   "fingerprint": "b71490f439ab590c"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation",
+   "line": 29,
+   "sentence": "A subclass provides all three; every other member has a default in the base (`django/db/migrations/operations/base.py:Operation`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation",
+   "kind": "class",
+   "lines": [
+    16,
+    177
+   ],
+   "fingerprint": "a8c3fa47364533ae"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.apply",
+   "line": 33,
+   "sentence": "Forwards, the **from-state** is the state before the operation and the **to-state** the state after (`django/db/migrations/migration.py:Migration.apply`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.apply",
+   "kind": "function",
+   "lines": [
+    94,
+    137
+   ],
+   "fingerprint": "7cc890cf93bf975f"
+  },
+  {
+   "pointer": "django/db/migrations/operations/fields.py:AddField.database_forwards",
+   "line": 37,
+   "sentence": "Apart from `RunSQL`, `RunPython` and `SeparateDatabaseAndState`, and from the operations whose database halves do nothing, each of those operations has a database half of one shape (`django/db/migrations/operations/fields.py:AddField.database_forwards`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/fields.py",
+   "symbol": "AddField.database_forwards",
+   "kind": "function",
+   "lines": [
+    111,
+    123
+   ],
+   "fingerprint": "b56d6eca8a956b67"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.allow_migrate_model",
+   "line": 37,
+   "sentence": "It asks `Operation.allow_migrate_model` whether the schema editor's connection is to have that model, and returns without a word if not (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.allow_migrate_model",
+   "kind": "function",
+   "lines": [
+    148,
+    158
+   ],
+   "fingerprint": "6d23b8aa4e2c47a2"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.can_migrate",
+   "line": 39,
+   "sentence": "`allow_migrate_model` asks the model's options before any router: `Options.can_migrate` is false for a proxy, a swapped-out or an unmanaged model, and for one whose `Options.required_db_vendor` is another vendor than the connection's or, with no vendor named, whose `Options.required_db_features` include a feature the connection lacks (`django/db/models/options.py:Options.can_migrate`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.can_migrate",
+   "kind": "function",
+   "lines": [
+    395,
+    411
+   ],
+   "fingerprint": "5e6e429df3af28a2"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.apply_migration",
+   "line": 53,
+   "sentence": "The state half has run, the migration goes on to its next operation, and the executor writes the migration's row as for any other: a database that a router keeps a model out of has the row and no table for the model (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.apply_migration",
+   "kind": "function",
+   "lines": [
+    241,
+    266
+   ],
+   "fingerprint": "4d2361bf6621e0b6"
+  },
+  {
+   "pointer": "django/db/migrations/operations/special.py:RunPython.database_forwards",
+   "line": 55,
+   "sentence": "`RunSQL` and `RunPython` concern no model and never call `allow_migrate_model`: each asks `ConnectionRouter.allow_migrate` itself, with the application's label and the hints it was made with (`django/db/migrations/operations/special.py:RunPython.database_forwards`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/special.py",
+   "symbol": "RunPython.database_forwards",
+   "kind": "function",
+   "lines": [
+    191,
+    203
+   ],
+   "fingerprint": "3e11177b0849c491"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.__new__",
+   "line": 59,
+   "sentence": "`Operation.__new__` runs before any subclass's `__init__` and keeps the positional and the keyword arguments of the call on the instance, as the pair `_constructor_args` (`django/db/migrations/operations/base.py:Operation.__new__`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.__new__",
+   "kind": "function",
+   "lines": [
+    50,
+    54
+   ],
+   "fingerprint": "594000bbdb4fb27c"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.__replace__",
+   "line": 61,
+   "sentence": "`Operation.__replace__` makes another operation of the same class from the kept arguments with some of them changed: a change is given by keyword, and a positional argument is matched to it by its name in the class's signature, as the last line below shows (`django/db/migrations/operations/base.py:Operation.__replace__`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.__replace__",
+   "kind": "function",
+   "lines": [
+    56,
+    64
+   ],
+   "fingerprint": "45ab5396cd6c15f6"
+  },
+  {
+   "pointer": "django/utils/copy.py",
+   "line": 61,
+   "sentence": "`copy.replace` calls it, as does Django's own copy of that function for Python 3.12 (`django/utils/copy.py`).",
+   "tree": "django",
+   "path": "django/utils/copy.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    17
+   ],
+   "fingerprint": "85bd36426ffbdf10"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:CreateModel.reduce",
+   "line": 61,
+   "sentence": "That is how `CreateModel.reduce`, asked by the optimizer about a later `RenameModel` of its model, answers with the `CreateModel` made again under the new name (`django/db/migrations/operations/models.py:CreateModel.reduce`; [The optimizer: `MigrationOptimizer` and `reduce`](optimizer.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "CreateModel.reduce",
+   "kind": "function",
+   "lines": [
+    151,
+    379
+   ],
+   "fingerprint": "28fb37a8ba33d254"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation",
+   "line": 75,
+   "sentence": "Class attributes of `Operation` say how an operation may be run (`django/db/migrations/operations/base.py:Operation`, `django/db/migrations/migration.py:Migration.unapply`; [A migration: its operations, its dependencies and how it is applied](migration.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation",
+   "kind": "class",
+   "lines": [
+    16,
+    177
+   ],
+   "fingerprint": "a8c3fa47364533ae"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:Migration.unapply",
+   "line": 75,
+   "sentence": "Class attributes of `Operation` say how an operation may be run (`django/db/migrations/operations/base.py:Operation`, `django/db/migrations/migration.py:Migration.unapply`; [A migration: its operations, its dependencies and how it is applied](migration.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "Migration.unapply",
+   "kind": "function",
+   "lines": [
+    139,
+    198
+   ],
+   "fingerprint": "d5047ef0b7e60cfb"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.describe",
+   "line": 84,
+   "sentence": "`Operation.describe` returns a phrase for the operation; none of those operations is left with the base's, which falls back on the class's name and the kept arguments (`django/db/migrations/operations/base.py:Operation.describe`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.describe",
+   "kind": "function",
+   "lines": [
+    106,
+    110
+   ],
+   "fingerprint": "0c4f8882a11fecbf"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.write_migration_files",
+   "line": 86,
+   "sentence": "Unless its verbosity is 0, makemigrations prints the formatted description of each operation of a migration it writes or, under `--dry-run`, would write, and of the branches it is asked to merge (`django/core/management/commands/makemigrations.py:Command.write_migration_files`, `django/core/management/commands/makemigrations.py:Command.handle_merge`); sqlmigrate and `migrate --plan` use `describe` and so show no sign.",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.write_migration_files",
+   "kind": "function",
+   "lines": [
+    337,
+    397
+   ],
+   "fingerprint": "5673ec73600eddb7"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.handle_merge",
+   "line": 86,
+   "sentence": "Unless its verbosity is 0, makemigrations prints the formatted description of each operation of a migration it writes or, under `--dry-run`, would write, and of the branches it is asked to merge (`django/core/management/commands/makemigrations.py:Command.write_migration_files`, `django/core/management/commands/makemigrations.py:Command.handle_merge`); sqlmigrate and `migrate --plan` use `describe` and so show no sign.",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.handle_merge",
+   "kind": "function",
+   "lines": [
+    409,
+    518
+   ],
+   "fingerprint": "a38da3ff1f869edb"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.reduce",
+   "line": 90,
+   "sentence": "The optimizer, which shortens a list of operations, asks an operation through `Operation.reduce` about one that comes later in the list: the answer is a list of operations to stand in place of both, or true or false for whether the two may change places (`django/db/migrations/operations/base.py:Operation.reduce`; [The optimizer: `MigrationOptimizer` and `reduce`](optimizer.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.reduce",
+   "kind": "function",
+   "lines": [
+    160,
+    170
+   ],
+   "fingerprint": "f84c36679d2ed981"
+  },
+  {
+   "pointer": "django/db/migrations/operations/__init__.py",
+   "line": 94,
+   "sentence": "The exported operations are the classes of this table, and `django.db.migrations` exports them again, which is where a migration file finds them (`django/db/migrations/operations/__init__.py`, `django/db/migrations/__init__.py`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    46
+   ],
+   "fingerprint": "65a001092ec0e3ca"
+  },
+  {
+   "pointer": "django/db/migrations/__init__.py",
+   "line": 94,
+   "sentence": "The exported operations are the classes of this table, and `django.db.migrations` exports them again, which is where a migration file finds them (`django/db/migrations/operations/__init__.py`, `django/db/migrations/__init__.py`).",
+   "tree": "django",
+   "path": "django/db/migrations/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2
+   ],
+   "fingerprint": "39ae11bdf11aea12"
+  },
+  {
+   "pointer": "django/db/migrations/operations/",
+   "line": 122,
+   "sentence": "The state half's methods are `ProjectState`'s and the database half's the schema editor's (`django/db/migrations/operations/`).*",
+   "tree": "django",
+   "path": "django/db/migrations/operations/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "3c3c002758e3846b"
+  }
+ ]
+}

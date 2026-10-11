@@ -39,4 +39,5 @@ _get_add_plan                django/db/models/fields/related_descriptors.py:crea
 _get_missing_target_ids      django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager    # the same
 _remove_items                django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager    # the same
 set_base                     django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager    # the same
+_auto_deps                   django/db/migrations/autodetector.py:MigrationAutodetector.add_operation    # set on each generated operation, by assignment: the list of what must exist or be gone before it can run
 ```

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 670">
+  <!-- three bands, the places the facts are kept: the models, the migration files, the database. Between them
+       the two commands, each a frame. A command reads the band above it and the band below it at the left,
+       its work runs to the right, and what it writes goes down into the band below at the right. The marked
+       band and the three marked arrows are the migration files and every use of them -->
+
+  <!-- the models -->
+  <rect class="box" x="0.5" y="0.5" width="939" height="38" rx="4"/>
+  <text class="strong" x="14" y="25">the models</text>
+
+  <!-- the migration files: what the two commands have in common -->
+  <rect class="mark-box" x="0.5" y="277.5" width="939" height="38" rx="4"/>
+  <text class="strong" x="14" y="302">migration files</text>
+
+  <!-- the database, and in it the one table -->
+  <rect class="box" x="0.5" y="607.5" width="939" height="62" rx="4"/>
+  <text class="strong" x="14" y="643">the database</text>
+  <rect class="ground" x="136.5" y="621.5" width="350" height="34" rx="4"/>
+  <text class="name" x="150" y="643">django_migrations</text>
+
+  <!-- makemigrations: the frame and what it is in words -->
+  <rect class="ground" x="0.5" y="74.5" width="939" height="167" rx="4"/>
+  <text class="strong" x="14" y="110">makemigrations</text>
+  <text class="quiet small" x="14" y="130">from the models and</text>
+  <text class="quiet small" x="14" y="146">the migration files,</text>
+  <text class="quiet small" x="14" y="162">new migration files</text>
+
+  <!-- the models are read into the to-state -->
+  <path class="line" d="M236.5 38.5 V78.5"/>
+  <polygon class="head" points="236.5,88.5 231.5,78.5 241.5,78.5"/>
+  <rect class="box" x="136.5" y="88.5" width="200" height="34" rx="4"/>
+  <text class="name" x="150" y="110">ProjectState.from_apps</text>
+
+  <!-- the migration files are read into the from-state -->
+  <path class="mark-line" d="M236.5 277.5 V237.5"/>
+  <polygon class="head mark" points="236.5,227.5 231.5,237.5 241.5,237.5"/>
+  <rect class="box" x="136.5" y="159.5" width="200" height="68" rx="4"/>
+  <text class="name" x="150" y="181">MigrationLoader</text>
+  <text class="quiet small" x="150" y="199">the graph, then each migration's</text>
+  <text class="quiet small" x="150" y="215">state halves in order</text>
+
+  <!-- the two states meet in the autodetector -->
+  <path class="line" d="M336.5 105.5 H466.5 V122.5"/>
+  <polygon class="head" points="466.5,132.5 461.5,122.5 471.5,122.5"/>
+  <text x="401.5" y="99" text-anchor="middle">the to-state</text>
+  <path class="line" d="M336.5 193.5 H466.5 V176.5"/>
+  <polygon class="head" points="466.5,166.5 461.5,176.5 471.5,176.5"/>
+  <text x="401.5" y="211" text-anchor="middle">the from-state</text>
+  <rect class="box" x="372.5" y="132.5" width="188" height="34" rx="4"/>
+  <text class="name" x="384.5" y="154">MigrationAutodetector</text>
+
+  <!-- what it finds goes to the writer -->
+  <path class="line" d="M560.5 149.5 H774.5"/>
+  <polygon class="head" points="784.5,149.5 774.5,144.5 774.5,154.5"/>
+  <text x="667.5" y="143" text-anchor="middle">operations, cut into migrations</text>
+  <rect class="box" x="784.5" y="132.5" width="141" height="34" rx="4"/>
+  <text class="name" x="796.5" y="154">MigrationWriter</text>
+
+  <!-- and the writer's files join the migration files -->
+  <path class="mark-line" d="M855 166.5 V267.5"/>
+  <polygon class="head mark" points="855,277.5 850,267.5 860,267.5"/>
+  <text x="843" y="264" text-anchor="end">new migration files</text>
+
+  <!-- migrate: the frame and what it is in words -->
+  <rect class="ground" x="0.5" y="351.5" width="939" height="220" rx="4"/>
+  <text class="strong" x="14" y="387">migrate</text>
+  <text class="quiet small" x="14" y="407">from the migration</text>
+  <text class="quiet small" x="14" y="423">files and one table,</text>
+  <text class="quiet small" x="14" y="439">a changed database</text>
+
+  <!-- the loader reads the migration files from above and the table's rows from below -->
+  <path class="mark-line" d="M236.5 315.5 V355.5"/>
+  <polygon class="head mark" points="236.5,365.5 231.5,355.5 241.5,355.5"/>
+  <path class="line" d="M236.5 621.5 V443.5"/>
+  <polygon class="head" points="236.5,433.5 231.5,443.5 241.5,443.5"/>
+  <text x="248" y="594">its rows</text>
+  <rect class="box" x="136.5" y="365.5" width="200" height="68" rx="4"/>
+  <text class="name" x="150" y="387">MigrationLoader</text>
+  <text class="quiet small" x="150" y="405">the graph, and which migrations</text>
+  <text class="quiet small" x="150" y="421">are applied</text>
+
+  <!-- the executor makes a plan -->
+  <path class="line" d="M336.5 399.5 H362.5"/>
+  <polygon class="head" points="372.5,399.5 362.5,394.5 362.5,404.5"/>
+  <rect class="box" x="372.5" y="382.5" width="158" height="34" rx="4"/>
+  <text class="name" x="385" y="404">MigrationExecutor</text>
+  <path class="line" d="M451.5 416.5 V443.5"/>
+  <polygon class="head" points="451.5,453.5 446.5,443.5 456.5,443.5"/>
+  <text x="464" y="438">a plan</text>
+
+  <!-- what is done for each migration of the plan -->
+  <rect class="box" x="372.5" y="453.5" width="553" height="104" rx="4"/>
+  <text x="386" y="476">then, for each migration of the plan, with a schema editor of its own:</text>
+  <text x="386" y="500">each operation's state half</text>
+  <text x="586" y="500">runs on the project state</text>
+  <text x="386" y="522">each operation's database half</text>
+  <text x="586" y="522">is given the schema editor, which sends the statements</text>
+  <text class="name" x="386" y="544">MigrationRecorder</text>
+  <text x="586" y="544">writes the migration's row in <tspan class="name">django_migrations</tspan></text>
+
+  <!-- what migrate writes: the migration's row, and the statements -->
+  <path class="line" d="M436.5 557.5 V611.5"/>
+  <polygon class="head" points="436.5,621.5 431.5,611.5 441.5,611.5"/>
+  <text x="448" y="594">the migration's row</text>
+  <path class="line" d="M855 557.5 V597.5"/>
+  <polygon class="head" points="855,607.5 850,597.5 860,597.5"/>
+  <text x="843" y="594" text-anchor="end">statements</text>
+</svg>

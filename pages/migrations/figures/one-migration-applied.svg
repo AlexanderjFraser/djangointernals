@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 282">
+  <!-- two columns, one for each migration. In each, the box is the schema editor's block, from BEGIN to COMMIT,
+       what is sent inside it is set in, and the marked box is the migration's row: inside the block on the left,
+       under it on the right -->
+  <text x="0" y="14"><tspan class="name strong">MigrationExecutor.apply_migration</tspan> on SQLite, where the schema editor's block is a transaction</text>
+
+  <!-- nothing deferred: the row is written inside the block -->
+  <text class="strong" x="0" y="44">Nothing deferred</text>
+  <text class="name" x="0" y="64">yard.0003_repair_foreman</text>
+  <rect class="box" x="0.5" y="78.5" width="312" height="160" rx="4"/>
+  <text x="12.5" y="103">enter the schema editor: <tspan class="name strong">BEGIN</tspan></text>
+  <text x="36.5" y="133">the operations' statements</text>
+  <rect class="mark-box" x="24.5" y="140.5" width="276" height="35" rx="4"/>
+  <text x="36.5" y="163">the migration's row is inserted</text>
+  <text x="12.5" y="193">leave the schema editor</text>
+  <text class="name strong" x="36.5" y="223">COMMIT</text>
+
+  <!-- statements deferred: they are sent as the block is left, and the row is written after it -->
+  <text class="strong" x="333" y="44">Statements deferred</text>
+  <text class="name" x="333" y="64">yard.0001_initial</text>
+  <rect class="box" x="333.5" y="78.5" width="312" height="160" rx="4"/>
+  <text x="345.5" y="103">enter the schema editor: <tspan class="name strong">BEGIN</tspan></text>
+  <text x="369.5" y="133">the operations' statements</text>
+  <text x="345.5" y="163">leave the schema editor</text>
+  <text x="369.5" y="193">three deferred <tspan class="name">CREATE INDEX</tspan></text>
+  <text class="name strong" x="369.5" y="223">COMMIT</text>
+  <rect class="mark-box" x="333.5" y="246.5" width="312" height="35" rx="4"/>
+  <text x="345.5" y="269">the migration's row is inserted</text>
+</svg>

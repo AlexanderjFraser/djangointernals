@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 584">
+  <!-- above, the four lists: crew's as a row of its five operations with the one cut marked, and under it the
+       three lists taken whole; under each piece, the migration made of it. Below, the five migrations as the
+       graph they make, the one that depends on nothing at the top, with what each dependency is for -->
+  <text class="strong" x="0" y="14">Each application's list after the sort, and the migrations cut from it</text>
+
+  <!-- crew's list: two operations, the cut, three operations -->
+  <text class="name strong" x="0" y="38">crew</text>
+  <rect class="ground" x="0.5" y="46.5" width="220" height="48" rx="4"/>
+  <path class="line" d="M110.5 46.5 V94.5"/>
+  <text class="name" x="12.5" y="66">CreateModel</text>
+  <text class="name" x="12.5" y="84">Sailor</text>
+  <text class="name" x="122.5" y="66">CreateModel</text>
+  <text class="name" x="122.5" y="84">Officer</text>
+
+  <rect class="ground" x="246.5" y="46.5" width="399" height="48" rx="4"/>
+  <path class="line" d="M415.5 46.5 V94.5"/>
+  <path class="line" d="M530.5 46.5 V94.5"/>
+  <text class="name" x="258.5" y="66">AddField</text>
+  <text class="name" x="258.5" y="84">Sailor.pilots_into</text>
+  <text class="name" x="427.5" y="66">AddField</text>
+  <text class="name" x="427.5" y="84">Sailor.ship</text>
+  <text class="name" x="542.5" y="66">CreateModel</text>
+  <text class="name" x="542.5" y="84">Veteran</text>
+
+  <!-- the cut, which is what the figure is about -->
+  <path class="mark-line dashed" d="M233.5 28 V131"/>
+
+  <!-- the two migrations cut from crew's list -->
+  <path class="line" d="M0.5 100.5 V106.5 H220.5 V100.5"/>
+  <text class="name" x="0" y="125">crew.auto_1</text>
+  <text class="mark small" x="95" y="125">cut off in chop mode</text>
+  <path class="line" d="M246.5 100.5 V106.5 H645.5 V100.5"/>
+  <text class="name" x="246" y="125">crew.auto_2</text>
+  <text class="quiet small" x="341" y="125">the rest, a round later</text>
+
+  <!-- the three lists taken whole -->
+  <text class="name strong" x="0" y="153">fleet</text>
+  <rect class="ground" x="0.5" y="161.5" width="202" height="28" rx="4"/>
+  <text class="quiet" x="12.5" y="180">the whole list</text>
+  <path class="line" d="M0.5 195.5 V201.5 H202.5 V195.5"/>
+  <text class="name" x="0" y="220">fleet.auto_1</text>
+
+  <text class="name strong" x="222" y="153">office</text>
+  <rect class="ground" x="222.5" y="161.5" width="202" height="28" rx="4"/>
+  <text class="quiet" x="234.5" y="180">the whole list</text>
+  <path class="line" d="M222.5 195.5 V201.5 H424.5 V195.5"/>
+  <text class="name" x="222" y="220">office.auto_1</text>
+
+  <text class="name strong" x="444" y="153">yard</text>
+  <rect class="ground" x="444.5" y="161.5" width="201" height="28" rx="4"/>
+  <text class="quiet" x="456.5" y="180">the whole list</text>
+  <path class="line" d="M444.5 195.5 V201.5 H645.5 V195.5"/>
+  <text class="name" x="444" y="220">yard.auto_1</text>
+
+  <!-- the dependencies -->
+  <text class="strong" x="0" y="256">Dependencies, each from a migration to one that must be applied before it</text>
+
+  <!-- the five migrations -->
+  <rect class="box" x="251.5" y="274.5" width="144" height="40" rx="4"/>
+  <text class="name strong" x="323.5" y="299" text-anchor="middle">crew.auto_1</text>
+
+  <rect class="box" x="251.5" y="358.5" width="144" height="40" rx="4"/>
+  <text class="name strong" x="323.5" y="383" text-anchor="middle">fleet.auto_1</text>
+
+  <rect class="box" x="0.5" y="442.5" width="144" height="40" rx="4"/>
+  <text class="name strong" x="72.5" y="467" text-anchor="middle">office.auto_1</text>
+
+  <rect class="box" x="501.5" y="442.5" width="144" height="40" rx="4"/>
+  <text class="name strong" x="573.5" y="467" text-anchor="middle">yard.auto_1</text>
+
+  <rect class="box" x="251.5" y="538.5" width="144" height="40" rx="4"/>
+  <text class="name strong" x="323.5" y="563" text-anchor="middle">crew.auto_2</text>
+
+  <!-- fleet's on crew's first -->
+  <path class="line" d="M323.5 358.5 V324.5"/>
+  <polygon class="head" points="323.5,314.5 318.5,324.5 328.5,324.5"/>
+  <text x="336" y="341"><tspan class="name">Ship.captain</tspan> needs <tspan class="name">Sailor</tspan></text>
+
+  <!-- office's on crew's first and on fleet's -->
+  <path class="line" d="M24.5 442.5 V294.5 H241.5"/>
+  <polygon class="head" points="251.5,294.5 241.5,289.5 241.5,299.5"/>
+  <text x="34" y="287"><tspan class="name">Licence.sailor</tspan> needs <tspan class="name">Sailor</tspan></text>
+  <path class="line" d="M72.5 442.5 V378.5 H241.5"/>
+  <polygon class="head" points="251.5,378.5 241.5,373.5 241.5,383.5"/>
+  <text x="64" y="371"><tspan class="name">Licence.port</tspan> needs <tspan class="name">Port</tspan></text>
+
+  <!-- yard's on fleet's -->
+  <path class="line" d="M573.5 442.5 V378.5 H405.5"/>
+  <polygon class="head" points="395.5,378.5 405.5,373.5 405.5,383.5"/>
+
+  <!-- crew's second on fleet's and on office's -->
+  <path class="line" d="M323.5 538.5 V408.5"/>
+  <polygon class="head" points="323.5,398.5 318.5,408.5 328.5,408.5"/>
+  <text x="336" y="503"><tspan class="name">Sailor.ship</tspan> needs <tspan class="name">Ship</tspan>,</text>
+  <text x="336" y="521"><tspan class="name">Sailor.pilots_into</tspan> needs <tspan class="name">Port</tspan></text>
+  <path class="line" d="M251.5 558.5 H72.5 V492.5"/>
+  <polygon class="head" points="72.5,482.5 67.5,492.5 77.5,492.5"/>
+  <text x="0" y="576"><tspan class="name">Sailor.pilots_into</tspan> needs <tspan class="name">Licence</tspan></text>
+</svg>

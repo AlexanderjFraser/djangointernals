@@ -128,7 +128,7 @@ Q(name='Ada').deconstruct(), (~Q(name='Ada') | Q(ship=1)).deconstruct()  ->  (('
 
 `Q.identity` is a tuple of the path, those keyword arguments and the children, with the value of each pair passed through `make_hashable` (`django/db/models/query_utils.py:Q.identity`, `django/utils/hashable.py:make_hashable`). `Q.__eq__` compares the identities of two `Q` objects and `Q.__hash__` hashes the identity. Children are compared in order, and only keyword arguments are sorted.
 
-Migrations are what need a `Q` to take itself apart. A `Q` in the condition of a constraint is written into a migration file by a serializer that calls `deconstruct` and writes a call of the path with those arguments (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize`). And the autodetector notices a changed condition by equality: a `CheckConstraint` compares its condition with `==` (`django/db/migrations/autodetector.py:MigrationAutodetector.create_altered_constraints`) ([Constraints and indexes](../models/constraints.md), [Migrations](../migrations.md)).
+Migrations are what need a `Q` to take itself apart. A `Q` in the condition of a constraint is written into a migration file by a serializer that calls `deconstruct` and writes a call of the path with those arguments (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize`). And the autodetector notices a changed condition by equality: a `CheckConstraint` compares its condition with `==` (`django/db/migrations/autodetector.py:MigrationAutodetector.create_altered_constraints`) ([Constraints and indexes](../models/constraints.md), [The autodetector: fields, indexes and constraints](../migrations/autodetector-fields.md)).
 
 ## Looking inside a tree
 

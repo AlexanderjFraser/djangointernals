@@ -263,7 +263,7 @@ create_many_to_many_intermediary_model(Voyage.calls, Voyage)
 
 The first lines are a function the field leaves with the registry on its own account, `set_managed`, which waits for Voyage, Port and the new model before it settles whether the new model is managed. With it, three functions are waiting under Voyage's name: the other two were left by `"ship"` and by `"calls"` as each joined the class. The one under Sailor's is still the function of Ship's `"captain"`.
 
-The same route serves anything that needs model classes it did not write. The dictionary passed to `type` can carry a `Meta` whose `"apps"` names a registry other than the global one, and the class is then registered there and nowhere else. Migrations rebuild the models of each point in a project's history in registries of their own in this way (`django/db/migrations/state.py:ModelState.render`) ([Migrations](../migrations.md)).
+The same route serves anything that needs model classes it did not write. The dictionary passed to `type` can carry a `Meta` whose `"apps"` names a registry other than the global one, and the class is then registered there and nowhere else. Migrations rebuild the models of each point in a project's history in registries of their own in this way (`django/db/migrations/state.py:ModelState.render`) ([Historical models: `StateApps` and rendering](../migrations/historical-models.md)).
 
 ## Signals that name a model by a string
 

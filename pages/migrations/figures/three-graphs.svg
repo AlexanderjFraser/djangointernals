@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 372">
+  <!-- yard's part of the graph four times: above the rule as build_graph first makes it, the eight
+       replaced migrations left to right from the oldest with the replacing node S under them, and
+       below the rule one column a database, with what is left of the graph there; every arrow
+       points left, from a migration to one it depends on -->
+  <text class="quiet small" x="0" y="12"><tspan class="name small">S</tspan> is <tspan class="name small">yard.0001_squashed_0007_merge</tspan>, the eight it replaces are written by their numbers,</text>
+  <text class="quiet small" x="0" y="28">and an arrow points from a migration to one it depends on</text>
+
+  <!-- the graph as build_graph first makes it -->
+  <text class="strong" x="0" y="60">As <tspan class="name strong">build_graph</tspan> first makes it, on every database</text>
+
+  <!-- the eight: five in a row, the two numbered 0006 one over the other, and the merge -->
+  <rect class="box" x="0.5" y="99.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="28.5" y="121" text-anchor="middle">0001</text>
+  <rect class="box" x="78.5" y="99.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="106.5" y="121" text-anchor="middle">0002</text>
+  <rect class="box" x="156.5" y="99.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="184.5" y="121" text-anchor="middle">0003</text>
+  <rect class="box" x="234.5" y="99.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="262.5" y="121" text-anchor="middle">0004</text>
+  <rect class="box" x="312.5" y="99.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="340.5" y="121" text-anchor="middle">0005</text>
+  <rect class="box" x="400.5" y="76.5" width="157" height="34" rx="4"/>
+  <text class="name strong" x="479" y="98" text-anchor="middle">0006_long_dock</text>
+  <rect class="box" x="400.5" y="122.5" width="157" height="34" rx="4"/>
+  <text class="name strong" x="479" y="144" text-anchor="middle">0006_dock_covered</text>
+  <rect class="box" x="589.5" y="99.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="617.5" y="121" text-anchor="middle">0007</text>
+
+  <!-- 0002 to 0005 each depend on the one before -->
+  <path class="line" d="M78.5 116.5 H66.5"/>
+  <polygon class="head" points="56.5,116.5 66.5,111.5 66.5,121.5"/>
+  <path class="line" d="M156.5 116.5 H144.5"/>
+  <polygon class="head" points="134.5,116.5 144.5,111.5 144.5,121.5"/>
+  <path class="line" d="M234.5 116.5 H222.5"/>
+  <polygon class="head" points="212.5,116.5 222.5,111.5 222.5,121.5"/>
+  <path class="line" d="M312.5 116.5 H300.5"/>
+  <polygon class="head" points="290.5,116.5 300.5,111.5 300.5,121.5"/>
+
+  <!-- both 0006 depend on 0005: one arrowhead, and a shaft that forks to the two -->
+  <path class="line" d="M400.5 93.5 H388.5 V139.5 H400.5"/>
+  <path class="line" d="M388.5 116.5 H378.5"/>
+  <polygon class="head" points="368.5,116.5 378.5,111.5 378.5,121.5"/>
+
+  <!-- 0007 depends on both: one shaft from it, and an arrowhead at each -->
+  <path class="line" d="M567.5 93.5 H577.5 V139.5 H567.5"/>
+  <path class="line" d="M577.5 116.5 H589.5"/>
+  <polygon class="head" points="557.5,93.5 567.5,88.5 567.5,98.5"/>
+  <polygon class="head" points="557.5,139.5 567.5,134.5 567.5,144.5"/>
+
+  <!-- the replacing node, with no edge to the eight -->
+  <rect class="mark-box" x="0.5" y="155.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="28.5" y="177" text-anchor="middle">S</text>
+
+  <!-- the rule between the graph every loader starts from and what each database makes of it -->
+  <path class="line" d="M0 210.5 H646"/>
+
+  <!-- "fresh": the replacing node alone -->
+  <text class="name strong" x="0" y="236">"fresh"</text>
+  <text x="0" y="256">none of the eight applied</text>
+  <text class="name" x="0" y="276">remove_replaced_nodes</text>
+  <rect class="mark-box" x="0.5" y="290.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="28.5" y="312" text-anchor="middle">S</text>
+  <text x="0" y="346"><tspan class="name">S</tspan> is not applied,</text>
+  <text x="0" y="364">and a plan applies it</text>
+
+  <!-- "default": the replacing node alone -->
+  <text class="name strong" x="200" y="236">"default"</text>
+  <text x="200" y="256">all eight applied</text>
+  <text class="name" x="200" y="276">remove_replaced_nodes</text>
+  <rect class="mark-box" x="200.5" y="290.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="228.5" y="312" text-anchor="middle">S</text>
+  <text x="200" y="346"><tspan class="name">S</tspan> counts as applied,</text>
+  <text x="200" y="364">and a plan is empty</text>
+
+  <!-- "halfway": the eight, written as the first and the last of them -->
+  <text class="name strong" x="400" y="236">"halfway"</text>
+  <text x="400" y="256"><tspan class="name">0001</tspan> to <tspan class="name">0003</tspan> applied</text>
+  <text class="name" x="400" y="276">remove_replacement_node</text>
+  <rect class="box" x="400.5" y="290.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="428.5" y="312" text-anchor="middle">0001</text>
+  <path class="line" d="M478.5 307.5 H466.5"/>
+  <polygon class="head" points="456.5,307.5 466.5,302.5 466.5,312.5"/>
+  <text class="quiet" x="490" y="309.5" text-anchor="middle">…</text>
+  <path class="line" d="M523.5 307.5 H511.5"/>
+  <polygon class="head" points="501.5,307.5 511.5,302.5 511.5,312.5"/>
+  <rect class="box" x="523.5" y="290.5" width="56" height="34" rx="4"/>
+  <text class="name strong" x="551.5" y="312" text-anchor="middle">0007</text>
+  <text x="400" y="346"><tspan class="name">S</tspan> is not in the graph,</text>
+  <text x="400" y="364">and a plan applies <tspan class="name">0004</tspan> to <tspan class="name">0007</tspan></text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 326">
+  <!-- the two halves are the marked panels. The state half stands between the project state before it ran
+       and the one after; both states go down into the database half, and what it takes from them goes on
+       to the schema editor -->
+  <text x="0" y="14"><tspan class="name strong">AddField(model_name='dock', name='metres', field=...)</tspan>, in a migration of yard</text>
+
+  <!-- the project state before the state half ran -->
+  <rect class="box" x="0.5" y="55.5" width="150" height="66" rx="4"/>
+  <text class="strong" x="12.5" y="76">project state</text>
+  <text class="quiet small" x="12.5" y="93">before the state half ran</text>
+  <text class="small" x="12.5" y="110">Dock without <tspan class="name small">metres</tspan></text>
+
+  <path class="line" d="M151 88.5 H187.5"/>
+  <polygon class="head" points="197.5,88.5 187.5,83.5 187.5,93.5"/>
+
+  <!-- the state half -->
+  <rect class="mark-box" x="197.5" y="30.5" width="251" height="116" rx="4"/>
+  <text class="strong" x="209.5" y="52">state half</text>
+  <text class="name" x="209.5" y="72">state_forwards('yard', state)</text>
+  <text class="name" x="209.5" y="98">ProjectState.add_field</text>
+  <text x="209.5" y="116">the model state <tspan class="name">yard.Dock</tspan> gains</text>
+  <text x="209.5" y="134">the field <tspan class="name">metres</tspan></text>
+
+  <path class="line" d="M449 88.5 H485.5"/>
+  <polygon class="head" points="495.5,88.5 485.5,83.5 485.5,93.5"/>
+
+  <!-- the project state after it -->
+  <rect class="box" x="495.5" y="55.5" width="150" height="66" rx="4"/>
+  <text class="strong" x="507.5" y="76">project state</text>
+  <text class="quiet small" x="507.5" y="93">after the state half ran</text>
+  <text class="small" x="507.5" y="110">Dock with <tspan class="name small">metres</tspan></text>
+
+  <!-- both states are handed to the database half -->
+  <path class="line" d="M75.5 122 V168.5"/>
+  <polygon class="head" points="75.5,178.5 70.5,168.5 80.5,168.5"/>
+  <text x="87.5" y="156">from-state</text>
+  <path class="line" d="M570.5 122 V168.5"/>
+  <polygon class="head" points="570.5,178.5 565.5,168.5 575.5,168.5"/>
+  <text x="558.5" y="156" text-anchor="end">to-state</text>
+
+  <!-- the database half -->
+  <rect class="mark-box" x="0.5" y="178.5" width="645" height="80" rx="4"/>
+  <text class="strong" x="12.5" y="200">database half</text>
+  <text class="name" x="12.5" y="220">database_forwards('yard', schema editor, from-state, to-state)</text>
+  <text x="12.5" y="246">the historical model <tspan class="name">yard.Dock</tspan> from each state's registry</text>
+
+  <!-- and on to the schema editor -->
+  <path class="line" d="M323 259 V278.5"/>
+  <polygon class="head" points="323,288.5 318,278.5 328,278.5"/>
+  <rect class="ground" x="208.5" y="288.5" width="229" height="36" rx="4"/>
+  <text x="323" y="311" text-anchor="middle">the schema editor's <tspan class="name">add_field</tspan></text>
+</svg>
