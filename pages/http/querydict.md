@@ -76,4 +76,4 @@ QueryDict("next=/a%26b/").urlencode(safe="/")  ->  'next=/a%26b/'
 
 The multipart parser is the one caller that builds a `QueryDict` by hand. It makes a mutable one, appends each field as it reads it, and sets `_mutable` to false itself before handing the dictionary back (`django/http/multipartparser.py:MultiPartParser._parse`).
 
-`MultiValueDict` is also the type of `FILES`, with uploaded files as its values, and is one of the data structures of [The utility layer](../utils.md).
+`MultiValueDict` is also the type of `FILES`, with uploaded files as its values, and is told with the other data structures of `django/utils/datastructures.py` in [Data structures: `MultiValueDict` and its neighbours](../utils/datastructures.md).

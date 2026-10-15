@@ -1,0 +1,478 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "exceptions.md",
+ "pointers": [
+  {
+   "pointer": "django/core/exceptions.py",
+   "line": 7,
+   "sentence": "`django/core/exceptions.py` holds the exceptions its docstring calls global, many raised in one part of Django and caught in another: the bases of each model's `Model.DoesNotExist` and `Model.MultipleObjectsReturned`, `SuspiciousOperation` and its subclasses, `PermissionDenied`, `BadRequest`, `ImproperlyConfigured`, `ValidationError` with `NON_FIELD_ERRORS`, the compiler's `EmptyResultSet` and `FullResultSet`, and `SynchronousOnlyOperation`, which `async_unsafe` raises.",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    265
+   ],
+   "fingerprint": "57b1f04d9a423a4d"
+  },
+  {
+   "pointer": "django/core/exceptions.py",
+   "line": 9,
+   "sentence": "The module imports nothing of Django but `make_hashable`, so any part can import it (`django/core/exceptions.py`).",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    265
+   ],
+   "fingerprint": "57b1f04d9a423a4d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.get",
+   "line": 15,
+   "sentence": "| `ObjectDoesNotExist` | `Exception` | a model's `Model.DoesNotExist`, from `QuerySet.get` (`django/db/models/query.py:QuerySet.get`) | `get_object_or_404` raises `Http404` instead (`django/shortcuts.py:get_object_or_404`); a template renders `\"string_if_invalid\"`, empty by default |",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.get",
+   "kind": "function",
+   "lines": [
+    726,
+    759
+   ],
+   "fingerprint": "7af2c1f495fa5cf2"
+  },
+  {
+   "pointer": "django/shortcuts.py:get_object_or_404",
+   "line": 15,
+   "sentence": "| `ObjectDoesNotExist` | `Exception` | a model's `Model.DoesNotExist`, from `QuerySet.get` (`django/db/models/query.py:QuerySet.get`) | `get_object_or_404` raises `Http404` instead (`django/shortcuts.py:get_object_or_404`); a template renders `\"string_if_invalid\"`, empty by default |",
+   "tree": "django",
+   "path": "django/shortcuts.py",
+   "symbol": "get_object_or_404",
+   "kind": "function",
+   "lines": [
+    79,
+    107
+   ],
+   "fingerprint": "45f5ab8100bd3ae0"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 17,
+   "sentence": "| `ObjectNotUpdated` | `Exception` | a model's `Model.NotUpdated`, from a forced update that changed no row (`django/db/models/base.py:Model._save_table`) | it goes up |",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
+   "kind": "function",
+   "lines": [
+    1075,
+    1212
+   ],
+   "fingerprint": "52c8d3bbd3d1cbaf"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.get_field",
+   "line": 18,
+   "sentence": "| `FieldDoesNotExist` | `Exception` | `Options.get_field` (`django/db/models/options.py:Options.get_field`) | the code that asked; a query raises `FieldError` instead |",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.get_field",
+   "kind": "function",
+   "lines": [
+    670,
+    695
+   ],
+   "fingerprint": "c8d677b02b94ebc0"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.names_to_path",
+   "line": 19,
+   "sentence": "| `FieldError` | `Exception` | a query's keyword that names no field (`django/db/models/sql/query.py:Query.names_to_path`) | it goes up |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.names_to_path",
+   "kind": "function",
+   "lines": [
+    1782,
+    1896
+   ],
+   "fingerprint": "20120f413f7ae99f"
+  },
+  {
+   "pointer": "django/db/models/fetch_modes.py:FetchRaise.fetch",
+   "line": 20,
+   "sentence": "| `FieldFetchBlocked` | `FieldError` | `FETCH_RAISE`, when a field not loaded is read (`django/db/models/fetch_modes.py:FetchRaise.fetch`) | it goes up ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)) |",
+   "tree": "django",
+   "path": "django/db/models/fetch_modes.py",
+   "symbol": "FetchRaise.fetch",
+   "kind": "function",
+   "lines": [
+    52,
+    55
+   ],
+   "fingerprint": "68691734aee30cbb"
+  },
+  {
+   "pointer": "django/core/validators.py",
+   "line": 21,
+   "sentence": "| `ValidationError` | `Exception` | validators (`django/core/validators.py`) | a form's or a model's errors |",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    754
+   ],
+   "fingerprint": "2909214bd9ebfac9"
+  },
+  {
+   "pointer": "django/utils/html.py:strip_tags",
+   "line": 22,
+   "sentence": "| `SuspiciousOperation` | `Exception` | its subclasses; markup `strip_tags` gives up on (`django/utils/html.py:strip_tags`) | a 400, logged under `\"django.security\"` (`django/core/handlers/exception.py:response_for_exception`) |",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "strip_tags",
+   "kind": "function",
+   "lines": [
+    215,
+    234
+   ],
+   "at": 216,
+   "fingerprint": "8af94305ca7f3911"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 22,
+   "sentence": "| `SuspiciousOperation` | `Exception` | its subclasses; markup `strip_tags` gives up on (`django/utils/html.py:strip_tags`) | a 400, logged under `\"django.security\"` (`django/core/handlers/exception.py:response_for_exception`) |",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.get_host",
+   "line": 23,
+   "sentence": "| `DisallowedHost` | `SuspiciousOperation` | a host `ALLOWED_HOSTS` refuses (`django/http/request.py:HttpRequest.get_host`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_host",
+   "kind": "function",
+   "lines": [
+    190,
+    210
+   ],
+   "fingerprint": "8b3e972265b23d16"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
+   "line": 24,
+   "sentence": "| `DisallowedRedirect` | `SuspiciousOperation` | a redirect too long or to a scheme not allowed (`django/http/response.py:HttpResponseRedirectBase.__init__`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseRedirectBase.__init__",
+   "kind": "function",
+   "lines": [
+    642,
+    662
+   ],
+   "fingerprint": "d24c129d406f5945"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._check_data_too_big",
+   "line": 25,
+   "sentence": "| `RequestDataTooBig` | `SuspiciousOperation` | a body over `DATA_UPLOAD_MAX_MEMORY_SIZE` (`django/http/request.py:HttpRequest._check_data_too_big`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._check_data_too_big",
+   "kind": "function",
+   "lines": [
+    436,
+    442
+   ],
+   "fingerprint": "7449cb278698c7a5"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict.__init__",
+   "line": 26,
+   "sentence": "| `TooManyFieldsSent` | `SuspiciousOperation` | fields over `DATA_UPLOAD_MAX_NUMBER_FIELDS` (`django/http/request.py:QueryDict.__init__`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict.__init__",
+   "kind": "function",
+   "lines": [
+    599,
+    628
+   ],
+   "fingerprint": "e42e36748c604427"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 27,
+   "sentence": "| `TooManyFilesSent` | `SuspiciousOperation` | files over `DATA_UPLOAD_MAX_NUMBER_FILES` (`django/http/multipartparser.py:MultiPartParser._parse`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:LazyStream._update_unget_history",
+   "line": 28,
+   "sentence": "| `SuspiciousMultipartForm` | `SuspiciousOperation` | a multipart body on which the parser seems to loop (`django/http/multipartparser.py:LazyStream._update_unget_history`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "LazyStream._update_unget_history",
+   "kind": "function",
+   "lines": [
+    516,
+    538
+   ],
+   "fingerprint": "6fec557984dd8dd3"
+  },
+  {
+   "pointer": "django/utils/_os.py:safe_join",
+   "line": 29,
+   "sentence": "| `SuspiciousFileOperation` | `SuspiciousOperation` | a file name reaching outside its directory (`django/utils/_os.py:safe_join`) | a 400 |",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "safe_join",
+   "kind": "function",
+   "lines": [
+    65,
+    92
+   ],
+   "fingerprint": "825ec30e9dd3bee8"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 30,
+   "sentence": "| `BadRequest` | `Exception` | a urlencoded form whose encoding is not UTF-8 (`django/http/request.py:HttpRequest._load_post_and_files`) | a 400 |",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
+   "pointer": "django/contrib/auth/mixins.py:AccessMixin.handle_no_permission",
+   "line": 31,
+   "sentence": "| `PermissionDenied` | `Exception` | a permission check (`django/contrib/auth/mixins.py:AccessMixin.handle_no_permission`) | a 403; from a backend, `authenticate` tries no other (`django/contrib/auth/__init__.py:authenticate`) |",
+   "tree": "django",
+   "path": "django/contrib/auth/mixins.py",
+   "symbol": "AccessMixin.handle_no_permission",
+   "kind": "function",
+   "lines": [
+    47,
+    65
+   ],
+   "fingerprint": "f52ffd402e4c5c66"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:authenticate",
+   "line": 31,
+   "sentence": "| `PermissionDenied` | `Exception` | a permission check (`django/contrib/auth/mixins.py:AccessMixin.handle_no_permission`) | a 403; from a backend, `authenticate` tries no other (`django/contrib/auth/__init__.py:authenticate`) |",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "authenticate",
+   "kind": "function",
+   "lines": [
+    123,
+    144
+   ],
+   "at": 124,
+   "fingerprint": "7ae854e051272436"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.read_body",
+   "line": 32,
+   "sentence": "| `RequestAborted` | `Exception` | a client gone (`django/core/handlers/asgi.py:ASGIHandler.read_body`) | `ASGIHandler.handle` sends nothing |",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.read_body",
+   "kind": "function",
+   "lines": [
+    239,
+    267
+   ],
+   "fingerprint": "8c1984707322f62e"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings._setup",
+   "line": 33,
+   "sentence": "| `ImproperlyConfigured` | `Exception` | a setting read before any are configured (`django/conf/__init__.py:LazySettings._setup`), and other wrong configurations | it goes up |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings._setup",
+   "kind": "function",
+   "lines": [
+    93,
+    109
+   ],
+   "fingerprint": "6721d7ba7192c979"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.check_apps_ready",
+   "line": 34,
+   "sentence": "| `AppRegistryNotReady` | `Exception` | the registry asked before it is ready (`django/apps/registry.py:Apps.check_apps_ready`) | it goes up |",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.check_apps_ready",
+   "kind": "function",
+   "lines": [
+    129,
+    138
+   ],
+   "fingerprint": "7dbef7462298717a"
+  },
+  {
+   "pointer": "django/urls/utils.py:get_callable",
+   "line": 36,
+   "sentence": "| `ViewDoesNotExist` | `Exception` | a dotted path that names no view (`django/urls/utils.py:get_callable`) | the URL checks report it |",
+   "tree": "django",
+   "path": "django/urls/utils.py",
+   "symbol": "get_callable",
+   "kind": "function",
+   "lines": [
+    11,
+    59
+   ],
+   "at": 12,
+   "fingerprint": "2533ce4343943073"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
+   "line": 37,
+   "sentence": "| `EmptyResultSet` | `Exception` | a condition that can match no row (`django/db/models/sql/where.py:WhereNode.as_sql`) | the compiler sends no statement, or writes a false condition |",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.as_sql",
+   "kind": "function",
+   "lines": [
+    116,
+    188
+   ],
+   "fingerprint": "3277e292e6bb60f6"
+  },
+  {
+   "pointer": "django/core/exceptions.py:ValidationError.__init__",
+   "line": 45,
+   "sentence": "`ValidationError.__init__` gives the error one of three shapes, chosen by its first argument (`django/core/exceptions.py:ValidationError.__init__`):",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": "ValidationError.__init__",
+   "kind": "function",
+   "lines": [
+    147,
+    188
+   ],
+   "fingerprint": "1bfde7faf61b8277"
+  },
+  {
+   "pointer": "django/core/exceptions.py:ValidationError.__iter__",
+   "line": 53,
+   "sentence": "A single or list-shaped error iterates as its messages, each with its params put in by `%`; a dictionary-shaped one as pairs of a name and its messages (`django/core/exceptions.py:ValidationError.__iter__`).",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": "ValidationError.__iter__",
+   "kind": "function",
+   "lines": [
+    212,
+    221
+   ],
+   "fingerprint": "0f094764733ec283"
+  },
+  {
+   "pointer": "django/template/base.py:Variable._resolve_lookup",
+   "line": 79,
+   "sentence": "When a template variable's lookup raises an exception with that attribute true, `Variable._resolve_lookup` gives the engine's `\"string_if_invalid\"`, empty by default, in its place; any other exception goes on up ([Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md)) (`django/template/base.py:Variable._resolve_lookup`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Variable._resolve_lookup",
+   "kind": "function",
+   "lines": [
+    965,
+    1045
+   ],
+   "fingerprint": "e7f5c1cb99dd5024"
+  },
+  {
+   "pointer": "docs/ref/exceptions.txt",
+   "line": 91,
+   "sentence": "The documentation says some of Django relies on thread-safety and does not work under coroutines sharing a thread (`docs/ref/exceptions.txt`); `async_unsafe` marks such code.",
+   "tree": "django",
+   "path": "docs/ref/exceptions.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    366
+   ],
+   "fingerprint": "03ecc7f94015ba3f"
+  },
+  {
+   "pointer": "django/utils/asyncio.py:async_unsafe",
+   "line": 91,
+   "sentence": "Its wrapper asks `asyncio.get_running_loop` whether a loop runs in the calling thread; if one does, and the environment variable `\"DJANGO_ALLOW_ASYNC_UNSAFE\"` is empty or unset, it raises `SynchronousOnlyOperation`, and otherwise calls the function (`django/utils/asyncio.py:async_unsafe`).",
+   "tree": "django",
+   "path": "django/utils/asyncio.py",
+   "symbol": "async_unsafe",
+   "kind": "function",
+   "lines": [
+    8,
+    39
+   ],
+   "fingerprint": "a148da8e03f6e918"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.cursor",
+   "line": 93,
+   "sentence": "`BaseDatabaseWrapper` marks the methods that open and close a connection, make a cursor, commit, roll back and keep savepoints, so a query run in a coroutine fails ([The asynchronous methods of a queryset](../querysets/async.md)) (`django/db/backends/base/base.py:BaseDatabaseWrapper.cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.cursor",
+   "kind": "function",
+   "lines": [
+    317,
+    320
+   ],
+   "at": 318,
+   "fingerprint": "e0ac61a7eb8adfd4"
+  },
+  {
+   "pointer": "django/core/checks/async_checks.py:check_async_unsafe",
+   "line": 93,
+   "sentence": "A deployment check reports the variable set (`django/core/checks/async_checks.py:check_async_unsafe`).",
+   "tree": "django",
+   "path": "django/core/checks/async_checks.py",
+   "symbol": "check_async_unsafe",
+   "kind": "function",
+   "lines": [
+    12,
+    16
+   ],
+   "at": 13,
+   "fingerprint": "785a3b20ab96497b"
+  }
+ ]
+}

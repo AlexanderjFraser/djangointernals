@@ -1,0 +1,363 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "datastructures.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/datastructures.py",
+   "line": 7,
+   "sentence": "`django/utils/datastructures.py` holds the containers that the request, the ORM and the template engine share: `MultiValueDict`, the dictionary of lists under a request's query, form data and files; `CaseInsensitiveMapping`, under its headers; `ImmutableList`, `OrderedSet`, `DictWrapper` and `DeferredSubDict`.",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    365
+   ],
+   "fingerprint": "cfe76fe0e3ed795f"
+  },
+  {
+   "pointer": "django/utils/hashable.py",
+   "line": 7,
+   "sentence": "Beside them, `make_hashable` in `django/utils/hashable.py` makes a value built of lists and dictionaries fit to be hashed.",
+   "tree": "django",
+   "path": "django/utils/hashable.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    26
+   ],
+   "fingerprint": "1f370baf860f6469"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict",
+   "line": 11,
+   "sentence": "A `MultiValueDict` is a `dict` whose stored values are lists, one to a key, with the methods that read and write a single value changed to hide the list (`django/utils/datastructures.py:MultiValueDict`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict",
+   "kind": "class",
+   "lines": [
+    49,
+    219
+   ],
+   "fingerprint": "99a8011934f0181b"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict._getlist",
+   "line": 17,
+   "sentence": "`MultiValueDict._getlist` makes that copy when asked to, and otherwise returns the stored list itself (`django/utils/datastructures.py:MultiValueDict._getlist`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict._getlist",
+   "kind": "function",
+   "lines": [
+    131,
+    147
+   ],
+   "fingerprint": "4841376da7e64138"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.setlistdefault",
+   "line": 21,
+   "sentence": "Their comments say why: a subclass's `setlist` or `__setitem__` may store another value, and `QueryDict`'s do: they decode bytes, and its `setlist` stores a new list (`django/utils/datastructures.py:MultiValueDict.setlistdefault`, `django/http/request.py:QueryDict.setlist`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.setlistdefault",
+   "kind": "function",
+   "lines": [
+    166,
+    173
+   ],
+   "fingerprint": "b76a7a2aed693592"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict.setlist",
+   "line": 21,
+   "sentence": "Their comments say why: a subclass's `setlist` or `__setitem__` may store another value, and `QueryDict`'s do: they decode bytes, and its `setlist` stores a new list (`django/utils/datastructures.py:MultiValueDict.setlistdefault`, `django/http/request.py:QueryDict.setlist`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict.setlist",
+   "kind": "function",
+   "lines": [
+    680,
+    684
+   ],
+   "fingerprint": "ac25605ab4576744"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.update",
+   "line": 23,
+   "sentence": "Another `MultiValueDict` has its lists added to the ends of this one's; from a mapping, pairs or keyword arguments each value is appended to its key, so a plain dictionary whose value is a list appends the list as one value (`django/utils/datastructures.py:MultiValueDict.update`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.update",
+   "kind": "function",
+   "lines": [
+    200,
+    215
+   ],
+   "fingerprint": "ce539938b1017dd1"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.__copy__",
+   "line": 27,
+   "sentence": "`MultiValueDict.copy` and `copy.copy` make a new dictionary with each list copied, their values shared; `copy.deepcopy` copies keys and lists deeply (`django/utils/datastructures.py:MultiValueDict.__copy__`, `django/utils/datastructures.py:MultiValueDict.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.__copy__",
+   "kind": "function",
+   "lines": [
+    97,
+    98
+   ],
+   "fingerprint": "0a17377bfa8889a7"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.__deepcopy__",
+   "line": 27,
+   "sentence": "`MultiValueDict.copy` and `copy.copy` make a new dictionary with each list copied, their values shared; `copy.deepcopy` copies keys and lists deeply (`django/utils/datastructures.py:MultiValueDict.__copy__`, `django/utils/datastructures.py:MultiValueDict.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    100,
+    107
+   ],
+   "fingerprint": "82ea8b14cef0cb0f"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.__setstate__",
+   "line": 27,
+   "sentence": "At protocols 2 to 5, the default among them, pickle writes a subclass of `dict` with the pairs its `items` yields, here the last values only, so `MultiValueDict.__getstate__` adds the whole lists to the state under `\"_data\"`, and `MultiValueDict.__setstate__` stores them again with `setlist` before restoring the rest of the instance's `__dict__` (`django/utils/datastructures.py:MultiValueDict.__setstate__`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.__setstate__",
+   "kind": "function",
+   "lines": [
+    112,
+    116
+   ],
+   "fingerprint": "63a88bc93e94aed3"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 45,
+   "sentence": "Uploaded files are kept in a plain one (`django/http/multipartparser.py:MultiPartParser._parse`), and the URL resolver files its candidates for reversing in one ([Reversing a name](../urls/reversing.md)) (`django/urls/resolvers.py:URLResolver._populate`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 45,
+   "sentence": "Uploaded files are kept in a plain one (`django/http/multipartparser.py:MultiPartParser._parse`), and the URL resolver files its candidates for reversing in one ([Reversing a name](../urls/reversing.md)) (`django/urls/resolvers.py:URLResolver._populate`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:ImmutableList",
+   "line": 49,
+   "sentence": "`ImmutableList.complain`, which raises it, is bound to the name of every method by which a list changes, those behind item assignment, deletion, `+=` and `*=` included, except `list.clear`, which fails with Python's own message (`django/utils/datastructures.py:ImmutableList`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "ImmutableList",
+   "kind": "class",
+   "lines": [
+    222,
+    256
+   ],
+   "fingerprint": "c644844695ce007f"
+  },
+  {
+   "pointer": "django/db/models/options.py:make_immutable_fields_list",
+   "line": 51,
+   "sentence": "A model's options hand out the lists of fields they cache as one, with a message that names the list and says to make a copy first ([The options: what a model keeps as `_meta`](../models/options.md)) (`django/db/models/options.py:make_immutable_fields_list`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "make_immutable_fields_list",
+   "kind": "function",
+   "lines": [
+    86,
+    87
+   ],
+   "fingerprint": "996663ae4fa01494"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:CaseInsensitiveMapping",
+   "line": 55,
+   "sentence": "It keeps a dictionary from each key in lower case to the key as written and its value; a lookup lowers the key it is given, and iteration and `repr` give the keys as written (`django/utils/datastructures.py:CaseInsensitiveMapping`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "CaseInsensitiveMapping",
+   "kind": "class",
+   "lines": [
+    288,
+    347
+   ],
+   "fingerprint": "65f557abe25815af"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:OrderedSet",
+   "line": 68,
+   "sentence": "`OrderedSet` keeps its items as the keys of a dictionary made with `dict.fromkeys`, so membership is a dictionary lookup, and iteration, reversed or not, follows the order of insertion, which adding an item again does not change (`django/utils/datastructures.py:OrderedSet`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "OrderedSet",
+   "kind": "class",
+   "lines": [
+    5,
+    42
+   ],
+   "fingerprint": "31968e0da979f289"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.process_rhs",
+   "line": 68,
+   "sentence": "Among the places Django uses it to drop duplicates and keep the order are the values on the right of an `In` lookup (`django/db/models/lookups.py:In.process_rhs`) and a model's ancestors (`django/db/models/options.py:Options.all_parents`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.process_rhs",
+   "kind": "function",
+   "lines": [
+    522,
+    546
+   ],
+   "fingerprint": "dfd7c49912fbc025"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.all_parents",
+   "line": 68,
+   "sentence": "Among the places Django uses it to drop duplicates and keep the order are the values on the right of an `In` lookup (`django/db/models/lookups.py:In.process_rhs`) and a model's ancestors (`django/db/models/options.py:Options.all_parents`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.all_parents",
+   "kind": "function",
+   "lines": [
+    714,
+    725
+   ],
+   "at": 715,
+   "fingerprint": "d3554bf3b21fd2d8"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:DictWrapper",
+   "line": 70,
+   "sentence": "`DictWrapper` is a dictionary that, for a key beginning with a given prefix, takes the prefix off and passes the value through a given function (`django/utils/datastructures.py:DictWrapper`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "DictWrapper",
+   "kind": "class",
+   "lines": [
+    259,
+    285
+   ],
+   "fingerprint": "42f22071e21f7a17"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.db_type_parameters",
+   "line": 70,
+   "sentence": "The parameters of a model field's column type are one, over the field's `__dict__`, so that `\"qn_column\"` gives the column's name quoted ([Column types: from a field to a column](../backends/column-types.md)) (`django/db/models/fields/__init__.py:Field.db_type_parameters`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.db_type_parameters",
+   "kind": "function",
+   "lines": [
+    881,
+    882
+   ],
+   "fingerprint": "00b73ce638f53c19"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:DeferredSubDict",
+   "line": 70,
+   "sentence": "`DeferredSubDict` looks a key up in a dictionary inside another only when indexed; its one user is the `{% partial %}` tag, whose partial may be defined below it ([Template partials: `{% partialdef %}` and `{% partial %}`](../templates/partials.md)) (`django/utils/datastructures.py:DeferredSubDict`, `django/template/defaulttags.py:partial_func`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "DeferredSubDict",
+   "kind": "class",
+   "lines": [
+    350,
+    365
+   ],
+   "fingerprint": "3bd43c09fe3387b4"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:partial_func",
+   "line": 70,
+   "sentence": "`DeferredSubDict` looks a key up in a dictionary inside another only when indexed; its one user is the `{% partial %}` tag, whose partial may be defined below it ([Template partials: `{% partialdef %}` and `{% partial %}`](../templates/partials.md)) (`django/utils/datastructures.py:DeferredSubDict`, `django/template/defaulttags.py:partial_func`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "partial_func",
+   "kind": "function",
+   "lines": [
+    1268,
+    1283
+   ],
+   "at": 1269,
+   "fingerprint": "791c70619270a882"
+  },
+  {
+   "pointer": "django/utils/hashable.py:make_hashable",
+   "line": 74,
+   "sentence": "A dictionary becomes a tuple of its pairs sorted by key, each value made hashable in turn; a value that hashes is returned as it is, so a string or a frozenset is not taken apart; one that does not hash but can be iterated becomes a tuple of its items, each made hashable; anything else raises the `TypeError` of `hash` (`django/utils/hashable.py:make_hashable`).",
+   "tree": "django",
+   "path": "django/utils/hashable.py",
+   "symbol": "make_hashable",
+   "kind": "function",
+   "lines": [
+    4,
+    26
+   ],
+   "fingerprint": "84bbb423b04e50a4"
+  },
+  {
+   "pointer": "django/utils/tree.py:Node.__hash__",
+   "line": 83,
+   "sentence": "Its users compare by value: `ValidationError.__hash__` ([Django's exceptions: `django.core.exceptions`](exceptions.md)); `Node.__hash__` (`django/utils/tree.py:Node.__hash__`); the identity of a `Q` object, a lookup and an expression ([Expressions: `resolve_expression` and `as_sql`](../sql/expressions.md)); the compiler, dropping a repeated ordering (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`); `Model._get_FIELD_display`, for a choice whose value is a list.",
+   "tree": "django",
+   "path": "django/utils/tree.py",
+   "symbol": "Node.__hash__",
+   "kind": "function",
+   "lines": [
+    79,
+    87
+   ],
+   "fingerprint": "e5d04a5f34743b5e"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_order_by",
+   "line": 83,
+   "sentence": "Its users compare by value: `ValidationError.__hash__` ([Django's exceptions: `django.core.exceptions`](exceptions.md)); `Node.__hash__` (`django/utils/tree.py:Node.__hash__`); the identity of a `Q` object, a lookup and an expression ([Expressions: `resolve_expression` and `as_sql`](../sql/expressions.md)); the compiler, dropping a repeated ordering (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`); `Model._get_FIELD_display`, for a choice whose value is a list.",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_order_by",
+   "kind": "function",
+   "lines": [
+    499,
+    558
+   ],
+   "fingerprint": "c479119e478ae75f"
+  }
+ ]
+}

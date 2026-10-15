@@ -1,0 +1,307 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "paths.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/_os.py",
+   "line": 7,
+   "sentence": "`django/utils/_os.py` holds Django's helpers for paths on disk: `safe_join`, which joins a name to a directory and refuses a result outside it, and `makedirs` and `safe_makedirs`, which give a mode to every directory they make.",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    119
+   ],
+   "fingerprint": "9060ff37e14d29dd"
+  },
+  {
+   "pointer": "django/utils/archive.py",
+   "line": 7,
+   "sentence": "`django/utils/archive.py` unpacks a tar or zip file with `extract`, and refuses a member that would land outside its target.",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    262
+   ],
+   "fingerprint": "d1046875a3eff741"
+  },
+  {
+   "pointer": "django/utils/_os.py:safe_join",
+   "line": 13,
+   "sentence": "Anything else raises `SuspiciousFileOperation`, whose message names both paths (`django/utils/_os.py:safe_join`).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "safe_join",
+   "kind": "function",
+   "lines": [
+    65,
+    92
+   ],
+   "fingerprint": "825ec30e9dd3bee8"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage.path",
+   "line": 29,
+   "sentence": "`FileSystemStorage.path`, through which the other methods find a file, lets it reach the caller (`django/core/files/storage/filesystem.py:FileSystemStorage.path`, [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage.path",
+   "kind": "function",
+   "lines": [
+    195,
+    196
+   ],
+   "fingerprint": "d2fe65e71eecc080"
+  },
+  {
+   "pointer": "django/template/loaders/filesystem.py:Loader.get_template_sources",
+   "line": 30,
+   "sentence": "The filesystem template loader, and the application directories loader that inherits from it, pass over a directory the name escapes, since the name may lie inside another (`django/template/loaders/filesystem.py:Loader.get_template_sources`, [Finding a template: `Engine` and the loaders](../templates/loaders.md)).",
+   "tree": "django",
+   "path": "django/template/loaders/filesystem.py",
+   "symbol": "Loader.get_template_sources",
+   "kind": "function",
+   "lines": [
+    27,
+    45
+   ],
+   "fingerprint": "cacd13c1a591c248"
+  },
+  {
+   "pointer": "django/views/static.py:serve",
+   "line": 31,
+   "sentence": "The static file view lets it go, and the handler answers with a 400 (`django/views/static.py:serve`, [The static file view](../views/static-files.md)).",
+   "tree": "django",
+   "path": "django/views/static.py",
+   "symbol": "serve",
+   "kind": "function",
+   "lines": [
+    28,
+    64
+   ],
+   "fingerprint": "d1fc8ba04f085844"
+  },
+  {
+   "pointer": "django/core/management/templates.py:TemplateCommand.download",
+   "line": 32,
+   "sentence": "`TemplateCommand.download` uses it to give a downloaded template a better name, which may come from the server's Content-Disposition header, and lets a refusal end the command (`django/core/management/templates.py:TemplateCommand.download`).",
+   "tree": "django",
+   "path": "django/core/management/templates.py",
+   "symbol": "TemplateCommand.download",
+   "kind": "function",
+   "lines": [
+    294,
+    354
+   ],
+   "fingerprint": "a48993dfc5450556"
+  },
+  {
+   "pointer": "django/utils/_os.py:safe_makedirs",
+   "line": 36,
+   "sentence": "Django's `makedirs` is a copy, its comment says, of a CPython pull request (23901) that adds `parent_mode=None`, the mode for each parent it makes; `safe_makedirs` passes one mode as both (`django/utils/_os.py:safe_makedirs`).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "safe_makedirs",
+   "kind": "function",
+   "lines": [
+    60,
+    62
+   ],
+   "fingerprint": "1b525f317a504d85"
+  },
+  {
+   "pointer": "django/utils/_os.py:makedirs",
+   "line": 38,
+   "sentence": "Django added one call to the copy: after each `os.mkdir` it sets the mode again with `os.chmod`, since, the comment says, the kernel masks `os.mkdir`'s mode with the umask, and this gives the exact mode without changing the umask, which is global state (`django/utils/_os.py:makedirs`).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "makedirs",
+   "kind": "function",
+   "lines": [
+    13,
+    57
+   ],
+   "fingerprint": "d6afab2e4feb68f6"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage._save",
+   "line": 40,
+   "sentence": "`FileSystemStorage._save` calls `safe_makedirs` with the storage's directory mode when one is set, and `os.makedirs` when not (`django/core/files/storage/filesystem.py:FileSystemStorage._save`); `FileBasedCache._createdir` makes the cache's directory with 0o700 ([The cache backends](../services/cache-backends.md)) (`django/core/cache/backends/filebased.py:FileBasedCache._createdir`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage._save",
+   "kind": "function",
+   "lines": [
+    68,
+    144
+   ],
+   "fingerprint": "5670333b5936370d"
+  },
+  {
+   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache._createdir",
+   "line": 40,
+   "sentence": "`FileSystemStorage._save` calls `safe_makedirs` with the storage's directory mode when one is set, and `os.makedirs` when not (`django/core/files/storage/filesystem.py:FileSystemStorage._save`); `FileBasedCache._createdir` makes the cache's directory with 0o700 ([The cache backends](../services/cache-backends.md)) (`django/core/cache/backends/filebased.py:FileBasedCache._createdir`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/filebased.py",
+   "symbol": "FileBasedCache._createdir",
+   "kind": "function",
+   "lines": [
+    120,
+    124
+   ],
+   "fingerprint": "c51e76359a81c298"
+  },
+  {
+   "pointer": "django/utils/_os.py:to_path",
+   "line": 42,
+   "sentence": "`to_path` returns a `pathlib.Path` as it is, makes a string one, and raises `TypeError` for anything else; the template autoreloader and `GeoIP2` call it (`django/utils/_os.py:to_path`).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "to_path",
+   "kind": "function",
+   "lines": [
+    113,
+    119
+   ],
+   "fingerprint": "e8084656eaceecfd"
+  },
+  {
+   "pointer": "django/utils/_os.py:symlinks_supported",
+   "line": 42,
+   "sentence": "Only Django's tests ask `symlinks_supported` whether a symbolic link can be made (`django/utils/_os.py:symlinks_supported`).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "symlinks_supported",
+   "kind": "function",
+   "lines": [
+    95,
+    110
+   ],
+   "fingerprint": "57fb8667d46640ed"
+  },
+  {
+   "pointer": "django/utils/archive.py:extract",
+   "line": 46,
+   "sentence": "`extract` opens the file as an `Archive` and unpacks it into a directory (`django/utils/archive.py:extract`).",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": "extract",
+   "kind": "function",
+   "lines": [
+    46,
+    52
+   ],
+   "fingerprint": "e4e9611fab720ba9"
+  },
+  {
+   "pointer": "django/utils/archive.py:Archive._archive_cls",
+   "line": 46,
+   "sentence": "A tar extension (\".tar\", \".tgz\", \".txz\" and others) gives `TarArchive`, which leaves the compression to `tarfile.open`; \".zip\" gives `ZipArchive`; anything else raises `UnrecognizedArchiveFormat` (`django/utils/archive.py:Archive._archive_cls`).",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": "Archive._archive_cls",
+   "kind": "function",
+   "lines": [
+    63,
+    84
+   ],
+   "at": 64,
+   "fingerprint": "247a740b7ba3ac7d"
+  },
+  {
+   "pointer": "django/utils/archive.py:BaseArchive.has_leading_dir",
+   "line": 50,
+   "sentence": "When every member's path begins with the same first part, as in an archive of one directory, that part is cut from each name, so the directory's contents land in the target itself (`django/utils/archive.py:BaseArchive.has_leading_dir`).",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": "BaseArchive.has_leading_dir",
+   "kind": "function",
+   "lines": [
+    129,
+    143
+   ],
+   "fingerprint": "5c17aa1682d8058d"
+  },
+  {
+   "pointer": "django/utils/archive.py:BaseArchive.target_filename",
+   "line": 51,
+   "sentence": "`BaseArchive.target_filename` joins the name to the absolute target and raises `SuspiciousOperation` unless `os.path.commonpath` of the two is the target; a path on another drive of Windows is refused too (`django/utils/archive.py:BaseArchive.target_filename`).",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": "BaseArchive.target_filename",
+   "kind": "function",
+   "lines": [
+    145,
+    154
+   ],
+   "fingerprint": "c68516d65eb41f1b"
+  },
+  {
+   "pointer": "django/utils/archive.py:BaseArchive._copy_permissions",
+   "line": 52,
+   "sentence": "**The member is written**, and a file is given the member's permission bits if they let others read it (`django/utils/archive.py:BaseArchive._copy_permissions`).",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": "BaseArchive._copy_permissions",
+   "kind": "function",
+   "lines": [
+    107,
+    115
+   ],
+   "at": 108,
+   "fingerprint": "d3ec5c557fb4ecf7"
+  },
+  {
+   "pointer": "docs/releases/5.2.7.txt",
+   "line": 54,
+   "sentence": "The release notes of CVE-2025-59682 say that `extract` allowed a partial directory traversal through an archive whose paths shared a prefix with the target directory (`docs/releases/5.2.7.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.7.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    33
+   ],
+   "fingerprint": "e076421892f094c4"
+  },
+  {
+   "pointer": "django/utils/archive.py:TarArchive.extract",
+   "line": 56,
+   "sentence": "A link in a tar to a file in it is written as an ordinary file holding that file's content; one that names nothing in the archive is reported on standard output and skipped, or, when no file has come before it, reported and then the loop fails with `UnboundLocalError` (`django/utils/archive.py:TarArchive.extract`).",
+   "tree": "django",
+   "path": "django/utils/archive.py",
+   "symbol": "TarArchive.extract",
+   "kind": "function",
+   "lines": [
+    174,
+    204
+   ],
+   "fingerprint": "361153020cdd7d65"
+  },
+  {
+   "pointer": "django/core/management/templates.py:TemplateCommand.extract",
+   "line": 67,
+   "sentence": "It unpacks into a new temporary directory and turns `ArchiveException` and `OSError` into a `CommandError` (`django/core/management/templates.py:TemplateCommand.extract`).",
+   "tree": "django",
+   "path": "django/core/management/templates.py",
+   "symbol": "TemplateCommand.extract",
+   "kind": "function",
+   "lines": [
+    366,
+    382
+   ],
+   "fingerprint": "3dda0d6fc3047539"
+  }
+ ]
+}

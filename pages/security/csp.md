@@ -51,7 +51,7 @@ Before the nonce was read, `"style-src"`, holding only the placeholder, was drop
 
 ## The nonce: `LazyNonce`
 
-The nonce must be new for every response, and many never use it: a redirect, a page with no inline script. `LazyNonce` is a `SimpleLazyObject` around `generate_nonce`, which returns `secrets.token_urlsafe(16)`, sixteen random bytes as 22 characters of URL-safe base64 (`django/utils/csp.py:generate_nonce`). Nothing is drawn until something reads the value, as a template does when it writes it; the first reading makes it, and every later one in the request gets the same ([The utility layer](../utils.md)).
+The nonce must be new for every response, and many never use it: a redirect, a page with no inline script. `LazyNonce` is a `SimpleLazyObject` around `generate_nonce`, which returns `secrets.token_urlsafe(16)`, sixteen random bytes as 22 characters of URL-safe base64 (`django/utils/csp.py:generate_nonce`). Nothing is drawn until something reads the value, as a template does when it writes it; the first reading makes it, and every later one in the request gets the same ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md)).
 
 What the subclass changes is truth. A `SimpleLazyObject` asked whether it is true makes its object to find out. `LazyNonce.__bool__` answers instead whether the value has been made, and makes nothing (`django/utils/csp.py:LazyNonce`). That is the test `build_policy` applies, so the header names a nonce only if something in the request read it.
 

@@ -10,7 +10,7 @@ A browser sends back only the chosen option's value, as a string, and a client c
 
 ## The choices on a field and on its widget
 
-`ChoiceField.choices` is a property whose setter passes the value through `normalize_choices`, which makes a mapping, an enumeration or nested groups into lists of pairs and wraps a callable to be called at each reading ([The utility layer](../utils.md)), and hands the result to the widget's `ChoiceWidget.choices`, which normalizes it again (`django/forms/fields.py:ChoiceField.choices`). A list so becomes two equal lists.
+`ChoiceField.choices` is a property whose setter passes the value through `normalize_choices`, which makes a mapping, an enumeration or nested groups into lists of pairs and wraps a callable to be called at each reading ([Choices: `normalize_choices` and the choice iterators](../utils/choices.md)), and hands the result to the widget's `ChoiceWidget.choices`, which normalizes it again (`django/forms/fields.py:ChoiceField.choices`). A list so becomes two equal lists.
 
 Each form instance deep-copies its fields ([Declaring a form: `DeclarativeFieldsMetaclass` and `BaseForm`](declaring.md)). `ChoiceField.__deepcopy__` adds a deep copy of the choices, and the widget copies its own shallowly (`django/forms/widgets.py:ChoiceWidget.__deepcopy__`). A form's `__init__` can so give one field new choices without touching the class's, provided it assigns them: a list changed in place changes what the field accepts and not what its widget draws.
 

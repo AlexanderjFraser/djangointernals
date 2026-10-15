@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 531">
+  <!-- three columns: the first use, where its result is afterwards, the second use -->
+  <text class="quiet small" x="0" y="14">The first use</text>
+  <text class="quiet small" x="224" y="14">After the first use</text>
+  <text class="quiet small" x="449" y="14">The second use</text>
+
+  <!-- a lazy value: nothing is kept, so nothing passes from the first use to the second -->
+  <text class="strong" x="0" y="46">A lazy value</text>
+  <text class="name" x="150" y="46">FLEET = lazy(fleet_size, str)()</text>
+  <text class="quiet small" x="150" y="64">keeps <tspan class="name small">fleet_size</tspan> and its arguments</text>
+
+  <rect class="box" x="0.5" y="76.5" width="196" height="92" rx="4"/>
+  <text class="name" x="13" y="98">str(FLEET)</text>
+  <text class="small" x="13" y="116">calls <tspan class="name small">fleet_size()</tspan></text>
+  <text x="13" y="134"><tspan class="quiet">→ </tspan><tspan class="name">'2 ships in harbour'</tspan></text>
+
+  <rect class="ground dashed" x="224.5" y="76.5" width="197" height="92" rx="4"/>
+  <text class="quiet small" x="237" y="116">the result is</text>
+  <text class="quiet" x="237" y="134">not kept</text>
+
+  <rect class="box" x="449.5" y="76.5" width="196" height="92" rx="4"/>
+  <text class="name" x="462" y="98">str(FLEET)</text>
+  <text class="small" x="462" y="116">calls <tspan class="name small">fleet_size()</tspan></text>
+  <text x="462" y="134"><tspan class="quiet">→ </tspan><tspan class="name">'2 ships in harbour'</tspan></text>
+  <text class="quiet small" x="462" y="152">called again at every use</text>
+
+  <!-- a lazy object: the first use fills _wrapped, the second reads from it -->
+  <text class="strong" x="0" y="200">A lazy object</text>
+  <text class="name" x="150" y="200">HOME = SimpleLazyObject(lambda: ...)</text>
+  <text class="quiet small" x="150" y="218">its <tspan class="name small">_wrapped</tspan> is empty</text>
+
+  <rect class="box" x="0.5" y="230.5" width="196" height="128" rx="4"/>
+  <text class="name" x="13" y="252">HOME.name</text>
+  <text class="small" x="13" y="270"><tspan class="name small">_wrapped</tspan> is empty:</text>
+  <text class="small" x="13" y="288"><tspan class="name small">_setup()</tspan> calls the lambda,</text>
+  <text class="small" x="13" y="306">keeps the Port in <tspan class="name small">_wrapped</tspan>,</text>
+  <text class="small" x="13" y="324">then reads <tspan class="name small">name</tspan> from it</text>
+  <text x="13" y="342"><tspan class="quiet">→ </tspan><tspan class="name">'Valletta'</tspan></text>
+
+  <path class="mark-line" d="M197 294.5 H214"/>
+  <polygon class="head mark" points="224,294.5 214,289.5 214,299.5"/>
+
+  <rect class="mark-box" x="224.5" y="230.5" width="197" height="128" rx="4"/>
+  <text class="small" x="237" y="290">the Port is kept in</text>
+  <text class="name mark" x="237" y="308">HOME._wrapped</text>
+
+  <path class="mark-line" d="M422 294.5 H439"/>
+  <polygon class="head mark" points="449,294.5 439,289.5 439,299.5"/>
+
+  <rect class="box" x="449.5" y="230.5" width="196" height="128" rx="4"/>
+  <text class="name" x="462" y="252">HOME.country</text>
+  <text class="small" x="462" y="270">reads <tspan class="name small">country</tspan> from the Port</text>
+  <text class="small" x="462" y="288">in <tspan class="name small">_wrapped</tspan></text>
+  <text x="462" y="306"><tspan class="quiet">→ </tspan><tspan class="name">'Malta'</tspan></text>
+
+  <!-- a cached property: the first use stores the list on the instance, the second finds it there -->
+  <text class="strong" x="0" y="390">A cached property</text>
+  <text class="name" x="150" y="390">class Harbour: ships = cached_property(ships)</text>
+  <text class="quiet small" x="150" y="408">a descriptor on the class</text>
+
+  <rect class="box" x="0.5" y="420.5" width="196" height="110" rx="4"/>
+  <text class="name" x="13" y="442">harbour.ships</text>
+  <text class="small" x="13" y="460">not in <tspan class="name small">vars(harbour)</tspan>:</text>
+  <text class="small" x="13" y="478">the descriptor calls</text>
+  <text class="small" x="13" y="496"><tspan class="name small">ships(harbour)</tspan></text>
+  <text class="small" x="13" y="514">and stores the list</text>
+
+  <path class="mark-line" d="M197 475.5 H214"/>
+  <polygon class="head mark" points="224,475.5 214,470.5 214,480.5"/>
+
+  <rect class="mark-box" x="224.5" y="420.5" width="197" height="110" rx="4"/>
+  <text class="small" x="237" y="471">the list is kept in</text>
+  <text class="name mark" x="237" y="489">vars(harbour)["ships"]</text>
+
+  <path class="mark-line" d="M422 475.5 H439"/>
+  <polygon class="head mark" points="449,475.5 439,470.5 439,480.5"/>
+
+  <rect class="box" x="449.5" y="420.5" width="196" height="110" rx="4"/>
+  <text class="name" x="462" y="442">harbour.ships</text>
+  <text class="small" x="462" y="460">found in <tspan class="name small">vars(harbour)</tspan>:</text>
+  <text class="small" x="462" y="478">the descriptor is not asked</text>
+</svg>

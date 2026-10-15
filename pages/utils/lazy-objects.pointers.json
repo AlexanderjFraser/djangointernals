@@ -1,0 +1,348 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "lazy-objects.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/functional.py:empty",
+   "line": 13,
+   "sentence": "`empty` is a bare `object()` (`django/utils/functional.py:empty`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "empty",
+   "kind": "assignment",
+   "lines": [
+    245,
+    245
+   ],
+   "fingerprint": "8c298099005c5803"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject",
+   "line": 13,
+   "sentence": "`LazyObject.__init__` puts it in `_wrapped`; `LazyObject._setup` raises `NotImplementedError`, and a subclass writes it to assign the object to `_wrapped` (`django/utils/functional.py:LazyObject`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject",
+   "kind": "class",
+   "lines": [
+    259,
+    372
+   ],
+   "fingerprint": "e374b7efdd84a273"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject.__setattr__",
+   "line": 17,
+   "sentence": "`LazyObject.__setattr__` writes `_wrapped` into the proxy's own `__dict__` and, for any other name, sets the object up and sets the attribute on it; `LazyObject.__delattr__` refuses `_wrapped` with `TypeError` and deletes anything else from the object (`django/utils/functional.py:LazyObject.__setattr__`, `django/utils/functional.py:LazyObject.__delattr__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject.__setattr__",
+   "kind": "function",
+   "lines": [
+    289,
+    296
+   ],
+   "fingerprint": "b9d104fcf7c21ee3"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject.__delattr__",
+   "line": 17,
+   "sentence": "`LazyObject.__setattr__` writes `_wrapped` into the proxy's own `__dict__` and, for any other name, sets the object up and sets the attribute on it; `LazyObject.__delattr__` refuses `_wrapped` with `TypeError` and deletes anything else from the object (`django/utils/functional.py:LazyObject.__setattr__`, `django/utils/functional.py:LazyObject.__delattr__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject.__delattr__",
+   "kind": "function",
+   "lines": [
+    298,
+    303
+   ],
+   "fingerprint": "ec74432e8b01878d"
+  },
+  {
+   "pointer": "django/utils/functional.py:new_method_proxy",
+   "line": 21,
+   "sentence": "`new_method_proxy` makes every forwarding method of `LazyObject` but `__setattr__` and `__delattr__`, as a function that takes the proxy, calls `_setup` if `_wrapped` is `empty`, calls the given function on the wrapped object, and is marked `_mask_wrapped = False` (`django/utils/functional.py:new_method_proxy`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "new_method_proxy",
+   "kind": "function",
+   "lines": [
+    248,
+    256
+   ],
+   "fingerprint": "17b1e3a0afc6c980"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject",
+   "line": 21,
+   "sentence": "The special methods are class attributes made the same way: `__str__`, `__bytes__`, `__bool__`, `__dir__`, `__hash__`, `__eq__`, `__ne__`, `__lt__`, `__gt__`, `__getitem__`, `__setitem__`, `__delitem__`, `__iter__`, `__len__` and `__contains__` (`django/utils/functional.py:LazyObject`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject",
+   "kind": "class",
+   "lines": [
+    259,
+    372
+   ],
+   "fingerprint": "e374b7efdd84a273"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject.__getattribute__",
+   "line": 43,
+   "sentence": "`LazyObject.__getattribute__`, which every attribute read passes through, raises `AttributeError` for what the ordinary lookup finds marked `_mask_wrapped = False`, so that, as its comment says, `__getattr__` answers from the wrapped object (`django/utils/functional.py:LazyObject.__getattribute__`):",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject.__getattribute__",
+   "kind": "function",
+   "lines": [
+    276,
+    285
+   ],
+   "fingerprint": "9addb1b32370c2b6"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject",
+   "line": 68,
+   "sentence": "`__class__` is forwarded, as a property made by `new_method_proxy`, because, the comment says, objects that care about the class, in equality tests above all, must see the wrapped one (`django/utils/functional.py:LazyObject`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject",
+   "kind": "class",
+   "lines": [
+    259,
+    372
+   ],
+   "fingerprint": "e374b7efdd84a273"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject.__reduce__",
+   "line": 74,
+   "sentence": "`LazyObject.__reduce__` sets the object up and has pickle write `unpickle_lazyobject` with the wrapped object as its argument, a function that returns its argument (`django/utils/functional.py:LazyObject.__reduce__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject.__reduce__",
+   "kind": "function",
+   "lines": [
+    327,
+    330
+   ],
+   "fingerprint": "445974b5109b4749"
+  },
+  {
+   "pointer": "django/db/migrations/serializer.py:serializer_factory",
+   "line": 74,
+   "sentence": "The migration serializer reads a lazy object's value from the same arguments ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)) (`django/db/migrations/serializer.py:serializer_factory`).",
+   "tree": "django",
+   "path": "django/db/migrations/serializer.py",
+   "symbol": "serializer_factory",
+   "kind": "function",
+   "lines": [
+    401,
+    427
+   ],
+   "fingerprint": "f2f546d91c2827e4"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject.__copy__",
+   "line": 76,
+   "sentence": "`LazyObject.__copy__` and `LazyObject.__deepcopy__` copy the wrapper while it is empty, by `type(self)` (not `__class__`, which the comment notes is proxied), and after setup the wrapped object, so that copy is not lazy (`django/utils/functional.py:LazyObject.__copy__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject.__copy__",
+   "kind": "function",
+   "lines": [
+    332,
+    339
+   ],
+   "fingerprint": "4cea1ff204411174"
+  },
+  {
+   "pointer": "django/utils/functional.py:SimpleLazyObject",
+   "line": 86,
+   "sentence": "`SimpleLazyObject.__init__` writes the function straight into the instance's `__dict__` as `\"_setupfunc\"`, where an assignment would have gone through `__setattr__` to the wrapped object; `SimpleLazyObject._setup` calls it and stores the result (`django/utils/functional.py:SimpleLazyObject`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "SimpleLazyObject",
+   "kind": "class",
+   "lines": [
+    383,
+    441
+   ],
+   "fingerprint": "bdc2d67b4c426c6c"
+  },
+  {
+   "pointer": "django/utils/functional.py:SimpleLazyObject.__repr__",
+   "line": 95,
+   "sentence": "A function that is a bound method of the proxy is shown only by its name, to avoid recursion, as the comment says: a bound method's repr holds its object's, and with the check removed a run raised `RecursionError` (`django/utils/functional.py:SimpleLazyObject.__repr__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "SimpleLazyObject.__repr__",
+   "kind": "function",
+   "lines": [
+    408,
+    417
+   ],
+   "fingerprint": "4c4722017b30f930"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings",
+   "line": 103,
+   "sentence": "| `django.conf.settings`, `django/conf/__init__.py:LazySettings` | a `Settings` from `\"DJANGO_SETTINGS_MODULE\"`, unless `LazySettings.configure` came first | [The settings object](../startup/settings.md) |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings",
+   "kind": "class",
+   "lines": [
+    86,
+    239
+   ],
+   "fingerprint": "f21a38b4aa0d750e"
+  },
+  {
+   "pointer": "django/core/files/storage/__init__.py:DefaultStorage",
+   "line": 104,
+   "sentence": "| `default_storage`, `django/core/files/storage/__init__.py:DefaultStorage` | the `\"default\"` storage | [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md) |",
+   "tree": "django",
+   "path": "django/core/files/storage/__init__.py",
+   "symbol": "DefaultStorage",
+   "kind": "class",
+   "lines": [
+    21,
+    23
+   ],
+   "fingerprint": "9307cbf72ba6ef08"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/storage.py:ConfiguredStorage",
+   "line": 105,
+   "sentence": "| `staticfiles_storage`, `django/contrib/staticfiles/storage.py:ConfiguredStorage` | the `\"staticfiles\"` storage | [Content types, static files and the other contrib apps](../contrib.md) |",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/storage.py",
+   "symbol": "ConfiguredStorage",
+   "kind": "class",
+   "lines": [
+    623,
+    625
+   ],
+   "fingerprint": "72138675a19dc3ac"
+  },
+  {
+   "pointer": "django/contrib/admin/sites.py:DefaultAdminSite",
+   "line": 106,
+   "sentence": "| the admin's `site`, `django/contrib/admin/sites.py:DefaultAdminSite` | the class `SimpleAdminConfig.default_site` names | [The admin](../admin.md) |",
+   "tree": "django",
+   "path": "django/contrib/admin/sites.py",
+   "symbol": "DefaultAdminSite",
+   "kind": "class",
+   "lines": [
+    622,
+    628
+   ],
+   "fingerprint": "fff05396cf1be01d"
+  },
+  {
+   "pointer": "django/utils/csp.py:LazyNonce",
+   "line": 107,
+   "sentence": "| a request's nonce, `django/utils/csp.py:LazyNonce` | `generate_nonce()` | [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md) |",
+   "tree": "django",
+   "path": "django/utils/csp.py",
+   "symbol": "LazyNonce",
+   "kind": "class",
+   "lines": [
+    56,
+    81
+   ],
+   "fingerprint": "047a85b4aa553113"
+  },
+  {
+   "pointer": "django/utils/text.py:Truncator",
+   "line": 108,
+   "sentence": "| a `Truncator`, `django/utils/text.py:Truncator` | its text as a string | [Text helpers: `Truncator` and `django/utils/text.py`](text.md) |",
+   "tree": "django",
+   "path": "django/utils/text.py",
+   "symbol": "Truncator",
+   "kind": "class",
+   "lines": [
+    185,
+    261
+   ],
+   "fingerprint": "db8db0aea1a3eb55"
+  },
+  {
+   "pointer": "django/utils/text.py",
+   "line": 108,
+   "sentence": "| a `Truncator`, `django/utils/text.py:Truncator` | its text as a string | [Text helpers: `Truncator` and `django/utils/text.py`](text.md) |",
+   "tree": "django",
+   "path": "django/utils/text.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    501
+   ],
+   "fingerprint": "72cb2344fb0d8ee0"
+  },
+  {
+   "pointer": "django/contrib/auth/middleware.py:AuthenticationMiddleware",
+   "line": 109,
+   "sentence": "| `HttpRequest.user`, `django/contrib/auth/middleware.py:AuthenticationMiddleware` | the user `get_user` finds | [Authentication, sessions and messages](../auth.md) |",
+   "tree": "django",
+   "path": "django/contrib/auth/middleware.py",
+   "symbol": "AuthenticationMiddleware",
+   "kind": "class",
+   "lines": [
+    29,
+    42
+   ],
+   "fingerprint": "98a287acb02f33ec"
+  },
+  {
+   "pointer": "django/template/context_processors.py:csrf",
+   "line": 110,
+   "sentence": "| the context's `\"csrf_token\"`, `django/template/context_processors.py:csrf` | the token from `get_token`, or `\"NOTPROVIDED\"` | [The context: `Context`, `RequestContext` and context processors](../templates/context.md) |",
+   "tree": "django",
+   "path": "django/template/context_processors.py",
+   "symbol": "csrf",
+   "kind": "function",
+   "lines": [
+    19,
+    35
+   ],
+   "fingerprint": "9b26b0072fe6705a"
+  },
+  {
+   "pointer": "django/test/client.py:Client.request",
+   "line": 111,
+   "sentence": "| a test response's resolver_match, `django/test/client.py:Client.request` | the path resolved | [The test framework](../testing.md) |",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "Client.request",
+   "kind": "function",
+   "lines": [
+    1075,
+    1120
+   ],
+   "fingerprint": "38331cbc21ed78b0"
+  },
+  {
+   "pointer": "django/test/signals.py:storages_changed",
+   "line": 115,
+   "sentence": "Putting `empty` back in `_wrapped` makes a lazy object lazy again, which Django does to both storages when a test overrides `STORAGES`, `STATIC_ROOT` or `STATIC_URL` (`django/test/signals.py:storages_changed`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "storages_changed",
+   "kind": "function",
+   "lines": [
+    116,
+    134
+   ],
+   "at": 117,
+   "fingerprint": "2e42269d452b7877"
+  }
+ ]
+}

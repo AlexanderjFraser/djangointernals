@@ -1,0 +1,270 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "inspect.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/inspect.py",
+   "line": 5,
+   "sentence": "Asking a callable what it accepts: `django/utils/inspect.py`",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    162
+   ],
+   "fingerprint": "11c7e764b7619077"
+  },
+  {
+   "pointer": "django/utils/inspect.py",
+   "line": 7,
+   "sentence": "`django/utils/inspect.py` answers what Django asks of a function a project hands it: whether it accepts `**kwargs`, what its parameters are called, whether a method takes nothing but its instance.",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    162
+   ],
+   "fingerprint": "11c7e764b7619077"
+  },
+  {
+   "pointer": "django/utils/inspect.py:signature",
+   "line": 13,
+   "sentence": "Django does not use the annotations, the docstring says (`django/utils/inspect.py:signature`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "signature",
+   "kind": "function",
+   "lines": [
+    154,
+    162
+   ],
+   "fingerprint": "e83ddd872c2ba16e"
+  },
+  {
+   "pointer": "django/utils/inspect.py:getfullargspec",
+   "line": 42,
+   "sentence": "The docstring of `lazy_annotations` names CPython issue 141560 as fixed in 3.15, and on 3.15 the wrapper passes the format to `inspect.getfullargspec` itself (`django/utils/inspect.py:getfullargspec`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "getfullargspec",
+   "kind": "function",
+   "lines": [
+    138,
+    151
+   ],
+   "fingerprint": "6ef7fa1bfd4e832d"
+  },
+  {
+   "pointer": "django/utils/inspect.py:lazy_annotations",
+   "line": 42,
+   "sentence": "On 3.14 the wrapper calls it inside `lazy_annotations`, which swaps `inspect._signature_from_callable` for `safe_signature_from_callable`, a `functools.partial` of it adding the format, and back on the way out, under a module-level `threading.Lock` (`django/utils/inspect.py:lazy_annotations`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "lazy_annotations",
+   "kind": "function",
+   "lines": [
+    114,
+    135
+   ],
+   "at": 115,
+   "fingerprint": "99dbf42e0c8b4264"
+  },
+  {
+   "pointer": "django/template/library.py:Library.simple_tag",
+   "line": 46,
+   "sentence": "Template code calls `getfullargspec`: `Library`'s tag decorators as a tag is registered, and `FilterExpression.args_check`, counting a filter's arguments, as a template is compiled ([Libraries: `Library`, custom tags and `{% load %}`](../templates/libraries.md); `django/template/library.py:Library.simple_tag`, `django/template/base.py:FilterExpression.args_check`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.simple_tag",
+   "kind": "function",
+   "lines": [
+    104,
+    164
+   ],
+   "fingerprint": "26fbe50d2be7a554"
+  },
+  {
+   "pointer": "django/template/base.py:FilterExpression.args_check",
+   "line": 46,
+   "sentence": "Template code calls `getfullargspec`: `Library`'s tag decorators as a tag is registered, and `FilterExpression.args_check`, counting a filter's arguments, as a template is compiled ([Libraries: `Library`, custom tags and `{% load %}`](../templates/libraries.md); `django/template/library.py:Library.simple_tag`, `django/template/base.py:FilterExpression.args_check`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "FilterExpression.args_check",
+   "kind": "function",
+   "lines": [
+    840,
+    856
+   ],
+   "more": [
+    [
+     858,
+     858
+    ]
+   ],
+   "fingerprint": "4a3c108a4d569313"
+  },
+  {
+   "pointer": "django/utils/inspect.py:_get_callable_parameters",
+   "line": 50,
+   "sentence": "Every question but `is_module_level_function` starts at `_get_callable_parameters`: a bound method is asked as its `__func__` less the first parameter, which its instance fills (`django/utils/inspect.py:_get_callable_parameters`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "_get_callable_parameters",
+   "kind": "function",
+   "lines": [
+    27,
+    30
+   ],
+   "fingerprint": "2a61f708764e21c2"
+  },
+  {
+   "pointer": "django/utils/inspect.py:func_supports_parameter",
+   "line": 64,
+   "sentence": "`func_supports_parameter` asks whether a name can be passed by keyword; `**kwargs`, which would take it, does not count (`django/utils/inspect.py:func_supports_parameter`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "func_supports_parameter",
+   "kind": "function",
+   "lines": [
+    96,
+    101
+   ],
+   "fingerprint": "4437fdd45f5d11b9"
+  },
+  {
+   "pointer": "django/utils/inspect.py:method_has_no_args",
+   "line": 66,
+   "sentence": "`method_has_no_args` counts the parameters that are neither `*` nor `**`, and wants none for a bound method and one for anything else (`django/utils/inspect.py:method_has_no_args`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "method_has_no_args",
+   "kind": "function",
+   "lines": [
+    90,
+    93
+   ],
+   "fingerprint": "4c14b4d084d587d0"
+  },
+  {
+   "pointer": "django/utils/inspect.py:is_module_level_function",
+   "line": 66,
+   "sentence": "`is_module_level_function` is true of a Python function whose qualified name holds no `\"<locals>\"`, which a method of a module-level class, read from the class, also passes (`django/utils/inspect.py:is_module_level_function`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": "is_module_level_function",
+   "kind": "function",
+   "lines": [
+    104,
+    111
+   ],
+   "fingerprint": "d20f9bf63bb586a8"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.connect",
+   "line": 70,
+   "sentence": "`Signal.connect` refuses a receiver without `**kwargs` when `settings.DEBUG` is true ([Signals: `Signal`, receivers and sending](../services/signals.md); `django/dispatch/dispatcher.py:Signal.connect`), and `CheckRegistry.register` such a check whatever the setting ([The system checks](../commands/checks.md); `django/core/checks/registry.py:CheckRegistry.register`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.connect",
+   "kind": "function",
+   "lines": [
+    102,
+    177
+   ],
+   "fingerprint": "1143db3a23fcde19"
+  },
+  {
+   "pointer": "django/core/checks/registry.py:CheckRegistry.register",
+   "line": 70,
+   "sentence": "`Signal.connect` refuses a receiver without `**kwargs` when `settings.DEBUG` is true ([Signals: `Signal`, receivers and sending](../services/signals.md); `django/dispatch/dispatcher.py:Signal.connect`), and `CheckRegistry.register` such a check whatever the setting ([The system checks](../commands/checks.md); `django/core/checks/registry.py:CheckRegistry.register`).",
+   "tree": "django",
+   "path": "django/core/checks/registry.py",
+   "symbol": "CheckRegistry.register",
+   "kind": "function",
+   "lines": [
+    36,
+    72
+   ],
+   "fingerprint": "b4e5e63ff45813e6"
+  },
+  {
+   "pointer": "django/tasks/backends/base.py:BaseTaskBackend.validate_task",
+   "line": 71,
+   "sentence": "`BaseTaskBackend.validate_task` refuses a task whose function is not module-level, or takes a context but not as its first argument ([Background tasks: `Task`, `TaskResult` and the task backends](../services/tasks.md); `django/tasks/backends/base.py:BaseTaskBackend.validate_task`).",
+   "tree": "django",
+   "path": "django/tasks/backends/base.py",
+   "symbol": "BaseTaskBackend.validate_task",
+   "kind": "function",
+   "lines": [
+    42,
+    83
+   ],
+   "fingerprint": "9da522e23cf95d85"
+  },
+  {
+   "pointer": "django/db/migrations/writer.py:OperationWriter.serialize",
+   "line": 72,
+   "sentence": "`OperationWriter.serialize` names an operation's positional arguments by `get_func_args` of its `__init__` ([Writing a migration file: `MigrationWriter`](../migrations/writer.md); `django/db/migrations/writer.py:OperationWriter.serialize`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "OperationWriter.serialize",
+   "kind": "function",
+   "lines": [
+    24,
+    103
+   ],
+   "fingerprint": "afbc99adfe953740"
+  },
+  {
+   "pointer": "django/db/models/query.py:_get_from_db",
+   "line": 73,
+   "sentence": "`_get_from_db` warns where an override of `Model.from_db` takes neither fetch_mode nor `**kwargs` ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md); `django/db/models/query.py:_get_from_db`); the admin warns where an override of `ModelAdmin.get_actions` lacks action_location ([The admin](../admin.md); `django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "_get_from_db",
+   "kind": "function",
+   "lines": [
+    70,
+    92
+   ],
+   "fingerprint": "a753ca5550f70311"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location",
+   "line": 73,
+   "sentence": "`_get_from_db` warns where an override of `Model.from_db` takes neither fetch_mode nor `**kwargs` ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md); `django/db/models/query.py:_get_from_db`); the admin warns where an override of `ModelAdmin.get_actions` lacks action_location ([The admin](../admin.md); `django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._get_actions_with_action_location",
+   "kind": "function",
+   "lines": [
+    1133,
+    1150
+   ],
+   "fingerprint": "a494b5328df3ed26"
+  },
+  {
+   "pointer": "django/contrib/admindocs/views.py:ModelDetailView.get_context_data",
+   "line": 74,
+   "sentence": "admindocs shows as a field a model's method that takes no argument, `*` or `**`, and lists others with `get_func_full_args` (`django/contrib/admindocs/views.py:ModelDetailView.get_context_data`).",
+   "tree": "django",
+   "path": "django/contrib/admindocs/views.py",
+   "symbol": "ModelDetailView.get_context_data",
+   "kind": "function",
+   "lines": [
+    228,
+    406
+   ],
+   "fingerprint": "fe1c39b37843bcc7"
+  }
+ ]
+}

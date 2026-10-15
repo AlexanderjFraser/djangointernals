@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 460">
+  <!-- the example: HOME is empty, valletta is the same row fetched directly -->
+  <text class="quiet small" x="0" y="14"><tspan class="name small">HOME</tspan>, a <tspan class="name small">SimpleLazyObject</tspan> whose <tspan class="name small">_wrapped</tspan> is empty; <tspan class="name small">valletta</tspan>, the same row fetched directly</text>
+
+  <!-- the ways in: two attribute reads on the left, an operator on the right -->
+  <text class="name strong" x="0" y="50">HOME.name</text>
+  <text class="name" x="150" y="50">HOME.__eq__</text>
+  <text class="name strong" x="335" y="50">HOME == valletta</text>
+
+  <path class="line" d="M35 57 V66"/>
+  <polygon class="head" points="35,76 30,66 40,66"/>
+  <path class="line dashed" d="M192 57 V66"/>
+  <polygon class="head" points="192,76 187,66 197,66"/>
+  <path class="line" d="M370 57 V66"/>
+  <polygon class="head" points="370,76 365,66 375,66"/>
+
+  <!-- the left way: the ordinary lookup fails, and __getattr__ is called -->
+  <rect class="box" x="0.5" y="76.5" width="310" height="114" rx="4"/>
+  <text class="name" x="13" y="98">LazyObject.__getattribute__("name")</text>
+  <text class="small" x="13" y="116">finds nothing: <tspan class="name small">AttributeError</tspan></text>
+  <text class="quiet small" x="13" y="138">for <tspan class="name small">"__eq__"</tspan>, it finds the proxy's <tspan class="name small">__eq__</tspan>,</text>
+  <text class="quiet small" x="13" y="156">marked <tspan class="name small">_mask_wrapped = False</tspan>:</text>
+  <text class="quiet small" x="13" y="174"><tspan class="name small">AttributeError</tspan></text>
+
+  <path class="line" d="M35 191 V201"/>
+  <polygon class="head" points="35,211 30,201 40,201"/>
+
+  <rect class="box" x="0.5" y="211.5" width="310" height="56" rx="4"/>
+  <text class="name" x="13" y="233">LazyObject.__getattr__("name"),</text>
+  <text class="small" x="13" y="251">a <tspan class="name small">new_method_proxy(getattr)</tspan></text>
+
+  <!-- the right way: Python takes the special method from the proxy's class -->
+  <rect class="box" x="335.5" y="76.5" width="310" height="76" rx="4"/>
+  <text class="small" x="348" y="98">Python takes <tspan class="name small">__eq__</tspan> from <tspan class="name small">type(HOME)</tspan>:</text>
+  <text class="name" x="348" y="118">LazyObject.__eq__,</text>
+  <text class="small" x="348" y="136">a <tspan class="name small">new_method_proxy(operator.eq)</tspan></text>
+
+  <!-- both ways reach the setup -->
+  <path class="line" d="M35 268 V278"/>
+  <polygon class="head" points="35,288 30,278 40,278"/>
+  <path class="line" d="M370 153 V278"/>
+  <polygon class="head" points="370,288 365,278 375,278"/>
+
+  <rect class="mark-box" x="0.5" y="288.5" width="645" height="94" rx="4"/>
+  <text x="13" y="310"><tspan class="name">_wrapped</tspan> is empty: <tspan class="name mark">_setup()</tspan></text>
+  <text class="small" x="13" y="328">the lambda runs, one query</text>
+  <text class="small" x="13" y="346">the Port is kept in <tspan class="name small">_wrapped</tspan></text>
+  <text class="quiet small" x="13" y="368">once <tspan class="name small">_wrapped</tspan> holds the Port, both paths skip <tspan class="name small">_setup()</tspan></text>
+
+  <!-- each way ends by calling its function on the Port -->
+  <path class="line" d="M35 383 V393"/>
+  <polygon class="head" points="35,403 30,393 40,393"/>
+  <path class="line" d="M370 383 V393"/>
+  <polygon class="head" points="370,403 365,393 375,393"/>
+
+  <rect class="box" x="0.5" y="403.5" width="310" height="56" rx="4"/>
+  <text class="name" x="13" y="425">getattr(the Port, "name")</text>
+  <text x="13" y="443"><tspan class="quiet">→ </tspan><tspan class="name">'Valletta'</tspan></text>
+
+  <rect class="box" x="335.5" y="403.5" width="310" height="56" rx="4"/>
+  <text class="name" x="348" y="425">operator.eq(the Port, valletta)</text>
+  <text x="348" y="443"><tspan class="quiet">→ </tspan><tspan class="name">True</tspan></text>
+</svg>

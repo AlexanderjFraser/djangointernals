@@ -1,0 +1,254 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "importing.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/module_loading.py",
+   "line": 7,
+   "sentence": "`django/utils/module_loading.py` is how Django reaches code it knows only by name: `import_string` turns a dotted path written as text into the class, function or module it names, `module_has_submodule` asks whether a package has a submodule without running it, and `autodiscover_modules` imports a module of one name from every installed application.",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    140
+   ],
+   "fingerprint": "9b8aaa87f7d5a74a"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 9,
+   "sentence": "The code that reads the setting imports the path: `BaseHandler.load_middleware` for each middleware ([Building the middleware chain](../handlers/chain.md)), `get_hashers` for the password hashers (`django/core/handlers/base.py:BaseHandler.load_middleware`, `django/contrib/auth/hashers.py:get_hashers`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:get_hashers",
+   "line": 9,
+   "sentence": "The code that reads the setting imports the path: `BaseHandler.load_middleware` for each middleware ([Building the middleware chain](../handlers/chain.md)), `get_hashers` for the password hashers (`django/core/handlers/base.py:BaseHandler.load_middleware`, `django/contrib/auth/hashers.py:get_hashers`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "get_hashers",
+   "kind": "function",
+   "lines": [
+    121,
+    132
+   ],
+   "at": 122,
+   "fingerprint": "efed92eb526b81ac"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:import_string",
+   "line": 13,
+   "sentence": "`import_string` takes a path and returns what it names (`django/utils/module_loading.py:import_string`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "import_string",
+   "kind": "function",
+   "lines": [
+    20,
+    49
+   ],
+   "fingerprint": "bded96086ec62ac9"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 21,
+   "sentence": "`import_string` accepts a module's path, a top-level one included, where a top-level module failed and a submodule worked only if already imported; and it favours a submodule over a same-named attribute of its package, where the answer used to depend on what had been imported before (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:cached_import",
+   "line": 37,
+   "sentence": "Each import in `import_string` goes through `cached_import`, which returns the module in `sys.modules` if it is there with a spec not marked as still initializing, and otherwise calls `importlib.import_module` (`django/utils/module_loading.py:cached_import`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "cached_import",
+   "kind": "function",
+   "lines": [
+    9,
+    17
+   ],
+   "fingerprint": "cd51dd627fee6053"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:module_has_submodule",
+   "line": 41,
+   "sentence": "`module_has_submodule` says whether a package has a submodule of a given name, without running it (`django/utils/module_loading.py:module_has_submodule`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "module_has_submodule",
+   "kind": "function",
+   "lines": [
+    88,
+    103
+   ],
+   "fingerprint": "5d74f2f3b3ad1716"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.create",
+   "line": 43,
+   "sentence": "`AppConfig.create` asks it whether an application has an apps submodule to look in for its configuration class and `AppConfig.import_models` whether it has a models submodule ([Populating the app registry](../startup/populate.md)), and the migrate command whether it has a management module (`django/apps/config.py:AppConfig.create`, `django/apps/config.py:AppConfig.import_models`, `django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.create",
+   "kind": "function",
+   "lines": [
+    99,
+    222
+   ],
+   "at": 100,
+   "fingerprint": "908a15da2135b37a"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.import_models",
+   "line": 43,
+   "sentence": "`AppConfig.create` asks it whether an application has an apps submodule to look in for its configuration class and `AppConfig.import_models` whether it has a models submodule ([Populating the app registry](../startup/populate.md)), and the migrate command whether it has a management module (`django/apps/config.py:AppConfig.create`, `django/apps/config.py:AppConfig.import_models`, `django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.import_models",
+   "kind": "function",
+   "lines": [
+    262,
+    269
+   ],
+   "fingerprint": "c684821c21372298"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.handle",
+   "line": 43,
+   "sentence": "`AppConfig.create` asks it whether an application has an apps submodule to look in for its configuration class and `AppConfig.import_models` whether it has a models submodule ([Populating the app registry](../startup/populate.md)), and the migrate command whether it has a management module (`django/apps/config.py:AppConfig.create`, `django/apps/config.py:AppConfig.import_models`, `django/core/management/commands/migrate.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    97,
+    389
+   ],
+   "at": 98,
+   "fingerprint": "b7fa6f17ce6ae80f"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:autodiscover_modules",
+   "line": 47,
+   "sentence": "`autodiscover_modules` imports each module name it is given from every installed application, in the order of `INSTALLED_APPS` (`django/utils/module_loading.py:autodiscover_modules`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "autodiscover_modules",
+   "kind": "function",
+   "lines": [
+    52,
+    85
+   ],
+   "fingerprint": "c4422a6ab6f89528"
+  },
+  {
+   "pointer": "django/contrib/admin/__init__.py:autodiscover",
+   "line": 47,
+   "sentence": "Its user in Django is the admin: `django.contrib.admin.autodiscover` calls it for `\"admin\"` with the default site as the registry, and `AdminConfig.ready` calls that as Django starts ([The admin](../admin.md)) (`django/contrib/admin/__init__.py:autodiscover`).",
+   "tree": "django",
+   "path": "django/contrib/admin/__init__.py",
+   "symbol": "autodiscover",
+   "kind": "function",
+   "lines": [
+    55,
+    56
+   ],
+   "fingerprint": "53ba2ff2d9149d00"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:qualname",
+   "line": 75,
+   "sentence": "`qualname` goes the other way: it returns a module's name, or a class's or a function's `__module__` and `__qualname__` joined by a dot (`django/utils/module_loading.py:qualname`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "qualname",
+   "kind": "function",
+   "lines": [
+    124,
+    140
+   ],
+   "fingerprint": "bd7fd7e8218553ce"
+  },
+  {
+   "pointer": "django/tasks/base.py:Task.__reduce__",
+   "line": 75,
+   "sentence": "A task is pickled as its function's path ([Background tasks: `Task`, `TaskResult` and the task backends](../services/tasks.md)) (`django/tasks/base.py:Task.__reduce__`, `django/tasks/base.py:Task.module_path`), the migration serializer writes functions and classes by it ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)), and a URL pattern names its view by it (`django/urls/resolvers.py:URLPattern.lookup_str`).",
+   "tree": "django",
+   "path": "django/tasks/base.py",
+   "symbol": "Task.__reduce__",
+   "kind": "function",
+   "lines": [
+    69,
+    73
+   ],
+   "fingerprint": "7a3eb7a99d42b5a9"
+  },
+  {
+   "pointer": "django/tasks/base.py:Task.module_path",
+   "line": 75,
+   "sentence": "A task is pickled as its function's path ([Background tasks: `Task`, `TaskResult` and the task backends](../services/tasks.md)) (`django/tasks/base.py:Task.__reduce__`, `django/tasks/base.py:Task.module_path`), the migration serializer writes functions and classes by it ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)), and a URL pattern names its view by it (`django/urls/resolvers.py:URLPattern.lookup_str`).",
+   "tree": "django",
+   "path": "django/tasks/base.py",
+   "symbol": "Task.module_path",
+   "kind": "function",
+   "lines": [
+    146,
+    148
+   ],
+   "at": 147,
+   "fingerprint": "b8a859ba6259bb60"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLPattern.lookup_str",
+   "line": 75,
+   "sentence": "A task is pickled as its function's path ([Background tasks: `Task`, `TaskResult` and the task backends](../services/tasks.md)) (`django/tasks/base.py:Task.__reduce__`, `django/tasks/base.py:Task.module_path`), the migration serializer writes functions and classes by it ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)), and a URL pattern names its view by it (`django/urls/resolvers.py:URLPattern.lookup_str`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLPattern.lookup_str",
+   "kind": "function",
+   "lines": [
+    488,
+    502
+   ],
+   "at": 489,
+   "fingerprint": "7707829d9465b9e5"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:module_dir",
+   "line": 83,
+   "sentence": "`module_dir` returns a package's only entry of `__path__`, or else the directory of the module's file, and raises `ValueError` for a namespace package spread over several directories, which has neither (`django/utils/module_loading.py:module_dir`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "module_dir",
+   "kind": "function",
+   "lines": [
+    106,
+    121
+   ],
+   "fingerprint": "2d745d4b4fd85696"
+  }
+ ]
+}

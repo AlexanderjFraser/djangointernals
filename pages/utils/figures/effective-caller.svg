@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 572">
+  <!-- the stack at the call of warn_about_external_use, top first, for two callers side by side;
+       rows line up, so the frame the walk stops at (the accent) is at the same height in both -->
+  <text x="0" y="14">The stack when <tspan class="name">warn_about_external_use</tspan> is called, top first.</text>
+  <text x="0" y="36"><tspan class="name">skip_name_prefixes</tspan> is <tspan class="name">"django.utils.version.VersionTuple"</tspan>; <tspan class="name">skip_frames</tspan> is <tspan class="name">0</tspan>.</text>
+
+  <!-- the two callers -->
+  <text x="0" y="72"><tspan class="name strong">patch_level()</tspan> in <tspan class="name">harbour/office/board.py</tspan></text>
+  <text x="0" y="91">reads <tspan class="name">django.VERSION[2]</tspan></text>
+
+  <text x="484" y="72"><tspan class="name strong">version_line()</tspan> in <tspan class="name">harbour/office/board.py</tspan></text>
+  <text x="484" y="91">calls <tspan class="name">django.get_version()</tspan>, whose <tspan class="name">get_main_version</tspan></text>
+  <text x="484" y="110">slices <tspan class="name">django.VERSION</tspan></text>
+
+  <!-- left: the read in the example's code -->
+  <rect class="box" x="0.5" y="124.5" width="455" height="54" rx="4"/>
+  <text class="name" x="14" y="146">django.utils.deprecation.warn_about_external_use</text>
+  <text class="quiet small" x="14" y="165">passed over: its own frame</text>
+
+  <rect class="box" x="0.5" y="186.5" width="455" height="54" rx="4"/>
+  <text class="name" x="14" y="208">django.utils.version.VersionTuple._warn</text>
+  <text class="quiet small" x="14" y="227">passed over: its caller</text>
+
+  <rect class="box" x="0.5" y="248.5" width="455" height="54" rx="4"/>
+  <text class="name" x="14" y="270">django.utils.version.VersionTuple.__getitem__</text>
+  <text class="quiet small" x="14" y="289">passed over: begins with <tspan class="name small">skip_name_prefixes</tspan></text>
+
+  <rect class="mark-box" x="0.5" y="310.5" width="455" height="74" rx="4"/>
+  <text class="name mark" x="14" y="332">harbour.office.board.patch_level</text>
+  <text class="small" x="14" y="351">effective caller, outside <tspan class="name small">"django."</tspan>:</text>
+  <text class="small strong" x="14" y="370"><tspan class="name small strong">RemovedInDjango2028Warning</tspan>, naming this line</text>
+
+  <rect class="ground dashed" x="0.5" y="392.5" width="455" height="54" rx="4"/>
+  <text class="name" x="14" y="414">__main__.&lt;module&gt;</text>
+  <text class="quiet small" x="14" y="433">not looked at</text>
+
+  <!-- right: the same read made by Django's own get_main_version -->
+  <rect class="box" x="484.5" y="124.5" width="455" height="54" rx="4"/>
+  <text class="name" x="498" y="146">django.utils.deprecation.warn_about_external_use</text>
+  <text class="quiet small" x="498" y="165">passed over: its own frame</text>
+
+  <rect class="box" x="484.5" y="186.5" width="455" height="54" rx="4"/>
+  <text class="name" x="498" y="208">django.utils.version.VersionTuple._warn</text>
+  <text class="quiet small" x="498" y="227">passed over: its caller</text>
+
+  <rect class="box" x="484.5" y="248.5" width="455" height="54" rx="4"/>
+  <text class="name" x="498" y="270">django.utils.version.VersionTuple.__getitem__</text>
+  <text class="quiet small" x="498" y="289">passed over: begins with <tspan class="name small">skip_name_prefixes</tspan></text>
+
+  <rect class="mark-box" x="484.5" y="310.5" width="455" height="74" rx="4"/>
+  <text class="name mark" x="498" y="332">django.utils.version.get_main_version</text>
+  <text class="small" x="498" y="351">effective caller, inside <tspan class="name small">"django."</tspan>:</text>
+  <text class="small strong" x="498" y="370">no warning</text>
+
+  <rect class="ground dashed" x="484.5" y="392.5" width="455" height="54" rx="4"/>
+  <text class="name" x="498" y="414">django.utils.version.get_version</text>
+  <text class="quiet small" x="498" y="433">not looked at</text>
+
+  <rect class="ground dashed" x="484.5" y="454.5" width="455" height="54" rx="4"/>
+  <text class="name" x="498" y="476">harbour.office.board.version_line</text>
+  <text class="quiet small" x="498" y="495">not looked at</text>
+
+  <rect class="ground dashed" x="484.5" y="516.5" width="455" height="54" rx="4"/>
+  <text class="name" x="498" y="538">__main__.&lt;module&gt;</text>
+  <text class="quiet small" x="498" y="557">not looked at</text>
+</svg>
