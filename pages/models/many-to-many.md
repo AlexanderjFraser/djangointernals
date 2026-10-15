@@ -387,7 +387,7 @@ The `add`, `remove`, `clear` and `set` of a many-to-many manager each run in a b
 
 ## Saving and deleting
 
-`Model.save` does not write a many-to-many field ([Saving an instance](saving.md)). A relation is changed by its manager, at the moment a method is called, and needs both instances to have keys. So an instance is saved first and related afterwards. A form that edits such a field follows the same order: `ManyToManyField.save_form_data` calls the manager's `set` ([Forms](../forms.md)).
+`Model.save` does not write a many-to-many field ([Saving an instance](saving.md)). A relation is changed by its manager, at the moment a method is called, and needs both instances to have keys. So an instance is saved first and related afterwards. A form that edits such a field follows the same order: `ManyToManyField.save_form_data` calls the manager's `set` ([Model forms: `ModelForm` and `fields_for_model`](../forms/model-forms.md)).
 
 Deleting an instance deletes its rows of the table between, and nothing about a many-to-many field does that. The through model's two foreign keys are ordinary foreign keys, those of a model Django made have `on_delete=CASCADE`, and the collector follows them as it follows any foreign key that points at the object, hidden or not:
 

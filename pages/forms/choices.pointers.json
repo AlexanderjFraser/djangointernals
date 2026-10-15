@@ -1,0 +1,396 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "choices.md",
+ "pointers": [
+  {
+   "pointer": "django/forms/fields.py:ChoiceField.choices",
+   "line": 13,
+   "sentence": "`ChoiceField.choices` is a property whose setter passes the value through `normalize_choices`, which makes a mapping, an enumeration or nested groups into lists of pairs and wraps a callable to be called at each reading ([The utility layer](../utils.md)), and hands the result to the widget's `ChoiceWidget.choices`, which normalizes it again (`django/forms/fields.py:ChoiceField.choices`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "ChoiceField.choices",
+   "kind": "function",
+   "lines": [
+    877,
+    879
+   ],
+   "at": 878,
+   "more": [
+    [
+     881,
+     885
+    ]
+   ],
+   "fingerprint": "030e10fbaaf8a51b"
+  },
+  {
+   "pointer": "django/forms/widgets.py:ChoiceWidget.__deepcopy__",
+   "line": 15,
+   "sentence": "`ChoiceField.__deepcopy__` adds a deep copy of the choices, and the widget copies its own shallowly (`django/forms/widgets.py:ChoiceWidget.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "ChoiceWidget.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    744,
+    749
+   ],
+   "fingerprint": "604cdae680827e95"
+  },
+  {
+   "pointer": "django/forms/fields.py:FilePathField.set_choices",
+   "line": 17,
+   "sentence": "`FilePathField` makes its own choices: the files or directories under its directory that match its pattern, the blank choice first when the field is not required (`django/forms/fields.py:FilePathField.set_choices`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "FilePathField.set_choices",
+   "kind": "function",
+   "lines": [
+    1202,
+    1239
+   ],
+   "fingerprint": "e422e1dc5b1d7335"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field",
+   "line": 23,
+   "sentence": "`ChoiceField.validate` makes the required check of `django/forms/fields.py:Field`, then asks `ChoiceField.valid_value`, which looks through the choices, and inside each group (a pair whose second element is a list or a tuple), for a value equal to the one given or with the same string, which lets a browser's string match a number among the choices.",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field",
+   "kind": "class",
+   "lines": [
+    84,
+    273
+   ],
+   "fingerprint": "69699d5267086c86"
+  },
+  {
+   "pointer": "django/forms/fields.py:ChoiceField.validate",
+   "line": 23,
+   "sentence": "Anything else is an `\"invalid_choice\"` error naming the value (`django/forms/fields.py:ChoiceField.validate`, `django/forms/fields.py:ChoiceField.valid_value`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "ChoiceField.validate",
+   "kind": "function",
+   "lines": [
+    893,
+    901
+   ],
+   "fingerprint": "9d06b716bb253498"
+  },
+  {
+   "pointer": "django/forms/fields.py:ChoiceField.valid_value",
+   "line": 23,
+   "sentence": "Anything else is an `\"invalid_choice\"` error naming the value (`django/forms/fields.py:ChoiceField.validate`, `django/forms/fields.py:ChoiceField.valid_value`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "ChoiceField.valid_value",
+   "kind": "function",
+   "lines": [
+    903,
+    915
+   ],
+   "fingerprint": "4064c45f4db22498"
+  },
+  {
+   "pointer": "django/forms/fields.py:TypedChoiceField._coerce",
+   "line": 25,
+   "sentence": "After the whole of `Field.clean`, `TypedChoiceField._coerce` passes the checked string to the field's `coerce`, and gives `empty_value`, `\"\"` unless another is given, for an empty one; a failed conversion is an `\"invalid_choice\"` error too (`django/forms/fields.py:TypedChoiceField._coerce`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "TypedChoiceField._coerce",
+   "kind": "function",
+   "lines": [
+    924,
+    939
+   ],
+   "fingerprint": "f69778ff220fd886"
+  },
+  {
+   "pointer": "django/forms/fields.py:MultipleChoiceField",
+   "line": 47,
+   "sentence": "`MultipleChoiceField` takes a list: `MultipleChoiceField.to_python` makes an empty value `[]` and each item of a list or a tuple a string, and refuses anything else as `\"invalid_list\"`; its `validate` checks each distinct item with `valid_value`, and `MultipleChoiceField.has_changed` compares lengths, then sets of strings (`django/forms/fields.py:MultipleChoiceField`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "MultipleChoiceField",
+   "kind": "class",
+   "lines": [
+    946,
+    990
+   ],
+   "fingerprint": "2cb0dff50d294022"
+  },
+  {
+   "pointer": "django/forms/widgets.py:ChoiceWidget.optgroups",
+   "line": 51,
+   "sentence": "`ChoiceWidget.get_context` adds the list `ChoiceWidget.optgroups` makes, a triple for each top-level choice: its group's name (`None` outside a group), its options, and its index (`django/forms/widgets.py:ChoiceWidget.optgroups`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "ChoiceWidget.optgroups",
+   "kind": "function",
+   "lines": [
+    764,
+    802
+   ],
+   "fingerprint": "8a25211065dfb759"
+  },
+  {
+   "pointer": "django/forms/widgets.py:ChoiceWidget.create_option",
+   "line": 51,
+   "sentence": "Its index is its place, or its group's and its own joined, `\"0_1\"` for Berth 2, and `ChoiceWidget.id_for_label` numbers an `\"id\"` among its attributes with that index (`django/forms/widgets.py:ChoiceWidget.create_option`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "ChoiceWidget.create_option",
+   "kind": "function",
+   "lines": [
+    804,
+    825
+   ],
+   "fingerprint": "58fd211e2c4853b8"
+  },
+  {
+   "pointer": "django/forms/widgets.py:ChoiceWidget.value_from_datadict",
+   "line": 53,
+   "sentence": "A widget of one value marks only the first match; one whose `ChoiceWidget.allow_multiple_selected` is true marks every match, and reads the data with `MultiValueDict.getlist` where it can, so that a `QueryDict` gives every value submitted under the name (`django/forms/widgets.py:ChoiceWidget.value_from_datadict`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "ChoiceWidget.value_from_datadict",
+   "kind": "function",
+   "lines": [
+    843,
+    850
+   ],
+   "fingerprint": "1ac7d9430862731c"
+  },
+  {
+   "pointer": "django/forms/widgets.py:Select.use_required_attribute",
+   "line": 55,
+   "sentence": "On a required field, `Select.use_required_attribute` withholds `\"required\"` from a select of one value whose first choice has a value, which its docstring calls invalid HTML (`django/forms/widgets.py:Select.use_required_attribute`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "Select.use_required_attribute",
+   "kind": "function",
+   "lines": [
+    889,
+    904
+   ],
+   "fingerprint": "90c47a965b33ef40"
+  },
+  {
+   "pointer": "django/forms/widgets.py:RadioSelect.id_for_label",
+   "line": 55,
+   "sentence": "A `RadioSelect` puts it on each input, and gives its field's label no `\"for\"`, for screen readers, its docstring says, and because clicking such a label would toggle the first input (`django/forms/widgets.py:RadioSelect.id_for_label`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "RadioSelect.id_for_label",
+   "kind": "function",
+   "lines": [
+    971,
+    979
+   ],
+   "fingerprint": "baecfea6b5ff7a35"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField",
+   "line": 59,
+   "sentence": "`ModelChoiceField` keeps a queryset in place of a list (`django/forms/models.py:ModelChoiceField`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField",
+   "kind": "class",
+   "lines": [
+    1475,
+    1620
+   ],
+   "fingerprint": "ec91e862bd54faa7"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField._set_queryset",
+   "line": 59,
+   "sentence": "Assigning `ModelChoiceField.queryset` stores the queryset's `QuerySet.all`, a copy with nothing cached, and hands the widget the field's choices (`django/forms/models.py:ModelChoiceField._set_queryset`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField._set_queryset",
+   "kind": "function",
+   "lines": [
+    1549,
+    1551
+   ],
+   "fingerprint": "c840c759ce31f479"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField._get_choices",
+   "line": 59,
+   "sentence": "Reading `ModelChoiceField.choices`, unless choices were assigned by hand, makes a new `ModelChoiceIterator`, so that, a comment says, it has not been consumed (`django/forms/models.py:ModelChoiceField._get_choices`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField._get_choices",
+   "kind": "function",
+   "lines": [
+    1565,
+    1578
+   ],
+   "fingerprint": "60ec4485d8137446"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceIterator",
+   "line": 61,
+   "sentence": "`ModelChoiceIterator` yields the blank choice, `\"\"` with `ModelChoiceField.empty_label`, unless that is `None`; then, for each object, a pair: a `ModelChoiceIteratorValue`, which holds the object's key and the object and is equal to the key, and the label `ModelChoiceField.label_from_instance` gives, the object's `str` by default (`django/forms/models.py:ModelChoiceIterator`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceIterator",
+   "kind": "class",
+   "lines": [
+    1444,
+    1472
+   ],
+   "fingerprint": "a4b60ef5b2e014d3"
+  },
+  {
+   "pointer": "django/forms/widgets.py:Select.use_required_attribute",
+   "line": 78,
+   "sentence": "A select of one value with no blank choice sends two, the first from `Select.use_required_attribute` reading the first choice (`django/forms/widgets.py:Select.use_required_attribute`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "Select.use_required_attribute",
+   "kind": "function",
+   "lines": [
+    889,
+    904
+   ],
+   "fingerprint": "90c47a965b33ef40"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField.__init__",
+   "line": 80,
+   "sentence": "Otherwise it is the label given, `None` again meaning none, and the default, `\"\"`, is replaced by what `get_blank_choice_label` gives (`django/forms/models.py:ModelChoiceField.__init__`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField.__init__",
+   "kind": "function",
+   "lines": [
+    1487,
+    1523
+   ],
+   "fingerprint": "291be943e9fb0ef4"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField.__deepcopy__",
+   "line": 82,
+   "sentence": "Without it, each form's widget would read the class's field (`django/forms/models.py:ModelChoiceField.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    1539,
+    1544
+   ],
+   "fingerprint": "a08276aab45907e2"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField.to_python",
+   "line": 86,
+   "sentence": "`ModelChoiceField.to_python` makes an empty value `None`, refuses a null character, and otherwise fetches the object with `QuerySet.get` on the field's queryset, one query, by `ModelChoiceField.to_field_name` or the primary key; an object of the model is taken by its key (`django/forms/models.py:ModelChoiceField.to_python`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField.to_python",
+   "kind": "function",
+   "lines": [
+    1590,
+    1610
+   ],
+   "fingerprint": "744d334ab63e8641"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField.validate",
+   "line": 86,
+   "sentence": "The query is the check against the choices, and `ModelChoiceField.validate` skips `ChoiceField.validate`, keeping only the required check (`django/forms/models.py:ModelChoiceField.validate`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField.validate",
+   "kind": "function",
+   "lines": [
+    1612,
+    1613
+   ],
+   "fingerprint": "b44adbdee59197e1"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelMultipleChoiceField._check_values",
+   "line": 88,
+   "sentence": "`ModelMultipleChoiceField.clean` returns `QuerySet.none` for an empty value when not required, and `ModelMultipleChoiceField._check_values` drops repeated keys, builds an unrun filter for each, so that a key of the wrong type is `\"invalid_pk_value\"`, fetches them all in one query with `\"__in\"`, and refuses a key it did not find as `\"invalid_choice\"` (`django/forms/models.py:ModelMultipleChoiceField._check_values`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelMultipleChoiceField._check_values",
+   "kind": "function",
+   "lines": [
+    1661,
+    1697
+   ],
+   "fingerprint": "b15325fe6e6c9cbb"
+  },
+  {
+   "pointer": "django/forms/models.py:apply_limit_choices_to_to_formfield",
+   "line": 92,
+   "sentence": "`apply_limit_choices_to_to_formfield` makes a dictionary a `Q`, adds the condition that the key equal the outer row's, and filters the field's queryset on `Exists` over the model's base manager, which a comment says avoids duplicates (`django/forms/models.py:apply_limit_choices_to_to_formfield`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "apply_limit_choices_to_to_formfield",
+   "kind": "function",
+   "lines": [
+    124,
+    138
+   ],
+   "fingerprint": "0b031a7531c2abf9"
+  },
+  {
+   "pointer": "django/forms/models.py:BaseModelForm.__init__",
+   "line": 92,
+   "sentence": "`ModelFormMetaclass` has `fields_for_model` skip this, and `BaseModelForm.__init__` does it for every field of each instance, so a callable is called for each form (`django/forms/models.py:BaseModelForm.__init__`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "BaseModelForm.__init__",
+   "kind": "function",
+   "lines": [
+    348,
+    394
+   ],
+   "fingerprint": "47359ae833597153"
+  },
+  {
+   "pointer": "django/db/models/utils.py:get_blank_choice_label",
+   "line": 98,
+   "sentence": "`get_blank_choice_label` gives a blank choice's label: `BLANK_CHOICE_LABEL`, a translated `\"- Select an option -\"`, or, while `USE_BLANK_CHOICE_DASH` is true, the dashes of `BLANK_CHOICE_DASH` (`django/db/models/utils.py:get_blank_choice_label`).",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": "get_blank_choice_label",
+   "kind": "function",
+   "lines": [
+    74,
+    81
+   ],
+   "fingerprint": "bd1ea9e85089e8ac"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.get_choices",
+   "line": 98,
+   "sentence": "Its callers include `ModelChoiceField.__init__` and a model field's `get_choices` (`django/db/models/fields/__init__.py:Field.get_choices`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.get_choices",
+   "kind": "function",
+   "lines": [
+    1097,
+    1126
+   ],
+   "fingerprint": "fa3f73fb9f6f9ea3"
+  }
+ ]
+}

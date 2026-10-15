@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 503">
+  <!-- the frame is one call of BaseForm.full_clean; its steps run down the page, and the work for one
+       field, here the tonnage, is drawn open in the box of _clean_fields -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="502" rx="4"/>
+
+  <!-- what calls it -->
+  <text class="name" x="14" y="24">form.is_valid()</text>
+  <path class="line" d="M139 19.5 H159"/>
+  <polygon class="head" points="169,19.5 159,14.5 159,24.5"/>
+  <text class="name" x="177" y="24">form.errors</text>
+  <path class="line" d="M271 19.5 H291"/>
+  <polygon class="head" points="301,19.5 291,14.5 291,24.5"/>
+  <text class="name strong" x="309" y="24">BaseForm.full_clean</text>
+  <text class="quiet small" x="469" y="24">the first time only</text>
+
+  <!-- an unbound form -->
+  <text x="14" y="52">not bound</text>
+  <text x="176" y="52">stop, with no errors; <tspan class="name">is_valid()</tspan> answers False without asking</text>
+
+  <!-- _clean_fields: the work for one field -->
+  <rect class="box" x="14.5" y="72.5" width="617" height="330" rx="4"/>
+  <text class="name strong" x="28" y="96">_clean_fields</text>
+  <text x="176" y="96">each field in order, here the tonnage</text>
+
+  <text class="name" x="28" y="126">BoundField.data</text>
+  <text x="176" y="126">the widget reads the data:</text>
+  <text class="name" x="176" y="146">value_from_datadict(data, files, "tonnage")</text>
+  <path class="line" d="M527 141.5 H545"/>
+  <polygon class="head" points="555,141.5 545,136.5 545,146.5"/>
+  <text class="name" x="563" y="146">"0"</text>
+
+  <!-- Field.clean, its three steps, and the error each can raise -->
+  <rect class="ground" x="28.5" y="162.5" width="589" height="104" rx="4"/>
+  <text class="name strong" x="42" y="184">Field.clean</text>
+  <text class="quiet small" x="368" y="184">or an error</text>
+
+  <text class="name" x="42" y="208">to_python</text>
+  <text class="name" x="176" y="208">"0"</text>
+  <path class="line" d="M207 203.5 H219"/>
+  <polygon class="head" points="229,203.5 219,198.5 219,208.5"/>
+  <text class="name" x="237" y="208">0</text>
+  <text class="name" x="368" y="208">"invalid"</text>
+
+  <text class="name" x="42" y="230">validate</text>
+  <text x="176" y="230">empty, and required?</text>
+  <text class="name" x="368" y="230">"required"</text>
+
+  <text class="name" x="42" y="252">run_validators</text>
+  <text class="name" x="176" y="252">MinValueValidator(1)</text>
+  <text class="name" x="368" y="252">"min_value"</text>
+
+  <!-- the form's method for the field -->
+  <text class="name" x="28" y="294">clean_tonnage</text>
+  <text x="176" y="294">the form's method for the field,</text>
+  <text x="176" y="314">if it has one</text>
+
+  <!-- where the field ends: a value, or an error -->
+  <path class="mark-line" d="M48 304 V338"/>
+  <polygon class="head mark" points="48,348 43,338 53,338"/>
+  <text class="quiet" x="60" y="330">a value</text>
+  <path class="mark-line" d="M388 267 V338"/>
+  <polygon class="head mark" points="388,348 383,338 393,338"/>
+  <text class="quiet" x="400" y="330">a <tspan class="name">ValidationError</tspan></text>
+
+  <text class="name mark" x="28" y="368">cleaned_data["tonnage"]</text>
+  <text x="368" y="368"><tspan class="name mark">errors["tonnage"]</tspan>, and the field</text>
+  <text x="368" y="388">left out of <tspan class="name">cleaned_data</tspan></text>
+
+  <!-- the checks of the whole form -->
+  <text class="name" x="14" y="432">_clean_form</text>
+  <text x="176" y="432">the form's <tspan class="name">clean()</tspan>; an error of no one field goes under <tspan class="name">"__all__"</tspan></text>
+  <text class="name" x="14" y="456">_post_clean</text>
+  <text x="176" y="456">nothing on a plain form; a model form fills and validates its instance</text>
+
+  <!-- what it leaves -->
+  <path class="line" d="M14 483.5 H34"/>
+  <polygon class="head" points="44,483.5 34,478.5 34,488.5"/>
+  <text x="52" y="488"><tspan class="name">errors</tspan> (an <tspan class="name">ErrorDict</tspan>) and <tspan class="name">cleaned_data</tspan></text>
+</svg>

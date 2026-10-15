@@ -1,0 +1,278 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "declaring.md",
+ "pointers": [
+  {
+   "pointer": "django/forms/forms.py:DeclarativeFieldsMetaclass.__new__",
+   "line": 9,
+   "sentence": "So the metaclass settles which fields a form class has, and in what order, as the class is made, and `BaseForm.__init__` gives each instance its data, its initial values and fields of its own to change (`django/forms/forms.py:DeclarativeFieldsMetaclass.__new__`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "DeclarativeFieldsMetaclass.__new__",
+   "kind": "function",
+   "lines": [
+    24,
+    49
+   ],
+   "fingerprint": "415f6a23c5a6e967"
+  },
+  {
+   "pointer": "django/forms/forms.py:Form",
+   "line": 13,
+   "sentence": "`Form` adds only a metaclass; its comment says it is separate to abstract how the fields are specified, the metaclass being purely a convenience for declaring them as attributes (`django/forms/forms.py:Form`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "Form",
+   "kind": "class",
+   "lines": [
+    432,
+    433
+   ],
+   "fingerprint": "89bad7ab5400fa9b"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field",
+   "line": 17,
+   "sentence": "It takes out every value that is a form field, an instance of `Field` (`django/forms/fields.py:Field`), and puts them back under one key, `\"declared_fields\"`, in the order the body assigned them; only then is the class made.",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field",
+   "kind": "class",
+   "lines": [
+    84,
+    273
+   ],
+   "fingerprint": "69699d5267086c86"
+  },
+  {
+   "pointer": "django/forms/forms.py:DeclarativeFieldsMetaclass.__new__",
+   "line": 17,
+   "sentence": "So BerthForm has no attribute named ship, and nor has an instance: a field is reached through the instance's `BaseForm.fields`, or by subscription, which gives its bound field (`django/forms/forms.py:DeclarativeFieldsMetaclass.__new__`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "DeclarativeFieldsMetaclass.__new__",
+   "kind": "function",
+   "lines": [
+    24,
+    49
+   ],
+   "fingerprint": "415f6a23c5a6e967"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelFormMetaclass.__new__",
+   "line": 35,
+   "sentence": "The dictionary is set on the class as both `BaseForm.base_fields` and `BaseForm.declared_fields`, one object; a model form's metaclass then sets the first again, when its `Meta` names a model, from the model's fields and the declared ones (`django/forms/models.py:ModelFormMetaclass.__new__`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelFormMetaclass.__new__",
+   "kind": "function",
+   "lines": [
+    275,
+    344
+   ],
+   "fingerprint": "15342ff5a4130f88"
+  },
+  {
+   "pointer": "django/forms/widgets.py:MediaDefiningClass",
+   "line": 37,
+   "sentence": "The metaclass is a subclass of `MediaDefiningClass`, which gives each class whose body defines no `media` a property made by `media_property`; on a form, that property gives the widgets' assets, to which an inner `Media` class ordinarily adds its own ([Form assets: `Media`](media.md)) (`django/forms/widgets.py:MediaDefiningClass`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "MediaDefiningClass",
+   "kind": "class",
+   "lines": [
+    306,
+    317
+   ],
+   "fingerprint": "83c4ba193f778d2b"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.__init__",
+   "line": 41,
+   "sentence": "The data, the files and the initial values are kept as given, not copied, or are made empty: a `MultiValueDict` for the first two, a dictionary for the third (`django/forms/forms.py:BaseForm.__init__`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.__init__",
+   "kind": "function",
+   "lines": [
+    73,
+    134
+   ],
+   "fingerprint": "e47ea31886a1592d"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.add_prefix",
+   "line": 43,
+   "sentence": "`BaseForm.add_prefix` joins it to a field's name with a hyphen, `\"berth-ship\"` for `prefix=\"berth\"`, and every input's name is made by it; `BaseForm.add_initial_prefix` puts `\"initial-\"` in front, for the hidden input of a field with `Field.show_hidden_initial` (`django/forms/forms.py:BaseForm.add_prefix`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.add_prefix",
+   "kind": "function",
+   "lines": [
+    208,
+    215
+   ],
+   "fingerprint": "3899da632ad3ee77"
+  },
+  {
+   "pointer": "django/forms/boundfield.py:BoundField.auto_id",
+   "line": 43,
+   "sentence": "`BaseForm.auto_id`, unless given, is `\"id_%s\"`, a pattern the bound field fills with that name to make the input's `\"id\"` ([`BoundField`: a field in a form](bound-fields.md)) (`django/forms/boundfield.py:BoundField.auto_id`).",
+   "tree": "django",
+   "path": "django/forms/boundfield.py",
+   "symbol": "BoundField.auto_id",
+   "kind": "function",
+   "lines": [
+    243,
+    255
+   ],
+   "at": 244,
+   "fingerprint": "95564b92463cb1d7"
+  },
+  {
+   "pointer": "django/forms/boundfield.py:BoundField.build_widget_attrs",
+   "line": 47,
+   "sentence": "`BaseForm.use_required_attribute`, true on the class, lets a bound field put `\"required\"` on the input of a required field (`django/forms/boundfield.py:BoundField.build_widget_attrs`).",
+   "tree": "django",
+   "path": "django/forms/boundfield.py",
+   "symbol": "BoundField.build_widget_attrs",
+   "kind": "function",
+   "lines": [
+    272,
+    303
+   ],
+   "fingerprint": "d8cb793b212c9e42"
+  },
+  {
+   "pointer": "django/forms/formsets.py:BaseFormSet._construct_form",
+   "line": 47,
+   "sentence": "`BaseForm.__init__` refuses the two together with a `ValueError`; a formset's forms get `use_required_attribute=False` unless its form arguments say otherwise (`django/forms/formsets.py:BaseFormSet._construct_form`).",
+   "tree": "django",
+   "path": "django/forms/formsets.py",
+   "symbol": "BaseFormSet._construct_form",
+   "kind": "function",
+   "lines": [
+    219,
+    246
+   ],
+   "fingerprint": "d00a0e207411eddf"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field.get_bound_field",
+   "line": 49,
+   "sentence": "`BaseForm.bound_field_class` is the one passed in, else the class's, else the renderer's; a field's own comes before all three (`django/forms/fields.py:Field.get_bound_field`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field.get_bound_field",
+   "kind": "function",
+   "lines": [
+    253,
+    261
+   ],
+   "fingerprint": "3c3a6e6b5d31b372"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.__init__",
+   "line": 53,
+   "sentence": "An instance's `BaseForm.fields` is a `copy.deepcopy` of its class's `BaseForm.base_fields`, and the comment at the copy says why: those are the definition for the whole class, an instance may want to change its fields, and so it is given its own (`django/forms/forms.py:BaseForm.__init__`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.__init__",
+   "kind": "function",
+   "lines": [
+    73,
+    134
+   ],
+   "fingerprint": "e47ea31886a1592d"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field.__deepcopy__",
+   "line": 53,
+   "sentence": "Each field is copied by `Field.__deepcopy__`, which copies less than its name says: the copy is shallow but for its widget, its dictionary of messages and its list of validators (`django/forms/fields.py:Field.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    263,
+    269
+   ],
+   "fingerprint": "55a0a72a8d8e8ec5"
+  },
+  {
+   "pointer": "django/forms/widgets.py:Widget.__deepcopy__",
+   "line": 53,
+   "sentence": "`Widget.__deepcopy__` is shallow too, but for a copy of `Widget.attrs` (`django/forms/widgets.py:Widget.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "Widget.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    330,
+    334
+   ],
+   "fingerprint": "c1e4963b32444846"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.order_fields",
+   "line": 55,
+   "sentence": "The names listed come first, in that order; a name the form lacks is skipped, which the docstring says lets a subclass remove a field without restating the order; the rest follow in the order they had (`django/forms/forms.py:BaseForm.order_fields`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.order_fields",
+   "kind": "function",
+   "lines": [
+    136,
+    156
+   ],
+   "fingerprint": "270c60a529edb520"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.__getitem__",
+   "line": 91,
+   "sentence": "`BaseForm.__getitem__` looks a name up in the instance's fields, raising a `KeyError` that lists the names there are, and answers with the field's bound field, made by `Field.get_bound_field` the first time and then kept (`django/forms/forms.py:BaseForm.__getitem__`, `django/forms/fields.py:Field.get_bound_field`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.__getitem__",
+   "kind": "function",
+   "lines": [
+    180,
+    195
+   ],
+   "fingerprint": "207c98a53e570bf1"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field.get_bound_field",
+   "line": 91,
+   "sentence": "`BaseForm.__getitem__` looks a name up in the instance's fields, raising a `KeyError` that lists the names there are, and answers with the field's bound field, made by `Field.get_bound_field` the first time and then kept (`django/forms/forms.py:BaseForm.__getitem__`, `django/forms/fields.py:Field.get_bound_field`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field.get_bound_field",
+   "kind": "function",
+   "lines": [
+    253,
+    261
+   ],
+   "fingerprint": "3c3a6e6b5d31b372"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.get_initial_for_field",
+   "line": 97,
+   "sentence": "`BaseForm.get_initial_for_field` is what a bound field asks for its initial value (`django/forms/forms.py:BaseForm.get_initial_for_field`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.get_initial_for_field",
+   "kind": "function",
+   "lines": [
+    414,
+    429
+   ],
+   "fingerprint": "31165ac4b5f4970d"
+  }
+ ]
+}

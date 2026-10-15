@@ -40,4 +40,19 @@ _get_missing_target_ids      django/db/models/fields/related_descriptors.py:crea
 _remove_items                django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager    # the same
 set_base                     django/db/models/fields/related_descriptors.py:create_forward_many_to_many_manager    # the same
 _auto_deps                   django/db/migrations/autodetector.py:MigrationAutodetector.add_operation    # set on each generated operation, by assignment: the list of what must exist or be gone before it can run
+Widget.media                 django/forms/widgets.py:MediaDefiningClass.__new__    # a property made by media_property and set on each widget class whose body defines no media of its own
+BaseForm.base_fields         django/forms/forms.py:DeclarativeFieldsMetaclass.__new__    # set on each form class by its metaclass: the fields declared on it and on its bases. BaseForm reads it and declares none; a model form's metaclass sets it again with the model's fields
+BaseForm.declared_fields     django/forms/forms.py:DeclarativeFieldsMetaclass.__new__    # the same, as the metaclass collected them from the class bodies
+BaseModelForm._meta          django/forms/models.py:ModelFormMetaclass.__new__    # set on each model form class: its ModelFormOptions, read from its inner Meta
+BaseFormSet.form             django/forms/formsets.py:formset_factory    # the class attributes of a formset class, given to type() by the factory: the form class it repeats
+BaseFormSet.extra            django/forms/formsets.py:formset_factory    # the same: how many empty forms an unbound formset adds
+BaseFormSet.can_order        django/forms/formsets.py:formset_factory    # the same
+BaseFormSet.can_delete       django/forms/formsets.py:formset_factory    # the same
+BaseFormSet.can_delete_extra django/forms/formsets.py:formset_factory    # the same
+BaseFormSet.min_num          django/forms/formsets.py:formset_factory    # the same
+BaseFormSet.max_num          django/forms/formsets.py:formset_factory    # the same
+BaseFormSet.absolute_max     django/forms/formsets.py:formset_factory    # the same: the most forms a bound formset will make, whatever its management form says
+BaseFormSet.validate_min     django/forms/formsets.py:formset_factory    # the same
+BaseFormSet.validate_max     django/forms/formsets.py:formset_factory    # the same
+BaseInlineFormSet.fk         django/forms/models.py:inlineformset_factory    # set on each inline formset class by the factory: the foreign key from the child model to the parent
 ```

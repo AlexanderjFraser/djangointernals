@@ -1,0 +1,447 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "validators.md",
+ "pointers": [
+  {
+   "pointer": "django/core/validators.py",
+   "line": 5,
+   "sentence": "Validators: `django/core/validators.py`",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    754
+   ],
+   "fingerprint": "2909214bd9ebfac9"
+  },
+  {
+   "pointer": "django/core/validators.py",
+   "line": 7,
+   "sentence": "`django/core/validators.py` holds the general ones: `RegexValidator` and the validators of domain names, URLs and email addresses, `BaseValidator` and the limits built on it, `DecimalValidator`, `FileExtensionValidator`, and ready-made ones such as `validate_email`.",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    754
+   ],
+   "fingerprint": "2909214bd9ebfac9"
+  },
+  {
+   "pointer": "django/core/validators.py:BaseValidator.__call__",
+   "line": 11,
+   "sentence": "Each validator here raises with a code, which names the rule broken (`\"min_value\"`), and parameters, which fill the message's placeholders (`django/core/validators.py:BaseValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "BaseValidator.__call__",
+   "kind": "function",
+   "lines": [
+    466,
+    473
+   ],
+   "fingerprint": "b9f041b924ab0aa9"
+  },
+  {
+   "pointer": "django/core/exceptions.py:ValidationError.__iter__",
+   "line": 11,
+   "sentence": "The message is filled only when it is read (`django/core/exceptions.py:ValidationError.__iter__`), so a field's own message for the code, put in the validator's place, can use the same parameters.",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": "ValidationError.__iter__",
+   "kind": "function",
+   "lines": [
+    212,
+    221
+   ],
+   "fingerprint": "0f094764733ec283"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field.__deepcopy__",
+   "line": 27,
+   "sentence": "A validator is ordinarily made once, with its module, field class or field, and called many times (`validate_image_file_extension` makes a new one at each call): a form's copy of its fields copies each list of validators but not the validators (`django/forms/fields.py:Field.__deepcopy__`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field.__deepcopy__",
+   "kind": "function",
+   "lines": [
+    263,
+    269
+   ],
+   "fingerprint": "55a0a72a8d8e8ec5"
+  },
+  {
+   "pointer": "django/forms/fields.py:Field.run_validators",
+   "line": 31,
+   "sentence": "A form field's `Field.run_validators` ([A form field: the base class](fields.md)) and a model field's ([Validating an instance](../models/validation.md)) work alike: they skip an empty value, call every validator of the field, gather all their errors into one `ValidationError`, and put the field's own message in place of a validator's where the field has one for its code (`django/forms/fields.py:Field.run_validators`, `django/db/models/fields/__init__.py:Field.run_validators`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "Field.run_validators",
+   "kind": "function",
+   "lines": [
+    189,
+    201
+   ],
+   "fingerprint": "ec4a17e660d17f62"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.run_validators",
+   "line": 31,
+   "sentence": "A form field's `Field.run_validators` ([A form field: the base class](fields.md)) and a model field's ([Validating an instance](../models/validation.md)) work alike: they skip an empty value, call every validator of the field, gather all their errors into one `ValidationError`, and put the field's own message in place of a validator's where the field has one for its code (`django/forms/fields.py:Field.run_validators`, `django/db/models/fields/__init__.py:Field.run_validators`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.run_validators",
+   "kind": "function",
+   "lines": [
+    823,
+    837
+   ],
+   "fingerprint": "68499cd332a093ee"
+  },
+  {
+   "pointer": "django/core/validators.py:EMPTY_VALUES",
+   "line": 33,
+   "sentence": "An empty value is one of the field's `empty_values`, which both base classes copy from `EMPTY_VALUES`: `None`, `\"\"` and an empty list, tuple or dictionary (`django/core/validators.py:EMPTY_VALUES`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EMPTY_VALUES",
+   "kind": "assignment",
+   "lines": [
+    19,
+    19
+   ],
+   "fingerprint": "d2d76842468bdaf1"
+  },
+  {
+   "pointer": "django/utils/deconstruct.py:deconstructible",
+   "line": 37,
+   "sentence": "Every validator class of the module is decorated with `deconstructible`, whose `deconstruct` returns the arguments an instance was made with, so that a migration can write a model field's validator as a call that makes it again ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)) (`django/utils/deconstruct.py:deconstructible`).",
+   "tree": "django",
+   "path": "django/utils/deconstruct.py",
+   "symbol": "deconstructible",
+   "kind": "function",
+   "lines": [
+    6,
+    61
+   ],
+   "fingerprint": "d681c9784ddce071"
+  },
+  {
+   "pointer": "django/core/validators.py:RegexValidator.__eq__",
+   "line": 39,
+   "sentence": "Each class has an `__eq__`, which compares only what the class defining it knows: `RegexValidator.__eq__` not a `URLValidator`'s schemes, `BaseValidator.__eq__` not a `StepValueValidator`'s offset, so two with different schemes are equal, as are two given different offsets (`django/core/validators.py:RegexValidator.__eq__`, `django/core/validators.py:BaseValidator.__eq__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "RegexValidator.__eq__",
+   "kind": "function",
+   "lines": [
+    60,
+    68
+   ],
+   "fingerprint": "020b6b36ea18f5d6"
+  },
+  {
+   "pointer": "django/core/validators.py:BaseValidator.__eq__",
+   "line": 39,
+   "sentence": "Each class has an `__eq__`, which compares only what the class defining it knows: `RegexValidator.__eq__` not a `URLValidator`'s schemes, `BaseValidator.__eq__` not a `StepValueValidator`'s offset, so two with different schemes are equal, as are two given different offsets (`django/core/validators.py:RegexValidator.__eq__`, `django/core/validators.py:BaseValidator.__eq__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "BaseValidator.__eq__",
+   "kind": "function",
+   "lines": [
+    475,
+    482
+   ],
+   "fingerprint": "1e42758b6d976e38"
+  },
+  {
+   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector.deep_deconstruct",
+   "line": 39,
+   "sentence": "A migration still tells them apart, by their arguments (`django/db/migrations/autodetector.py:MigrationAutodetector.deep_deconstruct`).",
+   "tree": "django",
+   "path": "django/db/migrations/autodetector.py",
+   "symbol": "MigrationAutodetector.deep_deconstruct",
+   "kind": "function",
+   "lines": [
+    73,
+    110
+   ],
+   "fingerprint": "052c8909ff1fb764"
+  },
+  {
+   "pointer": "django/contrib/auth/validators.py:ASCIIUsernameValidator",
+   "line": 43,
+   "sentence": "Its class attributes `RegexValidator.regex`, `RegexValidator.message`, `RegexValidator.code`, `RegexValidator.inverse_match` and `RegexValidator.flags` are defaults that its arguments replace, so a subclass can be written by setting attributes alone, as the auth app's username validators are (`django/contrib/auth/validators.py:ASCIIUsernameValidator`).",
+   "tree": "django",
+   "path": "django/contrib/auth/validators.py",
+   "symbol": "ASCIIUsernameValidator",
+   "kind": "class",
+   "lines": [
+    8,
+    15
+   ],
+   "at": 9,
+   "fingerprint": "21eb02ffd9fcf325"
+  },
+  {
+   "pointer": "django/core/validators.py:RegexValidator.__init__",
+   "line": 43,
+   "sentence": "The pattern is wrapped by `_lazy_re_compile` in a `SimpleLazyObject`, and compiled when it is first used (`django/core/validators.py:RegexValidator.__init__`, `django/utils/regex_helper.py:_lazy_re_compile`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "RegexValidator.__init__",
+   "kind": "function",
+   "lines": [
+    30,
+    48
+   ],
+   "fingerprint": "929b752cf2c4a486"
+  },
+  {
+   "pointer": "django/utils/regex_helper.py:_lazy_re_compile",
+   "line": 43,
+   "sentence": "The pattern is wrapped by `_lazy_re_compile` in a `SimpleLazyObject`, and compiled when it is first used (`django/core/validators.py:RegexValidator.__init__`, `django/utils/regex_helper.py:_lazy_re_compile`).",
+   "tree": "django",
+   "path": "django/utils/regex_helper.py",
+   "symbol": "_lazy_re_compile",
+   "kind": "function",
+   "lines": [
+    343,
+    354
+   ],
+   "fingerprint": "c40d15ca65c4544f"
+  },
+  {
+   "pointer": "django/core/validators.py:RegexValidator.__call__",
+   "line": 45,
+   "sentence": "A pattern that must match the whole value anchors itself, as each `RegexValidator` the module makes does with `\"^\"` and `\"\\Z\"` (`django/core/validators.py:RegexValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "RegexValidator.__call__",
+   "kind": "function",
+   "lines": [
+    50,
+    58
+   ],
+   "fingerprint": "5f90e9292feba1f2"
+  },
+  {
+   "pointer": "django/core/validators.py:DomainNameValidator",
+   "line": 49,
+   "sentence": "`DomainNameValidator`, `URLValidator` and `EmailValidator` share one description of a host name, kept on `DomainNameValidator`: labels of 1 to 63 characters that neither begin nor end with a hyphen, then a top-level domain of letters or a punycode label, `\"xn--\"` and the rest (`django/core/validators.py:DomainNameValidator`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "DomainNameValidator",
+   "kind": "class",
+   "lines": [
+    71,
+    126
+   ],
+   "at": 72,
+   "fingerprint": "801d6a450fa3ca2d"
+  },
+  {
+   "pointer": "django/core/validators.py:DomainNameValidator.__init__",
+   "line": 51,
+   "sentence": "It refuses a value that is not a string or is over 255 characters long, and wants a top-level domain, so `\"localhost\"` fails (`django/core/validators.py:DomainNameValidator.__init__`, `django/core/validators.py:DomainNameValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "DomainNameValidator.__init__",
+   "kind": "function",
+   "lines": [
+    102,
+    119
+   ],
+   "fingerprint": "cd016f700508eb19"
+  },
+  {
+   "pointer": "django/core/validators.py:DomainNameValidator.__call__",
+   "line": 51,
+   "sentence": "It refuses a value that is not a string or is over 255 characters long, and wants a top-level domain, so `\"localhost\"` fails (`django/core/validators.py:DomainNameValidator.__init__`, `django/core/validators.py:DomainNameValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "DomainNameValidator.__call__",
+   "kind": "function",
+   "lines": [
+    121,
+    126
+   ],
+   "fingerprint": "28cbfe84832cf61a"
+  },
+  {
+   "pointer": "django/core/validators.py:URLValidator.__call__",
+   "line": 53,
+   "sentence": "`URLValidator` refuses, in order and each with its code (`\"invalid\"` by default), a value that is not a string or is longer than `URLValidator.max_length` (2,048, `MAX_URL_LENGTH`); that holds a tab, carriage return, newline or null; whose scheme, before `\"://\"` and lower-cased, is not in `URLValidator.schemes` (by default `\"http\"`, `\"https\"`, `\"ftp\"` and `\"ftps\"`); that `urllib.parse.urlsplit` cannot split; that fails the pattern, which takes as host an IPv4 address, an IPv6 address in brackets, a host name or `\"localhost\"`; whose address in brackets `validate_ipv6_address` refuses; and whose host name is missing or longer than 253 characters, RFC 1034's limit (`django/core/validators.py:URLValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "URLValidator.__call__",
+   "kind": "function",
+   "lines": [
+    166,
+    198
+   ],
+   "fingerprint": "25b99ecc28ce5b06"
+  },
+  {
+   "pointer": "django/core/validators.py:EmailValidator.validate_domain",
+   "line": 55,
+   "sentence": "`EmailValidator.validate` has the user part checked by `EmailValidator.validate_username`, as a dot-atom or a quoted string, and the domain by `EmailValidator.validate_domain`, which passes one in the allowlist (by default `[\"localhost\"]`), one that matches the host-name pattern without the final dot a URL may have, or an address in brackets that `validate_ipv46_address` accepts (`django/core/validators.py:EmailValidator.validate_domain`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.validate_domain",
+   "kind": "function",
+   "lines": [
+    308,
+    327
+   ],
+   "fingerprint": "9c78591704dd26b5"
+  },
+  {
+   "pointer": "django/core/validators.py:EmailValidator.__init_subclass__",
+   "line": 59,
+   "sentence": "A call to it warns too, unless its caller was itself called from Django (`django/core/validators.py:EmailValidator.__init_subclass__`, `django/core/validators.py:EmailValidator.validate_domain_part`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.__init_subclass__",
+   "kind": "function",
+   "lines": [
+    250,
+    258
+   ],
+   "fingerprint": "68edfde2fb28cc7c"
+  },
+  {
+   "pointer": "django/core/validators.py:EmailValidator.validate_domain_part",
+   "line": 59,
+   "sentence": "A call to it warns too, unless its caller was itself called from Django (`django/core/validators.py:EmailValidator.__init_subclass__`, `django/core/validators.py:EmailValidator.validate_domain_part`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.validate_domain_part",
+   "kind": "function",
+   "lines": [
+    330,
+    349
+   ],
+   "fingerprint": "3e9e938563262c7a"
+  },
+  {
+   "pointer": "django/core/validators.py:BaseValidator.__call__",
+   "line": 63,
+   "sentence": "A call passes the value through `BaseValidator.clean`, calls the limit if it is callable, and raises if `BaseValidator.compare` of the two is true, with the parameters `\"limit_value\"`, `\"show_value\"` (the cleaned value) and `\"value\"` (`django/core/validators.py:BaseValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "BaseValidator.__call__",
+   "kind": "function",
+   "lines": [
+    466,
+    473
+   ],
+   "fingerprint": "b9f041b924ab0aa9"
+  },
+  {
+   "pointer": "django/forms/fields.py:IntegerField.__init__",
+   "line": 65,
+   "sentence": "The form `IntegerField` makes one from `step_size=`, with `min_value=` as the offset (`django/forms/fields.py:IntegerField.__init__`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "IntegerField.__init__",
+   "kind": "function",
+   "lines": [
+    319,
+    333
+   ],
+   "fingerprint": "6aceb5bdeefa1bfa"
+  },
+  {
+   "pointer": "django/core/validators.py:StepValueValidator.__call__",
+   "line": 67,
+   "sentence": "With an offset the parameters do not include `\"value\"`, so a field's message for `\"step_size\"` that names it raises `KeyError` when it is read (`django/core/validators.py:StepValueValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "StepValueValidator.__call__",
+   "kind": "function",
+   "lines": [
+    524,
+    540
+   ],
+   "fingerprint": "89c994fe1fcf19ea"
+  },
+  {
+   "pointer": "django/core/validators.py:DecimalValidator.__call__",
+   "line": 71,
+   "sentence": "`DecimalValidator` refuses an infinity or a NaN as `\"invalid\"`, then too many digits, decimal places or digits before the point, as `\"max_digits\"`, `\"max_decimal_places\"` and `\"max_whole_digits\"` (`django/core/validators.py:DecimalValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "DecimalValidator.__call__",
+   "kind": "function",
+   "lines": [
+    615,
+    661
+   ],
+   "fingerprint": "e145dcb072eea325"
+  },
+  {
+   "pointer": "django/core/validators.py:FileExtensionValidator.__call__",
+   "line": 73,
+   "sentence": "`FileExtensionValidator` refuses a file whose name's suffix, lower-cased, is not among the allowed extensions; with none given, it allows all (`django/core/validators.py:FileExtensionValidator.__call__`).",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "FileExtensionValidator.__call__",
+   "kind": "function",
+   "lines": [
+    690,
+    704
+   ],
+   "fingerprint": "1a5533bf3cd634c2"
+  },
+  {
+   "pointer": "django/forms/fields.py:ImageField",
+   "line": 73,
+   "sentence": "The form `ImageField` has it by default (`django/forms/fields.py:ImageField`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "ImageField",
+   "kind": "class",
+   "lines": [
+    713,
+    769
+   ],
+   "fingerprint": "b5a195c7e554540e"
+  },
+  {
+   "pointer": "django/forms/fields.py:CharField.__init__",
+   "line": 75,
+   "sentence": "Every form `CharField` has one (`django/forms/fields.py:CharField.__init__`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "CharField.__init__",
+   "kind": "function",
+   "lines": [
+    277,
+    289
+   ],
+   "fingerprint": "2af5c277f4d7572f"
+  },
+  {
+   "pointer": "django/core/validators.py",
+   "line": 89,
+   "sentence": "*The module's ready-made validators (`django/core/validators.py`).*",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    754
+   ],
+   "fingerprint": "2909214bd9ebfac9"
+  }
+ ]
+}

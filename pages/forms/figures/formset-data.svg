@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 338">
+  <!-- two halves: on the left the submitted data, one flat dictionary; on the right the order in which
+       BerthFormSet reads it; a bracket joins each reader to the keys it reads -->
+  <text class="strong" x="0" y="14">The data, flat</text>
+  <text class="strong" x="290" y="14">How BerthFormSet reads it</text>
+
+  <!-- the data -->
+  <rect class="ground" x="0.5" y="28.5" width="258" height="270" rx="4"/>
+  <text class="name" x="12" y="52">"form-TOTAL_FORMS":</text>
+  <text class="name" x="184" y="52">"2"</text>
+  <text class="name" x="12" y="72">"form-INITIAL_FORMS":</text>
+  <text class="name" x="184" y="72">"0"</text>
+  <text class="name" x="12" y="92">"form-MIN_NUM_FORMS":</text>
+  <text class="name" x="184" y="92">"0"</text>
+  <text class="name" x="12" y="112">"form-MAX_NUM_FORMS":</text>
+  <text class="name" x="184" y="112">"1000"</text>
+
+  <text class="name" x="12" y="158">"form-0-ship":</text>
+  <text class="name" x="152" y="158">"heron"</text>
+  <text class="name" x="12" y="178">"form-0-tonnage":</text>
+  <text class="name" x="152" y="178">"120"</text>
+  <text class="name" x="12" y="198">"form-0-arrives":</text>
+  <text class="name" x="152" y="198">"2026-10-20"</text>
+
+  <text class="name" x="12" y="224">"form-1-ship":</text>
+  <text class="name" x="152" y="224">"beagle"</text>
+  <text class="name" x="12" y="244">"form-1-tonnage":</text>
+  <text class="name" x="152" y="244">"0"</text>
+  <text class="name" x="12" y="264">"form-1-arrives":</text>
+  <text class="name" x="152" y="264">"2026-10-21"</text>
+  <text class="name" x="12" y="284">"form-1-DELETE":</text>
+  <text class="name" x="152" y="284">"on"</text>
+
+  <!-- the brackets: which keys each reader reads -->
+  <path class="mark-line" d="M264 40.5 H272.5 V116.5 H264"/>
+  <path class="mark-line" d="M264 146.5 H272.5 V202.5 H264"/>
+  <path class="mark-line" d="M264 212.5 H272.5 V288.5 H264"/>
+
+  <!-- 1: the management form -->
+  <text class="strong" x="290" y="52">1</text>
+  <text x="310" y="52">the management form, prefix <tspan class="name mark">"form"</tspan>,</text>
+  <text x="310" y="72">reads these four keys:</text>
+  <text x="310" y="92"><tspan class="name">TOTAL_FORMS</tspan> 2, <tspan class="name">INITIAL_FORMS</tspan> 0;</text>
+  <text class="quiet" x="310" y="112">the other two unused</text>
+
+  <!-- 2: the count, which reads no key of its own -->
+  <text class="strong" x="290" y="135">2</text>
+  <text x="310" y="135">the count: the smaller of 2 and <tspan class="name">absolute_max</tspan>, 2000</text>
+
+  <!-- 3: each form, under its own prefix -->
+  <text class="strong" x="290" y="158">3</text>
+  <text x="310" y="158">form 0, prefix <tspan class="name mark">"form-0"</tspan>, reads only its own keys:</text>
+  <text x="310" y="178"><tspan class="name">ship</tspan> <tspan class="name">"Heron"</tspan>, <tspan class="name">tonnage</tspan> 120,</text>
+  <text x="310" y="198"><tspan class="name">arrives</tspan> 2026-10-20, <tspan class="name">DELETE</tspan> False</text>
+
+  <text x="310" y="224">form 1, prefix <tspan class="name mark">"form-1"</tspan>, reads only its own keys:</text>
+  <text x="310" y="244">an error, <tspan class="name">tonnage</tspan> below 1;</text>
+  <text x="310" y="264"><tspan class="name">DELETE</tspan> True, so the error is left out</text>
+
+  <!-- 4: the set as a whole -->
+  <text class="strong" x="290" y="310">4</text>
+  <text x="310" y="310"><tspan class="name">errors</tspan> <tspan class="name">[{}]</tspan>, for form 0 only;</text>
+  <text x="310" y="330"><tspan class="name">is_valid()</tspan> True; <tspan class="name">deleted_forms</tspan> [form 1]</text>
+</svg>

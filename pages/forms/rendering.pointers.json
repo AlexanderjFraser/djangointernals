@@ -1,0 +1,382 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "rendering.md",
+ "pointers": [
+  {
+   "pointer": "django/forms/renderers.py",
+   "line": 7,
+   "sentence": "A form, a bound field, a list of errors and a widget each draw themselves by handing a template's name and a context to a renderer, an object of `django/forms/renderers.py` that finds the template and renders it.",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    77
+   ],
+   "fingerprint": "d1980056cac1a4b3"
+  },
+  {
+   "pointer": "django/forms/templates/",
+   "line": 7,
+   "sentence": "`get_default_renderer` makes the one the setting `FORM_RENDERER` names, and the built-in templates under `django/forms/templates/` nest, the form's calling each field's.",
+   "tree": "django",
+   "path": "django/forms/templates/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "9252e03fdbbd6f3b"
+  },
+  {
+   "pointer": "django/forms/utils.py:RenderableMixin.render",
+   "line": 13,
+   "sentence": "`RenderableMixin.render`, called with no arguments, renders the object's `template_name` with the dictionary of its `get_context` through the object's own renderer, and marks the result safe; any of the three can be given instead (`django/forms/utils.py:RenderableMixin.render`).",
+   "tree": "django",
+   "path": "django/forms/utils.py",
+   "symbol": "RenderableMixin.render",
+   "kind": "function",
+   "lines": [
+    51,
+    55
+   ],
+   "fingerprint": "286728d492a8edd4"
+  },
+  {
+   "pointer": "django/forms/widgets.py:Widget._render",
+   "line": 15,
+   "sentence": "A widget has a method of its own, `Widget.render`, which hands its context to the renderer it is given, or to the default one ([Widgets: `Widget` and its subclasses](widgets.md)) (`django/forms/widgets.py:Widget._render`).",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "Widget._render",
+   "kind": "function",
+   "lines": [
+    378,
+    381
+   ],
+   "fingerprint": "9e4f4f4d046a39ce"
+  },
+  {
+   "pointer": "django/forms/utils.py:RenderableFormMixin",
+   "line": 17,
+   "sentence": "`RenderableFormMixin` adds `as_div`, `as_p`, `as_table` and `as_ul`, each rendering a name the class holds, such as `BaseForm.template_name_div` (`django/forms/utils.py:RenderableFormMixin`).",
+   "tree": "django",
+   "path": "django/forms/utils.py",
+   "symbol": "RenderableFormMixin",
+   "kind": "class",
+   "lines": [
+    84,
+    99
+   ],
+   "fingerprint": "777a833dc6f3e78d"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.template_name",
+   "line": 17,
+   "sentence": "`str(form)` renders `BaseForm.template_name`, a property that reads the renderer's form template (`django/forms/forms.py:BaseForm.template_name`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.template_name",
+   "kind": "function",
+   "lines": [
+    227,
+    229
+   ],
+   "at": 228,
+   "fingerprint": "e82f21aabdc5ff0b"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.__init__",
+   "line": 21,
+   "sentence": "`BaseForm.__init__` settles a form's renderer once: the argument; else the class's `BaseForm.default_renderer`, made an instance if it is a class; else what `get_default_renderer` returns (`django/forms/forms.py:BaseForm.__init__`).",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.__init__",
+   "kind": "function",
+   "lines": [
+    73,
+    134
+   ],
+   "fingerprint": "e47ea31886a1592d"
+  },
+  {
+   "pointer": "django/forms/boundfield.py:BoundField.as_widget",
+   "line": 21,
+   "sentence": "Its bound fields, error lists and labels use it, and the bound field hands it to the widget (`django/forms/boundfield.py:BoundField.as_widget`).",
+   "tree": "django",
+   "path": "django/forms/boundfield.py",
+   "symbol": "BoundField.as_widget",
+   "kind": "function",
+   "lines": [
+    85,
+    113
+   ],
+   "fingerprint": "b820c515b58f2870"
+  },
+  {
+   "pointer": "django/forms/renderers.py:get_default_renderer",
+   "line": 23,
+   "sentence": "The function is cached, so everything that falls back on it shares one renderer and one engine; under `DjangoTemplates` that engine's loader is the cached one, which keeps each template it has compiled (`django/forms/renderers.py:get_default_renderer`, `django/template/engine.py:Engine.__init__`).",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": "get_default_renderer",
+   "kind": "function",
+   "lines": [
+    11,
+    14
+   ],
+   "at": 12,
+   "fingerprint": "c35adbc84a135762"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.__init__",
+   "line": 23,
+   "sentence": "The function is cached, so everything that falls back on it shares one renderer and one engine; under `DjangoTemplates` that engine's loader is the cached one, which keeps each template it has compiled (`django/forms/renderers.py:get_default_renderer`, `django/template/engine.py:Engine.__init__`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.__init__",
+   "kind": "function",
+   "lines": [
+    20,
+    63
+   ],
+   "fingerprint": "3f85ac396a1880be"
+  },
+  {
+   "pointer": "django/forms/renderers.py:BaseRenderer",
+   "line": 29,
+   "sentence": "`django/forms/renderers.py:BaseRenderer` holds the names of the default templates, `BaseRenderer.form_template_name`, `BaseRenderer.formset_template_name` and `BaseRenderer.field_template_name`, and `BaseRenderer.bound_field_class`, the form's last resort for its class of bound field.",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": "BaseRenderer",
+   "kind": "class",
+   "lines": [
+    17,
+    29
+   ],
+   "fingerprint": "87f5ef4b967f0679"
+  },
+  {
+   "pointer": "django/forms/renderers.py:BaseRenderer.render",
+   "line": 29,
+   "sentence": "`BaseRenderer.render` renders the template with the context and an optional request and strips white space from both ends (`django/forms/renderers.py:BaseRenderer.render`); the blank lines inside a piece stay.",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": "BaseRenderer.render",
+   "kind": "function",
+   "lines": [
+    27,
+    29
+   ],
+   "fingerprint": "c19387a4b7da851e"
+  },
+  {
+   "pointer": "django/template/context.py:make_context",
+   "line": 31,
+   "sentence": "No caller in the forms library passes a request, so the backend renders with a plain context and no context processor runs for a form's templates under Django's renderers ([The context: `Context`, `RequestContext` and context processors](../templates/context.md)) (`django/template/context.py:make_context`, `django/template/backends/jinja2.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/context.py",
+   "symbol": "make_context",
+   "kind": "function",
+   "lines": [
+    290,
+    307
+   ],
+   "fingerprint": "072fb1a9abbcb9db"
+  },
+  {
+   "pointer": "django/template/backends/jinja2.py:Template.render",
+   "line": 31,
+   "sentence": "No caller in the forms library passes a request, so the backend renders with a plain context and no context processor runs for a form's templates under Django's renderers ([The context: `Context`, `RequestContext` and context processors](../templates/context.md)) (`django/template/context.py:make_context`, `django/template/backends/jinja2.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/backends/jinja2.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    64,
+    78
+   ],
+   "fingerprint": "39abce4922367d18"
+  },
+  {
+   "pointer": "django/forms/templates/",
+   "line": 35,
+   "sentence": "The renderers `DjangoTemplates` and `Jinja2` share `EngineMixin`, whose `EngineMixin.engine` is made on first use and kept on the renderer: an instance of the renderer's template backend, named `\"djangoforms\"`, with empty `\"OPTIONS\"`, `\"APP_DIRS\"` true, and in `\"DIRS\"` the directory beside `renderers.py` named after the backend's `app_dirname`: `django/forms/templates/`, or `django/forms/jinja2/`, templates of the same names in Jinja2's syntax (`django/forms/renderers.py:EngineMixin.engine`).",
+   "tree": "django",
+   "path": "django/forms/templates/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "9252e03fdbbd6f3b"
+  },
+  {
+   "pointer": "django/forms/jinja2/",
+   "line": 35,
+   "sentence": "The renderers `DjangoTemplates` and `Jinja2` share `EngineMixin`, whose `EngineMixin.engine` is made on first use and kept on the renderer: an instance of the renderer's template backend, named `\"djangoforms\"`, with empty `\"OPTIONS\"`, `\"APP_DIRS\"` true, and in `\"DIRS\"` the directory beside `renderers.py` named after the backend's `app_dirname`: `django/forms/templates/`, or `django/forms/jinja2/`, templates of the same names in Jinja2's syntax (`django/forms/renderers.py:EngineMixin.engine`).",
+   "tree": "django",
+   "path": "django/forms/jinja2/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "80fd87508fd9593a"
+  },
+  {
+   "pointer": "django/forms/renderers.py:EngineMixin.engine",
+   "line": 35,
+   "sentence": "The renderers `DjangoTemplates` and `Jinja2` share `EngineMixin`, whose `EngineMixin.engine` is made on first use and kept on the renderer: an instance of the renderer's template backend, named `\"djangoforms\"`, with empty `\"OPTIONS\"`, `\"APP_DIRS\"` true, and in `\"DIRS\"` the directory beside `renderers.py` named after the backend's `app_dirname`: `django/forms/templates/`, or `django/forms/jinja2/`, templates of the same names in Jinja2's syntax (`django/forms/renderers.py:EngineMixin.engine`).",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": "EngineMixin.engine",
+   "kind": "function",
+   "lines": [
+    36,
+    45
+   ],
+   "at": 37,
+   "fingerprint": "6647eb6e8ad7d254"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.__init__",
+   "line": 37,
+   "sentence": "Both backends search `\"DIRS\"` before the applications' directories (`django/template/engine.py:Engine.__init__`, `django/template/backends/base.py:BaseEngine.template_dirs`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.__init__",
+   "kind": "function",
+   "lines": [
+    20,
+    63
+   ],
+   "fingerprint": "3f85ac396a1880be"
+  },
+  {
+   "pointer": "django/template/backends/base.py:BaseEngine.template_dirs",
+   "line": 37,
+   "sentence": "Both backends search `\"DIRS\"` before the applications' directories (`django/template/engine.py:Engine.__init__`, `django/template/backends/base.py:BaseEngine.template_dirs`).",
+   "tree": "django",
+   "path": "django/template/backends/base.py",
+   "symbol": "BaseEngine.template_dirs",
+   "kind": "function",
+   "lines": [
+    59,
+    68
+   ],
+   "at": 60,
+   "fingerprint": "df384b8cf8b3d610"
+  },
+  {
+   "pointer": "django/forms/renderers.py:TemplatesSetting",
+   "line": 41,
+   "sentence": "`django/forms/renderers.py:TemplatesSetting` keeps no engine: it finds a template with `django.template.loader.get_template`, which asks each backend of `TEMPLATES` in turn (`django/forms/renderers.py:TemplatesSetting.get_template`, `django/template/loader.py:get_template`).",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": "TemplatesSetting",
+   "kind": "class",
+   "lines": [
+    70,
+    77
+   ],
+   "fingerprint": "0cbee1609161480c"
+  },
+  {
+   "pointer": "django/forms/renderers.py:TemplatesSetting.get_template",
+   "line": 41,
+   "sentence": "`django/forms/renderers.py:TemplatesSetting` keeps no engine: it finds a template with `django.template.loader.get_template`, which asks each backend of `TEMPLATES` in turn (`django/forms/renderers.py:TemplatesSetting.get_template`, `django/template/loader.py:get_template`).",
+   "tree": "django",
+   "path": "django/forms/renderers.py",
+   "symbol": "TemplatesSetting.get_template",
+   "kind": "function",
+   "lines": [
+    76,
+    77
+   ],
+   "fingerprint": "c5c2b52034013e0e"
+  },
+  {
+   "pointer": "django/template/loader.py:get_template",
+   "line": 41,
+   "sentence": "`django/forms/renderers.py:TemplatesSetting` keeps no engine: it finds a template with `django.template.loader.get_template`, which asks each backend of `TEMPLATES` in turn (`django/forms/renderers.py:TemplatesSetting.get_template`, `django/template/loader.py:get_template`).",
+   "tree": "django",
+   "path": "django/template/loader.py",
+   "symbol": "get_template",
+   "kind": "function",
+   "lines": [
+    5,
+    19
+   ],
+   "fingerprint": "b33402ea8c09d58e"
+  },
+  {
+   "pointer": "django/forms/forms.py:BaseForm.get_context",
+   "line": 45,
+   "sentence": "`BaseForm.get_context` gives the form's template four keys (`django/forms/forms.py:BaseForm.get_context`): `\"form\"`; `\"fields\"`, a pair for each visible field of its bound field and its errors; `\"hidden_fields\"`, the bound fields with hidden widgets; and `\"errors\"`, a copy of `BaseForm.non_field_errors` with each hidden field's errors added, in a run as `\"(Hidden field token) This field is required.\"`.",
+   "tree": "django",
+   "path": "django/forms/forms.py",
+   "symbol": "BaseForm.get_context",
+   "kind": "function",
+   "lines": [
+    231,
+    251
+   ],
+   "fingerprint": "516c17930c9ae5c8"
+  },
+  {
+   "pointer": "django/forms/templates/django/forms/div.html",
+   "line": 74,
+   "sentence": "`\"django/forms/div.html\"` prints the form's errors, then a `<div>` for each visible field holding the field's group, and the hidden fields inside the last, if there is one (`django/forms/templates/django/forms/div.html`).",
+   "tree": "django",
+   "path": "django/forms/templates/django/forms/div.html",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    15
+   ],
+   "fingerprint": "3e02521a51175cb9"
+  },
+  {
+   "pointer": "django/forms/boundfield.py:BoundField.template_name",
+   "line": 76,
+   "sentence": "The field's template is its own, if it was given one, or the renderer's (`django/forms/boundfield.py:BoundField.template_name`).",
+   "tree": "django",
+   "path": "django/forms/boundfield.py",
+   "symbol": "BoundField.template_name",
+   "kind": "function",
+   "lines": [
+    78,
+    80
+   ],
+   "at": 79,
+   "fingerprint": "11afdc373f0546d7"
+  },
+  {
+   "pointer": "django/forms/boundfield.py:BoundField.label_tag",
+   "line": 76,
+   "sentence": "The label is `BaseForm.template_name_label`, rendered by `BoundField.label_tag` through the form (`django/forms/boundfield.py:BoundField.label_tag`).",
+   "tree": "django",
+   "path": "django/forms/boundfield.py",
+   "symbol": "BoundField.label_tag",
+   "kind": "function",
+   "lines": [
+    167,
+    211
+   ],
+   "fingerprint": "c3b10428472c4bf9"
+  },
+  {
+   "pointer": "django/forms/utils.py:flatatt",
+   "line": 78,
+   "sentence": "`django/forms/utils.py:flatatt` does the same in Python, for a media asset's attributes among others, but sorts the names, puts the bare ones last and leaves out `None`, which a widget given `{\"placeholder\": None}` drew, in a run, as `placeholder=\"None\"`.",
+   "tree": "django",
+   "path": "django/forms/utils.py",
+   "symbol": "flatatt",
+   "kind": "function",
+   "lines": [
+    20,
+    42
+   ],
+   "fingerprint": "2622d1a70d0441f0"
+  }
+ ]
+}

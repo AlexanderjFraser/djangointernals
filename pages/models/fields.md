@@ -356,6 +356,6 @@ What a field takes from the class is `ChoicesType.choices`, a property of the me
 
 ## A form field, and lookups
 
-`Field.formfield` returns the form field for a model field, and a `ModelForm` gets its fields by calling it, unless it was given a callback to call in its place. The field classes override it to name their own form class (`django/db/models/fields/__init__.py:Field.formfield`) ([Forms](../forms.md)).
+`Field.formfield` returns the form field for a model field, and a `ModelForm` gets its fields by calling it, unless it was given a callback to call in its place. The field classes override it to name their own form class (`django/db/models/fields/__init__.py:Field.formfield`) ([Model forms: `ModelForm` and `fields_for_model`](../forms/model-forms.md)).
 
 `Field` inherits from `RegisterLookupMixin`, which makes a field class the place where lookups and transforms are registered. A lookup registered on a class with `RegisterLookupMixin.register_lookup` is found on that class and on every class built on it, which is how the lookups registered on `Field` itself, `"exact"` among them, come to work on every field (`django/db/models/query_utils.py:RegisterLookupMixin`) ([From QuerySet to SQL](../sql.md)).

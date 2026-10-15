@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 713">
+  <!-- two lanes, time running down: at the left the form, a box for each of the four calls;
+       at the right the model, the class Ship and then the instance endeavour, each a rule down the time
+       it is there; between them what crosses -->
+
+  <!-- 1: the class, once -->
+  <rect class="ground" x="0.5" y="0.5" width="400" height="116" rx="4"/>
+  <text class="name strong" x="12" y="20">class ShipForm(ModelForm)</text>
+  <text class="quiet small" x="12" y="38">once, by <tspan class="name small">ModelFormMetaclass</tspan></text>
+  <text class="name" x="12" y="62">fields_for_model(Ship,</text>
+  <text class="name" x="145" y="80">["name", "tonnage", "home"])</text>
+  <text x="12" y="104"><tspan class="name">CharField</tspan>, <tspan class="name">IntegerField</tspan>, <tspan class="name">ModelChoiceField</tspan></text>
+
+  <path class="line" d="M600.5 0.5 V116.5"/>
+  <text class="name strong" x="612" y="20">Ship</text>
+  <text x="612" y="62">each model field's <tspan class="name">formfield()</tspan></text>
+
+  <path class="line" d="M401 57.5 H590"/>
+  <polygon class="head" points="600,57.5 590,52.5 590,62.5"/>
+  <path class="line" d="M411 99.5 H600"/>
+  <polygon class="head" points="401,99.5 411,94.5 411,104.5"/>
+
+  <!-- the instance, the same one from here to the end -->
+  <path class="line" d="M600.5 136.5 V712.5"/>
+  <text class="name strong" x="612" y="156">endeavour</text>
+
+  <!-- 2: the form made with the instance -->
+  <rect class="ground" x="0.5" y="136.5" width="400" height="92" rx="4"/>
+  <text class="name strong" x="12" y="156">ShipForm(data, instance=endeavour)</text>
+  <text class="name quiet small" x="12" y="174">BaseModelForm.__init__</text>
+  <text x="12" y="198">initial</text>
+  <text class="name" x="60" y="198">{"name": "Endeavour",</text>
+  <text class="name" x="68" y="216">"tonnage": 366, "home": 1}</text>
+
+  <text class="name small" x="500" y="186" text-anchor="middle">model_to_dict(endeavour)</text>
+  <path class="line" d="M411 193.5 H600"/>
+  <polygon class="head" points="401,193.5 411,188.5 411,198.5"/>
+
+  <!-- 3: is_valid -->
+  <rect class="ground" x="0.5" y="248.5" width="400" height="352" rx="4"/>
+  <text class="name strong" x="12" y="268">form.is_valid()</text>
+  <text class="name quiet small" x="12" y="286">BaseForm.full_clean</text>
+  <text x="12" y="310">the fields cleaned; <tspan class="name">clean()</tspan>, where</text>
+  <text x="12" y="328"><tspan class="name">BaseModelForm.clean</tspan> sets two flags</text>
+
+  <rect class="box" x="12.5" y="342.5" width="376" height="246" rx="4"/>
+  <text class="name" x="24" y="362">BaseModelForm._post_clean</text>
+  <text class="name" x="24" y="386">_get_validation_exclusions</text>
+  <text x="24" y="404"><tspan class="name">{"id", "captain"}</tspan><tspan class="quiet small">  not on the form</tspan></text>
+
+  <!-- the cleaned values onto the instance, before it is validated -->
+  <text class="name small mark" x="500" y="425" text-anchor="middle">construct_instance</text>
+  <path class="mark-line" d="M389 432.5 H590"/>
+  <polygon class="head mark" points="600,432.5 590,427.5 590,437.5"/>
+  <text x="612" y="437">the cleaned values set on <tspan class="name">endeavour</tspan>, file fields last</text>
+
+  <path class="line" d="M389 456.5 H590"/>
+  <polygon class="head" points="600,456.5 590,451.5 590,461.5"/>
+  <text class="name" x="612" y="461">endeavour.full_clean(exclude,</text>
+  <text class="name" x="643" y="479">validate_unique=False,</text>
+  <text class="name" x="643" y="497">validate_constraints=False)</text>
+
+  <text class="name" x="24" y="521">validate_unique</text>
+  <text class="quiet small" x="149" y="521">if its flag is set</text>
+  <path class="line" d="M389 516.5 H590"/>
+  <polygon class="head" points="600,516.5 590,511.5 590,521.5"/>
+  <text x="612" y="521"><tspan class="name">Model.validate_unique(</tspan>exclusions anew<tspan class="name">)</tspan></text>
+
+  <text class="name" x="24" y="545">validate_constraints</text>
+  <text class="quiet small" x="188" y="545">if its flag is set</text>
+  <path class="line" d="M389 540.5 H590"/>
+  <polygon class="head" points="600,540.5 590,535.5 590,545.5"/>
+  <text x="612" y="545"><tspan class="name">Model.validate_constraints(</tspan>exclusions anew<tspan class="name">)</tspan></text>
+
+  <!-- the errors back to the form -->
+  <text class="small" x="500" y="565" text-anchor="middle">each <tspan class="name small">ValidationError</tspan></text>
+  <path class="line" d="M399 572.5 H600"/>
+  <polygon class="head" points="389,572.5 399,567.5 399,577.5"/>
+  <text class="name" x="24" y="577">_update_errors</text>
+  <path class="line" d="M141 572.5 H151"/>
+  <polygon class="head" points="161,572.5 151,567.5 151,577.5"/>
+  <text x="169" y="577">the form's errors</text>
+
+  <!-- 4: save, the row before the many-to-many values -->
+  <rect class="ground" x="0.5" y="620.5" width="400" height="92" rx="4"/>
+  <text class="name strong" x="12" y="640">form.save()</text>
+  <text class="name quiet small" x="12" y="658">BaseModelForm.save</text>
+  <path class="line" d="M401 653.5 H590"/>
+  <polygon class="head" points="600,653.5 590,648.5 590,658.5"/>
+  <text class="name" x="612" y="658">endeavour.save()</text>
+  <text x="12" y="682"><tspan class="name">BaseModelForm._save_m2m</tspan>: then the many-to-many values</text>
+  <text class="quiet small" x="12" y="700">(<tspan class="name small">ShipForm</tspan> has none)</text>
+</svg>
