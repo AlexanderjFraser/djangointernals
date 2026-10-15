@@ -135,4 +135,4 @@ JsonResponse([1, 2], safe=True)  ->  raises TypeError: In order to allow non-dic
 
 ## Responses that are more than this
 
-`StreamingHttpResponse` and `FileResponse` share the base class and not the body, and have [a section of their own](streaming.md). `TemplateResponse` is an `HttpResponse` whose content is not there yet: it holds a template and a context, and is rendered only after middleware has had the chance to change them; it belongs to [Templates](../templates.md) (`django/template/response.py:SimpleTemplateResponse`).
+`StreamingHttpResponse` and `FileResponse` share the base class and not the body, and have [a section of their own](streaming.md). `TemplateResponse` is an `HttpResponse` whose content is not there yet: it holds a template and a context, and is rendered only after middleware has had the chance to change them; it belongs to [`SimpleTemplateResponse` and `TemplateResponse`](../templates/responses.md) (`django/template/response.py:SimpleTemplateResponse`).

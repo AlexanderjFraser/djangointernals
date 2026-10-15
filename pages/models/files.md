@@ -125,7 +125,7 @@ A `FieldFile` compares by name. It equals another object that has a `name` when 
 
 A pickled `FieldFile` is its name, its instance and its field, which the comment in `FieldFile.__getstate__` gives as what it needs. The open file and the storage are left out and the flag is written as committed, and `__setstate__` takes the storage from the field again (`django/db/models/fields/files.py:FieldFile.__getstate__`).
 
-Its methods `save`, `delete` and `open` carry `alters_data = True`, the mark by which a template refuses to call a method ([Templates](../templates.md)).
+Its methods `save`, `delete` and `open` carry `alters_data = True`, the mark by which a template refuses to call a method ([Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md)).
 
 ## `FieldFile.save` and `FieldFile.delete`
 

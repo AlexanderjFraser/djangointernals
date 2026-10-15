@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 462">
+  <!-- the levels of a RequestContext drawn as a stack, level 0 at the bottom; each level is a plate holding
+       its dictionary and, under it, who put it there; the lookup runs down the left from the top to the bottom -->
+
+  <!-- the situation -->
+  <text x="0" y="14"><tspan class="name">fleet/port_detail.html</tspan>, rendered with a request,</text>
+  <text x="0" y="34">while the body of <tspan class="name">{% for ship in ships %}</tspan> renders;</text>
+  <text x="0" y="54">the engine's <tspan class="name">"context_processors"</tspan> lists <tspan class="name">django.template.context_processors.request</tspan></text>
+
+  <!-- the lookup: from the top down -->
+  <text x="0" y="88"><tspan class="strong">top</tspan><tspan class="quiet">: looked up first</tspan></text>
+  <path class="line" d="M8.5 100.5 V422.5"/>
+  <polygon class="head" points="8.5,432.5 3.5,422.5 13.5,422.5"/>
+  <text x="0" y="456"><tspan class="strong">bottom</tspan><tspan class="quiet">: looked up last</tspan></text>
+
+  <!-- 4: the loop's level -->
+  <rect class="box" x="28.5" y="100.5" width="617" height="60" rx="4"/>
+  <text class="strong" x="42" y="124">4</text>
+  <text x="66" y="124"><tspan class="name">{"forloop": {...}, "ship": </tspan><tspan class="quiet">the current ship</tspan><tspan class="name">}</tspan></text>
+  <text class="quiet small" x="66" y="144">pushed by <tspan class="name small">ForNode.render</tspan>, for the loop</text>
+
+  <!-- 3: the view's dictionary -->
+  <rect class="box" x="28.5" y="168.5" width="617" height="60" rx="4"/>
+  <text class="strong" x="42" y="192">3</text>
+  <text x="66" y="192"><tspan class="name">{"port": </tspan><tspan class="quiet">Valletta</tspan><tspan class="name">, "ships": [...]}</tspan></text>
+  <text class="quiet small" x="66" y="212">the view's dictionary, pushed last by <tspan class="name small">make_context</tspan></text>
+
+  <!-- 2: the level for new modifications -->
+  <rect class="box" x="28.5" y="236.5" width="617" height="60" rx="4"/>
+  <text class="strong" x="42" y="260">2</text>
+  <text class="name" x="66" y="260">{}</text>
+  <text class="quiet small" x="66" y="280">pushed by <tspan class="name small">RequestContext.__init__</tspan>, for names set while it is the top</text>
+
+  <!-- 1: the held place, which the processors' output fills: the figure's point -->
+  <rect class="mark-box" x="28.5" y="304.5" width="617" height="60" rx="4"/>
+  <text class="strong" x="42" y="328">1</text>
+  <text x="66" y="328"><tspan class="name">{"csrf_token": </tspan><tspan class="quiet">lazy</tspan><tspan class="name">, "request": </tspan><tspan class="quiet">the request</tspan><tspan class="name">}</tspan></text>
+  <text class="quiet small" x="66" y="348">the held place, filled by <tspan class="name small">RequestContext.bind_template</tspan> as the render began</text>
+
+  <!-- 0: the bottom level -->
+  <rect class="box" x="28.5" y="372.5" width="617" height="60" rx="4"/>
+  <text class="strong" x="42" y="396">0</text>
+  <text class="name" x="66" y="396">{"True": True, "False": False, "None": None}</text>
+  <text class="quiet small" x="66" y="416">made with every context by <tspan class="name small">BaseContext</tspan></text>
+</svg>

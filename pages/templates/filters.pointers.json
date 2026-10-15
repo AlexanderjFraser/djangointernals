@@ -1,0 +1,356 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "filters.md",
+ "pointers": [
+  {
+   "pointer": "django/template/defaultfilters.py",
+   "line": 7,
+   "sentence": "The built-in filters are the functions of `django/template/defaultfilters.py`, from `|upper` and `|date` to `|default` and `|length`, which every template has without `{% load %}`.",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    997
+   ],
+   "fingerprint": "040aeab122c4db17"
+  },
+  {
+   "pointer": "django/template/base.py:FilterExpression.resolve",
+   "line": 9,
+   "sentence": "The parser finds a filter by name when it compiles `{{ ship.name|upper }}`, and checks its arguments ([Variables and filters: `FilterExpression` and `Variable`](variables.md)); at render time `FilterExpression.resolve` passes the value through each filter in turn (`django/template/base.py:FilterExpression.resolve`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "FilterExpression.resolve",
+   "kind": "function",
+   "lines": [
+    803,
+    838
+   ],
+   "fingerprint": "d802b4ad01b64e59"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py",
+   "line": 13,
+   "sentence": "`django/template/defaultfilters.py` makes one `Library`, `register`, and decorates each filter with `Library.filter`, which stores it under its own name or the one given, as `escape_filter` is stored as `|escape`, and sets the flags it is given as attributes on it and, for a decorator such as `stringfilter` to read, on the innermost function under it (`django/template/library.py:Library.filter`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    997
+   ],
+   "fingerprint": "040aeab122c4db17"
+  },
+  {
+   "pointer": "django/template/library.py:Library.filter",
+   "line": 13,
+   "sentence": "`django/template/defaultfilters.py` makes one `Library`, `register`, and decorates each filter with `Library.filter`, which stores it under its own name or the one given, as `escape_filter` is stored as `|escape`, and sets the flags it is given as attributes on it and, for a decorator such as `stringfilter` to read, on the innermost function under it (`django/template/library.py:Library.filter`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.filter",
+   "kind": "function",
+   "lines": [
+    57,
+    99
+   ],
+   "fingerprint": "f77269b046134c6e"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:stringfilter",
+   "line": 15,
+   "sentence": "Most string filters also wear `stringfilter`, which calls `str` on the first argument, so that `|lower` works on a number's text, and marks the result safe when that argument was a `SafeData` and the function has `is_safe=True` (`django/template/defaultfilters.py:stringfilter`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "stringfilter",
+   "kind": "function",
+   "lines": [
+    38,
+    52
+   ],
+   "fingerprint": "998d3a4f61167d36"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:cut",
+   "line": 19,
+   "sentence": "`|upper`, `|urlencode` and `|wordcount` carry `is_safe=False`, and `|cut` no flag: it keeps its input's safety unless the text removed was `\";\"` (`django/template/defaultfilters.py:cut`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "cut",
+   "kind": "function",
+   "lines": [
+    441,
+    449
+   ],
+   "at": 443,
+   "fingerprint": "1be31590daec1e17"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:linebreaksbr",
+   "line": 41,
+   "sentence": "When it is on, each escapes what of its input is not safe, adds its markup, numbers or separator and returns the whole through `mark_safe`; called from Python, they escape by default (`django/template/defaultfilters.py:linebreaksbr`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "linebreaksbr",
+   "kind": "function",
+   "lines": [
+    497,
+    508
+   ],
+   "at": 499,
+   "fingerprint": "eff2d2ba95bf42b2"
+  },
+  {
+   "pointer": "django/utils/html.py:Urlizer",
+   "line": 55,
+   "sentence": "`|urlize` and `|urlizetrunc` call `django.utils.html.urlize` with `nofollow=True`, which splits the text at white space, quotes and angle brackets, trims each word's wrapping and trailing punctuation, and links what is left if it is an `\"http\"` or `\"https\"` URL, a name beginning `\"www.\"` or ending in one of the seven original top-level domains, or an email address, given `\"mailto:\"` and no `rel=\"nofollow\"` (`django/utils/html.py:Urlizer`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "Urlizer",
+   "kind": "class",
+   "lines": [
+    289,
+    495
+   ],
+   "fingerprint": "e0c508ceb1b014f2"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:floatformat",
+   "line": 68,
+   "sentence": "`floatformat` reads the value as a `decimal.Decimal`, through `str` or else `float`, and gives `\"\"` for what is not a number (`django/template/defaultfilters.py:floatformat`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "floatformat",
+   "kind": "function",
+   "lines": [
+    94,
+    220
+   ],
+   "at": 95,
+   "fingerprint": "aef53957bd84d194"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:_property_resolver",
+   "line": 83,
+   "sentence": "`dictsort` and `dictsortreversed` sort by a key that `_property_resolver` makes (`django/template/defaultfilters.py:_property_resolver`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "_property_resolver",
+   "kind": "function",
+   "lines": [
+    540,
+    575
+   ],
+   "fingerprint": "859e52e5b3f00b9d"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:length",
+   "line": 85,
+   "sentence": "`length` is `len`, or `0` (`django/template/defaultfilters.py:length`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "length",
+   "kind": "function",
+   "lines": [
+    633,
+    639
+   ],
+   "at": 634,
+   "fingerprint": "19df5ed5b452b8e1"
+  },
+  {
+   "pointer": "django/template/base.py:Variable._resolve_lookup",
+   "line": 85,
+   "sentence": "`|length` calls `QuerySet.__len__`, which fills the result cache, so a `{% for %}` over the same `QuerySet` sends no second query; a variable that ends in a method, as `{{ port.ship_set.all }}` does, gives a new `QuerySet`, and a new query, each time it is resolved (`django/template/base.py:Variable._resolve_lookup`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Variable._resolve_lookup",
+   "kind": "function",
+   "lines": [
+    965,
+    1045
+   ],
+   "fingerprint": "e7f5c1cb99dd5024"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.__getitem__",
+   "line": 85,
+   "sentence": "`|last` asks for index -1, which `QuerySet.__getitem__` refuses with `ValueError`, and as `last` catches only `IndexError`, the render fails (`django/db/models/query.py:QuerySet.__getitem__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.__getitem__",
+   "kind": "function",
+   "lines": [
+    500,
+    535
+   ],
+   "fingerprint": "ea3ae0d5e3b16582"
+  },
+  {
+   "pointer": "django/utils/dateformat.py",
+   "line": 89,
+   "sentence": "`date` and `time` format with the letters of PHP's date function (`django/utils/dateformat.py`).",
+   "tree": "django",
+   "path": "django/utils/dateformat.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    335
+   ],
+   "fingerprint": "bb5dc7ca9f2fbcd6"
+  },
+  {
+   "pointer": "django/utils/timezone.py:template_localtime",
+   "line": 89,
+   "sentence": "Their `expects_localtime=True` has `FilterExpression.resolve` first convert an aware datetime to the current time zone, unless `Context.use_tz`, or `USE_TZ` when that is unset, is false, as inside `{% localtime off %}`, or a filter of `{% load tz %}` such as `|utc` has converted it already (`django/utils/timezone.py:template_localtime`, `django/templatetags/tz.py:do_timezone`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "template_localtime",
+   "kind": "function",
+   "lines": [
+    146,
+    161
+   ],
+   "fingerprint": "f64dffda9947fd1c"
+  },
+  {
+   "pointer": "django/templatetags/tz.py:do_timezone",
+   "line": 89,
+   "sentence": "Their `expects_localtime=True` has `FilterExpression.resolve` first convert an aware datetime to the current time zone, unless `Context.use_tz`, or `USE_TZ` when that is unset, is false, as inside `{% localtime off %}`, or a filter of `{% load tz %}` such as `|utc` has converted it already (`django/utils/timezone.py:template_localtime`, `django/templatetags/tz.py:do_timezone`).",
+   "tree": "django",
+   "path": "django/templatetags/tz.py",
+   "symbol": "do_timezone",
+   "kind": "function",
+   "lines": [
+    37,
+    84
+   ],
+   "at": 38,
+   "fingerprint": "f60bfcce3495a933"
+  },
+  {
+   "pointer": "django/utils/formats.py:get_format",
+   "line": 91,
+   "sentence": "`date` passes its argument to `django.utils.formats.date_format`, which looks it up as a format's name, in the active language's format modules and then the format settings, and takes an argument that names none as the format itself (`django/utils/formats.py:get_format`).",
+   "tree": "django",
+   "path": "django/utils/formats.py",
+   "symbol": "get_format",
+   "kind": "function",
+   "lines": [
+    100,
+    141
+   ],
+   "fingerprint": "49f715b54e20a187"
+  },
+  {
+   "pointer": "django/utils/dateformat.py:Formatter.format",
+   "line": 91,
+   "sentence": "Both give `\"\"` for `None`, `\"\"` or a value without the parts its letters ask for; but a `datetime.date` asked for a time letter, as by `|date:\"H:i\"`, raises `TypeError`, which `date` does not catch, and the render fails (`django/utils/dateformat.py:Formatter.format`).",
+   "tree": "django",
+   "path": "django/utils/dateformat.py",
+   "symbol": "Formatter.format",
+   "kind": "function",
+   "lines": [
+    40,
+    52
+   ],
+   "fingerprint": "edab063f81b4d48f"
+  },
+  {
+   "pointer": "django/utils/timesince.py:timesince",
+   "line": 93,
+   "sentence": "`|timesince` and `|timeuntil` put the time between the value and the argument, or now, into words (`django/utils/timesince.py:timesince`).",
+   "tree": "django",
+   "path": "django/utils/timesince.py",
+   "symbol": "timesince",
+   "kind": "function",
+   "lines": [
+    28,
+    135
+   ],
+   "fingerprint": "f0ce7ad9c6975692"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:default",
+   "line": 97,
+   "sentence": "`default` returns `value or arg`, replacing any false value; `default_if_none` replaces only `None` (`django/template/defaultfilters.py:default`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "default",
+   "kind": "function",
+   "lines": [
+    841,
+    844
+   ],
+   "at": 842,
+   "fingerprint": "491dbb92e7c9c672"
+  },
+  {
+   "pointer": "django/template/base.py:FilterExpression.resolve",
+   "line": 97,
+   "sentence": "With it set, the string is returned at once and no filter runs (`django/template/base.py:FilterExpression.resolve`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "FilterExpression.resolve",
+   "kind": "function",
+   "lines": [
+    803,
+    838
+   ],
+   "fingerprint": "d802b4ad01b64e59"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:pluralize",
+   "line": 99,
+   "sentence": "`pluralize` takes a plural suffix, `\"s\"` by default, or a singular and a plural, `\"y,ies\"` (`django/template/defaultfilters.py:pluralize`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "pluralize",
+   "kind": "function",
+   "lines": [
+    943,
+    982
+   ],
+   "at": 944,
+   "fingerprint": "3ac537cf623d8f47"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:yesno",
+   "line": 101,
+   "sentence": "`|divisibleby` tells whether `int` of the value divides by `int` of the argument, and a value that is not a number ends the render (`django/template/defaultfilters.py:yesno`, `django/template/defaultfilters.py:divisibleby`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "yesno",
+   "kind": "function",
+   "lines": [
+    861,
+    892
+   ],
+   "at": 862,
+   "fingerprint": "80a38bcb82326240"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:divisibleby",
+   "line": 101,
+   "sentence": "`|divisibleby` tells whether `int` of the value divides by `int` of the argument, and a value that is not a number ends the render (`django/template/defaultfilters.py:yesno`, `django/template/defaultfilters.py:divisibleby`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "divisibleby",
+   "kind": "function",
+   "lines": [
+    855,
+    858
+   ],
+   "at": 856,
+   "fingerprint": "db3934b4cf4d665c"
+  }
+ ]
+}

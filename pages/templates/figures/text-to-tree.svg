@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 800 490">
+  <!-- three stages: the text across the top; under it, row for row, the flat list of tokens on the left
+       and the tree of nodes on the right, where a block tag and its end tag become one box around what lies between -->
+
+  <!-- the text -->
+  <text class="strong" x="0" y="14">the text</text>
+  <rect class="ground" x="0.5" y="28.5" width="799" height="60" rx="4"/>
+  <text class="name" x="13" y="52">&lt;h1&gt;{{ port.name }}&lt;/h1&gt;</text>
+  <text class="name" x="13" y="74">{% if ships %}&lt;ul&gt;{% for ship in ships %}&lt;li&gt;{{ ship.name|upper }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;{% endif %}</text>
+
+  <!-- the headings of the two columns -->
+  <text class="strong" x="0" y="122"><tspan class="name">Lexer.tokenize</tspan>: a flat list of tokens</text>
+  <text class="strong" x="320" y="122"><tspan class="name">Parser.parse</tspan>: a tree of nodes</text>
+
+  <!-- the tokens: one chip each, all alike; the block tokens in the accent -->
+  <rect class="box" x="0.5" y="136.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="152">TEXT</text>
+  <text class="name" x="61" y="152">"&lt;h1&gt;"</text>
+  <rect class="box" x="0.5" y="166.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="182">VAR</text>
+  <text class="name" x="61" y="182">"port.name"</text>
+  <rect class="box" x="0.5" y="196.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="212">TEXT</text>
+  <text class="name" x="61" y="212">"&lt;/h1&gt;\n"</text>
+  <rect class="mark-box" x="0.5" y="226.5" width="240" height="22" rx="4"/>
+  <text class="name small mark" x="13" y="242">BLOCK</text>
+  <text class="name" x="61" y="242">"if ships"</text>
+  <rect class="box" x="0.5" y="256.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="272">TEXT</text>
+  <text class="name" x="61" y="272">"&lt;ul&gt;"</text>
+  <rect class="mark-box" x="0.5" y="286.5" width="240" height="22" rx="4"/>
+  <text class="name small mark" x="13" y="302">BLOCK</text>
+  <text class="name" x="61" y="302">"for ship in ships"</text>
+  <rect class="box" x="0.5" y="316.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="332">TEXT</text>
+  <text class="name" x="61" y="332">"&lt;li&gt;"</text>
+  <rect class="box" x="0.5" y="346.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="362">VAR</text>
+  <text class="name" x="61" y="362">"ship.name|upper"</text>
+  <rect class="box" x="0.5" y="376.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="392">TEXT</text>
+  <text class="name" x="61" y="392">"&lt;/li&gt;"</text>
+  <rect class="mark-box" x="0.5" y="406.5" width="240" height="22" rx="4"/>
+  <text class="name small mark" x="13" y="422">BLOCK</text>
+  <text class="name" x="61" y="422">"endfor"</text>
+  <rect class="box" x="0.5" y="436.5" width="240" height="22" rx="4"/>
+  <text class="name small quiet" x="13" y="452">TEXT</text>
+  <text class="name" x="61" y="452">"&lt;/ul&gt;"</text>
+  <rect class="mark-box" x="0.5" y="466.5" width="240" height="22" rx="4"/>
+  <text class="name small mark" x="13" y="482">BLOCK</text>
+  <text class="name" x="61" y="482">"endif"</text>
+
+  <!-- the tree: the IfNode and the ForNode are boxes that each run from the row of a block tag to the row of its end tag -->
+  <!-- IfNode: from {% if ships %} to its end tag -->
+  <rect class="mark-box" x="320.5" y="226.5" width="479" height="262" rx="4"/>
+  <text class="name" x="333" y="242">IfNode</text>
+  <text class="name quiet" x="391.8" y="242">if ships</text>
+  <!-- ForNode: from {% for ship in ships %} to its end tag -->
+  <rect class="mark-box" x="338.5" y="286.5" width="443" height="142" rx="4"/>
+  <text class="name" x="351" y="302">ForNode</text>
+  <text class="name quiet" x="417.6" y="302">for ship in ships</text>
+
+  <!-- the other nodes, each a chip at its depth -->
+  <rect class="box" x="320.5" y="136.5" width="479" height="22" rx="4"/>
+  <text class="name" x="333" y="152">TextNode</text>
+  <text class="name quiet" x="405.4" y="152">"&lt;h1&gt;"</text>
+  <rect class="box" x="320.5" y="166.5" width="479" height="22" rx="4"/>
+  <text class="name" x="333" y="182">VariableNode</text>
+  <text class="name quiet" x="436.6" y="182">port.name</text>
+  <rect class="box" x="320.5" y="196.5" width="479" height="22" rx="4"/>
+  <text class="name" x="333" y="212">TextNode</text>
+  <text class="name quiet" x="405.4" y="212">"&lt;/h1&gt;\n"</text>
+  <rect class="box" x="338.5" y="256.5" width="443" height="22" rx="4"/>
+  <text class="name" x="351" y="272">TextNode</text>
+  <text class="name quiet" x="423.4" y="272">"&lt;ul&gt;"</text>
+  <rect class="box" x="356.5" y="316.5" width="407" height="22" rx="4"/>
+  <text class="name" x="369" y="332">TextNode</text>
+  <text class="name quiet" x="441.4" y="332">"&lt;li&gt;"</text>
+  <rect class="box" x="356.5" y="346.5" width="407" height="22" rx="4"/>
+  <text class="name" x="369" y="362">VariableNode</text>
+  <text class="name quiet" x="472.6" y="362">ship.name|upper</text>
+  <rect class="box" x="356.5" y="376.5" width="407" height="22" rx="4"/>
+  <text class="name" x="369" y="392">TextNode</text>
+  <text class="name quiet" x="441.4" y="392">"&lt;/li&gt;"</text>
+  <rect class="box" x="338.5" y="436.5" width="443" height="22" rx="4"/>
+  <text class="name" x="351" y="452">TextNode</text>
+  <text class="name quiet" x="423.4" y="452">"&lt;/ul&gt;"</text>
+
+  <!-- from each token to what it became; the end tags have no arrow, for they leave no node -->
+  <path class="line" d="M240.5 147.5 H310.5"/>
+  <polygon class="head" points="320.5,147.5 310.5,142.5 310.5,152.5"/>
+  <path class="line" d="M240.5 177.5 H310.5"/>
+  <polygon class="head" points="320.5,177.5 310.5,172.5 310.5,182.5"/>
+  <path class="line" d="M240.5 207.5 H310.5"/>
+  <polygon class="head" points="320.5,207.5 310.5,202.5 310.5,212.5"/>
+  <path class="mark-line" d="M240.5 237.5 H310.5"/>
+  <polygon class="head mark" points="320.5,237.5 310.5,232.5 310.5,242.5"/>
+  <path class="line" d="M240.5 267.5 H328.5"/>
+  <polygon class="head" points="338.5,267.5 328.5,262.5 328.5,272.5"/>
+  <path class="mark-line" d="M240.5 297.5 H328.5"/>
+  <polygon class="head mark" points="338.5,297.5 328.5,292.5 328.5,302.5"/>
+  <path class="line" d="M240.5 327.5 H346.5"/>
+  <polygon class="head" points="356.5,327.5 346.5,322.5 346.5,332.5"/>
+  <path class="line" d="M240.5 357.5 H346.5"/>
+  <polygon class="head" points="356.5,357.5 346.5,352.5 346.5,362.5"/>
+  <path class="line" d="M240.5 387.5 H346.5"/>
+  <polygon class="head" points="356.5,387.5 346.5,382.5 346.5,392.5"/>
+  <path class="line" d="M240.5 447.5 H328.5"/>
+  <polygon class="head" points="338.5,447.5 328.5,442.5 328.5,452.5"/>
+</svg>

@@ -106,7 +106,7 @@ The last line lists what one frame's dictionary holds. Besides the file, the fun
 
 **The view** is named by `get_caller`, from the request's `ResolverMatch` when there is one and by resolving the path again when there is not ([What the handler asks of a view](callable.md#how-a-view-is-named)).
 
-Some exceptions get sections of their own. For a `TemplateDoesNotExist` the report lists every place each engine looked. For an exception raised while a template was being compiled or rendered, the template engine, when its `"debug"` option is on, has attached the template's own source lines to the exception, and the report shows the failing line of the template above the Python traceback ([Templates](../templates.md)). And for a `UnicodeError` the HTML report adds a hint, the text around the place that could not be encoded or decoded.
+Some exceptions get sections of their own. For a `TemplateDoesNotExist` the report lists every place each engine looked. For an exception raised while a template was being compiled or rendered, the template engine, when its `"debug"` option is on, has attached the template's own source lines to the exception, and the report shows the failing line of the template above the Python traceback ([Template errors and debug information](../templates/debugging.md)). And for a `UnicodeError` the HTML report adds a hint, the text around the place that could not be encoded or decoded.
 
 ## Two templates, read from disk each time
 

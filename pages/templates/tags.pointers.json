@@ -1,0 +1,582 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "tags.md",
+ "pointers": [
+  {
+   "pointer": "django/template/smartif.py",
+   "line": 7,
+   "sentence": "The built-in tags of `django.template.defaulttags` are in every Django template without `{% load %}`: how `{% for %}` builds its loop variables, `{% if %}` parses a condition with `django/template/smartif.py` and `{% url %}` reverses a name, and how `{% cycle %}`, `{% ifchanged %}`, `{% regroup %}` and `{% querystring %}` work.",
+   "tree": "django",
+   "path": "django/template/smartif.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    220
+   ],
+   "fingerprint": "3269ca7062842c19"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.__init__",
+   "line": 9,
+   "sentence": "The module is one of the three libraries every `Engine` gives each parser before the first token (`django/template/engine.py:Engine.__init__`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.__init__",
+   "kind": "function",
+   "lines": [
+    20,
+    63
+   ],
+   "fingerprint": "3f85ac396a1880be"
+  },
+  {
+   "pointer": "django/template/base.py:Node",
+   "line": 9,
+   "sentence": "Each tag in it but two is written there as a compile function and a subclass of `Node` (`django/template/base.py:Node`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Node",
+   "kind": "class",
+   "lines": [
+    1048,
+    1099
+   ],
+   "fingerprint": "45a9be1673961341"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:do_for",
+   "line": 13,
+   "sentence": "`do_for` reads `{% for ship in ships %}` at compile time: at least four words, an optional last word `reversed`, loop variables split on commas, the sequence as a filter expression, the body up to `{% empty %}` or `{% endfor %}` (`django/template/defaulttags.py:do_for`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "do_for",
+   "kind": "function",
+   "lines": [
+    807,
+    906
+   ],
+   "at": 808,
+   "fingerprint": "acb4d4405a8f5821"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:ForNode.render",
+   "line": 13,
+   "sentence": "`ForNode.render` then works in this order (`django/template/defaulttags.py:ForNode.render`):",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "ForNode.render",
+   "kind": "function",
+   "lines": [
+    191,
+    256
+   ],
+   "fingerprint": "baec01f8c0647928"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 25,
+   "sentence": "`{{ forloop.length }}` is new (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:do_if",
+   "line": 29,
+   "sentence": "`do_if` parses the condition of `{% if %}` and of each `{% elif %}`, and each branch up to the next clause, into an `IfNode` of pairs, a condition and a node list; `{% else %}` has `None` for its condition (`django/template/defaulttags.py:do_if`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "do_if",
+   "kind": "function",
+   "lines": [
+    932,
+    1020
+   ],
+   "at": 933,
+   "fingerprint": "1a13f5815c780b3d"
+  },
+  {
+   "pointer": "django/template/smartif.py",
+   "line": 31,
+   "sentence": "The condition is parsed by `django/template/smartif.py`, a top-down operator-precedence parser.",
+   "tree": "django",
+   "path": "django/template/smartif.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    220
+   ],
+   "fingerprint": "3269ca7062842c19"
+  },
+  {
+   "pointer": "django/template/smartif.py:infix",
+   "line": 31,
+   "sentence": "`OPERATORS` holds a class for each operator, made by `infix` or `prefix` from a power and a function: `\"or\"` at 6, `\"and\"` at 7, the prefix `\"not\"` at 8, `\"in\"` and `\"not in\"` at 9, and `\"is\"`, `\"is not\"` and the six comparisons at 10 (`django/template/smartif.py:infix`).",
+   "tree": "django",
+   "path": "django/template/smartif.py",
+   "symbol": "infix",
+   "kind": "function",
+   "lines": [
+    45,
+    69
+   ],
+   "fingerprint": "1fe5e98abc55f879"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:TemplateIfParser",
+   "line": 33,
+   "sentence": "`IfParser.__init__` joins `is` `not` and `not` `in` into single tokens and makes each word a fresh operator or, failing that, an operand, which `TemplateIfParser` makes a `TemplateLiteral` around a compiled filter expression, so `ships|length` is one operand (`django/template/defaulttags.py:TemplateIfParser`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "TemplateIfParser",
+   "kind": "class",
+   "lines": [
+    921,
+    929
+   ],
+   "fingerprint": "28e3073250628439"
+  },
+  {
+   "pointer": "django/template/smartif.py:IfParser.expression",
+   "line": 33,
+   "sentence": "An operator's `led` parses its right side with its own power, so equal powers group to the left (`django/template/smartif.py:IfParser.expression`).",
+   "tree": "django",
+   "path": "django/template/smartif.py",
+   "symbol": "IfParser.expression",
+   "kind": "function",
+   "lines": [
+    209,
+    217
+   ],
+   "fingerprint": "ac3e8215219f0956"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:IfNode.render",
+   "line": 37,
+   "sentence": "`IfNode.render` renders the first branch whose condition holds (`django/template/defaulttags.py:IfNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "IfNode.render",
+   "kind": "function",
+   "lines": [
+    322,
+    335
+   ],
+   "fingerprint": "e3e08f485601c02c"
+  },
+  {
+   "pointer": "django/template/smartif.py:infix",
+   "line": 37,
+   "sentence": "An operator evaluates its operands in its function, so `and` and `or` stop early, and turns any exception into `False`; a comment in `infix` says a template should not raise while rendering (`django/template/smartif.py:infix`).",
+   "tree": "django",
+   "path": "django/template/smartif.py",
+   "symbol": "infix",
+   "kind": "function",
+   "lines": [
+    45,
+    69
+   ],
+   "fingerprint": "1fe5e98abc55f879"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:url",
+   "line": 43,
+   "sentence": "`{% url %}` compiles its first argument, the name, as a filter expression, so it may be quoted or a variable; takes `as` and a name off the end; and makes each other word a keyword argument, `pk=port.pk`, or a positional one, by `kwarg_re` (`django/template/defaulttags.py:url`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "url",
+   "kind": "function",
+   "lines": [
+    1514,
+    1584
+   ],
+   "at": 1515,
+   "fingerprint": "2651bcbaaeb44d2b"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:URLNode.render",
+   "line": 43,
+   "sentence": "`URLNode.render` resolves them and calls `reverse` ([Reversing a name](../urls/reversing.md)) with a current application from the context's request: its attribute `\"current_app\"`, else the namespace of `HttpRequest.resolver_match` ([Namespaces](../urls/namespaces.md#where-the-current-application-comes-from)) (`django/template/defaulttags.py:URLNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "URLNode.render",
+   "kind": "function",
+   "lines": [
+    494,
+    522
+   ],
+   "fingerprint": "5ef0c50901620bf9"
+  },
+  {
+   "pointer": "django/template/base.py:token_kwargs",
+   "line": 47,
+   "sentence": "`{% with total=port.ships|length %}` pushes a level holding its names until `{% endwith %}`; `do_with` reads the pairs, or the older `port.ships|length as total`, with `token_kwargs` (`django/template/base.py:token_kwargs`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "token_kwargs",
+   "kind": "function",
+   "lines": [
+    1180,
+    1224
+   ],
+   "fingerprint": "d6b478f7246b5fb1"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:WithNode.render",
+   "line": 47,
+   "sentence": "Every value is resolved before the push, so `{% with a=1 b=a %}` gives b the a from outside, and a missing variable in one becomes `\"string_if_invalid\"` (`django/template/defaulttags.py:WithNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "WithNode.render",
+   "kind": "function",
+   "lines": [
+    578,
+    581
+   ],
+   "fingerprint": "e7532c19288a2b97"
+  },
+  {
+   "pointer": "django/template/context.py:BaseContext.__setitem__",
+   "line": 49,
+   "sentence": "Given `as` and a name, `{% url %}`, `{% firstof %}`, `{% now %}`, `{% widthratio %}` and the simple tags assign it in the context's top level, as `{% regroup %}` does (`django/template/context.py:BaseContext.__setitem__`): set inside `{% for %}`, `{% with %}` or `{% block %}`, it is gone after the end tag, and inside `{% if %}`, which pushes nothing, it outlasts it.",
+   "tree": "django",
+   "path": "django/template/context.py",
+   "symbol": "BaseContext.__setitem__",
+   "kind": "function",
+   "lines": [
+    67,
+    69
+   ],
+   "fingerprint": "5af26f1c7b0c8d64"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:CycleNode.render",
+   "line": 53,
+   "sentence": "`CycleNode` keeps its place in the render context under the node itself: an iterator cycling through its compiled values, made at its first render (`django/template/defaulttags.py:CycleNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "CycleNode.render",
+   "kind": "function",
+   "lines": [
+    104,
+    114
+   ],
+   "fingerprint": "e33ad945af3d939f"
+  },
+  {
+   "pointer": "django/template/base.py:Template.render",
+   "line": 53,
+   "sentence": "`Template.render` gives the render context a fresh level, and `{% include %}` renders its template that way each time ([Rendering: nodes and the render context](rendering.md)), so `{% cycle 'odd' 'even' %}` in a template included once for each of three ships renders `\"odd\"` all three times (`django/template/base.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    169,
+    177
+   ],
+   "fingerprint": "47f2bfece1d1bd14"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:cycle",
+   "line": 55,
+   "sentence": "Named nodes are kept on the parser, so a name holds within one template; `{% cycle row %}` returns the same node, and every use advances it (`django/template/defaulttags.py:cycle`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "cycle",
+   "kind": "function",
+   "lines": [
+    611,
+    701
+   ],
+   "at": 612,
+   "fingerprint": "d0f8dcb415b85c90"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:resetcycle",
+   "line": 55,
+   "sentence": "`{% resetcycle %}` gives a fresh iterator to the named node or, with no name, to the last cycle tag before it that declared values (`django/template/defaulttags.py:resetcycle`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "resetcycle",
+   "kind": "function",
+   "lines": [
+    1420,
+    1443
+   ],
+   "at": 1421,
+   "fingerprint": "1ec204ad9a966d45"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:IfChangedNode.render",
+   "line": 59,
+   "sentence": "`IfChangedNode` renders its body when its arguments' values, or with none its rendered body, differ from last time, and otherwise its `{% else %}` branch or nothing (`django/template/defaulttags.py:IfChangedNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "IfChangedNode.render",
+   "kind": "function",
+   "lines": [
+    267,
+    290
+   ],
+   "fingerprint": "8d32a3d8142fa3ed"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:IfChangedNode._get_context_stack_frame",
+   "line": 59,
+   "sentence": "It keeps the last values under the node in the loop's `\"forloop\"` dictionary, which is new each time the loop starts, so in a nested loop the comparison starts over on each pass of the outer one; outside a loop, in the render context (`django/template/defaulttags.py:IfChangedNode._get_context_stack_frame`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "IfChangedNode._get_context_stack_frame",
+   "kind": "function",
+   "lines": [
+    292,
+    304
+   ],
+   "fingerprint": "e5946a48ab495bdc"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:regroup",
+   "line": 63,
+   "sentence": "The key is compiled as the variable `{{ kinds.kind }}`, and each ship is put in the context under kinds while its key resolves: a hack, its comment says, for want of a getattr that works through the context (`django/template/defaulttags.py:regroup`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "regroup",
+   "kind": "function",
+   "lines": [
+    1352,
+    1417
+   ],
+   "at": 1353,
+   "fingerprint": "eba97cc29c297dfc"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:RegroupNode.render",
+   "line": 63,
+   "sentence": "Each is a `GroupedResult` of `\"grouper\"` and `\"list\"`; a missing list gives no groups (`django/template/defaulttags.py:RegroupNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "RegroupNode.render",
+   "kind": "function",
+   "lines": [
+    373,
+    387
+   ],
+   "fingerprint": "9623035998c72fc7"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:querystring",
+   "line": 67,
+   "sentence": "`querystring` is a simple tag that takes the context (`django/template/defaulttags.py:querystring`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "querystring",
+   "kind": "function",
+   "lines": [
+    1286,
+    1349
+   ],
+   "at": 1287,
+   "fingerprint": "c124c7a8cbce92fd"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 69,
+   "sentence": "The `\"?\"` is always there, and several positional mappings are allowed (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:FirstOfNode",
+   "line": 75,
+   "sentence": "| `{% firstof %}` | the first true argument, escaped when autoescaping is on | `django/template/defaulttags.py:FirstOfNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "FirstOfNode",
+   "kind": "class",
+   "lines": [
+    148,
+    163
+   ],
+   "fingerprint": "d6791330c637a367"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:now",
+   "line": 76,
+   "sentence": "| `{% now %}` | the time now, through the date filter; its argument is not resolved, only stripped of its first and last characters | `django/template/defaulttags.py:now` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "now",
+   "kind": "function",
+   "lines": [
+    1181,
+    1201
+   ],
+   "at": 1182,
+   "fingerprint": "3dbae3c84a70ce29"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:SpacelessNode",
+   "line": 77,
+   "sentence": "| `{% spaceless %}` | the body with white space between tags, and at its ends, removed | `django/template/defaulttags.py:SpacelessNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "SpacelessNode",
+   "kind": "class",
+   "lines": [
+    447,
+    454
+   ],
+   "fingerprint": "57d12c94ae98a5c7"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:verbatim",
+   "line": 78,
+   "sentence": "| `{% verbatim %}` | the body as text, which the lexer left unparsed | `django/template/defaulttags.py:verbatim` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "verbatim",
+   "kind": "function",
+   "lines": [
+    1587,
+    1607
+   ],
+   "at": 1588,
+   "fingerprint": "cd1c5dc7dc1ca24f"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:TemplateTagNode",
+   "line": 79,
+   "sentence": "| `{% templatetag %}` | a delimiter of the syntax, by name | `django/template/defaulttags.py:TemplateTagNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "TemplateTagNode",
+   "kind": "class",
+   "lines": [
+    457,
+    473
+   ],
+   "fingerprint": "6947a2078ac5edb4"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:WidthRatioNode",
+   "line": 80,
+   "sentence": "| `{% widthratio %}` | a value over a maximum, times a width, rounded half to even | `django/template/defaulttags.py:WidthRatioNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "WidthRatioNode",
+   "kind": "class",
+   "lines": [
+    533,
+    563
+   ],
+   "fingerprint": "a2599b396b761b9a"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:do_filter",
+   "line": 81,
+   "sentence": "| `{% filter %}` | the body through filters, refusing the escape and safe filters | `django/template/defaulttags.py:do_filter` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "do_filter",
+   "kind": "function",
+   "lines": [
+    724,
+    755
+   ],
+   "at": 725,
+   "fingerprint": "15e35b06d07969bd"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:LoremNode",
+   "line": 82,
+   "sentence": "| `{% lorem %}` | placeholder Latin | `django/template/defaulttags.py:LoremNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "LoremNode",
+   "kind": "class",
+   "lines": [
+    338,
+    355
+   ],
+   "fingerprint": "3d375ac3496d6364"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:DebugNode",
+   "line": 83,
+   "sentence": "| `{% debug %}` | the context and the loaded modules, when `settings.DEBUG` is true ([Template errors and debug information](debugging.md)) | `django/template/defaulttags.py:DebugNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "DebugNode",
+   "kind": "class",
+   "lines": [
+    123,
+    133
+   ],
+   "fingerprint": "a18af70d9be94844"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:comment",
+   "line": 84,
+   "sentence": "| `{% comment %}` | nothing: the parser skips to `{% endcomment %}` unparsed | `django/template/defaulttags.py:comment` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "comment",
+   "kind": "function",
+   "lines": [
+    602,
+    608
+   ],
+   "at": 603,
+   "fingerprint": "ca3323431f597ee0"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:CsrfTokenNode",
+   "line": 85,
+   "sentence": "| `{% csrf_token %}` | a hidden input holding the CSRF context processor's token, or nothing when the context has none | `django/template/defaulttags.py:CsrfTokenNode` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "CsrfTokenNode",
+   "kind": "class",
+   "lines": [
+    73,
+    95
+   ],
+   "fingerprint": "c15ee26e39726bd6"
+  },
+  {
+   "pointer": "django/utils/csp.py:nonce_attr",
+   "line": 86,
+   "sentence": "| `{% csp_nonce_attr %}` | a simple tag: `nonce=\"…\"` from the nonce of `django.template.context_processors.csp`, or nothing; given a form's media, its tags carrying that nonce | `django/utils/csp.py:nonce_attr` |",
+   "tree": "django",
+   "path": "django/utils/csp.py",
+   "symbol": "nonce_attr",
+   "kind": "function",
+   "lines": [
+    84,
+    90
+   ],
+   "fingerprint": "c60887ce72a1e513"
+  }
+ ]
+}

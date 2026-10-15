@@ -1,0 +1,421 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "engines.md",
+ "pointers": [
+  {
+   "pointer": "django/template/utils.py:EngineHandler.templates",
+   "line": 31,
+   "sentence": "`EngineHandler.templates` reads the setting at its first use and keeps a dictionary from each entry's **name** to the entry with its defaults filled in (`django/template/utils.py:EngineHandler.templates`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.templates",
+   "kind": "function",
+   "lines": [
+    25,
+    65
+   ],
+   "at": 26,
+   "fingerprint": "3a28f74f3d2b5f7d"
+  },
+  {
+   "pointer": "django/template/utils.py:EngineHandler.__getitem__",
+   "line": 35,
+   "sentence": "`engines[\"django\"]` returns the backend already made under that name, or finds the entry, copies it, takes `\"BACKEND\"` out, imports that class and calls it with the rest, and keeps the backend (`django/template/utils.py:EngineHandler.__getitem__`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.__getitem__",
+   "kind": "function",
+   "lines": [
+    67,
+    88
+   ],
+   "fingerprint": "fb1491113fd312c3"
+  },
+  {
+   "pointer": "django/template/loader.py:get_template",
+   "line": 41,
+   "sentence": "`get_template` asks each backend for the name in the order of `TEMPLATES` and returns the first template it gets (`django/template/loader.py:get_template`).",
+   "tree": "django",
+   "path": "django/template/loader.py",
+   "symbol": "get_template",
+   "kind": "function",
+   "lines": [
+    5,
+    19
+   ],
+   "fingerprint": "b33402ea8c09d58e"
+  },
+  {
+   "pointer": "django/template/loader.py:select_template",
+   "line": 41,
+   "sentence": "`select_template` does the same for a list of names, asking every backend for the first name before any for the second, and refuses a single string with a `TypeError` (`django/template/loader.py:select_template`).",
+   "tree": "django",
+   "path": "django/template/loader.py",
+   "symbol": "select_template",
+   "kind": "function",
+   "lines": [
+    22,
+    49
+   ],
+   "fingerprint": "5cfdfa15343a429e"
+  },
+  {
+   "pointer": "django/template/loader.py:render_to_string",
+   "line": 41,
+   "sentence": "`render_to_string` calls `select_template` for a list or tuple and `get_template` otherwise, and renders the template with the dictionary and the request (`django/template/loader.py:render_to_string`); `django.shortcuts.render` puts the result in a response ([The shortcuts](../views/shortcuts.md)).",
+   "tree": "django",
+   "path": "django/template/loader.py",
+   "symbol": "render_to_string",
+   "kind": "function",
+   "lines": [
+    52,
+    62
+   ],
+   "fingerprint": "c59b71870a6c5746"
+  },
+  {
+   "pointer": "django/template/loader.py:_engine_list",
+   "line": 41,
+   "sentence": "Given `using=\"jinja2\"`, they ask only that backend; otherwise they take `EngineHandler.all`, which makes every backend not yet made (`django/template/loader.py:_engine_list`).",
+   "tree": "django",
+   "path": "django/template/loader.py",
+   "symbol": "_engine_list",
+   "kind": "function",
+   "lines": [
+    65,
+    66
+   ],
+   "fingerprint": "f380d717fa2815f2"
+  },
+  {
+   "pointer": "django/template/backends/base.py:BaseEngine.__init__",
+   "line": 45,
+   "sentence": "`BaseEngine.__init__` keeps `\"NAME\"`, `\"DIRS\"` and `\"APP_DIRS\"` and refuses any other key with `ImproperlyConfigured`; Django's backends take `\"OPTIONS\"` out first, so what is refused is a key such as `\"DIR\"` for `\"DIRS\"` (`django/template/backends/base.py:BaseEngine.__init__`).",
+   "tree": "django",
+   "path": "django/template/backends/base.py",
+   "symbol": "BaseEngine.__init__",
+   "kind": "function",
+   "lines": [
+    11,
+    24
+   ],
+   "fingerprint": "accc66f2552c0c5d"
+  },
+  {
+   "pointer": "django/core/checks/templates.py:check_templates",
+   "line": 45,
+   "sentence": "`BaseEngine.check` returns no messages; the system check `check_templates` calls it on every backend (`django/core/checks/templates.py:check_templates`) ([The system checks](../commands/checks.md)).",
+   "tree": "django",
+   "path": "django/core/checks/templates.py",
+   "symbol": "check_templates",
+   "kind": "function",
+   "lines": [
+    4,
+    12
+   ],
+   "at": 5,
+   "fingerprint": "44fa45b45642667f"
+  },
+  {
+   "pointer": "django/template/backends/base.py:BaseEngine.template_dirs",
+   "line": 47,
+   "sentence": "The first is the directories of `\"DIRS\"`, then, with `\"APP_DIRS\"`, each installed application's subdirectory named by `BaseEngine.app_dirname` (`\"templates\"`, `\"jinja2\"` and `\"template_strings\"` for Django's three), which raises `ImproperlyConfigured` unless the backend overrides it (`django/template/backends/base.py:BaseEngine.template_dirs`).",
+   "tree": "django",
+   "path": "django/template/backends/base.py",
+   "symbol": "BaseEngine.template_dirs",
+   "kind": "function",
+   "lines": [
+    59,
+    68
+   ],
+   "at": 60,
+   "fingerprint": "df384b8cf8b3d610"
+  },
+  {
+   "pointer": "django/template/backends/base.py:BaseEngine.iter_template_filenames",
+   "line": 47,
+   "sentence": "The second joins each directory with the name through `safe_join`, skipping a join that lands outside it, to avoid directory traversal attacks, its docstring says (`django/template/backends/base.py:BaseEngine.iter_template_filenames`).",
+   "tree": "django",
+   "path": "django/template/backends/base.py",
+   "symbol": "BaseEngine.iter_template_filenames",
+   "kind": "function",
+   "lines": [
+    70,
+    83
+   ],
+   "fingerprint": "6115ecb32ee20e39"
+  },
+  {
+   "pointer": "django/template/backends/django.py:DjangoTemplates.__init__",
+   "line": 51,
+   "sentence": "`DjangoTemplates.__init__` turns an entry into an `Engine` (`django/template/backends/django.py:DjangoTemplates.__init__`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "DjangoTemplates.__init__",
+   "kind": "function",
+   "lines": [
+    19,
+    28
+   ],
+   "fingerprint": "7038b81e8184db54"
+  },
+  {
+   "pointer": "django/template/backends/django.py:DjangoTemplates.check",
+   "line": 51,
+   "sentence": "`DjangoTemplates.check` reports a `\"string_if_invalid\"` that is not a string, `\"templates.E002\"`, and one library name given to two modules, `\"templates.W003\"` (`django/template/backends/django.py:DjangoTemplates.check`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "DjangoTemplates.check",
+   "kind": "function",
+   "lines": [
+    30,
+    34
+   ],
+   "fingerprint": "7b6a9da1cfee5517"
+  },
+  {
+   "pointer": "django/template/base.py:Template",
+   "line": 53,
+   "sentence": "`DjangoTemplates.get_template` wraps what `Engine.get_template` returns, a compiled `django/template/base.py:Template` or, for a name such as `\"fleet/port_detail.html#ship_row\"`, a `PartialTemplate`, in the backend's `django/template/backends/django.py:Template`, which keeps the backend and passes `origin` through.",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template",
+   "kind": "class",
+   "lines": [
+    142,
+    292
+   ],
+   "fingerprint": "5d6e635dcfca813d"
+  },
+  {
+   "pointer": "django/template/backends/django.py:Template",
+   "line": 53,
+   "sentence": "`DjangoTemplates.get_template` wraps what `Engine.get_template` returns, a compiled `django/template/base.py:Template` or, for a name such as `\"fleet/port_detail.html#ship_row\"`, a `PartialTemplate`, in the backend's `django/template/backends/django.py:Template`, which keeps the backend and passes `origin` through.",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "Template",
+   "kind": "class",
+   "lines": [
+    93,
+    109
+   ],
+   "fingerprint": "2d90f308cb7ddf83"
+  },
+  {
+   "pointer": "django/template/backends/django.py:Template.render",
+   "line": 53,
+   "sentence": "Its `render` has `make_context` make a `Context` of the dictionary, or a `RequestContext` given the request, with the engine's `\"autoescape\"`; a `Context` passed instead is refused (`django/template/backends/django.py:Template.render`, `django/template/context.py:make_context`) ([The context: `Context`, `RequestContext` and context processors](context.md)).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    102,
+    109
+   ],
+   "fingerprint": "ddf08419a37420ba"
+  },
+  {
+   "pointer": "django/template/context.py:make_context",
+   "line": 53,
+   "sentence": "Its `render` has `make_context` make a `Context` of the dictionary, or a `RequestContext` given the request, with the engine's `\"autoescape\"`; a `Context` passed instead is refused (`django/template/backends/django.py:Template.render`, `django/template/context.py:make_context`) ([The context: `Context`, `RequestContext` and context processors](context.md)).",
+   "tree": "django",
+   "path": "django/template/context.py",
+   "symbol": "make_context",
+   "kind": "function",
+   "lines": [
+    290,
+    307
+   ],
+   "fingerprint": "072fb1a9abbcb9db"
+  },
+  {
+   "pointer": "django/template/exceptions.py:TemplateDoesNotExist",
+   "line": 57,
+   "sentence": "`TemplateDoesNotExist` carries, besides its message, `tried`, pairs of an origin and why it did not serve; `backend`; and `chain`, other such exceptions (`django/template/exceptions.py:TemplateDoesNotExist`).",
+   "tree": "django",
+   "path": "django/template/exceptions.py",
+   "symbol": "TemplateDoesNotExist",
+   "kind": "class",
+   "lines": [
+    9,
+    36
+   ],
+   "fingerprint": "ce7addd956fb640b"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.find_template",
+   "line": 57,
+   "sentence": "`Engine.find_template` raises one with every loader's `tried` (`django/template/engine.py:Engine.find_template`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.find_template",
+   "kind": "function",
+   "lines": [
+    155,
+    163
+   ],
+   "fingerprint": "a6a401e6214951d4"
+  },
+  {
+   "pointer": "django/template/backends/django.py:reraise",
+   "line": 57,
+   "sentence": "`DjangoTemplates.get_template` raises it again through `reraise`, as a copy that names the backend, raised from the original, and the wrapper's `render` does the same for one raised while rendering, as by `{% include %}` (`django/template/backends/django.py:reraise`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "reraise",
+   "kind": "function",
+   "lines": [
+    125,
+    130
+   ],
+   "fingerprint": "e93278b7ad2636b4"
+  },
+  {
+   "pointer": "django/template/backends/django.py:copy_exception",
+   "line": 67,
+   "sentence": "`copy_exception` makes the copy: the same class, message, `tried` and `chain`, the backend it is given or else the original's, and any debug data, but not the original's traceback, context or cause, so that, its docstring says, it can be kept around; the cached loader keeps such copies when `\"debug\"` is on (`django/template/backends/django.py:copy_exception`, `django/template/loaders/cached.py:Loader.get_template`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "copy_exception",
+   "kind": "function",
+   "lines": [
+    112,
+    122
+   ],
+   "fingerprint": "3f3d83a0d23a4e09"
+  },
+  {
+   "pointer": "django/template/loaders/cached.py:Loader.get_template",
+   "line": 67,
+   "sentence": "`copy_exception` makes the copy: the same class, message, `tried` and `chain`, the backend it is given or else the original's, and any debug data, but not the original's traceback, context or cause, so that, its docstring says, it can be kept around; the cached loader keeps such copies when `\"debug\"` is on (`django/template/backends/django.py:copy_exception`, `django/template/loaders/cached.py:Loader.get_template`).",
+   "tree": "django",
+   "path": "django/template/loaders/cached.py",
+   "symbol": "Loader.get_template",
+   "kind": "function",
+   "lines": [
+    28,
+    66
+   ],
+   "fingerprint": "2a6e976b35133af2"
+  },
+  {
+   "pointer": "django/template/backends/jinja2.py:Jinja2.__init__",
+   "line": 71,
+   "sentence": "The Jinja2 backend keeps for itself the options `\"environment\"`, the dotted path of the environment's class, `\"jinja2.Environment\"` unless given, and `\"context_processors\"` (`django/template/backends/jinja2.py:Jinja2.__init__`).",
+   "tree": "django",
+   "path": "django/template/backends/jinja2.py",
+   "symbol": "Jinja2.__init__",
+   "kind": "function",
+   "lines": [
+    17,
+    35
+   ],
+   "fingerprint": "bb39bea1a17b4e79"
+  },
+  {
+   "pointer": "django/template/backends/jinja2.py:Jinja2.get_template",
+   "line": 71,
+   "sentence": "`Jinja2.get_template` turns Jinja2's TemplateNotFound into a `TemplateDoesNotExist` with no `tried`, and its syntax error into Django's `TemplateSyntaxError` with debug data (`django/template/backends/jinja2.py:Jinja2.get_template`) ([Template errors and debug information](debugging.md)).",
+   "tree": "django",
+   "path": "django/template/backends/jinja2.py",
+   "symbol": "Jinja2.get_template",
+   "kind": "function",
+   "lines": [
+    40,
+    48
+   ],
+   "fingerprint": "088a543377d1e280"
+  },
+  {
+   "pointer": "django/template/backends/jinja2.py:Template.__init__",
+   "line": 73,
+   "sentence": "Its template's origin is the module's own `Origin`, holding only the file name and the template's name (`django/template/backends/jinja2.py:Template.__init__`).",
+   "tree": "django",
+   "path": "django/template/backends/jinja2.py",
+   "symbol": "Template.__init__",
+   "kind": "function",
+   "lines": [
+    56,
+    62
+   ],
+   "fingerprint": "420bdf0be2ac2ac4"
+  },
+  {
+   "pointer": "django/template/backends/jinja2.py:Template.render",
+   "line": 73,
+   "sentence": "Its `render` works on the dictionary it is given: with a request, it sets `\"request\"`, `\"csrf_input\"`, the hidden field for the CSRF token, marked safe, and `\"csrf_token\"`, the last two lazy, so the token is fetched only if used; then it updates the dictionary with each context processor's (`django/template/backends/jinja2.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/backends/jinja2.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    64,
+    78
+   ],
+   "fingerprint": "39abce4922367d18"
+  },
+  {
+   "pointer": "django/template/backends/dummy.py:TemplateStrings",
+   "line": 79,
+   "sentence": "`TemplateStrings` shows how little the contract asks (`django/template/backends/dummy.py:TemplateStrings`).",
+   "tree": "django",
+   "path": "django/template/backends/dummy.py",
+   "symbol": "TemplateStrings",
+   "kind": "class",
+   "lines": [
+    11,
+    39
+   ],
+   "fingerprint": "09e119d5f0b01a1c"
+  },
+  {
+   "pointer": "django/template/backends/dummy.py:Template.render",
+   "line": 79,
+   "sentence": "It takes no options, reads the first file of `iter_template_filenames` that exists, and returns a template of the module's own subclass of `string.Template`, whose `render` escapes every value with `conditional_escape`, adds `\"csrf_input\"` and `\"csrf_token\"` given a request, and leaves a placeholder with no value as written (`django/template/backends/dummy.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/backends/dummy.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    43,
+    51
+   ],
+   "fingerprint": "daaccb30c9e9363a"
+  },
+  {
+   "pointer": "django/template/base.py:Template",
+   "line": 83,
+   "sentence": "A `django/template/base.py:Template` made from a string alone asks `Engine.get_default` for an engine: the `Engine` of the first `DjangoTemplates` in `engines`, or `ImproperlyConfigured` if there is none.",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template",
+   "kind": "class",
+   "lines": [
+    142,
+    292
+   ],
+   "fingerprint": "5d6e635dcfca813d"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.get_default",
+   "line": 83,
+   "sentence": "The answer is cached (`django/template/engine.py:Engine.get_default`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.get_default",
+   "kind": "function",
+   "lines": [
+    87,
+    112
+   ],
+   "at": 89,
+   "fingerprint": "667572700f3c02c6"
+  }
+ ]
+}

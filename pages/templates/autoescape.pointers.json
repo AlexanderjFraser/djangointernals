@@ -1,0 +1,394 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "autoescape.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/safestring.py",
+   "line": 7,
+   "sentence": "The mark is made in `django/utils/safestring.py` and the escaping in `django/utils/html.py`; the engine applies them in `render_value_in_context`, in its filters, and as the `\"autoescape\"` option and `{% autoescape %}` direct.",
+   "tree": "django",
+   "path": "django/utils/safestring.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    78
+   ],
+   "fingerprint": "a5fae9177b897805"
+  },
+  {
+   "pointer": "django/utils/html.py",
+   "line": 7,
+   "sentence": "The mark is made in `django/utils/safestring.py` and the escaping in `django/utils/html.py`; the engine applies them in `render_value_in_context`, in its filters, and as the `\"autoescape\"` option and `{% autoescape %}` direct.",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    534
+   ],
+   "fingerprint": "b0d3fce78b92485d"
+  },
+  {
+   "pointer": "django/utils/safestring.py:SafeData",
+   "line": 13,
+   "sentence": "`__html__` is a convention shared with other libraries: an object that has it can be asked for its HTML, and the docstring says it lets other template engines understand Django's safe data (`django/utils/safestring.py:SafeData`).",
+   "tree": "django",
+   "path": "django/utils/safestring.py",
+   "symbol": "SafeData",
+   "kind": "class",
+   "lines": [
+    13,
+    22
+   ],
+   "fingerprint": "3698a5006e7dad77"
+  },
+  {
+   "pointer": "django/utils/safestring.py:SafeString",
+   "line": 15,
+   "sentence": "Every other string method is `str`'s own, so an upper-cased, sliced or replaced safe string is plain (`django/utils/safestring.py:SafeString`).",
+   "tree": "django",
+   "path": "django/utils/safestring.py",
+   "symbol": "SafeString",
+   "kind": "class",
+   "lines": [
+    25,
+    50
+   ],
+   "fingerprint": "8fbff1dd46ceaae6"
+  },
+  {
+   "pointer": "django/utils/safestring.py:mark_safe",
+   "line": 17,
+   "sentence": "Wrapped in `keep_lazy`, it leaves a lazy translation lazy, to become a `SafeString` when it is evaluated (`django/utils/safestring.py:mark_safe`).",
+   "tree": "django",
+   "path": "django/utils/safestring.py",
+   "symbol": "mark_safe",
+   "kind": "function",
+   "lines": [
+    64,
+    78
+   ],
+   "at": 65,
+   "fingerprint": "00d1078e97976b67"
+  },
+  {
+   "pointer": "django/utils/html.py:escape",
+   "line": 21,
+   "sentence": "It escapes even what is escaped already (`django/utils/html.py:escape`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "escape",
+   "kind": "function",
+   "lines": [
+    52,
+    62
+   ],
+   "at": 53,
+   "fingerprint": "c58c616d4b252384"
+  },
+  {
+   "pointer": "django/utils/html.py:conditional_escape",
+   "line": 21,
+   "sentence": "`conditional_escape` is the one `render_value_in_context` uses: a lazy string is made a `str`, an object with `__html__` is asked for its HTML, and anything else goes to `escape` (`django/utils/html.py:conditional_escape`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "conditional_escape",
+   "kind": "function",
+   "lines": [
+    120,
+    132
+   ],
+   "fingerprint": "c523b71e2b0756a5"
+  },
+  {
+   "pointer": "django/utils/html.py:format_html",
+   "line": 23,
+   "sentence": "It works as `str.format`, passing each argument through `conditional_escape` and marking the result safe, so `format_html(\"<li>{}</li>\", ship)` puts a ship named `<Beagle>` in as `&lt;Beagle&gt;` and a safe argument as it stands (`django/utils/html.py:format_html`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "format_html",
+   "kind": "function",
+   "lines": [
+    135,
+    145
+   ],
+   "fingerprint": "5bb23907b75e1981"
+  },
+  {
+   "pointer": "django/utils/html.py:html_safe",
+   "line": 27,
+   "sentence": "It wraps `__str__` so that its result is marked safe, and adds an `__html__` that returns `str(self)`; it refuses a class that defines `__html__` itself or does not itself define `__str__` (`django/utils/html.py:html_safe`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "html_safe",
+   "kind": "function",
+   "lines": [
+    516,
+    534
+   ],
+   "fingerprint": "7a01abe8a7116ab4"
+  },
+  {
+   "pointer": "django/utils/html.py:escapejs",
+   "line": 29,
+   "sentence": "`escapejs` replaces the backslash, quotes, angle brackets, some other punctuation, the Unicode line and paragraph separators and the control characters with escapes such as `\"\\u003C\"`, for a value inside a JavaScript string, and marks the result safe (`django/utils/html.py:escapejs`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "escapejs",
+   "kind": "function",
+   "lines": [
+    87,
+    90
+   ],
+   "at": 88,
+   "fingerprint": "b5a12b5c4afc6819"
+  },
+  {
+   "pointer": "django/utils/html.py:json_script",
+   "line": 29,
+   "sentence": "`json_script` serialises a value, by default with `DjangoJSONEncoder`, escapes angle brackets and ampersands the same way, and wraps it in a `<script type=\"application/json\">` element; its docstring calls the escaped JSON safe anywhere but inside a tag's attribute (`django/utils/html.py:json_script`).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "json_script",
+   "kind": "function",
+   "lines": [
+    100,
+    117
+   ],
+   "fingerprint": "1b43db7b43f6e82c"
+  },
+  {
+   "pointer": "django/template/base.py:render_value_in_context",
+   "line": 44,
+   "sentence": "With autoescaping off it only converts (`django/template/base.py:render_value_in_context`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "render_value_in_context",
+   "kind": "function",
+   "lines": [
+    1140,
+    1153
+   ],
+   "fingerprint": "91ac09cc182b2d7b"
+  },
+  {
+   "pointer": "django/forms/utils.py:RenderableMixin.render",
+   "line": 46,
+   "sentence": "`{{ form }}` writes a form unescaped: its `__str__` is `RenderableMixin.render`, which marks the rendering safe (`django/forms/utils.py:RenderableMixin.render`).",
+   "tree": "django",
+   "path": "django/forms/utils.py",
+   "symbol": "RenderableMixin.render",
+   "kind": "function",
+   "lines": [
+    51,
+    55
+   ],
+   "fingerprint": "286728d492a8edd4"
+  },
+  {
+   "pointer": "django/template/base.py:NodeList.render",
+   "line": 48,
+   "sentence": "`NodeList.render` joins its nodes' strings and marks the whole safe, so the template's own text, which a `TextNode` returns as it stands, goes out unescaped, and so does what a tag's node returns (`django/template/base.py:NodeList.render`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "NodeList.render",
+   "kind": "function",
+   "lines": [
+    1107,
+    1108
+   ],
+   "fingerprint": "1fc0a8684b9f021b"
+  },
+  {
+   "pointer": "django/template/library.py:SimpleNode.render",
+   "line": 48,
+   "sentence": "What a tag writes is escaped only if its node escapes it: the node of a `simple_tag` passes its function's result through `conditional_escape` when autoescaping is on, as `{% url %}` does its URL (`django/template/library.py:SimpleNode.render`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "SimpleNode.render",
+   "kind": "function",
+   "lines": [
+    341,
+    349
+   ],
+   "fingerprint": "d5a79179b7757577"
+  },
+  {
+   "pointer": "django/template/base.py:Variable.__init__",
+   "line": 50,
+   "sentence": "So `{{ \"<b>Valletta</b>\" }}` writes a bold Valletta, and for a port with none, `{{ port.harbourmaster|default:\"<em>vacant</em>\" }}` writes `\"<em>vacant</em>\"` (`django/template/base.py:Variable.__init__`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Variable.__init__",
+   "kind": "function",
+   "lines": [
+    888,
+    939
+   ],
+   "fingerprint": "93742eb534d9e3a0"
+  },
+  {
+   "pointer": "django/template/base.py:FilterExpression.resolve",
+   "line": 56,
+   "sentence": "When its input was safe, the engine marks its result safe; when not, the engine leaves the result as it is (`django/template/base.py:FilterExpression.resolve`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "FilterExpression.resolve",
+   "kind": "function",
+   "lines": [
+    803,
+    838
+   ],
+   "fingerprint": "d802b4ad01b64e59"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:stringfilter",
+   "line": 58,
+   "sentence": "It converts the first argument by `str`, which keeps a `SafeString` safe and turns an object whose `__str__` returns a safe string into one, then makes the engine's test on the converted value, reading `is_safe=True` from the innermost function, where `Library.filter` also sets it (`django/template/defaultfilters.py:stringfilter`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "stringfilter",
+   "kind": "function",
+   "lines": [
+    38,
+    52
+   ],
+   "fingerprint": "998d3a4f61167d36"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:join",
+   "line": 60,
+   "sentence": "With two ships, `{{ names|join:\"<br>\" }}` writes `\"Endeavour<br>&lt;Beagle&gt;\"`, the separator being a literal, and safe (`django/template/defaultfilters.py:join`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "join",
+   "kind": "function",
+   "lines": [
+    611,
+    621
+   ],
+   "at": 612,
+   "fingerprint": "381e4abe209d1a16"
+  },
+  {
+   "pointer": "django/template/context.py:Context",
+   "line": 64,
+   "sentence": "Whether to escape is a property of the context, `Context.autoescape`, an attribute beside the stack, true by default (`django/template/context.py:Context`).",
+   "tree": "django",
+   "path": "django/template/context.py",
+   "symbol": "Context",
+   "kind": "class",
+   "lines": [
+    141,
+    176
+   ],
+   "fingerprint": "4579487dc6a968ff"
+  },
+  {
+   "pointer": "django/template/backends/django.py:Template.render",
+   "line": 64,
+   "sentence": "The engine's `\"autoescape\"` option, true unless `\"OPTIONS\"` says otherwise, reaches it through the backend's template, which makes its context with the engine's setting (`django/template/backends/django.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    102,
+    109
+   ],
+   "fingerprint": "ddf08419a37420ba"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:AutoEscapeControlNode.render",
+   "line": 66,
+   "sentence": "The compile function `autoescape` accepts `\"on\"` or `\"off\"` and nothing else; its `AutoEscapeControlNode` sets the context's attribute, renders its body, and puts the old value back (`django/template/defaulttags.py:AutoEscapeControlNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "AutoEscapeControlNode.render",
+   "kind": "function",
+   "lines": [
+    55,
+    63
+   ],
+   "fingerprint": "9741ca7d1f9a42ee"
+  },
+  {
+   "pointer": "django/template/context.py:BaseContext.new",
+   "line": 66,
+   "sentence": "The setting holds for all that renders with the context meanwhile: a filter's `autoescape` argument, a simple tag, an included template, even one included with `only`, since `BaseContext.new` copies the old context's attributes (`django/template/context.py:BaseContext.new`).",
+   "tree": "django",
+   "path": "django/template/context.py",
+   "symbol": "BaseContext.new",
+   "kind": "function",
+   "lines": [
+    113,
+    120
+   ],
+   "fingerprint": "8f386baaf0ab3a48"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:do_filter",
+   "line": 68,
+   "sentence": "`{% filter %}` refuses `|escape` and `|safe` anywhere in its chain, naming `{% autoescape %}` instead, which its docstring calls the way to manage autoescaping for a block (`django/template/defaulttags.py:do_filter`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "do_filter",
+   "kind": "function",
+   "lines": [
+    724,
+    755
+   ],
+   "at": 725,
+   "fingerprint": "15e35b06d07969bd"
+  },
+  {
+   "pointer": "django/utils/html.py",
+   "line": 72,
+   "sentence": "These filters only escape or mark, each by a function of `django/utils/html.py` or `django/utils/safestring.py` ([The built-in filters](filters.md)).",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    534
+   ],
+   "fingerprint": "b0d3fce78b92485d"
+  },
+  {
+   "pointer": "django/utils/safestring.py",
+   "line": 72,
+   "sentence": "These filters only escape or mark, each by a function of `django/utils/html.py` or `django/utils/safestring.py` ([The built-in filters](filters.md)).",
+   "tree": "django",
+   "path": "django/utils/safestring.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    78
+   ],
+   "fingerprint": "a5fae9177b897805"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py",
+   "line": 83,
+   "sentence": "*The filters of `django/template/defaultfilters.py` that only escape for HTML or JavaScript, or mark.*",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    997
+   ],
+   "fingerprint": "040aeab122c4db17"
+  }
+ ]
+}

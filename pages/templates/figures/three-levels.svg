@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 405">
+  <!-- two stages: the chain of three templates and the queues its ExtendsNodes fill, a row a step;
+       then the root's tree rendering, each block taking a version from the end of its queue -->
+
+  <!-- the chain, the root at the left as in the queues -->
+  <rect class="ground" x="0.5" y="0.5" width="148" height="36" rx="4"/>
+  <text class="name" x="13" y="23">base.html</text>
+  <text class="quiet small" x="91" y="23">the root</text>
+  <path class="line" d="M230 18.5 H159"/>
+  <polygon class="head" points="149,18.5 159,13.5 159,23.5"/>
+  <text class="quiet small" x="172" y="11">extends</text>
+  <rect class="ground" x="230.5" y="0.5" width="143" height="36" rx="4"/>
+  <text class="name" x="243" y="23">fleet/base.html</text>
+  <path class="line" d="M454 18.5 H384"/>
+  <polygon class="head" points="374,18.5 384,13.5 384,23.5"/>
+  <text class="quiet small" x="397" y="11">extends</text>
+  <rect class="ground" x="454.5" y="0.5" width="197" height="36" rx="4"/>
+  <text class="name" x="467" y="23">fleet/port_detail.html</text>
+
+  <!-- the queues: a column for each block name, a row for each step; each queue ends at its column's right edge,
+       so what a step adds at the front lands to the left of what was there; what each step adds is in the accent -->
+  <text class="strong" x="0" y="72">the queues, front at the left and end at the right</text>
+  <text class="name" x="230" y="94">title</text>
+  <path class="line" d="M230 101.5 H506"/>
+  <text class="name" x="534" y="94">content</text>
+  <path class="line" d="M534 101.5 H696"/>
+  <text class="name" x="724" y="94">main</text>
+  <path class="line" d="M724 101.5 H940"/>
+
+  <!-- step 1 -->
+  <text x="0" y="126"><tspan class="name">port_detail</tspan>'s <tspan class="name">ExtendsNode</tspan> adds</text>
+  <rect class="mark-box" x="396.5" y="110.5" width="109" height="22" rx="4"/>
+  <text class="name" x="409" y="126">port_detail</text>
+  <rect class="mark-box" x="830.5" y="110.5" width="109" height="22" rx="4"/>
+  <text class="name" x="843" y="126">port_detail</text>
+
+  <!-- step 2 -->
+  <text x="0" y="160"><tspan class="name">fleet/base</tspan>'s <tspan class="name">ExtendsNode</tspan> adds</text>
+  <rect class="mark-box" x="290.5" y="144.5" width="101" height="22" rx="4"/>
+  <text class="name" x="303" y="160">fleet/base</text>
+  <rect class="box" x="396.5" y="144.5" width="109" height="22" rx="4"/>
+  <text class="name" x="409" y="160">port_detail</text>
+  <rect class="mark-box" x="594.5" y="144.5" width="101" height="22" rx="4"/>
+  <text class="name" x="607" y="160">fleet/base</text>
+  <rect class="mark-box" x="724.5" y="144.5" width="101" height="22" rx="4"/>
+  <text class="name" x="737" y="160">fleet/base</text>
+  <rect class="box" x="830.5" y="144.5" width="109" height="22" rx="4"/>
+  <text class="name" x="843" y="160">port_detail</text>
+
+  <!-- step 3 -->
+  <text x="0" y="194">and then the root's</text>
+  <rect class="mark-box" x="230.5" y="178.5" width="55" height="22" rx="4"/>
+  <text class="name" x="243" y="194">base</text>
+  <rect class="box" x="290.5" y="178.5" width="101" height="22" rx="4"/>
+  <text class="name" x="303" y="194">fleet/base</text>
+  <rect class="box" x="396.5" y="178.5" width="109" height="22" rx="4"/>
+  <text class="name" x="409" y="194">port_detail</text>
+  <rect class="mark-box" x="534.5" y="178.5" width="55" height="22" rx="4"/>
+  <text class="name" x="547" y="194">base</text>
+  <rect class="box" x="594.5" y="178.5" width="101" height="22" rx="4"/>
+  <text class="name" x="607" y="194">fleet/base</text>
+  <rect class="box" x="724.5" y="178.5" width="101" height="22" rx="4"/>
+  <text class="name" x="737" y="194">fleet/base</text>
+  <rect class="box" x="830.5" y="178.5" width="109" height="22" rx="4"/>
+  <text class="name" x="843" y="194">port_detail</text>
+
+  <!-- the render: who pops, the version it pops, what that version writes; a block.super or a block inside a version
+       renders within it, drawn indented and joined to it -->
+  <text class="strong" x="0" y="240"><tspan class="name">base.html</tspan>'s tree renders: a block pops the end of its queue, and pushes it back when done</text>
+
+  <!-- block title, and its block.super twice -->
+  <text class="name" x="0" y="270">block title</text>
+  <text x="230" y="270">pops</text>
+  <rect class="box" x="266.5" y="254.5" width="109" height="22" rx="4"/>
+  <text class="name" x="279" y="270">port_detail</text>
+  <text x="396" y="270"><tspan class="name">"Valletta | "</tspan> then <tspan class="name">block.super</tspan></text>
+
+  <path class="line" d="M5.5 276 V295.5 H18"/>
+  <text class="name" x="24" y="300">block.super</text>
+  <text x="230" y="300">pops</text>
+  <rect class="box" x="266.5" y="284.5" width="101" height="22" rx="4"/>
+  <text class="name" x="279" y="300">fleet/base</text>
+  <text x="396" y="300"><tspan class="name">"Fleet | "</tspan> then <tspan class="name">block.super</tspan></text>
+
+  <path class="line" d="M29.5 306 V325.5 H42"/>
+  <text class="name" x="48" y="330">block.super</text>
+  <text x="230" y="330">pops</text>
+  <rect class="box" x="266.5" y="314.5" width="55" height="22" rx="4"/>
+  <text class="name" x="279" y="330">base</text>
+  <text class="name" x="396" y="330">"Harbour"</text>
+
+  <!-- block content, and the block main inside the version it pops -->
+  <text class="name" x="0" y="368">block content</text>
+  <text x="230" y="368">pops</text>
+  <rect class="box" x="266.5" y="352.5" width="101" height="22" rx="4"/>
+  <text class="name" x="279" y="368">fleet/base</text>
+  <text x="396" y="368"><tspan class="name">"&lt;nav&gt;ports&lt;/nav&gt;"</tspan> then <tspan class="name">block main</tspan></text>
+
+  <path class="line" d="M5.5 374 V393.5 H18"/>
+  <text class="name" x="24" y="398">block main</text>
+  <text x="230" y="398">pops</text>
+  <rect class="box" x="266.5" y="382.5" width="109" height="22" rx="4"/>
+  <text class="name" x="279" y="398">port_detail</text>
+  <text class="name" x="396" y="398">"&lt;h1&gt;Valletta&lt;/h1&gt;"</text>
+</svg>

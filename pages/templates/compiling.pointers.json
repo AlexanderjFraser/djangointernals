@@ -1,0 +1,323 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "compiling.md",
+ "pointers": [
+  {
+   "pointer": "django/template/base.py:Template.compile_nodelist",
+   "line": 7,
+   "sentence": "A Django template is compiled as its `Template` is made: `Template.compile_nodelist` cuts the source into tokens with a `Lexer` and builds the tree of nodes with a `Parser`, which hands a block tag to the compile function registered under its first word (`django/template/base.py:Template.compile_nodelist`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template.compile_nodelist",
+   "kind": "function",
+   "lines": [
+    179,
+    214
+   ],
+   "fingerprint": "b7cae1bac3f46aa5"
+  },
+  {
+   "pointer": "django/template/base.py:Template.__init__",
+   "line": 13,
+   "sentence": "`Template.__init__` ends by calling `Template.compile_nodelist`, so a `Template` that exists has been compiled (`django/template/base.py:Template.__init__`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template.__init__",
+   "kind": "function",
+   "lines": [
+    143,
+    158
+   ],
+   "fingerprint": "43adbaf5afe06a00"
+  },
+  {
+   "pointer": "django/template/base.py:Template.compile_nodelist",
+   "line": 15,
+   "sentence": "With the engine's `\"debug\"` option on, `compile_nodelist` uses `DebugLexer`, which also records each token's start and end as `Token.position`; otherwise `Lexer` (`django/template/base.py:Template.compile_nodelist`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template.compile_nodelist",
+   "kind": "function",
+   "lines": [
+    179,
+    214
+   ],
+   "fingerprint": "b7cae1bac3f46aa5"
+  },
+  {
+   "pointer": "django/template/base.py:tag_re",
+   "line": 19,
+   "sentence": "The lexer has one regular expression, `tag_re`, which matches a `{% … %}`, a `{{ … }}` or a `{# … #}` and captures it whole (`django/template/base.py:tag_re`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "tag_re",
+   "kind": "assignment",
+   "lines": [
+    93,
+    93
+   ],
+   "fingerprint": "847775338a282911"
+  },
+  {
+   "pointer": "django/template/base.py:Lexer.tokenize",
+   "line": 19,
+   "sentence": "`Lexer.tokenize` relies on that order: it flips a flag after every piece, so it knows a tag from text without looking, and passes each non-empty piece to `Lexer.create_token` (`django/template/base.py:Lexer.tokenize`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Lexer.tokenize",
+   "kind": "function",
+   "lines": [
+    419,
+    431
+   ],
+   "fingerprint": "abb81f5f83dbb4ef"
+  },
+  {
+   "pointer": "django/template/base.py:Token",
+   "line": 21,
+   "sentence": "`Lexer.create_token` makes a `Token` with a `Token.token_type`, which is `TokenType.TEXT`, `TokenType.VAR`, `TokenType.BLOCK` or `TokenType.COMMENT`; `Token.contents`, the text as written or, for a tag, what lies between its delimiters, stripped; and `Token.lineno`, the line it starts on (`django/template/base.py:Token`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Token",
+   "kind": "class",
+   "lines": [
+    359,
+    404
+   ],
+   "fingerprint": "61c9d7e26782adde"
+  },
+  {
+   "pointer": "django/template/base.py:Lexer.create_token",
+   "line": 23,
+   "sentence": "A block token whose contents are `\"verbatim\"`, or begin with `\"verbatim \"`, sets `Lexer.verbatim` to the end tag that will close it, `\"endverbatim\"` and the same words; until a block token has exactly those contents, every tag becomes a text token holding the tag as written (`django/template/base.py:Lexer.create_token`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Lexer.create_token",
+   "kind": "function",
+   "lines": [
+    433,
+    465
+   ],
+   "fingerprint": "4002679aa852e75a"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:verbatim",
+   "line": 23,
+   "sentence": "The compile function of `{% verbatim %}` then parses only text, and renders it once into a node that prints the string (`django/template/defaulttags.py:verbatim`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "verbatim",
+   "kind": "function",
+   "lines": [
+    1587,
+    1607
+   ],
+   "at": 1588,
+   "fingerprint": "cd1c5dc7dc1ca24f"
+  },
+  {
+   "pointer": "django/template/base.py:Token.split_contents",
+   "line": 25,
+   "sentence": "A compile function usually reads `contents` through `Token.split_contents`, which splits it at white space except inside quotes, and keeps a string marked for translation, `_(\"…\")`, in one piece (`django/template/base.py:Token.split_contents`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Token.split_contents",
+   "kind": "function",
+   "lines": [
+    391,
+    404
+   ],
+   "fingerprint": "2b991563fe76633f"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.__init__",
+   "line": 35,
+   "sentence": "`Parser.__init__` reverses the list of tokens, so that, a comment says, `Parser.next_token`, `Parser.prepend_token` and `Parser.delete_first_token` work at the end of the list in constant time (`django/template/base.py:Parser.__init__`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.__init__",
+   "kind": "function",
+   "lines": [
+    503,
+    525
+   ],
+   "fingerprint": "01ccce1a75a03737"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.parse",
+   "line": 37,
+   "sentence": "`Parser.parse` takes tokens until it meets a block tag whose first word is one of those it was given, or, given no end words, until no tokens are left, and returns the nodes it made as a `NodeList` (`django/template/base.py:Parser.parse`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.parse",
+   "kind": "function",
+   "lines": [
+    530,
+    609
+   ],
+   "fingerprint": "1209ee26f1f2fa8c"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.error",
+   "line": 46,
+   "sentence": "`Parser.error` makes a `TemplateSyntaxError` of a message and attaches the token unless the exception has one (`django/template/base.py:Parser.error`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.error",
+   "kind": "function",
+   "lines": [
+    637,
+    648
+   ],
+   "fingerprint": "8db78a4c8c195216"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.invalid_block_tag",
+   "line": 48,
+   "sentence": "`Parser.invalid_block_tag` reports a word the table does not hold, with any end words the current parse was waiting for, which is how a misnested end tag shows itself (`django/template/base.py:Parser.invalid_block_tag`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.invalid_block_tag",
+   "kind": "function",
+   "lines": [
+    650,
+    666
+   ],
+   "fingerprint": "aa7c9933b0a8e387"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.unclosed_block_tag",
+   "line": 62,
+   "sentence": "`Parser.unclosed_block_tag` pops it and names it (`django/template/base.py:Parser.unclosed_block_tag`):",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.unclosed_block_tag",
+   "kind": "function",
+   "lines": [
+    668,
+    675
+   ],
+   "fingerprint": "62770a1f817977da"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.extend_nodelist",
+   "line": 68,
+   "sentence": "It sets on the node its token and the parser's origin, by which a rendering error finds its line; a comment says why: it cannot change a node's `__init__` (`django/template/base.py:Parser.extend_nodelist`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.extend_nodelist",
+   "kind": "function",
+   "lines": [
+    618,
+    635
+   ],
+   "fingerprint": "b3f27dcfdf09841c"
+  },
+  {
+   "pointer": "django/template/base.py:Node",
+   "line": 72,
+   "sentence": "A compile function is given the parser and its tag's token and must return a node: `Parser.extend_nodelist` reads `Node.must_be_first` from what it returns and sets two attributes on it, so in practice a `Node` (`django/template/base.py:Node`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Node",
+   "kind": "class",
+   "lines": [
+    1048,
+    1099
+   ],
+   "fingerprint": "45a9be1673961341"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:do_if",
+   "line": 74,
+   "sentence": "`do_if`, the compile function of `{% if %}`, shows the pattern (`django/template/defaulttags.py:do_if`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "do_if",
+   "kind": "function",
+   "lines": [
+    932,
+    1020
+   ],
+   "at": 933,
+   "fingerprint": "1a13f5815c780b3d"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:do_for",
+   "line": 76,
+   "sentence": "`do_for` checks the shape of `{% for ship in ships %}`, compiles the sequence, and parses to `\"empty\"` or `\"endfor\"`; on `\"empty\"` it parses again to `\"endfor\"` and drops that token with `delete_first_token` (`django/template/defaulttags.py:do_for`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "do_for",
+   "kind": "function",
+   "lines": [
+    807,
+    906
+   ],
+   "at": 808,
+   "fingerprint": "acb4d4405a8f5821"
+  },
+  {
+   "pointer": "django/template/loader_tags.py:do_extends",
+   "line": 76,
+   "sentence": "`do_extends`, by contrast, parses with no end words, and the rest of the template becomes its node's body (`django/template/loader_tags.py:do_extends`).",
+   "tree": "django",
+   "path": "django/template/loader_tags.py",
+   "symbol": "do_extends",
+   "kind": "function",
+   "lines": [
+    291,
+    312
+   ],
+   "at": 292,
+   "fingerprint": "0801d39ac0986b9f"
+  },
+  {
+   "pointer": "django/template/base.py:token_kwargs",
+   "line": 78,
+   "sentence": "`{% with %}`, `{% include %}` and the tags made by `Library.simple_tag`, `Library.simple_block_tag` and `Library.inclusion_tag` read named values with `token_kwargs` (`django/template/base.py:token_kwargs`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "token_kwargs",
+   "kind": "function",
+   "lines": [
+    1180,
+    1224
+   ],
+   "fingerprint": "d6b478f7246b5fb1"
+  },
+  {
+   "pointer": "django/template/base.py:Node.child_nodelists",
+   "line": 82,
+   "sentence": "A node that holds others names the attributes that hold them in `Node.child_nodelists`, by default `(\"nodelist\",)`: `TextNode` and `VariableNode` name none, `ForNode` names `\"nodelist_loop\"` and `\"nodelist_empty\"`, and `IfNode` answers the default with a property that chains its branches (`django/template/base.py:Node.child_nodelists`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Node.child_nodelists",
+   "kind": "assignment",
+   "lines": [
+    1052,
+    1052
+   ],
+   "fingerprint": "d4884ca76bd128e2"
+  },
+  {
+   "pointer": "django/template/base.py:Node.get_nodes_by_type",
+   "line": 82,
+   "sentence": "`Node.get_nodes_by_type` walks the tree through them and returns every node of a class (`django/template/base.py:Node.get_nodes_by_type`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Node.get_nodes_by_type",
+   "kind": "function",
+   "lines": [
+    1087,
+    1099
+   ],
+   "fingerprint": "4a65cb96a86b2c21"
+  }
+ ]
+}

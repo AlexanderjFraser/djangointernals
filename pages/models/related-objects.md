@@ -350,7 +350,7 @@ petrel.crew is petrel.crew, type(petrel.crew) is type(gannet.crew)  ->  (False, 
 hasattr(petrel.crew, 'aboard'), hasattr(petrel.crew, 'remove'), hasattr(petrel.crew, 'clear')  ->  (True, False, False)
 ```
 
-A `RelatedManager` can be called. Called with `manager="..."`, the name of another manager of the related model, it returns a manager of the same kind for the same instance, built on that manager's class; a class is made for it at each such call. The class also sets `do_not_call_in_templates`, which keeps the template engine from calling a manager it comes upon (`django/template/base.py:Variable._resolve_lookup`) ([Templates](../templates.md)).
+A `RelatedManager` can be called. Called with `manager="..."`, the name of another manager of the related model, it returns a manager of the same kind for the same instance, built on that manager's class; a class is made for it at each such call. The class also sets `do_not_call_in_templates`, which keeps the template engine from calling a manager it comes upon (`django/template/base.py:Variable._resolve_lookup`) ([Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md)).
 
 ### The queryset, and what its instances already know
 

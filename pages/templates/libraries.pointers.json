@@ -1,0 +1,348 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "libraries.md",
+ "pointers": [
+  {
+   "pointer": "django/template/library.py:Library",
+   "line": 13,
+   "sentence": "`Library` holds two dictionaries, `Library.tags` and `Library.filters`, and its methods are ways of filling them (`django/template/library.py:Library`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library",
+   "kind": "class",
+   "lines": [
+    17,
+    310
+   ],
+   "fingerprint": "8a6ead2e397db946"
+  },
+  {
+   "pointer": "django/template/library.py:import_library",
+   "line": 13,
+   "sentence": "A module becomes a library by keeping one in a variable named `\"register\"`, the one name Django looks for: `import_library` imports a dotted path and returns the module's `\"register\"`, and raises `InvalidTemplateLibrary` when the import raises an `ImportError` or the variable is missing (`django/template/library.py:import_library`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "import_library",
+   "kind": "function",
+   "lines": [
+    485,
+    501
+   ],
+   "fingerprint": "0014bc0ab0840d64"
+  },
+  {
+   "pointer": "django/template/library.py:Library.tag",
+   "line": 32,
+   "sentence": "`Library.tag` registers a compile function as it is, under the name it is given or the function's own (`django/template/library.py:Library.tag`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.tag",
+   "kind": "function",
+   "lines": [
+    29,
+    51
+   ],
+   "fingerprint": "ade34a6ebb0adc04"
+  },
+  {
+   "pointer": "django/template/library.py:Library.filter",
+   "line": 32,
+   "sentence": "It sets each twice, on the function registered and on the innermost function under its decorators, and the comment there says why: a decorator such as `stringfilter`, which turns a filter's first argument into a string, reads the flag from the innermost function (`django/template/library.py:Library.filter`, `django/template/defaultfilters.py:stringfilter`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.filter",
+   "kind": "function",
+   "lines": [
+    57,
+    99
+   ],
+   "fingerprint": "f77269b046134c6e"
+  },
+  {
+   "pointer": "django/template/defaultfilters.py:stringfilter",
+   "line": 32,
+   "sentence": "It sets each twice, on the function registered and on the innermost function under its decorators, and the comment there says why: a decorator such as `stringfilter`, which turns a filter's first argument into a string, reads the flag from the innermost function (`django/template/library.py:Library.filter`, `django/template/defaultfilters.py:stringfilter`).",
+   "tree": "django",
+   "path": "django/template/defaultfilters.py",
+   "symbol": "stringfilter",
+   "kind": "function",
+   "lines": [
+    38,
+    52
+   ],
+   "fingerprint": "998d3a4f61167d36"
+  },
+  {
+   "pointer": "django/template/backends/django.py:DjangoTemplates.__init__",
+   "line": 36,
+   "sentence": "`DjangoTemplates.__init__` gathers the libraries before it makes its `Engine` (`django/template/backends/django.py:DjangoTemplates.__init__`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "DjangoTemplates.__init__",
+   "kind": "function",
+   "lines": [
+    19,
+    28
+   ],
+   "fingerprint": "7038b81e8184db54"
+  },
+  {
+   "pointer": "django/template/backends/django.py:get_package_libraries",
+   "line": 36,
+   "sentence": "In each package it imports every module, subpackages included, and keeps those with a `\"register\"`; a module that cannot be imported stops the backend from being made, an import error raised again as `InvalidTemplateLibrary` (`django/template/backends/django.py:get_package_libraries`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "get_package_libraries",
+   "kind": "function",
+   "lines": [
+    167,
+    182
+   ],
+   "fingerprint": "ba07835e7d176191"
+  },
+  {
+   "pointer": "django/template/backends/django.py:get_template_tag_modules",
+   "line": 36,
+   "sentence": "A library's name is its module's path after the package: `\"fleet_tags\"` for the module above, `\"charts.maps\"` for a module in a subpackage (`django/template/backends/django.py:get_template_tag_modules`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "get_template_tag_modules",
+   "kind": "function",
+   "lines": [
+    133,
+    152
+   ],
+   "fingerprint": "8d66c6ae591d1d93"
+  },
+  {
+   "pointer": "django/template/backends/django.py:DjangoTemplates.get_templatetag_libraries",
+   "line": 36,
+   "sentence": "`get_installed_libraries` makes a dictionary of the names and paths, and `DjangoTemplates.get_templatetag_libraries` updates it with the `\"libraries\"` option, so a name given there replaces an installed module's (`django/template/backends/django.py:DjangoTemplates.get_templatetag_libraries`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "DjangoTemplates.get_templatetag_libraries",
+   "kind": "function",
+   "lines": [
+    83,
+    90
+   ],
+   "fingerprint": "1cbbda1fa4d53ddf"
+  },
+  {
+   "pointer": "django/template/backends/django.py:get_installed_libraries",
+   "line": 38,
+   "sentence": "The dictionary is built in the order of `INSTALLED_APPS` and a later entry replaces an earlier one, so `{% load %}` finds the library of the application listed last, where of two templates of one name the first application's is found (`django/template/backends/django.py:get_installed_libraries`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "get_installed_libraries",
+   "kind": "function",
+   "lines": [
+    155,
+    164
+   ],
+   "fingerprint": "34cdf5a5ed315ba3"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.__init__",
+   "line": 40,
+   "sentence": "`Engine.__init__` then imports them all, whether a template ever loads them or not: `Engine.template_libraries` maps each name to its `Library`, and `Engine.template_builtins` lists the three of `Engine.default_builtins` and then those of the `\"builtins\"` option (`django/template/engine.py:Engine.__init__`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.__init__",
+   "kind": "function",
+   "lines": [
+    20,
+    63
+   ],
+   "fingerprint": "3f85ac396a1880be"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.__init__",
+   "line": 44,
+   "sentence": "It copies each builtin into its tables at once, in order, with `Parser.add_library`, a dictionary update, so a later library replaces an earlier one's tag or filter of the same name; the others it keeps by name, as `Parser.libraries` (`django/template/base.py:Parser.__init__`, `django/template/base.py:Parser.add_library`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.__init__",
+   "kind": "function",
+   "lines": [
+    503,
+    525
+   ],
+   "fingerprint": "01ccce1a75a03737"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.add_library",
+   "line": 44,
+   "sentence": "It copies each builtin into its tables at once, in order, with `Parser.add_library`, a dictionary update, so a later library replaces an earlier one's tag or filter of the same name; the others it keeps by name, as `Parser.libraries` (`django/template/base.py:Parser.__init__`, `django/template/base.py:Parser.add_library`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.add_library",
+   "kind": "function",
+   "lines": [
+    686,
+    688
+   ],
+   "fingerprint": "0b4f4ed5ed6fc4e6"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:load",
+   "line": 46,
+   "sentence": "`{% load %}` does all its work in its compile function, `load` (`django/template/defaulttags.py:load`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "load",
+   "kind": "function",
+   "lines": [
+    1102,
+    1131
+   ],
+   "at": 1103,
+   "fingerprint": "1ad9fb523605f1c8"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:find_library",
+   "line": 46,
+   "sentence": "It splits the tag on white space, so the names in it are words, never variables, looks each up with `find_library`, and hands the library to `Parser.add_library`; an unknown name is a `TemplateSyntaxError` that lists every name the engine knows (`django/template/defaulttags.py:find_library`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "find_library",
+   "kind": "function",
+   "lines": [
+    1065,
+    1075
+   ],
+   "fingerprint": "fb7504f096e71b13"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:load_from_library",
+   "line": 46,
+   "sentence": "In the form `{% load berth knots from fleet_tags %}`, `load_from_library` first builds a new `Library` of only the tags and filters named (`django/template/defaulttags.py:load_from_library`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "load_from_library",
+   "kind": "function",
+   "lines": [
+    1078,
+    1099
+   ],
+   "fingerprint": "c873e05cb1a37e73"
+  },
+  {
+   "pointer": "django/template/library.py:Library.simple_tag",
+   "line": 57,
+   "sentence": "`simple_tag`, `simple_block_tag` and `inclusion_tag` write both for a function that only computes something, and return the function unchanged, so Python can still call it (`django/template/library.py:Library.simple_tag`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.simple_tag",
+   "kind": "function",
+   "lines": [
+    104,
+    164
+   ],
+   "fingerprint": "26fbe50d2be7a554"
+  },
+  {
+   "pointer": "django/template/library.py:parse_bits",
+   "line": 61,
+   "sentence": "When a template is compiled, that compile function splits the token, takes off a final `\"as\"` and a name where the tag allows one, and matches the rest against the signature with `parse_bits` (`django/template/library.py:parse_bits`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "parse_bits",
+   "kind": "function",
+   "lines": [
+    406,
+    482
+   ],
+   "fingerprint": "6c3b71a2a111984b"
+  },
+  {
+   "pointer": "django/template/library.py:TagHelperNode.get_resolved_arguments",
+   "line": 65,
+   "sentence": "When the template renders, the node resolves each argument in the context and calls the function, with the context itself first under `takes_context=True` (`django/template/library.py:TagHelperNode.get_resolved_arguments`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "TagHelperNode.get_resolved_arguments",
+   "kind": "function",
+   "lines": [
+    326,
+    331
+   ],
+   "fingerprint": "233798d0676d6774"
+  },
+  {
+   "pointer": "django/template/library.py:SimpleNode.render",
+   "line": 69,
+   "sentence": "With `\"as\"` and a name, the value is set, unescaped, in the context's top dictionary, and the tag renders the empty string (`django/template/library.py:SimpleNode.render`); set inside `{% for %}`, it is gone after `{% endfor %}`.",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "SimpleNode.render",
+   "kind": "function",
+   "lines": [
+    341,
+    349
+   ],
+   "fingerprint": "d5a79179b7757577"
+  },
+  {
+   "pointer": "django/template/library.py:Library.simple_block_tag",
+   "line": 73,
+   "sentence": "The compile function parses the body up to the end tag, `{% endnotice %}` for `{% notice %}` unless `end_name=` names another, and keeps its nodes (`django/template/library.py:Library.simple_block_tag`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.simple_block_tag",
+   "kind": "function",
+   "lines": [
+    166,
+    252
+   ],
+   "fingerprint": "2d5e40aa8ceb572b"
+  },
+  {
+   "pointer": "django/template/library.py:SimpleBlockNode.get_resolved_arguments",
+   "line": 73,
+   "sentence": "At each render the body is rendered in the same context and passed as the content; the rest is `SimpleNode.render`, escaping included (`django/template/library.py:SimpleBlockNode.get_resolved_arguments`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "SimpleBlockNode.get_resolved_arguments",
+   "kind": "function",
+   "lines": [
+    357,
+    366
+   ],
+   "fingerprint": "fd352911839a47f2"
+  },
+  {
+   "pointer": "django/template/library.py:Library.inclusion_tag",
+   "line": 79,
+   "sentence": "`inclusion_tag` takes a template as well as the function, which returns a dictionary for it (`django/template/library.py:Library.inclusion_tag`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.inclusion_tag",
+   "kind": "function",
+   "lines": [
+    254,
+    310
+   ],
+   "fingerprint": "b6571669125102e1"
+  },
+  {
+   "pointer": "django/template/library.py:InclusionNode.render",
+   "line": 79,
+   "sentence": "`InclusionNode.render` calls the function, fetches a template given by name or by a list of names from the engine of the template being rendered, and keeps it in the render context under the node, so that inside `{% for %}` it is fetched once for each render of the template around it, not once a turn (`django/template/library.py:InclusionNode.render`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "InclusionNode.render",
+   "kind": "function",
+   "lines": [
+    374,
+    403
+   ],
+   "fingerprint": "315fc05a6a86bb7b"
+  }
+ ]
+}

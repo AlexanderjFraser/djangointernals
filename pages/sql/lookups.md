@@ -103,7 +103,7 @@ Every field answers to the names in the table below, which `django/db/models/loo
 | `"range"` | `Range` | `"BETWEEN %s AND %s"` | |
 | `"isnull"` | `IsNull` | `"IS NULL"` or `"IS NOT NULL"` | refuses a value that is not `True` or `False`; decides a `Value` on the left without SQL |
 | `"regex"` | `Regex` | `"REGEXP %s"` | |
-| `"iregex"` | `IRegex` | `"REGEXP '(?i)' || %s"` | |
+| `"iregex"` | `IRegex` | `"REGEXP '(?i)' \|\| %s"` | |
 
 *The lookups registered on `Field`, the operator each takes from SQLite's table, and what each refuses or settles itself. A refusal is a `ValueError`; a decision is `EmptyResultSet` or `FullResultSet`, which the where tree counts.*
 
