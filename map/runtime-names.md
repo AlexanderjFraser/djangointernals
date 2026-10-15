@@ -20,6 +20,9 @@ HttpRequest.session          django/contrib/sessions/middleware.py:SessionMiddle
 HttpRequest.user             django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request    # set on each request by the authentication middleware: a lazy object that finds the user on first use
 HttpRequest.auser            django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request    # the same, as a coroutine function
 HttpRequest._messages        django/contrib/messages/middleware.py:MessageMiddleware.process_request       # set on each request by the message middleware: the storage for the request's messages
+HttpRequest._cache_update_cache  django/middleware/cache.py:FetchFromCacheMiddleware.process_request    # set on each request by the cache middleware: whether UpdateCacheMiddleware is to store the response
+outbox                       django/core/mail/backends/locmem.py:EmailBackend.__init__    # a list set on the module django.core.mail by the local-memory email backend, if the module has none; the test environment empties it
+EmailMessage.sent_using      django/core/mail/backends/locmem.py:EmailBackend.send_messages    # set on the copy of each message the local-memory backend keeps: the alias of the mailer that sent it
 Model.DoesNotExist           django/db/models/base.py:ModelBase.__new__    # made for each concrete model class, a subclass of ObjectDoesNotExist
 Model.MultipleObjectsReturned  django/db/models/base.py:ModelBase.__new__  # the same, of MultipleObjectsReturned
 Model.NotUpdated             django/db/models/base.py:ModelBase.__new__    # the same, of ObjectNotUpdated and DatabaseError

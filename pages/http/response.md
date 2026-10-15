@@ -35,7 +35,7 @@ A response's headers are a mapping from name to value in which the case of a nam
 
 The response passes the common dictionary operations through to it, so each has two spellings. `response.headers["Vary"]` and `response["Vary"]` are the same entry, and a membership test, a deletion, `get`, `items` and `setdefault` on a response all mean its headers (`django/http/response.py:HttpResponseBase.__setitem__`).
 
-There is one entry for a name. Setting a header that is already set replaces it, in whatever case the two were written, and the newer spelling of the name is the one sent. A header that should carry several values, such as `"Vary"`, has to be built up as one comma-separated string; that is what the helpers that patch such headers do (`django/utils/cache.py:patch_vary_headers`, in [Caching, files, mail, signals and tasks](../services.md)). Cookies cannot be combined that way, since each needs a `Set-Cookie` line of its own, and they are kept apart from the headers, in a collection of their own.
+There is one entry for a name. Setting a header that is already set replaces it, in whatever case the two were written, and the newer spelling of the name is the one sent. A header that should carry several values, such as `"Vary"`, has to be built up as one comma-separated string; that is what the helpers that patch such headers do (`django/utils/cache.py:patch_vary_headers`, in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md)). Cookies cannot be combined that way, since each needs a `Set-Cookie` line of its own, and they are kept apart from the headers, in a collection of their own.
 
 Every value goes through `ResponseHeaders.__setitem__`, which makes it fit to be sent or refuses it (`django/http/response.py:ResponseHeaders._convert_to_charset`).
 
@@ -135,4 +135,4 @@ JsonResponse([1, 2], safe=True)  ->  raises TypeError: In order to allow non-dic
 
 ## Responses that are more than this
 
-`StreamingHttpResponse` and `FileResponse` share the base class and not the body, and have [a section of their own](streaming.md). `TemplateResponse` is an `HttpResponse` whose content is not there yet: it holds a template and a context, and is rendered only after middleware has had the chance to change them; it belongs to [`SimpleTemplateResponse` and `TemplateResponse`](../templates/responses.md) (`django/template/response.py:SimpleTemplateResponse`).
+`StreamingHttpResponse` and `FileResponse` share the base class and not the body, and have a section of their own, [Streaming and file responses](streaming.md). `TemplateResponse` is an `HttpResponse` whose content is not there yet: it holds a template and a context, and is rendered only after middleware has had the chance to change them; it belongs to [`SimpleTemplateResponse` and `TemplateResponse`](../templates/responses.md) (`django/template/response.py:SimpleTemplateResponse`).

@@ -60,7 +60,7 @@ The commands of the project: what find_commands finds in each place, in the orde
 
 Replacement is by name and by nothing else. The runserver of `django.contrib.staticfiles` is a subclass of Django's that adds the serving of static files, but that is its author's choice: the dictionary would point just as well at a class that shared nothing with the one it displaced. A project replaces a command of Django's, or of another application, by putting a file of the same name in an application listed earlier.
 
-The dictionary is built once in a process, because `get_commands` is wrapped in `functools.cache`. The recordings in [`call_command`](call-command.md) show it: the directories are listed under the first call in a process and under none after it. In a process whose installed applications change, the test framework's, a receiver of the `setting_changed` signal empties the cache whenever `"INSTALLED_APPS"` is overridden (`django/test/signals.py:update_installed_apps`).
+The dictionary is built once in a process, because `get_commands` is wrapped in `functools.cache`. The recordings in [`call_command`: a command called from code](call-command.md) show it: the directories are listed under the first call in a process and under none after it. In a process whose installed applications change, the test framework's, a receiver of the `setting_changed` signal empties the cache whenever `"INSTALLED_APPS"` is overridden (`django/test/signals.py:update_installed_apps`).
 
 ## From a name to an object
 

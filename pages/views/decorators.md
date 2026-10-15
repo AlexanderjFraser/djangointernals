@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The decorators of `django/views/decorators/`: the wrappers they put around a view, the marks some of them leave on a view, a response or a request, how `condition` answers a request without calling the view, and how `method_decorator` applies any of them to a method of a class.
 
-A view decorator takes a view and returns what goes into the URLconf in its place. That is all the word means, and the handler knows nothing about it: by the time a request arrives, a decorator written above a function ran long ago, when the module that defines the view was imported, and what is left is a function. This section sorts Django's decorators by what that function does. Some call the view and act before the call or after it. Some change nothing about the call and exist to be noticed by other code. And one group is made mechanically from middleware classes, which the [next section](middleware-decorators.md) takes up.
+A view decorator takes a view and returns what goes into the URLconf in its place. That is all the word means, and the handler knows nothing about it: by the time a request arrives, a decorator written above a function ran long ago, when the module that defines the view was imported, and what is left is a function. This section sorts Django's decorators by what that function does. Some call the view and act before the call or after it. Some change nothing about the call and exist to be noticed by other code. And one group is made mechanically from middleware classes, which [A middleware as a decorator](middleware-decorators.md) takes up.
 
 ## The shape they share
 
@@ -184,7 +184,7 @@ PUT /edition/ with If-Match: "edition-6"
 
 After the view, or in its place, the wrapper sets `"ETag"` and `Last-Modified` on the response, each only if the response lacks it and only for a `"GET"` or a `"HEAD"`. A tag function may return its tag with or without the quotation marks, and a time without a time zone is taken to be in UTC. `etag` and `last_modified` are `condition` called with one of its two arguments.
 
-The comparisons themselves, and `ConditionalGetMiddleware`, which makes the same decision for a `"GET"` from the finished response and so only after the view has done its work, belong to [Caching, files, mail, signals and tasks](../services.md).
+The comparisons themselves, and `ConditionalGetMiddleware`, which makes the same decision for a `"GET"` from the finished response and so only after the view has done its work, belong to [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md).
 
 ## Decorating a class
 

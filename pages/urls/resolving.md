@@ -8,7 +8,7 @@ How `URLResolver.resolve` searches the tree for a path: the order it goes in, ho
 
 Everything that resolves a path ends in one method, `URLResolver.resolve`, called on a root resolver. `BaseHandler.resolve_request` calls it with the request's `path_info`, for each request that reaches the centre of the middleware chain. The function `resolve` calls it for anyone else: it takes a path and, optionally, a URLconf, and without one it uses the current URLconf of the thread or task it is called in, or failing that the root one. `is_valid_path` is `resolve` with the exception turned into `False` (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).
 
-What is resolved is a path and nothing more: no host, no method, no query string. It is the path as `path_info` has it, without the script prefix and with its percent escapes already decoded ([Making the request](../http/request.md)), so a route is written for the characters themselves. Asked directly for a path with a space in it, the museum's pattern for files takes the space as a space:
+What is resolved is a path and nothing more: no host, no method, no query string. It is the path as `path_info` has it, without the script prefix and with its percent escapes already decoded ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), so a route is written for the characters themselves. Asked directly for a path with a space in it, the museum's pattern for files takes the space as a space:
 
 ```text recording=urls
 resolve('/files/maps/ground floor.pdf')  ->  views.download, args (), kwargs {'name': 'maps/ground floor.pdf'}

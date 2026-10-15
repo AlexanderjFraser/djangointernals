@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 461">
+  <!-- each call is a box inside the call that made it, in the order the calls were made; on the right of a row,
+       what that call reached, and the four services marked -->
+  <!-- Voyage.objects.create, and the statement it sends -->
+  <rect class="ground" x="0.5" y="0.5" width="939" height="460" rx="4"/>
+  <text class="name" x="13" y="22">Voyage.objects.create(ship=beagle, sailed=date(2026, 10, 14))</text>
+  <text class="name" x="25" y="44">INSERT INTO "fleet_voyage" ...</text>
+  <!-- the signal -->
+  <rect class="box" x="12.5" y="56.5" width="915" height="392" rx="4"/>
+  <text class="name" x="25" y="78">post_save.send(sender=Voyage, instance=voyage, created=True, ...)</text>
+  <text class="strong mark" x="552" y="78">the signal</text>
+  <!-- its receiver, and the cache -->
+  <rect class="ground" x="24.5" y="90.5" width="891" height="346" rx="4"/>
+  <text class="name" x="37" y="112">voyage_saved(...)</text>
+  <text x="552" y="112">the receiver notices connected</text>
+  <text class="name" x="49" y="134">cache.delete("sailings")</text>
+  <text class="strong mark" x="552" y="134">the cache</text>
+  <text x="622" y="134"><tspan class="name">caches["default"]</tspan>, a <tspan class="name">LocMemCache</tspan>:</text>
+  <text x="622" y="152">the key <tspan class="name">":1:sailings"</tspan></text>
+  <!-- the task backend, and the task result's three statuses -->
+  <rect class="box" x="36.5" y="164.5" width="867" height="260" rx="4"/>
+  <text class="name" x="49" y="186">tell_harbour_master.enqueue(2)</text>
+  <text class="strong mark" x="552" y="186">the task backend</text>
+  <text x="666" y="186"><tspan class="name">task_backends["default"]</tspan>,</text>
+  <text x="666" y="204">an <tspan class="name">ImmediateBackend</tspan></text>
+  <text x="61" y="228">a <tspan class="name">TaskResult</tspan>, <tspan class="strong">READY</tspan></text>
+  <text x="552" y="228"><tspan class="name">task_enqueued</tspan> sent</text>
+  <text x="61" y="250"><tspan class="strong">RUNNING</tspan></text>
+  <text x="552" y="250"><tspan class="name">task_started</tspan> sent</text>
+  <!-- the task itself -->
+  <rect class="ground" x="48.5" y="262.5" width="843" height="126" rx="4"/>
+  <text class="name" x="61" y="284">tell_harbour_master(2)</text>
+  <text x="73" y="306"><tspan class="name">SELECT</tspan> the voyage and its ship</text>
+  <!-- the mailer, and the message it keeps -->
+  <rect class="box" x="60.5" y="318.5" width="819" height="58" rx="4"/>
+  <text class="name" x="73" y="340">send_mail(...)</text>
+  <text class="strong mark" x="552" y="340">the mailer</text>
+  <text x="628" y="340">the default, a locmem <tspan class="name">EmailBackend</tspan></text>
+  <text class="name" x="85" y="362">mail.outbox</text>
+  <path class="line" d="M190 357.5 H214"/>
+  <polygon class="head" points="180,357.5 190,352.5 190,362.5"/>
+  <text class="name" x="222" y="362">"Beagle sailed on 14 October 2026"</text>
+  <!-- back in enqueue, after the task has returned -->
+  <text x="61" y="410"><tspan class="strong">SUCCESSFUL</tspan>, return value 1</text>
+  <text x="552" y="410"><tspan class="name">task_finished</tspan> sent</text>
+</svg>

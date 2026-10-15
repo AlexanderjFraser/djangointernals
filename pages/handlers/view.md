@@ -46,7 +46,7 @@ The view may be wrapped before it is called.
 
 If the view is a coroutine function and the handler is running synchronously, the view is then wrapped in `async_to_sync`, so that it can be called like a function.
 
-Then the view is called, inside a `try`. If it raises an `Exception`, the handler passes the exception to `BaseHandler.process_exception_by_middleware`, which calls the `process_exception` hooks, innermost middleware first, until one returns a response (`django/core/handlers/base.py:BaseHandler.process_exception_by_middleware`). If one does, that response replaces the view's and the request carries on. If none does, the exception is raised again and leaves the centre, to be turned into a response by the wrapper around it, as [the next section](exceptions.md) describes.
+Then the view is called, inside a `try`. If it raises an `Exception`, the handler passes the exception to `BaseHandler.process_exception_by_middleware`, which calls the `process_exception` hooks, innermost middleware first, until one returns a response (`django/core/handlers/base.py:BaseHandler.process_exception_by_middleware`). If one does, that response replaces the view's and the request carries on. If none does, the exception is raised again and leaves the centre, to be turned into a response by the wrapper around it, as [How an exception becomes a response](exceptions.md) describes.
 
 ## The view must have returned a response
 

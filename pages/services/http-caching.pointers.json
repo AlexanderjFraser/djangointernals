@@ -1,0 +1,291 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "http-caching.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 5,
+   "sentence": "Cache headers and conditional requests: `django/utils/cache.py`",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 7,
+   "sentence": "`django/utils/cache.py` holds the functions that tell browsers and proxies whether and for how long to keep a response, `patch_cache_control`, `patch_response_headers`, `add_never_cache_headers` and `patch_vary_headers`, and `get_conditional_response`, which decides from a request's preconditions whether to answer 304 Not Modified or 412 Precondition Failed instead.",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/utils/cache.py:patch_cache_control",
+   "line": 15,
+   "sentence": "On the way out only `True` itself gives the bare name; any other value gives the name, `=` and the value as text, so `private=False` writes `private=False` (`django/utils/cache.py:patch_cache_control`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "patch_cache_control",
+   "kind": "function",
+   "lines": [
+    37,
+    103
+   ],
+   "fingerprint": "5e9a6a7ff1e89dc4"
+  },
+  {
+   "pointer": "django/utils/cache.py:get_max_age",
+   "line": 28,
+   "sentence": "`get_max_age` reads `\"max-age\"` back as an integer, or `None` when it is missing or not a whole number (`django/utils/cache.py:get_max_age`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "get_max_age",
+   "kind": "function",
+   "lines": [
+    106,
+    119
+   ],
+   "fingerprint": "2dbc11bafa5a603e"
+  },
+  {
+   "pointer": "django/utils/cache.py:patch_response_headers",
+   "line": 32,
+   "sentence": "It sets `\"Expires\"` that many seconds from now, written by `http_date`, unless the response has one, and passes the lifetime to `patch_cache_control` as the max-age (`django/utils/cache.py:patch_response_headers`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "patch_response_headers",
+   "kind": "function",
+   "lines": [
+    274,
+    290
+   ],
+   "fingerprint": "f361411bbf4df655"
+  },
+  {
+   "pointer": "django/utils/cache.py:add_never_cache_headers",
+   "line": 34,
+   "sentence": "`add_never_cache_headers` calls it with -1, which sets `\"Expires\"`, where there is none, to the present moment and `\"max-age\"` to 0, then adds `\"no-cache\"`, `\"no-store\"`, `\"must-revalidate\"` and `\"private\"`, the last removing any `\"public\"` (`django/utils/cache.py:add_never_cache_headers`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "add_never_cache_headers",
+   "kind": "function",
+   "lines": [
+    293,
+    300
+   ],
+   "fingerprint": "d8d45c06f0c739ec"
+  },
+  {
+   "pointer": "django/utils/cache.py:patch_vary_headers",
+   "line": 38,
+   "sentence": "If `\"*\"` is among the names, old or new, the header becomes `\"*\"` alone (`django/utils/cache.py:patch_vary_headers`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "patch_vary_headers",
+   "kind": "function",
+   "lines": [
+    303,
+    329
+   ],
+   "fingerprint": "9b15914a7c54165c"
+  },
+  {
+   "pointer": "django/utils/cache.py:has_vary_header",
+   "line": 38,
+   "sentence": "`has_vary_header` asks whether a name is there, on the same terms (`django/utils/cache.py:has_vary_header`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "has_vary_header",
+   "kind": "function",
+   "lines": [
+    332,
+    339
+   ],
+   "fingerprint": "99370d72b2d0c7ba"
+  },
+  {
+   "pointer": "django/utils/cache.py:get_conditional_response",
+   "line": 42,
+   "sentence": "It returns a 304 or a 412 to send instead, or else the response it was given, `None` if none (`django/utils/cache.py:get_conditional_response`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "get_conditional_response",
+   "kind": "function",
+   "lines": [
+    167,
+    215
+   ],
+   "fingerprint": "fe3ae04258b2f091"
+  },
+  {
+   "pointer": "django/utils/cache.py:_if_match_passes",
+   "line": 66,
+   "sentence": "If-Match uses the strong comparison: the current tag must be in the list exactly, so a weak one never matches, though `\"*\"` matches any tag (`django/utils/cache.py:_if_match_passes`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_if_match_passes",
+   "kind": "function",
+   "lines": [
+    218,
+    236
+   ],
+   "fingerprint": "c6ece052e31afd3e"
+  },
+  {
+   "pointer": "django/utils/cache.py:_if_none_match_passes",
+   "line": 66,
+   "sentence": "If-None-Match uses the weak comparison, stripping `\"W/\"` from both sides first (`django/utils/cache.py:_if_none_match_passes`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_if_none_match_passes",
+   "kind": "function",
+   "lines": [
+    247,
+    263
+   ],
+   "fingerprint": "19b0158a7fb556f3"
+  },
+  {
+   "pointer": "django/utils/cache.py:_if_modified_since_passes",
+   "line": 66,
+   "sentence": "The dates are compared as integers, and with no last-modified time If-Modified-Since never gives a 304 (`django/utils/cache.py:_if_modified_since_passes`), while If-Unmodified-Since, unless an If-Match came with it, always gives a 412, to a `\"GET\"` as well (`django/utils/cache.py:_if_unmodified_since_passes`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_if_modified_since_passes",
+   "kind": "function",
+   "lines": [
+    266,
+    271
+   ],
+   "fingerprint": "59302824d6ed4659"
+  },
+  {
+   "pointer": "django/utils/cache.py:_if_unmodified_since_passes",
+   "line": 66,
+   "sentence": "The dates are compared as integers, and with no last-modified time If-Modified-Since never gives a 304 (`django/utils/cache.py:_if_modified_since_passes`), while If-Unmodified-Since, unless an If-Match came with it, always gives a 412, to a `\"GET\"` as well (`django/utils/cache.py:_if_unmodified_since_passes`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_if_unmodified_since_passes",
+   "kind": "function",
+   "lines": [
+    239,
+    244
+   ],
+   "fingerprint": "b5e5c93bdc237243"
+  },
+  {
+   "pointer": "django/utils/cache.py:_not_modified",
+   "line": 68,
+   "sentence": "Given the full response, it copies over Cache-Control, Content-Location, `\"Date\"`, `\"ETag\"`, `\"Expires\"`, Last-Modified and `\"Vary\"`, the headers RFC 9110's section 15.4.5 requires and Last-Modified, as its comment says, and the cookies, which by the old cookie specification its comment quotes a proxy passes on with a 304 as with a 200 (`django/utils/cache.py:_not_modified`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_not_modified",
+   "kind": "function",
+   "lines": [
+    141,
+    164
+   ],
+   "fingerprint": "a9b1119eb201033c"
+  },
+  {
+   "pointer": "django/utils/cache.py:_precondition_failed",
+   "line": 68,
+   "sentence": "`_precondition_failed` makes the 412, an `HttpResponse` with an empty body, and logs it through `log_response` as a warning to `\"django.request\"` (`django/utils/cache.py:_precondition_failed`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_precondition_failed",
+   "kind": "function",
+   "lines": [
+    130,
+    138
+   ],
+   "fingerprint": "52a01d6de5b27628"
+  },
+  {
+   "pointer": "django/middleware/http.py:ConditionalGetMiddleware.process_response",
+   "line": 72,
+   "sentence": "`ConditionalGetMiddleware`'s one hook is `process_response`, so it acts on the finished response, after the view has run (`django/middleware/http.py:ConditionalGetMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/http.py",
+   "symbol": "ConditionalGetMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    16,
+    38
+   ],
+   "fingerprint": "56f2d29457cfe699"
+  },
+  {
+   "pointer": "django/utils/cache.py:set_response_etag",
+   "line": 72,
+   "sentence": "Unless Cache-Control holds `\"no-store\"`, which `ConditionalGetMiddleware.needs_etag` looks for, a response without an `\"ETag\"` is given one by `set_response_etag`: the MD5 of the content in quotes, a strong tag, and none for a streaming or an empty response (`django/utils/cache.py:set_response_etag`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "set_response_etag",
+   "kind": "function",
+   "lines": [
+    122,
+    127
+   ],
+   "fingerprint": "926a85d294a96317"
+  },
+  {
+   "pointer": "docs/topics/conditional-view-processing.txt",
+   "line": 72,
+   "sentence": "The middleware saves sending the body, not making it, the comparison the documentation draws with `condition` (`docs/topics/conditional-view-processing.txt`).",
+   "tree": "django",
+   "path": "docs/topics/conditional-view-processing.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    219
+   ],
+   "fingerprint": "cc7d60d34569f0d7"
+  },
+  {
+   "pointer": "django/views/decorators/http.py:condition",
+   "line": 76,
+   "sentence": "The `condition` decorator calls `get_conditional_response` before the view, with what its functions return: the tag through `quote_etag`, so a bare one becomes strong, and the time, made aware in UTC if naive, in whole seconds (`django/views/decorators/http.py:condition`).",
+   "tree": "django",
+   "path": "django/views/decorators/http.py",
+   "symbol": "condition",
+   "kind": "function",
+   "lines": [
+    82,
+    159
+   ],
+   "fingerprint": "c1eb2dbedb63b641"
+  },
+  {
+   "pointer": "docs/topics/conditional-view-processing.txt",
+   "line": 76,
+   "sentence": "So, as the documentation says, a decorator that sets `\"Vary\"` or Cache-Control must stand above `condition` for its headers to reach a 304 ([View decorators](../views/decorators.md)) (`docs/topics/conditional-view-processing.txt`).",
+   "tree": "django",
+   "path": "docs/topics/conditional-view-processing.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    219
+   ],
+   "fingerprint": "cc7d60d34569f0d7"
+  }
+ ]
+}

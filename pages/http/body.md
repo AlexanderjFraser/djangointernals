@@ -10,7 +10,7 @@ Everything else a request holds is small and already in memory. The body is neit
 
 ## The stream
 
-Each request has a file-like object, `_stream`, set by the subclass that made it. A `WSGIRequest` wraps the server's input in a `LimitedStream`, which cannot seek and gives out at most the number of bytes the `Content-Length` header declared. An `ASGIRequest` is handed the temporary file into which the handler has already received the whole body, and that file can seek ([Making the request](request.md)).
+Each request has a file-like object, `_stream`, set by the subclass that made it. A `WSGIRequest` wraps the server's input in a `LimitedStream`, which cannot seek and gives out at most the number of bytes the `Content-Length` header declared. An `ASGIRequest` is handed the temporary file into which the handler has already received the whole body, and that file can seek ([Making the request: `WSGIRequest` and `ASGIRequest`](request.md)).
 
 `HttpRequest` is itself readable as a file: `HttpRequest.read` and `HttpRequest.readline` pass straight through to the stream, and a request can be iterated by lines. Each of them first sets a flag, `_read_started`, which is how the rest of the class knows that someone has taken bytes from the stream directly. An `OSError` from the stream is raised again as `UnreadablePostError`, which is an `OSError` too, so that code which reads a form can tell a failed read from any other failure (`django/http/request.py:HttpRequest.read`, `django/http/request.py:UnreadablePostError`).
 

@@ -277,7 +277,7 @@ The attribute becomes an integer when the instance is validated, since `Model.cl
 
 ### A value as text
 
-`Field.value_from_object` returns the instance's attribute under the attname, and `Field.value_to_string` returns that value as a string, which in the base class is `str` of it (`django/db/models/fields/__init__.py:Field.value_to_string`). The serializers are what call the second: a value that is not of a plain type is written out as the string its field makes of it, and read back in through the field's `to_python`, so the two methods are a pair: what the one writes, the other has to be able to read ([Caching, files, mail, signals and tasks](../services.md)). `value_from_object` is also what `model_to_dict` reads an instance with to make a form's initial data (`django/forms/models.py:model_to_dict`).
+`Field.value_from_object` returns the instance's attribute under the attname, and `Field.value_to_string` returns that value as a string, which in the base class is `str` of it (`django/db/models/fields/__init__.py:Field.value_to_string`). The serializers are what call the second: a value that is not of a plain type is written out as the string its field makes of it, and read back in through the field's `to_python`, so the two methods are a pair: what the one writes, the other has to be able to read ([Serialization: `serialize`, `deserialize` and `DeserializedObject`](../services/serializers.md)). `value_from_object` is also what `model_to_dict` reads an instance with to make a form's initial data (`django/forms/models.py:model_to_dict`).
 
 ```text recording=models
 Sailor._meta.get_field('signed_on').to_python('2026-04-10 09:00:00+00:00')  ->  datetime.datetime(2026, 4, 10, 9, 0, tzinfo=datetime.timezone.utc)

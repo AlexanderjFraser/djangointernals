@@ -8,7 +8,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 A form on a web page is a conversation of at least two requests. The first asks for the page and gets an empty form. The second posts what was typed. If that fails validation, the same page goes back with the input still in it and the errors beside the fields, and the conversation goes round again. When it passes, the view does what the form was for and answers with a redirect, which in the words of Django's tutorial prevents data from being posted twice (`docs/intro/tutorial04.txt`).
 
-Every view that handles a form goes through that cycle. For `FormView`, `CreateView` and `UpdateView` it is written once, in `ProcessFormView`, and mixins supply the decisions, as in [the display views](generic.md). `DeleteView` is put together without `ProcessFormView` and has the posting half written again for itself.
+Every view that handles a form goes through that cycle. For `FormView`, `CreateView` and `UpdateView` it is written once, in `ProcessFormView`, and mixins supply the decisions, as in the display views ([The generic views](generic.md)). `DeleteView` is put together without `ProcessFormView` and has the posting half written again for itself.
 
 ```text recording=views
 FormView  ->  FormView > TemplateResponseMixin > BaseFormView > FormMixin > ContextMixin > ProcessFormView > View

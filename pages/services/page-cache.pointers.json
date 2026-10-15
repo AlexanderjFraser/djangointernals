@@ -1,0 +1,347 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "page-cache.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/cache.py:learn_cache_key",
+   "line": 9,
+   "sentence": "So Django learns the list from each response it stores for a URL and keeps it in the cache under a key made from the URL; a later request reads the list first and builds from it the key of the page, \"without building the response object itself\", as the docstring says (`django/utils/cache.py:learn_cache_key`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "learn_cache_key",
+   "kind": "function",
+   "lines": [
+    406,
+    444
+   ],
+   "fingerprint": "c9f633019a4a9860"
+  },
+  {
+   "pointer": "django/middleware/cache.py",
+   "line": 13,
+   "sentence": "The module's docstring puts `UpdateCacheMiddleware` first in `MIDDLEWARE` and `FetchFromCacheMiddleware` last, counterintuitive but correct, it says: the update half must run last on the way out, where the chain runs bottom-up, and the fetch half last on the way in (`django/middleware/cache.py`; [Handlers and middleware](../handlers.md#the-chain-is-an-onion)).",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    242
+   ],
+   "fingerprint": "b0dcb87c757c1a1e"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 13,
+   "sentence": "So the fetch half makes its key after `LocaleMiddleware` has set the language, and the update half reads the `\"Vary\"` after `SessionMiddleware`, `GZipMiddleware` and `LocaleMiddleware` have added to it (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  },
+  {
+   "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
+   "line": 15,
+   "sentence": "On a hit, `FetchFromCacheMiddleware.process_request` returns the stored response, and `MiddlewareMixin.__call__` does not call the layer inside it (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
+   "tree": "django",
+   "path": "django/middleware/__init__.py",
+   "symbol": "MiddlewareMixin.__call__",
+   "kind": "function",
+   "lines": [
+    35,
+    45
+   ],
+   "fingerprint": "1c249bc0b063a1d2"
+  },
+  {
+   "pointer": "django/middleware/cache.py:UpdateCacheMiddleware._should_update_cache",
+   "line": 17,
+   "sentence": "The fetch half sets it true after a miss, and false for a hit or for a method other than `\"GET\"` and `\"HEAD\"`; the update half stores only when it is true (`django/middleware/cache.py:UpdateCacheMiddleware._should_update_cache`).",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": "UpdateCacheMiddleware._should_update_cache",
+   "kind": "function",
+   "lines": [
+    87,
+    88
+   ],
+   "fingerprint": "426dae5cbfb23fc8"
+  },
+  {
+   "pointer": "django/utils/cache.py:learn_cache_key",
+   "line": 69,
+   "sentence": "With `USE_I18N` on, Accept-Language is left out: a comment says the key already carries the language, and the raw header would store the same content under several keys (ticket 18191) (`django/utils/cache.py:learn_cache_key`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "learn_cache_key",
+   "kind": "function",
+   "lines": [
+    406,
+    444
+   ],
+   "fingerprint": "c9f633019a4a9860"
+  },
+  {
+   "pointer": "django/utils/cache.py:get_cache_key",
+   "line": 71,
+   "sentence": "It reads the list under the header key, returns `None` if there is none, and otherwise builds the page key for the method it is given (`django/utils/cache.py:get_cache_key`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "get_cache_key",
+   "kind": "function",
+   "lines": [
+    384,
+    403
+   ],
+   "fingerprint": "73bf05056743659d"
+  },
+  {
+   "pointer": "django/utils/cache.py:_generate_cache_header_key",
+   "line": 73,
+   "sentence": "Both keys hash the URL from `HttpRequest.build_absolute_uri`, host and query string included (`django/utils/cache.py:_generate_cache_header_key`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_generate_cache_header_key",
+   "kind": "function",
+   "lines": [
+    374,
+    381
+   ],
+   "fingerprint": "08f0e1f53d39204f"
+  },
+  {
+   "pointer": "django/utils/cache.py:_generate_cache_key",
+   "line": 73,
+   "sentence": "The page key also hashes each listed header's value, empty where the request lacks it, as a netstring: its length in bytes, a colon, the bytes and a comma (`django/utils/cache.py:_generate_cache_key`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_generate_cache_key",
+   "kind": "function",
+   "lines": [
+    354,
+    371
+   ],
+   "fingerprint": "4b5184964adc7d6e"
+  },
+  {
+   "pointer": "tests/cache/tests.py:CacheUtils.test_learn_cache_key_no_header_collision",
+   "line": 73,
+   "sentence": "Django's tests check that `\"EU\"` then nothing and nothing then `\"EU\"` get different keys (`tests/cache/tests.py:CacheUtils.test_learn_cache_key_no_header_collision`).",
+   "tree": "django",
+   "path": "tests/cache/tests.py",
+   "symbol": "CacheUtils.test_learn_cache_key_no_header_collision",
+   "kind": "function",
+   "lines": [
+    2423,
+    2440
+   ],
+   "fingerprint": "0669f7338642e090"
+  },
+  {
+   "pointer": "django/utils/cache.py:_i18n_cache_key_suffix",
+   "line": 73,
+   "sentence": "Then `_i18n_cache_key_suffix` adds, with `USE_I18N`, the language, the request's attribute `LANGUAGE_CODE` where `LocaleMiddleware` has set it and otherwise the active language, and with `USE_TZ` the current time zone's name (`django/utils/cache.py:_i18n_cache_key_suffix`; [Choosing a language: `LocaleMiddleware`](../i18n/choosing.md), [Time zones](../i18n/time-zones.md)).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "_i18n_cache_key_suffix",
+   "kind": "function",
+   "lines": [
+    342,
+    351
+   ],
+   "fingerprint": "a79b56eeb3d47b96"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 75,
+   "sentence": "A page that varies on a header has a different key from the one older releases made, and its first request after an upgrade is a miss (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/middleware/cache.py:FetchFromCacheMiddleware.process_request",
+   "line": 79,
+   "sentence": "With no key it sets the flag true and returns `None`; so it does with no entry, once a `\"HEAD\"` has tried the key of an earlier `\"HEAD\"` (`django/middleware/cache.py:FetchFromCacheMiddleware.process_request`).",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": "FetchFromCacheMiddleware.process_request",
+   "kind": "function",
+   "lines": [
+    169,
+    207
+   ],
+   "fingerprint": "d3d7ee879c04de11"
+  },
+  {
+   "pointer": "django/middleware/cache.py:UpdateCacheMiddleware.process_response",
+   "line": 85,
+   "sentence": "`UpdateCacheMiddleware.process_response` returns the response untouched at the first of these that applies (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`):",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": "UpdateCacheMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    90,
+    146
+   ],
+   "fingerprint": "86dea3d2d0472ba4"
+  },
+  {
+   "pointer": "django/utils/http.py:split_directive_names",
+   "line": 90,
+   "sentence": "Its Cache-Control has `\"private\"`, `\"no-cache\"` or `\"no-store\"`, read in lower case by `split_directive_names`, so that `private=\"Set-Cookie\"` counts too (`django/utils/http.py:split_directive_names`).",
+   "tree": "django",
+   "path": "django/utils/http.py",
+   "symbol": "split_directive_names",
+   "kind": "function",
+   "lines": [
+    212,
+    223
+   ],
+   "fingerprint": "d974bb37106cef05"
+  },
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 94,
+   "sentence": "The middleware gives it to `patch_response_headers`, which adds `\"Expires\"` if absent and a `\"max-age\"`, keeping a smaller one already there ([Cache headers and conditional requests: `django/utils/cache.py`](http-caching.md)).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 94,
+   "sentence": "If the request has an `\"Authorization\"` header and the Cache-Control is not `\"public\"`, it adds Authorization to `\"Vary\"`, so each credential has its own page key, to simplify the keys, the documentation says (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  },
+  {
+   "pointer": "django/template/response.py:SimpleTemplateResponse.__getstate__",
+   "line": 96,
+   "sentence": "A response with a callable `render` is stored by a post-render callback, which runs at once if it is rendered already; a template response refuses to be pickled before it is rendered (`django/template/response.py:SimpleTemplateResponse.__getstate__`).",
+   "tree": "django",
+   "path": "django/template/response.py",
+   "symbol": "SimpleTemplateResponse.__getstate__",
+   "kind": "function",
+   "lines": [
+    53,
+    67
+   ],
+   "fingerprint": "ead949652b1a8b37"
+  },
+  {
+   "pointer": "django/middleware/cache.py",
+   "line": 100,
+   "sentence": "`CacheMiddleware` subclasses both halves, and fetches on the way in and updates on the way out from one place in the list; the module's docstring keeps it for simple sites, the two halves being needed where another middleware \"needs to affect the cache key\", most often `LocaleMiddleware` (`django/middleware/cache.py`).",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    242
+   ],
+   "fingerprint": "b0dcb87c757c1a1e"
+  },
+  {
+   "pointer": "django/middleware/cache.py:CacheMiddleware.__init__",
+   "line": 100,
+   "sentence": "`CacheMiddleware.__init__` takes a cache timeout, a page timeout, and a key prefix and a cache alias as keyword arguments, and a comment separates a value provided as the default from one not provided: `key_prefix=None` gives the prefix `\"\"`, `cache_alias=None` the alias `DEFAULT_CACHE_ALIAS`, `\"default\"`, and either left out keeps the setting's value (`django/middleware/cache.py:CacheMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": "CacheMiddleware.__init__",
+   "kind": "function",
+   "lines": [
+    218,
+    242
+   ],
+   "fingerprint": "24bdec792fbc0f5d"
+  },
+  {
+   "pointer": "django/views/decorators/cache.py:cache_page",
+   "line": 102,
+   "sentence": "`cache_page(timeout, *, cache=None, key_prefix=None)` calls `decorator_from_middleware_with_args(CacheMiddleware)` with `page_timeout=timeout` and always with the alias and the prefix (`django/views/decorators/cache.py:cache_page`).",
+   "tree": "django",
+   "path": "django/views/decorators/cache.py",
+   "symbol": "cache_page",
+   "kind": "function",
+   "lines": [
+    9,
+    27
+   ],
+   "fingerprint": "6e6f05b9edc4f427"
+  },
+  {
+   "pointer": "django/utils/decorators.py:make_middleware_decorator",
+   "line": 102,
+   "sentence": "So it runs inside the whole chain, after the URL is resolved, and returns a hit without `process_response` (`django/utils/decorators.py:make_middleware_decorator`; [A middleware as a decorator](../views/middleware-decorators.md)).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "make_middleware_decorator",
+   "kind": "function",
+   "lines": [
+    123,
+    201
+   ],
+   "fingerprint": "b9d42706d0c3b1b8"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 110,
+   "sentence": "*The page cache's settings, with their defaults from `django/conf/global_settings.py`.*",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 112,
+   "sentence": "`cache_page` stores the response before it passes back out through `MIDDLEWARE`, so a `\"Vary\"` that `SessionMiddleware` or `LocaleMiddleware` adds on the way out is not in the list it learns; the documentation keeps it for content safe to reuse for any request to the URL (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  }
+ ]
+}

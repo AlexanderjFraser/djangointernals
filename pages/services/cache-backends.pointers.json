@@ -1,0 +1,539 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "cache-backends.md",
+ "pointers": [
+  {
+   "pointer": "django/core/cache/backends/",
+   "line": 7,
+   "sentence": "The cache backends Django ships in `django/core/cache/backends/`, `LocMemCache`, `FileBasedCache`, `DatabaseCache`, `PyMemcacheCache` and `PyLibMCCache`, `RedisCache` and `DummyCache`: where each keeps an entry, how an entry expires, and how a backend makes room when it is full.",
+   "tree": "django",
+   "path": "django/core/cache/backends/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "a7eed1656e3901c6"
+  },
+  {
+   "pointer": "django/core/cache/__init__.py:CacheHandler.create_connection",
+   "line": 9,
+   "sentence": "`CacheHandler.create_connection` makes it with the alias's `\"LOCATION\"` and its other keys, and a backend reads the location its own way: as the name of a store in memory, a directory, a table, or servers' addresses (`django/core/cache/__init__.py:CacheHandler.create_connection`).",
+   "tree": "django",
+   "path": "django/core/cache/__init__.py",
+   "symbol": "CacheHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    43,
+    53
+   ],
+   "fingerprint": "3fa7f56f6ec1f6dc"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.get_backend_timeout",
+   "line": 13,
+   "sentence": "Beside each entry they store the time it expires, computed by `BaseCache.get_backend_timeout`, which gives `None` for never (`django/core/cache/backends/base.py:BaseCache.get_backend_timeout`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.get_backend_timeout",
+   "kind": "function",
+   "lines": [
+    87,
+    97
+   ],
+   "fingerprint": "ae7f80dbee4d1709"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 13,
+   "sentence": "Each also makes room itself when a write finds the store full by `\"MAX_ENTRIES\"` of the alias's `\"OPTIONS\"`, 300 by default: it removes one in `\"CULL_FREQUENCY\"` of the entries, a third by default, or all where that is 0; `DatabaseCache` checks on only a share of writes, and removes expired rows first (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 15,
+   "sentence": "They pass a client library the value and a timeout converted for the server, compare no time and cull nothing themselves, and give the alias's `\"OPTIONS\"` to the client they make (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  },
+  {
+   "pointer": "django/core/cache/backends/memcached.py:BaseMemcachedCache.get_backend_timeout",
+   "line": 30,
+   "sentence": "To Memcached, say the comments, 0 means never and a negative timeout expires at once, so `None` becomes 0 and 0 becomes -1; and a number above 30 days is read as a Unix time, so a longer timeout is made one (`django/core/cache/backends/memcached.py:BaseMemcachedCache.get_backend_timeout`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/memcached.py",
+   "symbol": "BaseMemcachedCache.get_backend_timeout",
+   "kind": "function",
+   "lines": [
+    42,
+    68
+   ],
+   "fingerprint": "b4052729571dc40f"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisCache.get_backend_timeout",
+   "line": 30,
+   "sentence": "`RedisCacheClient` is given `None` for no expiry and 0 for anything not positive, and `RedisCacheClient.set` deletes a key it is given 0 for (`django/core/cache/backends/redis.py:RedisCache.get_backend_timeout`, `django/core/cache/backends/redis.py:RedisCacheClient.set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisCache.get_backend_timeout",
+   "kind": "function",
+   "lines": [
+    188,
+    193
+   ],
+   "fingerprint": "c440f25ce9e1bb10"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisCacheClient.set",
+   "line": 30,
+   "sentence": "`RedisCacheClient` is given `None` for no expiry and 0 for anything not positive, and `RedisCacheClient.set` deletes a key it is given 0 for (`django/core/cache/backends/redis.py:RedisCache.get_backend_timeout`, `django/core/cache/backends/redis.py:RedisCacheClient.set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisCacheClient.set",
+   "kind": "function",
+   "lines": [
+    116,
+    122
+   ],
+   "fingerprint": "00e0f4a164e53993"
+  },
+  {
+   "pointer": "django/core/cache/backends/memcached.py:BaseMemcachedCache.clear",
+   "line": 32,
+   "sentence": "`BaseCache.clear`, in every backend, ignores `\"KEY_PREFIX\"` and version, and empties the whole store: for Memcached it calls the client's flush_all, and for Redis flushdb on the first server of `\"LOCATION\"` (`django/core/cache/backends/memcached.py:BaseMemcachedCache.clear`, `django/core/cache/backends/redis.py:RedisCacheClient.clear`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/memcached.py",
+   "symbol": "BaseMemcachedCache.clear",
+   "kind": "function",
+   "lines": [
+    137,
+    138
+   ],
+   "fingerprint": "b33796c2a4092a62"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisCacheClient.clear",
+   "line": 32,
+   "sentence": "`BaseCache.clear`, in every backend, ignores `\"KEY_PREFIX\"` and version, and empties the whole store: for Memcached it calls the client's flush_all, and for Redis flushdb on the first server of `\"LOCATION\"` (`django/core/cache/backends/memcached.py:BaseMemcachedCache.clear`, `django/core/cache/backends/redis.py:RedisCacheClient.clear`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisCacheClient.clear",
+   "kind": "function",
+   "lines": [
+    168,
+    170
+   ],
+   "fingerprint": "3e7d5f22219d69c7"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:_caches",
+   "line": 36,
+   "sentence": "`LocMemCache` keeps its entries in dictionaries at its module's level, keyed by the backend's name: one of entries, one of expiry times, one of locks (`django/core/cache/backends/locmem.py:_caches`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "_caches",
+   "kind": "assignment",
+   "lines": [
+    12,
+    12
+   ],
+   "fingerprint": "d206c5eca4ff6604"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:LocMemCache.__init__",
+   "line": 36,
+   "sentence": "So the store belongs to the process: the handler makes a `LocMemCache` for each thread, and all made with one `\"LOCATION\"`, under any alias, share its entries and its lock (`django/core/cache/backends/locmem.py:LocMemCache.__init__`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "LocMemCache.__init__",
+   "kind": "function",
+   "lines": [
+    20,
+    24
+   ],
+   "fingerprint": "75bf05dea1c7ae51"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:LocMemCache.get",
+   "line": 38,
+   "sentence": "`LocMemCache.set` pickles the value before it takes the lock, and `LocMemCache.get` unpickles it after, so what `get` returns is a copy (`django/core/cache/backends/locmem.py:LocMemCache.get`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "LocMemCache.get",
+   "kind": "function",
+   "lines": [
+    35,
+    43
+   ],
+   "fingerprint": "8294a56a46beb808"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:LocMemCache._cull",
+   "line": 40,
+   "sentence": "When a write finds `\"MAX_ENTRIES\"` entries or more, `LocMemCache._cull` pops entries from the back, the least recently used (`django/core/cache/backends/locmem.py:LocMemCache._cull`):",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "LocMemCache._cull",
+   "kind": "function",
+   "lines": [
+    92,
+    100
+   ],
+   "fingerprint": "8de424218dfbc0ad"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:LocMemCache._has_expired",
+   "line": 49,
+   "sentence": "`LocMemCache._has_expired` counts a key with no expiry recorded as expired, so a missing key and an expired one are a single case; `get`, `LocMemCache.has_key` and `LocMemCache.incr` delete an entry they find expired (`django/core/cache/backends/locmem.py:LocMemCache._has_expired`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "LocMemCache._has_expired",
+   "kind": "function",
+   "lines": [
+    88,
+    90
+   ],
+   "fingerprint": "75665828afb3d6ed"
+  },
+  {
+   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache._key_to_file",
+   "line": 53,
+   "sentence": "`FileBasedCache` keeps each entry in a file of the directory `\"LOCATION\"` names, named by the made key's MD5 with the suffix `\".djcache\"`: in a run, `\"sailings\"` was the file 69edded1a78ce377ad12a36cbce55470.djcache (`django/core/cache/backends/filebased.py:FileBasedCache._key_to_file`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/filebased.py",
+   "symbol": "FileBasedCache._key_to_file",
+   "kind": "function",
+   "lines": [
+    126,
+    140
+   ],
+   "fingerprint": "117bdff6e4f49eff"
+  },
+  {
+   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache._write_content",
+   "line": 53,
+   "sentence": "The file holds the expiry pickled, then the value pickled and compressed with zlib (`django/core/cache/backends/filebased.py:FileBasedCache._write_content`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/filebased.py",
+   "symbol": "FileBasedCache._write_content",
+   "kind": "function",
+   "lines": [
+    43,
+    46
+   ],
+   "fingerprint": "f0971a326ac82f3a"
+  },
+  {
+   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache.set",
+   "line": 55,
+   "sentence": "`FileBasedCache.set` makes the directory again, which a comment says can be deleted at any time, culls, writes the entry to a temporary file in the directory and moves it onto the entry's name with `file_move_safe` ([Files: `File`, `ContentFile` and their helpers](files.md)) (`django/core/cache/backends/filebased.py:FileBasedCache.set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/filebased.py",
+   "symbol": "FileBasedCache.set",
+   "kind": "function",
+   "lines": [
+    48,
+    61
+   ],
+   "fingerprint": "7aedfc6b2a716cdf"
+  },
+  {
+   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache._createdir",
+   "line": 55,
+   "sentence": "The directory is made with the mode 0o700 through `safe_makedirs`, because `os.makedirs`, says a comment, does not give the mode to the directories in between (`django/core/cache/backends/filebased.py:FileBasedCache._createdir`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/filebased.py",
+   "symbol": "FileBasedCache._createdir",
+   "kind": "function",
+   "lines": [
+    120,
+    124
+   ],
+   "fingerprint": "c51e76359a81c298"
+  },
+  {
+   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache._cull",
+   "line": 55,
+   "sentence": "To cull, every `set` lists the directory, and at `\"MAX_ENTRIES\"` files deletes a random sample of them (`django/core/cache/backends/filebased.py:FileBasedCache._cull`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/filebased.py",
+   "symbol": "FileBasedCache._cull",
+   "kind": "function",
+   "lines": [
+    103,
+    118
+   ],
+   "fingerprint": "c5ea158fbb608cdf"
+  },
+  {
+   "pointer": "django/core/management/commands/createcachetable.py:Command.create_table",
+   "line": 59,
+   "sentence": "`DatabaseCache` keeps each entry as a row of the table `\"LOCATION\"` names, with the key as primary key, the value, and an indexed expiry; the createcachetable command creates it (`django/core/management/commands/createcachetable.py:Command.create_table`) ([The commands Django ships](../commands/builtin.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/createcachetable.py",
+   "symbol": "Command.create_table",
+   "kind": "function",
+   "lines": [
+    57,
+    131
+   ],
+   "fingerprint": "d48546c54b48d496"
+  },
+  {
+   "pointer": "django/core/cache/backends/db.py:Options",
+   "line": 59,
+   "sentence": "There is no model: the backend runs SQL of its own on a cursor, and for the database router makes a stand-in class with the module's `Options` as its model options (`django/core/cache/backends/db.py:Options`), answering as a model CacheEntry of an application `\"django_cache\"` (`django/core/cache/backends/db.py:BaseDatabaseCache.__init__`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/db.py",
+   "symbol": "Options",
+   "kind": "class",
+   "lines": [
+    14,
+    30
+   ],
+   "fingerprint": "deb0c57d188da375"
+  },
+  {
+   "pointer": "django/core/cache/backends/db.py:BaseDatabaseCache.__init__",
+   "line": 59,
+   "sentence": "There is no model: the backend runs SQL of its own on a cursor, and for the database router makes a stand-in class with the module's `Options` as its model options (`django/core/cache/backends/db.py:Options`), answering as a model CacheEntry of an application `\"django_cache\"` (`django/core/cache/backends/db.py:BaseDatabaseCache.__init__`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/db.py",
+   "symbol": "BaseDatabaseCache.__init__",
+   "kind": "function",
+   "lines": [
+    34,
+    46
+   ],
+   "fingerprint": "9a393829545b6542"
+  },
+  {
+   "pointer": "django/core/cache/backends/db.py:DatabaseCache._base_set",
+   "line": 61,
+   "sentence": "A `DatabaseError` is swallowed, and `add` or `touch` returns `False`: to be thread-safe, says the comment, updates and inserts may fail silently (`django/core/cache/backends/db.py:DatabaseCache._base_set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/db.py",
+   "symbol": "DatabaseCache._base_set",
+   "kind": "function",
+   "lines": [
+    119,
+    212
+   ],
+   "fingerprint": "03f2c8ab31f800dc"
+  },
+  {
+   "pointer": "django/core/cache/backends/db.py:DatabaseCache.get_many",
+   "line": 63,
+   "sentence": "`DatabaseCache.get_many`, which `DatabaseCache.get` calls with one key, sends one SELECT, converts each expiry as the ORM would, lest, says a comment, it compare aware and naive datetimes, deletes the expired rows in one DELETE, and unpickles the others, their Base64 decoded strictly since 6.1 (`django/core/cache/backends/db.py:DatabaseCache.get_many`, `docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/db.py",
+   "symbol": "DatabaseCache.get_many",
+   "kind": "function",
+   "lines": [
+    61,
+    105
+   ],
+   "fingerprint": "d919878149fbd7f9"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 63,
+   "sentence": "`DatabaseCache.get_many`, which `DatabaseCache.get` calls with one key, sends one SELECT, converts each expiry as the ORM would, lest, says a comment, it compare aware and naive datetimes, deletes the expired rows in one DELETE, and unpickles the others, their Base64 decoded strictly since 6.1 (`django/core/cache/backends/db.py:DatabaseCache.get_many`, `docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/core/cache/backends/db.py:DatabaseCache._base_set",
+   "line": 65,
+   "sentence": "Only a share of writes cull: each draws a random number, and culls when it is at most `\"CULL_PROBABILITY\"` of the alias's `\"OPTIONS\"`, 0.1 by default (`django/core/cache/backends/db.py:DatabaseCache._base_set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/db.py",
+   "symbol": "DatabaseCache._base_set",
+   "kind": "function",
+   "lines": [
+    119,
+    212
+   ],
+   "fingerprint": "03f2c8ab31f800dc"
+  },
+  {
+   "pointer": "django/core/cache/backends/db.py:DatabaseCache._cull",
+   "line": 65,
+   "sentence": "The cull counts the rows; past `\"MAX_ENTRIES\"`, it deletes the expired ones, and if still past, the rows whose keys sort first, one in `\"CULL_FREQUENCY\"`, finding the first key to keep with `BaseDatabaseOperations.cache_key_culling_sql` ([The SQL a backend writes: `BaseDatabaseOperations`](../backends/operations.md)) (`django/core/cache/backends/db.py:DatabaseCache._cull`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/db.py",
+   "symbol": "DatabaseCache._cull",
+   "kind": "function",
+   "lines": [
+    265,
+    295
+   ],
+   "fingerprint": "dde5b3f740a3e2ee"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 67,
+   "sentence": "Culling on a share of writes, and `\"CULL_PROBABILITY\"`, are new, as an optimization (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/core/cache/backends/memcached.py:PyMemcacheCache.__init__",
+   "line": 71,
+   "sentence": "`PyMemcacheCache` makes pymemcache's HashClient, by default with pymemcache's pickling serializer; `PyLibMCCache` makes pylibmc's client (`django/core/cache/backends/memcached.py:PyMemcacheCache.__init__`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/memcached.py",
+   "symbol": "PyMemcacheCache.__init__",
+   "kind": "function",
+   "lines": [
+    177,
+    189
+   ],
+   "fingerprint": "f04f2f44f052e830"
+  },
+  {
+   "pointer": "django/core/cache/backends/memcached.py:BaseMemcachedCache.validate_key",
+   "line": 71,
+   "sentence": "Their base, `BaseMemcachedCache`, refuses the keys the base class warns of: `BaseMemcachedCache.validate_key` raises `InvalidCacheKey` where `BaseCache.validate_key` warns with `CacheKeyWarning`, for a made key longer than `MEMCACHE_MAX_KEY_LENGTH` or holding a space or a control character (`django/core/cache/backends/memcached.py:BaseMemcachedCache.validate_key`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/memcached.py",
+   "symbol": "BaseMemcachedCache.validate_key",
+   "kind": "function",
+   "lines": [
+    140,
+    142
+   ],
+   "fingerprint": "68de7e9d6977c5eb"
+  },
+  {
+   "pointer": "django/core/cache/backends/memcached.py:BaseMemcachedCache.set",
+   "line": 73,
+   "sentence": "`BaseMemcachedCache.set` deletes the key when the library reports a failure, so that, says the comment, the key does not keep its old value when the new one is over Memcached's limit (`django/core/cache/backends/memcached.py:BaseMemcachedCache.set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/memcached.py",
+   "symbol": "BaseMemcachedCache.set",
+   "kind": "function",
+   "lines": [
+    78,
+    83
+   ],
+   "fingerprint": "f060e8fbf63e9bdb"
+  },
+  {
+   "pointer": "django/core/cache/backends/memcached.py:PyLibMCCache.close",
+   "line": 73,
+   "sentence": "`BaseMemcachedCache.close` disconnects the client from its servers, as many clients, its comment says, do not clean up their connections; `PyLibMCCache.close` does nothing, libmemcached managing its own (`django/core/cache/backends/memcached.py:PyLibMCCache.close`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/memcached.py",
+   "symbol": "PyLibMCCache.close",
+   "kind": "function",
+   "lines": [
+    168,
+    171
+   ],
+   "fingerprint": "c7c5c5a5fbe6fe4d"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisCacheClient.__init__",
+   "line": 77,
+   "sentence": "`RedisCache` makes the keys and the timeout and hands the rest to a `RedisCacheClient`, which takes a serializer, a pool class and a parser class out of `\"OPTIONS\"` and passes the others to its connection pools (`django/core/cache/backends/redis.py:RedisCacheClient.__init__`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisCacheClient.__init__",
+   "kind": "function",
+   "lines": [
+    33,
+    75
+   ],
+   "fingerprint": "1bd690bf594322e9"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisCacheClient._get_connection_pool_index",
+   "line": 77,
+   "sentence": "Every write goes to the first server of `\"LOCATION\"`, and, if there are others, every read to one of them, chosen at random, so a read just after a write reaches a server other than the one written (`django/core/cache/backends/redis.py:RedisCacheClient._get_connection_pool_index`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisCacheClient._get_connection_pool_index",
+   "kind": "function",
+   "lines": [
+    77,
+    82
+   ],
+   "fingerprint": "3808c7fb7c43b557"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisSerializer.dumps",
+   "line": 79,
+   "sentence": "`RedisSerializer` pickles every value but an integer (a bool is pickled), which goes to the library as it is, for better atomicity of increments, its comment says: `RedisCacheClient.incr` checks that the key exists, then hands the increment to the library's incr without reading the value (`django/core/cache/backends/redis.py:RedisSerializer.dumps`, `django/core/cache/backends/redis.py:RedisCacheClient.incr`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisSerializer.dumps",
+   "kind": "function",
+   "lines": [
+    17,
+    23
+   ],
+   "fingerprint": "4fa5ec72debe8f5b"
+  },
+  {
+   "pointer": "django/core/cache/backends/redis.py:RedisCacheClient.incr",
+   "line": 79,
+   "sentence": "`RedisSerializer` pickles every value but an integer (a bool is pickled), which goes to the library as it is, for better atomicity of increments, its comment says: `RedisCacheClient.incr` checks that the key exists, then hands the increment to the library's incr without reading the value (`django/core/cache/backends/redis.py:RedisSerializer.dumps`, `django/core/cache/backends/redis.py:RedisCacheClient.incr`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/redis.py",
+   "symbol": "RedisCacheClient.incr",
+   "kind": "function",
+   "lines": [
+    146,
+    150
+   ],
+   "fingerprint": "4d04b0651dce4cc2"
+  },
+  {
+   "pointer": "django/core/cache/backends/dummy.py:DummyCache",
+   "line": 83,
+   "sentence": "Each method given a key still makes and validates it, so the keys `BaseCache.validate_key` warns of still warn; `DummyCache.get` returns the default, `DummyCache.add` returns `True`, and the methods that report a key found return `False` (`django/core/cache/backends/dummy.py:DummyCache`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/dummy.py",
+   "symbol": "DummyCache",
+   "kind": "class",
+   "lines": [
+    6,
+    34
+   ],
+   "fingerprint": "88954799660c6ef4"
+  }
+ ]
+}

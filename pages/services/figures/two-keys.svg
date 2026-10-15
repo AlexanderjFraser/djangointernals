@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 633">
+  <!-- three rows: the first request, which stores the header list under the header key and the response under
+       the page key; the two keys, one part to a row, so that each column read down is one key; the later request,
+       which reads the header list first and then the response. On the left, what each row is -->
+  <!-- the first request -->
+  <text text-anchor="end" x="306" y="22"><tspan class="strong">first</tspan> <tspan class="name">GET</tspan></text>
+  <text class="name" text-anchor="end" x="306" y="40">http://harbour.example/timetable/</text>
+  <text class="quiet" text-anchor="end" x="306" y="62">a miss; the view runs; no <tspan class="name">&quot;Vary&quot;</tspan></text>
+  <rect class="ground" x="326.5" y="0.5" width="613" height="190" rx="4"/>
+  <text class="name" x="339" y="22">process_response</text>
+  <rect class="box" x="338.5" y="34.5" width="283" height="138" rx="4"/>
+  <text class="name" x="351" y="56">learn_cache_key</text>
+  <text x="351" y="80">the header list, <tspan class="name">[]</tspan></text>
+  <text class="quiet small" x="351" y="98">the headers <tspan class="name small">&quot;Vary&quot;</tspan> names, as keys of</text>
+  <text class="quiet small" x="351" y="114"><tspan class="name small">request.META</tspan>, sorted</text>
+  <text x="351" y="136">under the header key, for 60 seconds</text>
+  <text x="351" y="158">returns the page key</text>
+  <path class="line" d="M622 153.5 H650"/>
+  <polygon class="head" points="660,153.5 650,148.5 650,158.5"/>
+  <text x="668" y="158">the response, under the page key,</text>
+  <text x="668" y="176">for 60 seconds</text>
+  <!-- each stored -->
+  <path class="line" d="M480 173 V214.5"/>
+  <polygon class="head" points="480,224.5 475,214.5 485,214.5"/>
+  <path class="line" d="M794.5 184 V214.5"/>
+  <polygon class="head" points="794.5,224.5 789.5,214.5 799.5,214.5"/>
+  <!-- the two keys, and what each part is -->
+  <rect class="ground" x="326.5" y="224.5" width="307" height="274.5" rx="4"/>
+  <rect class="ground" x="649.5" y="224.5" width="290" height="274.5" rx="4"/>
+  <text class="strong" x="339" y="247">the header key</text>
+  <text class="strong" x="662" y="247">the page key</text>
+  <text class="quiet" text-anchor="end" x="306" y="247">the parts of a key</text>
+  <text class="name" x="339" y="275">:1:</text>
+  <text class="name" x="662" y="275">:1:</text>
+  <text class="name" x="339" y="297">views.decorators.cache.cache_header.</text>
+  <text class="name" x="662" y="297">views.decorators.cache.cache_page.</text>
+  <rect class="ground dashed" x="339.5" y="306.5" width="18" height="16" rx="4"/>
+  <text class="name" x="360" y="319">.</text>
+  <rect class="ground dashed" x="662.5" y="306.5" width="18" height="16" rx="4"/>
+  <text class="name" x="683" y="319">.</text>
+  <text class="name mark" x="662" y="341">GET.</text>
+  <text class="name" x="339" y="363">d85587acf917224b6af36a3c98d2b75f.</text>
+  <text class="name" x="662" y="363">d85587acf917224b6af36a3c98d2b75f.</text>
+  <text class="name mark" x="662" y="385">d41d8cd98f00b204e9800998ecf8427e.</text>
+  <text class="name" x="339" y="425">en-us.</text>
+  <text class="name" x="662" y="425">en-us.</text>
+  <text class="name" x="339" y="447">UTC</text>
+  <text class="name" x="662" y="447">UTC</text>
+  <text text-anchor="end" x="306" y="275">the cache's <tspan class="name">KEY_PREFIX</tspan> (empty) and <tspan class="name">VERSION</tspan> (1)</text>
+  <text text-anchor="end" x="306" y="297">which key</text>
+  <text text-anchor="end" x="306" y="319">the page cache's key prefix (empty)</text>
+  <text text-anchor="end" x="306" y="341">the method, in the page key only</text>
+  <text text-anchor="end" x="306" y="363">MD5 of the absolute URL</text>
+  <text text-anchor="end" x="306" y="385">MD5 of the listed headers' values</text>
+  <text text-anchor="end" x="306" y="403">as netstrings: here, of nothing</text>
+  <text text-anchor="end" x="306" y="425">the language (<tspan class="name">USE_I18N</tspan>)</text>
+  <text text-anchor="end" x="306" y="447">the time zone (<tspan class="name">USE_TZ</tspan>)</text>
+  <!-- what each key holds -->
+  <path class="line" d="M338.5 461.5 H621.5"/>
+  <path class="line" d="M661.5 461.5 H927.5"/>
+  <text x="339" y="485">the header list, <tspan class="name">[]</tspan></text>
+  <text x="662" y="485">the response</text>
+  <!-- the later request: the header list first, then the response -->
+  <text text-anchor="end" x="306" y="554.5"><tspan class="strong">later</tspan> <tspan class="name">GET</tspan></text>
+  <text class="quiet" text-anchor="end" x="306" y="576.5">a hit</text>
+  <path class="line" d="M480 499.5 V523"/>
+  <polygon class="head" points="480,533 475,523 485,523"/>
+  <rect class="box" x="326.5" y="533" width="307" height="99.5" rx="4"/>
+  <text class="name" x="339" y="554.5">get_cache_key</text>
+  <text x="339" y="578.5">the header key</text>
+  <path class="line" d="M433 574 H451"/>
+  <polygon class="head" points="461,574 451,569 451,579"/>
+  <text x="469" y="578.5"><tspan class="name">[]</tspan></text>
+  <text x="339" y="600.5">the page key, built from <tspan class="name">[]</tspan></text>
+  <text x="339" y="618.5">and this request</text>
+  <path class="line" d="M634 596 H650"/>
+  <polygon class="head" points="660,596 650,591 650,601"/>
+  <path class="line" d="M794.5 499.5 V574.5"/>
+  <polygon class="head" points="794.5,584.5 789.5,574.5 799.5,574.5"/>
+  <text x="668" y="600.5">the page key</text>
+  <path class="line" d="M748 596 H766"/>
+  <polygon class="head" points="776,596 766,591 766,601"/>
+  <text x="784" y="600.5">the response,</text>
+  <text x="668" y="618.5">returned without the view</text>
+</svg>

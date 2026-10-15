@@ -1,0 +1,351 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "storage.md",
+ "pointers": [
+  {
+   "pointer": "django/core/files/storage/base.py:Storage",
+   "line": 9,
+   "sentence": "`Storage` settles the name in methods its backends inherit; a backend stores the bytes under it, and answers for it (`django/core/files/storage/base.py:Storage`).",
+   "tree": "django",
+   "path": "django/core/files/storage/base.py",
+   "symbol": "Storage",
+   "kind": "class",
+   "lines": [
+    11,
+    206
+   ],
+   "fingerprint": "d05cbdc37e1aacac"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 13,
+   "sentence": "Its default has two aliases, `\"default\"`, a `FileSystemStorage`, and `\"staticfiles\"`, the static files' storage ([Content types, static files and the other contrib apps](../contrib.md)) (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/core/files/storage/handler.py:StorageHandler",
+   "line": 15,
+   "sentence": "It copies the setting into `StorageHandler.backends` the first time a storage is asked for, and `StorageHandler.__getitem__` makes an alias's storage with `StorageHandler.create_storage` once and keeps it, so the process has one storage for each alias, shared by every thread (`django/core/files/storage/handler.py:StorageHandler`).",
+   "tree": "django",
+   "path": "django/core/files/storage/handler.py",
+   "symbol": "StorageHandler",
+   "kind": "class",
+   "lines": [
+    11,
+    46
+   ],
+   "fingerprint": "880777779744e37d"
+  },
+  {
+   "pointer": "django/core/files/storage/__init__.py:DefaultStorage",
+   "line": 17,
+   "sentence": "`django.core.files.storage.default_storage` is a `DefaultStorage`, a `LazyObject` that looks up the `\"default\"` alias at first use and stands for it from then on; a `django.db.models.FileField` given no storage keeps it ([File fields](../models/files.md)) (`django/core/files/storage/__init__.py:DefaultStorage`).",
+   "tree": "django",
+   "path": "django/core/files/storage/__init__.py",
+   "symbol": "DefaultStorage",
+   "kind": "class",
+   "lines": [
+    21,
+    23
+   ],
+   "fingerprint": "9307cbf72ba6ef08"
+  },
+  {
+   "pointer": "django/test/signals.py:storages_changed",
+   "line": 17,
+   "sentence": "A test's override of `STORAGES` empties the handler and the lazy storages ([Overriding settings](../startup/overrides.md)) (`django/test/signals.py:storages_changed`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "storages_changed",
+   "kind": "function",
+   "lines": [
+    116,
+    134
+   ],
+   "at": 117,
+   "fingerprint": "2e42269d452b7877"
+  },
+  {
+   "pointer": "django/core/files/storage/base.py:Storage",
+   "line": 21,
+   "sentence": "Two public methods of `Storage` hand the work to private ones that the base class does not define: `Storage.open` calls `_open`, and `Storage.save`, once it has settled the name, calls `_save` (`django/core/files/storage/base.py:Storage`).",
+   "tree": "django",
+   "path": "django/core/files/storage/base.py",
+   "symbol": "Storage",
+   "kind": "class",
+   "lines": [
+    11,
+    206
+   ],
+   "fingerprint": "d05cbdc37e1aacac"
+  },
+  {
+   "pointer": "docs/howto/custom-file-storage.txt",
+   "line": 21,
+   "sentence": "The documentation lets a backend leave some out (`docs/howto/custom-file-storage.txt`), but the inherited `is_name_available` calls `exists`, so `save` needs it.",
+   "tree": "django",
+   "path": "docs/howto/custom-file-storage.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    140
+   ],
+   "fingerprint": "2663c1934ca9ce4d"
+  },
+  {
+   "pointer": "django/core/files/storage/base.py:Storage.save",
+   "line": 25,
+   "sentence": "`Storage.save` takes a name, the content and, optionally, a maximum length, and returns the name it used (`django/core/files/storage/base.py:Storage.save`).",
+   "tree": "django",
+   "path": "django/core/files/storage/base.py",
+   "symbol": "Storage.save",
+   "kind": "function",
+   "lines": [
+    24,
+    52
+   ],
+   "fingerprint": "f445fc24d106f3e3"
+  },
+  {
+   "pointer": "django/core/files/utils.py:validate_file_name",
+   "line": 27,
+   "sentence": "Each check is `validate_file_name`, which raises `SuspiciousFileOperation` for a name whose last part is empty, `\".\"` or `\"..\"`, or which, read with forward slashes, is absolute or has `\"..\"` among its parts (`django/core/files/utils.py:validate_file_name`).",
+   "tree": "django",
+   "path": "django/core/files/utils.py",
+   "symbol": "validate_file_name",
+   "kind": "function",
+   "lines": [
+    7,
+    23
+   ],
+   "fingerprint": "0f4d6c7683d1e73b"
+  },
+  {
+   "pointer": "django/core/files/storage/base.py:Storage.get_available_name",
+   "line": 62,
+   "sentence": "`Storage.get_available_name` refuses a directory with `\"..\"` among its parts and validates the file name (`django/core/files/storage/base.py:Storage.get_available_name`).",
+   "tree": "django",
+   "path": "django/core/files/storage/base.py",
+   "symbol": "Storage.get_available_name",
+   "kind": "function",
+   "lines": [
+    75,
+    115
+   ],
+   "fingerprint": "4c4112a1a0310150"
+  },
+  {
+   "pointer": "django/utils/text.py:get_valid_filename",
+   "line": 71,
+   "sentence": "`Storage.get_valid_name` calls `get_valid_filename`, which strips the ends, turns spaces into underscores and drops every character but letters and digits of any script, dashes, underscores and dots; a result that is empty, `\".\"` or `\"..\"` raises `SuspiciousFileOperation` (`django/utils/text.py:get_valid_filename`).",
+   "tree": "django",
+   "path": "django/utils/text.py",
+   "symbol": "get_valid_filename",
+   "kind": "function",
+   "lines": [
+    264,
+    278
+   ],
+   "at": 265,
+   "fingerprint": "aec1252e49827efc"
+  },
+  {
+   "pointer": "django/core/files/storage/base.py:Storage.generate_filename",
+   "line": 71,
+   "sentence": "`Storage.generate_filename` cleans the last part of a path so, refuses `\"..\"` in its directory, and normalizes it (`django/core/files/storage/base.py:Storage.generate_filename`); a file field calls it on the name its `upload_to` gives ([File fields](../models/files.md)).",
+   "tree": "django",
+   "path": "django/core/files/storage/base.py",
+   "symbol": "Storage.generate_filename",
+   "kind": "function",
+   "lines": [
+    117,
+    129
+   ],
+   "fingerprint": "0017787fa74a79f1"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage",
+   "line": 80,
+   "sentence": "The constructor of `FileSystemStorage` stores its arguments and reads no setting (`django/core/files/storage/filesystem.py:FileSystemStorage`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage",
+   "kind": "class",
+   "lines": [
+    18,
+    224
+   ],
+   "at": 19,
+   "fingerprint": "a94262f99d7efe5e"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 80,
+   "sentence": "The storage uses cached properties, each the argument or, where that is `None`, a setting read at first use: `FileSystemStorage.location`, `MEDIA_ROOT`, made absolute either way; `FileSystemStorage.base_url`, `MEDIA_URL` (an argument gets a slash at its end); and the two modes, from `FILE_UPLOAD_PERMISSIONS` (`0o644`) and `FILE_UPLOAD_DIRECTORY_PERMISSIONS` (`None`) (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/core/files/storage/mixins.py:StorageSettingsMixin",
+   "line": 80,
+   "sentence": "The constructor connects `StorageSettingsMixin._clear_cached_properties` to `setting_changed`, which drops a property when its setting changes (`django/core/files/storage/mixins.py:StorageSettingsMixin`).",
+   "tree": "django",
+   "path": "django/core/files/storage/mixins.py",
+   "symbol": "StorageSettingsMixin",
+   "kind": "class",
+   "lines": [
+    1,
+    15
+   ],
+   "fingerprint": "95f54eac4a504041"
+  },
+  {
+   "pointer": "docs/howto/custom-file-storage.txt",
+   "line": 82,
+   "sentence": "The class is `deconstructible`, as a storage must be for its field to go into a migration (`docs/howto/custom-file-storage.txt`), and the decorator keeps only the arguments given (`django/utils/deconstruct.py:deconstructible`): the example's default storage deconstructs to its class's path and no arguments, naming no directory ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)).",
+   "tree": "django",
+   "path": "docs/howto/custom-file-storage.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    140
+   ],
+   "fingerprint": "2663c1934ca9ce4d"
+  },
+  {
+   "pointer": "django/utils/deconstruct.py:deconstructible",
+   "line": 82,
+   "sentence": "The class is `deconstructible`, as a storage must be for its field to go into a migration (`docs/howto/custom-file-storage.txt`), and the decorator keeps only the arguments given (`django/utils/deconstruct.py:deconstructible`): the example's default storage deconstructs to its class's path and no arguments, naming no directory ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)).",
+   "tree": "django",
+   "path": "django/utils/deconstruct.py",
+   "symbol": "deconstructible",
+   "kind": "function",
+   "lines": [
+    6,
+    61
+   ],
+   "fingerprint": "d681c9784ddce071"
+  },
+  {
+   "pointer": "django/utils/_os.py:safe_join",
+   "line": 86,
+   "sentence": "`FileSystemStorage._save` finds the path with `safe_join`, which raises `SuspiciousFileOperation` for one outside the location (`django/utils/_os.py:safe_join`), and makes the missing directories, with `safe_makedirs` when a directory mode is set, since `os.makedirs` does not give the directories between its mode (the comment cites CPython issue 86533).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "safe_join",
+   "kind": "function",
+   "lines": [
+    65,
+    92
+   ],
+   "fingerprint": "825ec30e9dd3bee8"
+  },
+  {
+   "pointer": "django/core/files/locks.py",
+   "line": 86,
+   "sentence": "Other content it writes chunk by chunk, under an exclusive lock (`django/core/files/locks.py`), into a file opened with `os.O_CREAT` and `os.O_EXCL`, so that the open fails if the file exists (`django/core/files/storage/filesystem.py:FileSystemStorage._save`).",
+   "tree": "django",
+   "path": "django/core/files/locks.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    128
+   ],
+   "fingerprint": "9a9f7a85cf273286"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage._save",
+   "line": 86,
+   "sentence": "Other content it writes chunk by chunk, under an exclusive lock (`django/core/files/locks.py`), into a file opened with `os.O_CREAT` and `os.O_EXCL`, so that the open fails if the file exists (`django/core/files/storage/filesystem.py:FileSystemStorage._save`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage._save",
+   "kind": "function",
+   "lines": [
+    68,
+    144
+   ],
+   "fingerprint": "5670333b5936370d"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage.is_name_available",
+   "line": 96,
+   "sentence": "With `allow_overwrite=True`, `FileSystemStorage.is_name_available` considers only the length and `FileSystemStorage.get_alternative_name` returns the name unchanged, so a long name is only cut; `_save` opens with `os.O_TRUNC` in place of `os.O_EXCL`, and lets `file_move_safe` overwrite (`django/core/files/storage/filesystem.py:FileSystemStorage.is_name_available`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage.is_name_available",
+   "kind": "function",
+   "lines": [
+    171,
+    174
+   ],
+   "fingerprint": "926d300ddc974879"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage._datetime_from_timestamp",
+   "line": 100,
+   "sentence": "The times are aware, in UTC, under `USE_TZ`, and naive local ones otherwise (`django/core/files/storage/filesystem.py:FileSystemStorage._datetime_from_timestamp`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage._datetime_from_timestamp",
+   "kind": "function",
+   "lines": [
+    209,
+    215
+   ],
+   "fingerprint": "879e253c6cc986a5"
+  },
+  {
+   "pointer": "django/core/files/storage/memory.py:InMemoryStorage",
+   "line": 104,
+   "sentence": "`InMemoryStorage` keeps its files in the instance, in a tree of nodes whose files are each an `InMemoryFileNode`, a `ContentFile` that keeps its times (`django/core/files/storage/memory.py:InMemoryStorage`).",
+   "tree": "django",
+   "path": "django/core/files/storage/memory.py",
+   "symbol": "InMemoryStorage",
+   "kind": "class",
+   "lines": [
+    167,
+    293
+   ],
+   "at": 168,
+   "fingerprint": "7241d43d93194407"
+  },
+  {
+   "pointer": "docs/ref/files/storage.txt",
+   "line": 104,
+   "sentence": "It inherits the naming and, given no location or base URL, takes them from `MEDIA_ROOT` and `MEDIA_URL`, but writes nothing to disk; the documentation offers it to speed up tests (`docs/ref/files/storage.txt`).",
+   "tree": "django",
+   "path": "docs/ref/files/storage.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    268
+   ],
+   "fingerprint": "6739a5f33ae351da"
+  }
+ ]
+}

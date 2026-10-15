@@ -80,7 +80,7 @@ test_name = connection.creation.create_test_db(verbosity=0, autoclobber=True)
 settings.MIGRATION_MODULES  ->  {}
 ```
 
-**The rest.** Then the createcachetable command makes the tables of the database caches that the router lets on this alias ([Caching, files, mail, signals and tasks](../services.md)); `BaseDatabaseWrapper.ensure_connection` opens the connection if nothing has; and where the environment variable `"RUNNING_DJANGOS_TEST_SUITE"` is `"true"`, `BaseDatabaseCreation.mark_expected_failures_and_skips` marks the tests of Django's own suite that this backend's features list ([What a database can do: `BaseDatabaseFeatures`](features.md)).
+**The rest.** Then the createcachetable command makes the tables of the database caches that the router lets on this alias ([The cache backends](../services/cache-backends.md)); `BaseDatabaseWrapper.ensure_connection` opens the connection if nothing has; and where the environment variable `"RUNNING_DJANGOS_TEST_SUITE"` is `"true"`, `BaseDatabaseCreation.mark_expected_failures_and_skips` marks the tests of Django's own suite that this backend's features list ([What a database can do: `BaseDatabaseFeatures`](features.md)).
 
 ## Destroying it: `destroy_test_db`
 

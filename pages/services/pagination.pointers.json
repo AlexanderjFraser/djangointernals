@@ -1,0 +1,251 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "pagination.md",
+ "pointers": [
+  {
+   "pointer": "django/core/paginator.py:BasePaginator",
+   "line": 9,
+   "sentence": "What the two paginators share is in `BasePaginator` (`django/core/paginator.py:BasePaginator`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator",
+   "kind": "class",
+   "lines": [
+    30,
+    144
+   ],
+   "fingerprint": "7be2265c0f8a67e5"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator.__init__",
+   "line": 13,
+   "sentence": "`BasePaginator.__init__` keeps the list; the page size and the number of **orphans**, objects that may join the last page rather than make one of their own, both through `int`; whether the first page may be empty, `allow_empty_first_page=True` by default; and `BasePaginator.default_error_messages` with any given in `error_messages=` merged over them by key (`django/core/paginator.py:BasePaginator.__init__`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator.__init__",
+   "kind": "function",
+   "lines": [
+    40,
+    70
+   ],
+   "fingerprint": "5bcda146160f6932"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 15,
+   "sentence": "Orphans not fewer than the page size: `__init__` warns, `RemovedInDjango2028Warning`, whoever the caller, and is to raise `ValueError` in Django 2028 (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator._check_object_list_is_ordered",
+   "line": 17,
+   "sentence": "Where the list's `ordered`, which a queryset has and a list lacks, is false, `BasePaginator._check_object_list_is_ordered` warns with `UnorderedObjectListWarning` that pagination \"may yield inconsistent results\" (`django/core/paginator.py:BasePaginator._check_object_list_is_ordered`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator._check_object_list_is_ordered",
+   "kind": "function",
+   "lines": [
+    72,
+    90
+   ],
+   "fingerprint": "85a39827b1047e26"
+  },
+  {
+   "pointer": "django/core/paginator.py:Paginator.count",
+   "line": 21,
+   "sentence": "`Paginator.count` calls the list's `count` where it is callable, not built in, and takes no argument, as `QuerySet.count` does, and otherwise takes `len` (`django/core/paginator.py:Paginator.count`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Paginator.count",
+   "kind": "function",
+   "lines": [
+    177,
+    183
+   ],
+   "at": 178,
+   "fingerprint": "2094d88801c1fc68"
+  },
+  {
+   "pointer": "django/core/paginator.py:Paginator.num_pages",
+   "line": 23,
+   "sentence": "`num_pages` is 0 for an empty list with `allow_empty_first_page=False`, and otherwise the count less the orphans, at least 1, divided by the page size and rounded up: an empty list has one empty page, and orphans add no page (`django/core/paginator.py:Paginator.num_pages`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Paginator.num_pages",
+   "kind": "function",
+   "lines": [
+    185,
+    191
+   ],
+   "at": 186,
+   "fingerprint": "0185b52594645392"
+  },
+  {
+   "pointer": "django/core/paginator.py:Paginator.page",
+   "line": 27,
+   "sentence": "`Paginator.page` checks the number and slices one page size from (number − 1) × page size; where the slice's end plus the orphans reaches the count, the slice runs to the end, and the orphans join the last page (`django/core/paginator.py:Paginator.page`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Paginator.page",
+   "kind": "function",
+   "lines": [
+    168,
+    175
+   ],
+   "fingerprint": "aac5c831b6b867aa"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator._get_page",
+   "line": 27,
+   "sentence": "`BasePaginator._get_page`, a hook for a subclass that wants another class, wraps the slice in a `Page` (`django/core/paginator.py:BasePaginator._get_page`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator._get_page",
+   "kind": "function",
+   "lines": [
+    123,
+    130
+   ],
+   "fingerprint": "f954c7aa7293a41a"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator._validate_number",
+   "line": 29,
+   "sentence": "`Paginator.validate_number` hands the number and the number of pages to `BasePaginator._validate_number`, which returns the number through `int`, or raises a subclass of `InvalidPage` with one of the paginator's error messages, the defaults marked for translation (`django/core/paginator.py:BasePaginator._validate_number`):",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator._validate_number",
+   "kind": "function",
+   "lines": [
+    132,
+    144
+   ],
+   "fingerprint": "e1d1a1dacce739ec"
+  },
+  {
+   "pointer": "django/core/paginator.py:Paginator.get_page",
+   "line": 37,
+   "sentence": "`Paginator.get_page` takes a number as a request gave it: `PageNotAnInteger` becomes the first page, `EmptyPage` the last (`django/core/paginator.py:Paginator.get_page`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Paginator.get_page",
+   "kind": "function",
+   "lines": [
+    155,
+    166
+   ],
+   "fingerprint": "5f2a53021eaf7c5c"
+  },
+  {
+   "pointer": "django/core/paginator.py:Page",
+   "line": 65,
+   "sentence": "`Page` is a `collections.abc.Sequence`, which builds iteration, `in` and `reversed` on its `__len__` and `__getitem__` (`django/core/paginator.py:Page`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Page",
+   "kind": "class",
+   "lines": [
+    302,
+    359
+   ],
+   "fingerprint": "5bad81d5508db4fc"
+  },
+  {
+   "pointer": "django/core/paginator.py:Page.start_index",
+   "line": 67,
+   "sentence": "`Page.start_index` and `Page.end_index` count from 1 across the list: the start is 0 for an empty list, and the last page ends at the count, orphans included (`django/core/paginator.py:Page.start_index`, `django/core/paginator.py:Page.end_index`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Page.start_index",
+   "kind": "function",
+   "lines": [
+    341,
+    349
+   ],
+   "fingerprint": "7b140b15f001b15f"
+  },
+  {
+   "pointer": "django/core/paginator.py:Page.end_index",
+   "line": 67,
+   "sentence": "`Page.start_index` and `Page.end_index` count from 1 across the list: the start is 0 for an empty list, and the last page ends at the count, orphans included (`django/core/paginator.py:Page.start_index`, `django/core/paginator.py:Page.end_index`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "Page.end_index",
+   "kind": "function",
+   "lines": [
+    351,
+    359
+   ],
+   "fingerprint": "b2270d27dfedee47"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator._get_elided_page_range",
+   "line": 71,
+   "sentence": "It keeps `on_ends=2` pages at each end and `on_each_side=3` around the current one, gives every page when there are no more than twice their sum, and never elides a single page (`django/core/paginator.py:BasePaginator._get_elided_page_range`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator._get_elided_page_range",
+   "kind": "function",
+   "lines": [
+    92,
+    121
+   ],
+   "fingerprint": "2de83a6172c2f523"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 77,
+   "sentence": "`AsyncPaginator` and `AsyncPage` are new (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/core/paginator.py:AsyncPaginator.acount",
+   "line": 79,
+   "sentence": "`AsyncPaginator.acount` awaits the list's `acount` where it is a coroutine function with no argument, as `QuerySet.acount` is, and otherwise takes `len` (`django/core/paginator.py:AsyncPaginator.acount`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "AsyncPaginator.acount",
+   "kind": "function",
+   "lines": [
+    256,
+    271
+   ],
+   "fingerprint": "f8566a9542d9cc57"
+  },
+  {
+   "pointer": "django/core/paginator.py:AsyncPage.aget_object_list",
+   "line": 81,
+   "sentence": "Its `__len__`, `__getitem__` and `__reversed__` are synchronous and fetch nothing: while its objects are not a list they raise `TypeError`, until `AsyncPage.aget_object_list` makes them one, by `async for` where the list allows it and otherwise by `list` under `sync_to_async` (`django/core/paginator.py:AsyncPage.aget_object_list`).",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "AsyncPage.aget_object_list",
+   "kind": "function",
+   "lines": [
+    408,
+    420
+   ],
+   "fingerprint": "f96c32b3e3fd7203"
+  }
+ ]
+}

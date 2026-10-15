@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 519">
+  <!-- two columns, send and asend; in each, down the page in time, the group of synchronous receivers in the box of
+       what runs them, then the coroutine receivers in theirs; the box that crosses from the caller's kind of code
+       to the other is marked -->
+  <text x="0" y="14">Receivers connected in the order <tspan class="name">a</tspan> (sync), <tspan class="name">b</tspan> (async), <tspan class="name">c</tspan> (sync), <tspan class="name">d</tspan> (async).</text>
+  <!-- Signal.send(sender, **named) -->
+  <text class="name strong" x="0" y="48">Signal.send(sender, **named)</text>
+  <text class="quiet small" x="0" y="66">from synchronous code</text>
+  <!-- the synchronous receivers, one after the other -->
+  <rect class="box" x="0.5" y="80.5" width="313" height="156" rx="4"/>
+  <text x="13" y="102">in the calling thread</text>
+  <text class="quiet small" x="13" y="120">in order</text>
+  <rect class="ground" x="12.5" y="132.5" width="289" height="34" rx="4"/>
+  <text class="name" x="25" y="154">a(signal=..., sender=..., **named)</text>
+  <path class="line" d="M157 167 V180.5"/>
+  <polygon class="head" points="157,190.5 152,180.5 162,180.5"/>
+  <rect class="ground" x="12.5" y="190.5" width="289" height="34" rx="4"/>
+  <text class="name" x="25" y="212">c(...)</text>
+  <!-- then the coroutine receivers, together -->
+  <path class="line" d="M157 237 V250.5"/>
+  <polygon class="head" points="157,260.5 152,250.5 162,250.5"/>
+  <text class="quiet small" x="169" y="253">then</text>
+  <rect class="mark-box" x="0.5" y="260.5" width="313" height="143" rx="4"/>
+  <text x="13" y="282">one <tspan class="name">async_to_sync</tspan> call, on an event loop</text>
+  <rect class="ground" x="12.5" y="293.5" width="289" height="98" rx="4"/>
+  <text x="25" y="315">one <tspan class="name">TaskGroup</tspan></text>
+  <text class="quiet small" x="25" y="333">started together, run concurrently</text>
+  <rect class="box" x="24.5" y="345.5" width="126.5" height="34" rx="4"/>
+  <text class="name" x="37" y="367">b(...)</text>
+  <rect class="box" x="163" y="345.5" width="126.5" height="34" rx="4"/>
+  <text class="name" x="175.5" y="367">d(...)</text>
+  <!-- what it returns: the synchronous receivers' pairs first -->
+  <text class="quiet" x="0" y="431">returned</text>
+  <text class="name" x="66" y="431">[(a, its result), (c, ...),</text>
+  <text class="name" x="73.8" y="449">(b, ...), (d, ...)]</text>
+  <!-- await Signal.asend(sender, **named) -->
+  <text class="name strong" x="332" y="48">await Signal.asend(sender, **named)</text>
+  <text class="quiet small" x="332" y="66">from asynchronous code</text>
+  <!-- the synchronous receivers, one after the other -->
+  <rect class="mark-box" x="332.5" y="80.5" width="313" height="156" rx="4"/>
+  <text x="345" y="102">one <tspan class="name">sync_to_async</tspan> call, on one thread</text>
+  <text class="quiet small" x="345" y="120">in order</text>
+  <rect class="ground" x="344.5" y="132.5" width="289" height="34" rx="4"/>
+  <text class="name" x="357" y="154">a(...)</text>
+  <path class="line" d="M489 167 V180.5"/>
+  <polygon class="head" points="489,190.5 484,180.5 494,180.5"/>
+  <rect class="ground" x="344.5" y="190.5" width="289" height="34" rx="4"/>
+  <text class="name" x="357" y="212">c(...)</text>
+  <!-- then the coroutine receivers, together -->
+  <path class="line" d="M489 237 V250.5"/>
+  <polygon class="head" points="489,260.5 484,250.5 494,250.5"/>
+  <text class="quiet small" x="501" y="253">then</text>
+  <rect class="box" x="332.5" y="260.5" width="313" height="143" rx="4"/>
+  <text x="345" y="282">on the caller's event loop</text>
+  <rect class="ground" x="344.5" y="293.5" width="289" height="98" rx="4"/>
+  <text x="357" y="315">one <tspan class="name">TaskGroup</tspan></text>
+  <text class="quiet small" x="357" y="333">started together, run concurrently</text>
+  <rect class="box" x="356.5" y="345.5" width="126.5" height="34" rx="4"/>
+  <text class="name" x="369" y="367">b(...)</text>
+  <rect class="box" x="495" y="345.5" width="126.5" height="34" rx="4"/>
+  <text class="name" x="507.5" y="367">d(...)</text>
+  <!-- what it returns: the synchronous receivers' pairs first -->
+  <text class="quiet" x="332" y="431">returned</text>
+  <text class="name" x="398" y="431">[(a, its result), (c, ...),</text>
+  <text class="name" x="405.8" y="449">(b, ...), (d, ...)]</text>
+  <!-- under both -->
+  <path class="line" d="M0 469.5 H646"/>
+  <text x="0" y="493">Under both: an exception in a receiver ends the send and reaches the caller;</text>
+  <text x="0" y="513"><tspan class="name">send_robust</tspan> and <tspan class="name">asend_robust</tspan> catch an <tspan class="name">Exception</tspan> and return it in the receiver's place.</text>
+</svg>

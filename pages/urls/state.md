@@ -23,7 +23,7 @@ A site is not always served from the root of its host. A server may mount a Djan
 
 That part is the **script prefix**. It is kept in a module-level object, `_prefixes`, by `set_script_prefix`, which adds a final slash if there is none, and read by `get_script_prefix` (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:get_script_prefix`).
 
-Each of the two handlers sets it before it makes the request object: `WSGIHandler.__call__` as its first statement, from the server's environ, and `ASGIHandler.handle` once the body has been received, from the scope's `"root_path"`. In both, `settings.FORCE_SCRIPT_NAME` takes the server's place: under WSGI whenever the setting is not `None`, and under ASGI whenever it is not empty ([The handler's entry](../handlers/entry.md)) (`django/core/handlers/wsgi.py:get_script_name`, `django/core/handlers/asgi.py:get_script_prefix`). `reverse` reads the prefix on every call and passes it down to be put in front of the path.
+Each of the two handlers sets it before it makes the request object: `WSGIHandler.__call__` as its first statement, from the server's environ, and `ASGIHandler.handle` once the body has been received, from the scope's `"root_path"`. In both, `settings.FORCE_SCRIPT_NAME` takes the server's place: under WSGI whenever the setting is not `None`, and under ASGI whenever it is not empty ([The two entry points](../handlers/entry.md)) (`django/core/handlers/wsgi.py:get_script_name`, `django/core/handlers/asgi.py:get_script_prefix`). `reverse` reads the prefix on every call and passes it down to be put in front of the path.
 
 This request was served with the server's script name set to `"/museum"`. The lines are the calls the handler made that set or cleared something, with the resolution of the path and the call of the view between them; the view then asked a few questions, and the recording's script asked them again afterwards.
 
@@ -81,7 +81,7 @@ The same request with FORCE_SCRIPT_NAME = '/exhibits': the prefix the handler se
           reverse("entrance")  ->  '/exhibits/'
 ```
 
-Code that runs outside a request has no handler to set a prefix for it. A new thread starts without one, as the last line of the first recording shows, and so does a management command. For commands `django.setup` sets it, to `settings.FORCE_SCRIPT_NAME` or else to `"/"`: a command that reverses a URL, to put a link in an email, gets the forced prefix or none ([What `django.setup` does](../startup.md)).
+Code that runs outside a request has no handler to set a prefix for it. A new thread starts without one, as the last line of the first recording shows, and so does a management command. For commands `django.setup` sets it, to `settings.FORCE_SCRIPT_NAME` or else to `"/"`: a command that reverses a URL, to put a link in an email, gets the forced prefix or none ([Settings, apps and startup](../startup.md)).
 
 The test client is different again. Its handlers make the request from an environ, or for the asynchronous client a scope, which may carry a script name or a root path, and they do not set the prefix. Here the recording's script sets a prefix itself and then makes a request through the test client with another script name:
 

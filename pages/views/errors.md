@@ -40,7 +40,7 @@ What `get_exception_response` calls is not `page_not_found` itself. Each of the 
 
 The views for 400, 403 and 404 are called with the request and the exception, the latter as a keyword argument. The one for 500 is called with the request alone (`django/core/handlers/exception.py:get_exception_response`, `django/core/handlers/exception.py:handle_uncaught_exception`). A view of the project's own, named in the URLconf, has to accept the same. A system check binds each handler's signature to that number of positional arguments, two or one; it does not test for a parameter named exception ([The URL checks, and listing the patterns](../urls/checks.md)).
 
-With `settings.DEBUG` on, the views for 404 and 500 are not reached: the handler answers those with [the debug pages](debug.md). The 403 view is called whatever the setting. With the setting on, the 400 view is reached only for a multipart body that could not be parsed.
+With `settings.DEBUG` on, the views for 404 and 500 are not reached: the handler answers those with the debug pages ([The debug pages and `ExceptionReporter`](debug.md)). The 403 view is called whatever the setting. With the setting on, the 400 view is reached only for a multipart body that could not be parsed.
 
 ## One template each
 

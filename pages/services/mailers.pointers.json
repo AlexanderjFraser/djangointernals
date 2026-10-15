@@ -1,0 +1,421 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "mailers.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/email.txt",
+   "line": 9,
+   "sentence": "In production a message leaves through an SMTP server, over a connection costly to open (`docs/topics/email.txt`); in development and tests it goes to the console, a file, a list in memory or nowhere.",
+   "tree": "django",
+   "path": "docs/topics/email.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1419
+   ],
+   "fingerprint": "ee910841bad6ca97"
+  },
+  {
+   "pointer": "django/core/mail/handler.py:MailersHandler",
+   "line": 13,
+   "sentence": "Unlike the handlers of the cache and the tasks it is not built on `BaseConnectionHandler`, and keeps nothing: `MailersHandler.__getitem__` calls `MailersHandler.create_connection` every time, and `MailersHandler.settings` reads `MAILERS` at each access, so a change to the setting is seen by the next lookup (`django/core/mail/handler.py:MailersHandler`).",
+   "tree": "django",
+   "path": "django/core/mail/handler.py",
+   "symbol": "MailersHandler",
+   "kind": "class",
+   "lines": [
+    11,
+    78
+   ],
+   "fingerprint": "d6b0b7b76cb78bdd"
+  },
+  {
+   "pointer": "django/core/mail/handler.py:MailersHandler.create_connection",
+   "line": 15,
+   "sentence": "A path that will not import becomes an `InvalidMailer` that names it (`django/core/mail/handler.py:MailersHandler.create_connection`).",
+   "tree": "django",
+   "path": "django/core/mail/handler.py",
+   "symbol": "MailersHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    44,
+    78
+   ],
+   "fingerprint": "7066895b5458f351"
+  },
+  {
+   "pointer": "django/core/mail/exceptions.py",
+   "line": 15,
+   "sentence": "`InvalidMailer` is an `ImproperlyConfigured` whose message begins by naming the entry when it is given the alias, and `MailerDoesNotExist` is an `InvalidMailer` that is also a `KeyError`, whose message, without that beginning, is the one shown below (`django/core/mail/exceptions.py`).",
+   "tree": "django",
+   "path": "django/core/mail/exceptions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    18
+   ],
+   "fingerprint": "69fc0ee98f82c586"
+  },
+  {
+   "pointer": "docs/topics/email.txt",
+   "line": 38,
+   "sentence": "To send several times over one connection, code keeps the instance, in the documentation's way in a `with` block (`docs/topics/email.txt`).",
+   "tree": "django",
+   "path": "docs/topics/email.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1419
+   ],
+   "fingerprint": "ee910841bad6ca97"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 42,
+   "sentence": "`MAILERS` has no default: `django/conf/global_settings.py` holds it only as a comment, so `MailersHandler._is_configured`, a test of whether the settings have it, is true only in a project that defines it.",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:get_connection",
+   "line": 42,
+   "sentence": "`get_connection` warns that Django 2028 will have no default mailer, unless an old email setting is defined (`warn_about_default_mailers_if_needed`), and makes the backend `EMAIL_BACKEND` names without an alias, which sends the SMTP backend to `EMAIL_HOST`, `EMAIL_PORT` and the other old settings (`django/core/mail/__init__.py:get_connection`).",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "get_connection",
+   "kind": "function",
+   "lines": [
+    72,
+    100
+   ],
+   "at": 73,
+   "fingerprint": "6fa2ace550b2f42c"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 44,
+   "sentence": "`get_connection` is deprecated in 6.1, with the `connection=`, `fail_silently=` and credential arguments of the sending functions, to go in Django 2028 (`docs/releases/6.1.txt`, `docs/internals/deprecation.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "docs/internals/deprecation.txt",
+   "line": 44,
+   "sentence": "`get_connection` is deprecated in 6.1, with the `connection=`, `fail_silently=` and credential arguments of the sending functions, to go in Django 2028 (`docs/releases/6.1.txt`, `docs/internals/deprecation.txt`).",
+   "tree": "django",
+   "path": "docs/internals/deprecation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1585
+   ],
+   "fingerprint": "f80d8f829f2033b6"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:warn_about_external_use",
+   "line": 44,
+   "sentence": "It warns through `warn_about_external_use`, which warns only when the caller is outside Django, so that one deprecated feature built on another does not warn twice (`django/utils/deprecation.py:warn_about_external_use`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "warn_about_external_use",
+   "kind": "function",
+   "lines": [
+    50,
+    126
+   ],
+   "fingerprint": "6b8d6bf8462df763"
+  },
+  {
+   "pointer": "django/conf/__init__.py:_check_email_settings_conflicts",
+   "line": 46,
+   "sentence": "Defining any setting of `DEPRECATED_EMAIL_SETTINGS` beside `MAILERS` is an `ImproperlyConfigured` as the settings load (`django/conf/__init__.py:_check_email_settings_conflicts`), and reading one while `MAILERS` is defined raises `AttributeError` (`django/conf/__init__.py:LazySettings.__getattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "_check_email_settings_conflicts",
+   "kind": "function",
+   "lines": [
+    63,
+    70
+   ],
+   "fingerprint": "ea841fffc4876789"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
+   "line": 46,
+   "sentence": "Defining any setting of `DEPRECATED_EMAIL_SETTINGS` beside `MAILERS` is an `ImproperlyConfigured` as the settings load (`django/conf/__init__.py:_check_email_settings_conflicts`), and reading one while `MAILERS` is defined raises `AttributeError` (`django/conf/__init__.py:LazySettings.__getattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__getattr__",
+   "kind": "function",
+   "lines": [
+    119,
+    146
+   ],
+   "fingerprint": "fd7eca125afabf3c"
+  },
+  {
+   "pointer": "django/core/mail/backends/base.py:BaseEmailBackend.__init__",
+   "line": 50,
+   "sentence": "It receives the keyword arguments the subclass did not consume: made for an alias, it raises `InvalidMailer` naming them as unknown options; made directly, it ignores them, warning when the maker is outside Django (`django/core/mail/backends/base.py:BaseEmailBackend.__init__`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/base.py",
+   "symbol": "BaseEmailBackend.__init__",
+   "kind": "function",
+   "lines": [
+    29,
+    71
+   ],
+   "fingerprint": "3dc0125a1f991704"
+  },
+  {
+   "pointer": "django/core/mail/backends/base.py:BaseEmailBackend.__enter__",
+   "line": 52,
+   "sentence": "`BaseEmailBackend.__enter__` calls `open`, and `close` if that fails; `BaseEmailBackend.__exit__` calls `close` (`django/core/mail/backends/base.py:BaseEmailBackend.__enter__`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/base.py",
+   "symbol": "BaseEmailBackend.__enter__",
+   "kind": "function",
+   "lines": [
+    109,
+    115
+   ],
+   "fingerprint": "73c666aa9ae7b415"
+  },
+  {
+   "pointer": "docs/topics/email.txt",
+   "line": 52,
+   "sentence": "Its contract, in the documentation: return the number sent; open a connection if none is open and close it after, but leave open one that was open (`docs/topics/email.txt`).",
+   "tree": "django",
+   "path": "docs/topics/email.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1419
+   ],
+   "fingerprint": "ee910841bad6ca97"
+  },
+  {
+   "pointer": "django/core/mail/backends/smtp.py:EmailBackend.__init__",
+   "line": 56,
+   "sentence": "Made without an alias, it reads each option it is not given from the old setting, the port from `EMAIL_PORT` whatever the security (`django/core/mail/backends/smtp.py:EmailBackend.__init__`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/smtp.py",
+   "symbol": "EmailBackend.__init__",
+   "kind": "function",
+   "lines": [
+    23,
+    99
+   ],
+   "fingerprint": "3ae1b50b548debae"
+  },
+  {
+   "pointer": "django/core/mail/backends/smtp.py:EmailBackend.open",
+   "line": 58,
+   "sentence": "With `\"fail_silently\"`, an `OSError`, which every exception of the standard library's SMTP module is, makes `open` return `None` (`django/core/mail/backends/smtp.py:EmailBackend.open`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/smtp.py",
+   "symbol": "EmailBackend.open",
+   "kind": "function",
+   "lines": [
+    114,
+    155
+   ],
+   "fingerprint": "d6f20cf2c893a2a2"
+  },
+  {
+   "pointer": "django/core/mail/backends/smtp.py:EmailBackend.send_messages",
+   "line": 60,
+   "sentence": "Otherwise, under the instance's re-entrant lock, it calls `open`, returns 0 if that failed in silence, sends each message with `EmailBackend._send`, and in a `finally` clause closes the connection if this call opened it (`django/core/mail/backends/smtp.py:EmailBackend.send_messages`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/smtp.py",
+   "symbol": "EmailBackend.send_messages",
+   "kind": "function",
+   "lines": [
+    183,
+    205
+   ],
+   "fingerprint": "20f80923d9828173"
+  },
+  {
+   "pointer": "django/core/mail/backends/smtp.py:EmailBackend.prep_address",
+   "line": 62,
+   "sentence": "It requires one mailbox, encodes a domain that is not ASCII with IDNA, and returns the bare address: `\"office@harbour.example\"` for `\"Harbour Office <office@harbour.example>\"` (`django/core/mail/backends/smtp.py:EmailBackend.prep_address`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/smtp.py",
+   "symbol": "EmailBackend.prep_address",
+   "kind": "function",
+   "lines": [
+    222,
+    256
+   ],
+   "fingerprint": "b8588d9580ec7b46"
+  },
+  {
+   "pointer": "django/core/mail/backends/console.py:EmailBackend.send_messages",
+   "line": 66,
+   "sentence": "The console backend writes each message's text to its `\"stream\"`, standard output by default, with a line of 79 hyphens after it (`django/core/mail/backends/console.py:EmailBackend.send_messages`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/console.py",
+   "symbol": "EmailBackend.send_messages",
+   "kind": "function",
+   "lines": [
+    29,
+    46
+   ],
+   "fingerprint": "05180f5f5ff3224b"
+  },
+  {
+   "pointer": "django/core/mail/backends/filebased.py:EmailBackend.open",
+   "line": 66,
+   "sentence": "The file backend is a console backend whose stream is a file: it requires `\"file_path\"`, a directory it creates, and its `open` opens for appending a file there named for the time and the instance's `id` (`django/core/mail/backends/filebased.py:EmailBackend.open`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/filebased.py",
+   "symbol": "EmailBackend.open",
+   "kind": "function",
+   "lines": [
+    86,
+    90
+   ],
+   "fingerprint": "536356795cc9c2d7"
+  },
+  {
+   "pointer": "django/core/mail/backends/locmem.py:EmailBackend.send_messages",
+   "line": 68,
+   "sentence": "Its `send_messages` builds each message, which validates its headers, and appends a deep copy to the outbox with `EmailMessage.sent_using` set to its alias, leaving the caller's message unchanged (`django/core/mail/backends/locmem.py:EmailBackend.send_messages`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/locmem.py",
+   "symbol": "EmailBackend.send_messages",
+   "kind": "function",
+   "lines": [
+    28,
+    37
+   ],
+   "fingerprint": "1bd0838cc6b6ba42"
+  },
+  {
+   "pointer": "django/core/checks/mail.py:check_mailers_production_backend",
+   "line": 68,
+   "sentence": "These four are for development: the deployment check mail.E001 fails when one of them is the `\"default\"` mailer (`django/core/checks/mail.py:check_mailers_production_backend`).",
+   "tree": "django",
+   "path": "django/core/checks/mail.py",
+   "symbol": "check_mailers_production_backend",
+   "kind": "function",
+   "lines": [
+    40,
+    63
+   ],
+   "at": 41,
+   "fingerprint": "637875a407d616b2"
+  },
+  {
+   "pointer": "django/test/utils.py:setup_test_environment",
+   "line": 68,
+   "sentence": "For a test run Django gives every alias the local-memory backend ([The test framework](../testing.md)) (`django/test/utils.py:setup_test_environment`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_test_environment",
+   "kind": "function",
+   "lines": [
+    120,
+    164
+   ],
+   "fingerprint": "fe1cc481eddb9aad"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage.send",
+   "line": 72,
+   "sentence": "With `using=` it sends through that alias's mailer; without, through a backend given by the deprecated argument, or else through `django.core.mail.get_connection`, which with `MAILERS` defined is the default mailer; `using=` beside a deprecated argument is a `TypeError` (`django/core/mail/message.py:EmailMessage.send`).",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage.send",
+   "kind": "function",
+   "lines": [
+    382,
+    420
+   ],
+   "fingerprint": "4fbfbed90aeb67c4"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:send_mail",
+   "line": 74,
+   "sentence": "`send_mail` builds an `EmailMultiAlternatives`, an HTML body as its alternative where one is given, and returns what `send` returns (`django/core/mail/__init__.py:send_mail`).",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "send_mail",
+   "kind": "function",
+   "lines": [
+    103,
+    183
+   ],
+   "at": 113,
+   "fingerprint": "261f02cfbd0738a6"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:send_mass_mail",
+   "line": 74,
+   "sentence": "`send_mass_mail` makes one backend and sends all its messages in one call of `send_messages`, so through the SMTP backend they share a connection, where `send_mail` opens one each time (`django/core/mail/__init__.py:send_mass_mail`).",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "send_mass_mail",
+   "kind": "function",
+   "lines": [
+    186,
+    257
+   ],
+   "at": 195,
+   "fingerprint": "f869180e845fff89"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:_send_server_message",
+   "line": 76,
+   "sentence": "The subject is prefixed with `EMAIL_SUBJECT_PREFIX`, `\"[Django] \"` by default, and the sender is `SERVER_EMAIL`, not `DEFAULT_FROM_EMAIL` (`django/core/mail/__init__.py:_send_server_message`).",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "_send_server_message",
+   "kind": "function",
+   "lines": [
+    261,
+    322
+   ],
+   "fingerprint": "5764ff14f502272e"
+  },
+  {
+   "pointer": "django/core/management/commands/sendtestemail.py:Command.handle",
+   "line": 89,
+   "sentence": "The sendtestemail command calls `send_mail` and, with its options, `mail_managers` and `mail_admins`, each with the alias its option --using gives (`django/core/management/commands/sendtestemail.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/sendtestemail.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    40,
+    57
+   ],
+   "fingerprint": "dca00f026430f14d"
+  }
+ ]
+}

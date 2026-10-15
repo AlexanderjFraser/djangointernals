@@ -1,0 +1,292 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "asgiref": "ef9d4b8b371cf8a7bb63dea3d0fdc60923e9e081",
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "cache-api.md",
+ "pointers": [
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache",
+   "line": 9,
+   "sentence": "So a backend writes the methods that touch its store ([The cache backends](cache-backends.md)), and `BaseCache` does what is the same for all (`django/core/cache/backends/base.py:BaseCache`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache",
+   "kind": "class",
+   "lines": [
+    58,
+    418
+   ],
+   "fingerprint": "adbdf2723191e18c"
+  },
+  {
+   "pointer": "django/core/cache/__init__.py:CacheHandler.create_connection",
+   "line": 13,
+   "sentence": "`CacheHandler.create_connection` copies the alias's dictionary, pops `\"BACKEND\"` and `\"LOCATION\"`, the location defaulting to the empty string, imports the class and calls it with the location and the rest of the dictionary (`django/core/cache/__init__.py:CacheHandler.create_connection`).",
+   "tree": "django",
+   "path": "django/core/cache/__init__.py",
+   "symbol": "CacheHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    43,
+    53
+   ],
+   "fingerprint": "3fa7f56f6ec1f6dc"
+  },
+  {
+   "pointer": "django/utils/connection.py:BaseConnectionHandler.__getitem__",
+   "line": 13,
+   "sentence": "A class that will not import, and an alias `CACHES` lacks, are refused with `InvalidCacheBackendError`, the second as `CacheHandler.exception_class` (`django/utils/connection.py:BaseConnectionHandler.__getitem__`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "BaseConnectionHandler.__getitem__",
+   "kind": "function",
+   "lines": [
+    56,
+    64
+   ],
+   "fingerprint": "85dcb79d857fcb0e"
+  },
+  {
+   "pointer": "asgiref:asgiref/local.py:Local",
+   "line": 15,
+   "sentence": "The handler leaves `BaseConnectionHandler.thread_critical` false, where the database's handler sets it, so its asgiref `Local` is a context variable (`asgiref:asgiref/local.py:Local`): each thread still makes its own backends, but code run through `sync_to_async` or `async_to_sync` sees its caller's.",
+   "tree": "asgiref",
+   "path": "asgiref/local.py",
+   "symbol": "Local",
+   "kind": "class",
+   "lines": [
+    77,
+    168
+   ],
+   "fingerprint": "6d26fdd4e1538965"
+  },
+  {
+   "pointer": "django/utils/connection.py:ConnectionProxy",
+   "line": 17,
+   "sentence": "`cache` is a `ConnectionProxy` of the handler and `DEFAULT_CACHE_ALIAS`: each read of an attribute the proxy lacks, each attribute set or deleted on it, and `in` and `==`, go to `caches[\"default\"]`, looked up again each time (`django/utils/connection.py:ConnectionProxy`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "ConnectionProxy",
+   "kind": "class",
+   "lines": [
+    7,
+    27
+   ],
+   "fingerprint": "608ab426ee5e8883"
+  },
+  {
+   "pointer": "django/core/cache/__init__.py:close_caches",
+   "line": 36,
+   "sentence": "`close_caches`, a receiver of `request_finished`, closes the backends the current thread or context has made (`django/core/cache/__init__.py:close_caches`).",
+   "tree": "django",
+   "path": "django/core/cache/__init__.py",
+   "symbol": "close_caches",
+   "kind": "function",
+   "lines": [
+    61,
+    64
+   ],
+   "fingerprint": "2ba32d3f493faede"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.__init__",
+   "line": 40,
+   "sentence": "`BaseCache.__init__` reads the rest of the dictionary (`django/core/cache/backends/base.py:BaseCache.__init__`):",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.__init__",
+   "kind": "function",
+   "lines": [
+    61,
+    85
+   ],
+   "fingerprint": "4d5f1fd5012a7ba4"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.make_key",
+   "line": 55,
+   "sentence": "`BaseCache.make_key` passes the key, the prefix and a version, the call's or else the cache's, to the key function, and `default_key_func` joins the three with colons (`django/core/cache/backends/base.py:BaseCache.make_key`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.make_key",
+   "kind": "function",
+   "lines": [
+    99,
+    110
+   ],
+   "fingerprint": "d381f03fa4dd98cc"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 55,
+   "sentence": "In Django's documentation, a prefix keeps apart the Django instances that share one cache, and a version retires old values without clearing the rest (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:get_key_func",
+   "line": 55,
+   "sentence": "`get_key_func` uses a callable `\"KEY_FUNCTION\"` as it is and imports a dotted path (`django/core/cache/backends/base.py:get_key_func`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "get_key_func",
+   "kind": "function",
+   "lines": [
+    44,
+    55
+   ],
+   "fingerprint": "826028ab97436577"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:memcache_key_warnings",
+   "line": 65,
+   "sentence": "`BaseCache.validate_key` issues a `CacheKeyWarning` for each message of `memcache_key_warnings`: a key longer than `MEMCACHE_MAX_KEY_LENGTH`, 250, or holding a control character or a space (`django/core/cache/backends/base.py:memcache_key_warnings`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "memcache_key_warnings",
+   "kind": "function",
+   "lines": [
+    424,
+    434
+   ],
+   "fingerprint": "c955ee0dde90a19f"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.get_backend_timeout",
+   "line": 71,
+   "sentence": "`BaseCache.get_backend_timeout` makes the sentinel the cache's default, keeps `None`, and adds a number of seconds to `time.time()`, giving the moment of expiry (`django/core/cache/backends/base.py:BaseCache.get_backend_timeout`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.get_backend_timeout",
+   "kind": "function",
+   "lines": [
+    87,
+    97
+   ],
+   "fingerprint": "ae7f80dbee4d1709"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.add",
+   "line": 75,
+   "sentence": "Their docstrings fix their returns: `add`, whether it stored the value, which it does only for an absent key; `touch`, whether the key was there; `delete`, whether it succeeded (`django/core/cache/backends/base.py:BaseCache.add`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.add",
+   "kind": "function",
+   "lines": [
+    127,
+    137
+   ],
+   "fingerprint": "2f4bc13efb48b768"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.__contains__",
+   "line": 77,
+   "sentence": "`BaseCache.__contains__` calls `has_key`, its comment says, so that `in` follows any override of it (`django/core/cache/backends/base.py:BaseCache.__contains__`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.__contains__",
+   "kind": "function",
+   "lines": [
+    310,
+    317
+   ],
+   "fingerprint": "1554d298482f06bd"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.get_or_set",
+   "line": 79,
+   "sentence": "`BaseCache.get_or_set` gets the key; on a miss it calls the default if callable, `add`s the result and gets the key again (`django/core/cache/backends/base.py:BaseCache.get_or_set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.get_or_set",
+   "kind": "function",
+   "lines": [
+    222,
+    239
+   ],
+   "fingerprint": "103cfabc50e51170"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.incr_version",
+   "line": 88,
+   "sentence": "`BaseCache.incr_version` gets the value at a version, the cache's by default, sets it at the version plus the delta, deletes the old entry and returns the new version (`django/core/cache/backends/base.py:BaseCache.incr_version`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.incr_version",
+   "kind": "function",
+   "lines": [
+    370,
+    384
+   ],
+   "fingerprint": "b3fb30339e6a2738"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:LocMemCache.incr",
+   "line": 99,
+   "sentence": "A key set for ten seconds and incremented had 300 left on `FileBasedCache`, which inherits the base's `incr`, and ten on `LocMemCache`, whose own leaves the expiry alone (`django/core/cache/backends/locmem.py:LocMemCache.incr`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "LocMemCache.incr",
+   "kind": "function",
+   "lines": [
+    66,
+    78
+   ],
+   "fingerprint": "811ce95d94227c03"
+  },
+  {
+   "pointer": "docs/topics/cache.txt",
+   "line": 103,
+   "sentence": "Each method of the API, but `in` and the helpers for keys and timeouts, has a twin with an `a` in front, such as `BaseCache.aget`, and every twin is `BaseCache`'s: no backend Django ships writes one, and its documentation says Django does not yet support asynchronous caching (`docs/topics/cache.txt`).",
+   "tree": "django",
+   "path": "docs/topics/cache.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1568
+   ],
+   "fingerprint": "61899c11eee34679"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.aget",
+   "line": 105,
+   "sentence": "The twins of the methods a backend must write, and `BaseCache.aclose`, call the method through `sync_to_async` with `thread_sensitive=True`, on the thread kept for such work, under ASGI the request's own ([Sync and async in one chain](../handlers/async.md)) (`django/core/cache/backends/base.py:BaseCache.aget`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.aget",
+   "kind": "function",
+   "lines": [
+    151,
+    154
+   ],
+   "fingerprint": "6b61d1db14be8901"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache.aget_or_set",
+   "line": 105,
+   "sentence": "The twins of the defaults, but for `BaseCache.adecr` and `BaseCache.adecr_version`, which call `aincr` and `aincr_version`, run the backend's replacement, if it has one, in one such call, and otherwise repeat the default's steps through the other twins, each a crossing of its own (`django/core/cache/backends/base.py:BaseCache.aget_or_set`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache.aget_or_set",
+   "kind": "function",
+   "lines": [
+    241,
+    255
+   ],
+   "fingerprint": "8fc77d66a2a4ce7a"
+  }
+ ]
+}

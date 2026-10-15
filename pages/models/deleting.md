@@ -224,7 +224,7 @@ signal post_delete, sender Manifest, instance=<Manifest: Manifest object (M-0004
 signal post_delete, sender Manifest, instance=<Manifest: Manifest object (M-0003)>
 ```
 
-Left out are the line that made the queryset and the fast delete of the ports of call, for whose model nothing was connected. How a signal finds its receivers is in [Caching, files, mail, signals and tasks](../services.md).
+Left out are the line that made the queryset and the fast delete of the ports of call, for whose model nothing was connected. How a signal finds its receivers is in [Signals: `Signal`, receivers and sending](../services/signals.md).
 
 `Collector.delete` sends neither signal for a model whose options have `Options.auto_created` set, as the through model that Django makes for a many-to-many field has (`django/db/models/deletion.py:Collector.delete`, `django/db/models/options.py:Options`). `can_fast_delete` makes no such exception (`django/db/models/deletion.py:Collector._has_signal_listeners`). A receiver connected for such a model costs the fetch and is not called for its rows.
 

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 700">
+  <!-- the field's save; under it the calls it makes, each a box inside its caller, in order; on the right,
+       a rule down which the name runs, written out where it changes -->
+  <text class="name" x="0" y="14">second.scan.save("scan.txt", ContentFile(b"four crates of cod"))</text>
+
+  <!-- the name, down the right -->
+  <path class="line" d="M418 43 V690"/>
+  <text class="name mark" x="426" y="52">"scan.txt"</text>
+  <text class="name mark" x="426" y="76">"manifests/scan.txt"</text>
+  <text class="quiet small" x="426" y="300">taken, by the first manifest's scan</text>
+  <text class="name mark" x="426" y="356">"manifests/scan_z7slDDE.txt"</text>
+  <text class="quiet small" x="426" y="374">free, at the next test</text>
+  <text class="name mark" x="426" y="676">"manifests/scan_z7slDDE.txt"</text>
+  <text class="quiet small" x="426" y="694">kept in the column <tspan class="name small">scan</tspan></text>
+
+  <!-- the field's generate_filename -->
+  <rect class="box" x="0.5" y="30.5" width="408" height="100" rx="4"/>
+  <text class="name" x="13" y="52">FileField.generate_filename(instance, "scan.txt")</text>
+  <text x="25" y="76"><tspan class="name">upload_to</tspan> <tspan class="name">"manifests/"</tspan> put in front</text>
+  <text class="name" x="25" y="98">Storage.generate_filename</text>
+  <text class="quiet small" x="25" y="116"><tspan class="name small">get_valid_name("scan.txt")</tspan>: nothing to clean</text>
+
+  <!-- Storage.save -->
+  <rect class="box" x="0.5" y="144.5" width="408" height="508" rx="4"/>
+  <text class="name" x="13" y="166">Storage.save(name, content, max_length=100)</text>
+  <text class="quiet small" x="13" y="184">100: the length of the column <tspan class="name small">scan</tspan></text>
+  <text class="name" x="25" y="208">validate_file_name</text>
+
+  <!-- get_available_name and its loop -->
+  <rect class="ground" x="12.5" y="220.5" width="384" height="179" rx="4"/>
+  <text class="name" x="25" y="242">get_available_name</text>
+  <text class="name" x="25" y="264">validate_file_name("scan.txt")</text>
+  <text class="quiet small" x="269" y="264">the file name alone</text>
+  <rect class="box" x="36.5" y="278.5" width="210" height="34" rx="4"/>
+  <text class="name" x="49" y="300">is_name_available(name)</text>
+  <path class="line" d="M247 295.5 H262"/>
+  <polygon class="head" points="272,295.5 262,290.5 262,300.5"/>
+  <text x="280" y="300">free: returned</text>
+  <path class="line" d="M60 313 V324"/>
+  <polygon class="head" points="60,334 55,324 65,324"/>
+  <text class="quiet small" x="70" y="327">taken</text>
+  <path class="line" d="M220 334 V323"/>
+  <polygon class="head" points="220,313 215,323 225,323"/>
+  <text class="quiet small" x="230" y="327">again</text>
+  <rect class="box" x="36.5" y="334.5" width="306" height="53" rx="4"/>
+  <text class="name" x="49" y="356">get_alternative_name("scan", ".txt")</text>
+  <text class="quiet small" x="49" y="374">over 100: the root cut, and another drawn</text>
+
+  <text class="name" x="25" y="422">validate_file_name</text>
+
+  <!-- _save and its retry -->
+  <rect class="ground" x="12.5" y="434.5" width="384" height="157" rx="4"/>
+  <text class="name" x="25" y="456">FileSystemStorage._save</text>
+  <rect class="box" x="36.5" y="470.5" width="235" height="34" rx="4"/>
+  <text x="49" y="492">create the file under <tspan class="name">MEDIA_ROOT</tspan></text>
+  <path class="line" d="M272 487.5 H287"/>
+  <polygon class="head" points="297,487.5 287,482.5 287,492.5"/>
+  <text x="305" y="492">created</text>
+  <path class="line" d="M60 505 V516"/>
+  <polygon class="head" points="60,526 55,516 65,516"/>
+  <text class="name quiet small" x="70" y="519">FileExistsError</text>
+  <path class="line" d="M220 526 V515"/>
+  <polygon class="head" points="220,505 215,515 225,515"/>
+  <text class="quiet small" x="230" y="519">again</text>
+  <rect class="box" x="36.5" y="526.5" width="212" height="53" rx="4"/>
+  <text class="name" x="49" y="548">get_available_name(name)</text>
+  <text class="quiet small" x="49" y="566">with no <tspan class="name small">max_length</tspan></text>
+
+  <text class="name" x="25" y="614">validate_file_name</text>
+  <text x="25" y="638">the name returned</text>
+
+  <!-- back in the field's save -->
+  <text x="0" y="676">the name set on the instance, and the instance saved</text>
+</svg>

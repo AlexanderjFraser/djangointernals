@@ -14,7 +14,7 @@ The inherited part is two methods, one inside the other, and the split between t
 
 **`BaseCommand.run_from_argv` is the layer for a command line.** It owns what only makes sense when a person typed the command: parsing an argument list, turning a `CommandError` into a line on standard error and an exit status, and closing the database connections before the process ends (`django/core/management/base.py:BaseCommand.run_from_argv`).
 
-**`BaseCommand.execute` is the layer for any caller.** It is given the options already parsed, as keyword arguments, and owns what belongs to running the command however it was started: the colour options, the checks, the call of `handle`, and writing out what `handle` returned. Code that runs a command without a command line enters here ([`call_command`](call-command.md)) (`django/core/management/base.py:BaseCommand.execute`).
+**`BaseCommand.execute` is the layer for any caller.** It is given the options already parsed, as keyword arguments, and owns what belongs to running the command however it was started: the colour options, the checks, the call of `handle`, and writing out what `handle` returned. Code that runs a command without a command line enters here ([`call_command`: a command called from code](call-command.md)) (`django/core/management/base.py:BaseCommand.execute`).
 
 The recordings on this page are of the small project used throughout the chapter. One of its commands, juice, takes a weight of apples in one option, asks for no system checks, and returns its output instead of writing it. This is a run of it from the moment its object exists.
 

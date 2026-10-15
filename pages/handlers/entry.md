@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 What `WSGIHandler` and `ASGIHandler` each do around the middleware chain: how a server's call becomes a request object, how the response gets back to the server, and who ends the request.
 
-A server is pointed at a module of the project, `wsgi.py` or `asgi.py` in a project made by `django-admin startproject`, and importing that module makes the handler. It calls one of two functions. `get_wsgi_application` runs `django.setup` and returns a new `WSGIHandler`; `get_asgi_application` does the same and returns an `ASGIHandler`. The functions exist so that the two classes can stay private: a project names the function and never the class (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`). A process therefore has one handler, made as the server starts, and making it builds the middleware chain, which is the subject of [the next section](chain.md).
+A server is pointed at a module of the project, `wsgi.py` or `asgi.py` in a project made by `django-admin startproject`, and importing that module makes the handler. It calls one of two functions. `get_wsgi_application` runs `django.setup` and returns a new `WSGIHandler`; `get_asgi_application` does the same and returns an `ASGIHandler`. The functions exist so that the two classes can stay private: a project names the function and never the class (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`). A process therefore has one handler, made as the server starts, and making it builds the middleware chain, which is the subject of [Building the middleware chain](chain.md).
 
 ## A WSGI request
 

@@ -1,0 +1,306 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "asgiref": "ef9d4b8b371cf8a7bb63dea3d0fdc60923e9e081",
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "signals.md",
+ "pointers": [
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.__init__",
+   "line": 9,
+   "sentence": "A signal is an object, each of Django's made once at module level, that holds its own list, `Signal.receivers` (`django/dispatch/dispatcher.py:Signal.__init__`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.__init__",
+   "kind": "function",
+   "lines": [
+    87,
+    100
+   ],
+   "fingerprint": "8a3fd62cfa7ae140"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.connect",
+   "line": 13,
+   "sentence": "`Signal.connect` takes the receiver, a sender (`None`, the default, means every sender), whether to hold the receiver weakly, and a dispatch uid (`django/dispatch/dispatcher.py:Signal.connect`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.connect",
+   "kind": "function",
+   "lines": [
+    102,
+    177
+   ],
+   "fingerprint": "1143db3a23fcde19"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:_make_id",
+   "line": 15,
+   "sentence": "The lookup key pairs the receiver's identity with the sender's, each from `_make_id`: the object's `id`, or for a bound method, which Python makes anew at each attribute access, the `id` of its instance and of its function (`django/dispatch/dispatcher.py:_make_id`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "_make_id",
+   "kind": "function",
+   "lines": [
+    15,
+    18
+   ],
+   "fingerprint": "33b57aa818bb4410"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:receiver",
+   "line": 19,
+   "sentence": "The `receiver` decorator calls `connect` with its keyword arguments, for one signal or for each of a list of them, and returns the function unchanged; one decorated at module level is then held alive by its module's name for it (`django/dispatch/dispatcher.py:receiver`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "receiver",
+   "kind": "function",
+   "lines": [
+    536,
+    558
+   ],
+   "fingerprint": "6d445aee53fac91d"
+  },
+  {
+   "pointer": "docs/topics/signals.txt",
+   "line": 19,
+   "sentence": "The documentation has receivers connected in an application's `AppConfig.ready`, as the example's notices does (`docs/topics/signals.txt`).",
+   "tree": "django",
+   "path": "docs/topics/signals.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    358
+   ],
+   "fingerprint": "e1386fc9dc55b7a2"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.disconnect",
+   "line": 23,
+   "sentence": "`Signal.disconnect` makes the same key, removes the entry with that key, and returns `True`, or `False` when there was none (`django/dispatch/dispatcher.py:Signal.disconnect`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.disconnect",
+   "kind": "function",
+   "lines": [
+    179,
+    213
+   ],
+   "fingerprint": "932aa6557d60c86f"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.send",
+   "line": 27,
+   "sentence": "`Signal.send` returns an empty list at once, without taking the lock, when the signal has no entries or its cache records that this sender has none (`django/dispatch/dispatcher.py:Signal.send`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.send",
+   "kind": "function",
+   "lines": [
+    219,
+    263
+   ],
+   "fingerprint": "3f0bdb7a425e8970"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal._live_receivers",
+   "line": 27,
+   "sentence": "Otherwise `Signal._live_receivers` keeps the entries connected for this sender or for every sender, in the order they were connected, resolves each weak reference, skips an entry whose receiver or sender has died, and returns two lists: the synchronous receivers and the coroutine functions (`django/dispatch/dispatcher.py:Signal._live_receivers`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal._live_receivers",
+   "kind": "function",
+   "lines": [
+    476,
+    524
+   ],
+   "fingerprint": "356476bb6d45f307"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:_run_parallel",
+   "line": 29,
+   "sentence": "If there are coroutine functions, it then makes one `async_to_sync` call of a coroutine that runs them through `_run_parallel`, each as a task of one `asyncio.TaskGroup`, so that they run concurrently, all in one copy of the caller's context, their results kept in the receivers' order (`django/dispatch/dispatcher.py:_run_parallel`). asgiref runs that coroutine on the event loop of the asynchronous code that called into this thread, if there is one, and otherwise on a new loop in a thread of its own while the calling thread waits (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "_run_parallel",
+   "kind": "function",
+   "lines": [
+    41,
+    65
+   ],
+   "fingerprint": "54e47907481dfda1"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.__call__",
+   "line": 29,
+   "sentence": "If there are coroutine functions, it then makes one `async_to_sync` call of a coroutine that runs them through `_run_parallel`, each as a task of one `asyncio.TaskGroup`, so that they run concurrently, all in one copy of the caller's context, their results kept in the receivers' order (`django/dispatch/dispatcher.py:_run_parallel`). asgiref runs that coroutine on the event loop of the asynchronous code that called into this thread, if there is one, and otherwise on a new loop in a thread of its own while the calling thread waits (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.__call__",
+   "kind": "function",
+   "lines": [
+    217,
+    332
+   ],
+   "fingerprint": "95cabb14938d5e3f"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:_restore_context",
+   "line": 52,
+   "sentence": "When the group is over, `_restore_context` sets each context variable the receivers changed in the context that awaited `_run_parallel`, which under `send` asgiref copies back to the calling thread, so a value a coroutine receiver sets reaches the code that sent the signal (`django/dispatch/dispatcher.py:_restore_context`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "_restore_context",
+   "kind": "function",
+   "lines": [
+    27,
+    38
+   ],
+   "fingerprint": "5181409d6d0bf679"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.__call__",
+   "line": 52,
+   "sentence": "When the group is over, `_restore_context` sets each context variable the receivers changed in the context that awaited `_run_parallel`, which under `send` asgiref copies back to the calling thread, so a value a coroutine receiver sets reaches the code that sent the signal (`django/dispatch/dispatcher.py:_restore_context`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.__call__",
+   "kind": "function",
+   "lines": [
+    217,
+    332
+   ],
+   "fingerprint": "95cabb14938d5e3f"
+  },
+  {
+   "pointer": "docs/topics/signals.txt",
+   "line": 56,
+   "sentence": "The coroutine receivers used to be run with asyncio's gather (`docs/topics/signals.txt`).",
+   "tree": "django",
+   "path": "docs/topics/signals.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    358
+   ],
+   "fingerprint": "e1386fc9dc55b7a2"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.send_robust",
+   "line": 60,
+   "sentence": "`Signal.send_robust` calls the receivers in the same order, but catches any `Exception` a receiver raises, logs it with its traceback on the logger `\"django.dispatch\"`, and puts the exception in that receiver's place in the list (`django/dispatch/dispatcher.py:Signal.send_robust`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.send_robust",
+   "kind": "function",
+   "lines": [
+    330,
+    391
+   ],
+   "fingerprint": "574d415616d8ed81"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.asend",
+   "line": 64,
+   "sentence": "`Signal.asend` keeps the grouping the other way round: the synchronous receivers are gathered into one function, called through a single `sync_to_async`, so on one thread and in order, and then the coroutine functions run together through `_run_parallel` on the caller's loop (`django/dispatch/dispatcher.py:Signal.asend`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.asend",
+   "kind": "function",
+   "lines": [
+    265,
+    320
+   ],
+   "fingerprint": "454e19a7fecb9a68"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal._flag_dead_receivers",
+   "line": 68,
+   "sentence": "`Signal._clear_dead_receivers` sweeps the list, under the lock, when the flag is set, from `connect`, `disconnect` and `_live_receivers` (`django/dispatch/dispatcher.py:Signal._flag_dead_receivers`, `django/dispatch/dispatcher.py:Signal._clear_dead_receivers`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal._flag_dead_receivers",
+   "kind": "function",
+   "lines": [
+    526,
+    533
+   ],
+   "fingerprint": "b8d1d43b6adba441"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal._clear_dead_receivers",
+   "line": 68,
+   "sentence": "`Signal._clear_dead_receivers` sweeps the list, under the lock, when the flag is set, from `connect`, `disconnect` and `_live_receivers` (`django/dispatch/dispatcher.py:Signal._flag_dead_receivers`, `django/dispatch/dispatcher.py:Signal._clear_dead_receivers`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal._clear_dead_receivers",
+   "kind": "function",
+   "lines": [
+    463,
+    474
+   ],
+   "fingerprint": "9e505e11bcc6c8cb"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal._live_receivers",
+   "line": 72,
+   "sentence": "`Signal.sender_receivers_cache` is a `weakref.WeakKeyDictionary` keyed by the sender: `connect` and `disconnect` empty it, and `_live_receivers` fills it, and reads it unless the dead flag is set (`django/dispatch/dispatcher.py:Signal._live_receivers`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal._live_receivers",
+   "kind": "function",
+   "lines": [
+    476,
+    524
+   ],
+   "fingerprint": "356476bb6d45f307"
+  },
+  {
+   "pointer": "django/db/models/signals.py",
+   "line": 74,
+   "sentence": "The signals with caching are the seven `ModelSignal`s: `pre_init`, `post_init`, `pre_save`, `post_save`, `pre_delete`, `post_delete` and `m2m_changed` (`django/db/models/signals.py`).",
+   "tree": "django",
+   "path": "django/db/models/signals.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    54
+   ],
+   "fingerprint": "986ea1c555ae82bf"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.has_listeners",
+   "line": 74,
+   "sentence": "`Signal.has_listeners` asks `_live_receivers` whether a sender has a receiver (`django/dispatch/dispatcher.py:Signal.has_listeners`); the `Collector` asks it of the deletion signals to decide whether rows may go unfetched ([Deleting: the `Collector`](../models/deleting.md#collectorcan_fast_delete-whether-rows-can-go-unseen)).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.has_listeners",
+   "kind": "function",
+   "lines": [
+    215,
+    217
+   ],
+   "fingerprint": "a2e7637dd95ab3f1"
+  },
+  {
+   "pointer": "django/db/models/signals.py:ModelSignal._lazy_method",
+   "line": 76,
+   "sentence": "`ModelSignal` adds one thing: its `connect` and `disconnect` take the sender as a string, `\"app_label.ModelName\"` (`django/db/models/signals.py:ModelSignal._lazy_method`).",
+   "tree": "django",
+   "path": "django/db/models/signals.py",
+   "symbol": "ModelSignal._lazy_method",
+   "kind": "function",
+   "lines": [
+    15,
+    24
+   ],
+   "fingerprint": "8059af6df1b1f524"
+  }
+ ]
+}

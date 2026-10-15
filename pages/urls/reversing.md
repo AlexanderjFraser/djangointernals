@@ -10,7 +10,7 @@ A regular expression recognises text. It does not produce any. Reversing needs t
 
 The detour is taken for every pattern, a route written for `path` included. `path` arrived in Django 2.0 (`docs/releases/2.0.txt`); before it every pattern was written as a regular expression, with the function that is now `re_path`. A route is expanded into an expression as its matcher is made (`django/urls/resolvers.py:_route_to_regex`), and reversing works on expressions whichever function wrote the pattern.
 
-`reverse` itself finds the root resolver of the current URLconf, unless it is given a URLconf, reads the script prefix, deals with any namespaces in the name, and hands the rest to `URLResolver._reverse_with_prefix`: the name, the prefix, and the arguments, which are given either as a list or as a dictionary (`django/urls/base.py:reverse`). Namespaces have [a section of their own](namespaces.md), and the names here have none.
+`reverse` itself finds the root resolver of the current URLconf, unless it is given a URLconf, reads the script prefix, deals with any namespaces in the name, and hands the rest to `URLResolver._reverse_with_prefix`: the name, the prefix, and the arguments, which are given either as a list or as a dictionary (`django/urls/base.py:reverse`). Namespaces have a section of their own, [Namespaces](namespaces.md), and the names here have none.
 
 ## The tables
 

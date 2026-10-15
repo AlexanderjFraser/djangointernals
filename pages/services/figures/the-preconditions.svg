@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 567">
+  <!-- the call; below it its tests, one box each, in the order made, passing down; on the right what each returns instead -->
+  <text class="name" x="0" y="14">get_conditional_response(request, etag, last_modified, response)</text>
+
+  <!-- 0: the status of a response given -->
+  <rect class="box" x="24.5" y="30.5" width="466" height="36" rx="4"/>
+  <text class="strong" x="6" y="53">0</text>
+  <text x="37" y="53">a response given, its status outside 200–299</text>
+  <path class="line" d="M491 48.5 H502"/>
+  <polygon class="head" points="512,48.5 502,43.5 502,53.5"/>
+  <text x="520" y="53">that response,</text>
+  <text x="520" y="71">untouched</text>
+  <path class="line" d="M60 67 V78"/>
+  <polygon class="head" points="60,88 55,78 65,78"/>
+
+  <!-- 1: If-Match, and its strong comparison -->
+  <rect class="box" x="24.5" y="88.5" width="466" height="92" rx="4"/>
+  <text class="strong" x="6" y="111">1</text>
+  <text class="name" x="37" y="111">If-Match</text>
+  <text class="quiet small" x="196" y="111">if present</text>
+  <text x="37" y="131">the current ETag does not match</text>
+  <text class="quiet small" x="37" y="151">strong comparison: a weak ETag, <tspan class="name small">W/"..."</tspan>, never matches;</text>
+  <text class="quiet small" x="37" y="167"><tspan class="name small">"*"</tspan> matches any ETag; with no current ETag, nothing matches</text>
+  <path class="mark-line" d="M491 126.5 H502"/>
+  <polygon class="head mark" points="512,126.5 502,121.5 502,131.5"/>
+  <text class="strong mark" x="520" y="131">412</text>
+  <path class="line" d="M60 181 V192"/>
+  <polygon class="head" points="60,202 55,192 65,192"/>
+
+  <!-- 2: If-Unmodified-Since -->
+  <rect class="box" x="24.5" y="202.5" width="466" height="56" rx="4"/>
+  <text class="strong" x="6" y="225">2</text>
+  <text class="name" x="37" y="225">If-Unmodified-Since</text>
+  <text class="quiet small" x="196" y="225">only without If-Match</text>
+  <text x="37" y="245">no last-modified time, or one later than the date</text>
+  <path class="mark-line" d="M491 240.5 H502"/>
+  <polygon class="head mark" points="512,240.5 502,235.5 502,245.5"/>
+  <text class="strong mark" x="520" y="245">412</text>
+  <path class="line" d="M60 259 V270"/>
+  <polygon class="head" points="60,280 55,270 65,270"/>
+
+  <!-- 3: If-None-Match, and its weak comparison -->
+  <rect class="box" x="24.5" y="280.5" width="466" height="92" rx="4"/>
+  <text class="strong" x="6" y="303">3</text>
+  <text class="name" x="37" y="303">If-None-Match</text>
+  <text class="quiet small" x="196" y="303">if present</text>
+  <text x="37" y="323">the current ETag matches</text>
+  <text class="quiet small" x="37" y="343">weak comparison: <tspan class="name small">"W/"</tspan> stripped from both sides;</text>
+  <text class="quiet small" x="37" y="359"><tspan class="name small">"*"</tspan> matches any ETag; with no current ETag, nothing matches</text>
+  <path class="mark-line" d="M491 318.5 H502"/>
+  <polygon class="head mark" points="512,318.5 502,313.5 502,323.5"/>
+  <text x="520" y="323"><tspan class="strong mark">304</tspan><tspan class="small"> for GET or HEAD</tspan></text>
+  <text x="520" y="343"><tspan class="strong mark">412</tspan><tspan class="small"> otherwise</tspan></text>
+  <path class="line" d="M60 373 V384"/>
+  <polygon class="head" points="60,394 55,384 65,384"/>
+
+  <!-- 4: If-Modified-Since -->
+  <rect class="box" x="24.5" y="394.5" width="466" height="56" rx="4"/>
+  <text class="strong" x="6" y="417">4</text>
+  <text class="name" x="37" y="417">If-Modified-Since</text>
+  <text class="quiet small" x="196" y="417">only without If-None-Match, only for GET or HEAD</text>
+  <text x="37" y="437">a last-modified time no later than the date</text>
+  <path class="mark-line" d="M491 432.5 H502"/>
+  <polygon class="head mark" points="512,432.5 502,427.5 502,437.5"/>
+  <text class="strong mark" x="520" y="437">304</text>
+  <path class="line" d="M60 451 V462"/>
+  <polygon class="head" points="60,472 55,462 65,462"/>
+
+  <!-- 5: If-Range, not tested -->
+  <rect class="ground dashed" x="24.5" y="472.5" width="466" height="36" rx="4"/>
+  <text class="strong" x="6" y="495">5</text>
+  <text class="name" x="37" y="495">If-Range</text>
+  <text class="quiet small" x="196" y="495">not supported</text>
+  <path class="line" d="M60 509 V520"/>
+  <polygon class="head" points="60,530 55,520 65,520"/>
+
+  <!-- 6: everything passed, and the response itself -->
+  <rect class="ground" x="24.5" y="530.5" width="466" height="36" rx="4"/>
+  <text class="strong" x="6" y="553">6</text>
+  <text class="strong" x="37" y="553">the response given</text>
+  <text class="quiet small" x="196" y="553"><tspan class="name small">None</tspan> from <tspan class="name small">condition</tspan></text>
+</svg>
