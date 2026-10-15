@@ -63,7 +63,7 @@ Each concrete widget names its template in `template_name`. The attributes are w
 
 `PasswordInput` draws no value unless made with `render_value=True`, so a form sent back with errors does not repeat the password (`django/forms/widgets.py:PasswordInput.get_context`). `MultipleHiddenInput` draws a hidden input for each value of a list and reads the list back with `getlist` (`django/forms/widgets.py:MultipleHiddenInput`). `Textarea`, which is no `Input`, writes the value between its tags, with `"cols"` of `"40"` and `"rows"` of `"10"` unless given others (`django/forms/widgets.py:Textarea.__init__`).
 
-The date and time inputs share `DateTimeBaseInput`, which writes a value in its `DateTimeBaseInput.format`, if it was made with one, or else in the first of the locale's formats named by `DateTimeBaseInput.format_key`, as `DATE_INPUT_FORMATS`; a string it leaves alone ([Internationalization and time zones](../i18n.md)) (`django/forms/widgets.py:DateTimeBaseInput.format_value`).
+The date and time inputs share `DateTimeBaseInput`, which writes a value in its `DateTimeBaseInput.format`, if it was made with one, or else in the first of the locale's formats named by `DateTimeBaseInput.format_key`, as `DATE_INPUT_FORMATS`; a string it leaves alone ([Locale formats: `get_format` and the format modules](../i18n/formats.md)) (`django/forms/widgets.py:DateTimeBaseInput.format_value`).
 
 ## File inputs: `FileInput` and `ClearableFileInput`
 

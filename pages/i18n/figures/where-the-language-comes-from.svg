@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 670">
+  <!-- the function, and the setting every example assumes -->
+  <text class="name strong" x="0" y="14">get_language_from_request(request, check_path)</text>
+  <text class="name" x="646" y="14" text-anchor="end">LANGUAGES = en, nl, de</text>
+  <text x="0" y="36">the first source that yields a supported code wins</text>
+
+  <!-- 1: the path's prefix -->
+  <rect class="box" x="0.5" y="52.5" width="645" height="60" rx="4"/>
+  <text class="strong" x="14" y="75">1</text>
+  <text class="strong" x="36" y="75">the path's prefix</text>
+  <text class="quiet small" x="164" y="75">read only with <tspan class="name small">check_path=True</tspan>, where the root URLconf uses <tspan class="name small">i18n_patterns</tspan></text>
+  <text x="36" y="99"><tspan class="name">"/nl/arrivals/"</tspan>, cookie <tspan class="name">"de"</tspan></text>
+  <path class="line" d="M262 94 H296"/>
+  <polygon class="head" points="306,94 296,89 296,99"/>
+  <text class="name strong" x="316" y="99">"nl"</text>
+
+  <!-- on to the next source -->
+  <path class="mark-line" d="M18 113 V130"/>
+  <polygon class="head mark" points="18,140 13,130 23,130"/>
+  <text class="quiet small" x="30" y="131">no answer</text>
+
+  <!-- 2: the cookie -->
+  <rect class="box" x="0.5" y="140.5" width="645" height="82" rx="4"/>
+  <text class="strong" x="14" y="163">2</text>
+  <text class="strong" x="36" y="163">the cookie <tspan class="name">"django_language"</tspan></text>
+  <text x="36" y="187"><tspan class="name">"de"</tspan>, Accept-Language: <tspan class="name">nl</tspan></text>
+  <path class="line" d="M262 182 H296"/>
+  <polygon class="head" points="306,182 296,177 296,187"/>
+  <text class="name strong" x="316" y="187">"de"</text>
+  <text class="quiet small" x="362" y="187">the header is not read</text>
+  <text x="36" y="209"><tspan class="name">"fr"</tspan>, Accept-Language: <tspan class="name">nl</tspan></text>
+  <path class="line" d="M262 204 H296"/>
+  <polygon class="head" points="306,204 296,199 296,209"/>
+  <text x="316" y="209">no answer: on to the header, <tspan class="name strong">"nl"</tspan></text>
+
+  <path class="mark-line" d="M18 223 V240"/>
+  <polygon class="head mark" points="18,250 13,240 23,240"/>
+  <text class="quiet small" x="30" y="241">no answer</text>
+
+  <!-- 3: the Accept-Language header -->
+  <rect class="box" x="0.5" y="250.5" width="645" height="60" rx="4"/>
+  <text class="strong" x="14" y="273">3</text>
+  <text class="strong" x="36" y="273">Accept-Language</text>
+  <text class="quiet small" x="164" y="273">each language, the highest q first; <tspan class="name small">"*"</tspan> ends the search</text>
+  <text class="name" x="36" y="297">nl-BE,nl;q=0.9,en;q=0.8</text>
+  <path class="line" d="M262 292 H296"/>
+  <polygon class="head" points="306,292 296,287 296,297"/>
+  <text class="name strong" x="316" y="297">"nl"</text>
+
+  <path class="mark-line" d="M18 311 V328"/>
+  <polygon class="head mark" points="18,338 13,328 23,328"/>
+  <text class="quiet small" x="30" y="329">no answer</text>
+
+  <!-- 4: the setting -->
+  <rect class="box" x="0.5" y="338.5" width="645" height="60" rx="4"/>
+  <text class="strong" x="14" y="361">4</text>
+  <text class="name strong" x="36" y="361">LANGUAGE_CODE</text>
+  <text x="36" y="385">no cookie, no header</text>
+  <path class="line" d="M262 380 H296"/>
+  <polygon class="head" points="306,380 296,375 296,385"/>
+  <text class="name strong" x="316" y="385">"en"</text>
+
+  <!-- the second function: one code, its candidates in turn -->
+  <text class="name strong" x="0" y="436">get_supported_language_variant(code)</text>
+  <text x="0" y="456">one code, its candidates in turn</text>
+  <rect class="ground" x="0.5" y="470.5" width="645" height="198" rx="4"/>
+
+  <!-- "nl-be": the code cut at its hyphen is supported -->
+  <text class="name strong" x="14" y="494">"nl-be"</text>
+  <text class="name" x="96" y="494">"nl-be"</text>
+  <text class="quiet small" x="212" y="494">not in <tspan class="name small">LANGUAGES</tspan></text>
+  <text class="name" x="96" y="516">"nl"</text>
+  <text class="small" x="212" y="516">in <tspan class="name small">LANGUAGES</tspan>, and a <tspan class="name small">"django"</tspan> catalogue exists</text>
+  <path class="line" d="M474 511 H494"/>
+  <polygon class="head" points="504,511 494,506 494,516"/>
+  <text class="name strong" x="514" y="516">"nl"</text>
+  <path class="line" d="M14 532.5 H632"/>
+
+  <!-- "pt-pt": no candidate; a regional code of the same language -->
+  <text class="name strong" x="14" y="554">"pt-pt"</text>
+  <text class="quiet small" x="96" y="554">with <tspan class="name small">"pt-br"</tspan> added to <tspan class="name small">LANGUAGES</tspan></text>
+  <text class="name" x="96" y="576">"pt-pt", "pt"</text>
+  <text class="quiet small" x="212" y="576">neither in <tspan class="name small">LANGUAGES</tspan></text>
+  <text class="small" x="96" y="598">the first code of <tspan class="name small">LANGUAGES</tspan> that begins <tspan class="name small">"pt-"</tspan></text>
+  <path class="line" d="M474 593 H494"/>
+  <polygon class="head" points="504,593 494,588 494,598"/>
+  <text class="name strong" x="514" y="598">"pt-br"</text>
+  <path class="line" d="M14 614.5 H632"/>
+
+  <!-- "fr-ca": nothing -->
+  <text class="name strong" x="14" y="636">"fr-ca"</text>
+  <text class="name" x="96" y="636">"fr-ca", "fr"</text>
+  <text class="quiet small" x="212" y="636">not in <tspan class="name small">LANGUAGES</tspan>, none begins <tspan class="name small">"fr-"</tspan></text>
+  <path class="line" d="M474 631 H494"/>
+  <polygon class="head" points="504,631 494,626 494,636"/>
+  <text class="name strong" x="514" y="636">LookupError</text>
+  <text class="quiet small" x="514" y="654">no answer</text>
+</svg>

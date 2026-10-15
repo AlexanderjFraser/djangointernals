@@ -28,7 +28,7 @@ These are the modules of `django/core/management/commands/`, which are commands 
 | loaddata | a deserializer, inside one transaction with constraint checking put off to its end `django/core/management/commands/loaddata.py:Command.loaddata` | [Caching, files, mail, signals and tasks](../services.md) |
 | createcachetable | nothing else: the command builds the statements for the database cache's table itself `django/core/management/commands/createcachetable.py:Command.create_table` | [Caching, files, mail, signals and tasks](../services.md) |
 | sendtestemail | the mail functions `django/core/mail/__init__.py:send_mail` | [Caching, files, mail, signals and tasks](../services.md) |
-| makemessages, compilemessages | the GNU gettext programs, run as child processes `django/core/management/utils.py:popen_wrapper` | [Internationalization and time zones](../i18n.md) |
+| makemessages, compilemessages | the GNU gettext programs, run as child processes `django/core/management/utils.py:popen_wrapper` | [Making catalogues: makemessages and compilemessages](../i18n/commands.md) |
 | test | the test runner class, named by `--testrunner` or else by `settings.TEST_RUNNER`, and its method that runs the tests `django/test/runner.py:DiscoverRunner.run_tests` | [The test framework](../testing.md) |
 | listurls | a walk over the root URLconf's patterns `django/urls/utils.py:extract_views_from_urlpatterns` | [URL routing](../urls.md) |
 | diffsettings | a comparison of the loaded settings with `django/conf/global_settings.py` `django/core/management/commands/diffsettings.py:Command.handle` | [Settings, apps and startup](../startup.md) |

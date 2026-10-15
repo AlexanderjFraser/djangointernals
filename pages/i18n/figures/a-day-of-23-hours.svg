@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 754">
+  <!-- one scale for both days: half an hour is 88 wide, 00:00 UTC stands at x 80, and the local axis is 120 below the UTC one -->
+  <text x="0" y="14"><tspan class="name">Europe/Amsterdam</tspan>, two days of 2026: instants in UTC above, the local clock below</text>
+
+  <!-- ===== 29 March ===== -->
+  <text class="strong" x="0" y="50">29 March: forward at 01:00 UTC, a day of 23 hours</text>
+
+  <!-- the UTC axis -->
+  <text class="quiet" x="0" y="93">UTC</text>
+  <path class="line" d="M60 88 H452"/>
+  <text x="80" y="78" text-anchor="middle">00:00</text>
+  <text x="168" y="78" text-anchor="middle">00:30</text>
+  <text x="256" y="78" text-anchor="middle">01:00</text>
+  <text x="344" y="78" text-anchor="middle">01:30</text>
+  <text x="432" y="78" text-anchor="middle">02:00</text>
+
+  <!-- each instant to its reading: straight down before the change, an hour to the right after it -->
+  <path class="line" d="M80 88 V208 M168 88 V208"/>
+  <path class="line" d="M256 88 L432 208 M344 88 L520 208 M432 88 L608 208"/>
+  <text class="quiet small" x="124" y="152" text-anchor="middle">+01:00</text>
+  <text class="quiet small" x="388" y="152" text-anchor="middle">+02:00</text>
+
+  <!-- the local axis, with the hour that never happens -->
+  <text class="quiet" x="0" y="213">local</text>
+  <path class="line" d="M60 208 H256 M432 208 H628"/>
+  <rect class="mark-box" x="256.5" y="200.5" width="176" height="16" rx="4"/>
+  <path class="line dashed" d="M256 208 H432"/>
+  <path class="line" d="M344 204 V212"/>
+  <text x="80" y="232" text-anchor="middle">01:00</text>
+  <text x="168" y="232" text-anchor="middle">01:30</text>
+  <text class="quiet" x="256" y="232" text-anchor="middle">02:00</text>
+  <text class="mark strong" x="344" y="232" text-anchor="middle">02:30</text>
+  <text x="432" y="232" text-anchor="middle">03:00</text>
+  <text x="520" y="232" text-anchor="middle">03:30</text>
+  <text x="608" y="232" text-anchor="middle">04:00</text>
+  <text x="344" y="254" text-anchor="middle">02:00 to 02:59 never happens: 02:30 is <tspan class="strong">imaginary</tspan></text>
+
+  <!-- make_aware's two instants for 02:30: by the offset before the change, and by the one after it -->
+  <path class="mark-line dashed" d="M344 200 V100"/>
+  <polygon class="head mark" points="344,90 339,100 349,100"/>
+  <path class="mark-line dashed" d="M332.27 200 L179.19 95.63"/>
+  <polygon class="head mark" points="170.93,90 182.01,91.5 176.38,99.77"/>
+  <text class="name small mark" x="348" y="196">fold=0</text>
+  <text class="name small mark" x="306" y="196" text-anchor="end">fold=1</text>
+
+  <!-- the two calls, each tagged as its arrow is -->
+  <text class="name small mark" x="0" y="286">fold=0</text>
+  <text class="name" x="54" y="286">make_aware(datetime(2026, 3, 29, 2, 30))</text>
+  <path class="line" d="M56 299 H70"/>
+  <polygon class="head" points="80,299 70,294 70,304"/>
+  <text x="88" y="304"><tspan class="name">02:30+01:00</tspan> = 01:30 UTC, which the clock reads 03:30</text>
+  <text class="name small mark" x="0" y="328">fold=1</text>
+  <text class="name" x="54" y="328">make_aware(datetime(2026, 3, 29, 2, 30, fold=1))</text>
+  <path class="line" d="M56 341 H70"/>
+  <polygon class="head" points="80,341 70,336 70,346"/>
+  <text x="88" y="346"><tspan class="name">02:30+02:00</tspan> = 00:30 UTC, which the clock reads 01:30</text>
+
+  <!-- ===== 25 October ===== -->
+  <text class="strong" x="0" y="392">25 October: back at 01:00 UTC, a day of 25 hours</text>
+
+  <text class="quiet" x="0" y="435">UTC</text>
+  <path class="line" d="M60 430 H452"/>
+  <text x="80" y="420" text-anchor="middle">00:00</text>
+  <text x="168" y="420" text-anchor="middle">00:30</text>
+  <text x="256" y="420" text-anchor="middle">01:00</text>
+  <text x="344" y="420" text-anchor="middle">01:30</text>
+  <text x="432" y="420" text-anchor="middle">02:00</text>
+
+  <!-- straight down before the change, an hour to the left after it: the hour is read twice -->
+  <path class="line" d="M80 430 V550"/>
+  <path class="line" d="M256 430 L80 550 M432 430 L256 550"/>
+  <text class="quiet small" x="124" y="494" text-anchor="middle">+02:00</text>
+  <text class="quiet small" x="222" y="494" text-anchor="middle">+01:00</text>
+
+  <!-- the local axis, with the hour that happens twice -->
+  <text class="quiet" x="0" y="555">local</text>
+  <path class="line" d="M60 550 H276"/>
+  <rect class="mark-box" x="80.5" y="542.5" width="176" height="16" rx="4"/>
+  <path class="line" d="M80 550 H256"/>
+  <text x="80" y="574" text-anchor="middle">02:00</text>
+  <text class="mark strong" x="168" y="574" text-anchor="middle">02:30</text>
+  <text x="256" y="574" text-anchor="middle">03:00</text>
+  <text x="168" y="596" text-anchor="middle">02:00 to 02:59 happens twice: 02:30 is <tspan class="strong">ambiguous</tspan></text>
+
+  <!-- make_aware's two instants for 02:30: each is one the clock reads so -->
+  <path class="mark-line" d="M168 542 V442"/>
+  <polygon class="head mark" points="168,432 163,442 173,442"/>
+  <path class="mark-line" d="M179.73 542 L332.81 437.63"/>
+  <polygon class="head mark" points="341.07,432 335.62,441.76 329.99,433.5"/>
+  <text class="name small mark" x="162" y="538" text-anchor="end">fold=0</text>
+  <text class="name small mark" x="205" y="538">fold=1</text>
+
+  <text class="name small mark" x="0" y="628">fold=0</text>
+  <text class="name" x="54" y="628">make_aware(datetime(2026, 10, 25, 2, 30))</text>
+  <path class="line" d="M56 641 H70"/>
+  <polygon class="head" points="80,641 70,636 70,646"/>
+  <text x="88" y="646"><tspan class="name">02:30+02:00</tspan> = 00:30 UTC, the first</text>
+  <text class="name small mark" x="0" y="670">fold=1</text>
+  <text class="name" x="54" y="670">make_aware(datetime(2026, 10, 25, 2, 30, fold=1))</text>
+  <path class="line" d="M56 683 H70"/>
+  <polygon class="head" points="80,683 70,678 70,688"/>
+  <text x="88" y="688"><tspan class="name">02:30+01:00</tspan> = 01:30 UTC, the second</text>
+
+  <!-- the form field refuses both readings -->
+  <text class="small" x="0" y="726">a form's <tspan class="name small">DateTimeField</tspan> in <tspan class="name small">Europe/Amsterdam</tspan>, given <tspan class="name small">"2026-03-29 02:30"</tspan> or <tspan class="name small">"2026-10-25 02:30"</tspan>:</text>
+  <path class="line" d="M56 743 H70"/>
+  <polygon class="head" points="80,743 70,738 70,748"/>
+  <text x="88" y="748"><tspan class="name">ValidationError</tspan>, code <tspan class="name">"ambiguous_timezone"</tspan></text>
+</svg>

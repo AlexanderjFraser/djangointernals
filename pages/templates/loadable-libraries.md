@@ -20,7 +20,7 @@ The storage may name another file: `ManifestStaticFilesStorage`, with `settings.
 
 ## Translation at render time: the i18n library
 
-The tags of `{% load i18n %}` translate as the template renders: the compiled template keeps its strings in the language they were written in, and each render looks them up in the catalogue of the language then active, so one compiled template serves every language. Choosing the language and making catalogues belong to [Internationalization and time zones](../i18n.md).
+The tags of `{% load i18n %}` translate as the template renders: the compiled template keeps its strings in the language they were written in, and each render looks them up in the catalogue of the language then active, so one compiled template serves every language. Choosing the language belongs to [Choosing a language: `LocaleMiddleware`](../i18n/choosing.md), and making catalogues to [Making catalogues: makemessages and compilemessages](../i18n/commands.md).
 
 ### `{% translate %}` and `TranslateNode`
 

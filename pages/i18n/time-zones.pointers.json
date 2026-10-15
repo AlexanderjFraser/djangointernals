@@ -1,0 +1,320 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "time-zones.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/i18n/timezones.txt",
+   "line": 9,
+   "sentence": "The documentation's reason: a program working in local time meets errors twice a year, when the clocks change (`docs/topics/i18n/timezones.txt`).",
+   "tree": "django",
+   "path": "docs/topics/i18n/timezones.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    710
+   ],
+   "fingerprint": "d89e6ac4150e7aeb"
+  },
+  {
+   "pointer": "django/utils/timezone.py:is_aware",
+   "line": 13,
+   "sentence": "`django.utils.timezone.is_aware` and `is_naive` test exactly that, and a comment says that they, `make_aware` and `make_naive` check nothing about their argument, by design: given `None`, they fail with an `AttributeError` (`django/utils/timezone.py:is_aware`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "is_aware",
+   "kind": "function",
+   "lines": [
+    211,
+    221
+   ],
+   "fingerprint": "144a49ddac42e2c5"
+  },
+  {
+   "pointer": "django/utils/timezone.py:now",
+   "line": 15,
+   "sentence": "`django.utils.timezone.now` is the present: aware in UTC where `USE_TZ` is true, and where it is false a naive reading of the process's clock, which is in `TIME_ZONE` where the settings object could set it ([The settings object](../startup/settings.md)) (`django/utils/timezone.py:now`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "now",
+   "kind": "function",
+   "lines": [
+    200,
+    204
+   ],
+   "fingerprint": "3ede9e3fec0cc5d3"
+  },
+  {
+   "pointer": "docs/releases/5.0.txt",
+   "line": 17,
+   "sentence": "`USE_TZ` is true by default, and pytz has gone, with `make_aware`'s is_dst argument (`docs/releases/5.0.txt`): the documentation points instead to the value's `datetime.datetime.fold` for a local time that happens twice or never (`docs/topics/i18n/timezones.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "f78c0112c823f44f"
+  },
+  {
+   "pointer": "docs/topics/i18n/timezones.txt",
+   "line": 17,
+   "sentence": "`USE_TZ` is true by default, and pytz has gone, with `make_aware`'s is_dst argument (`docs/releases/5.0.txt`): the documentation points instead to the value's `datetime.datetime.fold` for a local time that happens twice or never (`docs/topics/i18n/timezones.txt`).",
+   "tree": "django",
+   "path": "docs/topics/i18n/timezones.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    710
+   ],
+   "fingerprint": "d89e6ac4150e7aeb"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 21,
+   "sentence": "The **default time zone** is `TIME_ZONE`'s, `\"America/Chicago\"` unless a project sets it (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/utils/timezone.py:get_default_timezone",
+   "line": 21,
+   "sentence": "`get_default_timezone` makes a `zoneinfo.ZoneInfo` of it on its first call and keeps it, under `functools.lru_cache`; its comment says it is a function so that the setting is not read at import (`django/utils/timezone.py:get_default_timezone`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "get_default_timezone",
+   "kind": "function",
+   "lines": [
+    45,
+    52
+   ],
+   "at": 46,
+   "fingerprint": "852d3ad35aab0558"
+  },
+  {
+   "pointer": "django/utils/timezone.py:get_current_timezone",
+   "line": 23,
+   "sentence": "`get_current_timezone` gives that value, or the default zone where there is none (`django/utils/timezone.py:get_current_timezone`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "get_current_timezone",
+   "kind": "function",
+   "lines": [
+    64,
+    66
+   ],
+   "fingerprint": "77a09ec6d21ef1f1"
+  },
+  {
+   "pointer": "django/utils/timezone.py:activate",
+   "line": 25,
+   "sentence": "`activate` sets it: a `tzinfo` as it is, a string as a `zoneinfo.ZoneInfo`, so that an unknown name fails with `zoneinfo.ZoneInfoNotFoundError`, and anything else is refused with `ValueError`, `\"Invalid timezone: 5\"` for a 5 (`django/utils/timezone.py:activate`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "activate",
+   "kind": "function",
+   "lines": [
+    88,
+    100
+   ],
+   "fingerprint": "071d7162f106dcd4"
+  },
+  {
+   "pointer": "django/utils/timezone.py:override",
+   "line": 25,
+   "sentence": "`override`, a context manager and a decorator, remembers on entry the value present and activates its zone, or deactivates for `None`; on exit it puts the remembered value back, or deactivates where there was none (`django/utils/timezone.py:override`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "override",
+   "kind": "class",
+   "lines": [
+    113,
+    140
+   ],
+   "fingerprint": "6cf25e80c300fc4a"
+  },
+  {
+   "pointer": "django/utils/timezone.py:_get_timezone_name",
+   "line": 27,
+   "sentence": "`get_current_timezone_name` and `get_default_timezone_name` name a zone through `_get_timezone_name`: by the name it gives without a date, as a fixed offset does, and otherwise as a string, which for a `zoneinfo.ZoneInfo` is its key, `\"Europe/Amsterdam\"` (`django/utils/timezone.py:_get_timezone_name`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "_get_timezone_name",
+   "kind": "function",
+   "lines": [
+    74,
+    79
+   ],
+   "fingerprint": "6d215b1c9c06e3f6"
+  },
+  {
+   "pointer": "django/db/models/functions/datetime.py:TimezoneMixin.get_tzname",
+   "line": 27,
+   "sentence": "The name is what a `Trunc` or an `Extract` gives the backend for its SQL ([Transforms and database functions: `Transform` and `Func`](../sql/functions.md)) (`django/db/models/functions/datetime.py:TimezoneMixin.get_tzname`).",
+   "tree": "django",
+   "path": "django/db/models/functions/datetime.py",
+   "symbol": "TimezoneMixin.get_tzname",
+   "kind": "function",
+   "lines": [
+    28,
+    39
+   ],
+   "fingerprint": "95b5b14fe40cb993"
+  },
+  {
+   "pointer": "docs/topics/i18n/timezones.txt",
+   "line": 31,
+   "sentence": "The documentation's reason: a request carries nothing to choose one by, as Accept-Language does a language (`docs/topics/i18n/timezones.txt`).",
+   "tree": "django",
+   "path": "docs/topics/i18n/timezones.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    710
+   ],
+   "fingerprint": "d89e6ac4150e7aeb"
+  },
+  {
+   "pointer": "django/utils/timezone.py:localtime",
+   "line": 66,
+   "sentence": "`django.utils.timezone.localtime` converts an aware datetime into the current zone, or one it is given, and with no value converts the present (`django/utils/timezone.py:localtime`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "localtime",
+   "kind": "function",
+   "lines": [
+    167,
+    184
+   ],
+   "fingerprint": "2c537713cd79446a"
+  },
+  {
+   "pointer": "django/utils/timezone.py:make_naive",
+   "line": 66,
+   "sentence": "`make_naive` converts the same way and drops the zone (`django/utils/timezone.py:make_naive`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "make_naive",
+   "kind": "function",
+   "lines": [
+    248,
+    255
+   ],
+   "fingerprint": "e7d21e9cb97c1c63"
+  },
+  {
+   "pointer": "django/utils/timezone.py:template_localtime",
+   "line": 68,
+   "sentence": "A template converts each aware datetime it writes, through `template_localtime`, unless `USE_TZ` or the template's own flag says not to or a filter has converted it already (`django/utils/timezone.py:template_localtime`); the tags are in [The libraries to load: static, i18n, l10n, tz and cache](../templates/loadable-libraries.md).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "template_localtime",
+   "kind": "function",
+   "lines": [
+    146,
+    161
+   ],
+   "fingerprint": "f64dffda9947fd1c"
+  },
+  {
+   "pointer": "django/utils/timezone.py:make_aware",
+   "line": 72,
+   "sentence": "`django.utils.timezone.make_aware` takes a naive datetime as a reading of the current zone's clock, or another zone's, and attaches the zone with `datetime.datetime.replace`, refusing an aware value with `ValueError`; a comment warns that this \"may be wrong around DST changes\" (`django/utils/timezone.py:make_aware`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "make_aware",
+   "kind": "function",
+   "lines": [
+    237,
+    245
+   ],
+   "fingerprint": "e01904cdaed1cbc3"
+  },
+  {
+   "pointer": "django/utils/timezone.py:_datetime_ambiguous_or_imaginary",
+   "line": 103,
+   "sentence": "`_datetime_ambiguous_or_imaginary` finds such readings: the zone gives the value one offset as it is and another with its fold flipped (`django/utils/timezone.py:_datetime_ambiguous_or_imaginary`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "_datetime_ambiguous_or_imaginary",
+   "kind": "function",
+   "lines": [
+    258,
+    259
+   ],
+   "fingerprint": "b45c9e1e7e0d6ba1"
+  },
+  {
+   "pointer": "django/forms/utils.py:from_current_timezone",
+   "line": 103,
+   "sentence": "`from_current_timezone`, through which a form's datetime field passes what it read, refuses such a reading with a `ValidationError` of code `\"ambiguous_timezone\"` ([The built-in form fields](../forms/field-types.md#dates-and-times)) (`django/forms/utils.py:from_current_timezone`).",
+   "tree": "django",
+   "path": "django/forms/utils.py",
+   "symbol": "from_current_timezone",
+   "kind": "function",
+   "lines": [
+    215,
+    236
+   ],
+   "fingerprint": "540a82d888de62b4"
+  },
+  {
+   "pointer": "django/utils/dateformat.py:TimeFormat.__init__",
+   "line": 103,
+   "sentence": "`TimeFormat` gives such a value no zone, so the format letters `\"e\"`, `\"O\"`, `\"T\"`, `\"Z\"` and `\"I\"` write nothing ([Writing numbers, dates and durations](writing-values.md)) (`django/utils/dateformat.py:TimeFormat.__init__`).",
+   "tree": "django",
+   "path": "django/utils/dateformat.py",
+   "symbol": "TimeFormat.__init__",
+   "kind": "function",
+   "lines": [
+    56,
+    69
+   ],
+   "fingerprint": "b1ddfe2af233aafe"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DateTimeField.get_prep_value",
+   "line": 105,
+   "sentence": "A model's datetime field given a naive value warns and makes it aware in the default zone, not the current one; its comment expects an exception at a change of the clocks, and under `zoneinfo` none comes, so a naive 02:30 on 29 March becomes 01:30 UTC ([The field classes](../models/field-types.md)) (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DateTimeField.get_prep_value",
+   "kind": "function",
+   "lines": [
+    1702,
+    1720
+   ],
+   "fingerprint": "6a05034625aafc79"
+  },
+  {
+   "pointer": "django/views/generic/dates.py:DateMixin._make_date_lookup_arg",
+   "line": 109,
+   "sentence": "The date views make each boundary of a period midnight in the current zone, for a datetime field ([The date views](../views/dates.md)) (`django/views/generic/dates.py:DateMixin._make_date_lookup_arg`).",
+   "tree": "django",
+   "path": "django/views/generic/dates.py",
+   "symbol": "DateMixin._make_date_lookup_arg",
+   "kind": "function",
+   "lines": [
+    269,
+    280
+   ],
+   "fingerprint": "56d1db62fa786dce"
+  }
+ ]
+}

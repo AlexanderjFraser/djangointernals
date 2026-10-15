@@ -105,7 +105,7 @@ MonthMixin._get_next_month(2026-03-01)  ->  2026-04-01
 DateMixin._make_date_lookup_arg(2026-04-01)  ->  2026-04-01 00:00+00:00
 ```
 
-The field here is a `models.DateTimeField`, so `DateMixin._make_date_lookup_arg` turns each boundary from a date into a datetime at midnight, and, with time zone support on, into midnight in the current time zone. Its docstring gives the reason: so that the items shown are consistent with the URL. An article published late on the last evening of March, by the site's clock, belongs to March whatever its timestamp is in UTC ([Internationalization and time zones](../i18n.md)).
+The field here is a `models.DateTimeField`, so `DateMixin._make_date_lookup_arg` turns each boundary from a date into a datetime at midnight, and, with time zone support on, into midnight in the current time zone. Its docstring gives the reason: so that the items shown are consistent with the URL. An article published late on the last evening of March, by the site's clock, belongs to March whatever its timestamp is in UTC ([Time zones](../i18n/time-zones.md)).
 
 **A query.** `BaseDateListView.get_dated_queryset` applies the interval to the view's queryset, and then two more conditions that are not in the URL (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).
 
