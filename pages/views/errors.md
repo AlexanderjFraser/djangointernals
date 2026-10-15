@@ -130,4 +130,4 @@ A project replaces one of these by assigning to `handler404` or its siblings in 
 
 What the replacement returns is used as it is, status included. The handler chooses which error view to ask, and never corrects the status of the answer.
 
-A request refused by the CSRF check is answered by none of these. `CsrfViewMiddleware` has an error view of its own, named by `settings.CSRF_FAILURE_VIEW` ([Security](../security.md)).
+A request refused by the CSRF check is answered by none of these. `CsrfViewMiddleware` has an error view of its own, named by `settings.CSRF_FAILURE_VIEW` ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)).

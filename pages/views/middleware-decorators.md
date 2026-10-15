@@ -39,7 +39,7 @@ The decorators Django makes from its own middleware
     csrf_protect.__name__  ->  'csrf_protect'
 ```
 
-`cache_page` takes arguments, and is made by the variant that passes them on. `decorator_from_middleware_with_args` returns a function whose arguments are given to the middleware's constructor after the view, and `cache_page` is a small function that calls it with the timeout, the alias and the prefix under the names `CacheMiddleware.__init__` expects (`django/views/decorators/cache.py:cache_page`). What the cache then does with a request and a response is the subject of [Caching, files, mail, signals and tasks](../services.md), and the CSRF check that of [Security](../security.md).
+`cache_page` takes arguments, and is made by the variant that passes them on. `decorator_from_middleware_with_args` returns a function whose arguments are given to the middleware's constructor after the view, and `cache_page` is a small function that calls it with the timeout, the alias and the prefix under the names `CacheMiddleware.__init__` expects (`django/views/decorators/cache.py:cache_page`). What the cache then does with a request and a response is the subject of [Caching, files, mail, signals and tasks](../services.md), and the CSRF check that of [The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md).
 
 ## One instance for each view
 

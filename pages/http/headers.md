@@ -68,7 +68,7 @@ request.scheme
   that setting, the server says https, X-Forwarded-Proto: http  ->  'http'
 ```
 
-The scheme is a property that is worked out on every read, and a good deal hangs on it: whether `SecurityMiddleware` redirects to HTTPS, whether the CSRF middleware applies its stricter checks, what `build_absolute_uri` writes.
+The scheme is a property that is worked out on every read, and a good deal hangs on it: whether `SecurityMiddleware` redirects to HTTPS, whether the CSRF middleware checks the `"Referer"` of a request that has no `"Origin"` ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)), what `build_absolute_uri` writes.
 
 ## `build_absolute_uri`
 

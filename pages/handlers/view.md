@@ -36,7 +36,7 @@ WSGI, GET /nowhere/: no URL pattern matches
 
 With a view in hand, the handler calls each method in `BaseHandler._view_middleware`: the `process_view` hooks, in the order of the setting. Each is given the request, the view, and the arguments the view is about to be called with. If one returns a response, the loop stops and the view is not called; the response goes on through the rest of this method as if the view had returned it.
 
-This hook exists because of what it is told. A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for. `process_view` runs after, and is handed the view itself. `CsrfViewMiddleware` does its checking here for that reason: whether a view is exempt is an attribute of the view (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).
+This hook exists because of what it is told. A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for. `process_view` runs after, and is handed the view itself. `CsrfViewMiddleware` does its checking here for that reason: whether a view is exempt is an attribute of the view ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).
 
 ## Calling the view
 

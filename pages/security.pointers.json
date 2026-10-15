@@ -1,0 +1,341 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "security.md",
+ "pointers": [
+  {
+   "pointer": "docs/ref/settings.txt",
+   "line": 11,
+   "sentence": "It sends a site's cookies with requests that other sites' pages make to it, unless a cookie's SameSite attribute holds it back, so a form on another site can post to this one as the logged-in user (`docs/ref/settings.txt`).",
+   "tree": "django",
+   "path": "docs/ref/settings.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4179
+   ],
+   "fingerprint": "23ab897ca680e6a7"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 29,
+   "sentence": "The middleware live in `django/middleware/`, the HMAC and signing in `django/utils/crypto.py` and `django/core/signing.py`, the checks in `django/core/checks/security/`.*",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/utils/crypto.py",
+   "line": 29,
+   "sentence": "The middleware live in `django/middleware/`, the HMAC and signing in `django/utils/crypto.py` and `django/core/signing.py`, the checks in `django/core/checks/security/`.*",
+   "tree": "django",
+   "path": "django/utils/crypto.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    93
+   ],
+   "fingerprint": "597bfcee135f44d8"
+  },
+  {
+   "pointer": "django/core/signing.py",
+   "line": 29,
+   "sentence": "The middleware live in `django/middleware/`, the HMAC and signing in `django/utils/crypto.py` and `django/core/signing.py`, the checks in `django/core/checks/security/`.*",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    318
+   ],
+   "fingerprint": "e628b24e597bd6dc"
+  },
+  {
+   "pointer": "django/core/checks/security/",
+   "line": 29,
+   "sentence": "The middleware live in `django/middleware/`, the HMAC and signing in `django/utils/crypto.py` and `django/core/signing.py`, the checks in `django/core/checks/security/`.*",
+   "tree": "django",
+   "path": "django/core/checks/security/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "1f9ed25fe9a0d4a4"
+  },
+  {
+   "pointer": "django/utils/csp.py:CSP",
+   "line": 33,
+   "sentence": "Its settings install the four middleware, require HTTPS, and set a content security policy whose scripts must come from the site itself or carry the request's nonce (`django/utils/csp.py:CSP`):",
+   "tree": "django",
+   "path": "django/utils/csp.py",
+   "symbol": "CSP",
+   "kind": "class",
+   "lines": [
+    11,
+    53
+   ],
+   "fingerprint": "b2d4313c633d3f99"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 134,
+   "sentence": "The headers came in the order the middleware added them, which is the onion read from the inside; a response keeps its cookies apart, and the handler writes them after its headers (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_response",
+   "line": 134,
+   "sentence": "Last, `SecurityMiddleware` added Strict-Transport-Security, which it sends only on a secure request, and three headers whose settings are on by default (`django/middleware/security.py:SecurityMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    35,
+    68
+   ],
+   "fingerprint": "7ad22778135f164b"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:get_token",
+   "line": 136,
+   "sentence": "A second request from the same client got the same secret back in its cookie and a different token in its page, since every call of `get_token` makes a new mask (`django/middleware/csrf.py:get_token`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "get_token",
+   "kind": "function",
+   "lines": [
+    96,
+    114
+   ],
+   "fingerprint": "475f3a9372b9cf53"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
+   "line": 151,
+   "sentence": "`SecurityMiddleware.process_request` answered with a redirect to the same address over HTTPS, so the three middleware inside it never ran and the redirect carried none of their headers; it still had `SecurityMiddleware`'s own, added as its response went out (`django/middleware/security.py:SecurityMiddleware.process_request`):",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.process_request",
+   "kind": "function",
+   "lines": [
+    23,
+    33
+   ],
+   "fingerprint": "9a87791cf038990b"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_response",
+   "line": 167,
+   "sentence": "A template that writes `{% csrf_token %}` calls `get_token` by way of the CSRF context processor, which makes a secret if the request had none and marks it to be sent back; on the way out, `CsrfViewMiddleware.process_response` sets the cookie, or stores the secret in the session ([The CSRF secret and its token](security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    474,
+    486
+   ],
+   "fingerprint": "d5d6e46ffe74bc00"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 169,
+   "sentence": "A request that fails is answered by the view `CSRF_FAILURE_VIEW` names, `csrf_failure` by default, with a 403, and the view it was going to is never called ([The CSRF check: `CsrfViewMiddleware.process_view`](security/csrf-check.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
+  },
+  {
+   "pointer": "docs/ref/csrf.txt",
+   "line": 171,
+   "sentence": "The token is masked so that it differs on every page while the secret stays the same; Django's documentation gives the reason as protection against the BREACH attack (`docs/ref/csrf.txt`).",
+   "tree": "django",
+   "path": "docs/ref/csrf.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    243
+   ],
+   "fingerprint": "75d54fe68f85eaf7"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:login",
+   "line": 171,
+   "sentence": "The secret is kept from request to request; `rotate_token`, which `login` in `django.contrib.auth` calls, replaces it, as does `CsrfViewMiddleware.process_request` itself when a request's cookie is malformed (`django/contrib/auth/__init__.py:login`, `django/middleware/csrf.py:rotate_token`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "login",
+   "kind": "function",
+   "lines": [
+    169,
+    198
+   ],
+   "fingerprint": "06da4baa1295bf41"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:rotate_token",
+   "line": 171,
+   "sentence": "The secret is kept from request to request; `rotate_token`, which `login` in `django.contrib.auth` calls, replaces it, as does `CsrfViewMiddleware.process_request` itself when a request's cookie is malformed (`django/contrib/auth/__init__.py:login`, `django/middleware/csrf.py:rotate_token`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "rotate_token",
+   "kind": "function",
+   "lines": [
+    117,
+    122
+   ],
+   "fingerprint": "d5407023d5039d1e"
+  },
+  {
+   "pointer": "django/views/decorators/clickjacking.py:xframe_options_exempt",
+   "line": 189,
+   "sentence": "A view can also change what the middleware do for it alone: `xframe_options_exempt` marks its response to be left without X-Frame-Options, and `csp_override` gives its response a policy of its own, which the middleware then uses in place of `SECURE_CSP` (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:csp_override`).",
+   "tree": "django",
+   "path": "django/views/decorators/clickjacking.py",
+   "symbol": "xframe_options_exempt",
+   "kind": "function",
+   "lines": [
+    65,
+    89
+   ],
+   "fingerprint": "540e614f16766c13"
+  },
+  {
+   "pointer": "django/views/decorators/csp.py:csp_override",
+   "line": 189,
+   "sentence": "A view can also change what the middleware do for it alone: `xframe_options_exempt` marks its response to be left without X-Frame-Options, and `csp_override` gives its response a policy of its own, which the middleware then uses in place of `SECURE_CSP` (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:csp_override`).",
+   "tree": "django",
+   "path": "django/views/decorators/csp.py",
+   "symbol": "csp_override",
+   "kind": "function",
+   "lines": [
+    33,
+    35
+   ],
+   "fingerprint": "ab0cae350beb0edc"
+  },
+  {
+   "pointer": "django/utils/csp.py:build_policy",
+   "line": 191,
+   "sentence": "On the way out, `build_policy` writes the policy from the setting's dictionary, and replaces the placeholder `CSP.NONCE` with the nonce if the nonce was made, or drops it if not ([Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](security/csp.md)) (`django/utils/csp.py:build_policy`).",
+   "tree": "django",
+   "path": "django/utils/csp.py",
+   "symbol": "build_policy",
+   "kind": "function",
+   "lines": [
+    97,
+    128
+   ],
+   "fingerprint": "4a62a37911cbb837"
+  },
+  {
+   "pointer": "django/utils/crypto.py:salted_hmac",
+   "line": 195,
+   "sentence": "The base of them is `salted_hmac`, which makes an HMAC of a value with a key made by hashing a salt, which names the use, together with the secret key; so each use has a key of its own, and a value made for one use does not verify for another ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`).",
+   "tree": "django",
+   "path": "django/utils/crypto.py",
+   "symbol": "salted_hmac",
+   "kind": "function",
+   "lines": [
+    23,
+    61
+   ],
+   "fingerprint": "2a2e7d76a37fdbcc"
+  },
+  {
+   "pointer": "django/core/signing.py:dumps",
+   "line": 197,
+   "sentence": "`dumps` signs any value that JSON can hold, by way of a `TimestampSigner` with the salt `\"django.core.signing\"` unless it is given another, and `loads` checks it and gives the value back ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](security/signing.md)) (`django/core/signing.py:dumps`):",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "dumps",
+   "kind": "function",
+   "lines": [
+    172,
+    193
+   ],
+   "fingerprint": "0970fa05c223bafa"
+  },
+  {
+   "pointer": "django/core/signing.py:Signer.unsign",
+   "line": 212,
+   "sentence": "A `Signer` tries its key and then each of the fallbacks, which is how a site changes its key without at once losing every value signed with the old one (`django/core/signing.py:Signer.unsign`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.unsign",
+   "kind": "function",
+   "lines": [
+    247,
+    254
+   ],
+   "fingerprint": "47eef6ac66b5ee46"
+  },
+  {
+   "pointer": "django/core/checks/security/base.py:check_secret_key",
+   "line": 218,
+   "sentence": "The security checks are system checks with the tag `\"security\"`, and most are registered as deployment checks, which run only when the check command is given `--deploy`: that `settings.DEBUG` is off, that `SECRET_KEY` is long and not one startproject wrote, that `SecurityMiddleware`, `CsrfViewMiddleware` and `XFrameOptionsMiddleware` are installed and the cookies marked secure ([The security checks](security/checks.md)) ([The system checks](commands/checks.md)) (`django/core/checks/security/base.py:check_secret_key`).",
+   "tree": "django",
+   "path": "django/core/checks/security/base.py",
+   "symbol": "check_secret_key",
+   "kind": "function",
+   "lines": [
+    263,
+    271
+   ],
+   "at": 264,
+   "fingerprint": "fd44814a3512dd3d"
+  },
+  {
+   "pointer": "django/core/checks/security/csrf.py:check_csrf_failure_view",
+   "line": 218,
+   "sentence": "Three run on every check: that the two policy settings are dictionaries, that a policy with a nonce has the `csp` context processor to put the nonce in templates, and that the view `CSRF_FAILURE_VIEW` names takes a request and a reason (`django/core/checks/security/csrf.py:check_csrf_failure_view`).",
+   "tree": "django",
+   "path": "django/core/checks/security/csrf.py",
+   "symbol": "check_csrf_failure_view",
+   "kind": "function",
+   "lines": [
+    43,
+    65
+   ],
+   "at": 44,
+   "fingerprint": "ba1df1dff83eaaf6"
+  },
+  {
+   "pointer": "django/utils/http.py",
+   "line": 222,
+   "sentence": "Two of the checks they rely on are the request's: `HttpRequest.get_host`, which ordinarily refuses a host not in `ALLOWED_HOSTS`, and `HttpRequest.is_secure`, which a proxy's header can decide ([Headers, host and scheme](http/headers.md)); and checking a URL before redirecting to it is in [The helpers in `django/utils/http.py`](http/helpers.md).",
+   "tree": "django",
+   "path": "django/utils/http.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    434
+   ],
+   "fingerprint": "aca6086ffea6bad3"
+  }
+ ]
+}

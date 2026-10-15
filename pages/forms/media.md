@@ -69,7 +69,7 @@ When the declarations' orders cannot all be kept, as when two put the same asset
 
 A `Media` drawn as a string is `Media.render`: the stylesheets, by medium in alphabetical order, then the scripts, one element to a line, marked safe (`django/forms/widgets.py:Media.render`). An asset is drawn by `MediaAsset.render` from its class's element template, its path and its attributes. `media["css"]` and `media["js"]` are new `Media` objects holding only the stylesheets or only the scripts, so a template can write `{{ form.media.css }}` in its head and the scripts at its end (`django/forms/widgets.py:Media.__getitem__`).
 
-`Media.render`, `Media.render_css` and `Media.render_js` take attributes to put on every element. An asset that already has one raises `ValueError`; a safe string is written without them. So `{% csp_nonce_attr form.media %}`, new in 6.1, puts the Content Security Policy nonce on every element when the context holds one (`django/utils/csp.py:nonce_attr`) ([The built-in tags](../templates/tags.md), [Security](../security.md)).
+`Media.render`, `Media.render_css` and `Media.render_js` take attributes to put on every element. An asset that already has one raises `ValueError`; a safe string is written without them. So `{% csp_nonce_attr form.media %}`, new in 6.1, puts the Content Security Policy nonce on every element when the context holds one (`django/utils/csp.py:nonce_attr`) ([The built-in tags](../templates/tags.md), [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md)).
 
 ## Paths and the static files: `MediaAsset`
 

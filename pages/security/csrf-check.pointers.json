@@ -1,0 +1,222 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "csrf-check.md",
+ "pointers": [
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 9,
+   "sentence": "An accepted request goes on to its view; a refused one gets the failure view's response in its place (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._accept",
+   "line": 38,
+   "sentence": "`CsrfViewMiddleware._accept` marks an accepted request with the attribute `\"csrf_processing_done\"`, and `process_view` returns at once for a request so marked, which is what lets the middleware and the `csrf_protect` decorator share one request ([A middleware as a decorator](../views/middleware-decorators.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._accept",
+   "kind": "function",
+   "lines": [
+    204,
+    209
+   ],
+   "fingerprint": "f8ffc93c3247fcb3"
+  },
+  {
+   "pointer": "django/test/client.py:ClientHandler.__call__",
+   "line": 42,
+   "sentence": "Last, the test client's flag: its handler sets `\"_dont_enforce_csrf_checks\"` on every request, true unless the client was made with `enforce_csrf_checks=True` ([The test framework](../testing.md)) (`django/test/client.py:ClientHandler.__call__`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "ClientHandler.__call__",
+   "kind": "function",
+   "lines": [
+    169,
+    210
+   ],
+   "fingerprint": "3a378c0ad831b908"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._origin_verified",
+   "line": 46,
+   "sentence": "A request with an `\"Origin\"` header is refused unless `CsrfViewMiddleware._origin_verified` accepts it, in one of three ways tried in order (`django/middleware/csrf.py:CsrfViewMiddleware._origin_verified`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._origin_verified",
+   "kind": "function",
+   "lines": [
+    273,
+    297
+   ],
+   "fingerprint": "786af7d51aeebb16"
+  },
+  {
+   "pointer": "django/utils/http.py:is_same_domain",
+   "line": 46,
+   "sentence": "Or it may have the scheme of a trusted origin written with a `\"*\"`, and a host that matches that origin's host, star taken off, by `is_same_domain`, where a pattern that begins with a dot matches the domain and every subdomain (`django/utils/http.py:is_same_domain`).",
+   "tree": "django",
+   "path": "django/utils/http.py",
+   "symbol": "is_same_domain",
+   "kind": "function",
+   "lines": [
+    254,
+    271
+   ],
+   "fingerprint": "ff659092d60e432d"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.allowed_origin_subdomains",
+   "line": 48,
+   "sentence": "The setting is read into three cached properties, once for each instance of the middleware (`django/middleware/csrf.py:CsrfViewMiddleware.allowed_origin_subdomains`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.allowed_origin_subdomains",
+   "kind": "function",
+   "lines": [
+    187,
+    200
+   ],
+   "at": 188,
+   "fingerprint": "8033c9b08111ed32"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_referer",
+   "line": 52,
+   "sentence": "Otherwise the host must match the cookie's domain, `CSRF_COOKIE_DOMAIN` or, with `CSRF_USE_SESSIONS`, `SESSION_COOKIE_DOMAIN`, with the request's port added unless it is 443 or 80; or, when that domain is `None`, as by default, `get_host`, port and all, a `DisallowedHost` being refused (`django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._check_referer",
+   "kind": "function",
+   "lines": [
+    299,
+    342
+   ],
+   "fingerprint": "8c2234832e93c32f"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_token",
+   "line": 67,
+   "sentence": "No secret is refused too: insisting on a cookie for a `\"POST\"`, the comment says, avoids all CSRF attacks, login CSRF among them (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._check_token",
+   "kind": "function",
+   "lines": [
+    351,
+    401
+   ],
+   "fingerprint": "b5d057f8cd09d712"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:_does_token_match",
+   "line": 71,
+   "sentence": "`_does_token_match` unmasks a token of 64, takes one of 32 as the secret itself, as a script that read the cookie sends it, and compares it with the secret by `constant_time_compare` ([Secret keys and `django.utils.crypto`](keys.md)) (`django/middleware/csrf.py:_does_token_match`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "_does_token_match",
+   "kind": "function",
+   "lines": [
+    143,
+    157
+   ],
+   "fingerprint": "ac8630f09c582a7e"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._reject",
+   "line": 75,
+   "sentence": "It imports the view `CSRF_FAILURE_VIEW` names by `get_callable`, calls it with the request and the reason, and logs the response by `log_response` to `\"django.security.csrf\"`, as `\"Forbidden (%s): %s\"` with the reason and the path (`django/middleware/csrf.py:CsrfViewMiddleware._reject`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._reject",
+   "kind": "function",
+   "lines": [
+    211,
+    221
+   ],
+   "fingerprint": "e2c7a329c60b267b"
+  },
+  {
+   "pointer": "django/utils/log.py:log_response",
+   "line": 75,
+   "sentence": "`log_response` logs a 4xx as a warning and marks the response as logged, so the handler, which logs every response of 400 or more to `\"django.request\"`, does not log it again (`django/utils/log.py:log_response`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "log_response",
+   "kind": "function",
+   "lines": [
+    292,
+    324
+   ],
+   "fingerprint": "56310330211c712c"
+  },
+  {
+   "pointer": "django/views/csrf.py:csrf_failure",
+   "line": 96,
+   "sentence": "`csrf_failure` builds its page's context: a translated title and sentence; the reason; `\"no_referer\"` and `\"no_cookie\"`, true when the reason is `REASON_NO_REFERER` or `REASON_NO_CSRF_COOKIE`, each with paragraphs for the user; `settings.DEBUG`, with the documentation's version for its links and a line for when it is off; and the nonce, merged in from the `csp` context processor (`django/views/csrf.py:csrf_failure`).",
+   "tree": "django",
+   "path": "django/views/csrf.py",
+   "symbol": "csrf_failure",
+   "kind": "function",
+   "lines": [
+    22,
+    81
+   ],
+   "fingerprint": "141725332d9c81b8"
+  },
+  {
+   "pointer": "django/views/csrf.py:csrf_failure",
+   "line": 98,
+   "sentence": "When no engine has it, `csrf_failure` renders the built-in `\"csrf_403.html\"` with an `Engine` of its own and the context, so the page does not depend on `TEMPLATES` (`django/views/csrf.py:csrf_failure`).",
+   "tree": "django",
+   "path": "django/views/csrf.py",
+   "symbol": "csrf_failure",
+   "kind": "function",
+   "lines": [
+    22,
+    81
+   ],
+   "fingerprint": "141725332d9c81b8"
+  },
+  {
+   "pointer": "django/views/templates/csrf_403.html",
+   "line": 100,
+   "sentence": "The built-in page shows the paragraphs for a missing `\"Referer\"` or cookie when the reason is one of those, and, with `settings.DEBUG` true, the reason and a list of what to check (`django/views/templates/csrf_403.html`).",
+   "tree": "django",
+   "path": "django/views/templates/csrf_403.html",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    86
+   ],
+   "fingerprint": "c01c7216dec59867"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 102,
+   "sentence": "The check is synchronous for another reason: `process_view` is a synchronous method, which the handler adapts to its own mode separately from the layer ([Sync and async in one chain](../handlers/async.md)) (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  }
+ ]
+}

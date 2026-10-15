@@ -50,7 +50,7 @@ The body is set by the `HttpResponse.content` setter. A string is encoded with t
 
 Each layer's `process_response` is given the response the layer inside it returned, and returns the response the layer outside it will see, which may be a different object. Read in the order they run, which is the reverse of `settings.MIDDLEWARE`:
 
-**`XFrameOptionsMiddleware`** sets `X-Frame-Options` to the value of `settings.X_FRAME_OPTIONS`, `"DENY"` by default, unless the header is already there or the response was marked exempt by the decorator (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).
+**`XFrameOptionsMiddleware`** sets `X-Frame-Options` to the value of `settings.X_FRAME_OPTIONS`, `"DENY"` by default, unless the header is already there or the response was marked exempt by the decorator ([The security headers: `SecurityMiddleware` and `XFrameOptionsMiddleware`](../security/headers.md)) (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).
 
 **`MessageMiddleware`** asks the request's message storage to store what has not been read, into a cookie or the session; here there is nothing to store (`django/contrib/messages/middleware.py:MessageMiddleware.process_response`, `django/contrib/messages/storage/base.py:BaseStorage.update`).
 
@@ -62,7 +62,7 @@ Each layer's `process_response` is given the response the layer inside it return
 
 **`SessionMiddleware`** reads the session's two flags and whether it is empty. A session that was modified, or any session when `settings.SESSION_SAVE_EVERY_REQUEST` is true, is saved and its cookie set, unless it is empty or the response is a server error; a session that was merely accessed makes the response vary on the `"Cookie"` header; a session that was emptied has its cookie deleted. This request's session was never touched, so nothing is done (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/contrib/sessions/backends/base.py:SessionBase.is_empty`).
 
-**`SecurityMiddleware`** adds the headers that are on by default: `X-Content-Type-Options` as `"nosniff"`, `Referrer-Policy` and `Cross-Origin-Opener-Policy` as `"same-origin"`, each only if the response does not already have it. `Strict-Transport-Security` is added only to a secure request and only when `settings.SECURE_HSTS_SECONDS` is set (`django/middleware/security.py:SecurityMiddleware.process_response`).
+**`SecurityMiddleware`** adds the headers that are on by default: `X-Content-Type-Options` as `"nosniff"`, `Referrer-Policy` and `Cross-Origin-Opener-Policy` as `"same-origin"`, each only if the response does not already have it. `Strict-Transport-Security` is added only to a secure request and only when `settings.SECURE_HSTS_SECONDS` is set ([The security headers: `SecurityMiddleware` and `XFrameOptionsMiddleware`](../security/headers.md)) (`django/middleware/security.py:SecurityMiddleware.process_response`).
 
 The outermost layer's return is what the chain returns. `BaseHandler.get_response` then registers the request's own `close` among the response's closers, so that closing the response closes any files that were uploaded with the request, and logs the response if its status is 400 or more; a 200 is not logged (`django/core/handlers/base.py:BaseHandler.get_response`).
 

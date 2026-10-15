@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 672">
+  <!-- the onion cut through, time running down: each layer's band above the centre is its way in, below it its way out -->
+  <text x="0" y="14">on the way in, in the order of <tspan class="name">MIDDLEWARE</tspan></text>
+  <text x="552" y="14">request</text>
+
+  <!-- the four layers, outermost first -->
+  <rect class="ground" x="0.5" y="28.5" width="645" height="614" rx="4"/>
+  <rect class="box" x="20.5" y="84.5" width="605" height="486" rx="4"/>
+  <rect class="ground" x="40.5" y="140.5" width="565" height="374" rx="4"/>
+  <rect class="box" x="60.5" y="178.5" width="525" height="280" rx="4"/>
+
+  <!-- the way in -->
+  <text class="name" x="12" y="50">SecurityMiddleware</text>
+  <text x="12" y="68">plain HTTP: answers with a redirect to HTTPS, and nothing inside it runs</text>
+  <text class="name" x="32" y="106">CsrfViewMiddleware</text>
+  <text x="32" y="124">reads the CSRF secret from the request's cookie</text>
+  <text class="name" x="52" y="162">XFrameOptionsMiddleware</text>
+  <text class="name" x="72" y="200">ContentSecurityPolicyMiddleware</text>
+  <text x="72" y="218">gives the request a nonce, made when it is first used</text>
+
+  <!-- the request's path to the centre -->
+  <path class="line" d="M540 4 V224"/>
+  <polygon class="head" points="540,234 535,224 545,224"/>
+
+  <!-- the centre: the check, which waits for the view to be known, then the view -->
+  <rect class="mark-box" x="80.5" y="234.5" width="485" height="72" rx="4"/>
+  <text class="name mark" x="92" y="256">CsrfViewMiddleware</text>
+  <text class="quiet small" x="246" y="256">before the view</text>
+  <text x="92" y="274">a method that is not safe: checks the origin, then the token;</text>
+  <text x="92" y="292">or refuses with a 403</text>
+
+  <path class="line" d="M540 307 V320"/>
+  <polygon class="head" points="540,330 535,320 545,320"/>
+
+  <rect class="ground" x="80.5" y="330.5" width="485" height="72" rx="4"/>
+  <text x="92" y="352">the view renders the template</text>
+  <text x="92" y="370"><tspan class="name">{% csrf_token %}</tspan> asks for a token,</text>
+  <text x="92" y="388"><tspan class="name">{% csp_nonce_attr %}</tspan> for the nonce</text>
+
+  <!-- the way out, innermost first -->
+  <text class="name" x="72" y="424">ContentSecurityPolicyMiddleware</text>
+  <text x="72" y="442">Content-Security-Policy, with the nonce if it was used</text>
+  <text class="name" x="52" y="480">XFrameOptionsMiddleware</text>
+  <text x="52" y="498">X-Frame-Options</text>
+  <text class="name" x="32" y="536">CsrfViewMiddleware</text>
+  <text x="32" y="554">the secret in a cookie, if a token was asked for</text>
+  <text class="name" x="12" y="592">SecurityMiddleware</text>
+  <text x="12" y="610">Strict-Transport-Security on HTTPS, X-Content-Type-Options,</text>
+  <text x="12" y="628">Referrer-Policy, Cross-Origin-Opener-Policy</text>
+
+  <!-- the response's path out -->
+  <path class="line" d="M540 403 V656"/>
+  <polygon class="head" points="540,666 535,656 545,656"/>
+  <text x="0" y="666">on the way out, in the reverse order</text>
+  <text x="552" y="666">response</text>
+</svg>

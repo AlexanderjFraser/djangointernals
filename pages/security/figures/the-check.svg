@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 480">
+  <!-- the order of the tests: a request that passes one goes down to the next -->
+  <path class="mark-line" d="M8 15 V427 H16"/>
+
+  <!-- four tests that let a request through without checking it -->
+  <text x="24" y="20">already marked as checked</text>
+  <text x="24" y="42">the view is marked <tspan class="name">csrf_exempt</tspan></text>
+  <text x="24" y="64">a safe method: GET, HEAD, OPTIONS, TRACE</text>
+  <text x="24" y="86">the test client's flag</text>
+  <path class="line" d="M192 15 H356 M232 37 H356 M288 59 H356 M147 81 H356 M356 15 V81 M356 48 H372"/>
+  <polygon class="head" points="382,48 372,43 372,53"/>
+  <text x="392" y="53">let through, unchecked</text>
+
+  <!-- the origin: three cases, by the headers the request has -->
+  <text class="strong" x="24" y="124">the origin</text>
+  <text class="quiet small" x="392" y="124">refused, with the reason</text>
+
+  <text x="24" y="148">an Origin header:</text>
+  <text x="40" y="166">the site's own origin or a trusted one</text>
+  <text class="quiet small" x="262" y="166">else</text>
+  <path class="line" d="M295 161 H372"/>
+  <polygon class="head" points="382,161 372,156 372,166"/>
+  <text class="name" x="392" y="166">"Origin checking failed - …"</text>
+
+  <text x="24" y="192">no Origin, HTTPS:</text>
+  <text x="40" y="210">a Referer naming the site or a trusted host</text>
+  <text class="quiet small" x="294" y="210">else</text>
+  <path class="line" d="M327 205 H372"/>
+  <polygon class="head" points="382,205 372,200 372,210"/>
+  <text class="name" x="392" y="210">"Referer checking failed - …"</text>
+
+  <text x="24" y="236">no Origin, plain HTTP:</text>
+  <text class="quiet" x="40" y="254">nothing checked</text>
+
+  <!-- the token: each test that matches refuses -->
+  <text class="strong" x="24" y="292">the token</text>
+
+  <text x="24" y="316">a malformed cookie</text>
+  <path class="line" d="M150 311 H372"/>
+  <polygon class="head" points="382,311 372,306 372,316"/>
+  <text class="name" x="392" y="316">"CSRF cookie has …"</text>
+
+  <text x="24" y="338">no secret</text>
+  <path class="line" d="M88 333 H372"/>
+  <polygon class="head" points="382,333 372,328 372,338"/>
+  <text class="name" x="392" y="338">"CSRF cookie not set."</text>
+
+  <text x="24" y="360">no token in the form field or the header</text>
+  <path class="line" d="M262 355 H372"/>
+  <polygon class="head" points="382,355 372,350 372,360"/>
+  <text class="name" x="392" y="360">"CSRF token missing."</text>
+
+  <text x="24" y="382">a token of the wrong length or characters</text>
+  <path class="line" d="M274 377 H372"/>
+  <polygon class="head" points="382,377 372,372 372,382"/>
+  <text class="name" x="392" y="382">"CSRF token from … has …"</text>
+
+  <text x="24" y="404">a token not matching the secret</text>
+  <path class="line" d="M218 399 H372"/>
+  <polygon class="head" points="382,399 372,394 372,404"/>
+  <text class="name" x="392" y="404">"CSRF token from … incorrect."</text>
+
+  <!-- past every test -->
+  <text x="24" y="432">otherwise</text>
+  <path class="mark-line" d="M92 427 H372"/>
+  <polygon class="head mark" points="382,427 372,422 372,432"/>
+  <text class="strong" x="392" y="432">accepted, on to the view</text>
+
+  <!-- what a refusal is -->
+  <text x="0" y="472"><tspan class="strong">refused:</tspan> the failure view's 403 in the view's place, the reason logged</text>
+</svg>

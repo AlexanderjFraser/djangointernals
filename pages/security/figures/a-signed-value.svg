@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 322">
+  <!-- the call, and the string it returned, whole -->
+  <text x="0" y="14"><tspan class="name">signing.dumps({"berth": 4, "ship": "Endeavour"}, salt="harbour.berths")</tspan> returned</text>
+  <rect class="ground" x="0.5" y="28.5" width="734" height="30" rx="4"/>
+  <text class="name" x="12" y="48">eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9<tspan class="strong">:</tspan>1xHQ1Q<tspan class="strong">:</tspan>cw06NVDicoTdRLXU-PNAx10QwWOsa6ND2MLn9CkLFYA</text>
+
+  <!-- the string cut at its separators: each part stands where it stood in the string -->
+  <rect class="box" x="0.5" y="78.5" width="336" height="28" rx="4"/>
+  <text class="name" x="12" y="97">eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9</text>
+  <text x="350" y="97">the JSON in URL-safe base64:  <tspan class="name">{"berth":4,"ship":"Endeavour"}</tspan></text>
+
+  <text class="name strong" x="324" y="126">:</text>
+  <text class="quiet" x="350" y="126">the separator</text>
+
+  <rect class="box" x="319.5" y="136.5" width="71" height="28" rx="4"/>
+  <text class="name" x="331.8" y="155">1xHQ1Q</text>
+  <text x="404" y="155">the time in base 62:  <tspan class="name">1792088264</tspan>, 2026-10-15 18:17:44 UTC</text>
+
+  <text class="name strong" x="378.6" y="184">:</text>
+  <text class="quiet" x="404" y="184">the separator</text>
+
+  <rect class="mark-box" x="374.5" y="194.5" width="360" height="28" rx="4"/>
+  <text class="name mark" x="386.4" y="213">cw06NVDicoTdRLXU-PNAx10QwWOsa6ND2MLn9CkLFYA</text>
+  <text x="748" y="204">the signature,</text>
+  <text x="748" y="222">in URL-safe base64</text>
+
+  <!-- what the signature is made of: everything before the last separator, and the key -->
+  <text x="0" y="252">everything before the last <tspan class="name">":"</tspan></text>
+  <rect class="box" x="0.5" y="262.5" width="391" height="28" rx="4"/>
+  <text class="name" x="12" y="281">eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9<tspan class="strong">:</tspan>1xHQ1Q</text>
+  <path class="mark-line" d="M392 276 H554 V233"/>
+  <polygon class="head mark" points="554,223 549,233 559,233"/>
+  <text x="404" y="267">HMAC with SHA-256</text>
+  <text x="404" y="300">key: SHA-256 of <tspan class="name">"harbour.berths"</tspan> + <tspan class="name">"signer"</tspan> + <tspan class="name">SECRET_KEY</tspan></text>
+
+  <!-- the compressed form -->
+  <text class="quiet small" x="0" y="314">compressed: a <tspan class="name small">"."</tspan> in front of the base64, inside what is signed</text>
+</svg>
