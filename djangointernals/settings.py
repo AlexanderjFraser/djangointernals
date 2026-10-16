@@ -22,7 +22,7 @@ DIST_DIR = BASE_DIR / "dist"
 SITE_URL = "https://djangointernals.dev"
 PAGES_PROJECT = "djangointernals"
 REPOSITORY_URL = "https://github.com/AlexanderjFraser/djangointernals"
-INDEXABLE = False
+INDEXABLE = True  # published on the owner's word, 2026-10-16
 DELTA_CHAPTER = "changes"
 
 # The key signs nothing: the site has no sessions, no forms and no users.
