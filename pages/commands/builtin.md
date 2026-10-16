@@ -60,7 +60,7 @@ A contrib application's commands exist in a project that installs the applicatio
 | `django.contrib.gis` | inspectdb | Django's inspectdb, taught the geometry column types `django/contrib/gis/management/commands/inspectdb.py:Command` |
 | | ogrinspect | prints model source for a layer of a geographic data file `django/contrib/gis/utils/ogrinspect.py:_ogrinspect` |
 
-*The commands of the contrib applications. They belong to [Authentication, sessions and messages](../auth.md) and [Content types, static files and the other contrib apps](../contrib.md).*
+*The commands of the contrib applications. createsuperuser and changepassword are told in [Creating a superuser: createsuperuser and changepassword](../auth/createsuperuser.md), clearsessions in [The session backends](../auth/session-backends.md), and the others belong to [Content types, static files and the other contrib apps](../contrib.md).*
 
 Two of them have the name of a command of Django's and take its place, each by subclassing the class it displaces.
 
@@ -145,7 +145,7 @@ The commands of django.core and of django.contrib.staticfiles: the base of each,
 - sqlmigrate overrides `execute` to take the colour out of the transaction statements that are put around its output, since the rest of what it prints is not coloured. It also decides in `handle`, for each run, whether those statements are wanted at all: only for a migration that is atomic on a database that can roll back changes to its schema (`django/core/management/commands/sqlmigrate.py:Command.handle`).
 - listurls and collectstatic override `__init__`: the first to choose its own style object, the second to set up its lists of files, its storage and a style without colour.
 
-One more is not in the recording because its application is not installed there. The createsuperuser command overrides `__init__`, to find the user model before its arguments are declared, and `execute`, to accept a stream to read from in place of standard input, which it declares as a stealth option, for the benefit of tests (`django/contrib/auth/management/commands/createsuperuser.py:Command.execute`).
+One more is not in the recording because its application is not installed there. The createsuperuser command overrides `__init__`, to find the user model before its arguments are declared, and `execute`, to accept in place of standard input a stream that it asks only whether it is a terminal, declared as a stealth option and, its comment says, used for testing; its prompts still read standard input (`django/contrib/auth/management/commands/createsuperuser.py:Command.execute`) ([Creating a superuser: createsuperuser and changepassword](../auth/createsuperuser.md)).
 
 ## Commands that write a project: `TemplateCommand`
 

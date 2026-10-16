@@ -1,0 +1,365 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "user-model.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/auth/base_user.py",
+   "line": 18,
+   "sentence": "*The layers of the user model, in `django/contrib/auth/base_user.py` and `django/contrib/auth/models.py`.*",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    164
+   ],
+   "fingerprint": "8f0851c891464b42"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py",
+   "line": 18,
+   "sentence": "*The layers of the user model, in `django/contrib/auth/base_user.py` and `django/contrib/auth/models.py`.*",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    639
+   ],
+   "fingerprint": "fb5cc235be494dcb"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser",
+   "line": 22,
+   "sentence": "`AbstractBaseUser.is_active` is a class attribute, true, so a model that does not make it a field has every user active (`django/contrib/auth/base_user.py:AbstractBaseUser`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "AbstractBaseUser",
+   "kind": "class",
+   "lines": [
+    43,
+    164
+   ],
+   "fingerprint": "12ffe9bdca02340d"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:BaseUserManager.get_by_natural_key",
+   "line": 24,
+   "sentence": "`BaseUserManager.get_by_natural_key`, a `get` on the same field, is how `ModelBackend` finds the user a login names ([Authenticating: `authenticate` and the backends](authenticating.md)) (`django/contrib/auth/base_user.py:BaseUserManager.get_by_natural_key`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "BaseUserManager.get_by_natural_key",
+   "kind": "function",
+   "lines": [
+    36,
+    37
+   ],
+   "fingerprint": "8012952b98bb2b16"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser.normalize_username",
+   "line": 26,
+   "sentence": "`AbstractBaseUser.clean` passes the username through `AbstractBaseUser.normalize_username`, which applies Unicode's NFKC normalization so that, as the documentation puts it, visually identical characters with different code points count as identical (`django/contrib/auth/base_user.py:AbstractBaseUser.normalize_username`, `docs/topics/auth/customizing.txt`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "AbstractBaseUser.normalize_username",
+   "kind": "function",
+   "lines": [
+    158,
+    164
+   ],
+   "at": 159,
+   "fingerprint": "973eaa7c26b148e0"
+  },
+  {
+   "pointer": "docs/topics/auth/customizing.txt",
+   "line": 26,
+   "sentence": "`AbstractBaseUser.clean` passes the username through `AbstractBaseUser.normalize_username`, which applies Unicode's NFKC normalization so that, as the documentation puts it, visually identical characters with different code points count as identical (`django/contrib/auth/base_user.py:AbstractBaseUser.normalize_username`, `docs/topics/auth/customizing.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/customizing.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1225
+   ],
+   "fingerprint": "2d7433839d20b5b2"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser.save",
+   "line": 32,
+   "sentence": "It keeps the raw password in `AbstractBaseUser._password` so that, a comment says, it can be passed to `password_changed` after the model is saved: `AbstractBaseUser.save` saves, then calls `password_changed` if `_password` is set, and clears it ([Password validation: `validate_password` and the validators](password-validation.md)) (`django/contrib/auth/base_user.py:AbstractBaseUser.save`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "AbstractBaseUser.save",
+   "kind": "function",
+   "lines": [
+    61,
+    65
+   ],
+   "fingerprint": "6c4c40ec3fbf8e0f"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser.check_password",
+   "line": 34,
+   "sentence": "The setter calls `set_password`, clears `_password`, since by its comment a hash upgrade is not a password change, and saves the `password` field alone ([Password hashing: `make_password` and the hashers](hashers.md)) (`django/contrib/auth/base_user.py:AbstractBaseUser.check_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "AbstractBaseUser.check_password",
+   "kind": "function",
+   "lines": [
+    97,
+    109
+   ],
+   "fingerprint": "6fafd328f7b96242"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser.set_unusable_password",
+   "line": 36,
+   "sentence": "`AbstractBaseUser.set_unusable_password` stores `make_password(None)`, a string beginning with `\"!\"` that no password matches, and `AbstractBaseUser.has_usable_password` tells it with `is_password_usable` (`django/contrib/auth/base_user.py:AbstractBaseUser.set_unusable_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "AbstractBaseUser.set_unusable_password",
+   "kind": "function",
+   "lines": [
+    122,
+    124
+   ],
+   "fingerprint": "c8813bb4310374e8"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:BaseUserManager.normalize_email",
+   "line": 40,
+   "sentence": "`BaseUserManager.normalize_email` strips an address that has an `\"@\"` and lowercases what follows the last one, leaving the local part as it was; a missing address becomes `\"\"` (`django/contrib/auth/base_user.py:BaseUserManager.normalize_email`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "BaseUserManager.normalize_email",
+   "kind": "function",
+   "lines": [
+    22,
+    34
+   ],
+   "at": 23,
+   "fingerprint": "46dd34c5cda02853"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:UserManager._create_user_object",
+   "line": 42,
+   "sentence": "It sets the password with `make_password`, not `set_password`, so no `password_changed` follows (`django/contrib/auth/models.py:UserManager._create_user_object`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "UserManager._create_user_object",
+   "kind": "function",
+   "lines": [
+    148,
+    161
+   ],
+   "fingerprint": "f3718e8ed17e3324"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:PermissionsMixin",
+   "line": 53,
+   "sentence": "`PermissionsMixin` adds `is_superuser` and two many-to-many fields, `groups` to the group model and `user_permissions` to `Permission`, each with the related name `\"user_set\"` (`django/contrib/auth/models.py:PermissionsMixin`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "PermissionsMixin",
+   "kind": "class",
+   "lines": [
+    322,
+    448
+   ],
+   "fingerprint": "89f42e53d8649e2c"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:AbstractUser",
+   "line": 55,
+   "sentence": "`AbstractUser.email_user` calls `send_mail` with the user's address (`django/contrib/auth/models.py:AbstractUser`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "AbstractUser",
+   "kind": "class",
+   "lines": [
+    451,
+    519
+   ],
+   "fingerprint": "bad5ea2617123d84"
+  },
+  {
+   "pointer": "django/contrib/auth/validators.py",
+   "line": 57,
+   "sentence": "The username is validated by `UnicodeUsernameValidator`, which allows word characters and `\".\"`, `\"@\"`, `\"+\"` and `\"-\"`; `ASCIIUsernameValidator` is the same pattern with the ASCII flag, and refuses \"tomás\" (`django/contrib/auth/validators.py`).",
+   "tree": "django",
+   "path": "django/contrib/auth/validators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    25
+   ],
+   "fingerprint": "54eeccc9a7244da4"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:User",
+   "line": 61,
+   "sentence": "`User` adds to `AbstractUser` only a `Meta` that sets the swappable option to `\"AUTH_USER_MODEL\"` (`django/contrib/auth/models.py:User`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "User",
+   "kind": "class",
+   "lines": [
+    522,
+    531
+   ],
+   "fingerprint": "d9865c4aae47f8aa"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:AnonymousUser",
+   "line": 65,
+   "sentence": "Any two are equal, every one hashes to 1, and `int` of one raises `TypeError`, asking whether it is being used in place of a user (`django/contrib/auth/models.py:AnonymousUser`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "AnonymousUser",
+   "kind": "class",
+   "lines": [
+    534,
+    639
+   ],
+   "fingerprint": "72330f40a2dd452f"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:get_user_model",
+   "line": 69,
+   "sentence": "`get_user_model` asks the registry for the model `AUTH_USER_MODEL` names with `require_ready=False` (`django/contrib/auth/__init__.py:get_user_model`), which needs only the applications loaded, not all their models, and imports the named application's models itself if they are not yet (`django/apps/registry.py:Apps.get_model`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "get_user_model",
+   "kind": "function",
+   "lines": [
+    261,
+    275
+   ],
+   "fingerprint": "c2397fbd81505386"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.get_model",
+   "line": 69,
+   "sentence": "`get_user_model` asks the registry for the model `AUTH_USER_MODEL` names with `require_ready=False` (`django/contrib/auth/__init__.py:get_user_model`), which needs only the applications loaded, not all their models, and imports the named application's models itself if they are not yet (`django/apps/registry.py:Apps.get_model`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_model",
+   "kind": "function",
+   "lines": [
+    188,
+    213
+   ],
+   "fingerprint": "bc409748c76018b2"
+  },
+  {
+   "pointer": "django/contrib/auth/apps.py:AuthConfig.ready",
+   "line": 69,
+   "sentence": "`AuthConfig.ready` calls `get_user_model`, so a wrong value stops `django.setup` (`django/contrib/auth/apps.py:AuthConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/auth/apps.py",
+   "symbol": "AuthConfig.ready",
+   "kind": "function",
+   "lines": [
+    18,
+    35
+   ],
+   "fingerprint": "c5e2565bc4196afa"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:UserModel",
+   "line": 71,
+   "sentence": "The backends, the forms, the views, changepassword and the mod_wsgi handler keep the class they got at import as `UserModel` (`django/contrib/auth/backends.py:UserModel`); only a receiver of `setting_changed`, which `override_settings` sends, binds the five again (`django/test/signals.py:user_model_swapped`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "UserModel",
+   "kind": "assignment",
+   "lines": [
+    12,
+    12
+   ],
+   "fingerprint": "3dbc5eb814afdca4"
+  },
+  {
+   "pointer": "django/test/signals.py:user_model_swapped",
+   "line": 71,
+   "sentence": "The backends, the forms, the views, changepassword and the mod_wsgi handler keep the class they got at import as `UserModel` (`django/contrib/auth/backends.py:UserModel`); only a receiver of `setting_changed`, which `override_settings` sends, binds the five again (`django/test/signals.py:user_model_swapped`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "user_model_swapped",
+   "kind": "function",
+   "lines": [
+    225,
+    255
+   ],
+   "at": 226,
+   "fingerprint": "b2047cf62d312ad0"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.swapped",
+   "line": 73,
+   "sentence": "When the setting names another model, `User`'s `Options.swapped` is that name (`django/db/models/options.py:Options.swapped`): migrate makes no table for it, the registry's lists leave it out (`django/apps/config.py:AppConfig.get_models`), and its manager refuses to be read ([The options: what a model keeps as `_meta`](../models/options.md)).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.swapped",
+   "kind": "function",
+   "lines": [
+    421,
+    447
+   ],
+   "at": 422,
+   "fingerprint": "9629b67048fbdca3"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.get_models",
+   "line": 73,
+   "sentence": "When the setting names another model, `User`'s `Options.swapped` is that name (`django/db/models/options.py:Options.swapped`): migrate makes no table for it, the registry's lists leave it out (`django/apps/config.py:AppConfig.get_models`), and its manager refuses to be read ([The options: what a model keeps as `_meta`](../models/options.md)).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.get_models",
+   "kind": "function",
+   "lines": [
+    241,
+    260
+   ],
+   "fingerprint": "de79d3f2f8fdae6e"
+  },
+  {
+   "pointer": "docs/topics/auth/customizing.txt",
+   "line": 73,
+   "sentence": "The documentation asks that it be set before the first migrate (`docs/topics/auth/customizing.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/customizing.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1225
+   ],
+   "fingerprint": "2d7433839d20b5b2"
+  },
+  {
+   "pointer": "django/contrib/auth/checks.py:check_user_model",
+   "line": 108,
+   "sentence": "It makes an instance with no arguments, and requires that `REQUIRED_FIELDS` be a list or tuple (`\"auth.E001\"`) and not hold `USERNAME_FIELD` (`\"auth.E002\"`); that the username field be unique, or the only field of a unique constraint with no condition, an error (`\"auth.E003\"`) when `AUTHENTICATION_BACKENDS` is `ModelBackend` alone and otherwise a warning (`\"auth.W004\"`); and that `is_anonymous` and `is_authenticated` not be callable (`\"auth.C009\"`, `\"auth.C010\"`, critical) (`django/contrib/auth/checks.py:check_user_model`).",
+   "tree": "django",
+   "path": "django/contrib/auth/checks.py",
+   "symbol": "check_user_model",
+   "kind": "function",
+   "lines": [
+    27,
+    120
+   ],
+   "fingerprint": "8bd983fb810ed6be"
+  }
+ ]
+}

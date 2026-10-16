@@ -1,0 +1,235 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "creating-permissions.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/auth/apps.py:AuthConfig.ready",
+   "line": 9,
+   "sentence": "`AuthConfig.ready` connects both receivers to `post_migrate` with no sender, so each runs for every application with a models module, and registers the check among the model checks (`django/contrib/auth/apps.py:AuthConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/auth/apps.py",
+   "symbol": "AuthConfig.ready",
+   "kind": "function",
+   "lines": [
+    18,
+    35
+   ],
+   "fingerprint": "c5e2565bc4196afa"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.__init__",
+   "line": 13,
+   "sentence": "`Options.default_permissions` is a tuple of actions, add, change, delete and view unless the `Meta` sets another (`django/db/models/options.py:Options.__init__`); `Options.permissions` is a list of pairs of codename and name, empty unless the `Meta` sets one ([The options: what a model keeps as `_meta`](../models/options.md)).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.__init__",
+   "kind": "function",
+   "lines": [
+    115,
+    170
+   ],
+   "fingerprint": "74dac3353d0e26ec"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:get_permission_codename",
+   "line": 15,
+   "sentence": "The codename is the action and the model's name joined by an underscore, `\"change_ship\"`, made by `get_permission_codename`, which the admin also uses ([The admin](../admin.md)) (`django/contrib/auth/__init__.py:get_permission_codename`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "get_permission_codename",
+   "kind": "function",
+   "lines": [
+    363,
+    367
+   ],
+   "fingerprint": "239a2e1b9bc876e9"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:_get_builtin_permissions",
+   "line": 15,
+   "sentence": "The name is \"Can\", the action and `Options.verbose_name_raw`, the verbose name untranslated whatever language is active (`django/contrib/auth/management/__init__.py:_get_builtin_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "_get_builtin_permissions",
+   "kind": "function",
+   "lines": [
+    25,
+    38
+   ],
+   "fingerprint": "81f1b4aac1a64081"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:_get_all_permissions",
+   "line": 15,
+   "sentence": "`_get_all_permissions` puts the `Meta`'s own pairs after these (`django/contrib/auth/management/__init__.py:_get_all_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "_get_all_permissions",
+   "kind": "function",
+   "lines": [
+    18,
+    22
+   ],
+   "fingerprint": "64bae6d0e22a023f"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:create_permissions",
+   "line": 19,
+   "sentence": "`create_permissions` returns without a write when the application has no models module; when the registry it is given has no `Permission` (auth not installed, or its migrations not applied in the state); when the router does not let `Permission` be migrated on the database it is given; or when the registry has no `ContentType` or no such application (`django/contrib/auth/management/__init__.py:create_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "create_permissions",
+   "kind": "function",
+   "lines": [
+    41,
+    111
+   ],
+   "fingerprint": "6f0eed2e5ffcc15f"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:create_contenttypes",
+   "line": 21,
+   "sentence": "Otherwise it first calls `create_contenttypes` for the application, which clears `ContentTypeManager`'s cache and makes the missing content types (`django/contrib/contenttypes/management/__init__.py:create_contenttypes`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "create_contenttypes",
+   "kind": "function",
+   "lines": [
+    100,
+    143
+   ],
+   "fingerprint": "7e422ad0ff68b39e"
+  },
+  {
+   "pointer": "django/apps/config.py:AppConfig.get_models",
+   "line": 21,
+   "sentence": "It takes the application's models from the registry, less the models made for many-to-many fields and those swapped out (`django/apps/config.py:AppConfig.get_models`), and their content types from `ContentTypeManager.get_for_models` with `for_concrete_models=False`, which gives a proxy its own content type, and so its own permissions, and makes any it does not find.",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig.get_models",
+   "kind": "function",
+   "lines": [
+    241,
+    260
+   ],
+   "fingerprint": "de79d3f2f8fdae6e"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:AlterModelOptions",
+   "line": 25,
+   "sentence": "The registry being a state's, a permission added to a `Meta` in an application with migrations is made by the migrate that applies the `AlterModelOptions` recording it (`django/db/migrations/operations/models.py:AlterModelOptions`); the models of an application without migrations are rendered from their classes.",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "AlterModelOptions",
+   "kind": "class",
+   "lines": [
+    794,
+    846
+   ],
+   "fingerprint": "609d2844a9516aff"
+  },
+  {
+   "pointer": "docs/topics/auth/default.txt",
+   "line": 72,
+   "sentence": "Tug's rows are under office, so nora's `\"fleet.change_ship\"` gives nothing over tugs: a proxy does not inherit its concrete model's permissions, as Django's documentation puts it (`docs/topics/auth/default.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/default.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1909
+   ],
+   "fingerprint": "ca9454b4b5b54ef4"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:rename_permissions_after_model_rename",
+   "line": 76,
+   "sentence": "Without a plan, as from flush, it does nothing (`django/contrib/auth/management/__init__.py:rename_permissions_after_model_rename`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "rename_permissions_after_model_rename",
+   "kind": "function",
+   "lines": [
+    127,
+    226
+   ],
+   "fingerprint": "93c9fb0be69eedfc"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:_get_permission_metadata",
+   "line": 78,
+   "sentence": "For each rename it reads the model's actions and verbose name from the registry, or, for a model the state no longer has, `Permission`'s default actions and the model's name (`django/contrib/auth/management/__init__.py:_get_permission_metadata`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "_get_permission_metadata",
+   "kind": "function",
+   "lines": [
+    114,
+    124
+   ],
+   "fingerprint": "1cff4afc4fab2917"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 82,
+   "sentence": "A permission's name and codename are renamed when a migration renames its model (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/contrib/auth/migrations/0011_update_proxy_permissions.py:update_proxy_model_permissions",
+   "line": 86,
+   "sentence": "Where the proxy already has such a row the update raises `IntegrityError`, and the migration prints a warning naming both content types and goes on (`django/contrib/auth/migrations/0011_update_proxy_permissions.py:update_proxy_model_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/migrations/0011_update_proxy_permissions.py",
+   "symbol": "update_proxy_model_permissions",
+   "kind": "function",
+   "lines": [
+    17,
+    56
+   ],
+   "fingerprint": "7acaec0479149b6e"
+  },
+  {
+   "pointer": "docs/releases/2.2.txt",
+   "line": 88,
+   "sentence": "The release notes of 2.2, which changed that, give this migration as the way existing rows follow (`docs/releases/2.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/2.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    533
+   ],
+   "fingerprint": "528358e200072377"
+  },
+  {
+   "pointer": "django/contrib/auth/checks.py:check_models_permissions",
+   "line": 92,
+   "sentence": "It reports a built-in name or codename too long, with the longest verbose name or model name that would fit (`\"auth.E007\"`, `\"auth.E011\"`); a `Meta` pair whose name or codename is too long (`\"auth.E008\"`, `\"auth.E012\"`); a `Meta` codename that is also a built-in one (`\"auth.E005\"`); and any other `Meta` codename given twice (`\"auth.E006\"`) (`django/contrib/auth/checks.py:check_models_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/checks.py",
+   "symbol": "check_models_permissions",
+   "kind": "function",
+   "lines": [
+    123,
+    236
+   ],
+   "fingerprint": "a6a68b255881a3a2"
+  }
+ ]
+}

@@ -37,7 +37,7 @@ Django's signals are module-level objects: the request signals and `setting_chan
 | `task_started` | `ImmediateBackend._execute_task` | the backend's class | `"task_result"` |
 | `task_finished` | `ImmediateBackend._execute_task` | the backend's class | `"task_result"` |
 
-*The signals Django defines, and what a receiver is given besides `"signal"` and `"sender"` (`django/dispatch/dispatcher.py:Signal.send`). The login signals belong to [Authentication, sessions and messages](../auth.md), the autoreloader's to [The autoreloader](../commands/autoreload.md), the tasks' to [Background tasks: `Task`, `TaskResult` and the task backends](tasks.md).*
+*The signals Django defines, and what a receiver is given besides `"signal"` and `"sender"` (`django/dispatch/dispatcher.py:Signal.send`). The login signals belong to [The user of a request: `login`, `logout` and `AuthenticationMiddleware`](../auth/login.md) and [Authenticating: `authenticate` and the backends](../auth/authenticating.md), the autoreloader's to [The autoreloader](../commands/autoreload.md), the tasks' to [Background tasks: `Task`, `TaskResult` and the task backends](tasks.md).*
 
 ## The request cycle and the test framework
 

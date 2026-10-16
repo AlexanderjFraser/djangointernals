@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 546">
+  <!-- the request, as it arrives -->
+  <text x="0" y="15"><tspan class="name">POST /berths/</tspan> with the cookies <tspan class="name">"sessionid"</tspan> and <tspan class="name">"csrftoken"</tspan>, and <tspan class="name">ship=Endeavour</tspan></text>
+  <text class="quiet small" x="0" y="37">on the way in, in the order of <tspan class="name small">MIDDLEWARE</tspan></text>
+
+  <!-- the four middleware, each a layer around the next: its top strip is its part on the way in, its bottom strip its part on the way out -->
+  <rect class="ground" x="0.5" y="48.5" width="645" height="496" rx="4"/>
+  <rect class="ground" x="12.5" y="82.5" width="621" height="428" rx="4"/>
+  <rect class="ground" x="24.5" y="116.5" width="597" height="360" rx="4"/>
+  <rect class="ground" x="36.5" y="150.5" width="573" height="292" rx="4"/>
+
+  <!-- on the way in -->
+  <text class="name" x="12" y="70">SessionMiddleware</text>
+  <text class="small" x="238" y="70"><tspan class="name small">request.session</tspan>: a <tspan class="name small">SessionStore</tspan> for the cookie’s key, not yet loaded</text>
+  <text class="name" x="24" y="104">CsrfViewMiddleware</text>
+  <text class="small" x="238" y="104">the CSRF secret read from its cookie</text>
+  <text class="name" x="36" y="138">AuthenticationMiddleware</text>
+  <text class="small" x="238" y="138"><tspan class="name small">request.user</tspan>: a lazy object, which will call <tspan class="name small">get_user</tspan></text>
+  <text class="name" x="48" y="172">MessageMiddleware</text>
+  <text class="small" x="238" y="172">a <tspan class="name small">FallbackStorage</tspan> for the request</text>
+
+  <!-- at the centre, before the view -->
+  <text class="quiet small" x="48" y="198">before the view</text>
+  <text class="name" x="48" y="216">CsrfViewMiddleware</text>
+  <text class="small" x="238" y="216">the POST’s token checked against the secret</text>
+
+  <!-- the view -->
+  <rect class="box" x="48.5" y="230.5" width="549" height="160" rx="4"/>
+  <text class="strong" x="60" y="252">the view, under <tspan class="name">login_required</tspan></text>
+
+  <!-- the first use of request.user: the only SQL of the request -->
+  <rect class="mark-box" x="60.5" y="262.5" width="525" height="94" rx="4"/>
+  <text class="name" x="72" y="284">request.user.is_authenticated</text>
+  <text class="small" x="238" y="304"><tspan class="name small">get_user</tspan>: the session loaded</text>
+  <text class="small mark strong" x="436" y="304">SELECT the session’s row</text>
+  <text class="small" x="238" y="324">the user id and backend read from it</text>
+  <text class="small mark strong" x="436" y="324">SELECT the user</text>
+  <text class="small" x="238" y="344">the session’s hash checked against the user’s password</text>
+
+  <text class="name" x="60" y="378">messages.success(...)</text>
+  <text class="small" x="238" y="378">the message queued in the storage</text>
+
+  <!-- on the way out -->
+  <text class="quiet small" x="48" y="412">on the way out, in the reverse order</text>
+  <text class="name" x="48" y="430">MessageMiddleware</text>
+  <text class="small" x="238" y="430">the queued message signed into the cookie <tspan class="name small">"messages"</tspan></text>
+  <text class="name" x="36" y="464">AuthenticationMiddleware</text>
+  <text class="small" x="238" y="464">nothing</text>
+  <text class="name" x="24" y="498">CsrfViewMiddleware</text>
+  <text class="small" x="238" y="498">nothing: no token was asked for</text>
+  <text class="name" x="12" y="532">SessionMiddleware</text>
+  <text class="small" x="238" y="532">the session was read and not changed: not saved; <tspan class="name small">Vary: Cookie</tspan></text>
+</svg>

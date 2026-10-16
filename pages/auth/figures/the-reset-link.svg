@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 870 492">
+  <!-- the link whole, with the token marked over it -->
+  <text class="quiet small" x="484" y="12" text-anchor="middle">token</text>
+  <path class="line" d="M332 26 V20 H636 V26"/>
+  <rect class="ground" x="0.5" y="30.5" width="655" height="30" rx="4"/>
+  <text class="name" x="12" y="50">http://harbour.example/accounts/reset/MQ/dgj90m-95ce358e6d687e9859dffa3b75fa3751/</text>
+
+  <!-- the link cut at the boundaries of its parts: each part stands where it stood in the link -->
+  <rect class="box" x="0.5" y="80.5" width="195" height="28" rx="4"/>
+  <text class="name" x="12" y="99">http://harbour.example</text>
+  <text x="210" y="99"><tspan class="name">"protocol"</tspan> and <tspan class="name">"domain"</tspan>: https if the request for the link was secure; the host it named</text>
+
+  <rect class="box" x="171.5" y="118.5" width="149" height="28" rx="4"/>
+  <text class="name" x="183.8" y="137">/accounts/reset/</text>
+  <text x="335" y="137">the path of <tspan class="name">PasswordResetConfirmView</tspan>, <tspan class="name">"password_reset_confirm"</tspan></text>
+
+  <rect class="box" x="296.5" y="156.5" width="40" height="28" rx="4"/>
+  <text class="name" x="308.6" y="175">MQ</text>
+  <text x="351" y="175"><tspan class="name">uidb64</tspan>: nora’s primary key, <tspan class="name">"1"</tspan>, in URL-safe base64</text>
+  <text x="351" y="193"><tspan class="name">PasswordResetConfirmView.get_user</tspan> decodes it to the user; none, no form</text>
+
+  <rect class="box" x="319.5" y="212.5" width="72" height="28" rx="4"/>
+  <text class="name" x="332" y="231">dgj90m</text>
+  <text x="406" y="231">the timestamp: 813832294 seconds since 2001-01-01, in base 36</text>
+  <text x="406" y="249"><tspan class="name">check_token</tspan>: makes the HMAC again with it, then refuses it</text>
+  <text x="406" y="267">if older than <tspan class="name">PASSWORD_RESET_TIMEOUT</tspan></text>
+
+  <text class="name strong" x="378.8" y="297">-</text>
+  <text class="quiet" x="400" y="297">joins the token’s two parts</text>
+  <text x="400" y="315"><tspan class="name">check_token</tspan>: splits the token there; not two parts, refused</text>
+
+  <!-- the last part, which is what the figure is about -->
+  <rect class="mark-box" x="374.5" y="333.5" width="274" height="28" rx="4"/>
+  <text class="name mark" x="386.6" y="352">95ce358e6d687e9859dffa3b75fa3751</text>
+
+  <!-- what it is made from: the value, the row's state -->
+  <path class="mark-line" d="M512 414 V372"/>
+  <polygon class="head mark" points="512,362 507,372 517,372"/>
+  <text x="526" y="384">every second hex digit of</text>
+  <text x="526" y="402"><tspan class="name">salted_hmac(key_salt, value, secret)</tspan>, SHA-256</text>
+  <text class="quiet small" x="0" y="404">the value</text>
+  <rect class="box" x="0.5" y="414.5" width="655" height="28" rx="4"/>
+  <text x="12" y="433"><tspan class="name">"1"</tspan> + the password hash + the last login (<tspan class="name">""</tspan> before the first) + <tspan class="name">"813832294"</tspan> + <tspan class="name">"nora@harbour.example"</tspan></text>
+
+  <!-- how check_token treats it -->
+  <text x="0" y="466"><tspan class="name">check_token</tspan>: makes it again from the user's row as stored now, under <tspan class="name">SECRET_KEY</tspan> and then each</text>
+  <text x="0" y="484">of <tspan class="name">SECRET_KEY_FALLBACKS</tspan>, and compares; no match, refused</text>
+</svg>

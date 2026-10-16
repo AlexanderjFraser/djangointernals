@@ -1,0 +1,277 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "permissions.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/auth/models.py:Permission",
+   "line": 13,
+   "sentence": "A permission prints as its content type and its name, `\"Fleet | ship | Can change ship\"`, and `Permission.user_perm_str`, new in 6.1, gives the string a check takes, `\"fleet.change_ship\"` (`django/contrib/auth/models.py:Permission`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "Permission",
+   "kind": "class",
+   "lines": [
+    39,
+    90
+   ],
+   "fingerprint": "0bdd6fff97548872"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:PermissionManager.get_by_natural_key",
+   "line": 17,
+   "sentence": "A permission's natural key is its codename, its application's label and its model's name (`django/contrib/auth/models.py:PermissionManager.get_by_natural_key`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "PermissionManager.get_by_natural_key",
+   "kind": "function",
+   "lines": [
+    30,
+    36
+   ],
+   "fingerprint": "b8cf07d3790ad829"
+  },
+  {
+   "pointer": "docs/topics/serialization.txt",
+   "line": 17,
+   "sentence": "The serialization documentation gives the reason one is wanted: migrate makes these rows, so their primary keys depend on how and when it ran (`docs/topics/serialization.txt`).",
+   "tree": "django",
+   "path": "docs/topics/serialization.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    740
+   ],
+   "fingerprint": "3da905d7a79c6748"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:Group",
+   "line": 19,
+   "sentence": "The group model is a unique name and a many-to-many field of permissions, with its name as its natural key; its docstring calls it a generic way of categorizing users, for permissions or any other label (`django/contrib/auth/models.py:Group`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "Group",
+   "kind": "class",
+   "lines": [
+    107,
+    142
+   ],
+   "fingerprint": "11c2d4aac05898bd"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:PermissionsMixin",
+   "line": 19,
+   "sentence": "Both name their reverse accessor `\"user_set\"` and their reverse lookup `\"user\"`, where a model's own name would otherwise go, so a query from a group or a permission to its users, such as `ModelBackend.with_perm`'s, reads the same whatever the user model is called (`django/contrib/auth/models.py:PermissionsMixin`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "PermissionsMixin",
+   "kind": "class",
+   "lines": [
+    322,
+    448
+   ],
+   "fingerprint": "89f42e53d8649e2c"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:PermissionsMixin.has_perm",
+   "line": 23,
+   "sentence": "The first backend to answer true makes the answer yes, and one that raises `PermissionDenied` makes it no at once, the docstring's way for a backend to cut the checks short; after the last, it is no (`django/contrib/auth/models.py:PermissionsMixin.has_perm`, `django/contrib/auth/models.py:_user_has_perm`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "PermissionsMixin.has_perm",
+   "kind": "function",
+   "lines": [
+    389,
+    402
+   ],
+   "fingerprint": "7caedcc0231adcad"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:_user_has_perm",
+   "line": 23,
+   "sentence": "The first backend to answer true makes the answer yes, and one that raises `PermissionDenied` makes it no at once, the docstring's way for a backend to cut the checks short; after the last, it is no (`django/contrib/auth/models.py:PermissionsMixin.has_perm`, `django/contrib/auth/models.py:_user_has_perm`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "_user_has_perm",
+   "kind": "function",
+   "lines": [
+    266,
+    278
+   ],
+   "fingerprint": "dd068ba4151e7d9e"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:_user_get_permissions",
+   "line": 25,
+   "sentence": "The three getters, `PermissionsMixin.get_user_permissions`, `PermissionsMixin.get_group_permissions` and `PermissionsMixin.get_all_permissions`, have no shortcut for the superuser: `_user_get_permissions` returns the union of the sets of every backend that has the method (`django/contrib/auth/models.py:_user_get_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "_user_get_permissions",
+   "kind": "function",
+   "lines": [
+    248,
+    254
+   ],
+   "fingerprint": "19718945199b8794"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:BaseBackend",
+   "line": 29,
+   "sentence": "`BaseBackend` answers `BaseBackend.has_perm` by membership of the union of its two getters, which give empty sets; it has no `has_module_perms`, which is asked only of backends that have one (`django/contrib/auth/backends.py:BaseBackend`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "BaseBackend",
+   "kind": "class",
+   "lines": [
+    15,
+    56
+   ],
+   "fingerprint": "1d447daaf6a46ed5"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:ModelBackend._get_permissions",
+   "line": 29,
+   "sentence": "`ModelBackend.get_all_permissions` keeps their union under `\"_perm_cache\"`, and `ModelBackend.has_perm` answers whether the user is active and the string is in it (`django/contrib/auth/backends.py:ModelBackend._get_permissions`, `django/contrib/auth/backends.py:ModelBackend.get_all_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "ModelBackend._get_permissions",
+   "kind": "function",
+   "lines": [
+    109,
+    128
+   ],
+   "fingerprint": "d0f49c2ef4544272"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:ModelBackend.get_all_permissions",
+   "line": 29,
+   "sentence": "`ModelBackend.get_all_permissions` keeps their union under `\"_perm_cache\"`, and `ModelBackend.has_perm` answers whether the user is active and the string is in it (`django/contrib/auth/backends.py:ModelBackend._get_permissions`, `django/contrib/auth/backends.py:ModelBackend.get_all_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "ModelBackend.get_all_permissions",
+   "kind": "function",
+   "lines": [
+    171,
+    176
+   ],
+   "fingerprint": "337727a0f92983e6"
+  },
+  {
+   "pointer": "docs/topics/auth/default.txt",
+   "line": 35,
+   "sentence": "Within one object a permission given after a check is not seen, even after `Model.refresh_from_db`, which leaves the caches; the documentation's advice is to fetch the user again (`docs/topics/auth/default.txt`):",
+   "tree": "django",
+   "path": "docs/topics/auth/default.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1909
+   ],
+   "fingerprint": "ca9454b4b5b54ef4"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:UserManager.with_perm",
+   "line": 54,
+   "sentence": "It asks one backend: the only one configured, or the one whose dotted path it is given, raising `ValueError` when several are configured and none is named (`django/contrib/auth/models.py:UserManager.with_perm`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "UserManager.with_perm",
+   "kind": "function",
+   "lines": [
+    219,
+    244
+   ],
+   "fingerprint": "2cf3f35c2694f0e5"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:ModelBackend.with_perm",
+   "line": 54,
+   "sentence": "`ModelBackend.with_perm` builds one query: the users who hold the permission through a group or directly, or are superusers unless `include_superusers=False`, and who are active unless told otherwise; given an object, no users (`django/contrib/auth/backends.py:ModelBackend.with_perm`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "ModelBackend.with_perm",
+   "kind": "function",
+   "lines": [
+    200,
+    233
+   ],
+   "fingerprint": "f6ecca8cfa711208"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:AnonymousUser",
+   "line": 58,
+   "sentence": "`AnonymousUser` has the same methods and no superuser shortcut: its `has_perm` and getters ask the backends, and its group permissions are always an empty set (`django/contrib/auth/models.py:AnonymousUser`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "AnonymousUser",
+   "kind": "class",
+   "lines": [
+    534,
+    639
+   ],
+   "fingerprint": "72330f40a2dd452f"
+  },
+  {
+   "pointer": "django/contrib/auth/context_processors.py:auth",
+   "line": 62,
+   "sentence": "The context processor `django.contrib.auth.context_processors.auth` gives a template `\"user\"`, the request's user, or an `AnonymousUser` when there is none, and `\"perms\"`, a `PermWrapper` around that user ([The context: `Context`, `RequestContext` and context processors](../templates/context.md)) (`django/contrib/auth/context_processors.py:auth`).",
+   "tree": "django",
+   "path": "django/contrib/auth/context_processors.py",
+   "symbol": "auth",
+   "kind": "function",
+   "lines": [
+    49,
+    67
+   ],
+   "fingerprint": "821394c6f4551265"
+  },
+  {
+   "pointer": "django/contrib/auth/context_processors.py:PermWrapper",
+   "line": 64,
+   "sentence": "The `in` of `{% if %}` reaches `PermWrapper.__contains__`, which takes `\"fleet.change_ship\"` as the same check and `\"fleet\"` as the application's (`django/contrib/auth/context_processors.py:PermWrapper`).",
+   "tree": "django",
+   "path": "django/contrib/auth/context_processors.py",
+   "symbol": "PermWrapper",
+   "kind": "class",
+   "lines": [
+    24,
+    46
+   ],
+   "fingerprint": "06327c691db04d55"
+  },
+  {
+   "pointer": "django/contrib/auth/context_processors.py:PermLookupDict.__iter__",
+   "line": 66,
+   "sentence": "So in `{% if \"change_ship\" in perms.fleet %}` the `in` raises at once, and the tag, which turns an error in an operator into false, takes the test as false for every user (`django/contrib/auth/context_processors.py:PermLookupDict.__iter__`, `django/template/smartif.py:infix`):",
+   "tree": "django",
+   "path": "django/contrib/auth/context_processors.py",
+   "symbol": "PermLookupDict.__iter__",
+   "kind": "function",
+   "lines": [
+    15,
+    18
+   ],
+   "fingerprint": "0d873b037ca7ae9d"
+  },
+  {
+   "pointer": "django/template/smartif.py:infix",
+   "line": 66,
+   "sentence": "So in `{% if \"change_ship\" in perms.fleet %}` the `in` raises at once, and the tag, which turns an error in an operator into false, takes the test as false for every user (`django/contrib/auth/context_processors.py:PermLookupDict.__iter__`, `django/template/smartif.py:infix`):",
+   "tree": "django",
+   "path": "django/template/smartif.py",
+   "symbol": "infix",
+   "kind": "function",
+   "lines": [
+    45,
+    69
+   ],
+   "fingerprint": "1fe5e98abc55f879"
+  }
+ ]
+}

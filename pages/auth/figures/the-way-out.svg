@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 536">
+  <!-- the call; its questions run down the left, each outcome that ends it stands to the right -->
+  <text class="name" x="0" y="15">SessionMiddleware.process_response(request, response)</text>
+  <path class="line" d="M140.5 22 V30.5"/>
+  <polygon class="head" points="140.5,40.5 135.5,30.5 145.5,30.5"/>
+
+  <!-- the guard -->
+  <rect class="box" x="0.5" y="40.5" width="280" height="52" rx="4"/>
+  <text x="12" y="62">no <tspan class="name">request.session</tspan>, or one without</text>
+  <text x="12" y="80"><tspan class="name">accessed</tspan>, <tspan class="name">modified</tspan>, <tspan class="name">is_empty</tspan></text>
+  <path class="line" d="M280.5 66.5 H370.5"/>
+  <polygon class="head" points="380.5,66.5 370.5,61.5 370.5,71.5"/>
+  <text class="quiet small" x="330" y="60" text-anchor="middle">yes</text>
+  <rect class="ground" x="380.5" y="49.5" width="265" height="34" rx="4"/>
+  <text x="392" y="71">the response as it is</text>
+
+  <path class="line" d="M140.5 92.5 V122.5"/>
+  <polygon class="head" points="140.5,132.5 135.5,122.5 145.5,122.5"/>
+  <text class="quiet small" x="150" y="116">no</text>
+
+  <!-- an empty session whose cookie came with the request -->
+  <rect class="box" x="0.5" y="132.5" width="280" height="52" rx="4"/>
+  <text x="12" y="154">the request brought the session cookie,</text>
+  <text x="12" y="172">and the session is empty</text>
+  <path class="line" d="M280.5 158.5 H370.5"/>
+  <polygon class="head" points="380.5,158.5 370.5,153.5 370.5,163.5"/>
+  <text class="quiet small" x="330" y="152" text-anchor="middle">yes</text>
+  <rect class="ground" x="380.5" y="105.5" width="265" height="106" rx="4"/>
+  <text x="392" y="127">the cookie deleted, with</text>
+  <text class="name" x="392" y="145">SESSION_COOKIE_PATH,</text>
+  <text class="name" x="392" y="163">SESSION_COOKIE_DOMAIN,</text>
+  <text class="name" x="392" y="181">SESSION_COOKIE_SAMESITE</text>
+  <text class="name" x="392" y="199">Vary: Cookie</text>
+
+  <path class="line" d="M140.5 184.5 V206.5"/>
+  <polygon class="head" points="140.5,216.5 135.5,206.5 145.5,206.5"/>
+  <text class="quiet small" x="150" y="204">no</text>
+
+  <!-- otherwise: Vary first, whatever follows -->
+  <rect class="ground" x="0.5" y="216.5" width="280" height="34" rx="4"/>
+  <text x="12" y="238"><tspan class="name">Vary: Cookie</tspan> if the session was accessed</text>
+  <path class="line" d="M140.5 250.5 V270.5"/>
+  <polygon class="head" points="140.5,280.5 135.5,270.5 145.5,270.5"/>
+
+  <!-- whether there is anything to save -->
+  <rect class="box" x="0.5" y="280.5" width="280" height="70" rx="4"/>
+  <text x="12" y="302">it was modified, or</text>
+  <text x="12" y="320"><tspan class="name">SESSION_SAVE_EVERY_REQUEST</tspan> is true,</text>
+  <text x="12" y="338">and it is not empty</text>
+  <path class="line" d="M280.5 315.5 H370.5"/>
+  <polygon class="head" points="380.5,315.5 370.5,310.5 370.5,320.5"/>
+  <text class="quiet small" x="330" y="309" text-anchor="middle">no</text>
+  <rect class="ground" x="380.5" y="298.5" width="265" height="34" rx="4"/>
+  <text x="392" y="320">not saved, no cookie</text>
+
+  <path class="line" d="M140.5 350.5 V380.5"/>
+  <polygon class="head" points="140.5,390.5 135.5,380.5 145.5,380.5"/>
+  <text class="quiet small" x="150" y="374">yes</text>
+
+  <!-- the status -->
+  <rect class="box" x="0.5" y="390.5" width="280" height="34" rx="4"/>
+  <text x="12" y="412">status below 500</text>
+  <path class="line" d="M280.5 407.5 H370.5"/>
+  <polygon class="head" points="380.5,407.5 370.5,402.5 370.5,412.5"/>
+  <text class="quiet small" x="330" y="401" text-anchor="middle">no</text>
+  <rect class="ground" x="380.5" y="390.5" width="265" height="34" rx="4"/>
+  <text x="392" y="412">not saved, no cookie</text>
+
+  <path class="line" d="M140.5 424.5 V454.5"/>
+  <polygon class="head" points="140.5,464.5 135.5,454.5 145.5,454.5"/>
+  <text class="quiet small" x="150" y="448">yes</text>
+
+  <!-- the save, the one way to a stored session and a cookie set -->
+  <rect class="mark-box" x="0.5" y="464.5" width="645" height="70" rx="4"/>
+  <text x="12" y="486">saved; an <tspan class="name">UpdateError</tspan> raised again as <tspan class="name">SessionInterrupted</tspan></text>
+  <text x="12" y="504">the cookie set: <tspan class="name">Max-Age</tspan> and <tspan class="name">expires</tspan>, or neither for a browser-length session</text>
+  <text class="name" x="12" y="522">Vary: Cookie</text>
+</svg>

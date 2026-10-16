@@ -1,0 +1,291 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "message-storage.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/messages/storage/base.py:BaseStorage",
+   "line": 9,
+   "sentence": "The rest is `BaseStorage`'s ([Messages: `add_message`, `Message` and `MessageMiddleware`](messages.md)) (`django/contrib/messages/storage/base.py:BaseStorage`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/base.py",
+   "symbol": "BaseStorage",
+   "kind": "class",
+   "lines": [
+    49,
+    183
+   ],
+   "fingerprint": "78b9efd81a51da41"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:MessageEncoder.default",
+   "line": 13,
+   "sentence": "`MessageEncoder` turns each `Message` into a JSON list: the marker `\"__json_message\"`, 1 if the text is safe HTML (a `SafeData`) and 0 if not, the level, the text, and the extra tags unless they are `None` (`django/contrib/messages/storage/cookie.py:MessageEncoder.default`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "MessageEncoder.default",
+   "kind": "function",
+   "lines": [
+    18,
+    26
+   ],
+   "fingerprint": "b6585d771585972d"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:MessageDecoder.process_messages",
+   "line": 13,
+   "sentence": "`MessageDecoder` walks the decoded JSON through lists and dictionaries and turns each list that begins with the marker back into a `Message`, passing the text through `mark_safe` when the flag is 1 (`django/contrib/messages/storage/cookie.py:MessageDecoder.process_messages`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "MessageDecoder.process_messages",
+   "kind": "function",
+   "lines": [
+    34,
+    43
+   ],
+   "fingerprint": "ae6a31c70c5eb44f"
+  },
+  {
+   "pointer": "django/core/signing.py:get_cookie_signer",
+   "line": 15,
+   "sentence": "The JSON is signed by the signer `get_cookie_signer` makes, with the salt `CookieStorage.key_salt`, `\"django.contrib.messages\"`: an instance of the class `SIGNING_BACKEND` names, `TimestampSigner` by default ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](../security/signing.md)) (`django/core/signing.py:get_cookie_signer`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "get_cookie_signer",
+   "kind": "function",
+   "lines": [
+    150,
+    156
+   ],
+   "fingerprint": "3162cc89a1bdf525"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._encode_parts",
+   "line": 15,
+   "sentence": "`CookieStorage._encode_parts` calls `Signer.sign_object` with compression, which compresses only when that saves space and marks compressed data with a leading `\".\"` (`django/contrib/messages/storage/cookie.py:CookieStorage._encode_parts`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._encode_parts",
+   "kind": "function",
+   "lines": [
+    175,
+    186
+   ],
+   "fingerprint": "75f42dc488b14d13"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._decode",
+   "line": 21,
+   "sentence": "`CookieStorage._decode` checks it with `Signer.unsign_object` and no maximum age, so the time is never compared and a message cookie does not expire by its signature (`django/contrib/messages/storage/cookie.py:CookieStorage._decode`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._decode",
+   "kind": "function",
+   "lines": [
+    198,
+    214
+   ],
+   "fingerprint": "a52d01243104cd86"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie",
+   "line": 23,
+   "sentence": "With nothing to store it deletes the cookie ([Cookies](../http/cookies.md)) (`django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._update_cookie",
+   "kind": "function",
+   "lines": [
+    109,
+    128
+   ],
+   "fingerprint": "1aa1616ffa47cb8a"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._get",
+   "line": 25,
+   "sentence": "When the last item is `CookieStorage.not_finished`, the string `\"__messagesnotfinished__\"` (the **not-finished marker**), it removes it and answers that not every message was retrieved (`django/contrib/messages/storage/cookie.py:CookieStorage._get`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._get",
+   "kind": "function",
+   "lines": [
+    94,
+    107
+   ],
+   "fingerprint": "00b080f89288a32a"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._store",
+   "line": 31,
+   "sentence": "When it does not, it looks by bisection for the longest run of messages that fits with the not-finished marker after it (`django/contrib/messages/storage/cookie.py:CookieStorage._store`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._store",
+   "kind": "function",
+   "lines": [
+    130,
+    173
+   ],
+   "fingerprint": "561636424f53ef19"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:bisect_keep_right",
+   "line": 33,
+   "sentence": "Either way the cookie ends with the marker (`django/contrib/messages/storage/cookie.py:bisect_keep_right`, `django/contrib/messages/storage/cookie.py:bisect_keep_left`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "bisect_keep_right",
+   "kind": "function",
+   "lines": [
+    234,
+    248
+   ],
+   "fingerprint": "596d148dc382cd46"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:bisect_keep_left",
+   "line": 33,
+   "sentence": "Either way the cookie ends with the marker (`django/contrib/messages/storage/cookie.py:bisect_keep_right`, `django/contrib/messages/storage/cookie.py:bisect_keep_left`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "bisect_keep_left",
+   "kind": "function",
+   "lines": [
+    217,
+    231
+   ],
+   "fingerprint": "cda0c9e0b9943233"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/session.py:SessionStorage.__init__",
+   "line": 37,
+   "sentence": "`SessionStorage` keeps the messages in the session under `SessionStorage.session_key`, `\"_messages\"`, and refuses to be made for a request without a session ([Authentication, sessions and messages](../auth.md)) (`django/contrib/messages/storage/session.py:SessionStorage.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/session.py",
+   "symbol": "SessionStorage.__init__",
+   "kind": "function",
+   "lines": [
+    15,
+    22
+   ],
+   "fingerprint": "b2f096694673b171"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/session.py:SessionStorage.deserialize_messages",
+   "line": 37,
+   "sentence": "It stores the list as a string: `SessionStorage.serialize_messages` encodes it with `MessageEncoder`, the same lists as in the cookie, and `SessionStorage.deserialize_messages` decodes a non-empty string with `MessageDecoder` and returns anything else as it found it, `None` included (`django/contrib/messages/storage/session.py:SessionStorage.deserialize_messages`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/session.py",
+   "symbol": "SessionStorage.deserialize_messages",
+   "kind": "function",
+   "lines": [
+    49,
+    52
+   ],
+   "fingerprint": "d9f970b26a4e2bd6"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/session.py:SessionStorage._store",
+   "line": 39,
+   "sentence": "`SessionStorage._store` sets the entry when it has messages, removes it when it has none, and returns an empty list (`django/contrib/messages/storage/session.py:SessionStorage._store`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/session.py",
+   "symbol": "SessionStorage._store",
+   "kind": "function",
+   "lines": [
+    35,
+    43
+   ],
+   "fingerprint": "7c730886d539c1e9"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/fallback.py:FallbackStorage",
+   "line": 43,
+   "sentence": "`FallbackStorage.storage_classes` is `CookieStorage` and then `SessionStorage`, and a `FallbackStorage` makes one of each for its request (`django/contrib/messages/storage/fallback.py:FallbackStorage`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/fallback.py",
+   "symbol": "FallbackStorage",
+   "kind": "class",
+   "lines": [
+    6,
+    56
+   ],
+   "fingerprint": "2b38c8ccbffe123b"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/fallback.py:FallbackStorage._get",
+   "line": 45,
+   "sentence": "It stops at a storage that returns `None`, as one that was not used does, and after one that has retrieved everything; it notes which storages held messages (`django/contrib/messages/storage/fallback.py:FallbackStorage._get`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/fallback.py",
+   "symbol": "FallbackStorage._get",
+   "kind": "function",
+   "lines": [
+    21,
+    38
+   ],
+   "fingerprint": "b76ae0a32e377e23"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/fallback.py:FallbackStorage._store",
+   "line": 47,
+   "sentence": "A storage given nothing that held messages when they were read is emptied, so the cookie is deleted and the session's entry removed (`django/contrib/messages/storage/fallback.py:FallbackStorage._store`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/fallback.py",
+   "symbol": "FallbackStorage._store",
+   "kind": "function",
+   "lines": [
+    40,
+    56
+   ],
+   "fingerprint": "a4254ecdbd5bd504"
+  },
+  {
+   "pointer": "docs/ref/contrib/messages.txt",
+   "line": 49,
+   "sentence": "Django's documentation gives the reason for trying the cookie first: it avoids writing to the session whenever possible, and should perform best in the general case (`docs/ref/contrib/messages.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/messages.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    485
+   ],
+   "fingerprint": "108322968acff439"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._decode",
+   "line": 80,
+   "sentence": "Under `FallbackStorage` the mark falls on the storage inside, which nothing asks (`django/contrib/messages/storage/cookie.py:CookieStorage._decode`, `django/contrib/messages/storage/base.py:BaseStorage.update`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._decode",
+   "kind": "function",
+   "lines": [
+    198,
+    214
+   ],
+   "fingerprint": "a52d01243104cd86"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/base.py:BaseStorage.update",
+   "line": 80,
+   "sentence": "Under `FallbackStorage` the mark falls on the storage inside, which nothing asks (`django/contrib/messages/storage/cookie.py:CookieStorage._decode`, `django/contrib/messages/storage/base.py:BaseStorage.update`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/base.py",
+   "symbol": "BaseStorage.update",
+   "kind": "function",
+   "lines": [
+    128,
+    140
+   ],
+   "fingerprint": "17248471c5ac7cd0"
+  }
+ ]
+}

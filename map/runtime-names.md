@@ -14,6 +14,8 @@ Each entry is a claim and is verified like one.
 ROOT_URLCONF                 django/conf/__init__.py:Settings.__init__                   # the defaults do not define it; a project's settings module does, and each of its upper-case names is set here
 MAILERS                      django/conf/__init__.py:Settings.__init__                   # the same: the defaults hold it only as a comment, until the mail settings it replaces are removed
 SERIALIZATION_MODULES        django/conf/__init__.py:Settings.__init__                   # the same: the serializers read it only where a project has set it
+MESSAGE_LEVEL                django/conf/__init__.py:Settings.__init__                   # the same: the message storage reads it with getattr, and takes INFO where a project has not set it
+MESSAGE_TAGS                 django/conf/__init__.py:Settings.__init__                   # the same: get_level_tags reads it with getattr, and takes no extra tags where a project has not set it
 process_exception            django/core/handlers/base.py:BaseHandler.load_middleware    # a method the handler looks for on a middleware instance; no class in Django declares one
 process_template_response    django/core/handlers/base.py:BaseHandler.load_middleware    # the same
 HttpRequest.session          django/contrib/sessions/middleware.py:SessionMiddleware.process_request        # set on each request by the session middleware: the session store for the request's cookie

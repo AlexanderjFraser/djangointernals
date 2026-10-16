@@ -270,7 +270,7 @@ With no parent either, `_prepare` makes a field of the class that `Options._get_
 
 ## Swapped models, and models that are not managed
 
-A `Meta` may set `"swappable"` to the name of a setting. It says that a project may put a model of its own in this one's place, by naming that model in the setting. The one model in Django that sets it is the user, to `"AUTH_USER_MODEL"` (`django/contrib/auth/models.py:User`) ([Authentication, sessions and messages](../auth.md)).
+A `Meta` may set `"swappable"` to the name of a setting. It says that a project may put a model of its own in this one's place, by naming that model in the setting. The one model in Django that sets it is the user, to `"AUTH_USER_MODEL"` (`django/contrib/auth/models.py:User`) ([The user model: `AbstractBaseUser`, `User` and `AUTH_USER_MODEL`](../auth/user-model.md)).
 
 `Options.swapped` says whether that has happened: it is `None` for a model that has not been replaced, and otherwise the setting's value, which names the model put in its place (`django/db/models/options.py:Options.swapped`). A model has not been replaced when it is not swappable, when the setting is empty or missing, and when the setting names this very model, in a comparison that ignores the case of the model's name. A model whose `swapped` is not `None` is left out of the registry's lists of models unless they are asked to include it, and reading a manager on it raises `AttributeError` (`django/apps/config.py:AppConfig.get_models`, `django/db/models/manager.py:ManagerDescriptor.__get__`).
 

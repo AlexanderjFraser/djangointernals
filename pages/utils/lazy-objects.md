@@ -106,7 +106,7 @@ A function that is a bound method of the proxy is shown only by its name, to avo
 | the admin's `site`, `django/contrib/admin/sites.py:DefaultAdminSite` | the class `SimpleAdminConfig.default_site` names | [The admin](../admin.md) |
 | a request's nonce, `django/utils/csp.py:LazyNonce` | `generate_nonce()` | [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md) |
 | a `Truncator`, `django/utils/text.py:Truncator` | its text as a string | [Text helpers: `Truncator` and `django/utils/text.py`](text.md) |
-| `HttpRequest.user`, `django/contrib/auth/middleware.py:AuthenticationMiddleware` | the user `get_user` finds | [Authentication, sessions and messages](../auth.md) |
+| `HttpRequest.user`, `django/contrib/auth/middleware.py:AuthenticationMiddleware` | the user `get_user` finds | [The user of a request: `login`, `logout` and `AuthenticationMiddleware`](../auth/login.md) |
 | the context's `"csrf_token"`, `django/template/context_processors.py:csrf` | the token from `get_token`, or `"NOTPROVIDED"` | [The context: `Context`, `RequestContext` and context processors](../templates/context.md) |
 | a test response's resolver_match, `django/test/client.py:Client.request` | the path resolved | [The test framework](../testing.md) |
 

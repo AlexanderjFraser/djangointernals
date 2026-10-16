@@ -158,7 +158,7 @@ type(vars(Sailor)['objects']).__name__, Sailor.objects is Sailor.objects  ->  ('
 Sailor._meta.local_managers[0] is Sailor.objects, Sailor._meta.local_managers[0] == Sailor.objects  ->  (False, True)
 ```
 
-`ManagerDescriptor.__get__` refuses three kinds of read with `AttributeError`. A manager is not to be reached through an instance: it belongs to the class. It is not to be had from an abstract class, which may declare a manager for its children and cannot use it. And it is not to be had from a model that a setting has swapped for another ([Authentication, sessions and messages](../auth.md)).
+`ManagerDescriptor.__get__` refuses three kinds of read with `AttributeError`. A manager is not to be reached through an instance: it belongs to the class. It is not to be had from an abstract class, which may declare a manager for its children and cannot use it. And it is not to be had from a model that a setting has swapped for another ([The user model: `AbstractBaseUser`, `User` and `AUTH_USER_MODEL`](../auth/user-model.md)).
 
 ```text recording=models
 Ship(name='Heron').objects  ->  raises AttributeError: Manager isn't accessible via Ship instances

@@ -1,0 +1,265 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "requiring-login.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/asyncio.py:async_unsafe",
+   "line": 13,
+   "sentence": "Around an ordinary view the wrapper calls the test with `HttpRequest.user`, through `async_to_sync` if the test is a coroutine function; such a test runs in an event loop, where reading a user not yet loaded can query the database, which Django refuses with `SynchronousOnlyOperation` (`django/utils/asyncio.py:async_unsafe`).",
+   "tree": "django",
+   "path": "django/utils/asyncio.py",
+   "symbol": "async_unsafe",
+   "kind": "function",
+   "lines": [
+    8,
+    39
+   ],
+   "fingerprint": "a148da8e03f6e918"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py:user_passes_test",
+   "line": 13,
+   "sentence": "A true answer calls the view, a false one returns the redirect, and an exception the test raises goes out through the wrapper (`django/contrib/auth/decorators.py:user_passes_test`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": "user_passes_test",
+   "kind": "function",
+   "lines": [
+    13,
+    71
+   ],
+   "fingerprint": "e5d97a9f51a48ea2"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py:user_passes_test",
+   "line": 19,
+   "sentence": "The address to come back to is the request's whole URL, from `HttpRequest.build_absolute_uri`, cut to its path and query string by `HttpRequest.get_full_path` when the login URL has no scheme or the request's, and no host or the request's (`django/contrib/auth/decorators.py:user_passes_test`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": "user_passes_test",
+   "kind": "function",
+   "lines": [
+    13,
+    71
+   ],
+   "fingerprint": "e5d97a9f51a48ea2"
+  },
+  {
+   "pointer": "django/contrib/auth/views.py:redirect_to_login",
+   "line": 21,
+   "sentence": "It returns an `HttpResponseRedirect` (`django/contrib/auth/views.py:redirect_to_login`).",
+   "tree": "django",
+   "path": "django/contrib/auth/views.py",
+   "symbol": "redirect_to_login",
+   "kind": "function",
+   "lines": [
+    184,
+    196
+   ],
+   "fingerprint": "f0e538bb7653cc29"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py:login_required",
+   "line": 31,
+   "sentence": "`login_required` is `user_passes_test` with a test that reads the user's `is_authenticated`, written bare above a view or called with a login URL and a field's name; it does not look at `is_active` (`django/contrib/auth/decorators.py:login_required`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": "login_required",
+   "kind": "function",
+   "lines": [
+    74,
+    88
+   ],
+   "fingerprint": "89daabf93f166ae3"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py:login_not_required",
+   "line": 33,
+   "sentence": "It sets the view's attribute `\"login_required\"` to false and returns the same function (`django/contrib/auth/decorators.py:login_not_required`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": "login_not_required",
+   "kind": "function",
+   "lines": [
+    91,
+    96
+   ],
+   "fingerprint": "64bd44c3bb1e1a77"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py:permission_required",
+   "line": 37,
+   "sentence": "When the answer is no, the test raises `PermissionDenied` if the decorator was given `raise_exception=True`, which the handler turns into a 403 ([How an exception becomes a response](../handlers/exceptions.md)); otherwise it returns false, and the user is sent to the login page, logged in or not (`django/contrib/auth/decorators.py:permission_required`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": "permission_required",
+   "kind": "function",
+   "lines": [
+    99,
+    138
+   ],
+   "fingerprint": "f5a45fe2f7979862"
+  },
+  {
+   "pointer": "docs/topics/auth/default.txt",
+   "line": 39,
+   "sentence": "The documentation's remedy is `login_required` written above the raising decorator, which also avoids a loop when `LoginView.redirect_authenticated_user` sends a logged-in user back (`docs/topics/auth/default.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/default.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1909
+   ],
+   "fingerprint": "ca9454b4b5b54ef4"
+  },
+  {
+   "pointer": "django/contrib/auth/mixins.py",
+   "line": 53,
+   "sentence": "`UserPassesTestMixin.dispatch` calls, with no argument, the method `UserPassesTestMixin.get_test_func` returns, `UserPassesTestMixin.test_func` by default (`django/contrib/auth/mixins.py`).",
+   "tree": "django",
+   "path": "django/contrib/auth/mixins.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    136
+   ],
+   "fingerprint": "1d91cedc84f64c55"
+  },
+  {
+   "pointer": "django/contrib/auth/mixins.py:AccessMixin.handle_no_permission",
+   "line": 55,
+   "sentence": "Only an anonymous user is redirected, to an address worked out as the decorator's is; `AccessMixin.get_login_url` raises `ImproperlyConfigured` when neither `AccessMixin.login_url` nor `LOGIN_URL` gives a URL (`django/contrib/auth/mixins.py:AccessMixin.handle_no_permission`).",
+   "tree": "django",
+   "path": "django/contrib/auth/mixins.py",
+   "symbol": "AccessMixin.handle_no_permission",
+   "kind": "function",
+   "lines": [
+    47,
+    65
+   ],
+   "fingerprint": "f52ffd402e4c5c66"
+  },
+  {
+   "pointer": "django/contrib/auth/middleware.py:LoginRequiredMiddleware",
+   "line": 65,
+   "sentence": "`LoginRequiredMiddleware.handle_no_permission` works the redirect out as the decorator does, from the view's `\"login_url\"` or `LOGIN_URL` (with neither, `LoginRequiredMiddleware.get_login_url` raises `ImproperlyConfigured`), and the view's `\"redirect_field_name\"` or `LoginRequiredMiddleware.redirect_field_name`, `\"next\"` (`django/contrib/auth/middleware.py:LoginRequiredMiddleware`).",
+   "tree": "django",
+   "path": "django/contrib/auth/middleware.py",
+   "symbol": "LoginRequiredMiddleware",
+   "kind": "class",
+   "lines": [
+    45,
+    92
+   ],
+   "fingerprint": "b65de06e7f1155dd"
+  },
+  {
+   "pointer": "docs/releases/5.1.txt",
+   "line": 67,
+   "sentence": "5.1's release notes say the middleware does not support setting either through `LoginRequiredMixin` (`docs/releases/5.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "3a1b214427111cf2"
+  },
+  {
+   "pointer": "django/utils/decorators.py:_update_method_wrapper",
+   "line": 80,
+   "sentence": "A class-based view is marked through `method_decorator` on `dispatch`, which copies onto `dispatch` the attributes its decorator sets, and `View.as_view` copies those onto the function it returns (`django/utils/decorators.py:_update_method_wrapper`, `django/views/generic/base.py:View.as_view`).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "_update_method_wrapper",
+   "kind": "function",
+   "lines": [
+    16,
+    23
+   ],
+   "fingerprint": "b1e8d92dcc0380f8"
+  },
+  {
+   "pointer": "django/views/generic/base.py:View.as_view",
+   "line": 80,
+   "sentence": "A class-based view is marked through `method_decorator` on `dispatch`, which copies onto `dispatch` the attributes its decorator sets, and `View.as_view` copies those onto the function it returns (`django/utils/decorators.py:_update_method_wrapper`, `django/views/generic/base.py:View.as_view`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.as_view",
+   "kind": "function",
+   "lines": [
+    81,
+    124
+   ],
+   "at": 82,
+   "fingerprint": "2cb7c2fdb4ae4ca3"
+  },
+  {
+   "pointer": "django/contrib/auth/views.py",
+   "line": 80,
+   "sentence": "So `LoginView` and the four views of the password reset are `login_not_required`; `LogoutView` is not, and the password-change views carry `login_required` (`django/contrib/auth/views.py`).",
+   "tree": "django",
+   "path": "django/contrib/auth/views.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    379
+   ],
+   "fingerprint": "5030f1da37f4d17d"
+  },
+  {
+   "pointer": "django/contrib/admin/sites.py:AdminSite.login",
+   "line": 80,
+   "sentence": "The admin marks its login view, and gives the site-wide views that `AdminSite.get_urls` wraps its login page as their login URL ([The admin](../admin.md)) (`django/contrib/admin/sites.py:AdminSite.login`, `django/contrib/admin/sites.py:AdminSite.get_urls`).",
+   "tree": "django",
+   "path": "django/contrib/admin/sites.py",
+   "symbol": "AdminSite.login",
+   "kind": "function",
+   "lines": [
+    410,
+    445
+   ],
+   "at": 412,
+   "fingerprint": "9c98bb404e68e70f"
+  },
+  {
+   "pointer": "django/contrib/admin/sites.py:AdminSite.get_urls",
+   "line": 80,
+   "sentence": "The admin marks its login view, and gives the site-wide views that `AdminSite.get_urls` wraps its login page as their login URL ([The admin](../admin.md)) (`django/contrib/admin/sites.py:AdminSite.login`, `django/contrib/admin/sites.py:AdminSite.get_urls`).",
+   "tree": "django",
+   "path": "django/contrib/admin/sites.py",
+   "symbol": "AdminSite.get_urls",
+   "kind": "function",
+   "lines": [
+    258,
+    318
+   ],
+   "fingerprint": "23869a8afaa86f7d"
+  },
+  {
+   "pointer": "django/contrib/auth/checks.py:check_middleware",
+   "line": 82,
+   "sentence": "`AuthConfig.ready` registers `check_middleware`, which reports `\"auth.E013\"` when `LoginRequiredMiddleware` or a subclass is in `MIDDLEWARE` and `AuthenticationMiddleware` is missing or comes after it ([The system checks](../commands/checks.md)) (`django/contrib/auth/checks.py:check_middleware`).",
+   "tree": "django",
+   "path": "django/contrib/auth/checks.py",
+   "symbol": "check_middleware",
+   "kind": "function",
+   "lines": [
+    239,
+    261
+   ],
+   "fingerprint": "dfbb4b1ca79f7423"
+  }
+ ]
+}

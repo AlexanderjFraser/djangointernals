@@ -211,7 +211,7 @@ django.core.signing.BadSignature: Signature "0FeZlbBD_zc3yj0U94CdSZvBzG5MHoHtkxr
 
 The first part is the JSON in URL-safe base64, which anyone can decode: signing makes a change detectable and hides nothing. The value read under another salt was refused, as it was after `SECRET_KEY` was changed; with the old key listed in `SECRET_KEY_FALLBACKS`, it was accepted again. A `Signer` tries its key and then each of the fallbacks, which is how a site changes its key without at once losing every value signed with the old one (`django/core/signing.py:Signer.unsign`).
 
-The users of these are mostly elsewhere in Django: signed cookies ([Cookies](http/cookies.md)), the session's stored data and the session backend that keeps everything in a cookie, the messages kept in a cookie, and in `django.contrib.auth` the tokens of a password reset and the hash that ties a session to the user's password ([Authentication, sessions and messages](auth.md)).
+The users of these are mostly elsewhere in Django: signed cookies ([Cookies](http/cookies.md)), the session's stored data and the session backend that keeps everything in a cookie, the messages kept in a cookie, and in `django.contrib.auth` the tokens of a password reset and the hash that ties a session to the user's password ([The session store: `SessionBase`](auth/sessions.md), [Password reset: `PasswordResetTokenGenerator` and the reset views](auth/password-reset.md), [The user of a request: `login`, `logout` and `AuthenticationMiddleware`](auth/login.md)).
 
 ## Checks before deployment
 

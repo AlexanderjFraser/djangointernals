@@ -1,0 +1,165 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "createsuperuser.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/admin/sites.py:AdminSite.has_permission",
+   "line": 9,
+   "sentence": "A new project has no user, and the admin, where users are added, admits only an active staff user ([The admin](../admin.md)) (`django/contrib/admin/sites.py:AdminSite.has_permission`). createsuperuser makes the first from the command line, for whatever model `AUTH_USER_MODEL` names, so it knows of the fields only what the model declares: the field named by `USERNAME_FIELD`, those of `AbstractBaseUser.REQUIRED_FIELDS`, and whether there is a field called `\"password\"`.",
+   "tree": "django",
+   "path": "django/contrib/admin/sites.py",
+   "symbol": "AdminSite.has_permission",
+   "kind": "function",
+   "lines": [
+    204,
+    209
+   ],
+   "fingerprint": "1a4dd5977d53b54b"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/createsuperuser.py:Command.add_arguments",
+   "line": 13,
+   "sentence": "Beside these stand `--noinput` and `--database` (`django/contrib/auth/management/commands/createsuperuser.py:Command.add_arguments`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/createsuperuser.py",
+   "symbol": "Command.add_arguments",
+   "kind": "function",
+   "lines": [
+    38,
+    86
+   ],
+   "fingerprint": "ddab61bf376477fd"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/createsuperuser.py:Command.handle",
+   "line": 13,
+   "sentence": "If the model has a field called `\"password\"`, the data starts with a password of `None`, meaning none given yet; a model without one is never asked for a password (`django/contrib/auth/management/commands/createsuperuser.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/createsuperuser.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    92,
+    254
+   ],
+   "fingerprint": "af5c84e0174aa57b"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/createsuperuser.py:Command.handle",
+   "line": 17,
+   "sentence": "When the stream is not a TTY it raises `NotRunningInTTYException`, which `handle` catches at its end: it writes that creation was skipped and ends without an error, so a script that forgets `--noinput` and runs without a terminal makes no user and does not fail (`django/contrib/auth/management/commands/createsuperuser.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/createsuperuser.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    92,
+    254
+   ],
+   "fingerprint": "af5c84e0174aa57b"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:get_default_username",
+   "line": 19,
+   "sentence": "When `AUTH_USER_MODEL` names another model there is none, since, a comment says, no assumption can be made about the username then (`django/contrib/auth/management/__init__.py:get_default_username`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "get_default_username",
+   "kind": "function",
+   "lines": [
+    246,
+    292
+   ],
+   "fingerprint": "789a04ae234585f7"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/createsuperuser.py:Command.get_input_data",
+   "line": 21,
+   "sentence": "`Command.get_input_data` reads an answer with `input`, puts the default in place of an empty one, and has the model field clean it; an error is written and the question asked again (`django/contrib/auth/management/commands/createsuperuser.py:Command.get_input_data`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/createsuperuser.py",
+   "symbol": "Command.get_input_data",
+   "kind": "function",
+   "lines": [
+    256,
+    270
+   ],
+   "fingerprint": "3e6b596685a78acf"
+  },
+  {
+   "pointer": "django/db/models/fields/related.py:ForeignKey.validate",
+   "line": 21,
+   "sentence": "A foreign key is answered with the key of a row that must exist (`django/db/models/fields/related.py:ForeignKey.validate`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related.py",
+   "symbol": "ForeignKey.validate",
+   "kind": "function",
+   "lines": [
+    1215,
+    1237
+   ],
+   "fingerprint": "9d6d9a83799e5ffd"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/createsuperuser.py:Command.handle",
+   "line": 51,
+   "sentence": "A field that may be blank may be given empty, and is then left out (`django/contrib/auth/management/commands/createsuperuser.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/createsuperuser.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    92,
+    254
+   ],
+   "fingerprint": "af5c84e0174aa57b"
+  },
+  {
+   "pointer": "django/contrib/auth/models.py:UserManager.create_superuser",
+   "line": 71,
+   "sentence": "`UserManager.create_superuser` sets `is_staff=True` and `is_superuser=True`, raises `ValueError` if told otherwise, and makes the user as `UserManager.create_user` does (`django/contrib/auth/models.py:UserManager.create_superuser`).",
+   "tree": "django",
+   "path": "django/contrib/auth/models.py",
+   "symbol": "UserManager.create_superuser",
+   "kind": "function",
+   "lines": [
+    191,
+    200
+   ],
+   "fingerprint": "df6c50e78084ef67"
+  },
+  {
+   "pointer": "docs/topics/auth/passwords.txt",
+   "line": 71,
+   "sentence": "`UserManager.create_superuser` validates no password; the documentation gives two reasons: developers, not users, work at that level, and a model's validation does not run as it is created (`docs/topics/auth/passwords.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/passwords.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    792
+   ],
+   "fingerprint": "00987b70a6a1b10b"
+  },
+  {
+   "pointer": "django/contrib/auth/management/commands/changepassword.py:Command.handle",
+   "line": 75,
+   "sentence": "changepassword looks the user up by `USERNAME_FIELD`, under the name given or else the system account's from `getpass.getuser`, taken as it is; a name no user has is a `CommandError` (`django/contrib/auth/management/commands/changepassword.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/commands/changepassword.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    39,
+    82
+   ],
+   "fingerprint": "8f79d66898818745"
+  }
+ ]
+}

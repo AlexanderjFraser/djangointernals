@@ -1,0 +1,179 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "session-middleware.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.__init__",
+   "line": 13,
+   "sentence": "`SessionMiddleware.__init__` imports the module that `SESSION_ENGINE` names and keeps the store class that module defines (`django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.__init__",
+   "kind": "function",
+   "lines": [
+    15,
+    18
+   ],
+   "fingerprint": "729defcd673f0b25"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_request",
+   "line": 15,
+   "sentence": "`SessionMiddleware.process_request` reads the cookie that `SESSION_COOKIE_NAME` names, `\"sessionid\"` by default, and sets `HttpRequest.session` to a new store made with its value, or with `None` when the request has no such cookie (`django/contrib/sessions/middleware.py:SessionMiddleware.process_request`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.process_request",
+   "kind": "function",
+   "lines": [
+    20,
+    22
+   ],
+   "fingerprint": "9b62cd0751fc1630"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
+   "line": 21,
+   "sentence": "`MiddlewareMixin.__call__` always runs `process_request` before the layers inside, so in the chain what trips the guard is code inside that deleted `HttpRequest.session` or replaced it with an object without these attributes, or an engine whose store lacks them; in a run whose view deleted it, the response came back with no cookie and no `\"Vary\"` (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    24,
+    84
+   ],
+   "fingerprint": "e54a21ed4b7c52be"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.is_empty",
+   "line": 23,
+   "sentence": "`is_empty` is true when the store has no key and its data, if it has loaded any, is an empty dictionary (`django/contrib/sessions/backends/base.py:SessionBase.is_empty`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/base.py",
+   "symbol": "SessionBase.is_empty",
+   "kind": "function",
+   "lines": [
+    190,
+    195
+   ],
+   "fingerprint": "d7bb009c48419c5f"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.delete_cookie",
+   "line": 45,
+   "sentence": "The deleted cookie gets the path, domain and SameSite that the settings give the cookie when it is set ([Cookies](../http/cookies.md)) (`django/http/response.py:HttpResponseBase.delete_cookie`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.delete_cookie",
+   "kind": "function",
+   "lines": [
+    297,
+    313
+   ],
+   "fingerprint": "8d98fd4c554e82ca"
+  },
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 45,
+   "sentence": "`\"Cookie\"` goes into `\"Vary\"` by `patch_vary_headers` whenever the session was accessed and whenever the cookie is set or deleted: a response made from a session depends on the `\"Cookie\"` header that brought its key, and `\"Vary\"` tells a cache so ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md)) (`django/utils/cache.py:patch_vary_headers`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/utils/cache.py:patch_vary_headers",
+   "line": 45,
+   "sentence": "`\"Cookie\"` goes into `\"Vary\"` by `patch_vary_headers` whenever the session was accessed and whenever the cookie is set or deleted: a response made from a session depends on the `\"Cookie\"` header that brought its key, and `\"Vary\"` tells a cache so ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md)) (`django/utils/cache.py:patch_vary_headers`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "patch_vary_headers",
+   "kind": "function",
+   "lines": [
+    303,
+    329
+   ],
+   "fingerprint": "9b15914a7c54165c"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
+   "line": 65,
+   "sentence": "The save of a session without a key makes one: at /port/ in a run, the backend asked whether a new key was taken, then inserted the row (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    24,
+    84
+   ],
+   "fingerprint": "e54a21ed4b7c52be"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.get_expiry_date",
+   "line": 69,
+   "sentence": "A browser-length session's row is still stored to expire after `SESSION_COOKIE_AGE`: two weeks ahead, at a login in a run (`django/contrib/sessions/backends/base.py:SessionBase.get_expiry_date`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/base.py",
+   "symbol": "SessionBase.get_expiry_date",
+   "kind": "function",
+   "lines": [
+    319,
+    340
+   ],
+   "fingerprint": "afecd1c40d0b4fd2"
+  },
+  {
+   "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
+   "line": 73,
+   "sentence": "Every backend but the signed-cookie one then raises `UpdateError`, which the middleware raises again as this subclass of `BadRequest` (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/contrib/sessions/exceptions.py:SessionInterrupted`, `django/contrib/sessions/backends/db.py:SessionStore.save`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/middleware.py",
+   "symbol": "SessionMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    24,
+    84
+   ],
+   "fingerprint": "e54a21ed4b7c52be"
+  },
+  {
+   "pointer": "django/contrib/sessions/exceptions.py:SessionInterrupted",
+   "line": 73,
+   "sentence": "Every backend but the signed-cookie one then raises `UpdateError`, which the middleware raises again as this subclass of `BadRequest` (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/contrib/sessions/exceptions.py:SessionInterrupted`, `django/contrib/sessions/backends/db.py:SessionStore.save`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/exceptions.py",
+   "symbol": "SessionInterrupted",
+   "kind": "class",
+   "lines": [
+    16,
+    19
+   ],
+   "fingerprint": "f18c472a198c30da"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/db.py:SessionStore.save",
+   "line": 73,
+   "sentence": "Every backend but the signed-cookie one then raises `UpdateError`, which the middleware raises again as this subclass of `BadRequest` (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/contrib/sessions/exceptions.py:SessionInterrupted`, `django/contrib/sessions/backends/db.py:SessionStore.save`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/db.py",
+   "symbol": "SessionStore.save",
+   "kind": "function",
+   "lines": [
+    114,
+    137
+   ],
+   "fingerprint": "de20c53dcc9fd814"
+  }
+ ]
+}

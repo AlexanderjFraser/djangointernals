@@ -1,0 +1,306 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "hashers.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/auth/passwords.txt",
+   "line": 9,
+   "sentence": "An old string is checked by what it says while its hasher is listed, and replaced at its user's next login (`docs/topics/auth/passwords.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/passwords.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    792
+   ],
+   "fingerprint": "00987b70a6a1b10b"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:PBKDF2PasswordHasher.encode",
+   "line": 27,
+   "sentence": "`PBKDF2PasswordHasher.encode` derives the key with `pbkdf2`, which calls `hashlib.pbkdf2_hmac`, and joins the four parts (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher.encode`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "PBKDF2PasswordHasher.encode",
+   "kind": "function",
+   "lines": [
+    329,
+    335
+   ],
+   "fingerprint": "557f982e7ba7c8a5"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:make_password",
+   "line": 31,
+   "sentence": "`make_password` takes a password, a salt and a hasher, `\"default\"` unless named (`django/contrib/auth/hashers.py:make_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "make_password",
+   "kind": "function",
+   "lines": [
+    100,
+    118
+   ],
+   "fingerprint": "8644ca49aaf779d3"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:get_hashers",
+   "line": 43,
+   "sentence": "`get_hashers` makes an instance of each class of `PASSWORD_HASHERS`, refusing one whose `algorithm` is empty with `ImproperlyConfigured`; `get_hashers_by_algorithm` indexes them by algorithm (`django/contrib/auth/hashers.py:get_hashers`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "get_hashers",
+   "kind": "function",
+   "lines": [
+    121,
+    132
+   ],
+   "at": 122,
+   "fingerprint": "efed92eb526b81ac"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:get_hasher",
+   "line": 45,
+   "sentence": "`get_hasher` returns a hasher it is given as it is, the first of the list for `\"default\"`, and otherwise the hasher of that algorithm, or a `ValueError` (`django/contrib/auth/hashers.py:get_hasher`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "get_hasher",
+   "kind": "function",
+   "lines": [
+    147,
+    169
+   ],
+   "fingerprint": "4476e791ce595fd3"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:identify_hasher",
+   "line": 45,
+   "sentence": "`identify_hasher` takes the algorithm from a stored string's part before the first `\"$\"` (`django/contrib/auth/hashers.py:identify_hasher`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "identify_hasher",
+   "kind": "function",
+   "lines": [
+    172,
+    191
+   ],
+   "fingerprint": "0b607fbba8f9efe4"
+  },
+  {
+   "pointer": "docs/releases/5.1.txt",
+   "line": 45,
+   "sentence": "It first recognises the unsalted forms of ancient Django by length and form as `\"unsalted_md5\"` and `\"unsalted_sha1\"`, whose hashers Django 5.1 removed, so such a string finds none unless a project supplies one (`docs/releases/5.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "3a1b214427111cf2"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:verify_password",
+   "line": 49,
+   "sentence": "`verify_password` answers whether the password matches the string, and whether the string should be made again (`django/contrib/auth/hashers.py:verify_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "verify_password",
+   "kind": "function",
+   "lines": [
+    39,
+    72
+   ],
+   "fingerprint": "1673cf5e18a4c289"
+  },
+  {
+   "pointer": "docs/topics/auth/passwords.txt",
+   "line": 66,
+   "sentence": "The documentation warns of it and shows how to rehash old strings (`docs/topics/auth/passwords.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/passwords.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    792
+   ],
+   "fingerprint": "00987b70a6a1b10b"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:check_password",
+   "line": 70,
+   "sentence": "`django.contrib.auth.hashers.check_password` returns `verify_password`'s first answer and, when the password is right and the string due for an update, calls the setter it was given with the password (`django/contrib/auth/hashers.py:check_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "check_password",
+   "kind": "function",
+   "lines": [
+    75,
+    86
+   ],
+   "fingerprint": "43e1910fcbca8374"
+  },
+  {
+   "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser.check_password",
+   "line": 72,
+   "sentence": "`AbstractBaseUser.check_password`'s setter sets the password with the default hasher and saves the `password` field alone, first clearing `AbstractBaseUser._password`, since by its comment a hash upgrade is not a password change (`django/contrib/auth/base_user.py:AbstractBaseUser.check_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/base_user.py",
+   "symbol": "AbstractBaseUser.check_password",
+   "kind": "function",
+   "lines": [
+    97,
+    109
+   ],
+   "fingerprint": "6fafd328f7b96242"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher",
+   "line": 86,
+   "sentence": "A subclass of `BasePasswordHasher` names its `algorithm` and implements `encode`, `decode`, `verify` and `safe_summary`, which raise `NotImplementedError` on the base (`django/contrib/auth/hashers.py:BasePasswordHasher`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "BasePasswordHasher",
+   "kind": "class",
+   "lines": [
+    209,
+    313
+   ],
+   "fingerprint": "b09465b2df349b9e"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher.salt",
+   "line": 88,
+   "sentence": "`safe_summary` gives a string's parts for display, `mask_hash` keeping six characters of the salt (two of an MD5 salt) and of the hash and a `\"*\"` for each of the rest (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`, `django/contrib/auth/hashers.py:mask_hash`); `UserChangeForm` shows it in place of the password ([The authentication forms: `AuthenticationForm` and the password forms](user-forms.md)).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "BasePasswordHasher.salt",
+   "kind": "function",
+   "lines": [
+    241,
+    249
+   ],
+   "fingerprint": "307a2de5ba9ae9db"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:mask_hash",
+   "line": 88,
+   "sentence": "`safe_summary` gives a string's parts for display, `mask_hash` keeping six characters of the salt (two of an MD5 salt) and of the hash and a `\"*\"` for each of the rest (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`, `django/contrib/auth/hashers.py:mask_hash`); `UserChangeForm` shows it in place of the password ([The authentication forms: `AuthenticationForm` and the password forms](user-forms.md)).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "mask_hash",
+   "kind": "function",
+   "lines": [
+    194,
+    201
+   ],
+   "fingerprint": "04a470f566771b00"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 102,
+   "sentence": "`PASSWORD_HASHERS` lists all but `BCryptPasswordHasher` and `MD5PasswordHasher`, in this order (`django/conf/global_settings.py`).*",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:PBKDF2PasswordHasher.must_update",
+   "line": 104,
+   "sentence": "`PBKDF2PasswordHasher.must_update` asks for a new string when the stored iterations differ from `PBKDF2PasswordHasher.iterations`, fewer or more, or the salt is short; `PBKDF2PasswordHasher.harden_runtime` runs the iterations missing (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher.must_update`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "PBKDF2PasswordHasher.must_update",
+   "kind": "function",
+   "lines": [
+    361,
+    364
+   ],
+   "fingerprint": "5b2a7fa900cec55e"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 106,
+   "sentence": "The iterations went from 1,500,000 to 1,800,000 (1,200,000 in 6.0); the documentation promises a rise with each release (`docs/releases/6.2.txt`, `docs/releases/6.1.txt`, `docs/topics/auth/passwords.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 106,
+   "sentence": "The iterations went from 1,500,000 to 1,800,000 (1,200,000 in 6.0); the documentation promises a rise with each release (`docs/releases/6.2.txt`, `docs/releases/6.1.txt`, `docs/topics/auth/passwords.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "docs/topics/auth/passwords.txt",
+   "line": 106,
+   "sentence": "The iterations went from 1,500,000 to 1,800,000 (1,200,000 in 6.0); the documentation promises a rise with each release (`docs/releases/6.2.txt`, `docs/releases/6.1.txt`, `docs/topics/auth/passwords.txt`).",
+   "tree": "django",
+   "path": "docs/topics/auth/passwords.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    792
+   ],
+   "fingerprint": "00987b70a6a1b10b"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.encode",
+   "line": 108,
+   "sentence": "`BCryptSHA256PasswordHasher` takes its salt from bcrypt, which writes the rounds into it, and hashes the password's SHA-256 digest in hex, against the truncation of ticket 20138: `BCryptPasswordHasher`, hashing the password as given, is subject to bcrypt's limit of 72 bytes, its docstring says (`django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.encode`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "BCryptSHA256PasswordHasher.encode",
+   "kind": "function",
+   "lines": [
+    506,
+    517
+   ],
+   "fingerprint": "8b932b73efc2e881"
+  },
+  {
+   "pointer": "docs/topics/testing/overview.txt",
+   "line": 110,
+   "sentence": "`MD5PasswordHasher` is the documentation's choice for tests that authenticate many users, where the default hasher is \"rather slow by design\" (`docs/topics/testing/overview.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/overview.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    399
+   ],
+   "fingerprint": "5d93d7bb7a79af85"
+  }
+ ]
+}

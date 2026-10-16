@@ -61,7 +61,7 @@ The algorithm is a keyword argument naming a constructor of `hashlib`, which `sa
 
 ## `pbkdf2`
 
-`pbkdf2` is `hashlib.pbkdf2_hmac` with SHA-256 unless another digest is given, and a derived key as long as the digest's output unless a length is given (`django/utils/crypto.py:pbkdf2`). Its users are the PBKDF2 password hashers, `PBKDF2PasswordHasher` first among the defaults of `PASSWORD_HASHERS` ([Authentication, sessions and messages](../auth.md)).
+`pbkdf2` is `hashlib.pbkdf2_hmac` with SHA-256 unless another digest is given, and a derived key as long as the digest's output unless a length is given (`django/utils/crypto.py:pbkdf2`). Its users are the PBKDF2 password hashers, `PBKDF2PasswordHasher` first among the defaults of `PASSWORD_HASHERS` ([Password hashing: `make_password` and the hashers](../auth/hashers.md)).
 
 ## The key a new project gets
 

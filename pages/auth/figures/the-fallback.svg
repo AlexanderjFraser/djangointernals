@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 821">
+  <!-- each request is a frame, time running down it; in each, the cookie's storage on the left and the
+       session's on the right; a small square is a message, numbered in the order it was added -->
+
+  <!-- the first request -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="406" rx="4"/>
+  <text x="12" y="24"><tspan class="strong">First request</tspan>: <tspan class="name">POST</tspan>, eight messages added; no cookie, so no earlier ones</text>
+  <rect class="ground" x="12.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="22.5" y="51">1</text>
+  <rect class="ground" x="36.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="46.5" y="51">2</text>
+  <rect class="ground" x="60.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="70.5" y="51">3</text>
+  <rect class="ground" x="84.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="94.5" y="51">4</text>
+  <rect class="ground" x="108.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="118.5" y="51">5</text>
+  <rect class="ground" x="132.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="142.5" y="51">6</text>
+  <rect class="ground" x="156.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="166.5" y="51">7</text>
+  <rect class="ground" x="180.5" y="36.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="190.5" y="51">8</text>
+  <text x="12" y="82">on the way out: <tspan class="name">FallbackStorage._store(eight)</tspan></text>
+
+  <!-- the cookie takes the oldest that fit, with the marker -->
+  <rect class="box" x="12.5" y="96.5" width="333" height="174" rx="4"/>
+  <text class="name" x="24" y="118">CookieStorage._store</text>
+  <text class="quiet small" x="24" y="136">given the eight, <tspan class="name small">remove_oldest=False</tspan></text>
+  <text class="small" x="24" y="160">the eight: more than 2,048 characters</text>
+  <text class="small" x="24" y="178"><tspan class="name small">bisect_keep_left</tspan>: the first six and the marker fit</text>
+  <text class="small" x="24" y="202">the cookie <tspan class="name small">"messages"</tspan> set to them</text>
+  <rect class="ground" x="24.5" y="212.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="34.5" y="227">1</text>
+  <rect class="ground" x="48.5" y="212.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="58.5" y="227">2</text>
+  <rect class="ground" x="72.5" y="212.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="82.5" y="227">3</text>
+  <rect class="ground" x="96.5" y="212.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="106.5" y="227">4</text>
+  <rect class="ground" x="120.5" y="212.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="130.5" y="227">5</text>
+  <rect class="ground" x="144.5" y="212.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="154.5" y="227">6</text>
+  <rect class="mark-box" x="168.5" y="212.5" width="52" height="20" rx="4"/>
+  <text class="small mark" text-anchor="middle" x="194.5" y="227">marker</text>
+  <text class="small" x="24" y="256">returns the seventh and eighth</text>
+
+  <!-- what the cookie returns goes to the session -->
+  <path class="line" d="M346 251.5 H365.5"/>
+  <polygon class="head" points="375.5,251.5 365.5,246.5 365.5,256.5"/>
+  <rect class="box" x="375.5" y="234.5" width="258" height="130" rx="4"/>
+  <text class="name" x="388" y="256">SessionStorage._store</text>
+  <text class="quiet small" x="388" y="274">given the seventh and eighth</text>
+  <text class="small" x="388" y="298">the session’s <tspan class="name small">"_messages"</tspan></text>
+  <rect class="ground" x="388.5" y="308.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="398.5" y="323">7</text>
+  <rect class="ground" x="412.5" y="308.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="422.5" y="323">8</text>
+  <text class="small" x="388" y="350">the two, as a JSON string</text>
+
+  <!-- after the storage, the session middleware -->
+  <text x="12" y="390"><tspan class="name">SessionMiddleware</tspan>: the session modified, saved</text>
+
+  <!-- the next request -->
+  <rect class="ground" x="0.5" y="422.5" width="645" height="398" rx="4"/>
+  <text x="12" y="446"><tspan class="strong">Next request</tspan>: <tspan class="name">GET /berths/</tspan>, the page loops over the messages</text>
+  <text class="name" x="12" y="472">FallbackStorage._get</text>
+
+  <!-- the cookie read first; the marker sends the read on to the session -->
+  <rect class="box" x="12.5" y="486.5" width="333" height="88" rx="4"/>
+  <text class="name" x="24" y="508">CookieStorage._get</text>
+  <rect class="ground" x="24.5" y="518.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="34.5" y="533">1</text>
+  <rect class="ground" x="48.5" y="518.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="58.5" y="533">2</text>
+  <rect class="ground" x="72.5" y="518.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="82.5" y="533">3</text>
+  <rect class="ground" x="96.5" y="518.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="106.5" y="533">4</text>
+  <rect class="ground" x="120.5" y="518.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="130.5" y="533">5</text>
+  <rect class="ground" x="144.5" y="518.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="154.5" y="533">6</text>
+  <rect class="mark-box" x="168.5" y="518.5" width="52" height="20" rx="4"/>
+  <text class="small mark" text-anchor="middle" x="194.5" y="533">marker</text>
+  <text class="small" x="24" y="560">six; the marker removed: not all retrieved</text>
+
+  <path class="line" d="M346 555.5 H365.5"/>
+  <polygon class="head" points="375.5,555.5 365.5,550.5 365.5,560.5"/>
+  <rect class="box" x="375.5" y="538.5" width="258" height="88" rx="4"/>
+  <text class="name" x="388" y="560">SessionStorage._get</text>
+  <rect class="ground" x="388.5" y="570.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="398.5" y="585">7</text>
+  <rect class="ground" x="412.5" y="570.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="422.5" y="585">8</text>
+  <text class="small" x="388" y="612">two: all retrieved</text>
+
+  <!-- the eight together again -->
+  <text x="12" y="652">the page shows the eight, first to last</text>
+  <rect class="ground" x="12.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="22.5" y="677">1</text>
+  <rect class="ground" x="36.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="46.5" y="677">2</text>
+  <rect class="ground" x="60.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="70.5" y="677">3</text>
+  <rect class="ground" x="84.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="94.5" y="677">4</text>
+  <rect class="ground" x="108.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="118.5" y="677">5</text>
+  <rect class="ground" x="132.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="142.5" y="677">6</text>
+  <rect class="ground" x="156.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="166.5" y="677">7</text>
+  <rect class="ground" x="180.5" y="662.5" width="20" height="20" rx="4"/>
+  <text class="small" text-anchor="middle" x="190.5" y="677">8</text>
+
+  <!-- on the way out, nothing to store: both emptied -->
+  <text x="12" y="708">on the way out: <tspan class="name">FallbackStorage._store(an empty list)</tspan></text>
+  <rect class="box" x="12.5" y="722.5" width="333" height="56" rx="4"/>
+  <text class="name" x="24" y="744">CookieStorage</text>
+  <text class="small" x="24" y="762">held messages: the cookie deleted</text>
+  <rect class="box" x="375.5" y="722.5" width="258" height="56" rx="4"/>
+  <text class="name" x="388" y="744">SessionStorage</text>
+  <text class="small" x="388" y="762">held messages: <tspan class="name small">"_messages"</tspan> removed</text>
+
+  <text x="12" y="804"><tspan class="name">SessionMiddleware</tspan>: the session modified, saved</text>
+</svg>

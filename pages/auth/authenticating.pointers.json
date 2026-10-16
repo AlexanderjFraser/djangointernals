@@ -1,0 +1,295 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "authenticating.md",
+ "pointers": [
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 9,
+   "sentence": "The setting's default is `ModelBackend` alone (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:load_backend",
+   "line": 13,
+   "sentence": "`django.contrib.auth.load_backend` imports the class a dotted path names and calls it, so each call makes a new instance (`django/contrib/auth/__init__.py:load_backend`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "load_backend",
+   "kind": "function",
+   "lines": [
+    22,
+    23
+   ],
+   "fingerprint": "0f5a77fb7c4ce50f"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:_get_backends",
+   "line": 13,
+   "sentence": "`get_backends` does that for every path of the setting, and raises `ImproperlyConfigured` when there is none (`django/contrib/auth/__init__.py:_get_backends`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "_get_backends",
+   "kind": "function",
+   "lines": [
+    26,
+    36
+   ],
+   "fingerprint": "63016658d9c77bd5"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:authenticate",
+   "line": 17,
+   "sentence": "`authenticate` takes the request, `None` unless given, and the credentials as keyword arguments (`django/contrib/auth/__init__.py:authenticate`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "authenticate",
+   "kind": "function",
+   "lines": [
+    123,
+    144
+   ],
+   "at": 124,
+   "fingerprint": "7ae854e051272436"
+  },
+  {
+   "pointer": "django/utils/inspect.py",
+   "line": 17,
+   "sentence": "It passes over every backend that cannot take them: `_get_compatible_backends`, a generator, reads each backend's authenticate method with `signature` as the loop reaches it and binds the request and the credentials to it, and a `TypeError` skips the backend ([Asking a callable what it accepts: `django/utils/inspect.py`](../utils/inspect.md)) (`django/contrib/auth/__init__.py:_get_compatible_backends`).",
+   "tree": "django",
+   "path": "django/utils/inspect.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    162
+   ],
+   "fingerprint": "11c7e764b7619077"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:_get_compatible_backends",
+   "line": 17,
+   "sentence": "It passes over every backend that cannot take them: `_get_compatible_backends`, a generator, reads each backend's authenticate method with `signature` as the loop reaches it and binds the request and the credentials to it, and a `TypeError` skips the backend ([Asking a callable what it accepts: `django/utils/inspect.py`](../utils/inspect.md)) (`django/contrib/auth/__init__.py:_get_compatible_backends`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "_get_compatible_backends",
+   "kind": "function",
+   "lines": [
+    43,
+    52
+   ],
+   "fingerprint": "a1286f19e13624f1"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:_clean_credentials",
+   "line": 25,
+   "sentence": "The sender is the module's name, `\"django.contrib.auth\"`; the receiver gets the request, and the credentials with `_clean_credentials` having masked the value of every key containing api, token, key, secret, password or signature, a list its docstring calls not comprehensive (`django/contrib/auth/__init__.py:_clean_credentials`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "_clean_credentials",
+   "kind": "function",
+   "lines": [
+    76,
+    89
+   ],
+   "at": 77,
+   "fingerprint": "f64c395737983c32"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:aauthenticate",
+   "line": 61,
+   "sentence": "`aauthenticate` is the same loop, awaiting each backend's `BaseBackend.aauthenticate` and sending the signal with `Signal.asend`; it picks the backends by their synchronous method's signature (`django/contrib/auth/__init__.py:aauthenticate`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "aauthenticate",
+   "kind": "function",
+   "lines": [
+    147,
+    166
+   ],
+   "at": 148,
+   "fingerprint": "663d6be5568a7e7c"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:BaseBackend",
+   "line": 63,
+   "sentence": "Every method `BaseBackend` declares answers no: `BaseBackend.authenticate` and `BaseBackend.get_user` return `None`, `BaseBackend.get_user_permissions` and `BaseBackend.get_group_permissions` an empty set, and `BaseBackend.has_perm` looks in those two (`django/contrib/auth/backends.py:BaseBackend`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "BaseBackend",
+   "kind": "class",
+   "lines": [
+    15,
+    56
+   ],
+   "fingerprint": "1d447daaf6a46ed5"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:ModelBackend.authenticate",
+   "line": 67,
+   "sentence": "`ModelBackend.authenticate` takes username and password, or, for the username, the keyword argument named after the user model's `USERNAME_FIELD`; without both it returns `None` (`django/contrib/auth/backends.py:ModelBackend.authenticate`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "ModelBackend.authenticate",
+   "kind": "function",
+   "lines": [
+    64,
+    78
+   ],
+   "at": 65,
+   "fingerprint": "1ffb5446623e1b91"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:check_password_with_timing_attack_mitigation",
+   "line": 69,
+   "sentence": "Given none, it sets the password on an unsaved instance of the user model, which runs the default hasher once for nothing; its docstring's reason is to prevent user enumeration attacks, ticket 20760 (`django/contrib/auth/__init__.py:check_password_with_timing_attack_mitigation`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "check_password_with_timing_attack_mitigation",
+   "kind": "function",
+   "lines": [
+    391,
+    399
+   ],
+   "fingerprint": "34ffd6909854cfaf"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:ModelBackend.get_user",
+   "line": 71,
+   "sentence": "`ModelBackend.get_user` applies the same test, so a user made inactive is not found at the next request of a session (`django/contrib/auth/backends.py:ModelBackend.get_user`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "ModelBackend.get_user",
+   "kind": "function",
+   "lines": [
+    235,
+    240
+   ],
+   "fingerprint": "33818015bf7eb93f"
+  },
+  {
+   "pointer": "docs/howto/deployment/wsgi/apache-auth.txt",
+   "line": 73,
+   "sentence": "Apache's mod_wsgi can call Django's `check_password` outside the request cycle (`docs/howto/deployment/wsgi/apache-auth.txt`): `None` when no active user has the name, otherwise whether the password matches, by the same timing function and without the backends (`django/contrib/auth/handlers/modwsgi.py:check_password`).",
+   "tree": "django",
+   "path": "docs/howto/deployment/wsgi/apache-auth.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    138
+   ],
+   "fingerprint": "02b4a3def024ba22"
+  },
+  {
+   "pointer": "django/contrib/auth/handlers/modwsgi.py:check_password",
+   "line": 73,
+   "sentence": "Apache's mod_wsgi can call Django's `check_password` outside the request cycle (`docs/howto/deployment/wsgi/apache-auth.txt`): `None` when no active user has the name, otherwise whether the password matches, by the same timing function and without the backends (`django/contrib/auth/handlers/modwsgi.py:check_password`).",
+   "tree": "django",
+   "path": "django/contrib/auth/handlers/modwsgi.py",
+   "symbol": "check_password",
+   "kind": "function",
+   "lines": [
+    23,
+    41
+   ],
+   "fingerprint": "21587e1643b4ef7d"
+  },
+  {
+   "pointer": "docs/howto/auth-remote-user.txt",
+   "line": 77,
+   "sentence": "When the web server has authenticated the browser, Django has only to believe the name it passes on (`docs/howto/auth-remote-user.txt`).",
+   "tree": "django",
+   "path": "docs/howto/auth-remote-user.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    146
+   ],
+   "fingerprint": "9f68d9e43dd0e282"
+  },
+  {
+   "pointer": "django/contrib/auth/backends.py:RemoteUserBackend.authenticate",
+   "line": 77,
+   "sentence": "`RemoteUserBackend.configure_user`, given the user and whether it was just created, returns it unchanged unless overridden; the inherited `user_can_authenticate` refuses an inactive user (`django/contrib/auth/backends.py:RemoteUserBackend.authenticate`).",
+   "tree": "django",
+   "path": "django/contrib/auth/backends.py",
+   "symbol": "RemoteUserBackend.authenticate",
+   "kind": "function",
+   "lines": [
+    270,
+    298
+   ],
+   "fingerprint": "ebb1fa34224b4f33"
+  },
+  {
+   "pointer": "django/contrib/auth/middleware.py:RemoteUserMiddleware",
+   "line": 79,
+   "sentence": "It serves either kind of chain, running `RemoteUserMiddleware.process_request`, or in an asynchronous one `RemoteUserMiddleware.aprocess_request`, before the layer inside, and does nothing on the way out (`django/contrib/auth/middleware.py:RemoteUserMiddleware`).",
+   "tree": "django",
+   "path": "django/contrib/auth/middleware.py",
+   "symbol": "RemoteUserMiddleware",
+   "kind": "class",
+   "lines": [
+    95,
+    280
+   ],
+   "fingerprint": "ce9a78f5ae1d1bcf"
+  },
+  {
+   "pointer": "django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username",
+   "line": 103,
+   "sentence": "Under ASGI there is no environ, and `RemoteUserMiddleware.get_username` reads `\"HTTP_REMOTE_USER\"`, the Remote-User header, while `header` is the default; a subclass's `header` is read as written, as `\"HTTP_AUTHUSER\"` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username`).",
+   "tree": "django",
+   "path": "django/contrib/auth/middleware.py",
+   "symbol": "RemoteUserMiddleware.get_username",
+   "kind": "function",
+   "lines": [
+    242,
+    248
+   ],
+   "fingerprint": "c59ab6fc9a1dc2c6"
+  },
+  {
+   "pointer": "docs/howto/auth-remote-user.txt",
+   "line": 103,
+   "sentence": "The documentation's warning follows: under ASGI a reverse proxy must always set or strip the header (`docs/howto/auth-remote-user.txt`).",
+   "tree": "django",
+   "path": "docs/howto/auth-remote-user.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    146
+   ],
+   "fingerprint": "9f68d9e43dd0e282"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 105,
+   "sentence": "Under ASGI a custom `header` is again read without an added `\"HTTP_\"`, as before 5.2 (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  }
+ ]
+}
