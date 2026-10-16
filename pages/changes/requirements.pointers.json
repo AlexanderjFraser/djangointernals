@@ -1,0 +1,238 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "requirements.md",
+ "pointers": [
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 13,
+   "sentence": "6.0, 6.1 and 6.2 support 3.12, 3.13 and 3.14, the 5.2 series being the last for 3.10 and 3.11 (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/views/generic/base.py",
+   "line": 15,
+   "sentence": "Under Python 3.11 every module of the package parses and `import django` succeeds; in a run, `django.setup` then raised `ValueError` as it configured the logging handler \"mail_admins\", from an `ImportError` for `inspect.markcoroutinefunction`, which Python added in 3.12 and the module of the generic views imports at its top (`django/views/generic/base.py`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    291
+   ],
+   "fingerprint": "c0a4661dff91e7e4"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 30,
+   "sentence": "Where the notes drop a version of PostgreSQL, MySQL or MariaDB, the reason they give is the end of its upstream support, and 6.1 also passed over MySQL 8.1 to 8.3 and MariaDB 10.7 to 10.10 as short-term releases (`docs/releases/6.1.txt`); SQLite's floor rises without a reason given.",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.minimum_database_version",
+   "line": 32,
+   "sentence": "At this commit each backend's `minimum_database_version` holds 6.2's floor as a tuple: `(16,)` for PostgreSQL, `(3, 37)` for SQLite, `(19,)` for Oracle, and on MySQL a cached property that answers `(10, 11)` for MariaDB and `(8, 4)` otherwise (`django/db/backends/mysql/features.py:DatabaseFeatures.minimum_database_version`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.minimum_database_version",
+   "kind": "function",
+   "lines": [
+    65,
+    70
+   ],
+   "at": 66,
+   "fingerprint": "7f9f6b2b033b0ece"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported",
+   "line": 32,
+   "sentence": "`BaseDatabaseWrapper.init_connection_state` calls `BaseDatabaseWrapper.check_database_version_supported` for each alias until it passes once in a process, and the check raises `NotSupportedError`, naming the version required and the version found, for a server older than the floor (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`; [What a database can do: `BaseDatabaseFeatures`](../backends/features.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.check_database_version_supported",
+   "kind": "function",
+   "lines": [
+    190,
+    204
+   ],
+   "fingerprint": "8b19411895e85531"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/base.py",
+   "line": 49,
+   "sentence": "Two backends check their driver as their module is imported, refusing with `ImproperlyConfigured` a psycopg2 older than 2.9.9, a psycopg 3 older than 3.1.12 (`django/db/backends/postgresql/base.py`) or a mysqlclient older than 2.2.1 (`django/db/backends/mysql/base.py`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    624
+   ],
+   "fingerprint": "6bed565f8e0a9b96"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py",
+   "line": 49,
+   "sentence": "Two backends check their driver as their module is imported, refusing with `ImproperlyConfigured` a psycopg2 older than 2.9.9, a psycopg 3 older than 3.1.12 (`django/db/backends/postgresql/base.py`) or a mysqlclient older than 2.2.1 (`django/db/backends/mysql/base.py`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    441
+   ],
+   "fingerprint": "3565a5a65adf7a17"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py",
+   "line": 49,
+   "sentence": "The Oracle backend imports `oracledb` alone; its connection reads the driver's version as `oracledb_version`, and nothing at this commit compares it with 4.0.2 (`django/db/backends/oracle/base.py`). gettext's floor is a message: makemessages and compilemessages, finding one of its programs missing, ask for GNU gettext 0.19 or newer, and check the version of none they find (`django/core/management/commands/makemessages.py:check_programs`, `django/core/management/commands/compilemessages.py:Command.handle`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    669
+   ],
+   "fingerprint": "fea2aed7e2fa2103"
+  },
+  {
+   "pointer": "django/core/management/commands/makemessages.py:check_programs",
+   "line": 49,
+   "sentence": "The Oracle backend imports `oracledb` alone; its connection reads the driver's version as `oracledb_version`, and nothing at this commit compares it with 4.0.2 (`django/db/backends/oracle/base.py`). gettext's floor is a message: makemessages and compilemessages, finding one of its programs missing, ask for GNU gettext 0.19 or newer, and check the version of none they find (`django/core/management/commands/makemessages.py:check_programs`, `django/core/management/commands/compilemessages.py:Command.handle`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/makemessages.py",
+   "symbol": "check_programs",
+   "kind": "function",
+   "lines": [
+    33,
+    39
+   ],
+   "fingerprint": "094e32355f9ff674"
+  },
+  {
+   "pointer": "django/core/management/commands/compilemessages.py:Command.handle",
+   "line": 49,
+   "sentence": "The Oracle backend imports `oracledb` alone; its connection reads the driver's version as `oracledb_version`, and nothing at this commit compares it with 4.0.2 (`django/db/backends/oracle/base.py`). gettext's floor is a message: makemessages and compilemessages, finding one of its programs missing, ask for GNU gettext 0.19 or newer, and check the version of none they find (`django/core/management/commands/makemessages.py:check_programs`, `django/core/management/commands/compilemessages.py:Command.handle`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/compilemessages.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    71,
+    140
+   ],
+   "fingerprint": "3de55c20f5c576bb"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 51,
+   "sentence": "In dropping Python 3.11, 6.0 named the first release of each library to add or confirm support for 3.12: aiosmtpd 1.4.5, argon2-cffi 23.1.0, bcrypt 4.1.1, docutils 0.22, geoip2 4.8.0, Pillow 10.1.0, mysqlclient 2.2.1, numpy 1.26.0, PyYAML 6.0.2, psycopg 3.1.12, psycopg2 2.9.9, redis-py 5.1.0, selenium 4.23.0, sqlparse 0.5.0 and tblib 3.0.0 (`docs/releases/6.0.txt`); 5.0 had raised selenium to 4.8.0, colorama to 0.4.6 and docutils to 0.19.",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "docs/ref/contrib/gis/install/geolibs.txt",
+   "line": 64,
+   "sentence": "The notes name the versions each release removes, and the oldest left is inferred from them, except PROJ's, which they state as \"PROJ < 5\" and \"< 6\"; the 6.2 row is also this commit's list of supported versions (`docs/ref/contrib/gis/install/geolibs.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/gis/install/geolibs.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    306
+   ],
+   "fingerprint": "0f0e467b26946c65"
+  },
+  {
+   "pointer": "django/contrib/gis/gdal/libgdal.py",
+   "line": 66,
+   "sentence": "GDAL is loaded from `GDAL_LIBRARY_PATH` or found by name, the versioned names going down to 3.5, but on POSIX the unversioned \"gdal\" and \"GDAL\" are tried first, and `GDAL_VERSION`, read from the library once loaded, is compared with no floor (`django/contrib/gis/gdal/libgdal.py`).",
+   "tree": "django",
+   "path": "django/contrib/gis/gdal/libgdal.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    140
+   ],
+   "fingerprint": "0a23f3577b03f9e8"
+  },
+  {
+   "pointer": "django/contrib/gis/geos/libgeos.py:geos_version_tuple",
+   "line": 66,
+   "sentence": "GEOS is found under unversioned names alone, and `geos_version_tuple` is compared only with 3.12 and 3.14, for what those releases changed (`django/contrib/gis/geos/libgeos.py:geos_version_tuple`).",
+   "tree": "django",
+   "path": "django/contrib/gis/geos/libgeos.py",
+   "symbol": "geos_version_tuple",
+   "kind": "function",
+   "lines": [
+    176,
+    178
+   ],
+   "fingerprint": "b091209163bfc8b5"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.spatial_version",
+   "line": 66,
+   "sentence": "`PostGISOperations.spatial_version` takes the setting `POSTGIS_VERSION` or asks the server, and compares the version with nothing; 3.3 appears only in the message of the `ImproperlyConfigured` it raises when it cannot read one (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.spatial_version`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.spatial_version",
+   "kind": "function",
+   "lines": [
+    191,
+    219
+   ],
+   "at": 192,
+   "fingerprint": "54d1807801484d70"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/spatialite/operations.py:SpatiaLiteOperations.spatial_version",
+   "line": 66,
+   "sentence": "The one refusal is SpatiaLite's: `SpatiaLiteOperations.spatial_version` raises `ImproperlyConfigured` below 4.3.0 (`django/contrib/gis/db/backends/spatialite/operations.py:SpatiaLiteOperations.spatial_version`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/spatialite/operations.py",
+   "symbol": "SpatiaLiteOperations.spatial_version",
+   "kind": "function",
+   "lines": [
+    96,
+    109
+   ],
+   "at": 97,
+   "fingerprint": "637992445e62d17f"
+  }
+ ]
+}

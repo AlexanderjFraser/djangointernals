@@ -1,0 +1,194 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "security-fixes-sql.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.check_alias",
+   "line": 21,
+   "sentence": "It raises `ValueError` where `FORBIDDEN_ALIAS_PATTERN` finds a quotation mark (single, double, a backtick or a square bracket), whitespace, a control character, a semicolon, a hash, or a comment marker, `\"--\"`, `\"/*\"` or `\"*/\"` (`django/db/models/sql/query.py:Query.check_alias`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.check_alias",
+   "kind": "function",
+   "lines": [
+    1222,
+    1238
+   ],
+   "fingerprint": "ec1a78726396fa30"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.quote_name",
+   "line": 21,
+   "sentence": "The compiler writes the alias in quotation marks with the backend's `quote_name`, which on PostgreSQL, SQLite and MySQL wraps a name not already wrapped and escapes nothing inside it (`django/db/backends/postgresql/operations.py:DatabaseOperations.quote_name`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/operations.py",
+   "symbol": "DatabaseOperations.quote_name",
+   "kind": "function",
+   "lines": [
+    189,
+    192
+   ],
+   "fingerprint": "c92b25dfc54629ec"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.table_alias",
+   "line": 38,
+   "sentence": "The name of a `FilteredRelation` becomes the alias of the table its join brings in, where that table is not yet in the query (`django/db/models/sql/query.py:Query.table_alias`); `Join.as_sql` writes the alias after the table (`django/db/models/sql/datastructures.py:Join.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.table_alias",
+   "kind": "function",
+   "lines": [
+    900,
+    925
+   ],
+   "fingerprint": "5a7b0799198af938"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join.as_sql",
+   "line": 38,
+   "sentence": "The name of a `FilteredRelation` becomes the alias of the table its join brings in, where that table is not yet in the query (`django/db/models/sql/query.py:Query.table_alias`); `Join.as_sql` writes the alias after the table (`django/db/models/sql/datastructures.py:Join.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join.as_sql",
+   "kind": "function",
+   "lines": [
+    76,
+    133
+   ],
+   "fingerprint": "e5695c5129142fd0"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
+   "line": 42,
+   "sentence": "At this commit `add_filtered_relation` refuses a name with a period, and the compiler writes a dotted name that way only when it was given to `extra` as its order_by (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler._order_by_pairs",
+   "kind": "function",
+   "lines": [
+    339,
+    497
+   ],
+   "fingerprint": "ba998de2fa3ab66a"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
+   "line": 52,
+   "sentence": "`Q.__init__` takes two keyword arguments of its own beside the conditions, `\"_connector\"` and `\"_negated\"`, and the connector is the word that `WhereNode.as_sql` writes between the conditions it joins (`django/db/models/sql/where.py:WhereNode.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.as_sql",
+   "kind": "function",
+   "lines": [
+    116,
+    188
+   ],
+   "fingerprint": "3277e292e6bb60f6"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:Q._check_connector",
+   "line": 52,
+   "sentence": "`Q._check_connector` refuses with `ValueError` any connector but `Q.AND`, `Q.OR`, `Q.XOR` and `None`, in the constructor and, at this commit, in `Q.create` (`django/db/models/query_utils.py:Q._check_connector`).",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "Q._check_connector",
+   "kind": "function",
+   "lines": [
+    68,
+    72
+   ],
+   "at": 69,
+   "fingerprint": "411126af00c23744"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._filter_or_exclude_inplace",
+   "line": 52,
+   "sentence": "`QuerySet._filter_or_exclude_inplace` refuses both with `TypeError`, by the set `PROHIBITED_FILTER_KWARGS`, and at this commit `When.__init__` does the same (`django/db/models/query.py:QuerySet._filter_or_exclude_inplace`; [`filter`, `exclude` and `Q` objects](../querysets/filters.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._filter_or_exclude_inplace",
+   "kind": "function",
+   "lines": [
+    1750,
+    1757
+   ],
+   "fingerprint": "e1e8591383be0ce5"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:HasKeyLookup",
+   "line": 64,
+   "sentence": "On Oracle a JSON path cannot be a bind variable, the comments in the JSON lookups say, so the lookups write it into the statement (`django/db/models/fields/json.py:HasKeyLookup`).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "HasKeyLookup",
+   "kind": "class",
+   "lines": [
+    184,
+    266
+   ],
+   "fingerprint": "fd9c43e7f83f65e3"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:HasKeyLookup.as_oracle",
+   "line": 64,
+   "sentence": "At this commit `HasKeyLookup.as_oracle` writes only the path and passes the left-hand side's parameters as bind variables (`django/db/models/fields/json.py:HasKeyLookup.as_oracle`).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "HasKeyLookup.as_oracle",
+   "kind": "function",
+   "lines": [
+    238,
+    253
+   ],
+   "fingerprint": "24c6628583355c92"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:ProcessJSONLHSMixin._process_as_oracle",
+   "line": 64,
+   "sentence": "A comment says that each key of the path passes through `json.dumps`, which writes U+FFFF as an escape, and the path stands in an Oracle literal delimited by U+FFFF, so that the delimiter is never in it (`django/db/models/fields/json.py:ProcessJSONLHSMixin._process_as_oracle`; [The SQL a backend writes: `BaseDatabaseOperations`](../backends/operations.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "ProcessJSONLHSMixin._process_as_oracle",
+   "kind": "function",
+   "lines": [
+    364,
+    387
+   ],
+   "fingerprint": "d4e9a90bbaa0e1bc"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/lookups.py:GISLookup.process_band_indices",
+   "line": 66,
+   "sentence": "A raster lookup on PostGIS may carry a band index in its value (`django/contrib/gis/db/models/lookups.py:GISLookup.process_band_indices`), and `PostGISOperator.check_raster` writes the index into the SQL beside its operand.",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/lookups.py",
+   "symbol": "GISLookup.process_band_indices",
+   "kind": "function",
+   "lines": [
+    37,
+    54
+   ],
+   "fingerprint": "a6125df756d6deb5"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperator.check_raster",
+   "line": 66,
+   "sentence": "Since 5.2.11 and 6.0.2 (CVE-2026-1207) it raises `TypeError` for an index that is not an integer (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperator.check_raster`; [Spatial lookups, functions and distances](../contrib/spatial-queries.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperator.check_raster",
+   "kind": "function",
+   "lines": [
+    45,
+    96
+   ],
+   "fingerprint": "d85b521ad380ed81"
+  }
+ ]
+}

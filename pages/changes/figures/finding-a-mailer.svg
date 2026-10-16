@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 513">
+  <!-- send_mail makes a message and sends it -->
+  <rect class="box" x="0.5" y="0.5" width="134" height="36" rx="4"/>
+  <text class="name" x="12" y="23">send_mail(...)</text>
+  <text x="150" y="13">an <tspan class="name">EmailMultiAlternatives</tspan> holding <tspan class="name">connection=</tspan> if given (deprecated),</text>
+  <text x="150" y="32">or, with no <tspan class="name">using=</tspan> either, <tspan class="name">get_connection()</tspan>; then its <tspan class="name">send(using=...)</tspan></text>
+  <path class="line" d="M67 37 V62"/>
+  <polygon class="head" points="67,72 62,62 72,62"/>
+
+  <!-- EmailMessage.send, and its three ways to a backend -->
+  <rect class="box" x="0.5" y="72.5" width="645" height="36" rx="4"/>
+  <text class="name strong" x="12" y="95">EmailMessage.send(using=None)</text>
+
+  <!-- using=alias: the mailer -->
+  <path class="mark-line" d="M150 109 V196"/>
+  <polygon class="head mark" points="150,206 145,196 155,196"/>
+  <text class="name small quiet" x="160" y="128">using=alias</text>
+
+  <!-- a connection held: that backend (deprecated) -->
+  <path class="line dashed" d="M323 109 V136"/>
+  <polygon class="head" points="323,146 318,136 328,136"/>
+  <text class="quiet small" x="333" y="128">a connection held</text>
+  <rect class="ground dashed" x="273.5" y="146.5" width="99" height="30" rx="4"/>
+  <text x="323" y="166" text-anchor="middle">that backend</text>
+
+  <!-- neither: get_connection -->
+  <path class="line" d="M496 109 V196"/>
+  <polygon class="head" points="496,206 491,196 501,196"/>
+  <text class="quiet small" x="506" y="128">neither</text>
+
+  <!-- left: mailers[alias], the handler; the thing the figure is about -->
+  <rect class="box" x="0.5" y="206.5" width="300" height="247" rx="4"/>
+  <text class="name strong mark" x="12" y="229">mailers[alias]</text>
+  <text class="quiet small" x="12" y="247">a new instance at each lookup</text>
+
+  <!-- right: get_connection, deprecated -->
+  <rect class="ground dashed" x="345.5" y="206.5" width="300" height="306" rx="4"/>
+  <text class="name strong" x="357" y="229">get_connection(backend=None)</text>
+  <text class="quiet small" x="357" y="247">deprecated: warns when called from outside Django</text>
+
+  <!-- the row where MAILERS is defined -->
+  <path class="line" d="M1 261 H300"/>
+  <path class="line" d="M346 261 H645"/>
+  <text class="small strong" x="12" y="281"><tspan class="name small">MAILERS</tspan> defined</text>
+  <text class="small strong" x="357" y="281"><tspan class="name small">MAILERS</tspan> defined</text>
+
+  <text x="12" y="303">the class <tspan class="name">MAILERS[alias]["BACKEND"]</tspan></text>
+  <text x="12" y="323">names (the SMTP backend if none),</text>
+  <text x="12" y="343">made with its <tspan class="name">"OPTIONS"</tspan> and <tspan class="name">alias=alias</tspan></text>
+  <text class="quiet" x="12" y="363">an alias it lacks: <tspan class="name">MailerDoesNotExist</tspan></text>
+
+  <text x="357" y="303">a new instance of the <tspan class="name">"default"</tspan> entry,</text>
+  <text x="357" y="323">keyword arguments added to its <tspan class="name">"OPTIONS"</tspan></text>
+  <text class="quiet" x="357" y="343">a backend's path: <tspan class="name">RuntimeError</tspan></text>
+
+  <!-- get_connection makes the default mailer -->
+  <path class="line" d="M345 298 H311"/>
+  <polygon class="head" points="301,298 311,293 311,303"/>
+
+  <!-- the row where MAILERS is not defined -->
+  <path class="line" d="M1 377 H300"/>
+  <path class="line" d="M346 377 H645"/>
+  <text class="small strong" x="12" y="397"><tspan class="name small">MAILERS</tspan> not defined</text>
+  <text class="small strong" x="357" y="397"><tspan class="name small">MAILERS</tspan> not defined</text>
+
+  <text x="12" y="419"><tspan class="name">"default"</tspan>: <tspan class="name">get_connection()</tspan></text>
+  <text class="quiet" x="12" y="439">any other alias: <tspan class="name">MailerDoesNotExist</tspan></text>
+
+  <text x="357" y="419">warns, unless an old email setting is defined:</text>
+  <text class="quiet small" x="357" y="437">“Django 2028 will not have a default mailer. ...”</text>
+  <text x="357" y="459">makes the class <tspan class="name">EMAIL_BACKEND</tspan> names (or</text>
+  <text x="357" y="479">the path given) with no alias: the SMTP</text>
+  <text x="357" y="499">backend reads <tspan class="name">EMAIL_HOST</tspan> and the rest</text>
+
+  <!-- the default mailer, without MAILERS, is what get_connection makes -->
+  <path class="line" d="M301 414 H335"/>
+  <polygon class="head" points="345,414 335,409 335,419"/>
+
+  <!-- the key, in the corner the shorter box leaves -->
+  <text class="quiet small" x="0" y="509">dashed: deprecated</text>
+</svg>

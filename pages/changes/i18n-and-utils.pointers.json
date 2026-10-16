@@ -1,0 +1,344 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "i18n-and-utils.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/",
+   "line": 7,
+   "sentence": "The changes from Django 5.0 to this commit in time zones, localization, translation and the smaller modules of `django/utils/`: `USE_TZ` true by default, pytz, the is_dst argument and the alias utc gone, USE_L10N gone, Uyghur and Haitian Creole added, and what changed in `cached_property`, `Truncator`, `parse_duration`, `import_string` and `django.VERSION`.",
+   "tree": "django",
+   "path": "django/utils/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "6c235fe9c1712577"
+  },
+  {
+   "pointer": "docs/releases/4.0.txt",
+   "line": 9,
+   "sentence": "Most of what 5.0 changed here ended deprecations that 4.0 began, when Django moved from pytz to the standard library's `zoneinfo` and made localized output the default (`docs/releases/4.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    772
+   ],
+   "fingerprint": "75c28734cc7b3883"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 9,
+   "sentence": "What 5.0 removed is an error where it was a module, a name or an argument, with one exception, and is passed over in silence where it was a setting: the settings object takes any upper-case name (`django/conf/__init__.py:Settings.__init__`), and nothing at this commit reads these.",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 13,
+   "sentence": "`USE_TZ` has been true by default since 5.0 (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "docs/releases/4.0.txt",
+   "line": 13,
+   "sentence": "The project template has written `USE_TZ = True` into a new project's settings since 1.4 (`docs/releases/4.0.txt`), so the change reached the settings that never set it: a settings module written by hand, or `settings.configure` in a script.",
+   "tree": "django",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    772
+   ],
+   "fingerprint": "75c28734cc7b3883"
+  },
+  {
+   "pointer": "django/utils/timezone.py:now",
+   "line": 13,
+   "sentence": "With it on, `django.utils.timezone.now` is aware, in UTC (`django/utils/timezone.py:now`), and a model's datetime field given a naive value warns and takes it to be in the default zone (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "now",
+   "kind": "function",
+   "lines": [
+    200,
+    204
+   ],
+   "fingerprint": "3ede9e3fec0cc5d3"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:DateTimeField.get_prep_value",
+   "line": 13,
+   "sentence": "With it on, `django.utils.timezone.now` is aware, in UTC (`django/utils/timezone.py:now`), and a model's datetime field given a naive value warns and takes it to be in the default zone (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "DateTimeField.get_prep_value",
+   "kind": "function",
+   "lines": [
+    1702,
+    1720
+   ],
+   "fingerprint": "6a05034625aafc79"
+  },
+  {
+   "pointer": "django/utils/timezone.py:make_aware",
+   "line": 15,
+   "sentence": "`TIME_ZONE`, and a name given to `django.utils.timezone.activate`, become a `zoneinfo.ZoneInfo`, and a zone given as an object is treated as any `tzinfo`: `make_aware` attaches it with `datetime.datetime.replace` (`django/utils/timezone.py:make_aware`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "make_aware",
+   "kind": "function",
+   "lines": [
+    237,
+    245
+   ],
+   "fingerprint": "e01904cdaed1cbc3"
+  },
+  {
+   "pointer": "docs/releases/3.0.txt",
+   "line": 15,
+   "sentence": "The is_dst argument, which decided the treatment of local times that never happen or happen twice (`docs/releases/3.0.txt`), went from `make_aware`, `QuerySet.datetimes`, `Trunc` and the truncations by unit; for `make_aware`, which only attaches the zone, a `zoneinfo.ZoneInfo` takes such a time's offset from the value's `datetime.datetime.fold`.",
+   "tree": "django",
+   "path": "docs/releases/3.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    656
+   ],
+   "fingerprint": "51f2374385c5b170"
+  },
+  {
+   "pointer": "django/db/models/functions/datetime.py:TruncBase.__init__",
+   "line": 34,
+   "sentence": "`TruncBase.__init__` passes on the keywords it does not name, and `Func` keeps them as extra values for its SQL template, which a truncation's SQL does not use (`django/db/models/functions/datetime.py:TruncBase.__init__`, `django/db/models/expressions.py:Func.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/functions/datetime.py",
+   "symbol": "TruncBase.__init__",
+   "kind": "function",
+   "lines": [
+    270,
+    278
+   ],
+   "fingerprint": "eeb01f13de3ed320"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Func.__init__",
+   "line": 34,
+   "sentence": "`TruncBase.__init__` passes on the keywords it does not name, and `Func` keeps them as extra values for its SQL template, which a truncation's SQL does not use (`django/db/models/functions/datetime.py:TruncBase.__init__`, `django/db/models/expressions.py:Func.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Func.__init__",
+   "kind": "function",
+   "lines": [
+    1062,
+    1075
+   ],
+   "fingerprint": "27f2b594d772c75d"
+  },
+  {
+   "pointer": "docs/releases/4.0.txt",
+   "line": 38,
+   "sentence": "USE_L10N, the setting that switched localized formats on, was deprecated in 4.0, which made its default true, and removed in 5.0; the 4.0 notes give the consequence, that by default any date or number Django displays is localized (`docs/releases/4.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    772
+   ],
+   "fingerprint": "75c28734cc7b3883"
+  },
+  {
+   "pointer": "django/utils/formats.py:get_format",
+   "line": 38,
+   "sentence": "At this commit `get_format` takes use_l10n=None to mean true, and so do `localize` and the functions under it (`django/utils/formats.py:get_format`).",
+   "tree": "django",
+   "path": "django/utils/formats.py",
+   "symbol": "get_format",
+   "kind": "function",
+   "lines": [
+    100,
+    141
+   ],
+   "fingerprint": "49f715b54e20a187"
+  },
+  {
+   "pointer": "django/templatetags/l10n.py:LocalizeNode",
+   "line": 38,
+   "sentence": "Localization is turned off by a caller, as a template is inside `{% localize off %}`, which sets the context's flag (`django/templatetags/l10n.py:LocalizeNode`).",
+   "tree": "django",
+   "path": "django/templatetags/l10n.py",
+   "symbol": "LocalizeNode",
+   "kind": "class",
+   "lines": [
+    23,
+    36
+   ],
+   "fingerprint": "ec59709523d56e5f"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 52,
+   "sentence": "Uyghur, `\"ug\"`, joined `LANGUAGES` in 5.0, written right to left and so in `LANGUAGES_BIDI`, and Haitian Creole, `\"ht\"`, in 6.0 (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/utils/translation/trans_real.py:translation_catalog_exists",
+   "line": 52,
+   "sentence": "With `USE_I18N` on, `check_for_language` asks for a catalogue (`django/utils/translation/trans_real.py:translation_catalog_exists`), so for `\"ht\"` it is false and `get_supported_language_variant` raises `LookupError`: unless a project or an application provides a catalogue, the language is never chosen from a request's path, cookie or Accept-Language (`django/utils/translation/trans_real.py:get_language_from_request`), and in a run, activated by hand, it left Django's messages in English.",
+   "tree": "django",
+   "path": "django/utils/translation/trans_real.py",
+   "symbol": "translation_catalog_exists",
+   "kind": "function",
+   "lines": [
+    480,
+    493
+   ],
+   "at": 481,
+   "fingerprint": "e34ed1d595c1cb65"
+  },
+  {
+   "pointer": "django/utils/translation/trans_real.py:get_language_from_request",
+   "line": 52,
+   "sentence": "With `USE_I18N` on, `check_for_language` asks for a catalogue (`django/utils/translation/trans_real.py:translation_catalog_exists`), so for `\"ht\"` it is false and `get_supported_language_variant` raises `LookupError`: unless a project or an application provides a catalogue, the language is never chosen from a request's path, cookie or Accept-Language (`django/utils/translation/trans_real.py:get_language_from_request`), and in a run, activated by hand, it left Django's messages in English.",
+   "tree": "django",
+   "path": "django/utils/translation/trans_real.py",
+   "symbol": "get_language_from_request",
+   "kind": "function",
+   "lines": [
+    575,
+    619
+   ],
+   "fingerprint": "19a6327038e8bc03"
+  },
+  {
+   "pointer": "django/core/signing.py:b62_encode",
+   "line": 56,
+   "sentence": "At this commit signing writes its base 62 with its own `b62_encode` and `b62_decode` (`django/core/signing.py:b62_encode`); the 5.1 notes named `collections.abc.Iterable` in is_iterable's place, which is how the check registry tests a check's result (`django/core/checks/registry.py:CheckRegistry.run_checks`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "b62_encode",
+   "kind": "function",
+   "lines": [
+    68,
+    77
+   ],
+   "fingerprint": "a4d16e3da71ecf76"
+  },
+  {
+   "pointer": "django/core/checks/registry.py:CheckRegistry.run_checks",
+   "line": 56,
+   "sentence": "At this commit signing writes its base 62 with its own `b62_encode` and `b62_decode` (`django/core/signing.py:b62_encode`); the 5.1 notes named `collections.abc.Iterable` in is_iterable's place, which is how the check registry tests a check's result (`django/core/checks/registry.py:CheckRegistry.run_checks`).",
+   "tree": "django",
+   "path": "django/core/checks/registry.py",
+   "symbol": "CheckRegistry.run_checks",
+   "kind": "function",
+   "lines": [
+    74,
+    106
+   ],
+   "fingerprint": "698a8954c64ca523"
+  },
+  {
+   "pointer": "django/utils/text.py:TruncateHTMLParser",
+   "line": 61,
+   "sentence": "| `Truncator` | with html=True, for the `truncatechars_html` and `truncatewords_html` filters, parses with subclasses of `html.parser.HTMLParser`, more robust and faster in the notes' words, with small differences in output (`django/utils/text.py:TruncateHTMLParser`) | 5.1 | [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md) |",
+   "tree": "django",
+   "path": "django/utils/text.py",
+   "symbol": "TruncateHTMLParser",
+   "kind": "class",
+   "lines": [
+    99,
+    154
+   ],
+   "fingerprint": "0286d5eea14a4b8f"
+  },
+  {
+   "pointer": "django/utils/text.py",
+   "line": 61,
+   "sentence": "| `Truncator` | with html=True, for the `truncatechars_html` and `truncatewords_html` filters, parses with subclasses of `html.parser.HTMLParser`, more robust and faster in the notes' words, with small differences in output (`django/utils/text.py:TruncateHTMLParser`) | 5.1 | [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md) |",
+   "tree": "django",
+   "path": "django/utils/text.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    501
+   ],
+   "fingerprint": "72cb2344fb0d8ee0"
+  },
+  {
+   "pointer": "django/utils/dateparse.py:iso8601_duration_re",
+   "line": 63,
+   "sentence": "| `parse_duration` | reads ISO 8601's weeks, alone or before days and a time: in a run `\"P1W2DT3H\"` was nine days and three hours (`django/utils/dateparse.py:iso8601_duration_re`) | 6.1 | [Dates, durations and addresses: `parse_datetime`, `parse_duration` and `clean_ipv6_address`](../utils/parsing.md) |",
+   "tree": "django",
+   "path": "django/utils/dateparse.py",
+   "symbol": "iso8601_duration_re",
+   "kind": "assignment",
+   "lines": [
+    40,
+    51
+   ],
+   "fingerprint": "a4cf09cb6f93578e"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:import_string",
+   "line": 64,
+   "sentence": "| `import_string` | imports the whole path as a module first, so it returns a top-level module, and for a longer path a submodule rather than its package's attribute of the same name, unless the package itself rebinds the name after importing the submodule (`django/utils/module_loading.py:import_string`) | 6.2 | [Importing by name: `import_string` and `autodiscover_modules`](../utils/importing.md) |",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "import_string",
+   "kind": "function",
+   "lines": [
+    20,
+    49
+   ],
+   "fingerprint": "bded96086ec62ac9"
+  },
+  {
+   "pointer": "django/utils/version.py:VersionTuple",
+   "line": 65,
+   "sentence": "| `django.VERSION` | a `VersionTuple`: an index or slice past its second part, its length, unpacking, or a comparison with three parts or more warns with `RemovedInDjango2028Warning`, the class once named for 7.0 (`django/utils/version.py:VersionTuple`) | 6.2 | [Django's version: `VersionTuple` and `get_version`](../utils/version.md) |",
+   "tree": "django",
+   "path": "django/utils/version.py",
+   "symbol": "VersionTuple",
+   "kind": "class",
+   "lines": [
+    33,
+    161
+   ],
+   "fingerprint": "2a6e23d45db3dd82"
+  }
+ ]
+}

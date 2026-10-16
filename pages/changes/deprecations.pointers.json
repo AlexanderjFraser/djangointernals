@@ -1,0 +1,862 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "deprecations.md",
+ "pointers": [
+  {
+   "pointer": "docs/internals/deprecation.txt",
+   "line": 9,
+   "sentence": "The deprecation timeline, `docs/internals/deprecation.txt`, lists under each coming release what it will remove or change.",
+   "tree": "django",
+   "path": "docs/internals/deprecation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1585
+   ],
+   "fingerprint": "f80d8f829f2033b6"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:__getattr__",
+   "line": 17,
+   "sentence": "| `MiddlewareMixin` imported from `django.utils.deprecation` | `django/utils/deprecation.py:__getattr__` | the old path fails; the class is in `django.middleware` |",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "__getattr__",
+   "kind": "function",
+   "lines": [
+    24,
+    47
+   ],
+   "fingerprint": "fc2f84f4daf68ded"
+  },
+  {
+   "pointer": "django/http/response.py:JsonResponse.__init__",
+   "line": 18,
+   "sentence": "| `JsonResponse` given safe at all, true or false | `django/http/response.py:JsonResponse.__init__` | the parameter goes, with the `TypeError` for data not a dict |",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "JsonResponse.__init__",
+   "kind": "function",
+   "lines": [
+    756,
+    785
+   ],
+   "fingerprint": "1fc5ef8a0f619bc5"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.aiterator",
+   "line": 19,
+   "sentence": "| `QuerySet.aiterator` after `QuerySet.prefetch_related` with no chunk size; it takes 2,000 | `django/db/models/query.py:QuerySet.aiterator` | `ValueError`, as `QuerySet.iterator` raises already |",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.aiterator",
+   "kind": "function",
+   "lines": [
+    628,
+    680
+   ],
+   "fingerprint": "5cd4f4bf58d752d8"
+  },
+  {
+   "pointer": "django/db/models/functions/datetime.py:TimezoneMixin.deconstruct",
+   "line": 20,
+   "sentence": "| an `Extract` or `Trunc` with no `tzinfo` deconstructed, as a migration writes it, while `USE_TZ` is true | `django/db/models/functions/datetime.py:TimezoneMixin.deconstruct` | the current time zone is written into the arguments |",
+   "tree": "django",
+   "path": "django/db/models/functions/datetime.py",
+   "symbol": "TimezoneMixin.deconstruct",
+   "kind": "function",
+   "lines": [
+    41,
+    58
+   ],
+   "fingerprint": "da51c745804be646"
+  },
+  {
+   "pointer": "django/core/validators.py:EmailValidator.__init_subclass__",
+   "line": 21,
+   "sentence": "| `EmailValidator.validate_domain_part`, overridden, or called from code that Django did not call | `django/core/validators.py:EmailValidator.__init_subclass__`, `django/core/validators.py:EmailValidator.validate_domain_part` | removed; `EmailValidator.validate_domain` alone checks the domain |",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.__init_subclass__",
+   "kind": "function",
+   "lines": [
+    250,
+    258
+   ],
+   "fingerprint": "68edfde2fb28cc7c"
+  },
+  {
+   "pointer": "django/core/validators.py:EmailValidator.validate_domain_part",
+   "line": 21,
+   "sentence": "| `EmailValidator.validate_domain_part`, overridden, or called from code that Django did not call | `django/core/validators.py:EmailValidator.__init_subclass__`, `django/core/validators.py:EmailValidator.validate_domain_part` | removed; `EmailValidator.validate_domain` alone checks the domain |",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.validate_domain_part",
+   "kind": "function",
+   "lines": [
+    330,
+    349
+   ],
+   "fingerprint": "3e9e938563262c7a"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 33,
+   "sentence": "| the email settings of `DEPRECATED_EMAIL_SETTINGS`, `EMAIL_BACKEND` among them, set, or read first from outside Django | `django/conf/__init__.py:Settings.__init__`, `django/conf/__init__.py:LazySettings.__getattr__` | removed; `MailersHandler.settings` reads `MAILERS` alone |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
+   "line": 33,
+   "sentence": "| the email settings of `DEPRECATED_EMAIL_SETTINGS`, `EMAIL_BACKEND` among them, set, or read first from outside Django | `django/conf/__init__.py:Settings.__init__`, `django/conf/__init__.py:LazySettings.__getattr__` | removed; `MailersHandler.settings` reads `MAILERS` alone |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__getattr__",
+   "kind": "function",
+   "lines": [
+    119,
+    146
+   ],
+   "fingerprint": "fd7eca125afabf3c"
+  },
+  {
+   "pointer": "django/core/mail/deprecation.py:warn_about_default_mailers_if_needed",
+   "line": 34,
+   "sentence": "| no `MAILERS` and no email setting set, when the default mailer is built | `django/core/mail/deprecation.py:warn_about_default_mailers_if_needed` | no default mailer: the global settings define `MAILERS` as empty (`django/conf/global_settings.py`) |",
+   "tree": "django",
+   "path": "django/core/mail/deprecation.py",
+   "symbol": "warn_about_default_mailers_if_needed",
+   "kind": "function",
+   "lines": [
+    43,
+    56
+   ],
+   "fingerprint": "06c2e3af6a9358c6"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 34,
+   "sentence": "| no `MAILERS` and no email setting set, when the default mailer is built | `django/core/mail/deprecation.py:warn_about_default_mailers_if_needed` | no default mailer: the global settings define `MAILERS` as empty (`django/conf/global_settings.py`) |",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 35,
+   "sentence": "| `USE_BLANK_CHOICE_DASH` set | `django/conf/__init__.py:Settings.__init__` | removed, with `get_blank_choice_label`; a blank choice's label is `BLANK_CHOICE_LABEL` |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 36,
+   "sentence": "| `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` set | `django/conf/__init__.py:Settings.__init__` | removed; `_unsign_cookie` tries only the salt of `_cookie_signer_salt` |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/utils/html.py:Urlizer.handle_word",
+   "line": 37,
+   "sentence": "| `URLIZE_ASSUME_HTTPS` set | no warning; read where `urlize` warns (`django/utils/html.py:Urlizer.handle_word`) | removed; `\"https\"` the default |",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "Urlizer.handle_word",
+   "kind": "function",
+   "lines": [
+    342,
+    410
+   ],
+   "fingerprint": "5cd4f12d686e3e5b"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:deprecate_posargs",
+   "line": 45,
+   "sentence": "| fail_silently or a later argument of `send_mail`, `send_mass_mail`, `mail_admins`, `mail_managers` or `django.core.mail.get_connection`, or any after the first four of `EmailMessage` and `EmailMultiAlternatives`, given by position | `django/utils/deprecation.py:deprecate_posargs` | `TypeError`: the decorator goes, the parameters stay keyword-only |",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "deprecate_posargs",
+   "kind": "function",
+   "lines": [
+    248,
+    420
+   ],
+   "fingerprint": "8cf34f1797d8a3d9"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:get_connection",
+   "line": 46,
+   "sentence": "| `django.core.mail.get_connection`, called from outside Django | `django/core/mail/__init__.py:get_connection` | removed; a backend comes from `mailers` |",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "get_connection",
+   "kind": "function",
+   "lines": [
+    72,
+    100
+   ],
+   "at": 73,
+   "fingerprint": "6fa2ace550b2f42c"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:send_mail",
+   "line": 47,
+   "sentence": "| the connection, fail_silently, auth_user and auth_password arguments of the sending functions, `EmailMessage`'s connection and `EmailMessage.connection`, fail_silently of `EmailMessage.send` | `django/core/mail/__init__.py:send_mail`, `django/core/mail/message.py:EmailMessage.__init__`, `django/core/mail/message.py:EmailMessage.connection`, `django/core/mail/message.py:EmailMessage.send` | removed; a message goes through the mailer that using names, or the default |",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "send_mail",
+   "kind": "function",
+   "lines": [
+    103,
+    183
+   ],
+   "at": 113,
+   "fingerprint": "261f02cfbd0738a6"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage.__init__",
+   "line": 47,
+   "sentence": "| the connection, fail_silently, auth_user and auth_password arguments of the sending functions, `EmailMessage`'s connection and `EmailMessage.connection`, fail_silently of `EmailMessage.send` | `django/core/mail/__init__.py:send_mail`, `django/core/mail/message.py:EmailMessage.__init__`, `django/core/mail/message.py:EmailMessage.connection`, `django/core/mail/message.py:EmailMessage.send` | removed; a message goes through the mailer that using names, or the default |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage.__init__",
+   "kind": "function",
+   "lines": [
+    249,
+    321
+   ],
+   "at": 260,
+   "fingerprint": "157165958368be81"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage.connection",
+   "line": 47,
+   "sentence": "| the connection, fail_silently, auth_user and auth_password arguments of the sending functions, `EmailMessage`'s connection and `EmailMessage.connection`, fail_silently of `EmailMessage.send` | `django/core/mail/__init__.py:send_mail`, `django/core/mail/message.py:EmailMessage.__init__`, `django/core/mail/message.py:EmailMessage.connection`, `django/core/mail/message.py:EmailMessage.send` | removed; a message goes through the mailer that using names, or the default |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage.connection",
+   "kind": "function",
+   "lines": [
+    324,
+    328
+   ],
+   "at": 325,
+   "more": [
+    [
+     330,
+     337
+    ]
+   ],
+   "fingerprint": "66c61e5df2e51d4a"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage.send",
+   "line": 47,
+   "sentence": "| the connection, fail_silently, auth_user and auth_password arguments of the sending functions, `EmailMessage`'s connection and `EmailMessage.connection`, fail_silently of `EmailMessage.send` | `django/core/mail/__init__.py:send_mail`, `django/core/mail/message.py:EmailMessage.__init__`, `django/core/mail/message.py:EmailMessage.connection`, `django/core/mail/message.py:EmailMessage.send` | removed; a message goes through the mailer that using names, or the default |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage.send",
+   "kind": "function",
+   "lines": [
+    382,
+    420
+   ],
+   "fingerprint": "4fbfbed90aeb67c4"
+  },
+  {
+   "pointer": "django/core/mail/backends/smtp.py:EmailBackend.__init__",
+   "line": 48,
+   "sentence": "| the SMTP `EmailBackend` made outside `mailers` | `django/core/mail/backends/smtp.py:EmailBackend.__init__` | unsupported, the timeline says |",
+   "tree": "django",
+   "path": "django/core/mail/backends/smtp.py",
+   "symbol": "EmailBackend.__init__",
+   "kind": "function",
+   "lines": [
+    23,
+    99
+   ],
+   "fingerprint": "3ae1b50b548debae"
+  },
+  {
+   "pointer": "django/core/mail/backends/base.py:BaseEmailBackend.__init__",
+   "line": 49,
+   "sentence": "| `BaseEmailBackend.__init__`, outside `mailers`, given a keyword it does not take, or fail_silently; fail_silently read on a backend that sets none | `django/core/mail/backends/base.py:BaseEmailBackend.__init__`, `django/core/mail/backends/base.py:BaseEmailBackend.__getattr__` | `TypeError` for an unknown keyword, the warning says; no fail_silently |",
+   "tree": "django",
+   "path": "django/core/mail/backends/base.py",
+   "symbol": "BaseEmailBackend.__init__",
+   "kind": "function",
+   "lines": [
+    29,
+    71
+   ],
+   "fingerprint": "3dc0125a1f991704"
+  },
+  {
+   "pointer": "django/core/mail/backends/base.py:BaseEmailBackend.__getattr__",
+   "line": 49,
+   "sentence": "| `BaseEmailBackend.__init__`, outside `mailers`, given a keyword it does not take, or fail_silently; fail_silently read on a backend that sets none | `django/core/mail/backends/base.py:BaseEmailBackend.__init__`, `django/core/mail/backends/base.py:BaseEmailBackend.__getattr__` | `TypeError` for an unknown keyword, the warning says; no fail_silently |",
+   "tree": "django",
+   "path": "django/core/mail/backends/base.py",
+   "symbol": "BaseEmailBackend.__getattr__",
+   "kind": "function",
+   "lines": [
+    74,
+    84
+   ],
+   "fingerprint": "710c3c3161cce1d2"
+  },
+  {
+   "pointer": "django/utils/log.py:AdminEmailHandler.__init__",
+   "line": 50,
+   "sentence": "| `AdminEmailHandler` given email_backend | `django/utils/log.py:AdminEmailHandler.__init__` | removed; the handler's using names the mailer |",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.__init__",
+   "kind": "function",
+   "lines": [
+    89,
+    121
+   ],
+   "fingerprint": "0c1609920b7f002c"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:_send_server_message",
+   "line": 51,
+   "sentence": "| `ADMINS` or `MANAGERS` as (name, address) pairs, when mail is sent to them | `django/core/mail/__init__.py:_send_server_message` | the branch goes, and the check after it raises `ImproperlyConfigured` |",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "_send_server_message",
+   "kind": "function",
+   "lines": [
+    261,
+    322
+   ],
+   "fingerprint": "5764ff14f502272e"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage.attach",
+   "line": 52,
+   "sentence": "| an `email.mime.base.MIMEBase` attached, by `EmailMessage.attach` or the attachments argument | `django/core/mail/message.py:EmailMessage.attach` | removed; an attachment is an `email.message.MIMEPart` or a tuple |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage.attach",
+   "kind": "function",
+   "lines": [
+    422,
+    472
+   ],
+   "fingerprint": "712d68db882a62da"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:__getattr__",
+   "line": 53,
+   "sentence": "| `BadHeaderError`, `SafeMIMEText` and `SafeMIMEMultipart` taken from `django.core.mail` | `django/core/mail/__init__.py:__getattr__` | removed; `BadHeaderError` is already `ValueError` |",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "__getattr__",
+   "kind": "function",
+   "lines": [
+    390,
+    400
+   ],
+   "fingerprint": "be2d84b55cc7e5d0"
+  },
+  {
+   "pointer": "django/core/mail/message.py:forbid_multi_line_headers",
+   "line": 54,
+   "sentence": "| `forbid_multi_line_headers` or `sanitize_address` called | `django/core/mail/message.py:forbid_multi_line_headers`, `django/core/mail/message.py:sanitize_address` | removed |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "forbid_multi_line_headers",
+   "kind": "function",
+   "lines": [
+    76,
+    103
+   ],
+   "fingerprint": "54e622111c2ed4ac"
+  },
+  {
+   "pointer": "django/core/mail/message.py:sanitize_address",
+   "line": 54,
+   "sentence": "| `forbid_multi_line_headers` or `sanitize_address` called | `django/core/mail/message.py:forbid_multi_line_headers`, `django/core/mail/message.py:sanitize_address` | removed |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "sanitize_address",
+   "kind": "function",
+   "lines": [
+    107,
+    159
+   ],
+   "fingerprint": "3507801713dcd772"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.select_related",
+   "line": 62,
+   "sentence": "| `QuerySet.select_related` with no arguments, called from outside Django | `django/db/models/query.py:QuerySet.select_related` | `TypeError` |",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.select_related",
+   "kind": "function",
+   "lines": [
+    1832,
+    1862
+   ],
+   "fingerprint": "9458464d1c83ae80"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_select_related",
+   "line": 63,
+   "sentence": "| `select_related(True)`, which fails with `AttributeError` | no warning; `django/db/models/sql/query.py:Query.add_select_related` | `TypeError` |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_select_related",
+   "kind": "function",
+   "lines": [
+    2457,
+    2471
+   ],
+   "fingerprint": "bc8e3a1938ae2c9f"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.values_list",
+   "line": 64,
+   "sentence": "| `QuerySet.values_list` with `flat=True` and no field, which takes the first concrete field | `django/db/models/query.py:QuerySet.values_list` | `TypeError` |",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.values_list",
+   "kind": "function",
+   "lines": [
+    1593,
+    1651
+   ],
+   "fingerprint": "9adddb839591ff81"
+  },
+  {
+   "pointer": "django/db/models/query.py:_get_from_db",
+   "line": 65,
+   "sentence": "| a model's own `Model.from_db` that takes no fetch_mode, called without the queryset's mode | `django/db/models/query.py:_get_from_db` | `from_db` always given fetch_mode |",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "_get_from_db",
+   "kind": "function",
+   "lines": [
+    70,
+    92
+   ],
+   "fingerprint": "a753ca5550f70311"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.check_alias",
+   "line": 66,
+   "sentence": "| a percent sign in an alias | `django/db/models/sql/query.py:Query.check_alias` | `ValueError`: `FORBIDDEN_ALIAS_PATTERN` takes in the sign |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.check_alias",
+   "kind": "function",
+   "lines": [
+    1222,
+    1238
+   ],
+   "fingerprint": "ec1a78726396fa30"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:JSONExact.process_rhs",
+   "line": 67,
+   "sentence": "| `None` as an exact lookup's value on a whole `JSONField`, taken as JSON null | `django/db/models/fields/json.py:JSONExact.process_rhs` | `\"IS NULL\"`; JSON null is `JSONNull` |",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "JSONExact.process_rhs",
+   "kind": "function",
+   "lines": [
+    321,
+    343
+   ],
+   "fingerprint": "d2bfc0bc144ef11f"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.__init_subclass__",
+   "line": 68,
+   "sentence": "| a field class that defines a method get_placeholder and no get_placeholder_sql, given one that calls it | `django/db/models/fields/__init__.py:Field.__init_subclass__` | the shim goes |",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.__init_subclass__",
+   "kind": "function",
+   "lines": [
+    194,
+    218
+   ],
+   "fingerprint": "2ac579297d54be55"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias",
+   "line": 69,
+   "sentence": "| `SQLCompiler.quote_name_unless_alias` | `django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias` | removed; `SQLCompiler.quote_name` |",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.quote_name_unless_alias",
+   "kind": "function",
+   "lines": [
+    582,
+    591
+   ],
+   "fingerprint": "ccafb3f0406ea771"
+  },
+  {
+   "pointer": "django/db/models/utils.py:get_blank_choice_label",
+   "line": 70,
+   "sentence": "| `BLANK_CHOICE_DASH` | no warning; read when `USE_BLANK_CHOICE_DASH` is true (`django/db/models/utils.py:get_blank_choice_label`) | removed |",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": "get_blank_choice_label",
+   "kind": "function",
+   "lines": [
+    74,
+    81
+   ],
+   "fingerprint": "bd1ea9e85089e8ac"
+  },
+  {
+   "pointer": "django/db/transaction.py:savepoint",
+   "line": 71,
+   "sentence": "| `django.db.transaction.savepoint` | `django/db/transaction.py:savepoint` | removed; `savepoint_create` |",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "savepoint",
+   "kind": "function",
+   "lines": [
+    52,
+    58
+   ],
+   "fingerprint": "d7a03525aa08212b"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db",
+   "line": 72,
+   "sentence": "| `BaseDatabaseCreation.create_test_db` given serialize; the message names a serialize_test_db that the tree does not define | `django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db` | the parameter goes |",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.create_test_db",
+   "kind": "function",
+   "lines": [
+    45,
+    129
+   ],
+   "fingerprint": "dc7cb1465332c24b"
+  },
+  {
+   "pointer": "django/utils/html.py:Urlizer.handle_word",
+   "line": 80,
+   "sentence": "| `urlize` and `urlizetrunc` linking a web address that has no scheme, while `URLIZE_ASSUME_HTTPS` is false | `django/utils/html.py:Urlizer.handle_word` | `\"https://\"` assumed |",
+   "tree": "django",
+   "path": "django/utils/html.py",
+   "symbol": "Urlizer.handle_word",
+   "kind": "function",
+   "lines": [
+    342,
+    410
+   ],
+   "fingerprint": "5cd4f12d686e3e5b"
+  },
+  {
+   "pointer": "django/template/base.py:Parser.parse",
+   "line": 81,
+   "sentence": "| two dots in a row in a variable tag, `{{ port..name }}` | `django/template/base.py:Parser.parse` | `TemplateSyntaxError`, by the comment at the warning |",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Parser.parse",
+   "kind": "function",
+   "lines": [
+    530,
+    609
+   ],
+   "fingerprint": "1209ee26f1f2fa8c"
+  },
+  {
+   "pointer": "django/utils/crypto.py:salted_hmac",
+   "line": 82,
+   "sentence": "| `salted_hmac` or `base64_hmac` with no algorithm, which takes `\"sha1\"` | `django/utils/crypto.py:salted_hmac`, `django/core/signing.py:base64_hmac` | `\"sha256\"` the default |",
+   "tree": "django",
+   "path": "django/utils/crypto.py",
+   "symbol": "salted_hmac",
+   "kind": "function",
+   "lines": [
+    23,
+    61
+   ],
+   "fingerprint": "2a2e7d76a37fdbcc"
+  },
+  {
+   "pointer": "django/core/signing.py:base64_hmac",
+   "line": 82,
+   "sentence": "| `salted_hmac` or `base64_hmac` with no algorithm, which takes `\"sha1\"` | `django/utils/crypto.py:salted_hmac`, `django/core/signing.py:base64_hmac` | `\"sha256\"` the default |",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "base64_hmac",
+   "kind": "function",
+   "lines": [
+    103,
+    115
+   ],
+   "fingerprint": "b038e03c6a14c165"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator.__init__",
+   "line": 83,
+   "sentence": "| a `Paginator` or `AsyncPaginator` whose orphans are not fewer than its page size | `django/core/paginator.py:BasePaginator.__init__` | `ValueError` |",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator.__init__",
+   "kind": "function",
+   "lines": [
+    40,
+    70
+   ],
+   "fingerprint": "5bcda146160f6932"
+  },
+  {
+   "pointer": "django/utils/version.py:VersionTuple._warn",
+   "line": 84,
+   "sentence": "| `django.VERSION` indexed from its third component, iterated, measured, or compared with three or more components | `django/utils/version.py:VersionTuple._warn` | four components, (year, patch, status, iteration) |",
+   "tree": "django",
+   "path": "django/utils/version.py",
+   "symbol": "VersionTuple._warn",
+   "kind": "function",
+   "lines": [
+    82,
+    102
+   ],
+   "fingerprint": "b42e2c558c3de1e2"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.__init_subclass__",
+   "line": 92,
+   "sentence": "| `ModelAdmin.list_select_related` set to `True` in a subclass | `django/contrib/admin/options.py:ModelAdmin.__init_subclass__` | `ValueError` |",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.__init_subclass__",
+   "kind": "function",
+   "lines": [
+    727,
+    737
+   ],
+   "fingerprint": "a9d845d1dc1aeecb"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.get_changelist_instance",
+   "line": 93,
+   "sentence": "| `ModelAdmin.get_list_select_related` returning `True` | `django/contrib/admin/options.py:ModelAdmin.get_changelist_instance` | `ValueError` |",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.get_changelist_instance",
+   "kind": "function",
+   "lines": [
+    911,
+    956
+   ],
+   "fingerprint": "f1c7f69d58408f64"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location",
+   "line": 94,
+   "sentence": "| `ModelAdmin.get_actions` overridden without action_location, which gives the change form no actions | `django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location` | called with action_location, say the comments at its callers |",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._get_actions_with_action_location",
+   "kind": "function",
+   "lines": [
+    1133,
+    1150
+   ],
+   "fingerprint": "a494b5328df3ed26"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._get_action_choices_with_action_location",
+   "line": 95,
+   "sentence": "| `ModelAdmin.get_action_choices` overridden without action_location | `django/contrib/admin/options.py:ModelAdmin._get_action_choices_with_action_location` | the same |",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._get_action_choices_with_action_location",
+   "kind": "function",
+   "lines": [
+    1166,
+    1187
+   ],
+   "fingerprint": "b1dec8c04a58700e"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:Action.__iter__",
+   "line": 96,
+   "sentence": "| an `Action` unpacked or indexed like the tuple it replaced | `django/contrib/admin/options.py:Action.__iter__`, `django/contrib/admin/options.py:Action.__getitem__` | removed |",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "Action.__iter__",
+   "kind": "function",
+   "lines": [
+    118,
+    124
+   ],
+   "fingerprint": "a55bec69df8aab04"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:Action.__getitem__",
+   "line": 96,
+   "sentence": "| an `Action` unpacked or indexed like the tuple it replaced | `django/contrib/admin/options.py:Action.__iter__`, `django/contrib/admin/options.py:Action.__getitem__` | removed |",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "Action.__getitem__",
+   "kind": "function",
+   "lines": [
+    127,
+    134
+   ],
+   "fingerprint": "ae785a220e544f31"
+  },
+  {
+   "pointer": "django/contrib/postgres/aggregates/general.py:StringAgg.__init__",
+   "line": 104,
+   "sentence": "| `StringAgg` of `django.contrib.postgres.aggregates`, and its delimiter given as a string | `django/contrib/postgres/aggregates/general.py:StringAgg.__init__` | removed; in `django.db.models.StringAgg` a string delimiter is a field reference |",
+   "tree": "django",
+   "path": "django/contrib/postgres/aggregates/general.py",
+   "symbol": "StringAgg.__init__",
+   "kind": "function",
+   "lines": [
+    88,
+    107
+   ],
+   "fingerprint": "4883e4eeaf476522"
+  },
+  {
+   "pointer": "django/contrib/postgres/aggregates/general.py:BitAnd.__init__",
+   "line": 105,
+   "sentence": "| `BitAnd`, `BitOr` and `BitXor` of the same module | `django/contrib/postgres/aggregates/general.py:BitAnd.__init__`, `django/contrib/postgres/aggregates/general.py:BitOr.__init__`, `django/contrib/postgres/aggregates/general.py:BitXor.__init__` | removed; those of `django.db.models` |",
+   "tree": "django",
+   "path": "django/contrib/postgres/aggregates/general.py",
+   "symbol": "BitAnd.__init__",
+   "kind": "function",
+   "lines": [
+    36,
+    43
+   ],
+   "fingerprint": "86d1cf443fe7ed44"
+  },
+  {
+   "pointer": "django/contrib/postgres/aggregates/general.py:BitOr.__init__",
+   "line": 105,
+   "sentence": "| `BitAnd`, `BitOr` and `BitXor` of the same module | `django/contrib/postgres/aggregates/general.py:BitAnd.__init__`, `django/contrib/postgres/aggregates/general.py:BitOr.__init__`, `django/contrib/postgres/aggregates/general.py:BitXor.__init__` | removed; those of `django.db.models` |",
+   "tree": "django",
+   "path": "django/contrib/postgres/aggregates/general.py",
+   "symbol": "BitOr.__init__",
+   "kind": "function",
+   "lines": [
+    47,
+    54
+   ],
+   "fingerprint": "3c99a986ccb880c9"
+  },
+  {
+   "pointer": "django/contrib/postgres/aggregates/general.py:BitXor.__init__",
+   "line": 105,
+   "sentence": "| `BitAnd`, `BitOr` and `BitXor` of the same module | `django/contrib/postgres/aggregates/general.py:BitAnd.__init__`, `django/contrib/postgres/aggregates/general.py:BitOr.__init__`, `django/contrib/postgres/aggregates/general.py:BitXor.__init__` | removed; those of `django.db.models` |",
+   "tree": "django",
+   "path": "django/contrib/postgres/aggregates/general.py",
+   "symbol": "BitXor.__init__",
+   "kind": "function",
+   "lines": [
+    58,
+    65
+   ],
+   "fingerprint": "edc71410c6647ae2"
+  },
+  {
+   "pointer": "django/contrib/postgres/aggregates/mixins.py:OrderableAggMixin.__init_subclass__",
+   "line": 106,
+   "sentence": "| `OrderableAggMixin` subclassed | `django/contrib/postgres/aggregates/mixins.py:OrderableAggMixin.__init_subclass__` | removed; `Aggregate.allow_order_by` |",
+   "tree": "django",
+   "path": "django/contrib/postgres/aggregates/mixins.py",
+   "symbol": "OrderableAggMixin.__init_subclass__",
+   "kind": "function",
+   "lines": [
+    11,
+    18
+   ],
+   "fingerprint": "5f7e195e1b04ae94"
+  },
+  {
+   "pointer": "django/utils/warnings.py:django_file_prefixes",
+   "line": 110,
+   "sentence": "Each site chooses the line: `skip_file_prefixes=django_file_prefixes()` names the first frame outside Django's directory (`django/utils/warnings.py:django_file_prefixes`); `warn_about_external_use` names the code that used the feature, and is silent when that code is in the `django` package (`django/utils/deprecation.py:warn_about_external_use`); `warn_about_implementation` names the line where an override is defined; a stack level names the frame that many levels up, and none the warning's own line.",
+   "tree": "django",
+   "path": "django/utils/warnings.py",
+   "symbol": "django_file_prefixes",
+   "kind": "function",
+   "lines": [
+    7,
+    12
+   ],
+   "at": 8,
+   "fingerprint": "ab888baa7ce22cc9"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:warn_about_external_use",
+   "line": 110,
+   "sentence": "Each site chooses the line: `skip_file_prefixes=django_file_prefixes()` names the first frame outside Django's directory (`django/utils/warnings.py:django_file_prefixes`); `warn_about_external_use` names the code that used the feature, and is silent when that code is in the `django` package (`django/utils/deprecation.py:warn_about_external_use`); `warn_about_implementation` names the line where an override is defined; a stack level names the frame that many levels up, and none the warning's own line.",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "warn_about_external_use",
+   "kind": "function",
+   "lines": [
+    50,
+    126
+   ],
+   "fingerprint": "6b8d6bf8462df763"
+  },
+  {
+   "pointer": "django/utils/autoreload.py:get_child_arguments",
+   "line": 127,
+   "sentence": "The development server keeps the option: its autoreloader passes its `-W` options to the serving process (`django/utils/autoreload.py:get_child_arguments`).",
+   "tree": "django",
+   "path": "django/utils/autoreload.py",
+   "symbol": "get_child_arguments",
+   "kind": "function",
+   "lines": [
+    224,
+    265
+   ],
+   "fingerprint": "3a28e14679a77677"
+  }
+ ]
+}

@@ -1,0 +1,485 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "backends-and-migrations.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pool",
+   "line": 11,
+   "sentence": "With `\"pool\"` in an alias's `\"OPTIONS\"`, `True` or the pool's arguments, the backend's `pool` property makes one pool for the process, and each connection is taken from it as it opens (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/base.py",
+   "symbol": "DatabaseWrapper.pool",
+   "kind": "function",
+   "lines": [
+    193,
+    236
+   ],
+   "at": 194,
+   "fingerprint": "dcc252b28ea1a815"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.pool",
+   "line": 11,
+   "sentence": "With `\"pool\"` in an alias's `\"OPTIONS\"`, `True` or the pool's arguments, the backend's `pool` property makes one pool for the process, and each connection is taken from it as it opens (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": "DatabaseWrapper.pool",
+   "kind": "function",
+   "lines": [
+    258,
+    283
+   ],
+   "at": 259,
+   "fingerprint": "ce0c7c3290369faf"
+  },
+  {
+   "pointer": "docs/releases/5.1.txt",
+   "line": 11,
+   "sentence": "The release notes' reason: opening a connection can take relatively long, and keeping connections open can reduce latency (`docs/releases/5.1.txt`; [Opening and closing a connection](../backends/lifecycle.md#connection-pools-postgresql-and-oracle)).",
+   "tree": "django",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "3a1b214427111cf2"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params",
+   "line": 15,
+   "sentence": "Since 5.1 SQLite's backend takes two keys out of `\"OPTIONS\"` before the rest reach `sqlite3.connect` (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    154,
+    198
+   ],
+   "fingerprint": "115b31b8e0cc0c53"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection",
+   "line": 15,
+   "sentence": "`\"init_command\"` is split at each semicolon, each command run on every new connection after Django's two pragmas (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_new_connection`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    203,
+    215
+   ],
+   "at": 204,
+   "fingerprint": "1e3f6e43a55de133"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit",
+   "line": 15,
+   "sentence": "`\"transaction_mode\"`, `\"DEFERRED\"`, `\"EXCLUSIVE\"` or `\"IMMEDIATE\"`, capitals or not, is written after the `\"BEGIN\"` that opens an outermost atomic block, and any other string raises `ImproperlyConfigured` (`django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit`; [SQLite](../backends/sqlite.md#opening-a-connection-get_connection_params-and-get_new_connection)).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._start_transaction_under_autocommit",
+   "kind": "function",
+   "lines": [
+    321,
+    331
+   ],
+   "fingerprint": "9be10b45e65c4515"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.get_connection_params",
+   "line": 17,
+   "sentence": "Since 5.2 MySQL's backend asks for the character set `\"utf8mb4\"`, where it asked for `\"utf8\"`, which the release notes call an alias of the deprecated `\"utf8mb3\"`; a `\"charset\"` in `\"OPTIONS\"` still wins (`django/db/backends/mysql/base.py:DatabaseWrapper.get_connection_params`; [MySQL and MariaDB](../backends/mysql.md#the-driver-mysqldb-and-opening-a-connection)).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper.get_connection_params",
+   "kind": "function",
+   "lines": [
+    214,
+    251
+   ],
+   "fingerprint": "6c7a87c9719f8528"
+  },
+  {
+   "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.data_types",
+   "line": 21,
+   "sentence": "Since 5.0 a `UUIDField` on MariaDB is a column of the database's type `\"uuid\"`, where it was `\"char(32)\"`, as it still is on MySQL (`django/db/backends/mysql/base.py:DatabaseWrapper.data_types`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/base.py",
+   "symbol": "DatabaseWrapper.data_types",
+   "kind": "function",
+   "lines": [
+    140,
+    145
+   ],
+   "at": 141,
+   "fingerprint": "434d813780feb5de"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.has_native_uuid_field",
+   "line": 21,
+   "sentence": "The release notes say MariaDB 10.7 and later; at this commit the flag is whether the server is MariaDB at all (`django/db/backends/mysql/features.py:DatabaseFeatures.has_native_uuid_field`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.has_native_uuid_field",
+   "kind": "function",
+   "lines": [
+    220,
+    222
+   ],
+   "at": 221,
+   "fingerprint": "0d2a5e3d3505259f"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:UUIDField.get_db_prep_value",
+   "line": 21,
+   "sentence": "The field writes a `uuid.UUID` for a native column and its hex otherwise (`django/db/models/fields/__init__.py:UUIDField.get_db_prep_value`), so a `\"char(32)\"` column an earlier release made on MariaDB no longer matches ([Column types: from a field to a column](../backends/column-types.md#mysqls-two-properties)).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "UUIDField.get_db_prep_value",
+   "kind": "function",
+   "lines": [
+    2836,
+    2844
+   ],
+   "fingerprint": "3ec9dd795a8b4336"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range",
+   "line": 23,
+   "sentence": "Since 5.0 SQLite's operations object gives every integer field a 64-bit range, from 0 for the positive ones, its comment saying that sqlite3 supports integers up to 64 bits (`django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/operations.py",
+   "symbol": "DatabaseOperations.integer_field_range",
+   "kind": "function",
+   "lines": [
+    365,
+    374
+   ],
+   "fingerprint": "1b22888662359d54"
+  },
+  {
+   "pointer": "django/db/backends/oracle/base.py",
+   "line": 27,
+   "sentence": "At this commit `django/db/backends/oracle/base.py` imports `oracledb` alone, and raises `ImproperlyConfigured` where it cannot ([Oracle](../backends/oracle.md#the-driver-and-the-processs-environment)).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    669
+   ],
+   "fingerprint": "fea2aed7e2fa2103"
+  },
+  {
+   "pointer": "django/db/transaction.py:savepoint",
+   "line": 31,
+   "sentence": "Since 6.1 `django.db.transaction.savepoint` warns with `RemovedInDjango2028Warning` and calls `savepoint_create` (`django/db/transaction.py:savepoint`; [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#savepoints); [What still warns: the deprecations and the releases that end them](deprecations.md)).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "savepoint",
+   "kind": "function",
+   "lines": [
+    52,
+    58
+   ],
+   "fingerprint": "d7a03525aa08212b"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field._check_db_default",
+   "line": 39,
+   "sentence": "| `BaseDatabaseFeatures.supports_expression_defaults`, `BaseDatabaseFeatures.supports_default_keyword_in_insert`, `BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert` | new, true by default; where false, the check `\"fields.E011\"` refuses an expression as a `db_default`, and an insert writes the default's expression where it would write `\"DEFAULT\"` (SQLite lacks the second, Oracle the third) (5.0) | `django/db/models/fields/__init__.py:Field._check_db_default`, `django/db/models/expressions.py:DatabaseDefault.as_sql`, `django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql` |",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field._check_db_default",
+   "kind": "function",
+   "lines": [
+    426,
+    460
+   ],
+   "fingerprint": "7466ad50c747a3de"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:DatabaseDefault.as_sql",
+   "line": 39,
+   "sentence": "| `BaseDatabaseFeatures.supports_expression_defaults`, `BaseDatabaseFeatures.supports_default_keyword_in_insert`, `BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert` | new, true by default; where false, the check `\"fields.E011\"` refuses an expression as a `db_default`, and an insert writes the default's expression where it would write `\"DEFAULT\"` (SQLite lacks the second, Oracle the third) (5.0) | `django/db/models/fields/__init__.py:Field._check_db_default`, `django/db/models/expressions.py:DatabaseDefault.as_sql`, `django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql` |",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "DatabaseDefault.as_sql",
+   "kind": "function",
+   "lines": [
+    1345,
+    1348
+   ],
+   "fingerprint": "6a0edbd50ab30821"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql",
+   "line": 39,
+   "sentence": "| `BaseDatabaseFeatures.supports_expression_defaults`, `BaseDatabaseFeatures.supports_default_keyword_in_insert`, `BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert` | new, true by default; where false, the check `\"fields.E011\"` refuses an expression as a `db_default`, and an insert writes the default's expression where it would write `\"DEFAULT\"` (SQLite lacks the second, Oracle the third) (5.0) | `django/db/models/fields/__init__.py:Field._check_db_default`, `django/db/models/expressions.py:DatabaseDefault.as_sql`, `django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql` |",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    1825,
+    1947
+   ],
+   "fingerprint": "915d3dd6e1884b1b"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:BuiltinLookup.process_lhs",
+   "line": 40,
+   "sentence": "| `BaseDatabaseOperations.lookup_cast` | replaces field_cast_sql, deprecated in 5.0 and removed in 6.0, in `BuiltinLookup.process_lhs` (5.0, 6.0) | `django/db/models/lookups.py:BuiltinLookup.process_lhs` |",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "BuiltinLookup.process_lhs",
+   "kind": "function",
+   "lines": [
+    235,
+    241
+   ],
+   "fingerprint": "d5b1f1b2f2d5e717"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_decimalfield_value",
+   "line": 41,
+   "sentence": "| `BaseDatabaseOperations.adapt_decimalfield_value` | a no-op: returns the value as given (5.2) | `django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_decimalfield_value` |",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.adapt_decimalfield_value",
+   "kind": "function",
+   "lines": [
+    614,
+    619
+   ],
+   "fingerprint": "5c47483ee2fbec07"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_durationfield_value",
+   "line": 45,
+   "sentence": "| `BaseDatabaseOperations.adapt_durationfield_value` | new: a duration for the driver, an integer of microseconds, or the value itself on PostgreSQL and Oracle (6.1) | `django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_durationfield_value` |",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.adapt_durationfield_value",
+   "kind": "function",
+   "lines": [
+    593,
+    601
+   ],
+   "fingerprint": "0f44d5062f6405d6"
+  },
+  {
+   "pointer": "django/core/management/commands/inspectdb.py:Command.handle",
+   "line": 47,
+   "sentence": "| `BaseDatabaseFeatures.supports_inspectdb` | new, true by default; where false, inspectdb raises `CommandError` (6.1) | `django/core/management/commands/inspectdb.py:Command.handle` |",
+   "tree": "django",
+   "path": "django/core/management/commands/inspectdb.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    46,
+    54
+   ],
+   "fingerprint": "dfdb3ed7c00947e2"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.binary_placeholder_sql",
+   "line": 48,
+   "sentence": "| `BaseDatabaseOperations.binary_placeholder_sql`, `BaseSpatialOperations.get_geom_placeholder_sql` | return the SQL and a tuple of parameters; the first is given the compiler, the second renamed from get_geom_placeholder (6.1) | `django/db/backends/base/operations.py:BaseDatabaseOperations.binary_placeholder_sql`, `django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_geom_placeholder_sql` |",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.binary_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    755,
+    762
+   ],
+   "fingerprint": "cc224e928e8e3d03"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_geom_placeholder_sql",
+   "line": 48,
+   "sentence": "| `BaseDatabaseOperations.binary_placeholder_sql`, `BaseSpatialOperations.get_geom_placeholder_sql` | return the SQL and a tuple of parameters; the first is given the compiler, the second renamed from get_geom_placeholder (6.1) | `django/db/backends/base/operations.py:BaseDatabaseOperations.binary_placeholder_sql`, `django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_geom_placeholder_sql` |",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": "BaseSpatialOperations.get_geom_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    122,
+    145
+   ],
+   "fingerprint": "eb56772f159d9cf1"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:BitAggregate.as_sql",
+   "line": 49,
+   "sentence": "| `BaseDatabaseFeatures.supports_bit_aggregations` | new, true by default; where false, `BitAggregate.as_sql` raises `NotSupportedError`; on Oracle, true from 21 (6.1) | `django/db/models/aggregates.py:BitAggregate.as_sql` |",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "BitAggregate.as_sql",
+   "kind": "function",
+   "lines": [
+    256,
+    269
+   ],
+   "fingerprint": "dd3fd46aed94b566"
+  },
+  {
+   "pointer": "django/db/migrations/serializer.py:FUNCTION_TYPES",
+   "line": 55,
+   "sentence": "Since 5.0 a function under `functools.cache` or `functools.lru_cache` is written by name: on CPython it is an instance of `functools._lru_cache_wrapper`, which the serializer adds to `FUNCTION_TYPES` (`django/db/migrations/serializer.py:FUNCTION_TYPES`).",
+   "tree": "django",
+   "path": "django/db/migrations/serializer.py",
+   "symbol": "FUNCTION_TYPES",
+   "kind": "assignment",
+   "lines": [
+    24,
+    24
+   ],
+   "more": [
+    [
+     31,
+     31
+    ]
+   ],
+   "fingerprint": "3ce89d0a08829bab"
+  },
+  {
+   "pointer": "django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed",
+   "line": 55,
+   "sentence": "Since 6.0 `ZoneInfoSerializer` writes a `zoneinfo.ZoneInfo`, and keyword arguments of a deconstructed call whose names are not identifiers go into a dictionary after `**` (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed`).",
+   "tree": "django",
+   "path": "django/db/migrations/serializer.py",
+   "symbol": "DeconstructibleSerializer.serialize_deconstructed",
+   "kind": "function",
+   "lines": [
+    105,
+    127
+   ],
+   "at": 106,
+   "fingerprint": "aad915e3bf69edb8"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.formatted_description",
+   "line": 67,
+   "sentence": "Since 5.1 an operation has a **category**, `Operation.category`, a member of `OperationCategory`, whose values are signs: `\"+\"` an addition, `\"-\"` a removal, `\"~\"` an alteration, `\"p\"` Python, `\"s\"` SQL, `\"?\"` a mix. makemigrations prints `Operation.formatted_description`, sign and description, for each operation it writes or merges; a category of `None`, the base class's, shows `\"?\"` (`django/db/migrations/operations/base.py:Operation.formatted_description`; [Operations: the base class and its two halves](../migrations/operations.md#category-describe-and-the-name-fragment)).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.formatted_description",
+   "kind": "function",
+   "lines": [
+    112,
+    117
+   ],
+   "fingerprint": "3cba99e37e85f7c6"
+  },
+  {
+   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._constraint_should_be_dropped_and_recreated",
+   "line": 71,
+   "sentence": "Since 5.2 a constraint changed only in the attributes `BaseConstraint.non_db_attrs` lists, `violation_error_message` and `violation_error_code`, becomes an `AlterConstraint`, which changes the project state and sends nothing; a constraint changed otherwise is still removed and added, in the database too, except where a field it names was renamed and kept its db_column (`django/db/migrations/autodetector.py:MigrationAutodetector._constraint_should_be_dropped_and_recreated`; [The autodetector: fields, indexes and constraints](../migrations/autodetector-fields.md#constraints-create_altered_constraints)).",
+   "tree": "django",
+   "path": "django/db/migrations/autodetector.py",
+   "symbol": "MigrationAutodetector._constraint_should_be_dropped_and_recreated",
+   "kind": "function",
+   "lines": [
+    1500,
+    1534
+   ],
+   "fingerprint": "c05a0e2f3b3d2439"
+  },
+  {
+   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes",
+   "line": 73,
+   "sentence": "`MigrationAutodetector._detect_changes` sorts an unmanaged model with the others (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`); its operations change the state and no table, since `Operation.allow_migrate_model` refuses a model whose options say it cannot be migrated (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`), and the questioner is asked no default for a field it gains that cannot be null ([The autodetector: comparing two project states](../migrations/autodetector.md#detect_changes-the-models-sorted-then-the-generators-in-order)).",
+   "tree": "django",
+   "path": "django/db/migrations/autodetector.py",
+   "symbol": "MigrationAutodetector._detect_changes",
+   "kind": "function",
+   "lines": [
+    126,
+    224
+   ],
+   "fingerprint": "42477daab850e2e8"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.allow_migrate_model",
+   "line": 73,
+   "sentence": "`MigrationAutodetector._detect_changes` sorts an unmanaged model with the others (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`); its operations change the state and no table, since `Operation.allow_migrate_model` refuses a model whose options say it cannot be migrated (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`), and the questioner is asked no default for a field it gains that cannot be null ([The autodetector: comparing two project states](../migrations/autodetector.md#detect_changes-the-models-sorted-then-the-generators-in-order)).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.allow_migrate_model",
+   "kind": "function",
+   "lines": [
+    148,
+    158
+   ],
+   "fingerprint": "6d23b8aa4e2c47a2"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.autodetector",
+   "line": 75,
+   "sentence": "Since 5.2 makemigrations and migrate make their autodetector from a class attribute, by default `MigrationAutodetector` (`django/core/management/commands/makemigrations.py:Command.autodetector`, `django/core/management/commands/migrate.py:Command.autodetector`).",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.autodetector",
+   "kind": "assignment",
+   "lines": [
+    27,
+    27
+   ],
+   "fingerprint": "40bb7c5a5ac7897f"
+  },
+  {
+   "pointer": "django/core/management/commands/migrate.py:Command.autodetector",
+   "line": 75,
+   "sentence": "Since 5.2 makemigrations and migrate make their autodetector from a class attribute, by default `MigrationAutodetector` (`django/core/management/commands/makemigrations.py:Command.autodetector`, `django/core/management/commands/migrate.py:Command.autodetector`).",
+   "tree": "django",
+   "path": "django/core/management/commands/migrate.py",
+   "symbol": "Command.autodetector",
+   "kind": "assignment",
+   "lines": [
+    19,
+    19
+   ],
+   "fingerprint": "40bb7c5a5ac7897f"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys",
+   "line": 79,
+   "sentence": "The loader follows the chain down to migrations that replace nothing, whose rows decide whether it counts as applied, and refuses a cycle with `CommandError` (`django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys`, `django/db/migrations/loader.py:MigrationLoader.replace_migration`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader._resolve_replaced_migration_keys",
+   "kind": "function",
+   "lines": [
+    224,
+    233
+   ],
+   "fingerprint": "f03c09968c1fc163"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py:MigrationLoader.replace_migration",
+   "line": 79,
+   "sentence": "The loader follows the chain down to migrations that replace nothing, whose rows decide whether it counts as applied, and refuses a cycle with `CommandError` (`django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys`, `django/db/migrations/loader.py:MigrationLoader.replace_migration`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": "MigrationLoader.replace_migration",
+   "kind": "function",
+   "lines": [
+    235,
+    272
+   ],
+   "fingerprint": "af5a61256ac2515f"
+  }
+ ]
+}
