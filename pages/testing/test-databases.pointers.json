@@ -1,0 +1,284 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "test-databases.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 9,
+   "sentence": "Django's documentation gives the reason a `SimpleTestCase` names no database by default: its tests are not run in a transaction, so a write would affect later tests (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase",
+   "line": 13,
+   "sentence": "`SimpleTestCase.databases` is an empty set and `TransactionTestCase.databases` is `{\"default\"}`, which `TestCase` inherits; a class may name other aliases, or give `\"__all__\"` for every alias (`django/test/testcases.py:TransactionTestCase`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase",
+   "kind": "class",
+   "lines": [
+    1106,
+    1312
+   ],
+   "fingerprint": "3308a424456fe856"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._databases_names",
+   "line": 13,
+   "sentence": "The same aliases, mirrors apart, are where a `TransactionTestCase` loads fixtures and flushes, and all of them where a `TestCase` opens its atomic blocks (`django/test/testcases.py:TransactionTestCase._databases_names`; [Emptying the tables after each test: `TransactionTestCase`](transaction-test-case.md), [A transaction around each test: `TestCase`](test-case.md)).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._databases_names",
+   "kind": "function",
+   "lines": [
+    1184,
+    1195
+   ],
+   "at": 1185,
+   "fingerprint": "b1b1155d54517faa"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase._validate_databases",
+   "line": 15,
+   "sentence": "The frozenset it returns replaces the class's attribute (`django/test/testcases.py:SimpleTestCase._validate_databases`, `django/test/testcases.py:SimpleTestCase._add_databases_failures`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase._validate_databases",
+   "kind": "function",
+   "lines": [
+    223,
+    242
+   ],
+   "at": 224,
+   "fingerprint": "afc99d478b1ae585"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase._add_databases_failures",
+   "line": 15,
+   "sentence": "The frozenset it returns replaces the class's attribute (`django/test/testcases.py:SimpleTestCase._validate_databases`, `django/test/testcases.py:SimpleTestCase._add_databases_failures`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase._add_databases_failures",
+   "kind": "function",
+   "lines": [
+    244,
+    268
+   ],
+   "at": 245,
+   "fingerprint": "53e797f8fc8a6704"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner._get_databases",
+   "line": 19,
+   "sentence": "The result maps each alias to whether any test that uses it sets `TransactionTestCase.serialized_rollback` (`django/test/runner.py:DiscoverRunner._get_databases`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner._get_databases",
+   "kind": "function",
+   "lines": [
+    1139,
+    1151
+   ],
+   "fingerprint": "16b3a07e456661bc"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.get_databases",
+   "line": 19,
+   "sentence": "`DiscoverRunner.get_databases` logs the aliases no test uses at the debug level, which a runner made without a logger, as the test command makes it, prints from verbosity 2 (`django/test/runner.py:DiscoverRunner.get_databases`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.get_databases",
+   "kind": "function",
+   "lines": [
+    1153,
+    1162
+   ],
+   "fingerprint": "3346409590846cec"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.run_tests",
+   "line": 21,
+   "sentence": "`DiscoverRunner.run_tests` passes the aliases, and those to serialize, to `DiscoverRunner.setup_databases`, and the aliases to `DiscoverRunner.run_checks`, so that the database checks run for these alone, and keeps both sets on the suite for a `ParallelTestSuite`'s workers (`django/test/runner.py:DiscoverRunner.run_tests`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.run_tests",
+   "kind": "function",
+   "lines": [
+    1164,
+    1203
+   ],
+   "fingerprint": "1b41de7210dc1707"
+  },
+  {
+   "pointer": "django/test/utils.py:get_unique_databases_and_mirrors",
+   "line": 72,
+   "sentence": "`dependency_ordered` takes, round after round, the groups whose dependencies are met, and raises `ImproperlyConfigured` where an alias depends on one of its own group or a round takes none (`django/test/utils.py:get_unique_databases_and_mirrors`, `django/test/utils.py:dependency_ordered`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "get_unique_databases_and_mirrors",
+   "kind": "function",
+   "lines": [
+    327,
+    380
+   ],
+   "fingerprint": "554cb74b18ffd755"
+  },
+  {
+   "pointer": "django/test/utils.py:dependency_ordered",
+   "line": 72,
+   "sentence": "`dependency_ordered` takes, round after round, the groups whose dependencies are met, and raises `ImproperlyConfigured` where an alias depends on one of its own group or a round takes none (`django/test/utils.py:get_unique_databases_and_mirrors`, `django/test/utils.py:dependency_ordered`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "dependency_ordered",
+   "kind": "function",
+   "lines": [
+    285,
+    324
+   ],
+   "fingerprint": "b8874c12c2c5121a"
+  },
+  {
+   "pointer": "django/test/utils.py:setup_databases",
+   "line": 76,
+   "sentence": "For each group the creation of the first alias makes the test database, and its clones for `--parallel`; the group's other aliases are pointed at it, and each mirror at the database of the alias it names; once all are made, those to serialize are serialized (`django/test/utils.py:setup_databases`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_databases",
+   "kind": "function",
+   "lines": [
+    189,
+    261
+   ],
+   "fingerprint": "a994f743d9f2fba8"
+  },
+  {
+   "pointer": "django/test/utils.py:teardown_databases",
+   "line": 78,
+   "sentence": "In its `finally`, `run_tests` gives that list to `teardown_databases`, which destroys each made database's clones and then the database, or leaves them with `--keepdb`, and puts back the `\"NAME\"` of the alias that made it (`django/test/utils.py:teardown_databases`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "teardown_databases",
+   "kind": "function",
+   "lines": [
+    383,
+    394
+   ],
+   "fingerprint": "ff4778b162e61ae9"
+  },
+  {
+   "pointer": "django/core/checks/database.py:check_database_backends",
+   "line": 80,
+   "sentence": "Through the test command, a misspelt alias never reaches `_validate_databases`: `get_unique_databases_and_mirrors` passes over it, the check command fails on it once the others are made (`django/core/checks/database.py:check_database_backends`), and the `finally` destroys them.",
+   "tree": "django",
+   "path": "django/core/checks/database.py",
+   "symbol": "check_database_backends",
+   "kind": "function",
+   "lines": [
+    6,
+    14
+   ],
+   "at": 7,
+   "fingerprint": "aa4f32a0c1df79e8"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase._add_databases_failures",
+   "line": 84,
+   "sentence": "Each becomes a `_DatabaseFailure`, which keeps the method and, called, raises `DatabaseOperationForbidden` with the class's message: `SimpleTestCase._disallowed_database_msg`, or `TransactionTestCase`'s own (`django/test/testcases.py:SimpleTestCase._add_databases_failures`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase._add_databases_failures",
+   "kind": "function",
+   "lines": [
+    244,
+    268
+   ],
+   "at": 245,
+   "fingerprint": "53e797f8fc8a6704"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase.ensure_connection_patch_method",
+   "line": 86,
+   "sentence": "It lets through a connection already open, the connection without a database (`NO_DB_ALIAS`), and, a comment says, one made by hand under an alias `DATABASES` lacks (`django/test/testcases.py:SimpleTestCase.ensure_connection_patch_method`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase.ensure_connection_patch_method",
+   "kind": "function",
+   "lines": [
+    283,
+    306
+   ],
+   "at": 284,
+   "fingerprint": "9329c5c585d97c3f"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase._remove_databases_failures",
+   "line": 88,
+   "sentence": "Both are undone as class cleanups after `tearDownClass`: `SimpleTestCase._remove_databases_failures` puts each method back, and `ensure_connection` is restored (`django/test/testcases.py:SimpleTestCase._remove_databases_failures`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase._remove_databases_failures",
+   "kind": "function",
+   "lines": [
+    270,
+    281
+   ],
+   "at": 271,
+   "fingerprint": "5dd82f49078d7877"
+  },
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 92,
+   "sentence": "Django's documentation says `skipIfDBFeature` needs all the features (`docs/topics/testing/tools.txt`); the code needs one.",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/test/testcases.py:_deferredSkip",
+   "line": 92,
+   "sentence": "All three are made by `_deferredSkip` (`django/test/testcases.py:_deferredSkip`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "_deferredSkip",
+   "kind": "function",
+   "lines": [
+    1565,
+    1620
+   ],
+   "fingerprint": "fff10878808d471e"
+  },
+  {
+   "pointer": "django/test/testcases.py:CheckCondition.__get__",
+   "line": 96,
+   "sentence": "A skipped base skips the class; otherwise the first condition that holds sets the attribute to `True`, with the reason (`django/test/testcases.py:CheckCondition.__get__`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "CheckCondition.__get__",
+   "kind": "function",
+   "lines": [
+    1552,
+    1562
+   ],
+   "fingerprint": "822fb85c45c30176"
+  }
+ ]
+}

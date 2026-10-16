@@ -1,0 +1,249 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "runner.md",
+ "pointers": [
+  {
+   "pointer": "django/core/management/commands/test.py:Command",
+   "line": 13,
+   "sentence": "Some of the test command's options are not its own: the runner's class adds them, and the class may be named on the same command line (`django/core/management/commands/test.py:Command`).",
+   "tree": "django",
+   "path": "django/core/management/commands/test.py",
+   "symbol": "Command",
+   "kind": "class",
+   "lines": [
+    10,
+    66
+   ],
+   "fingerprint": "d4b8fe3396c33a7d"
+  },
+  {
+   "pointer": "django/core/management/commands/test.py:Command.run_from_argv",
+   "line": 13,
+   "sentence": "`BaseCommand.run_from_argv` builds the parser before it parses ([Running a command: `BaseCommand`](../commands/running.md)), so `Command.run_from_argv` first reads `--testrunner` alone, with `get_command_line_option`; its docstring gives the reason, that this lets a runner define further options (`django/core/management/commands/test.py:Command.run_from_argv`).",
+   "tree": "django",
+   "path": "django/core/management/commands/test.py",
+   "symbol": "Command.run_from_argv",
+   "kind": "function",
+   "lines": [
+    17,
+    24
+   ],
+   "fingerprint": "4d4a82188c5d7af3"
+  },
+  {
+   "pointer": "django/test/utils.py:get_runner",
+   "line": 13,
+   "sentence": "`Command.add_arguments` adds the labels, `--noinput` and `--testrunner`, and takes the class with `get_runner`, which imports the module of the dotted path read, or of `TEST_RUNNER`, and returns the attribute the last part names (`django/test/utils.py:get_runner`); if the class has an `add_arguments`, it adds its options.",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "get_runner",
+   "kind": "function",
+   "lines": [
+    397,
+    406
+   ],
+   "fingerprint": "8cc946bec72e3fd2"
+  },
+  {
+   "pointer": "django/core/management/commands/test.py:Command.handle",
+   "line": 17,
+   "sentence": "`Command.handle` takes the class again, from the parsed option or the setting; replaces a `--parallel` of `\"auto\"` by what `get_max_test_processes` returns ([Running in parallel: `ParallelTestSuite`](parallel.md)); makes the runner with every option as a keyword argument, those every command shares included; calls `run_tests` with the labels, timed as `\"Total run\"`; and calls `sys.exit` with 1 if it returned a true value, such as a count above zero (`django/core/management/commands/test.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/test.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    54,
+    66
+   ],
+   "fingerprint": "e80daf792d58e48f"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.__init__",
+   "line": 21,
+   "sentence": "`DiscoverRunner.add_arguments`, a class method, runs before any runner exists; `DiscoverRunner.__init__` keeps most options under their destinations (`django/test/runner.py:DiscoverRunner.__init__`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.__init__",
+   "kind": "function",
+   "lines": [
+    763,
+    822
+   ],
+   "fingerprint": "19bf6e8ec8c3e57d"
+  },
+  {
+   "pointer": "docs/ref/django-admin.txt",
+   "line": 44,
+   "sentence": "`--pdb` with a `parallel` above 1 is refused with `ValueError`; Django's documentation says a debugger there ends in `bdb.BdbQuit` (`docs/ref/django-admin.txt`).",
+   "tree": "django",
+   "path": "docs/ref/django-admin.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2229
+   ],
+   "fingerprint": "b82578e5a4b8e2e9"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.run_tests",
+   "line": 48,
+   "sentence": "`DiscoverRunner.run_tests` calls the runner's own methods in a fixed order (`django/test/runner.py:DiscoverRunner.run_tests`):",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.run_tests",
+   "kind": "function",
+   "lines": [
+    1164,
+    1203
+   ],
+   "fingerprint": "1b41de7210dc1707"
+  },
+  {
+   "pointer": "docs/topics/testing/advanced.txt",
+   "line": 62,
+   "sentence": "Django's documentation lets a project's runner subclass `DiscoverRunner` or stand alone, and asks it to accept `**kwargs`, so that Django can add options (`docs/topics/testing/advanced.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/advanced.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    889
+   ],
+   "fingerprint": "6276180c0829ff60"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.run_checks",
+   "line": 66,
+   "sentence": "`DiscoverRunner.run_checks` calls the check command with the runner's verbosity and the aliases the tests use, after the databases since, its comment says, some checks need them (`django/test/runner.py:DiscoverRunner.run_checks`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.run_checks",
+   "kind": "function",
+   "lines": [
+    1106,
+    1109
+   ],
+   "fingerprint": "ddfefe0b1810f72d"
+  },
+  {
+   "pointer": "django/core/checks/registry.py:CheckRegistry.run_checks",
+   "line": 66,
+   "sentence": "The checks tagged for databases run on those aliases; with none, as when no test names a database, they are left out (`django/core/checks/registry.py:CheckRegistry.run_checks`; [The system checks](../commands/checks.md)).",
+   "tree": "django",
+   "path": "django/core/checks/registry.py",
+   "symbol": "CheckRegistry.run_checks",
+   "kind": "function",
+   "lines": [
+    74,
+    106
+   ],
+   "fingerprint": "698a8954c64ca523"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.run_suite",
+   "line": 70,
+   "sentence": "It runs the suite and, in a `finally`, logs the shuffle seed that `DiscoverRunner.setup_shuffler` logged before (`django/test/runner.py:DiscoverRunner.run_suite`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.run_suite",
+   "kind": "function",
+   "lines": [
+    1111,
+    1119
+   ],
+   "fingerprint": "35b3ea3c2d96ace1"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.log",
+   "line": 70,
+   "sentence": "The runner's own lines go through `DiscoverRunner.log`: to a logger the runner was given, or else printed to standard output, INFO and above at verbosity 1, everything at 2 (`django/test/runner.py:DiscoverRunner.log`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.log",
+   "kind": "function",
+   "lines": [
+    942,
+    958
+   ],
+   "fingerprint": "4c22ce763fb4b16a"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.get_resultclass",
+   "line": 72,
+   "sentence": "`get_resultclass` returns `DebugSQLTextTestResult` with `--debug-sql`, else `PDBDebugResult` with `--pdb`, else `None`, which leaves `unittest.TextTestResult`; given both options, no debugger opens (`django/test/runner.py:DiscoverRunner.get_resultclass`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.get_resultclass",
+   "kind": "function",
+   "lines": [
+    1090,
+    1094
+   ],
+   "fingerprint": "64bf6673543ff686"
+  },
+  {
+   "pointer": "django/test/runner.py:PDBDebugResult",
+   "line": 72,
+   "sentence": "`PDBDebugResult` opens a post-mortem debugger at each error, failure and failing subtest: ipdb where it can be imported, pdb otherwise (`django/test/runner.py:PDBDebugResult`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "PDBDebugResult",
+   "kind": "class",
+   "lines": [
+    124,
+    151
+   ],
+   "fingerprint": "7eacb7e95236a13b"
+  },
+  {
+   "pointer": "django/test/runner.py:DebugSQLTextTestResult",
+   "line": 76,
+   "sentence": "`DebugSQLTextTestResult` sets the logger `\"django.db.backends\"` to DEBUG and, from `DebugSQLTextTestResult.startTest` to `DebugSQLTextTestResult.stopTest`, gives it a handler that writes into a string through `QueryFormatter` (`django/test/runner.py:DebugSQLTextTestResult`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DebugSQLTextTestResult",
+   "kind": "class",
+   "lines": [
+    67,
+    121
+   ],
+   "fingerprint": "ab42ddb71fb3d5d3"
+  },
+  {
+   "pointer": "django/test/runner.py:QueryFormatter",
+   "line": 76,
+   "sentence": "`QueryFormatter` passes each statement through its alias's `BaseDatabaseOperations.format_debug_sql`, which reindents it with sqlparse (`django/test/runner.py:QueryFormatter`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "QueryFormatter",
+   "kind": "class",
+   "lines": [
+    45,
+    64
+   ],
+   "fingerprint": "5d78bcf4f7fbdf9f"
+  },
+  {
+   "pointer": "django/test/utils.py:TimeKeeper",
+   "line": 124,
+   "sentence": "`TimeKeeper.timed` records its block's time under a name entered as the block begins, so a block is printed before those inside it, such as each creation `setup_databases` times (`django/test/utils.py:TimeKeeper`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "TimeKeeper",
+   "kind": "class",
+   "lines": [
+    970,
+    988
+   ],
+   "fingerprint": "4fa196d8e388e21f"
+  }
+ ]
+}

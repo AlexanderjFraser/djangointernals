@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 680 617">
+  <!-- the class's transaction: the outer box, from BEGIN to ROLLBACK; hooks at x=28, statements at x=192 -->
+  <rect class="box" x="0.5" y="0.5" width="679" height="616" rx="4"/>
+  <text class="name strong" x="14" y="22">setUpClass</text>
+  <text class="name" x="28" y="44">_enter_atomics</text>
+  <text class="name" x="192" y="44">BEGIN</text>
+  <text class="name" x="28" y="64">setUpTestData</text>
+  <text class="name" x="192" y="64">INSERT INTO "fleet_port" ... ('Valletta', 'Malta') ...</text>
+  <text class="name" x="192" y="84">INSERT INTO "fleet_ship" ... ('Endeavour', 366, 1, NULL) ...</text>
+
+  <!-- the first test's savepoint -->
+  <rect class="ground" x="14.5" y="98.5" width="651" height="138" rx="4"/>
+  <text class="name strong" x="28" y="120">test_list_shows_ships</text>
+  <text class="name" x="28" y="142">_fixture_setup</text>
+  <text class="name" x="192" y="142">SAVEPOINT "s30220_x4"</text>
+  <text x="28" y="162">the test</text>
+  <text class="name" x="192" y="162">SELECT ... FROM "fleet_ship" INNER JOIN "fleet_port" ...</text>
+  <text class="name" x="28" y="182">_fixture_teardown</text>
+  <text class="name" x="192" y="182">PRAGMA foreign_key_check</text>
+  <text class="name mark strong" x="192" y="202">ROLLBACK TO SAVEPOINT "s30220_x4"</text>
+  <text class="name" x="192" y="222">RELEASE SAVEPOINT "s30220_x4"</text>
+
+  <!-- the second test's savepoint -->
+  <rect class="ground" x="14.5" y="248.5" width="651" height="138" rx="4"/>
+  <text class="name strong" x="28" y="270">test_missing_ship_is_404</text>
+  <text class="name" x="28" y="292">_fixture_setup</text>
+  <text class="name" x="192" y="292">SAVEPOINT "s30220_x5"</text>
+  <text x="28" y="312">the test</text>
+  <text class="name" x="192" y="312">SELECT ... WHERE "fleet_ship"."id" = 999 LIMIT 21</text>
+  <text class="name" x="28" y="332">_fixture_teardown</text>
+  <text class="name" x="192" y="332">PRAGMA foreign_key_check</text>
+  <text class="name mark strong" x="192" y="352">ROLLBACK TO SAVEPOINT "s30220_x5"</text>
+  <text class="name" x="192" y="372">RELEASE SAVEPOINT "s30220_x5"</text>
+
+  <!-- the third test's savepoint: the one that writes -->
+  <rect class="ground" x="14.5" y="398.5" width="651" height="158" rx="4"/>
+  <text class="name strong" x="28" y="420">test_rename</text>
+  <text class="name" x="28" y="442">_fixture_setup</text>
+  <text class="name" x="192" y="442">SAVEPOINT "s30220_x6"</text>
+  <text x="28" y="462">the test</text>
+  <text class="name" x="192" y="462">UPDATE "fleet_ship" SET "name" = 'Resolution', ...</text>
+  <text class="name" x="192" y="482">SELECT ... FROM "fleet_ship" LIMIT 21</text>
+  <text class="name" x="28" y="502">_fixture_teardown</text>
+  <text class="name" x="192" y="502">PRAGMA foreign_key_check</text>
+  <text class="name mark strong" x="192" y="522">ROLLBACK TO SAVEPOINT "s30220_x6"</text>
+  <text class="name" x="192" y="542">RELEASE SAVEPOINT "s30220_x6"</text>
+
+  <!-- the end of the class: the transaction rolled back -->
+  <text class="name strong" x="14" y="580">tearDownClass</text>
+  <text class="name" x="28" y="602">_rollback_atomics</text>
+  <text class="name mark strong" x="192" y="602">ROLLBACK</text>
+</svg>

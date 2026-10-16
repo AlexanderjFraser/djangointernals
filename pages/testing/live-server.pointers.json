@@ -1,0 +1,213 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "live-server.md",
+ "pointers": [
+  {
+   "pointer": "django/test/testcases.py:LiveServerTestCase",
+   "line": 9,
+   "sentence": "It also says why the class is a `TransactionTestCase`: threads do not share transactions, unless they use SQLite's database in memory, and each must commit for the other to see its changes ([Emptying the tables after each test: `TransactionTestCase`](transaction-test-case.md); `django/test/testcases.py:LiveServerTestCase`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerTestCase",
+   "kind": "class",
+   "lines": [
+    1794,
+    1869
+   ],
+   "fingerprint": "79d2c04eb5a62373"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerTestCase.setUpClass",
+   "line": 15,
+   "sentence": "It appends `allowed_host` to `ALLOWED_HOSTS` with `modify_settings`, entered as a context of the class, and starts the server with `LiveServerTestCase._start_server_thread` (`django/test/testcases.py:LiveServerTestCase.setUpClass`, `django/test/testcases.py:LiveServerTestCase._start_server_thread`):",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerTestCase.setUpClass",
+   "kind": "function",
+   "lines": [
+    1829,
+    1835
+   ],
+   "at": 1830,
+   "fingerprint": "3979fe6230766d20"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerTestCase._start_server_thread",
+   "line": 15,
+   "sentence": "It appends `allowed_host` to `ALLOWED_HOSTS` with `modify_settings`, entered as a context of the class, and starts the server with `LiveServerTestCase._start_server_thread` (`django/test/testcases.py:LiveServerTestCase.setUpClass`, `django/test/testcases.py:LiveServerTestCase._start_server_thread`):",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerTestCase._start_server_thread",
+   "kind": "function",
+   "lines": [
+    1837,
+    1852
+   ],
+   "at": 1838,
+   "fingerprint": "a1493084bcf198ba"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerTestCase._terminate_thread",
+   "line": 22,
+   "sentence": "`_terminate_thread` calls `LiveServerThread.terminate`, then `BaseDatabaseWrapper.dec_thread_sharing` on each shared connection (`django/test/testcases.py:LiveServerTestCase._terminate_thread`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerTestCase._terminate_thread",
+   "kind": "function",
+   "lines": [
+    1863,
+    1869
+   ],
+   "at": 1864,
+   "fingerprint": "20bec335049611dc"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerThread.run",
+   "line": 26,
+   "sentence": "An exception on the way is kept as the thread's error and `is_ready` set, to end the wait; in a `finally` the thread closes its connections (`django/test/testcases.py:LiveServerThread.run`, `django/test/testcases.py:LiveServerThread._create_server`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerThread.run",
+   "kind": "function",
+   "lines": [
+    1749,
+    1775
+   ],
+   "fingerprint": "0f5da5cf25f1ed0c"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerThread._create_server",
+   "line": 26,
+   "sentence": "An exception on the way is kept as the thread's error and `is_ready` set, to end the wait; in a `finally` the thread closes its connections (`django/test/testcases.py:LiveServerThread.run`, `django/test/testcases.py:LiveServerThread._create_server`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerThread._create_server",
+   "kind": "function",
+   "lines": [
+    1777,
+    1783
+   ],
+   "fingerprint": "f6320fcf50af0b98"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:ThreadedWSGIServer",
+   "line": 28,
+   "sentence": "`ThreadedWSGIServer.process_request_thread` puts the shared connections in place on each such thread, and `ThreadedWSGIServer.close_request` closes the thread's connections when the client's connection ends (`django/core/servers/basehttp.py:ThreadedWSGIServer`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "ThreadedWSGIServer",
+   "kind": "class",
+   "lines": [
+    87,
+    112
+   ],
+   "fingerprint": "74421b2e4c86c07e"
+  },
+  {
+   "pointer": "django/test/testcases.py:LiveServerTestCase._make_connections_override",
+   "line": 32,
+   "sentence": "`_make_connections_override` takes those of the test thread's connections that are SQLite's to a database in memory (`django/test/testcases.py:LiveServerTestCase._make_connections_override`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "LiveServerTestCase._make_connections_override",
+   "kind": "function",
+   "lines": [
+    1819,
+    1827
+   ],
+   "at": 1820,
+   "fingerprint": "bff4210f39a356c9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.close",
+   "line": 32,
+   "sentence": "The server's threads use those very objects, so they see what the test wrote, committed or not, and their closing does not destroy the database: SQLite's `DatabaseWrapper.close` ignores a close of a database in memory (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    220,
+    227
+   ],
+   "at": 221,
+   "fingerprint": "317a4a75947883f9"
+  },
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 32,
+   "sentence": "The documentation warns against the two threads querying through it at once: a test should wait for a page to load before going on (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/test/testcases.py:FSFilesHandler._should_handle",
+   "line": 38,
+   "sentence": "`FSFilesHandler.__call__` hands the application inside every request whose path is not under the URL's path, and all of them when the URL names a host (`django/test/testcases.py:FSFilesHandler._should_handle`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "FSFilesHandler._should_handle",
+   "kind": "function",
+   "lines": [
+    1671,
+    1677
+   ],
+   "fingerprint": "cdfa717169f32517"
+  },
+  {
+   "pointer": "django/test/testcases.py:FSFilesHandler.get_response",
+   "line": 38,
+   "sentence": "A missing file, or a directory, raises `Http404`, and the request goes on to `BaseHandler.get_response`: the file handler's own chain, not the application inside, for as a `WSGIHandler` it built the middleware chain when it was made (`django/test/testcases.py:FSFilesHandler.get_response`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "FSFilesHandler.get_response",
+   "kind": "function",
+   "lines": [
+    1684,
+    1692
+   ],
+   "fingerprint": "d922744350d2a47d"
+  },
+  {
+   "pointer": "docs/howto/static-files/index.txt",
+   "line": 40,
+   "sentence": "The documentation gives that as the reason for `StaticLiveServerTestCase`, whose `static_handler` is the static files application's `StaticFilesHandler`, serving from the finders ([Serving static files: `StaticFilesHandler` and the development server](../contrib/serving-static.md); `docs/howto/static-files/index.txt`).",
+   "tree": "django",
+   "path": "docs/howto/static-files/index.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    194
+   ],
+   "fingerprint": "1b49593529bab2c4"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings._add_script_prefix",
+   "line": 42,
+   "sentence": "An empty `MEDIA_URL`, the default, is read as the script prefix, ordinarily `\"/\"` (`django/conf/__init__.py:LazySettings._add_script_prefix`), so the media handler takes every path, and with `MEDIA_ROOT` empty too it serves the current directory: /manage.py gets the project's manage.py.",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings._add_script_prefix",
+   "kind": "function",
+   "lines": [
+    221,
+    234
+   ],
+   "at": 222,
+   "fingerprint": "7c901b693424c372"
+  }
+ ]
+}

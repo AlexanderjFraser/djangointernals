@@ -1,0 +1,221 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "environment.md",
+ "pointers": [
+  {
+   "pointer": "django/test/utils.py",
+   "line": 9,
+   "sentence": "A function in `django/test/utils.py` makes these changes once for a run, and again in each worker that --parallel starts by spawn or forkserver (`django/test/runner.py:_init_worker`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1032
+   ],
+   "fingerprint": "b5555b49cfbaf14e"
+  },
+  {
+   "pointer": "django/test/runner.py:_init_worker",
+   "line": 9,
+   "sentence": "A function in `django/test/utils.py` makes these changes once for a run, and again in each worker that --parallel starts by spawn or forkserver (`django/test/runner.py:_init_worker`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "_init_worker",
+   "kind": "function",
+   "lines": [
+    473,
+    524
+   ],
+   "fingerprint": "ffa01dd6338820a5"
+  },
+  {
+   "pointer": "django/test/runner.py:DiscoverRunner.setup_test_environment",
+   "line": 9,
+   "sentence": "`DiscoverRunner.setup_test_environment` calls it with the runner's debug mode, then `unittest.installHandler`, which `DiscoverRunner.teardown_test_environment` undoes with `unittest.removeHandler` (`django/test/runner.py:DiscoverRunner.setup_test_environment`).",
+   "tree": "django",
+   "path": "django/test/runner.py",
+   "symbol": "DiscoverRunner.setup_test_environment",
+   "kind": "function",
+   "lines": [
+    960,
+    962
+   ],
+   "fingerprint": "d920506e3b6bcab7"
+  },
+  {
+   "pointer": "docs/topics/testing/overview.txt",
+   "line": 9,
+   "sentence": "With that handler, a first Ctrl-C lets the running test finish, then stops the run, which reports its results and destroys the test databases (`docs/topics/testing/overview.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/overview.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    399
+   ],
+   "fingerprint": "5d93d7bb7a79af85"
+  },
+  {
+   "pointer": "django/test/client.py:RequestFactory._base_environ",
+   "line": 13,
+   "sentence": "The test client builds a request whose `\"SERVER_NAME\"` is `\"testserver\"`, with no `\"Host\"` header unless the test gives one, so `HttpRequest.get_host` takes `\"testserver\"` as the host and checks it against `ALLOWED_HOSTS` ([Headers, host and scheme](../http/headers.md); `django/test/client.py:RequestFactory._base_environ`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "RequestFactory._base_environ",
+   "kind": "function",
+   "lines": [
+    404,
+    435
+   ],
+   "fingerprint": "64c27e73f3264ab3"
+  },
+  {
+   "pointer": "django/test/utils.py:setup_test_environment",
+   "line": 13,
+   "sentence": "`setup_test_environment` sets the setting to a new list, the project's hosts and `\"testserver\"` (`django/test/utils.py:setup_test_environment`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_test_environment",
+   "kind": "function",
+   "lines": [
+    120,
+    164
+   ],
+   "fingerprint": "fe1cc481eddb9aad"
+  },
+  {
+   "pointer": "docs/topics/testing/advanced.txt",
+   "line": 13,
+   "sentence": "Django's documentation says hosts are checked in tests so the test client can tell the project's URLs from external ones (`docs/topics/testing/advanced.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/advanced.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    889
+   ],
+   "fingerprint": "6276180c0829ff60"
+  },
+  {
+   "pointer": "docs/topics/testing/overview.txt",
+   "line": 15,
+   "sentence": "The runner passes its debug mode, false unless --debug-mode is given, so its tests run with debugging off whatever the settings say; the documentation's reason is that what a test observes should be what production shows (`docs/topics/testing/overview.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/overview.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    399
+   ],
+   "fingerprint": "5d93d7bb7a79af85"
+  },
+  {
+   "pointer": "django/core/mail/handler.py:MailersHandler.create_connection",
+   "line": 19,
+   "sentence": "`mailers` reads the settings each time it makes a backend (`django/core/mail/handler.py:MailersHandler.create_connection`), so each backend it makes from then on is that one, which appends a copy of each message to `outbox` on `django.core.mail` ([Sending email: `mailers` and the email backends](../services/mailers.md)).",
+   "tree": "django",
+   "path": "django/core/mail/handler.py",
+   "symbol": "MailersHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    44,
+    78
+   ],
+   "fingerprint": "7066895b5458f351"
+  },
+  {
+   "pointer": "django/template/backends/django.py:DjangoTemplates.__init__",
+   "line": 21,
+   "sentence": "A Django template engine whose `\"OPTIONS\"` give no `\"debug\"` takes it from `settings.DEBUG` as it is built (`django/template/backends/django.py:DjangoTemplates.__init__`): with the harbour's settings, one built before `setup_test_environment(debug=False)` kept it on.",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "DjangoTemplates.__init__",
+   "kind": "function",
+   "lines": [
+    19,
+    28
+   ],
+   "fingerprint": "7038b81e8184db54"
+  },
+  {
+   "pointer": "django/test/signals.py",
+   "line": 23,
+   "sentence": "The receivers of `setting_changed` in `django/test/signals.py` are connected not by `setup_test_environment` but when anything first imports from `django.test` ([Overriding settings](../startup/overrides.md)).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    261
+   ],
+   "fingerprint": "0a445b89832f1f3d"
+  },
+  {
+   "pointer": "django/test/utils.py:instrumented_test_render",
+   "line": 27,
+   "sentence": "`setup_test_environment` replaces both, on the classes, with `instrumented_test_render`, which sends `template_rendered` with the template and the context and then renders the nodes (`django/test/utils.py:instrumented_test_render`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "instrumented_test_render",
+   "kind": "function",
+   "lines": [
+    107,
+    113
+   ],
+   "fingerprint": "a7610b2be4945375"
+  },
+  {
+   "pointer": "django/template/backends/jinja2.py:Template.render",
+   "line": 27,
+   "sentence": "A Jinja2 template sends nothing (`django/template/backends/jinja2.py:Template.render`).",
+   "tree": "django",
+   "path": "django/template/backends/jinja2.py",
+   "symbol": "Template.render",
+   "kind": "function",
+   "lines": [
+    64,
+    78
+   ],
+   "fingerprint": "39abce4922367d18"
+  },
+  {
+   "pointer": "django/utils/translation/trans_real.py:deactivate",
+   "line": 81,
+   "sentence": "Last, `setup_test_environment` calls `deactivate`, which drops the thread's active translation, so the run begins in `LANGUAGE_CODE`; teardown does not undo it (`django/utils/translation/trans_real.py:deactivate`).",
+   "tree": "django",
+   "path": "django/utils/translation/trans_real.py",
+   "symbol": "deactivate",
+   "kind": "function",
+   "lines": [
+    309,
+    315
+   ],
+   "fingerprint": "ef08b5cfb339a75c"
+  },
+  {
+   "pointer": "django/test/utils.py:teardown_test_environment",
+   "line": 83,
+   "sentence": "`teardown_test_environment` restores `ALLOWED_HOSTS`, `settings.DEBUG`, whichever mail setting was replaced, and the two `_render` methods, then deletes the saved values and `outbox` (`django/test/utils.py:teardown_test_environment`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "teardown_test_environment",
+   "kind": "function",
+   "lines": [
+    167,
+    186
+   ],
+   "fingerprint": "68faab81cb9df465"
+  }
+ ]
+}

@@ -287,7 +287,7 @@ with transaction.atomic(): Ship.objects.count()
 
 Oracle, which does not release savepoints, appends a line marked as faked to `queries_log` where the release would be, when `queries_logged` holds (`django/db/backends/oracle/base.py:DatabaseWrapper._savepoint_commit`) ([Transactions: autocommit, `atomic` and savepoints](transactions.md)).
 
-Django's documentation says SQL logging is enabled only when `settings.DEBUG` is true (`docs/ref/logging.txt`); the code's condition is `queries_logged`, which `force_debug_cursor` makes true as well. The test framework sets it: `CaptureQueriesContext`, which `assertNumQueries` uses, sets it for the length of its block and meanwhile disconnects `reset_queries`, and the test runner's option `"--debug-sql"` sets it on every connection (`django/test/utils.py:CaptureQueriesContext`, `django/test/utils.py:setup_databases`) ([The test framework](../testing.md)).
+Django's documentation says SQL logging is enabled only when `settings.DEBUG` is true (`docs/ref/logging.txt`); the code's condition is `queries_logged`, which `force_debug_cursor` makes true as well. The test framework sets it: `CaptureQueriesContext`, which `assertNumQueries` uses, sets it for the length of its block and meanwhile disconnects `reset_queries`, and the test runner's option `"--debug-sql"` sets it on every connection (`django/test/utils.py:CaptureQueriesContext`, `django/test/utils.py:setup_databases`) ([Counting queries: `assertNumQueries` and `CaptureQueriesContext`](../testing/query-assertions.md)).
 
 ## The chunked cursor: `chunked_cursor`
 

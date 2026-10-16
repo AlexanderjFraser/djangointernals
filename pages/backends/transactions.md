@@ -291,7 +291,7 @@ with transaction.atomic(), transaction.atomic(durable=True): pass
 raises RuntimeError: A durable atomic block cannot be nested within another atomic block.
 ```
 
-The check looks only at the innermost open block, and lets the durable block through where that block's `Atomic._from_testcase` is set. `TestCase` sets it on the blocks it opens around a class of tests and around each test, so a durable block that code under a test opens directly inside them is let through, and one opened inside another block of the test's code is refused (`django/test/testcases.py:TestCase._enter_atomics`) ([The test framework](../testing.md)).
+The check looks only at the innermost open block, and lets the durable block through where that block's `Atomic._from_testcase` is set. `TestCase` sets it on the blocks it opens around a class of tests and around each test, so a durable block that code under a test opens directly inside them is let through, and one opened inside another block of the test's code is refused (`django/test/testcases.py:TestCase._enter_atomics`) ([A transaction around each test: `TestCase`](../testing/test-case.md)).
 
 ## Autocommit turned off by hand
 

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 940 477">
+  <!-- the command, and the parent's steps before there are any workers: labels at x=14, what they do at x=180 -->
+  <text class="name" x="0" y="15">python manage.py test harbour.office --parallel 2</text>
+  <text class="quiet" x="402" y="15">workers started by spawn</text>
+
+  <text class="strong" x="0" y="49">The parent</text>
+  <text class="name" x="14" y="73">build_suite</text>
+  <text x="180" y="73">subsuites 0 <tspan class="name">PortTests</tspan>, 1 <tspan class="name">ShipPageTests</tspan>, 2 <tspan class="name">ShipUrlTests</tspan>; 2 processes</text>
+  <text class="name" x="14" y="95">setup_databases</text>
+  <text x="180" y="95">the test database of <tspan class="name">"default"</tspan>, then its clones <tspan class="name">"1"</tspan> and <tspan class="name">"2"</tspan></text>
+  <text class="name" x="14" y="117">run</text>
+  <text x="180" y="117">slots <tspan class="name">[0, 0]</tspan>; a <tspan class="name">Pool</tspan> of two workers; tasks 0, 1, 2</text>
+
+  <!-- three processes side by side, time running down: worker A, the parent, worker B -->
+  <rect class="ground" x="0.5" y="137.5" width="309" height="250" rx="4"/>
+  <rect class="ground" x="360.5" y="137.5" width="259" height="338" rx="4"/>
+  <rect class="ground" x="670.5" y="137.5" width="269" height="250" rx="4"/>
+  <text class="strong" x="12" y="159">Worker A, <tspan class="mark">slot 2</tspan></text>
+  <text class="strong" x="372" y="159">The parent</text>
+  <text class="strong" x="682" y="159">Worker B, <tspan class="mark">slot 1</tspan></text>
+
+  <!-- each worker sets itself up on its own clone -->
+  <text x="12" y="183"><tspan class="name">django.setup</tspan>, <tspan class="name">setup_test_environment</tspan>,</text>
+  <text x="12" y="201">the parent’s settings, <tspan class="mark strong">clone 2</tspan> copied</text>
+  <text x="12" y="219">into memory, check</text>
+  <text x="682" y="183">the same, with <tspan class="mark strong">clone 1</tspan></text>
+
+  <!-- tasks 0 and 1 handed out -->
+  <path class="line" d="M360 242 H320"/>
+  <polygon class="head" points="310,242 320,237 320,247"/>
+  <text class="quiet small" x="335" y="236" text-anchor="middle">0</text>
+  <path class="line" d="M620 242 H660"/>
+  <polygon class="head" points="670,242 660,237 660,247"/>
+  <text class="quiet small" x="645" y="236" text-anchor="middle">1</text>
+
+  <!-- worker A: subsuite 0, its events sent back -->
+  <text x="12" y="247">subsuite 0, <tspan class="name">PortTests</tspan>: its events,</text>
+  <text x="12" y="265">for each test <tspan class="name">startTest</tspan>, <tspan class="name">addDuration</tspan>,</text>
+  <text x="12" y="283"><tspan class="name">addSuccess</tspan>, <tspan class="name">stopTest</tspan>,</text>
+  <text x="12" y="301">sent back</text>
+  <path class="line" d="M310 296 H350"/>
+  <polygon class="head" points="360,296 350,291 350,301"/>
+
+  <!-- worker B: subsuite 1 -->
+  <text x="682" y="247">subsuite 1, <tspan class="name">ShipPageTests</tspan></text>
+
+  <!-- the parent replays each list as it arrives -->
+  <text x="372" y="265">replays each list as it arrives</text>
+  <text x="372" y="283">into its result, which prints</text>
+  <text x="372" y="301"><tspan class="name">PortTests</tspan>’ two tests,</text>
+
+  <!-- worker A, free again, takes task 2 -->
+  <path class="line" d="M360 324 H320"/>
+  <polygon class="head" points="310,324 320,319 320,329"/>
+  <text class="quiet small" x="335" y="318" text-anchor="middle">2</text>
+  <text x="12" y="329">subsuite 2, <tspan class="name">ShipUrlTests</tspan>:</text>
+  <text x="12" y="347">its events</text>
+  <path class="line" d="M310 342 H350"/>
+  <polygon class="head" points="360,342 350,337 350,347"/>
+  <text x="372" y="347"><tspan class="name">ShipUrlTests</tspan>’ one,</text>
+
+  <!-- worker B's events, last -->
+  <text x="682" y="373">its events sent back</text>
+  <path class="line" d="M670 368 H630"/>
+  <polygon class="head" points="620,368 630,363 630,373"/>
+  <text x="372" y="373"><tspan class="name">ShipPageTests</tspan>’ three:</text>
+  <text x="372" y="395">Ran 6 tests, OK</text>
+
+  <!-- the parent, after the workers -->
+  <text class="name" x="372" y="423">teardown_databases</text>
+  <text x="372" y="443">clones <tspan class="name">"1"</tspan> and <tspan class="name">"2"</tspan>,</text>
+  <text x="372" y="461">then the test database</text>
+</svg>

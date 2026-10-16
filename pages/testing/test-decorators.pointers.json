@@ -1,0 +1,307 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "test-decorators.md",
+ "pointers": [
+  {
+   "pointer": "django/test/utils.py:TestContextDecorator.__call__",
+   "line": 13,
+   "sentence": "Called on a class it uses `decorate_class`, on any other callable `decorate_callable`, and refuses anything else with a `TypeError` (`django/test/utils.py:TestContextDecorator.__call__`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "TestContextDecorator.__call__",
+   "kind": "function",
+   "lines": [
+    475,
+    480
+   ],
+   "fingerprint": "d7c6876364d7bfe8"
+  },
+  {
+   "pointer": "django/test/utils.py:TestContextDecorator.decorate_callable",
+   "line": 15,
+   "sentence": "`SimpleTestCase` runs a test method through `async_to_sync` only if it is a coroutine function, which the wrapper is ([One test, in order: `SimpleTestCase`](simple-test-case.md); `django/test/utils.py:TestContextDecorator.decorate_callable`, `django/test/testcases.py:SimpleTestCase._setup_and_call`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "TestContextDecorator.decorate_callable",
+   "kind": "function",
+   "lines": [
+    453,
+    473
+   ],
+   "fingerprint": "e5f68b86f562ad07"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase._setup_and_call",
+   "line": 15,
+   "sentence": "`SimpleTestCase` runs a test method through `async_to_sync` only if it is a coroutine function, which the wrapper is ([One test, in order: `SimpleTestCase`](simple-test-case.md); `django/test/utils.py:TestContextDecorator.decorate_callable`, `django/test/testcases.py:SimpleTestCase._setup_and_call`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase._setup_and_call",
+   "kind": "function",
+   "lines": [
+    338,
+    377
+   ],
+   "fingerprint": "335ae6d26ee82b6b"
+  },
+  {
+   "pointer": "django/test/utils.py:TestContextDecorator.decorate_class",
+   "line": 17,
+   "sentence": "It does not hold in `setUpClass`, and a subclass that defines a `setUp` without calling its parent's loses it (`django/test/utils.py:TestContextDecorator.decorate_class`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "TestContextDecorator.decorate_class",
+   "kind": "function",
+   "lines": [
+    438,
+    451
+   ],
+   "fingerprint": "8415967a94756f3e"
+  },
+  {
+   "pointer": "django/test/utils.py:override_settings.decorate_class",
+   "line": 21,
+   "sentence": "On a class, `override_settings.decorate_class` replaces no `setUp`: it takes only a subclass of `SimpleTestCase`, refusing any other with a `ValueError`, \"Only subclasses of Django SimpleTestCase can be decorated with override_settings\", and records the values as `SimpleTestCase._overridden_settings` (`django/test/utils.py:override_settings.decorate_class`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_settings.decorate_class",
+   "kind": "function",
+   "lines": [
+    556,
+    565
+   ],
+   "fingerprint": "3242c763539e0735"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase.setUpClass",
+   "line": 21,
+   "sentence": "`SimpleTestCase.setUpClass` enters an `override_settings` of those values with `unittest.TestCase.enterClassContext`, which leaves it as a class cleanup, after `tearDownClass` (`django/test/testcases.py:SimpleTestCase.setUpClass`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase.setUpClass",
+   "kind": "function",
+   "lines": [
+    213,
+    221
+   ],
+   "at": 214,
+   "fingerprint": "23b440f2a02cd22f"
+  },
+  {
+   "pointer": "django/test/utils.py:override_settings.enable",
+   "line": 101,
+   "sentence": "If a receiver raises while an override is entered, `override_settings.enable` keeps the exception as `override_settings.enable_exception` and calls `disable`, which restores the settings, sends the signal for leaving, and raises it (`django/test/utils.py:override_settings.enable`, `django/test/utils.py:override_settings.disable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_settings.enable",
+   "kind": "function",
+   "lines": [
+    497,
+    521
+   ],
+   "fingerprint": "9161f91a4efca350"
+  },
+  {
+   "pointer": "django/test/utils.py:override_settings.disable",
+   "line": 101,
+   "sentence": "If a receiver raises while an override is entered, `override_settings.enable` keeps the exception as `override_settings.enable_exception` and calls `disable`, which restores the settings, sends the signal for leaving, and raises it (`django/test/utils.py:override_settings.enable`, `django/test/utils.py:override_settings.disable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_settings.disable",
+   "kind": "function",
+   "lines": [
+    523,
+    544
+   ],
+   "fingerprint": "d8ad312f56c1c53c"
+  },
+  {
+   "pointer": "django/test/signals.py:complex_setting_changed",
+   "line": 101,
+   "sentence": "If a receiver raises while an override is entered, `override_settings.enable` keeps the exception as `override_settings.enable_exception` and calls `disable`, which restores the settings, sends the signal for leaving, and raises it (`django/test/utils.py:override_settings.enable`, `django/test/utils.py:override_settings.disable`). `COMPLEX_OVERRIDE_SETTINGS`, the settings that may not work well with `override_settings` (ticket #19031), holds `\"DATABASES\"` alone, and for it a receiver warns on entering \"Overriding setting DATABASES can lead to unexpected behavior.\" (`django/test/signals.py:complex_setting_changed`). `SimpleTestCase.settings` and `SimpleTestCase.modify_settings` return a new decorator of each kind, for a `with` block (`django/test/testcases.py:SimpleTestCase.settings`, `django/test/testcases.py:SimpleTestCase.modify_settings`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "complex_setting_changed",
+   "kind": "function",
+   "lines": [
+    165,
+    173
+   ],
+   "at": 166,
+   "fingerprint": "1eb527181f823f67"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase.settings",
+   "line": 101,
+   "sentence": "`SimpleTestCase.settings` and `SimpleTestCase.modify_settings` return a new decorator of each kind, for a `with` block (`django/test/testcases.py:SimpleTestCase.settings`, `django/test/testcases.py:SimpleTestCase.modify_settings`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase.settings",
+   "kind": "function",
+   "lines": [
+    394,
+    399
+   ],
+   "fingerprint": "256f0582004cc1e6"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase.modify_settings",
+   "line": 101,
+   "sentence": "`SimpleTestCase.settings` and `SimpleTestCase.modify_settings` return a new decorator of each kind, for a `with` block (`django/test/testcases.py:SimpleTestCase.settings`, `django/test/testcases.py:SimpleTestCase.modify_settings`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase.modify_settings",
+   "kind": "function",
+   "lines": [
+    401,
+    406
+   ],
+   "fingerprint": "487342afe15d53f1"
+  },
+  {
+   "pointer": "django/test/utils.py:modify_settings.enable",
+   "line": 105,
+   "sentence": "Any other action, `\"insert\"` say, raises `ValueError` (\"Unsupported action: insert\") before the settings are touched (`django/test/utils.py:modify_settings.enable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "modify_settings.enable",
+   "kind": "function",
+   "lines": [
+    593,
+    615
+   ],
+   "fingerprint": "abe4d3fe8b81d127"
+  },
+  {
+   "pointer": "django/test/utils.py:isolate_apps.enable",
+   "line": 111,
+   "sentence": "`isolate_apps` gives a test its own app registry: `isolate_apps.enable` keeps `Options.default_apps`, puts in its place a new `Apps` populated with the applications it is given, and returns it (`django/test/utils.py:isolate_apps.enable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "isolate_apps.enable",
+   "kind": "function",
+   "lines": [
+    960,
+    964
+   ],
+   "fingerprint": "c7dc565484e1ef0f"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.__init__",
+   "line": 111,
+   "sentence": "A new model's options take that registry as their `apps` unless its `Meta` gives one, and `ModelBase.__new__` registers a model that is not abstract there, not in the project's registry (`django/db/models/options.py:Options.__init__`, `django/db/models/options.py:Options.contribute_to_class`, `django/db/models/base.py:ModelBase.__new__`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.__init__",
+   "kind": "function",
+   "lines": [
+    115,
+    170
+   ],
+   "fingerprint": "74dac3353d0e26ec"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.contribute_to_class",
+   "line": 111,
+   "sentence": "A new model's options take that registry as their `apps` unless its `Meta` gives one, and `ModelBase.__new__` registers a model that is not abstract there, not in the project's registry (`django/db/models/options.py:Options.__init__`, `django/db/models/options.py:Options.contribute_to_class`, `django/db/models/base.py:ModelBase.__new__`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.contribute_to_class",
+   "kind": "function",
+   "lines": [
+    185,
+    249
+   ],
+   "fingerprint": "99f2ba7634e3d0b9"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase.__new__",
+   "line": 111,
+   "sentence": "A new model's options take that registry as their `apps` unless its `Meta` gives one, and `ModelBase.__new__` registers a model that is not abstract there, not in the project's registry (`django/db/models/options.py:Options.__init__`, `django/db/models/options.py:Options.contribute_to_class`, `django/db/models/base.py:ModelBase.__new__`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase.__new__",
+   "kind": "function",
+   "lines": [
+    105,
+    397
+   ],
+   "fingerprint": "0088098d570317e1"
+  },
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 113,
+   "sentence": "The documentation calls the arguments app labels, but `Apps` takes them as entries of `INSTALLED_APPS`: `isolate_apps(\"office\")` raises `ModuleNotFoundError`, \"No module named 'office'\" (`docs/topics/testing/tools.txt`; `django/apps/registry.py:Apps.populate`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.populate",
+   "line": 113,
+   "sentence": "The documentation calls the arguments app labels, but `Apps` takes them as entries of `INSTALLED_APPS`: `isolate_apps(\"office\")` raises `ModuleNotFoundError`, \"No module named 'office'\" (`docs/topics/testing/tools.txt`; `django/apps/registry.py:Apps.populate`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.populate",
+   "kind": "function",
+   "lines": [
+    61,
+    127
+   ],
+   "fingerprint": "32f7c6ad9925afa8"
+  },
+  {
+   "pointer": "django/test/utils.py:override_script_prefix",
+   "line": 115,
+   "sentence": "`override_script_prefix` sets a script prefix and puts the old one back ([The script prefix, the current URLconf and the caches](../urls/state.md); `django/test/utils.py:override_script_prefix`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_script_prefix",
+   "kind": "class",
+   "lines": [
+    908,
+    920
+   ],
+   "fingerprint": "0023c4770b1a1fe8"
+  },
+  {
+   "pointer": "django/test/utils.py:override_system_checks.enable",
+   "line": 115,
+   "sentence": "`override_system_checks` leaves the check registry only the checks it is given, and the deployment checks too when its second argument is not `None` ([The system checks](../commands/checks.md); `django/test/utils.py:override_system_checks.enable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_system_checks.enable",
+   "kind": "function",
+   "lines": [
+    633,
+    642
+   ],
+   "fingerprint": "37954c52db068729"
+  },
+  {
+   "pointer": "django/test/utils.py:ignore_warnings.enable",
+   "line": 115,
+   "sentence": "`ignore_warnings` adds an `\"ignore\"` filter inside `warnings.catch_warnings`, which leaving restores (`django/test/utils.py:ignore_warnings.enable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "ignore_warnings.enable",
+   "kind": "function",
+   "lines": [
+    769,
+    772
+   ],
+   "fingerprint": "a46ab1ed3918d37d"
+  }
+ ]
+}

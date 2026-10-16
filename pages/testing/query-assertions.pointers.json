@@ -1,0 +1,154 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "query-assertions.md",
+ "pointers": [
+  {
+   "pointer": "django/test/utils.py:CaptureQueriesContext.__enter__",
+   "line": 13,
+   "sentence": "Entering, `CaptureQueriesContext` keeps the connection's `force_debug_cursor` and sets it; calls `BaseDatabaseWrapper.ensure_connection`, so that, the comment says, queries opening the connection are not counted; notes the length of `BaseDatabaseWrapper.queries_log` as the start; and disconnects `reset_queries` from `request_started` (`django/test/utils.py:CaptureQueriesContext.__enter__`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "CaptureQueriesContext.__enter__",
+   "kind": "function",
+   "lines": [
+    740,
+    749
+   ],
+   "fingerprint": "54bdfa7d93fed5ef"
+  },
+  {
+   "pointer": "django/test/utils.py:CaptureQueriesContext.__exit__",
+   "line": 13,
+   "sentence": "Leaving, it puts `force_debug_cursor` back, reconnects `reset_queries` if it was the one to disconnect it, and notes the length as the end, unless an exception is leaving: then the end stays unset, and the slice runs on to the log's end (`django/test/utils.py:CaptureQueriesContext.__exit__`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "CaptureQueriesContext.__exit__",
+   "kind": "function",
+   "lines": [
+    751,
+    757
+   ],
+   "fingerprint": "42ba374f90c59bfb"
+  },
+  {
+   "pointer": "django/test/utils.py:CaptureQueriesContext.captured_queries",
+   "line": 13,
+   "sentence": "`CaptureQueriesContext.captured_queries` is `BaseDatabaseWrapper.queries` sliced from start to end: dictionaries of `\"sql\"` and `\"time\"`, which the object also counts, indexes and iterates (`django/test/utils.py:CaptureQueriesContext.captured_queries`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "CaptureQueriesContext.captured_queries",
+   "kind": "function",
+   "lines": [
+    736,
+    738
+   ],
+   "at": 737,
+   "fingerprint": "1931a4d79ed623f1"
+  },
+  {
+   "pointer": "django/db/__init__.py:reset_queries",
+   "line": 15,
+   "sentence": "The test client's handler sends `request_started` at each request, and `reset_queries` empties the log of every connection the thread has made (`django/db/__init__.py:reset_queries`): in a run, a request outside a capture emptied the log, and one inside left it whole.",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": "reset_queries",
+   "kind": "function",
+   "lines": [
+    47,
+    49
+   ],
+   "fingerprint": "ac1a034b891429d6"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase.assertNumQueries",
+   "line": 21,
+   "sentence": "Without a function it returns the context manager; with one, it calls it with the other arguments inside (`django/test/testcases.py:TransactionTestCase.assertNumQueries`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase.assertNumQueries",
+   "kind": "function",
+   "lines": [
+    1304,
+    1312
+   ],
+   "fingerprint": "09132f021fe91df0"
+  },
+  {
+   "pointer": "django/test/testcases.py:_AssertNumQueriesContext.__exit__",
+   "line": 21,
+   "sentence": "As a block is left, it compares the number captured with the number expected, its message listing the statements, numbered; an exception leaving the block goes on its way, and nothing is compared (`django/test/testcases.py:_AssertNumQueriesContext.__exit__`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "_AssertNumQueriesContext.__exit__",
+   "kind": "function",
+   "lines": [
+    109,
+    126
+   ],
+   "fingerprint": "ba1b250287cab348"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.queries",
+   "line": 71,
+   "sentence": "A capture measures lengths: with the log filled to its limit by hand, `assertNumQueries(2)` around two statements failed with \"0 queries executed, 2 expected\", and `queries` warned that the limit was exceeded (`django/db/backends/base/base.py:BaseDatabaseWrapper.queries`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.queries",
+   "kind": "function",
+   "lines": [
+    173,
+    181
+   ],
+   "at": 174,
+   "fingerprint": "a173853039eb9b79"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._pre_setup",
+   "line": 73,
+   "sentence": "So `TransactionTestCase._pre_setup` clears the log of each of the class's databases but mirrors before each test of a `TransactionTestCase` or a `TestCase`, the comment saying that one test probably won't run 9,000 queries and that an overflow breaks `assertNumQueries` (`django/test/testcases.py:TransactionTestCase._pre_setup`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._pre_setup",
+   "kind": "function",
+   "lines": [
+    1145,
+    1182
+   ],
+   "at": 1146,
+   "fingerprint": "3613508cdc1893a1"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase.assertQuerySetEqual",
+   "line": 77,
+   "sentence": "`TransactionTestCase.assertQuerySetEqual` takes a queryset, or any iterable, and the values expected; given `transform=`, it passes each item through that first; without, the items themselves are compared (`django/test/testcases.py:TransactionTestCase.assertQuerySetEqual`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase.assertQuerySetEqual",
+   "kind": "function",
+   "lines": [
+    1288,
+    1302
+   ],
+   "fingerprint": "831d818a68bbeb05"
+  },
+  {
+   "pointer": "docs/releases/5.1.txt",
+   "line": 79,
+   "sentence": "The old name, assertQuerysetEqual, is removed (`docs/releases/5.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "3a1b214427111cf2"
+  }
+ ]
+}

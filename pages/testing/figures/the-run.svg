@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 684">
+  <!-- the command, and its own first step: labels at x=0, what happens at x=232 -->
+  <text class="name" x="0" y="15">python manage.py test harbour.office</text>
+  <text x="0" y="41">test command</text>
+  <text x="232" y="41">the runner class from <tspan class="name">TEST_RUNNER</tspan>, <tspan class="name">DiscoverRunner</tspan>,</text>
+  <text x="232" y="59">made with the options</text>
+
+  <!-- the frame is one call of DiscoverRunner.run_tests; its steps run down it, labels at x=14 -->
+  <rect class="ground" x="0.5" y="75.5" width="645" height="558" rx="4"/>
+  <text class="name strong" x="14" y="97">DiscoverRunner.run_tests(("harbour.office",))</text>
+
+  <text class="name" x="14" y="125">setup_test_environment</text>
+  <text x="232" y="125"><tspan class="name">"testserver"</tspan> allowed, <tspan class="name">DEBUG</tspan> off,</text>
+  <text x="232" y="143">mail kept in memory, renders reported</text>
+
+  <text class="name" x="14" y="167">build_suite</text>
+  <text x="232" y="167">the tests found from the labels; <tspan class="name">TestCase</tspan> classes</text>
+  <text x="232" y="185">before other Django tests, plain <tspan class="name">unittest</tspan> tests last</text>
+
+  <text class="name" x="14" y="209">get_databases</text>
+  <text x="232" y="209">the aliases the tests’ <tspan class="name">databases</tspan> attributes name: <tspan class="name">"default"</tspan></text>
+
+  <text class="name" x="14" y="231">setup_databases</text>
+  <text x="232" y="231">a test database for each, made and migrated</text>
+
+  <text class="name" x="14" y="253">run_checks</text>
+  <text x="232" y="253">the system checks, now that the test databases exist</text>
+
+  <text class="name" x="14" y="275">run_suite</text>
+  <text x="232" y="275"><tspan class="name">unittest</tspan> runs the suite, a class at a time</text>
+
+  <!-- the suite opened: its two classes, in the order they run -->
+  <rect class="box" x="14.5" y="287.5" width="617" height="286" rx="4"/>
+
+  <!-- the TestCase: a transaction around the class (the outer accent box), a savepoint around each test (the inner) -->
+  <text x="28" y="309"><tspan class="name strong">ShipPageTests</tspan>, a <tspan class="name">TestCase</tspan></text>
+  <rect class="mark-box" x="28.5" y="321.5" width="589" height="192" rx="4"/>
+  <text class="name" x="42" y="343">setUpClass</text>
+  <text x="232" y="343">a transaction opened on <tspan class="name">"default"</tspan>;</text>
+  <text x="232" y="361"><tspan class="name">setUpTestData</tspan> writes its rows inside it</text>
+
+  <text x="42" y="385">each test</text>
+  <text x="232" y="385">a new <tspan class="name">Client</tspan></text>
+  <rect class="mark-box" x="219.5" y="397.5" width="384" height="80" rx="4"/>
+  <text x="232" y="419">a savepoint</text>
+  <text x="232" y="441"><tspan class="name">setUp</tspan>, the test, <tspan class="name">tearDown</tspan></text>
+  <text class="mark" x="232" y="463">back to the savepoint</text>
+
+  <text class="name" x="42" y="499">tearDownClass</text>
+  <text class="mark" x="232" y="499">the transaction rolled back</text>
+
+  <!-- the SimpleTestCase: no transaction, and no database -->
+  <text x="28" y="537"><tspan class="name strong">ShipUrlTests</tspan>, a <tspan class="name">SimpleTestCase</tspan></text>
+  <text x="42" y="559">each test</text>
+  <text x="232" y="559">a new <tspan class="name">Client</tspan>; a query to any database refused</text>
+
+  <!-- after the suite -->
+  <text class="name" x="14" y="597">teardown_databases</text>
+  <text x="232" y="597">each test database destroyed</text>
+
+  <text class="name" x="14" y="619">teardown_test_environment</text>
+  <text x="232" y="619">the settings and the template renderer put back</text>
+
+  <!-- the command's last step -->
+  <text x="0" y="659">any failure, error or</text>
+  <text x="0" y="677">unexpected success</text>
+  <text x="232" y="659">the process ends with status 1</text>
+</svg>

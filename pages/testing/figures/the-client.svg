@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 586">
+  <!-- the test's call -->
+  <text class="name" x="0" y="15">client.get("/ships/")</text>
+
+  <!-- the frame is one call of Client.get; labels at x=14, what happens at x=232 -->
+  <rect class="ground" x="0.5" y="29.5" width="645" height="556" rx="4"/>
+  <text class="name strong" x="14" y="51">Client.get</text>
+  <text x="232" y="51">extra keys and headers kept on the client</text>
+  <text x="14" y="73"><tspan class="name">RequestFactory.get</tspan>, <tspan class="name">RequestFactory.generic</tspan></text>
+
+  <!-- Client.request: the client's own work, before and after the handler -->
+  <rect class="box" x="14.5" y="85.5" width="617" height="486" rx="4"/>
+  <text class="name strong" x="28" y="107">Client.request</text>
+
+  <text class="name" x="28" y="131">_base_environ</text>
+  <text x="232" y="131">the environ</text>
+
+  <text class="name" x="28" y="153">connect</text>
+  <text x="232" y="153"><tspan class="name">store_rendered_templates</tspan> to <tspan class="name mark">template_rendered</tspan>,</text>
+  <text x="232" y="171"><tspan class="name">store_exc_info</tspan> to <tspan class="name mark">got_request_exception</tspan></text>
+
+  <!-- ClientHandler.__call__: the handler, in the server's place -->
+  <rect class="ground" x="28.5" y="183.5" width="589" height="266" rx="4"/>
+  <text class="name strong" x="42" y="205">ClientHandler.__call__</text>
+
+  <text class="name" x="42" y="229">load_middleware</text>
+  <text x="232" y="229">at the client’s first request only</text>
+
+  <text class="name" x="42" y="251">request_started</text>
+  <text x="232" y="251">sent with <tspan class="name">close_old_connections</tspan> off</text>
+
+  <text class="name" x="42" y="273">WSGIRequest</text>
+  <text x="232" y="273">marked to pass the CSRF check</text>
+
+  <!-- get_response: the project's middleware and view, at the centre -->
+  <rect class="box" x="42.5" y="285.5" width="561" height="82" rx="4"/>
+  <text class="name strong" x="56" y="307">get_response</text>
+  <text x="232" y="307">the middleware, then <tspan class="name">ship_list</tspan></text>
+
+  <text class="name mark" x="56" y="331">template_rendered</text>
+  <text x="232" y="331">sent as <tspan class="name">"office/ship_list.html"</tspan> renders</text>
+
+  <text class="name mark" x="56" y="353">template_rendered</text>
+  <text x="232" y="353">sent as <tspan class="name">"office/base.html"</tspan> renders</text>
+
+  <!-- the handler again, after the chain -->
+  <text class="name" x="42" y="391">conditional_content_removal</text>
+
+  <text class="name mark" x="42" y="413">wsgi_request</text>
+  <text x="232" y="413">set on the response</text>
+
+  <text class="name" x="42" y="435">close</text>
+  <text x="232" y="435"><tspan class="name">request_finished</tspan>, <tspan class="name">close_old_connections</tspan> off</text>
+
+  <!-- Client.request again, after the handler -->
+  <text class="name" x="28" y="473">disconnect</text>
+  <text x="232" y="473">both receivers, in a finally</text>
+
+  <text class="name" x="28" y="495">check_exception</text>
+  <text x="232" y="495"><tspan class="name mark">exc_info</tspan> set: <tspan class="name">None</tspan>, no exception reported</text>
+
+  <text x="28" y="517">the response</text>
+  <text x="232" y="517"><tspan class="name mark">client</tspan>, <tspan class="name mark">request</tspan>, <tspan class="name mark">templates</tspan>, <tspan class="name mark">context</tspan>,</text>
+  <text x="232" y="535"><tspan class="name mark">json</tspan>, <tspan class="name mark">resolver_match</tspan> set</text>
+
+  <text class="name" x="28" y="557">cookies</text>
+  <text x="232" y="557">none set by the response, none kept</text>
+</svg>

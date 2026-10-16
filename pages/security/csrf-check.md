@@ -39,7 +39,7 @@ A request already checked is not checked again. `CsrfViewMiddleware._accept` mar
 
 A view marked by `csrf_exempt` is let through next, without the request being marked ([View decorators](../views/decorators.md)). It is tested after `CsrfViewMiddleware.process_request` has read the browser's secret, so that, a comment says, `get_token` still works in an exempt view.
 
-Then the safe methods, `"GET"`, `"HEAD"`, `"OPTIONS"` and `"TRACE"`, on the comment's assumption that whatever RFC 9110 does not define as safe needs protection. Last, the test client's flag: its handler sets `"_dont_enforce_csrf_checks"` on every request, true unless the client was made with `enforce_csrf_checks=True` ([The test framework](../testing.md)) (`django/test/client.py:ClientHandler.__call__`). Both these paths mark the request as checked.
+Then the safe methods, `"GET"`, `"HEAD"`, `"OPTIONS"` and `"TRACE"`, on the comment's assumption that whatever RFC 9110 does not define as safe needs protection. Last, the test client's flag: its handler sets `"_dont_enforce_csrf_checks"` on every request, true unless the client was made with `enforce_csrf_checks=True` ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:ClientHandler.__call__`). Both these paths mark the request as checked.
 
 ## The origin
 

@@ -65,4 +65,16 @@ BaseFormSet.absolute_max     django/forms/formsets.py:formset_factory    # the s
 BaseFormSet.validate_min     django/forms/formsets.py:formset_factory    # the same
 BaseFormSet.validate_max     django/forms/formsets.py:formset_factory    # the same
 BaseInlineFormSet.fk         django/forms/models.py:inlineformset_factory    # set on each inline formset class by the factory: the foreign key from the child model to the parent
+SimpleTestCase.client        django/test/testcases.py:SimpleTestCase._pre_setup    # set on the test class before each test: a new instance of its client_class
+SimpleTestCase.async_client  django/test/testcases.py:SimpleTestCase._pre_setup    # the same, of its async_client_class
+HttpResponseBase.wsgi_request   django/test/client.py:ClientHandler.__call__    # set by the test client's handler on each response: the WSGIRequest it made and handled
+HttpResponseBase.asgi_request   django/test/client.py:AsyncClientHandler.__call__    # the same, by the asynchronous client's handler: the ASGIRequest
+HttpResponseBase.client      django/test/client.py:Client.request    # set by the test client on each response it returns: the client that sent the request
+HttpResponseBase.request     django/test/client.py:Client.request    # the same: the keyword arguments the request was built from, the environ's keys the test gave
+HttpResponseBase.templates   django/test/client.py:Client.request    # the same: the templates rendered while the request ran, as template_rendered reported them
+HttpResponseBase.context     django/test/client.py:Client.request    # the same: a copy of each rendered template's context, a ContextList, or the one context where there was one
+HttpResponseBase.json        django/test/client.py:Client.request    # the same: a function that parses the body as JSON, once, where the content type is JSON
+HttpResponseBase.resolver_match  django/test/client.py:Client.request    # the same: a SimpleLazyObject that resolves the request's path when first used
+HttpResponseBase.exc_info    django/test/client.py:ClientMixin.check_exception    # set on each response the test client returns: the exception got_request_exception reported, or None
+HttpResponseBase.redirect_chain  django/test/client.py:Client._handle_redirects    # set where the client followed redirects: each redirect's URL and status, in order
 ```

@@ -1,0 +1,212 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "test-case.md",
+ "pointers": [
+  {
+   "pointer": "django/test/testcases.py:connections_support_transactions",
+   "line": 11,
+   "sentence": "Each turns on whether every alias in the class's `databases` has `BaseDatabaseFeatures.supports_transactions`, and all but `_fixture_teardown` on whether each has `BaseDatabaseFeatures.uses_savepoints` too, as `TestCase._databases_support_transactions` and `TestCase._databases_support_savepoints` ask (`django/test/testcases.py:connections_support_transactions`, `django/test/testcases.py:connections_support_savepoints`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "connections_support_transactions",
+   "kind": "function",
+   "lines": [
+    1315,
+    1325
+   ],
+   "fingerprint": "d239260d3afbd29f"
+  },
+  {
+   "pointer": "django/test/testcases.py:connections_support_savepoints",
+   "line": 11,
+   "sentence": "Each turns on whether every alias in the class's `databases` has `BaseDatabaseFeatures.supports_transactions`, and all but `_fixture_teardown` on whether each has `BaseDatabaseFeatures.uses_savepoints` too, as `TestCase._databases_support_transactions` and `TestCase._databases_support_savepoints` ask (`django/test/testcases.py:connections_support_transactions`, `django/test/testcases.py:connections_support_savepoints`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "connections_support_savepoints",
+   "kind": "function",
+   "lines": [
+    1328,
+    1337
+   ],
+   "fingerprint": "a07f0ea0b0ff7ae9"
+  },
+  {
+   "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.supports_transactions",
+   "line": 11,
+   "sentence": "SQLite, PostgreSQL and Oracle have both; MySQL too, unless its engine is MyISAM (`django/db/backends/mysql/features.py:DatabaseFeatures.supports_transactions`).",
+   "tree": "django",
+   "path": "django/db/backends/mysql/features.py",
+   "symbol": "DatabaseFeatures.supports_transactions",
+   "kind": "function",
+   "lines": [
+    185,
+    190
+   ],
+   "at": 186,
+   "fingerprint": "a29b8832d51ce5c4"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit",
+   "line": 47,
+   "sentence": "The class's block sent `\"BEGIN\"` on entering, before any write: SQLite's backend begins a transaction with that statement, followed by the `\"transaction_mode\"` of its `\"OPTIONS\"` where one is set (`django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper._start_transaction_under_autocommit",
+   "kind": "function",
+   "lines": [
+    321,
+    331
+   ],
+   "fingerprint": "9be10b45e65c4515"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase.setUpClass",
+   "line": 51,
+   "sentence": "`TestCase.setUpClass` first calls the parent's: `SimpleTestCase.setUpClass` enters the class's overridden settings and guards the aliases it does not name, and `TransactionTestCase.setUpClass` runs no `_pre_setup` for a `TestCase` (`django/test/testcases.py:TransactionTestCase.setUpClass`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase.setUpClass",
+   "kind": "function",
+   "lines": [
+    1131,
+    1136
+   ],
+   "at": 1132,
+   "fingerprint": "edac9c863504659f"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase.setUpClass",
+   "line": 51,
+   "sentence": "Otherwise, in order (`django/test/testcases.py:TestCase.setUpClass`):",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase.setUpClass",
+   "kind": "function",
+   "lines": [
+    1418,
+    1448
+   ],
+   "at": 1419,
+   "fingerprint": "5a56ddacb599d41f"
+  },
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 60,
+   "sentence": "A project's `setUpClass` that raises after calling the parent's leaves the transaction open; Django's documentation warns of a segmentation fault on some platforms (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestData",
+   "line": 64,
+   "sentence": "`TestData` is a descriptor with a `__get__` and no `__set__` (`django/test/testcases.py:TestData`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestData",
+   "kind": "class",
+   "lines": [
+    1340,
+    1375
+   ],
+   "fingerprint": "574f1acee8402b56"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._fixture_setup",
+   "line": 105,
+   "sentence": "Inside the class's blocks, `Atomic.__enter__` makes each new block a savepoint (`django/test/testcases.py:TestCase._fixture_setup`; [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#entering-a-block-atomic__enter)).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._fixture_setup",
+   "kind": "function",
+   "lines": [
+    1471,
+    1490
+   ],
+   "at": 1472,
+   "fingerprint": "4587adfeecbac258"
+  },
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 107,
+   "sentence": "Nothing is wrapped in `TestData`; Django's documentation notes the speed lost without transactions (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase._fixture_teardown",
+   "line": 111,
+   "sentence": "`TestCase._fixture_teardown`, where the databases have transactions, goes through the class's aliases in reverse order (`django/test/testcases.py:TestCase._fixture_teardown`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase._fixture_teardown",
+   "kind": "function",
+   "lines": [
+    1492,
+    1500
+   ],
+   "fingerprint": "6268309c5aeebd01"
+  },
+  {
+   "pointer": "docs/releases/1.10.txt",
+   "line": 113,
+   "sentence": "The release notes of Django 1.10, which added the check, give its purpose as catching bugs (`docs/releases/1.10.txt`).",
+   "tree": "django",
+   "path": "docs/releases/1.10.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1383
+   ],
+   "fingerprint": "d491274bfc61d8d9"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.check_constraints",
+   "line": 137,
+   "sentence": "Then `\"PRAGMA foreign_key_check\"` found the row, SQLite's `check_constraints` raised (`django/db/backends/sqlite3/base.py:DatabaseWrapper.check_constraints`), and `SimpleTestCase._setup_and_call` added an error to the same test, the E.",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.check_constraints",
+   "kind": "function",
+   "lines": [
+    262,
+    316
+   ],
+   "fingerprint": "1bd9510422826736"
+  },
+  {
+   "pointer": "django/test/testcases.py:TestCase.tearDownClass",
+   "line": 141,
+   "sentence": "`TestCase.tearDownClass`, where the databases have both features, rolls the class's blocks back, ending each transaction, and closes every connection that was opened; in every case it then calls the parent's (`django/test/testcases.py:TestCase.tearDownClass`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TestCase.tearDownClass",
+   "kind": "function",
+   "lines": [
+    1450,
+    1459
+   ],
+   "at": 1451,
+   "fingerprint": "378c379ff6ffbc86"
+  }
+ ]
+}

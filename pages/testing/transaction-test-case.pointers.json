@@ -1,0 +1,213 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "transaction-test-case.md",
+ "pointers": [
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 9,
+   "sentence": "A rollback cannot undo what a test committed, and some tests must commit: code that commits or rolls back, to see the effect, or a check that code runs inside a transaction, as `select_for_update` requires, which Django's documentation says cannot be made in a `TestCase` (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._databases_names",
+   "line": 11,
+   "sentence": "Both work on the class's databases: the aliases of `databases` in the order of `DATABASES`, less any whose `\"TEST\"` settings name a `\"MIRROR\"` ([Test databases: `BaseDatabaseCreation`](../backends/creation.md); `django/test/testcases.py:TransactionTestCase._databases_names`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._databases_names",
+   "kind": "function",
+   "lines": [
+    1184,
+    1195
+   ],
+   "at": 1185,
+   "fingerprint": "b1b1155d54517faa"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._pre_setup",
+   "line": 15,
+   "sentence": "`TransactionTestCase._pre_setup` is a class method, and works in this order (`django/test/testcases.py:TransactionTestCase._pre_setup`):",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._pre_setup",
+   "kind": "function",
+   "lines": [
+    1145,
+    1182
+   ],
+   "at": 1146,
+   "fingerprint": "3613508cdc1893a1"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase.setUpClass",
+   "line": 24,
+   "sentence": "`TransactionTestCase.setUpClass` calls the parent's and then, for a class that is not a `TestCase`, calls `_pre_setup` and sets `SimpleTestCase._pre_setup_ran_eagerly` on the class; `SimpleTestCase._setup_and_call` finds the flag at the first test that is not skipped, clears it, and does not call `_pre_setup` again (`django/test/testcases.py:TransactionTestCase.setUpClass`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase.setUpClass",
+   "kind": "function",
+   "lines": [
+    1131,
+    1136
+   ],
+   "at": 1132,
+   "fingerprint": "edac9c863504659f"
+  },
+  {
+   "pointer": "docs/releases/5.2.txt",
+   "line": 26,
+   "sentence": "Rows from `fixtures` and from `serialized_rollback` are there during `setUpClass` (`docs/releases/5.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "56a4c82a284e4c7a"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._fixture_setup",
+   "line": 34,
+   "sentence": "`TransactionTestCase._fixture_setup` works on each of the class's databases in turn, and what it writes is committed (`django/test/testcases.py:TransactionTestCase._fixture_setup`):",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._fixture_setup",
+   "kind": "function",
+   "lines": [
+    1210,
+    1230
+   ],
+   "at": 1211,
+   "fingerprint": "37a9bba0dc08639c"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._post_teardown",
+   "line": 42,
+   "sentence": "`TransactionTestCase._post_teardown` calls `_fixture_teardown`, then closes each connection made in this thread, whatever its alias, and in a `finally` undoes the narrowing to `available_apps` (`django/test/testcases.py:TransactionTestCase._post_teardown`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._post_teardown",
+   "kind": "function",
+   "lines": [
+    1235,
+    1263
+   ],
+   "fingerprint": "56ecf0250e52d50c"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.close",
+   "line": 42,
+   "sentence": "A `TestCase` does not close them where its databases have transactions (`TestCase._should_reload_connections`), and SQLite's backend ignores the close of a database in memory (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper.close",
+   "kind": "function",
+   "lines": [
+    220,
+    227
+   ],
+   "at": 221,
+   "fingerprint": "317a4a75947883f9"
+  },
+  {
+   "pointer": "django/test/testcases.py:TransactionTestCase._fixture_teardown",
+   "line": 44,
+   "sentence": "`_fixture_teardown` calls flush on each of the class's databases, with `reset_sequences=False`, with `allow_cascade=True` only under `available_apps`, and with `inhibit_post_migrate=True` under `available_apps`, or under `serialized_rollback` where the runner kept the rows, the comment saying the latter is so as not to recreate the serialized rows (`django/test/testcases.py:TransactionTestCase._fixture_teardown`).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "TransactionTestCase._fixture_teardown",
+   "kind": "function",
+   "lines": [
+    1265,
+    1286
+   ],
+   "fingerprint": "288a54b862789ad6"
+  },
+  {
+   "pointer": "django/core/management/commands/flush.py:Command.handle",
+   "line": 44,
+   "sentence": "Flush empties the models' tables in one transaction ([Introspection: reading the schema back](../backends/introspection.md)), and then, unless inhibited, sends `post_migrate` on the database for each application with a models module, its comment saying this lets each respond as if the database had been migrated from scratch: contenttypes and auth make their rows again ([The migrate command, showmigrations and sqlmigrate](../migrations/migrate.md); `django/core/management/commands/flush.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/flush.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    32,
+    91
+   ],
+   "fingerprint": "ba4b03fe0cc2ef74"
+  },
+  {
+   "pointer": "docs/topics/testing/advanced.txt",
+   "line": 102,
+   "sentence": "`available_apps` is private, Django's documentation says, and spares Django's own test suite the `post_migrate` after each flush, whose cost grows with the number of models (`docs/topics/testing/advanced.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/advanced.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    889
+   ],
+   "fingerprint": "6276180c0829ff60"
+  },
+  {
+   "pointer": "django/core/management/commands/loaddata.py:Command.fixture_dirs",
+   "line": 102,
+   "sentence": "Under it, whatever asks the registry sees only the applications named: the flush empties their tables and, where the backend cascades, those that refer to them, and sends no `post_migrate`; and loaddata looks for fixtures in their directories and no other application's (`django/core/management/commands/loaddata.py:Command.fixture_dirs`).",
+   "tree": "django",
+   "path": "django/core/management/commands/loaddata.py",
+   "symbol": "Command.fixture_dirs",
+   "kind": "function",
+   "lines": [
+    355,
+    384
+   ],
+   "at": 356,
+   "fingerprint": "72da95cdc6228b75"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:create_contenttypes",
+   "line": 104,
+   "sentence": "The `post_migrate` before each test wrote nothing: the receivers of contenttypes and auth return when the registry has no `ContentType` or no `Permission` (`django/contrib/contenttypes/management/__init__.py:create_contenttypes`, `django/contrib/auth/management/__init__.py:create_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "create_contenttypes",
+   "kind": "function",
+   "lines": [
+    100,
+    143
+   ],
+   "fingerprint": "7e422ad0ff68b39e"
+  },
+  {
+   "pointer": "django/contrib/auth/management/__init__.py:create_permissions",
+   "line": 104,
+   "sentence": "The `post_migrate` before each test wrote nothing: the receivers of contenttypes and auth return when the registry has no `ContentType` or no `Permission` (`django/contrib/contenttypes/management/__init__.py:create_contenttypes`, `django/contrib/auth/management/__init__.py:create_permissions`).",
+   "tree": "django",
+   "path": "django/contrib/auth/management/__init__.py",
+   "symbol": "create_permissions",
+   "kind": "function",
+   "lines": [
+    41,
+    111
+   ],
+   "fingerprint": "6f0eed2e5ffcc15f"
+  }
+ ]
+}

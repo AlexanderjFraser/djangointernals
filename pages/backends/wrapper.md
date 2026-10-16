@@ -126,4 +126,4 @@ with transaction.atomic(), connection.constraint_checks_disabled(): Ship.objects
       -> False
 ```
 
-On the other three the deferred foreign keys let the rows in, and `check_constraints` checks them. `TestCase` calls `check_constraints` as each test ends, before it rolls the test's transaction back, on each database whose features say it can defer checks and whose connection is usable and not marked for rollback (`django/test/testcases.py:TestCase._fixture_teardown`, `django/test/testcases.py:TestCase._should_check_constraints`) ([The test framework](../testing.md)).
+On the other three the deferred foreign keys let the rows in, and `check_constraints` checks them. `TestCase` calls `check_constraints` as each test ends, before it rolls the test's transaction back, on each database whose features say it can defer checks and whose connection is usable and not marked for rollback (`django/test/testcases.py:TestCase._fixture_teardown`, `django/test/testcases.py:TestCase._should_check_constraints`) ([A transaction around each test: `TestCase`](../testing/test-case.md)).
