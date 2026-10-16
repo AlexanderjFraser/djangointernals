@@ -10,7 +10,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 ## Two forms of a version
 
-Following DEP 20, the releases from Django 2028, the one that was to be 7.0, are calendar versions, numbered by a year and a patch number (2028.1) with no minor number (`docs/releases/6.2.txt`). `VERSION` holds the numbers as printed, then the status (`"alpha"`, `"beta"`, `"rc"` or `"final"`) and its iteration: five parts for 6.2.1, four for 2028.1. A comment on `_validate_version` says that keeping the numbers as printed is what makes `django.VERSION >= (2028, 3)` mean what it looks like; the function checks the length and the status with `assert` (`django/utils/version.py:_validate_version`).
+Following DEP 20, the releases from Django 2028, the one that was to be 7.0, are calendar versions, numbered by a year and a patch number (2028.1) with no minor number (`docs/releases/6.2.txt`); [What changed](../changes.md#the-releases) sets them beside the releases from 5.0 to this commit. `VERSION` holds the numbers as printed, then the status (`"alpha"`, `"beta"`, `"rc"` or `"final"`) and its iteration: five parts for 6.2.1, four for 2028.1. A comment on `_validate_version` says that keeping the numbers as printed is what makes `django.VERSION >= (2028, 3)` mean what it looks like; the function checks the length and the status with `assert` (`django/utils/version.py:_validate_version`).
 
 The two forms agree from the right. `VersionTuple.patch`, `VersionTuple.status` and `VersionTuple.iteration` are the third, second and last parts from the end, and `VersionTuple.feature`, the numbers that name a feature release, is everything before them (`django/utils/version.py:VersionTuple`).
 

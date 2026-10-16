@@ -114,4 +114,5 @@ published (`INDEXABLE` in `djangointernals/settings.py`).
   keeps its quotes inside the span (`"text/html"`).
 - On this machine: never edit files through PowerShell; a script goes in a
   file and is run with `.venv/Scripts/python.exe`, never through a
-  heredoc. The `python` on PATH is 3.11, which cannot parse the pin.
+  heredoc. A bare `python` may be the system's 3.11, which imports the pin
+  only as far as its first use of a 3.12 API, and fails.

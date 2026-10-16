@@ -153,7 +153,7 @@ peers[0].signed_on
 
 > **Trap.** Every instance in the list is assigned the value the database returned, so a peer whose attribute the program has assigned since it was fetched has it overwritten. And an instance whose row is gone has no entry in the dictionary, so the loop raises `KeyError` when it reaches it, having assigned to the instances before it in the list.
 
-In the first lines below the second sailor's `"signed_on"` is set to `None` before the first's is read. In the last, a sailor named Eve is fetched as a fifth peer and her row is then deleted; her key is 6, a sailor with key 5 having been made and deleted in the same run.
+In the first lines below the second sailor's `"signed_on"` is set to `None` before the first's is read. In the last, a sailor named Eve is fetched as a fifth peer and Eve's row is then deleted; its key is 6, a sailor with key 5 having been made and deleted in the same run.
 
 ```text recording=querysets
 peers = list(Sailor.objects.fetch_mode(models.FETCH_PEERS).only('name').order_by('id')); peers[1].signed_on = None

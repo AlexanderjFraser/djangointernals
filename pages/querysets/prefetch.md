@@ -166,7 +166,7 @@ prefetch_related_objects(hands, 'ship__home')
       -> ([<Port: Bergen>], [])
 ```
 
-In the first call Ada was left out at level 0, since her ship was cached, and ships were fetched for the other three. Those two ships were the objects of level 1, and their home ports were fetched. Ada's own Ship, another object than the Petrel that Bram was given, was not among them, and its home was still not cached. In the second call nobody needed fetching at level 0, so the function read through, and its list for level 1 was the ship of every sailor. Ada's alone lacked its home, and it was fetched.
+In the first call Ada was left out at level 0, since Ada's ship was cached, and ships were fetched for the other three. Those two ships were the objects of level 1, and their home ports were fetched. Ada's own Ship, another object than the Petrel that Bram was given, was not among them, and its home was still not cached. In the second call nobody needed fetching at level 0, so the function read through, and its list for level 1 was the ship of every sailor. Ada's alone lacked its home, and it was fetched.
 
 ## `prefetch_one_level`: one queryset, shared out
 

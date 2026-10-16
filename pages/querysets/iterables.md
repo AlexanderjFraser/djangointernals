@@ -260,7 +260,7 @@ no_officer._state.fields_cache, Sailor.officer.is_cached(no_officer)  ->  ({'off
 no_officer.officer  ->  raises RelatedObjectDoesNotExist: Sailor has no officer.
 ```
 
-The statement has the same outer join. Afterwards her cache holds `None` under `"officer"`, as the Petrel's held `None` for its captain, and reading the attribute raises with no statement sent.
+The statement has the same outer join. Afterwards the sailor's cache holds `None` under `"officer"`, as the Petrel's held `None` for its captain, and reading the attribute raises with no statement sent.
 
 ## Known related objects
 
