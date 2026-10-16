@@ -1,0 +1,237 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "flatpages-and-redirects.md",
+ "pointers": [
+  {
+   "pointer": "docs/ref/contrib/flatpages.txt",
+   "line": 9,
+   "sentence": "The flat pages application keeps the first in the database, one-off pages a project would not write an application for, in its documentation's words (`docs/ref/contrib/flatpages.txt`); the redirects application keeps the second.",
+   "tree": "django",
+   "path": "docs/ref/contrib/flatpages.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    430
+   ],
+   "fingerprint": "45fff93ab03b8d30"
+  },
+  {
+   "pointer": "django/contrib/flatpages/models.py:FlatPage",
+   "line": 13,
+   "sentence": "One more field, `enable_comments`, is read by nothing in Django and shown by no fieldset of the admin; the documentation leaves it to a project (`django/contrib/flatpages/models.py:FlatPage`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/models.py",
+   "symbol": "FlatPage",
+   "kind": "class",
+   "lines": [
+    8,
+    49
+   ],
+   "fingerprint": "b02bf9bd530202a6"
+  },
+  {
+   "pointer": "django/contrib/redirects/models.py:Redirect",
+   "line": 15,
+   "sentence": "Site and old path are unique together (`django/contrib/redirects/models.py:Redirect`).",
+   "tree": "django",
+   "path": "django/contrib/redirects/models.py",
+   "symbol": "Redirect",
+   "kind": "class",
+   "lines": [
+    6,
+    35
+   ],
+   "fingerprint": "56fe057c128b947b"
+  },
+  {
+   "pointer": "django/contrib/redirects/middleware.py:RedirectFallbackMiddleware",
+   "line": 23,
+   "sentence": "Both are class attributes, for a subclass to change, a comment says (`django/contrib/redirects/middleware.py:RedirectFallbackMiddleware`).",
+   "tree": "django",
+   "path": "django/contrib/redirects/middleware.py",
+   "symbol": "RedirectFallbackMiddleware",
+   "kind": "class",
+   "lines": [
+    10,
+    52
+   ],
+   "fingerprint": "f83f3e16f176b0ca"
+  },
+  {
+   "pointer": "django/contrib/flatpages/middleware.py:FlatpageFallbackMiddleware.process_response",
+   "line": 34,
+   "sentence": "If it raises anything else, so does the 404, unless `settings.DEBUG` is true, when the exception goes on; the comment's reason is that a middleware cannot assume the error will be caught elsewhere (`django/contrib/flatpages/middleware.py:FlatpageFallbackMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/middleware.py",
+   "symbol": "FlatpageFallbackMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    10,
+    22
+   ],
+   "fingerprint": "cdc43487cd186c6c"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 36,
+   "sentence": "`BaseHandler._get_response` calls the `process_view` hooks only after the URL resolves, so none has run for a path that resolves nowhere (`django/core/handlers/base.py:BaseHandler._get_response`) ([The centre of the chain](../handlers/view.md)).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
+   "lines": [
+    176,
+    228
+   ],
+   "fingerprint": "8a7faacfec18a9da"
+  },
+  {
+   "pointer": "django/contrib/flatpages/views.py:flatpage",
+   "line": 40,
+   "sentence": "`CommonMiddleware` would not: it adds a slash only when the path with one resolves in the URLconf, and the path of a flat page the middleware serves resolves nowhere ([Resolving a path](../urls/resolving.md#the-resolvers-other-callers)) (`django/contrib/flatpages/views.py:flatpage`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/views.py",
+   "symbol": "flatpage",
+   "kind": "function",
+   "lines": [
+    22,
+    45
+   ],
+   "fingerprint": "064564edab0b7ce4"
+  },
+  {
+   "pointer": "django/contrib/flatpages/views.py:render_flatpage",
+   "line": 44,
+   "sentence": "The view gives the template one variable, \"flatpage\", and the request, so the context processors add theirs (`django/contrib/flatpages/views.py:render_flatpage`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/views.py",
+   "symbol": "render_flatpage",
+   "kind": "function",
+   "lines": [
+    48,
+    70
+   ],
+   "at": 49,
+   "fingerprint": "066c15657175a61d"
+  },
+  {
+   "pointer": "docs/ref/contrib/flatpages.txt",
+   "line": 61,
+   "sentence": "The documentation warns that Django does not sanitize a flat page's HTML, that a malicious page can lead to permission escalation, and that only trusted users should add or edit pages (`docs/ref/contrib/flatpages.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/flatpages.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    430
+   ],
+   "fingerprint": "45fff93ab03b8d30"
+  },
+  {
+   "pointer": "django/contrib/flatpages/urls.py",
+   "line": 65,
+   "sentence": "The flat pages application's URLconf is one pattern, `\"<path:url>\"` to `flatpage`, for a project to include under a prefix (`django/contrib/flatpages/urls.py`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/urls.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    6
+   ],
+   "fingerprint": "46cdfb223d7dd923"
+  },
+  {
+   "pointer": "django/contrib/flatpages/models.py:FlatPage.get_absolute_url",
+   "line": 67,
+   "sentence": "`FlatPage.get_absolute_url` reverses the view with the page's URL, without its leading slash and then with it; when neither reverses, it returns the URL after the script prefix, added by hand, a comment says, because it bypasses `reverse` (`django/contrib/flatpages/models.py:FlatPage.get_absolute_url`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/models.py",
+   "symbol": "FlatPage.get_absolute_url",
+   "kind": "function",
+   "lines": [
+    40,
+    49
+   ],
+   "fingerprint": "a4a86431edae7e4e"
+  },
+  {
+   "pointer": "docs/ref/contrib/flatpages.txt",
+   "line": 69,
+   "sentence": "The documentation's catch-all is a regular expression that matches only a path ending in a slash (`docs/ref/contrib/flatpages.txt`); with it, /bulletins/1 was redirected again.",
+   "tree": "django",
+   "path": "docs/ref/contrib/flatpages.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    430
+   ],
+   "fingerprint": "45fff93ab03b8d30"
+  },
+  {
+   "pointer": "django/contrib/flatpages/forms.py:FlatpageForm",
+   "line": 73,
+   "sentence": "Its `url` field is a `RegexField` of letters, digits, dots, underscores, hyphens, slashes and tildes; `FlatpageForm.clean_url` requires a leading slash, and a trailing one when `settings.APPEND_SLASH` is true and `MIDDLEWARE` holds \"django.middleware.common.CommonMiddleware\"; `FlatpageForm.clean` refuses a URL another page has on any of the chosen sites (`django/contrib/flatpages/forms.py:FlatpageForm`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/forms.py",
+   "symbol": "FlatpageForm",
+   "kind": "class",
+   "lines": [
+    9,
+    74
+   ],
+   "fingerprint": "36f0ea876468ba1a"
+  },
+  {
+   "pointer": "django/contrib/flatpages/admin.py:FlatPageAdmin",
+   "line": 83,
+   "sentence": "`FlatPageAdmin` uses the form, and puts `registration_required` and `template_name` in a collapsed fieldset of advanced options (`django/contrib/flatpages/admin.py:FlatPageAdmin`).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/admin.py",
+   "symbol": "FlatPageAdmin",
+   "kind": "class",
+   "lines": [
+    7,
+    22
+   ],
+   "at": 8,
+   "fingerprint": "cf715838632dacb6"
+  },
+  {
+   "pointer": "django/contrib/flatpages/templatetags/flatpages.py:FlatpageNode.render",
+   "line": 87,
+   "sentence": "It never looks at the request's user (`django/contrib/flatpages/templatetags/flatpages.py:FlatpageNode.render`):",
+   "tree": "django",
+   "path": "django/contrib/flatpages/templatetags/flatpages.py",
+   "symbol": "FlatpageNode.render",
+   "kind": "function",
+   "lines": [
+    21,
+    43
+   ],
+   "fingerprint": "bdd7ce50e097f6f6"
+  },
+  {
+   "pointer": "django/contrib/flatpages/sitemaps.py:FlatPageSitemap.items",
+   "line": 96,
+   "sentence": "`FlatPageSitemap` lists for a sitemap the pages without `registration_required` of the site `SITE_ID` names, asking `SiteManager.get_current` without a request (`django/contrib/flatpages/sitemaps.py:FlatPageSitemap.items`) ([Sitemaps: `Sitemap` and the sitemap views](sitemaps.md)).",
+   "tree": "django",
+   "path": "django/contrib/flatpages/sitemaps.py",
+   "symbol": "FlatPageSitemap.items",
+   "kind": "function",
+   "lines": [
+    7,
+    14
+   ],
+   "fingerprint": "b966880ac20b6757"
+  }
+ ]
+}

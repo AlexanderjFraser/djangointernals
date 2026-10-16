@@ -1,0 +1,277 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "gis-extras.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/gis/forms/fields.py:GeometryField",
+   "line": 13,
+   "sentence": "`django.contrib.gis.forms` is all of `django.forms` and, beside it, the map widgets and a form field for each kind of geometry: `django.contrib.gis.forms.fields.GeometryField` and its subclasses, `PointField` and the rest, differing only in `geom_type` (`django/contrib/gis/forms/fields.py:GeometryField`).",
+   "tree": "django",
+   "path": "django/contrib/gis/forms/fields.py",
+   "symbol": "GeometryField",
+   "kind": "class",
+   "lines": [
+    10,
+    124
+   ],
+   "fingerprint": "5f56a76f82a8af05"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:GeometryField.formfield",
+   "line": 13,
+   "sentence": "A model's geometry field makes its own, passing its kind, its SRID and `max_geom_collections`, a limit on nested collections that keeps hostile input from crashing GEOS (`django/contrib/gis/db/models/fields.py:GeometryField.formfield`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "GeometryField.formfield",
+   "kind": "function",
+   "lines": [
+    332,
+    344
+   ],
+   "fingerprint": "69a505b018579752"
+  },
+  {
+   "pointer": "django/contrib/gis/forms/widgets.py:BaseGeometryWidget",
+   "line": 31,
+   "sentence": "`BaseGeometryWidget` keeps its options, `base_layer`, `geom_type`, `map_srid` and `display_raw`, as class attributes, copied into the widget's `attrs` when it is made (`django/contrib/gis/forms/widgets.py:BaseGeometryWidget`).",
+   "tree": "django",
+   "path": "django/contrib/gis/forms/widgets.py",
+   "symbol": "BaseGeometryWidget",
+   "kind": "class",
+   "lines": [
+    13,
+    72
+   ],
+   "fingerprint": "2e56731005720002"
+  },
+  {
+   "pointer": "django/contrib/gis/static/gis/js/OLMapWidget.js",
+   "line": 37,
+   "sentence": "It reads the textarea as GeoJSON and writes changes back the same way, naming no projection (`django/contrib/gis/static/gis/js/OLMapWidget.js`); and `OpenLayersWidget.deserialize` reads GeoJSON in the map's SRID, where GeoJSON, its comment says, assumes 4326.",
+   "tree": "django",
+   "path": "django/contrib/gis/static/gis/js/OLMapWidget.js",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    333
+   ],
+   "fingerprint": "18fc6ed03c005904"
+  },
+  {
+   "pointer": "django/contrib/gis/admin/options.py:GeoModelAdminMixin.formfield_for_dbfield",
+   "line": 43,
+   "sentence": "`GISModelAdmin` is `ModelAdmin` behind `GeoModelAdminMixin`, whose `formfield_for_dbfield` gives a geometry field of two dimensions, or of three if `supports_3d` allows, the model field's own form field with the widget `gis_widget`, `OSMWidget` by default, made with `gis_widget_kwargs` (`django/contrib/gis/admin/options.py:GeoModelAdminMixin.formfield_for_dbfield`).",
+   "tree": "django",
+   "path": "django/contrib/gis/admin/options.py",
+   "symbol": "GeoModelAdminMixin.formfield_for_dbfield",
+   "kind": "function",
+   "lines": [
+    10,
+    17
+   ],
+   "fingerprint": "5c1d8f5fcfd6d001"
+  },
+  {
+   "pointer": "django/contrib/gis/apps.py:GISConfig.ready",
+   "line": 47,
+   "sentence": "`GISConfig.ready` adds the format to `BUILTIN_SERIALIZERS` (`django/contrib/gis/apps.py:GISConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/gis/apps.py",
+   "symbol": "GISConfig.ready",
+   "kind": "function",
+   "lines": [
+    11,
+    14
+   ],
+   "fingerprint": "db14c8babd8da127"
+  },
+  {
+   "pointer": "django/contrib/gis/serializers/geojson.py:Serializer.get_dump_object",
+   "line": 47,
+   "sentence": "It writes a FeatureCollection, and for each instance a Feature whose `\"id\"` is the key or id_field's value, whose `\"properties\"` are the other fields, with the key as `\"pk\"` unless a fields list leaves it out, and whose `\"geometry\"` is the first geometry field's, or geometry_field's, transformed into srid (`django/contrib/gis/serializers/geojson.py:Serializer.get_dump_object`).",
+   "tree": "django",
+   "path": "django/contrib/gis/serializers/geojson.py",
+   "symbol": "Serializer.get_dump_object",
+   "kind": "function",
+   "lines": [
+    43,
+    66
+   ],
+   "fingerprint": "c446a8620c4ed193"
+  },
+  {
+   "pointer": "django/contrib/gis/feeds.py:Feed",
+   "line": 53,
+   "sentence": "`django/contrib/gis/feeds.py:Feed` is `django.contrib.syndication.views.Feed` with `GeoRSSFeed` as its generator and two more dynamic attributes, `\"geometry\"` for the feed and `\"item_geometry\"` for each item, which `Feed.feed_extra_kwargs` and `Feed.item_extra_kwargs` hand to the generator ([Feeds: `django.contrib.syndication` and the feed generator](feeds.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/feeds.py",
+   "symbol": "Feed",
+   "kind": "class",
+   "lines": [
+    137,
+    151
+   ],
+   "fingerprint": "78d4b9359465ebad"
+  },
+  {
+   "pointer": "django/contrib/gis/sitemaps/kml.py:KMLSitemap",
+   "line": 63,
+   "sentence": "`KMLSitemap` lists geometry fields, not objects: triples of an application label, a model name and a field name, from the models or triples given or, by default, from every geometry field of every installed model (`django/contrib/gis/sitemaps/kml.py:KMLSitemap`).",
+   "tree": "django",
+   "path": "django/contrib/gis/sitemaps/kml.py",
+   "symbol": "KMLSitemap",
+   "kind": "class",
+   "lines": [
+    8,
+    74
+   ],
+   "fingerprint": "8d926a05267fee26"
+  },
+  {
+   "pointer": "django/contrib/gis/sitemaps/views.py:kml",
+   "line": 63,
+   "sentence": "It renders \"gis/kml/placemarks.kml\" with `render_to_kml`, as \"application/vnd.google-earth.kml+xml\", or with `render_to_kmz`, which zips it as \"doc.kml\" (`django/contrib/gis/sitemaps/views.py:kml`, `django/contrib/gis/shortcuts.py:compress_kml`).",
+   "tree": "django",
+   "path": "django/contrib/gis/sitemaps/views.py",
+   "symbol": "kml",
+   "kind": "function",
+   "lines": [
+    10,
+    58
+   ],
+   "fingerprint": "c1d09cc369b3f84e"
+  },
+  {
+   "pointer": "django/contrib/gis/shortcuts.py:compress_kml",
+   "line": 63,
+   "sentence": "It renders \"gis/kml/placemarks.kml\" with `render_to_kml`, as \"application/vnd.google-earth.kml+xml\", or with `render_to_kmz`, which zips it as \"doc.kml\" (`django/contrib/gis/sitemaps/views.py:kml`, `django/contrib/gis/shortcuts.py:compress_kml`).",
+   "tree": "django",
+   "path": "django/contrib/gis/shortcuts.py",
+   "symbol": "compress_kml",
+   "kind": "function",
+   "lines": [
+    15,
+    21
+   ],
+   "fingerprint": "eae9129bfafe3bad"
+  },
+  {
+   "pointer": "django/contrib/gis/utils/ogrinspect.py:_ogrinspect",
+   "line": 67,
+   "sentence": "GDAL reads a file of geographic data, a shapefile or GeoJSON, as a `DataSource` of layers of features, each with the layer's fields and a geometry. ogrinspect writes a model for a layer, each OGR field type mapped to a model field type with the layer's widths, and a geometry field of the layer's type, with the layer's SRID, or -1 if it has none, unless that is 4326, the default (`django/contrib/gis/utils/ogrinspect.py:_ogrinspect`); `--mapping` adds the dictionary `LayerMapping` wants (`django/contrib/gis/management/commands/ogrinspect.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/gis/utils/ogrinspect.py",
+   "symbol": "_ogrinspect",
+   "kind": "function",
+   "lines": [
+    130,
+    269
+   ],
+   "fingerprint": "63c8fd604dc8d9a3"
+  },
+  {
+   "pointer": "django/contrib/gis/management/commands/ogrinspect.py:Command.handle",
+   "line": 67,
+   "sentence": "GDAL reads a file of geographic data, a shapefile or GeoJSON, as a `DataSource` of layers of features, each with the layer's fields and a geometry. ogrinspect writes a model for a layer, each OGR field type mapped to a model field type with the layer's widths, and a geometry field of the layer's type, with the layer's SRID, or -1 if it has none, unless that is 4326, the default (`django/contrib/gis/utils/ogrinspect.py:_ogrinspect`); `--mapping` adds the dictionary `LayerMapping` wants (`django/contrib/gis/management/commands/ogrinspect.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/gis/management/commands/ogrinspect.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    111,
+    164
+   ],
+   "fingerprint": "9e5dcb2115784805"
+  },
+  {
+   "pointer": "django/contrib/gis/utils/layermapping.py:LayerMapping",
+   "line": 78,
+   "sentence": "`LayerMapping` saves a layer's features as rows (`django/contrib/gis/utils/layermapping.py:LayerMapping`).",
+   "tree": "django",
+   "path": "django/contrib/gis/utils/layermapping.py",
+   "symbol": "LayerMapping",
+   "kind": "class",
+   "lines": [
+    59,
+    737
+   ],
+   "fingerprint": "c633a19adc2fa2a3"
+  },
+  {
+   "pointer": "django/db/transaction.py:atomic",
+   "line": 80,
+   "sentence": "In the default mode, \"commit_on_success\", the load is one `atomic` block of the default database, whichever database it writes to (`django/db/transaction.py:atomic`); with `step=1000`, each thousand features are one, the last taking the rest; \"autocommit\" uses none.",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "atomic",
+   "kind": "function",
+   "lines": [
+    329,
+    336
+   ],
+   "fingerprint": "945efcd8e1d1b64c"
+  },
+  {
+   "pointer": "django/contrib/gis/utils/srs.py:add_srs_entry",
+   "line": 82,
+   "sentence": "`add_srs_entry` adds a coordinate system GDAL knows to the spatial_ref_sys of PostGIS or SpatiaLite, if no row has its SRID (`django/contrib/gis/utils/srs.py:add_srs_entry`); GeoDjango's inspectdb asks the backend's introspection for each geometry column's type and, except on MySQL, its SRID (`django/contrib/gis/management/commands/inspectdb.py:Command.get_field_type`) ([The commands Django ships](../commands/builtin.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/utils/srs.py",
+   "symbol": "add_srs_entry",
+   "kind": "function",
+   "lines": [
+    5,
+    78
+   ],
+   "fingerprint": "e6e0c1e95d0e357b"
+  },
+  {
+   "pointer": "django/contrib/gis/management/commands/inspectdb.py:Command.get_field_type",
+   "line": 82,
+   "sentence": "`add_srs_entry` adds a coordinate system GDAL knows to the spatial_ref_sys of PostGIS or SpatiaLite, if no row has its SRID (`django/contrib/gis/utils/srs.py:add_srs_entry`); GeoDjango's inspectdb asks the backend's introspection for each geometry column's type and, except on MySQL, its SRID (`django/contrib/gis/management/commands/inspectdb.py:Command.get_field_type`) ([The commands Django ships](../commands/builtin.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/management/commands/inspectdb.py",
+   "symbol": "Command.get_field_type",
+   "kind": "function",
+   "lines": [
+    7,
+    18
+   ],
+   "fingerprint": "c1b9ddebeee73f5b"
+  },
+  {
+   "pointer": "django/contrib/gis/geoip2.py:GeoIP2",
+   "line": 86,
+   "sentence": "`GeoIP2` reads a country or city database of MaxMind's or DB-IP's with the geoip2 package (`django/contrib/gis/geoip2.py:GeoIP2`).",
+   "tree": "django",
+   "path": "django/contrib/gis/geoip2.py",
+   "symbol": "GeoIP2",
+   "kind": "class",
+   "lines": [
+    51,
+    230
+   ],
+   "fingerprint": "7e2c4427f2100337"
+  },
+  {
+   "pointer": "django/contrib/gis/geoip2.py:GeoIP2.__init__",
+   "line": 89,
+   "sentence": "GEOIP_PATH django/contrib/gis/geoip2.py:GeoIP2.__init__ # a setting a project makes, read with getattr",
+   "tree": "django",
+   "path": "django/contrib/gis/geoip2.py",
+   "symbol": "GeoIP2.__init__",
+   "kind": "function",
+   "lines": [
+    70,
+    120
+   ],
+   "fingerprint": "9816756c6d186245"
+  }
+ ]
+}

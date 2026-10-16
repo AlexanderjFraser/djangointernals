@@ -1,0 +1,294 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "static-finders.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/staticfiles/finders.py",
+   "line": 7,
+   "sentence": "`STATICFILES_FINDERS` names the finders; `django/contrib/staticfiles/finders.py` holds their base class `BaseFinder`, the two the setting names by default, `FileSystemFinder` and `AppDirectoriesFinder`, the storage finders, and `find`, which asks them in turn.",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    326
+   ],
+   "fingerprint": "e59ae94101b59fcf"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:BaseFinder",
+   "line": 13,
+   "sentence": "`BaseFinder` declares three methods and implements none (`django/contrib/staticfiles/finders.py:BaseFinder`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "BaseFinder",
+   "kind": "class",
+   "lines": [
+    18,
+    47
+   ],
+   "fingerprint": "7157307cdae34e8c"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/utils.py:get_files",
+   "line": 15,
+   "sentence": "Django's finders list with `get_files`, which walks a storage and skips a file whose name or relative path matches a pattern, and a directory whose name does; `matches_patterns` tests with `fnmatch.fnmatchcase`, case-sensitive everywhere (`django/contrib/staticfiles/utils.py:get_files`, `django/contrib/staticfiles/utils.py:matches_patterns`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/utils.py",
+   "symbol": "get_files",
+   "kind": "function",
+   "lines": [
+    16,
+    39
+   ],
+   "fingerprint": "f69a875261e604b1"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/utils.py:matches_patterns",
+   "line": 15,
+   "sentence": "Django's finders list with `get_files`, which walks a storage and skips a file whose name or relative path matches a pattern, and a directory whose name does; `matches_patterns` tests with `fnmatch.fnmatchcase`, case-sensitive everywhere (`django/contrib/staticfiles/utils.py:get_files`, `django/contrib/staticfiles/utils.py:matches_patterns`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/utils.py",
+   "symbol": "matches_patterns",
+   "kind": "function",
+   "lines": [
+    8,
+    13
+   ],
+   "fingerprint": "9c6ced7eceaed83a"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:FileSystemFinder.__init__",
+   "line": 19,
+   "sentence": "An entry is a directory, or a pair of a prefix and a directory; the finder keeps each pair once, in order, and makes a `FileSystemStorage` for each directory, setting on it an attribute `\"prefix\"`, which collectstatic puts before each of the directory's paths (`django/contrib/staticfiles/finders.py:FileSystemFinder.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "FileSystemFinder.__init__",
+   "kind": "function",
+   "lines": [
+    56,
+    72
+   ],
+   "fingerprint": "648b27cc6875ab28"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:FileSystemFinder.find_location",
+   "line": 29,
+   "sentence": "With a prefix, the path must begin with the prefix and the platform's separator, `os.sep`, which are taken off; the rest is joined to the directory with `safe_join`, and the result returned if it exists, a directory included (`django/contrib/staticfiles/finders.py:FileSystemFinder.find_location`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "FileSystemFinder.find_location",
+   "kind": "function",
+   "lines": [
+    131,
+    143
+   ],
+   "fingerprint": "79148d7cca6fbfc9"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:AppDirectoriesFinder.__init__",
+   "line": 33,
+   "sentence": "When made, it goes through the application configs in the order of `INSTALLED_APPS`, makes a storage of its `AppDirectoriesFinder.storage_class`, `FileSystemStorage`, for each one's directory, and keeps those that exist, under the application's name (`django/contrib/staticfiles/finders.py:AppDirectoriesFinder.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "AppDirectoriesFinder.__init__",
+   "kind": "function",
+   "lines": [
+    166,
+    183
+   ],
+   "fingerprint": "d3a51bfa26340e23"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:AppDirectoriesFinder.find_in_app",
+   "line": 33,
+   "sentence": "`AppDirectoriesFinder.find` asks each storage in turn with `FileSystemStorage.exists` and answers with `FileSystemStorage.path`, which is `safe_join` again (`django/contrib/staticfiles/finders.py:AppDirectoriesFinder.find_in_app`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "AppDirectoriesFinder.find_in_app",
+   "kind": "function",
+   "lines": [
+    210,
+    219
+   ],
+   "fingerprint": "e455b3b9ab418d69"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:BaseStorageFinder",
+   "line": 37,
+   "sentence": "`BaseStorageFinder` finds files in a storage, given to it or set as its class attribute `BaseStorageFinder.storage`, and raises `ImproperlyConfigured` with none; it finds nothing in a storage with no paths on disk, where `Storage.path` raises `NotImplementedError` (`django/contrib/staticfiles/finders.py:BaseStorageFinder`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "BaseStorageFinder",
+   "kind": "class",
+   "lines": [
+    222,
+    267
+   ],
+   "fingerprint": "95e1b10c4c5ad03b"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:DefaultStorageFinder.__init__",
+   "line": 37,
+   "sentence": "`DefaultStorageFinder` is one over `default_storage`, the `\"default\"` storage of `STORAGES`, and refuses one whose `base_location` is empty, as a `FileSystemStorage`'s is with no location and `MEDIA_ROOT` left empty; one with no `base_location` passes (`django/contrib/staticfiles/finders.py:DefaultStorageFinder.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "DefaultStorageFinder.__init__",
+   "kind": "function",
+   "lines": [
+    277,
+    285
+   ],
+   "fingerprint": "9ff52d4c4b95631f"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 37,
+   "sentence": "The default `STATICFILES_FINDERS` has it commented out (`django/conf/global_settings.py`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:find",
+   "line": 41,
+   "sentence": "The module's `find` empties `searched_locations` and asks each finder in the order of `STATICFILES_FINDERS` (`django/contrib/staticfiles/finders.py:find`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "find",
+   "kind": "function",
+   "lines": [
+    288,
+    307
+   ],
+   "fingerprint": "ba1ba3d67c9a5e89"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 43,
+   "sentence": "`find` no longer takes all, deprecated in 5.2 for find_all (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:get_finder",
+   "line": 45,
+   "sentence": "`get_finder` is wrapped in `functools.cache`, so each finder is made once in a process and keeps the directories it found then (`django/contrib/staticfiles/finders.py:get_finder`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "get_finder",
+   "kind": "function",
+   "lines": [
+    315,
+    326
+   ],
+   "at": 316,
+   "fingerprint": "e42c1aeac9b244dc"
+  },
+  {
+   "pointer": "django/test/signals.py:static_finders_changed",
+   "line": 45,
+   "sentence": "Under `override_settings`, receivers of `setting_changed` clear the cache when `STATICFILES_DIRS`, `STATIC_ROOT` or `INSTALLED_APPS` changes (`django/test/signals.py:static_finders_changed`, `django/test/signals.py:update_installed_apps`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "static_finders_changed",
+   "kind": "function",
+   "lines": [
+    196,
+    204
+   ],
+   "at": 197,
+   "fingerprint": "64b89d4680bdcc86"
+  },
+  {
+   "pointer": "django/test/signals.py:update_installed_apps",
+   "line": 45,
+   "sentence": "Under `override_settings`, receivers of `setting_changed` clear the cache when `STATICFILES_DIRS`, `STATIC_ROOT` or `INSTALLED_APPS` changes (`django/test/signals.py:static_finders_changed`, `django/test/signals.py:update_installed_apps`).",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": "update_installed_apps",
+   "kind": "function",
+   "lines": [
+    38,
+    56
+   ],
+   "at": 39,
+   "fingerprint": "249d3cccabd6cb1c"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/apps.py:StaticFilesConfig.ready",
+   "line": 49,
+   "sentence": "`StaticFilesConfig.ready` registers two checks under the tag `Tags.staticfiles` (`django/contrib/staticfiles/apps.py:StaticFilesConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/apps.py",
+   "symbol": "StaticFilesConfig.ready",
+   "kind": "function",
+   "lines": [
+    12,
+    14
+   ],
+   "fingerprint": "12a9b225568a540a"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/checks.py:check_finders",
+   "line": 49,
+   "sentence": "`check_storages` returns `\"staticfiles.E005\"` when `STORAGES` has no `\"staticfiles\"` storage; `check_finders` calls each finder's `check`, and of Django's finders only `FileSystemFinder` has one (`django/contrib/staticfiles/checks.py:check_finders`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/checks.py",
+   "symbol": "check_finders",
+   "kind": "function",
+   "lines": [
+    11,
+    21
+   ],
+   "fingerprint": "cdd240a023ac64a1"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/finders.py:FileSystemFinder.check",
+   "line": 49,
+   "sentence": "`FileSystemFinder.check` returns `\"staticfiles.E001\"` alone when `STATICFILES_DIRS` is not a list or tuple; otherwise, for each entry, `\"staticfiles.E003\"` for a prefix that ends with a slash, `\"staticfiles.E002\"` for a directory that is `STATIC_ROOT`, and the warning `\"staticfiles.W004\"` for a directory that does not exist (`django/contrib/staticfiles/finders.py:FileSystemFinder.check`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/finders.py",
+   "symbol": "FileSystemFinder.check",
+   "kind": "function",
+   "lines": [
+    74,
+    114
+   ],
+   "fingerprint": "9c61482216687af9"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/findstatic.py:Command.handle_label",
+   "line": 53,
+   "sentence": "A path found nowhere is reported on standard error, except at verbosity 0, and the command still succeeds (`django/contrib/staticfiles/management/commands/findstatic.py:Command.handle_label`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/findstatic.py",
+   "symbol": "Command.handle_label",
+   "kind": "function",
+   "lines": [
+    20,
+    48
+   ],
+   "fingerprint": "1a363702509cd5d3"
+  }
+ ]
+}

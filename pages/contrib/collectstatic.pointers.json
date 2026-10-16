@@ -1,0 +1,221 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "collectstatic.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/staticfiles/storage.py:ConfiguredStorage",
+   "line": 11,
+   "sentence": "That storage is `staticfiles_storage`, which the command takes when it is made: a `ConfiguredStorage`, a `LazyObject` that stands for the storage `storages` makes for the alias `\"staticfiles\"` (`django/contrib/staticfiles/storage.py:ConfiguredStorage`) ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md)).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/storage.py",
+   "symbol": "ConfiguredStorage",
+   "kind": "class",
+   "lines": [
+    623,
+    625
+   ],
+   "fingerprint": "72138675a19dc3ac"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command",
+   "line": 15,
+   "sentence": "The collectstatic command sets `BaseCommand.requires_system_checks` to one tag, `Tags.staticfiles`, so `BaseCommand.execute` runs before it only the checks of that tag, in Django `check_finders` and `check_storages`, and no model check can stop it ([Running a command: `BaseCommand`](../commands/running.md), [Finding static files: the finders](static-finders.md)) (`django/contrib/staticfiles/management/commands/collectstatic.py:Command`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command",
+   "kind": "class",
+   "lines": [
+    13,
+    403
+   ],
+   "fingerprint": "3f540e44a07e62c1"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.set_options",
+   "line": 17,
+   "sentence": "`Command.set_options` takes the patterns of `--ignore` and, unless `--no-default-ignore` is given, adds the `ignore_patterns` of the staticfiles application's config, `StaticFilesConfig` or a project's subclass of it (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.set_options`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.set_options",
+   "kind": "function",
+   "lines": [
+    94,
+    107
+   ],
+   "fingerprint": "89d80d7df79b203a"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/utils.py:get_files",
+   "line": 17,
+   "sentence": "The finders apply them as they list, to a file's name and to its path inside the directory it is listed from (`django/contrib/staticfiles/utils.py:get_files`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/utils.py",
+   "symbol": "get_files",
+   "kind": "function",
+   "lines": [
+    16,
+    39
+   ],
+   "fingerprint": "f69a875261e604b1"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.handle",
+   "line": 19,
+   "sentence": "`Command.handle` asks before it collects, unless `--noinput` is given, whenever the destination may hold files. When `Command.is_local_storage` finds a `FileSystemStorage` with a location, the prompt names the directory and is shown only if the directory exists and has something in it; otherwise the command does not look and, its comment says, plays safe and asks. The warning is \"This will DELETE ALL FILES in this location!\" with `--clear` and \"This will overwrite existing files!\" without; any answer but \"yes\" raises `CommandError`, \"Collecting static files cancelled.\" (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.handle`). The harbour office's first run, into an empty directory, asked nothing; a run into the full directory asked.",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    179,
+    257
+   ],
+   "fingerprint": "9613480fb84a75bb"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.collect",
+   "line": 23,
+   "sentence": "`Command.collect` does the work and returns five lists, from which `handle` makes the summary (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.collect`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.collect",
+   "kind": "function",
+   "lines": [
+    109,
+    177
+   ],
+   "fingerprint": "43b4af022ec2bba7"
+  },
+  {
+   "pointer": "django/core/files/storage/base.py:Storage.path",
+   "line": 25,
+   "sentence": "`Command.local` is false when the storage's `path` raises `NotImplementedError`, as `Storage.path` does (`django/core/files/storage/base.py:Storage.path`).",
+   "tree": "django",
+   "path": "django/core/files/storage/base.py",
+   "symbol": "Storage.path",
+   "kind": "function",
+   "lines": [
+    131,
+    137
+   ],
+   "fingerprint": "7ecb1b848a377686"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.delete_file",
+   "line": 32,
+   "sentence": "`Command.copy_file` and `Command.link_file` each begin by asking `Command.delete_file` whether a file already at the destination may stay (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.delete_file`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.delete_file",
+   "kind": "function",
+   "lines": [
+    298,
+    347
+   ],
+   "fingerprint": "f034fc818bda272f"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.copy_file",
+   "line": 34,
+   "sentence": "Linking makes the directories and puts at the destination a link, made by `os.symlink`, to the source's absolute path (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.copy_file`, `django/contrib/staticfiles/management/commands/collectstatic.py:Command.link_file`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.copy_file",
+   "kind": "function",
+   "lines": [
+    384,
+    403
+   ],
+   "fingerprint": "92c519bdb2408e81"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.link_file",
+   "line": 34,
+   "sentence": "Linking makes the directories and puts at the destination a link, made by `os.symlink`, to the source's absolute path (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.copy_file`, `django/contrib/staticfiles/management/commands/collectstatic.py:Command.link_file`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.link_file",
+   "kind": "function",
+   "lines": [
+    349,
+    382
+   ],
+   "fingerprint": "a85b3842a83ed21a"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/storage.py:HashedFilesMixin._post_process",
+   "line": 62,
+   "sentence": "`ManifestStaticFilesStorage` reads each original through its source storage, not the copy, and processes a file whose hashed copy is missing and, every time, each CSS or JavaScript file, whose references it rewrites: twelve on the first run, five on the second (`django/contrib/staticfiles/storage.py:HashedFilesMixin._post_process`) ([Static file storages: `ManifestStaticFilesStorage` and hashed names](static-storage.md)).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/storage.py",
+   "symbol": "HashedFilesMixin._post_process",
+   "kind": "function",
+   "lines": [
+    408,
+    491
+   ],
+   "fingerprint": "2c318db09751bf7a"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/storage.py:ManifestFilesMixin.post_process",
+   "line": 64,
+   "sentence": "The manifest is saved only when the storage's generator runs to its end, which the raise prevented, and `--clear` had deleted the old one: the run left no staticfiles.json (`django/contrib/staticfiles/storage.py:ManifestFilesMixin.post_process`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/storage.py",
+   "symbol": "ManifestFilesMixin.post_process",
+   "kind": "function",
+   "lines": [
+    573,
+    577
+   ],
+   "fingerprint": "6c0443b8c28ec002"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py:Command.handle",
+   "line": 68,
+   "sentence": "At verbosity 1 or more, `handle` returns one line, which `execute` writes: the files deleted, if `--clear` deleted any; the files copied, or \"symlinked\" with `--link`; \"to\" the directory, when the prompt could name one; and, each only when not zero, the counts unmodified, post-processed and \"skipped due to conflict\" (`django/contrib/staticfiles/management/commands/collectstatic.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    179,
+    257
+   ],
+   "fingerprint": "9613480fb84a75bb"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 70,
+   "sentence": "At verbosity 1, files skipped for a conflict and files deleted by `--clear` appear only as counts in the summary; verbosity 2 names each (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/storage.py:HashedFilesMixin.post_process",
+   "line": 72,
+   "sentence": "`clear_dir` and `delete_file` only say what they would delete; a copy or a link is announced at verbosity 1 as pretended; and `post_process` is called with `dry_run=True`, on which `HashedFilesMixin.post_process` does nothing and no manifest is saved (`django/contrib/staticfiles/storage.py:HashedFilesMixin.post_process`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/storage.py",
+   "symbol": "HashedFilesMixin.post_process",
+   "kind": "function",
+   "lines": [
+    344,
+    406
+   ],
+   "fingerprint": "3e40d42ee0ec8b41"
+  }
+ ]
+}

@@ -1,0 +1,250 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "serving-static.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/staticfiles/views.py:serve",
+   "line": 13,
+   "sentence": "`django.contrib.staticfiles.views.serve` takes a request and a path relative to `STATIC_URL` (`django/contrib/staticfiles/views.py:serve`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/views.py",
+   "symbol": "serve",
+   "kind": "function",
+   "lines": [
+    16,
+    40
+   ],
+   "fingerprint": "50ebeb12aadaf297"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/urls.py:staticfiles_urlpatterns",
+   "line": 27,
+   "sentence": "It passes its prefix, `STATIC_URL` unless another is given, and this view to `django.conf.urls.static.static`, so it refuses an empty prefix and returns an empty list unless `settings.DEBUG` is true and the prefix names no host (`django/contrib/staticfiles/urls.py:staticfiles_urlpatterns`, `django/conf/urls/static.py:static`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/urls.py",
+   "symbol": "staticfiles_urlpatterns",
+   "kind": "function",
+   "lines": [
+    8,
+    14
+   ],
+   "fingerprint": "eefaf29b6a339252"
+  },
+  {
+   "pointer": "django/conf/urls/static.py:static",
+   "line": 27,
+   "sentence": "It passes its prefix, `STATIC_URL` unless another is given, and this view to `django.conf.urls.static.static`, so it refuses an empty prefix and returns an empty list unless `settings.DEBUG` is true and the prefix names no host (`django/contrib/staticfiles/urls.py:staticfiles_urlpatterns`, `django/conf/urls/static.py:static`).",
+   "tree": "django",
+   "path": "django/conf/urls/static.py",
+   "symbol": "static",
+   "kind": "function",
+   "lines": [
+    10,
+    30
+   ],
+   "fingerprint": "341179f8ac240ce1"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/urls.py",
+   "line": 27,
+   "sentence": "Its module is a URLconf as well: when it is first imported with `settings.DEBUG` true, its own list of patterns receives the same pattern (`django/contrib/staticfiles/urls.py`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/urls.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    19
+   ],
+   "fingerprint": "a300ccfe17723de4"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandler.__call__",
+   "line": 31,
+   "sentence": "`StaticFilesHandler.__call__` reads the path from the environ, and unless `StaticFilesHandlerMixin._should_handle` finds it under the path of `STATIC_URL`, with no host in `STATIC_URL`, it calls the application inside, untouched (`django/contrib/staticfiles/handlers.py:StaticFilesHandler.__call__`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "StaticFilesHandler.__call__",
+   "kind": "function",
+   "lines": [
+    78,
+    81
+   ],
+   "fingerprint": "b585487ac0a7c2c0"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.load_middleware",
+   "line": 33,
+   "sentence": "`StaticFilesHandlerMixin.load_middleware`, which `WSGIHandler.__init__` calls, does nothing; the comment says the middleware are already loaded for the application inside (`django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.load_middleware`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "StaticFilesHandlerMixin.load_middleware",
+   "kind": "function",
+   "lines": [
+    24,
+    27
+   ],
+   "fingerprint": "a8d35b73bfb90708"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.get_response",
+   "line": 33,
+   "sentence": "An `Http404` becomes a response through `response_for_exception`: the project's 404 view, or the technical 404 page while `settings.DEBUG` is true (`django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.get_response`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "StaticFilesHandlerMixin.get_response",
+   "kind": "function",
+   "lines": [
+    52,
+    56
+   ],
+   "fingerprint": "2f7612165dcb6bd5"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 47,
+   "sentence": "And only `Http404` is caught: the `SuspiciousFileOperation` a finder raises for a path that climbs out of its directory, which the project's chain would have made a 400, leaves the handler for the server (`django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.close",
+   "line": 49,
+   "sentence": "Closing the response sends `request_finished` with the handler's class as its sender: `StaticFilesHandler` for the static files of the run, `WSGIHandler` for the lighthouse (`django/http/response.py:HttpResponseBase.close`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.close",
+   "kind": "function",
+   "lines": [
+    339,
+    348
+   ],
+   "fingerprint": "7689c4f13ba32ef4"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/utils.py:check_settings",
+   "line": 51,
+   "sentence": "That raises `ImproperlyConfigured` for a `STATIC_URL` not set (an empty one becomes the script prefix, ordinarily `\"/\"`, under which every path falls), a `MEDIA_URL` equal to it, a `MEDIA_ROOT` and a `STATIC_ROOT` both set and equal, and, while `settings.DEBUG` is true, a `MEDIA_URL` inside `STATIC_URL`, whose paths the handler would take for its own (`django/contrib/staticfiles/utils.py:check_settings`, `django/conf/__init__.py:LazySettings._add_script_prefix`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/utils.py",
+   "symbol": "check_settings",
+   "kind": "function",
+   "lines": [
+    42,
+    71
+   ],
+   "fingerprint": "4d9a55be8f1947fa"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings._add_script_prefix",
+   "line": 51,
+   "sentence": "That raises `ImproperlyConfigured` for a `STATIC_URL` not set (an empty one becomes the script prefix, ordinarily `\"/\"`, under which every path falls), a `MEDIA_URL` equal to it, a `MEDIA_ROOT` and a `STATIC_ROOT` both set and equal, and, while `settings.DEBUG` is true, a `MEDIA_URL` inside `STATIC_URL`, whose paths the handler would take for its own (`django/contrib/staticfiles/utils.py:check_settings`, `django/conf/__init__.py:LazySettings._add_script_prefix`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings._add_script_prefix",
+   "kind": "function",
+   "lines": [
+    221,
+    234
+   ],
+   "at": 222,
+   "fingerprint": "7c901b693424c372"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:ASGIStaticFilesHandler.__call__",
+   "line": 55,
+   "sentence": "`ASGIStaticFilesHandler.__call__` keeps a scope of the type `\"http\"` whose path is under `STATIC_URL`, for `ASGIHandler.__call__`, and passes every other, a lifespan or a WebSocket among them, to the application inside (`django/contrib/staticfiles/handlers.py:ASGIStaticFilesHandler.__call__`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "ASGIStaticFilesHandler.__call__",
+   "kind": "function",
+   "lines": [
+    94,
+    101
+   ],
+   "fingerprint": "26c1ea5006c67ac2"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:ASGIStaticFilesHandler.get_response_async",
+   "line": 55,
+   "sentence": "`ASGIStaticFilesHandler.get_response_async` then replaces the synchronous iterator of a streaming response, such as the view's `FileResponse`, with an asynchronous generator that first reads all of it in a thread; its comment says `FileResponse` is not async compatible (`django/contrib/staticfiles/handlers.py:ASGIStaticFilesHandler.get_response_async`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "ASGIStaticFilesHandler.get_response_async",
+   "kind": "function",
+   "lines": [
+    103,
+    115
+   ],
+   "fingerprint": "95a367cc7a96ecbf"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler",
+   "line": 59,
+   "sentence": "It adds `--nostatic` and `--insecure`, and its `Command.get_handler` wraps what Django's returns, the project's WSGI application, in a `StaticFilesHandler`, unless `--nostatic` was given, if `settings.DEBUG` is true or `--insecure` was given (`django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler`).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/runserver.py",
+   "symbol": "Command.get_handler",
+   "kind": "function",
+   "lines": [
+    26,
+    36
+   ],
+   "fingerprint": "d3277a000ed4a018"
+  },
+  {
+   "pointer": "docs/ref/contrib/staticfiles.txt",
+   "line": 61,
+   "sentence": "`--insecure` serves files by the names they are kept under, and the documentation says it does not work with `ManifestStaticFilesStorage` (`docs/ref/contrib/staticfiles.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/staticfiles.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    561
+   ],
+   "fingerprint": "d908cf56f9481805"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/testing.py:StaticLiveServerTestCase",
+   "line": 63,
+   "sentence": "`StaticLiveServerTestCase` overrides `LiveServerTestCase.static_handler`, a private handler that serves `STATIC_ROOT`, with `StaticFilesHandler`, so a live server's static files come from the finders, with nothing collected (`django/contrib/staticfiles/testing.py:StaticLiveServerTestCase`, `django/test/testcases.py:_StaticFilesHandler`) ([The test framework](../testing.md)).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/testing.py",
+   "symbol": "StaticLiveServerTestCase",
+   "kind": "class",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "3b0d3020f3ad7500"
+  },
+  {
+   "pointer": "django/test/testcases.py:_StaticFilesHandler",
+   "line": 63,
+   "sentence": "`StaticLiveServerTestCase` overrides `LiveServerTestCase.static_handler`, a private handler that serves `STATIC_ROOT`, with `StaticFilesHandler`, so a live server's static files come from the finders, with nothing collected (`django/contrib/staticfiles/testing.py:StaticLiveServerTestCase`, `django/test/testcases.py:_StaticFilesHandler`) ([The test framework](../testing.md)).",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "_StaticFilesHandler",
+   "kind": "class",
+   "lines": [
+    1709,
+    1719
+   ],
+   "fingerprint": "f71a0e0a3e418a3d"
+  }
+ ]
+}

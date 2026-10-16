@@ -1,0 +1,236 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "postgres-indexes.md",
+ "pointers": [
+  {
+   "pointer": "docs/ref/contrib/postgres/fields.txt",
+   "line": 9,
+   "sentence": "Django's `Index` names none, and gets a B-tree, which the documentation finds of little help with complex types: GiST may suit a range or an hstore, it says, and GIN an array (`docs/ref/contrib/postgres/fields.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/fields.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    931
+   ],
+   "fingerprint": "6dabb1aa9b40a9a0"
+  },
+  {
+   "pointer": "docs/ref/contrib/postgres/constraints.txt",
+   "line": 9,
+   "sentence": "An exclusion constraint forbids two rows for which every one of a list of comparisons, each with its own operator, is true; PostgreSQL implements it with an index (`docs/ref/contrib/postgres/constraints.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/constraints.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    229
+   ],
+   "fingerprint": "17bc47593a542f6d"
+  },
+  {
+   "pointer": "django/contrib/postgres/indexes.py:PostgresIndex.create_sql",
+   "line": 13,
+   "sentence": "It calls `PostgresIndex.check_supported`, an empty hook no class here overrides; hands `Index.create_sql` a `\"USING\"` clause with the class's suffix, `\"btree\"` for `BTreeIndex`; and puts what `PostgresIndex.get_with_params` returns in a `\"WITH\"` clause after any `\"INCLUDE\"`, before a tablespace or a condition (`django/contrib/postgres/indexes.py:PostgresIndex.create_sql`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/indexes.py",
+   "symbol": "PostgresIndex.create_sql",
+   "kind": "function",
+   "lines": [
+    26,
+    37
+   ],
+   "fingerprint": "4fb5b2cff590d0c9"
+  },
+  {
+   "pointer": "docs/ref/contrib/postgres/indexes.txt",
+   "line": 37,
+   "sentence": "Bloom is an extension, which the documentation says to install with `BloomExtension` (`docs/ref/contrib/postgres/indexes.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/indexes.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    182
+   ],
+   "fingerprint": "bdc3051b14aa9342"
+  },
+  {
+   "pointer": "django/contrib/postgres/indexes.py:PostgresIndex.max_name_length",
+   "line": 39,
+   "sentence": "`PostgresIndex.max_name_length` is thirty less three plus the length of the class's suffix: an unnamed `SpGistIndex` on the sailings' window is named `\"charts_sail_window_95d66d_spgist\"`, 32 characters (`django/contrib/postgres/indexes.py:PostgresIndex.max_name_length`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/indexes.py",
+   "symbol": "PostgresIndex.max_name_length",
+   "kind": "function",
+   "lines": [
+    18,
+    24
+   ],
+   "at": 19,
+   "fingerprint": "40563abe941da6a1"
+  },
+  {
+   "pointer": "django/contrib/postgres/indexes.py:OpClass",
+   "line": 45,
+   "sentence": "Over expressions, the expression is wrapped in `OpClass`, a `Func` that writes it and then the class's name (`django/contrib/postgres/indexes.py:OpClass`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/indexes.py",
+   "symbol": "OpClass",
+   "kind": "class",
+   "lines": [
+    239,
+    244
+   ],
+   "fingerprint": "7ffd73c35c03e0c4"
+  },
+  {
+   "pointer": "django/db/models/indexes.py:IndexExpression.resolve_expression",
+   "line": 47,
+   "sentence": "It lifts its wrapper classes off the top of the expression, puts the rest in parentheses unless it resolves to a column, and nests the wrappers back around it in the order of `IndexExpression.wrapper_classes`, the first outermost (`django/db/models/indexes.py:IndexExpression.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/indexes.py",
+   "symbol": "IndexExpression.resolve_expression",
+   "kind": "function",
+   "lines": [
+    328,
+    387
+   ],
+   "fingerprint": "544909a8e644e376"
+  },
+  {
+   "pointer": "django/contrib/postgres/apps.py:PostgresConfig.ready",
+   "line": 47,
+   "sentence": "`PostgresConfig.ready` makes those `OrderBy`, `OpClass` and `Collate` with `IndexExpression.register_wrappers`, so that after an index's column come its collation, its operator class and its direction, in that order (`django/contrib/postgres/apps.py:PostgresConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/apps.py",
+   "symbol": "PostgresConfig.ready",
+   "kind": "function",
+   "lines": [
+    56,
+    89
+   ],
+   "fingerprint": "8cddf2829aab5052"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.get_expression_for_validation",
+   "line": 56,
+   "sentence": "In `validate`, an exclusion or a unique constraint drops an `OpClass`, whose `OpClass.constraint_validation_compatible` is false, from the top of an expression: `BaseExpression.get_expression_for_validation` returns the expression inside, one level only (`django/db/models/expressions.py:BaseExpression.get_expression_for_validation`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.get_expression_for_validation",
+   "kind": "function",
+   "lines": [
+    503,
+    516
+   ],
+   "fingerprint": "174b49d6275c1102"
+  },
+  {
+   "pointer": "django/contrib/postgres/constraints.py:ExclusionConstraint.__init__",
+   "line": 82,
+   "sentence": "`ExclusionConstraint.__init__` checks the index type, the expressions' shape and the types of the condition, the deferrable and the include, and refuses a hash index with more than one pair, with an include, or with an operator other than `RangeOperators.EQUAL` (`django/contrib/postgres/constraints.py:ExclusionConstraint.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/constraints.py",
+   "symbol": "ExclusionConstraint.__init__",
+   "kind": "function",
+   "lines": [
+    28,
+    88
+   ],
+   "fingerprint": "acb8343a155a4c69"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 84,
+   "sentence": "`ExclusionConstraint` takes the hash index type (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/contrib/postgres/constraints.py:ExclusionConstraint.constraint_sql",
+   "line": 86,
+   "sentence": "`ExclusionConstraint.constraint_sql` compiles them and the condition as an index's are, without table names and with values written in by the editor's `quote_value`, and asks the editor for the `\"INCLUDE\"` and `\"DEFERRABLE\"` clauses (`django/contrib/postgres/constraints.py:ExclusionConstraint.constraint_sql`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/constraints.py",
+   "symbol": "ExclusionConstraint.constraint_sql",
+   "kind": "function",
+   "lines": [
+    117,
+    137
+   ],
+   "fingerprint": "805f7da7811bd8d9"
+  },
+  {
+   "pointer": "docs/ref/contrib/postgres/constraints.txt",
+   "line": 93,
+   "sentence": "The documentation asks for the btree_gist extension with GiST (`docs/ref/contrib/postgres/constraints.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/constraints.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    229
+   ],
+   "fingerprint": "17bc47593a542f6d"
+  },
+  {
+   "pointer": "django/contrib/postgres/constraints.py:ExclusionConstraint.validate",
+   "line": 97,
+   "sentence": "`ExclusionConstraint.validate` asks whether a stored row would break the rule with the instance (`django/contrib/postgres/constraints.py:ExclusionConstraint.validate`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/constraints.py",
+   "symbol": "ExclusionConstraint.validate",
+   "kind": "function",
+   "lines": [
+    202,
+    242
+   ],
+   "fingerprint": "a1eddafbd9defcd2"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:Q.check",
+   "line": 97,
+   "sentence": "A condition goes through `Q.check`, which tests it on the instance's values together with an `Exists` of those rows that meet it (`django/db/models/query_utils.py:Q.check`).",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "Q.check",
+   "kind": "function",
+   "lines": [
+    171,
+    201
+   ],
+   "fingerprint": "eb45db44eeacd5bc"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql",
+   "line": 106,
+   "sentence": "And it works only on PostgreSQL, the one database for which `PostgresOperatorLookup` writes SQL (`django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql`): on the harbour's SQLite database it raised `NotImplementedError`, \"Subclasses must implement as_sql()\".",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "PostgresOperatorLookup.as_postgresql",
+   "kind": "function",
+   "lines": [
+    365,
+    369
+   ],
+   "fingerprint": "788e423ac06c3cfc"
+  }
+ ]
+}

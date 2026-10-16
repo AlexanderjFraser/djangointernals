@@ -1,0 +1,319 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "postgres-fields.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/postgres/utils.py:CheckPostgresInstalledMixin",
+   "line": 9,
+   "sentence": "Each is a `django.db.models.Field` and a `CheckPostgresInstalledMixin`, whose check fails while `django.contrib.postgres` is not installed (`django/contrib/postgres/utils.py:CheckPostgresInstalledMixin`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/utils.py",
+   "symbol": "CheckPostgresInstalledMixin",
+   "kind": "class",
+   "lines": [
+    34,
+    53
+   ],
+   "fingerprint": "e05f4e802fee8c17"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql",
+   "line": 9,
+   "sentence": "The lookups of these fields that write PostgreSQL's own operators are `PostgresOperatorLookup`s and write SQL in `as_postgresql` only: compiled for SQLite, `\"crew__overlap\"` raised `NotImplementedError` (`django/db/models/lookups.py:PostgresOperatorLookup.as_postgresql`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "PostgresOperatorLookup.as_postgresql",
+   "kind": "function",
+   "lines": [
+    365,
+    369
+   ],
+   "fingerprint": "788e423ac06c3cfc"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/array.py:ArrayField.db_type",
+   "line": 13,
+   "sentence": "`ArrayField` is given an instance of another field, `ArrayField.base_field`, and its column is that field's type with brackets after it: `\"varchar(60)[]\"` for the crew, `\"varchar(60)[4]\"` with `size=4` (`django/contrib/postgres/fields/array.py:ArrayField.db_type`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/array.py",
+   "symbol": "ArrayField.db_type",
+   "kind": "function",
+   "lines": [
+    114,
+    116
+   ],
+   "fingerprint": "942009ba2ebb2b54"
+  },
+  {
+   "pointer": "docs/ref/contrib/postgres/fields.txt",
+   "line": 13,
+   "sentence": "PostgreSQL does not enforce the size, the documentation says (`docs/ref/contrib/postgres/fields.txt`): only Django checks it, by the `ArrayMaxLengthValidator` that `ArrayField.__init__` adds.",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/fields.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    931
+   ],
+   "fingerprint": "6dabb1aa9b40a9a0"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/array.py:ArrayField.get_placeholder_sql",
+   "line": 15,
+   "sentence": "On the way in, `ArrayField.get_db_prep_value` and `ArrayField.get_db_prep_save` hand each item of a list to the base field's method of the same name, and the list goes to the driver as one parameter, which `ArrayField.get_placeholder_sql` casts to the column's type (`django/contrib/postgres/fields/array.py:ArrayField.get_placeholder_sql`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/array.py",
+   "symbol": "ArrayField.get_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    127,
+    132
+   ],
+   "fingerprint": "4c9998613b877fda"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:JSONField.get_db_prep_save",
+   "line": 26,
+   "sentence": "An item `None` in an array of `django.db.models.JSONField` is saved as SQL NULL, not JSON null: `ArrayField.get_db_prep_save` hands it to `JSONField.get_db_prep_save`, which returns `None` as it is (`django/db/models/fields/json.py:JSONField.get_db_prep_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "JSONField.get_db_prep_save",
+   "kind": "function",
+   "lines": [
+    107,
+    121
+   ],
+   "fingerprint": "24425a1722c19100"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/array.py:ArrayField.check",
+   "line": 28,
+   "sentence": "`ArrayField.check` refuses a related field as the base, `\"postgres.E002\"`, and gathers the base field's errors but `\"postgres.E005\"` into one `\"postgres.E001\"` and its warnings into one `\"postgres.W004\"` (`django/contrib/postgres/fields/array.py:ArrayField.check`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/array.py",
+   "symbol": "ArrayField.check",
+   "kind": "function",
+   "lines": [
+    62,
+    104
+   ],
+   "fingerprint": "d143d9aee4b69e68"
+  },
+  {
+   "pointer": "django/contrib/postgres/utils.py:prefix_validation_error",
+   "line": 28,
+   "sentence": "`ArrayField.check` refuses a related field as the base, `\"postgres.E002\"`, and gathers the base field's errors but `\"postgres.E005\"` into one `\"postgres.E001\"` and its warnings into one `\"postgres.W004\"` (`django/contrib/postgres/fields/array.py:ArrayField.check`). `ArrayField.validate` and `ArrayField.run_validators` run the base field's on each item and raise at the first that fails, its error rewritten by `prefix_validation_error` with the code `\"item_invalid\"` and the item's number: \"Item 2 in the array did not validate: Ensure this value has at most 60 characters (it has 70).\" (`django/contrib/postgres/utils.py:prefix_validation_error`). `ArrayField.validate` also refuses an array whose arrays differ in length.",
+   "tree": "django",
+   "path": "django/contrib/postgres/utils.py",
+   "symbol": "prefix_validation_error",
+   "kind": "function",
+   "lines": [
+    8,
+    31
+   ],
+   "fingerprint": "01eff420bcd38198"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/array.py:ArrayRHSMixin",
+   "line": 32,
+   "sentence": "`\"contains\"` (`\"@>\"`), `\"contained_by\"` (`\"<@\"`), `\"overlap\"` (`\"&&\"`) and `\"exact\"` on an array are built on `ArrayRHSMixin`, which turns a list on the right, unless it holds only `None`, into an `\"ARRAY[...]\"` of `Value`s prepared by the base field, and casts the right side to the column's type either way (`django/contrib/postgres/fields/array.py:ArrayRHSMixin`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/array.py",
+   "symbol": "ArrayRHSMixin",
+   "kind": "class",
+   "lines": [
+    254,
+    282
+   ],
+   "fingerprint": "dab277558568f51d"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/array.py:ArrayField.get_transform",
+   "line": 34,
+   "sentence": "Any other name that is no lookup of the field goes to `ArrayField.get_transform` (`django/contrib/postgres/fields/array.py:ArrayField.get_transform`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/array.py",
+   "symbol": "ArrayField.get_transform",
+   "kind": "function",
+   "lines": [
+    184,
+    203
+   ],
+   "fingerprint": "9042ef0f0ca63b80"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/hstore.py:HStoreField.validate",
+   "line": 50,
+   "sentence": "`django.contrib.postgres.fields.HStoreField` is a column of the type `\"hstore\"`, which a database has once the extension is created in it, by the migration operation `HStoreExtension` or by hand. `HStoreField.get_prep_value` makes each key a string and each value a string or `None`, so `{\"salt\": 40}` is saved as `{'salt': '40'}`; `HStoreField.validate`, which converts nothing, refuses it: \"The value of “salt” is not a string or null.\" (`django/contrib/postgres/fields/hstore.py:HStoreField.validate`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/hstore.py",
+   "symbol": "HStoreField.validate",
+   "kind": "function",
+   "lines": [
+    31,
+    39
+   ],
+   "fingerprint": "b6758acd808bfe83"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/hstore.py:HStoreField.get_transform",
+   "line": 52,
+   "sentence": "A name that is no lookup or transform of the field is a key: `HStoreField.get_transform` answers it with a `KeyTransformFactory`, whose transform writes `\"->\"` (`django/contrib/postgres/fields/hstore.py:HStoreField.get_transform`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/hstore.py",
+   "symbol": "HStoreField.get_transform",
+   "kind": "function",
+   "lines": [
+    25,
+    29
+   ],
+   "fingerprint": "c2b2b6e9a426fbd5"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/ranges.py",
+   "line": 62,
+   "sentence": "`RangeField` is the base of `IntegerRangeField` (`\"int4range\"`), `BigIntegerRangeField` (`\"int8range\"`), `DecimalRangeField` (`\"numrange\"`), `DateTimeRangeField` (`\"tstzrange\"`) and `DateRangeField` (`\"daterange\"`), each naming the model field of its bounds, `base_field`, a `range_type` and a form field (`django/contrib/postgres/fields/ranges.py`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/ranges.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    388
+   ],
+   "fingerprint": "48dc924ab066f9a6"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/psycopg_any.py",
+   "line": 62,
+   "sentence": "The range types are psycopg's, named in `django/db/backends/postgresql/psycopg_any.py`.",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/psycopg_any.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    120
+   ],
+   "fingerprint": "283547d637c2c40f"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/ranges.py:RangeField.get_prep_value",
+   "line": 62,
+   "sentence": "`RangeField.get_prep_value` makes a range of a list or tuple of two bounds (`django/contrib/postgres/fields/ranges.py:RangeField.get_prep_value`), with `ContinuousRangeField.default_bounds` on `DecimalRangeField` and `DateTimeRangeField`: `\"[)\"` unless the field was made with one of the other three (`django/contrib/postgres/fields/ranges.py:ContinuousRangeField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/ranges.py",
+   "symbol": "RangeField.get_prep_value",
+   "kind": "function",
+   "lines": [
+    94,
+    101
+   ],
+   "fingerprint": "294ecf397515b539"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/ranges.py:ContinuousRangeField.get_prep_value",
+   "line": 62,
+   "sentence": "`RangeField.get_prep_value` makes a range of a list or tuple of two bounds (`django/contrib/postgres/fields/ranges.py:RangeField.get_prep_value`), with `ContinuousRangeField.default_bounds` on `DecimalRangeField` and `DateTimeRangeField`: `\"[)\"` unless the field was made with one of the other three (`django/contrib/postgres/fields/ranges.py:ContinuousRangeField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/ranges.py",
+   "symbol": "ContinuousRangeField.get_prep_value",
+   "kind": "function",
+   "lines": [
+    156,
+    159
+   ],
+   "fingerprint": "f0d73845d2216e14"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/ranges.py:DateTimeRangeContains.as_postgresql",
+   "line": 64,
+   "sentence": "`\"contains\"` also takes one value, which `RangeContains` casts to the bounds' field; on the date and datetime ranges `\"contains\"` is `DateTimeRangeContains` instead, which casts it to the bounds' column type (`django/contrib/postgres/fields/ranges.py:DateTimeRangeContains.as_postgresql`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/ranges.py",
+   "symbol": "DateTimeRangeContains.as_postgresql",
+   "kind": "function",
+   "lines": [
+    245,
+    260
+   ],
+   "fingerprint": "8e2f90f37521487b"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/ranges.py:RangeContainedBy",
+   "line": 66,
+   "sentence": "`RangeContainedBy` asks the other question, a plain value in a range: importing the range fields' module registers it as `\"contained_by\"` on `models.DateField`, `models.DateTimeField`, `models.IntegerField`, `models.FloatField` and `models.DecimalField`, and it casts the range to the type `RangeContainedBy.type_mapping` gives the column (`django/contrib/postgres/fields/ranges.py:RangeContainedBy`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/ranges.py",
+   "symbol": "RangeContainedBy",
+   "kind": "class",
+   "lines": [
+    267,
+    296
+   ],
+   "fingerprint": "46a87330aae60866"
+  },
+  {
+   "pointer": "django/contrib/postgres/forms/array.py:SimpleArrayField",
+   "line": 86,
+   "sentence": "`ArrayField.formfield` gives a `SimpleArrayField` of the base field's form field, the size its maximum (`django/contrib/postgres/forms/array.py:SimpleArrayField`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/forms/array.py",
+   "symbol": "SimpleArrayField",
+   "kind": "class",
+   "lines": [
+    14,
+    112
+   ],
+   "fingerprint": "b0e0090479de667e"
+  },
+  {
+   "pointer": "django/contrib/postgres/forms/ranges.py:BaseRangeField.compress",
+   "line": 88,
+   "sentence": "`BaseRangeField.compress` refuses a start after the end and makes the range with the bounds `ContinuousRangeField.formfield` passed it, if any (`django/contrib/postgres/forms/ranges.py:BaseRangeField.compress`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/forms/ranges.py",
+   "symbol": "BaseRangeField.compress",
+   "kind": "function",
+   "lines": [
+    78,
+    95
+   ],
+   "fingerprint": "eecb7f5421166c90"
+  },
+  {
+   "pointer": "django/contrib/postgres/validators.py",
+   "line": 95,
+   "sentence": "`django/contrib/postgres/validators.py` has validators of a list's length (`ArrayMaxLengthValidator`, `ArrayMinLengthValidator`), an hstore's keys (`KeysValidator`) and a range's bounds (`RangeMaxValueValidator`, `RangeMinValueValidator`, for which a missing bound is beyond any limit).",
+   "tree": "django",
+   "path": "django/contrib/postgres/validators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    91
+   ],
+   "fingerprint": "18226dc0849e8658"
+  },
+  {
+   "pointer": "django/contrib/postgres/fields/citext.py",
+   "line": 99,
+   "sentence": "`CICharField`, `CIEmailField` and `CITextField` remain only so that old migrations import (`django/contrib/postgres/fields/citext.py`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/fields/citext.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    45
+   ],
+   "fingerprint": "cad576c802301af1"
+  }
+ ]
+}

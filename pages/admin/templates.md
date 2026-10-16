@@ -105,4 +105,4 @@ nora's change form of a port adds: inlines.js
 
 `BaseModelAdmin` is made by `MediaDefiningClass`, so a model admin's inner `Media` adds to the property, unless its extend attribute says otherwise (`django/forms/widgets.py:media_property`). Adding merges: in a run, a subclass of ShipAdmin made by hand with `js = ["fleet/tonnage.js"]` got its script before `"admin/js/jquery.init.js"`, and after it once its list began with that file, as the documentation asks of forms and widgets that use `"django.jQuery"` (`docs/ref/contrib/admin/index.txt`).
 
-The admin's scripts, stylesheets and images are static files under `django/contrib/admin/static/admin/`, which the staticfiles application finds, and serves in development ([Content types, static files and the other contrib apps](../contrib.md)).
+The admin's scripts, stylesheets and images are static files under `django/contrib/admin/static/admin/`, which the staticfiles application finds, and serves in development ([Serving static files: `StaticFilesHandler` and the development server](../contrib/serving-static.md)).

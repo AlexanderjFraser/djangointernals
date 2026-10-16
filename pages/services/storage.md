@@ -10,7 +10,7 @@ Writing the bytes is the easy part of saving a file; the name is the hard part. 
 
 ## `STORAGES` and the handler
 
-`STORAGES` maps each alias to a dictionary that names a backend class under `"BACKEND"`, with any `"OPTIONS"`. Its default has two aliases, `"default"`, a `FileSystemStorage`, and `"staticfiles"`, the static files' storage ([Content types, static files and the other contrib apps](../contrib.md)) (`django/conf/global_settings.py`).
+`STORAGES` maps each alias to a dictionary that names a backend class under `"BACKEND"`, with any `"OPTIONS"`. Its default has two aliases, `"default"`, a `FileSystemStorage`, and `"staticfiles"`, the static files' storage ([Static file storages: `ManifestStaticFilesStorage` and hashed names](../contrib/static-storage.md)) (`django/conf/global_settings.py`).
 
 The handler `storages` is a `StorageHandler`. It copies the setting into `StorageHandler.backends` the first time a storage is asked for, and `StorageHandler.__getitem__` makes an alias's storage with `StorageHandler.create_storage` once and keeps it, so the process has one storage for each alias, shared by every thread (`django/core/files/storage/handler.py:StorageHandler`). `create_storage` imports the class and calls it with the `"OPTIONS"` as keyword arguments, ignoring any other key. An alias the setting lacks, or a class that will not import, raises `InvalidStorageError`, an `ImproperlyConfigured`.
 

@@ -148,7 +148,7 @@ Five more arguments qualify the rule:
 - `condition=`, a `Q`: the rule holds only among the rows that meet it.
 - `deferrable=`, which is `Deferrable.DEFERRED` or `Deferrable.IMMEDIATE`: the constraint is declared `"DEFERRABLE INITIALLY DEFERRED"`, which is not enforced until the end of the transaction, or `"DEFERRABLE INITIALLY IMMEDIATE"`, which is enforced after every statement.
 - `include=`, names of fields whose columns are stored in the index beside the key without being part of the rule.
-- `opclasses=`, the name of an operator class for each field, which only PostgreSQL's schema editor writes into the statement ([Content types, static files and the other contrib apps](../contrib.md) has the rest of what is PostgreSQL's alone).
+- `opclasses=`, the name of an operator class for each field, which only PostgreSQL's schema editor writes into the statement ([PostgreSQL indexes and `ExclusionConstraint`](../contrib/postgres-indexes.md) has the rest of what is PostgreSQL's alone).
 - `nulls_distinct=`, whether two nulls count as different values. Left at `None`, the database's own rule stands.
 
 ### In the table's statement or after it, as a constraint or as an index

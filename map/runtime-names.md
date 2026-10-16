@@ -16,6 +16,11 @@ MAILERS                      django/conf/__init__.py:Settings.__init__          
 SERIALIZATION_MODULES        django/conf/__init__.py:Settings.__init__                   # the same: the serializers read it only where a project has set it
 MESSAGE_LEVEL                django/conf/__init__.py:Settings.__init__                   # the same: the message storage reads it with getattr, and takes INFO where a project has not set it
 MESSAGE_TAGS                 django/conf/__init__.py:Settings.__init__                   # the same: get_level_tags reads it with getattr, and takes no extra tags where a project has not set it
+SITE_ID                      django/conf/__init__.py:Settings.__init__                   # the same: SiteManager.get_current reads it with getattr, and finds the site by the request's host where a project has not set it
+GDAL_LIBRARY_PATH            django/conf/__init__.py:Settings.__init__                   # the same: django/contrib/gis/gdal/libgdal.py reads it, and tries the library's usual names where a project has not set it
+GEOS_LIBRARY_PATH            django/conf/__init__.py:Settings.__init__                   # the same: load_geos reads it, and tries the library's usual names where a project has not set it
+SPATIALITE_LIBRARY_PATH      django/conf/__init__.py:Settings.__init__                   # the same: the SpatiaLite backend reads it with getattr, and tries the extension's usual names where a project has not set it
+POSTGIS_VERSION              django/conf/__init__.py:Settings.__init__                   # the same: PostGISOperations.spatial_version reads it where a project has set it, and asks the database otherwise
 process_exception            django/core/handlers/base.py:BaseHandler.load_middleware    # a method the handler looks for on a middleware instance; no class in Django declares one
 process_template_response    django/core/handlers/base.py:BaseHandler.load_middleware    # the same
 HttpRequest.session          django/contrib/sessions/middleware.py:SessionMiddleware.process_request        # set on each request by the session middleware: the session store for the request's cookie

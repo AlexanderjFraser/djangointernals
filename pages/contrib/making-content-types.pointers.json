@@ -1,0 +1,166 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "making-content-types.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/contenttypes/apps.py:ContentTypesConfig.ready",
+   "line": 15,
+   "sentence": "It registers `check_generic_foreign_keys` and `check_model_name_lengths` (`django/contrib/contenttypes/apps.py:ContentTypesConfig.ready`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/apps.py",
+   "symbol": "ContentTypesConfig.ready",
+   "kind": "function",
+   "lines": [
+    18,
+    22
+   ],
+   "fingerprint": "2b8d9d7f9ab433ca"
+  },
+  {
+   "pointer": "django/core/management/sql.py:emit_post_migrate_signal",
+   "line": 19,
+   "sentence": "Migrate sends `post_migrate` for each installed application with a models module once the executor has finished, giving as apps the registry of the state the plan left; flush sends it with no apps, and `create_contenttypes` then uses the main registry (`django/core/management/sql.py:emit_post_migrate_signal`) ([The migrate command, showmigrations and sqlmigrate](../migrations/migrate.md)).",
+   "tree": "django",
+   "path": "django/core/management/sql.py",
+   "symbol": "emit_post_migrate_signal",
+   "kind": "function",
+   "lines": [
+    42,
+    59
+   ],
+   "fingerprint": "b7692e5c98a612b3"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:create_contenttypes",
+   "line": 19,
+   "sentence": "`create_contenttypes` then works in this order (`django/contrib/contenttypes/management/__init__.py:create_contenttypes`):",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "create_contenttypes",
+   "kind": "function",
+   "lines": [
+    100,
+    143
+   ],
+   "fingerprint": "7e422ad0ff68b39e"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:inject_rename_contenttypes_operations",
+   "line": 48,
+   "sentence": "`inject_rename_contenttypes_operations` prevents this by editing the plan before the executor runs it (`django/contrib/contenttypes/management/__init__.py:inject_rename_contenttypes_operations`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "inject_rename_contenttypes_operations",
+   "kind": "function",
+   "lines": [
+    54,
+    97
+   ],
+   "fingerprint": "fb0d8e1674a7cf07"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:RenameContentType.__init__",
+   "line": 56,
+   "sentence": "Both call `RenameContentType._rename` with the names in their order (`django/contrib/contenttypes/management/__init__.py:RenameContentType.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "RenameContentType.__init__",
+   "kind": "function",
+   "lines": [
+    8,
+    12
+   ],
+   "fingerprint": "e1ae7082602ccc5b"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/__init__.py:RenameContentType._rename",
+   "line": 58,
+   "sentence": "If it raises `IntegrityError`, a row with the new name exists already, a stale one by the comment's account: it warns with `RuntimeWarning`, puts the old name back on the instance, and migrate goes on (`django/contrib/contenttypes/management/__init__.py:RenameContentType._rename`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/__init__.py",
+   "symbol": "RenameContentType._rename",
+   "kind": "function",
+   "lines": [
+    14,
+    45
+   ],
+   "fingerprint": "ba376321762e0a31"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py:Command.handle",
+   "line": 68,
+   "sentence": "The command remove_stale_contenttypes deletes such rows (`django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    37,
+    107
+   ],
+   "fingerprint": "6392e0a869d3090d"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/migrations/0002_remove_content_type_name.py:add_legacy_name",
+   "line": 91,
+   "sentence": "0002_remove_content_type_name drops the name column that 0001_initial made, and when unapplied fills it again with `add_legacy_name`, from each model's class name in the migration's state, or the row's model field where the state lacks the model (`django/contrib/contenttypes/migrations/0002_remove_content_type_name.py:add_legacy_name`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/migrations/0002_remove_content_type_name.py",
+   "symbol": "add_legacy_name",
+   "kind": "function",
+   "lines": [
+    4,
+    12
+   ],
+   "fingerprint": "20cc199fbf4b013b"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._check_fields",
+   "line": 95,
+   "sentence": "A model's own checks cover its local fields and its many-to-many fields (`django/db/models/base.py:Model._check_fields`), not a `GenericForeignKey`, which is a private field.",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._check_fields",
+   "kind": "function",
+   "lines": [
+    1958,
+    1966
+   ],
+   "at": 1959,
+   "fingerprint": "7ab2146820aed85a"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/checks.py:check_generic_foreign_keys",
+   "line": 95,
+   "sentence": "`check_generic_foreign_keys` finds each `GenericForeignKeyDescriptor` in a model class's own dictionary and runs `GenericForeignKey.check` on its field ([Generic foreign keys: `GenericForeignKey`](generic-foreign-key.md)) (`django/contrib/contenttypes/checks.py:check_generic_foreign_keys`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/checks.py",
+   "symbol": "check_generic_foreign_keys",
+   "kind": "function",
+   "lines": [
+    7,
+    25
+   ],
+   "fingerprint": "e0d2916d1f1b1500"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/checks.py:check_model_name_lengths",
+   "line": 95,
+   "sentence": "`check_model_name_lengths` reports `\"contenttypes.E005\"` for a model whose name in lower case is longer than 100 characters, the `max_length` of `ContentType.model` (`django/contrib/contenttypes/checks.py:check_model_name_lengths`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/checks.py",
+   "symbol": "check_model_name_lengths",
+   "kind": "function",
+   "lines": [
+    28,
+    46
+   ],
+   "fingerprint": "30051105611f0428"
+  }
+ ]
+}

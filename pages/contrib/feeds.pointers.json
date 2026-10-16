@@ -1,0 +1,291 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "feeds.md",
+ "pointers": [
+  {
+   "pointer": "django/utils/feedgenerator.py",
+   "line": 7,
+   "sentence": "How a feed, a subclass of `django.contrib.syndication.views.Feed`, answers a request with an RSS or Atom document: the object it is about, the attributes that may each be a value or a method, and the feed generator of `django/utils/feedgenerator.py`, a `SyndicationFeed` such as `Rss201rev2Feed` or `Atom1Feed`, which writes the XML.",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    525
+   ],
+   "fingerprint": "6a112e13dcfa2f0a"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed",
+   "line": 9,
+   "sentence": "The view knows the request: it finds the object, takes the current site's domain for links, renders templates and makes dates aware (`django/contrib/syndication/views.py:Feed`).",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed",
+   "kind": "class",
+   "lines": [
+    29,
+    235
+   ],
+   "fingerprint": "b04f6b4c1ff0cf5e"
+  },
+  {
+   "pointer": "django/utils/feedgenerator.py:SyndicationFeed",
+   "line": 9,
+   "sentence": "The **feed generator** knows nothing of requests or models: it keeps what it is handed in dictionaries and writes one dialect of XML (`django/utils/feedgenerator.py:SyndicationFeed`).",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": "SyndicationFeed",
+   "kind": "class",
+   "lines": [
+    110,
+    283
+   ],
+   "fingerprint": "0557ec88384e36b0"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed",
+   "line": 13,
+   "sentence": "The URLconf holds one instance of a `Feed` subclass (`django/contrib/syndication/views.py:Feed`), and every request to its pattern calls that one object ([What the handler asks of a view](../views/callable.md)).",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed",
+   "kind": "class",
+   "lines": [
+    29,
+    235
+   ],
+   "fingerprint": "b04f6b4c1ff0cf5e"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed.__call__",
+   "line": 13,
+   "sentence": "`Feed.__call__` does four things (`django/contrib/syndication/views.py:Feed.__call__`):",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed.__call__",
+   "kind": "function",
+   "lines": [
+    35,
+    49
+   ],
+   "fingerprint": "c206d2949e3fdbbe"
+  },
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 17,
+   "sentence": "It makes an `HttpResponse` with the generator's `content_type`, and, if the feed has an attribute `\"item_pubdate\"` or `\"item_updateddate\"`, a Last-Modified header from `SyndicationFeed.latest_post_date`, the newest date of any item or else the present, so that, says the comment, `ConditionalGetMiddleware` can answer 304 ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#conditionalgetmiddleware)).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed._get_dynamic_attr",
+   "line": 58,
+   "sentence": "Every part of a feed but four plain attributes, `Feed.feed_type`, `Feed.language`, `Feed.title_template` and `Feed.description_template`, and two methods always called, `Feed.feed_extra_kwargs` and `Feed.item_extra_kwargs`, is read through `Feed._get_dynamic_attr`, with one argument: the object from `Feed.get_object` for a part of the feed, the item for a part of an item (`django/contrib/syndication/views.py:Feed._get_dynamic_attr`).",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed._get_dynamic_attr",
+   "kind": "function",
+   "lines": [
+    78,
+    106
+   ],
+   "fingerprint": "eb4656e093b3c9a2"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed.get_feed",
+   "line": 64,
+   "sentence": "`Feed.get_feed` works in this order (`django/contrib/syndication/views.py:Feed.get_feed`):",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed.get_feed",
+   "kind": "function",
+   "lines": [
+    135,
+    235
+   ],
+   "fingerprint": "8a56351b878863cb"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:add_domain",
+   "line": 71,
+   "sentence": "The feed's link, its `\"feed_url\"` and each item's link go through `add_domain`: a path gets the scheme, `\"https\"` when `HttpRequest.is_secure` says so, and the domain; a URL beginning `\"http://\"`, `\"https://\"` or `\"mailto:\"` is left alone, and one beginning `\"//\"` gets the scheme, which RSS requires, says the comment, citing ticket 16753 (`django/contrib/syndication/views.py:add_domain`).",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "add_domain",
+   "kind": "function",
+   "lines": [
+    15,
+    22
+   ],
+   "fingerprint": "d371a78364e09c46"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed.item_enclosures",
+   "line": 71,
+   "sentence": "An enclosure's URL is no link: `Feed.item_enclosures` makes at most one `Enclosure`, from `\"item_enclosure_url\"`, `\"item_enclosure_length\"` and `\"item_enclosure_mime_type\"`, each through `str`, so a missing length is written `\"None\"` (`django/contrib/syndication/views.py:Feed.item_enclosures`).",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed.item_enclosures",
+   "kind": "function",
+   "lines": [
+    67,
+    76
+   ],
+   "fingerprint": "5bc17d38c5e8c7a3"
+  },
+  {
+   "pointer": "django/contrib/syndication/views.py:Feed.item_title",
+   "line": 99,
+   "sentence": "`Feed.item_title` escapes the item's `str` as HTML, and its comment says titles should be double escaped by default, citing ticket 6533 (`django/contrib/syndication/views.py:Feed.item_title`); the generator escapes again, as XML.",
+   "tree": "django",
+   "path": "django/contrib/syndication/views.py",
+   "symbol": "Feed.item_title",
+   "kind": "function",
+   "lines": [
+    51,
+    53
+   ],
+   "fingerprint": "5355eb07ee7d9487"
+  },
+  {
+   "pointer": "django/utils/feedgenerator.py:SyndicationFeed.__init__",
+   "line": 103,
+   "sentence": "`SyndicationFeed.__init__` keeps the feed's values in a dictionary, text made strings and URLs escaped, the id `\"feed_guid\"` or else the link, and any keyword it does not know (`django/utils/feedgenerator.py:SyndicationFeed.__init__`); `SyndicationFeed.add_item` appends one for each item.",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": "SyndicationFeed.__init__",
+   "kind": "function",
+   "lines": [
+    113,
+    163
+   ],
+   "fingerprint": "42969df2b464b291"
+  },
+  {
+   "pointer": "django/utils/text.py",
+   "line": 105,
+   "sentence": "`RssFeed.write` makes a `SimplerXMLGenerator` over the file ([Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md#the-xml-writer)) and writes the declaration, any stylesheets, an rss element and a channel, the feed's elements and the items (`django/utils/feedgenerator.py:RssFeed.write`); `Atom1Feed.write`, a feed element and entries.",
+   "tree": "django",
+   "path": "django/utils/text.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    501
+   ],
+   "fingerprint": "72cb2344fb0d8ee0"
+  },
+  {
+   "pointer": "django/utils/feedgenerator.py:RssFeed.write",
+   "line": 105,
+   "sentence": "`RssFeed.write` makes a `SimplerXMLGenerator` over the file ([Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md#the-xml-writer)) and writes the declaration, any stylesheets, an rss element and a channel, the feed's elements and the items (`django/utils/feedgenerator.py:RssFeed.write`); `Atom1Feed.write`, a feed element and entries.",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": "RssFeed.write",
+   "kind": "function",
+   "lines": [
+    298,
+    309
+   ],
+   "fingerprint": "e76d7ecb07f29d70"
+  },
+  {
+   "pointer": "docs/ref/contrib/syndication.txt",
+   "line": 105,
+   "sentence": "A format built on RSS or Atom subclasses `Rss201rev2Feed` or `Atom1Feed` and extends them, calling the superclass's, says the documentation (`docs/ref/contrib/syndication.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/syndication.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1208
+   ],
+   "fingerprint": "556ba882661c3449"
+  },
+  {
+   "pointer": "django/contrib/gis/feeds.py:Feed",
+   "line": 105,
+   "sentence": "GeoDjango's `Feed` uses one, `GeoRSSFeed`, handing it geometries through its own `feed_extra_kwargs` and `item_extra_kwargs` (`django/contrib/gis/feeds.py:Feed`) ([GeoDjango's forms, admin, feeds and data tools](gis-extras.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/feeds.py",
+   "symbol": "Feed",
+   "kind": "class",
+   "lines": [
+    137,
+    151
+   ],
+   "fingerprint": "78d4b9359465ebad"
+  },
+  {
+   "pointer": "django/utils/feedgenerator.py",
+   "line": 113,
+   "sentence": "*The generators of `django/utils/feedgenerator.py`.",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    525
+   ],
+   "fingerprint": "6a112e13dcfa2f0a"
+  },
+  {
+   "pointer": "django/utils/feedgenerator.py:get_tag_uri",
+   "line": 115,
+   "sentence": "An Atom entry with no unique id gets one from `get_tag_uri`; from a feed view, only when `\"item_guid\"` returns `None`, as in `\"tag:harbour.example,2026-10-13:/bulletins/2//\"` (`django/utils/feedgenerator.py:get_tag_uri`).",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": "get_tag_uri",
+   "kind": "function",
+   "lines": [
+    48,
+    59
+   ],
+   "fingerprint": "9315592028eb91c5"
+  },
+  {
+   "pointer": "docs/releases/5.2.txt",
+   "line": 119,
+   "sentence": "The feed generators take stylesheets (`docs/releases/5.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "56a4c82a284e4c7a"
+  },
+  {
+   "pointer": "django/utils/feedgenerator.py:Stylesheet",
+   "line": 121,
+   "sentence": "Each is a URL, made a `Stylesheet`, or a `Stylesheet`, whose type is guessed from the extension unless given, whose media is `\"screen\"` unless given, and whose URL is read only when written, so a lazy one from `reverse_lazy` works (`django/utils/feedgenerator.py:Stylesheet`).",
+   "tree": "django",
+   "path": "django/utils/feedgenerator.py",
+   "symbol": "Stylesheet",
+   "kind": "class",
+   "lines": [
+    78,
+    107
+   ],
+   "fingerprint": "637cbbf7f9a54579"
+  }
+ ]
+}

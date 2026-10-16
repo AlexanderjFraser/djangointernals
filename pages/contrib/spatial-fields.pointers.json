@@ -1,0 +1,278 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "spatial-fields.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField",
+   "line": 9,
+   "sentence": "`BaseSpatialField`, a `django.db.models.Field`, and the classes built on it answer them: `GeometryField`, for vector geometries, and `RasterField`, for grids of values (`django/contrib/gis/db/models/fields.py:BaseSpatialField`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "BaseSpatialField",
+   "kind": "class",
+   "lines": [
+    74,
+    242
+   ],
+   "fingerprint": "d490ae4884694f61"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField.db_type",
+   "line": 13,
+   "sentence": "Where `django.db.models.Field.db_type` looks the internal type up in the backend's table of column types ([A field: the base class](../models/fields.md)), `BaseSpatialField.db_type` returns what the connection's operations object writes with `geo_db_type` (`django/contrib/gis/db/models/fields.py:BaseSpatialField.db_type`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "BaseSpatialField.db_type",
+   "kind": "function",
+   "lines": [
+    123,
+    124
+   ],
+   "fingerprint": "df72719973d47e3f"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.geo_db_type",
+   "line": 13,
+   "sentence": "PostGIS's writes the field's geometry type, with `\"Z\"` for three dimensions, and its SRID (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.geo_db_type`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.geo_db_type",
+   "kind": "function",
+   "lines": [
+    247,
+    268
+   ],
+   "fingerprint": "a346a6f30c6ea5e3"
+  },
+  {
+   "pointer": "docs/ref/contrib/gis/model-api.txt",
+   "line": 23,
+   "sentence": "That argument stands in for `db_index` because a spatial index, the documentation says, is typically a variant of the R-tree (`docs/ref/contrib/gis/model-api.txt`); the backend's schema editor makes it ([Spatial backends: PostGIS, SpatiaLite, MySQL and Oracle](spatial-backends.md)).",
+   "tree": "django",
+   "path": "docs/ref/contrib/gis/model-api.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    289
+   ],
+   "fingerprint": "d1289dacbf3a7fa1"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:get_srid_info",
+   "line": 25,
+   "sentence": "`BaseSpatialField.geodetic`, `BaseSpatialField.units_name` and their siblings ask `get_srid_info`, which the first time reads the SRID's row of `\"spatial_ref_sys\"`, or Oracle's `\"CS_SRS\"`, and keeps its units, its spheroid and whether it is geographic in `_srid_cache`, by alias and SRID, for the life of the process; on MySQL, whose backend has no model of such a table, GDAL's `SpatialReference` answers (`django/contrib/gis/db/models/fields.py:get_srid_info`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "get_srid_info",
+   "kind": "function",
+   "lines": [
+    36,
+    71
+   ],
+   "fingerprint": "f37bbaa53027c7f1"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:GeometryField.contribute_to_class",
+   "line": 29,
+   "sentence": "`GeometryField.contribute_to_class` puts a `SpatialProxy` on the model class under the field's attname (`django/contrib/gis/db/models/fields.py:GeometryField.contribute_to_class`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "GeometryField.contribute_to_class",
+   "kind": "function",
+   "lines": [
+    322,
+    330
+   ],
+   "fingerprint": "e9d5c4f51606e800"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/proxy.py:SpatialProxy",
+   "line": 31,
+   "sentence": "`SpatialProxy.__get__` parses a string or a `memoryview` at the first read, with `GEOSGeometry` and the field's `max_geom_collections`, and assigns the result back through `__set__`, so the string is parsed once and its type checked then (`django/contrib/gis/db/models/proxy.py:SpatialProxy`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/proxy.py",
+   "symbol": "SpatialProxy",
+   "kind": "class",
+   "lines": [
+    12,
+    89
+   ],
+   "fingerprint": "826b2149a4e3f1d1"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value",
+   "line": 54,
+   "sentence": "`BaseSpatialField.get_prep_value`, which a lookup calls when it is made, keeps a `GEOSGeometry` or a `GDALRaster`, makes a geometry of a string, and of bytes a raster if GDAL can read one or else a geometry; then `BaseSpatialField.get_srid` gives a value with no SRID, or with -1, the field's, and keeps any other unless the field's is -1 (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "BaseSpatialField.get_prep_value",
+   "kind": "function",
+   "lines": [
+    191,
+    242
+   ],
+   "fingerprint": "fc4ee34351d7cf5f"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geom_placeholder_sql",
+   "line": 54,
+   "sentence": "`BaseSpatialField.get_placeholder_sql` hands the compiler's question, what to write where the value goes, to the backend's `get_geom_placeholder_sql`, which on PostGIS transforms a value of another SRID (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geom_placeholder_sql`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.get_geom_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    307,
+    332
+   ],
+   "fingerprint": "cb03b58591581982"
+  },
+  {
+   "pointer": "django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value",
+   "line": 63,
+   "sentence": "So `GDALRaster.check_raster_lookup_value` refuses a dictionary, a string or a path with `DisallowedRasterLookup`, a `SuspiciousOperation`, which a request answers with 400 (`django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value`) ([How an exception becomes a response](../handlers/exceptions.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/gdal/raster/source.py",
+   "symbol": "GDALRaster.check_raster_lookup_value",
+   "kind": "function",
+   "lines": [
+    247,
+    261
+   ],
+   "at": 248,
+   "fingerprint": "7d35ee39db60db35"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value",
+   "line": 63,
+   "sentence": "For a string the refusal waits while `GEOSGeometry` has its turn, so WKT still works; it is raised if that fails on a string that begins \"/vsi\" or looks like JSON, as a filter of moorings by \"/vsicurl/https://charts.example/harbour.tif\" did (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "BaseSpatialField.get_prep_value",
+   "kind": "function",
+   "lines": [
+    191,
+    242
+   ],
+   "fingerprint": "fc4ee34351d7cf5f"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_db_converters",
+   "line": 65,
+   "sentence": "On the way out a geometry field has no `from_db_value`: the backend adds a converter for every expression whose output field is a geometry field (`django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_db_converters`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": "BaseSpatialOperations.get_db_converters",
+   "kind": "function",
+   "lines": [
+    182,
+    186
+   ],
+   "fingerprint": "3c77ca3c5e7582c3"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geometry_converter",
+   "line": 65,
+   "sentence": "PostGIS's reads the WKB and gives the result the field's `geom_class` without asking GEOS its type; for `GeometryField`, whose `geom_class` is `None`, it asks (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geometry_converter`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.get_geometry_converter",
+   "kind": "function",
+   "lines": [
+    420,
+    432
+   ],
+   "fingerprint": "0e3f7c3e4ebd794f"
+  },
+  {
+   "pointer": "docs/releases/6.0.8.txt",
+   "line": 67,
+   "sentence": "`max_geom_collections`, 198 by default, limits the nesting of geometry collections in WKT and their number in WKB, against a crash in GEOS the release notes describe (`docs/releases/6.0.8.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.8.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    106
+   ],
+   "fingerprint": "416b7962b066dbe2"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:PointField",
+   "line": 71,
+   "sentence": "`PointField`, `LineStringField`, `PolygonField`, `MultiPointField`, `MultiLineStringField`, `MultiPolygonField` and `GeometryCollectionField`, the subclasses of `GeometryField`, set three class attributes and a description (`django/contrib/gis/db/models/fields.py:PointField`): `GeometryField.geom_type`, the type's OpenGIS name, which PostGIS and MySQL write into the column's type; `GeometryField.geom_class`, the GEOS class the proxy demands and the converter makes; and `GeometryField.form_class`, the form field of the same name.",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "PointField",
+   "kind": "class",
+   "lines": [
+    358,
+    362
+   ],
+   "fingerprint": "5d240f67130d0c09"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/lookups.py",
+   "line": 75,
+   "sentence": "The lookups, and some functions that serve as transforms, are registered on `BaseSpatialField` itself when `django.contrib.gis.db.models` is imported (`django/contrib/gis/db/models/lookups.py`, `django/contrib/gis/db/models/functions.py`); `\"exact\"` is another name for `\"same_as\"`, which PostGIS writes as `~=` ([Spatial lookups, functions and distances](spatial-queries.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/lookups.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    395
+   ],
+   "fingerprint": "82ca436e50e48ed4"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/functions.py",
+   "line": 75,
+   "sentence": "The lookups, and some functions that serve as transforms, are registered on `BaseSpatialField` itself when `django.contrib.gis.db.models` is imported (`django/contrib/gis/db/models/lookups.py`, `django/contrib/gis/db/models/functions.py`); `\"exact\"` is another name for `\"same_as\"`, which PostGIS writes as `~=` ([Spatial lookups, functions and distances](spatial-queries.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/functions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    640
+   ],
+   "fingerprint": "b3b04d0ccef2ab4e"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:RasterField",
+   "line": 79,
+   "sentence": "`RasterField` holds a `GDALRaster`; its `geom_type` is `\"RASTER\"` (`django/contrib/gis/db/models/fields.py:RasterField`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "RasterField",
+   "kind": "class",
+   "lines": [
+    420,
+    467
+   ],
+   "fingerprint": "1fc3557d57be0ba7"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:ExtentField",
+   "line": 81,
+   "sentence": "`ExtentField` is no model's field but the output field of the aggregates `Extent` and `Extent3D` (`django/contrib/gis/db/models/fields.py:ExtentField`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "ExtentField",
+   "kind": "class",
+   "lines": [
+    407,
+    417
+   ],
+   "fingerprint": "08102a880e083251"
+  }
+ ]
+}

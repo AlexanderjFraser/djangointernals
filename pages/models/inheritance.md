@@ -135,7 +135,7 @@ The third test is about what stands ahead of the abstract base in the method res
 
 ### Private fields
 
-A **private field** is one that joined its class with `private_only=True` and is kept in `Options.private_fields`, apart from the others; `GenericForeignKey` and `GenericRelation` add themselves so ([Content types, static files and the other contrib apps](../contrib.md)). Such a field is copied from a base whether or not the base is abstract, and on a copy taken from a base with a table the metaclass sets `GenericRelation.mti_inherited`, which that class reads in order to give such a copy no reverse relation of its own (`django/db/models/base.py:ModelBase.__new__`, `django/contrib/contenttypes/fields.py:GenericRelation.contribute_to_class`).
+A **private field** is one that joined its class with `private_only=True` and is kept in `Options.private_fields`, apart from the others; `GenericForeignKey` and `GenericRelation` add themselves so ([Generic foreign keys: `GenericForeignKey`](../contrib/generic-foreign-key.md)). Such a field is copied from a base whether or not the base is abstract, and on a copy taken from a base with a table the metaclass sets `GenericRelation.mti_inherited`, which that class reads in order to give such a copy no reverse relation of its own (`django/db/models/base.py:ModelBase.__new__`, `django/contrib/contenttypes/fields.py:GenericRelation.contribute_to_class`).
 
 ### `Meta` travels as a class attribute
 

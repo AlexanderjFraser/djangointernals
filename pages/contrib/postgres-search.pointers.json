@@ -1,0 +1,359 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "postgres-search.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/postgres/lookups.py:SearchLookup.process_lhs",
+   "line": 13,
+   "sentence": "It adds one step to `SearchVectorExact`: its `process_lhs` wraps the left side in a `SearchVector`, with the right side's configuration if it has one; the inherited `process_rhs` wraps a right side that is not already a query in a `SearchQuery` with the vector's configuration; and `SearchVectorExact.as_sql` puts `\"@@\"` between them (`django/contrib/postgres/lookups.py:SearchLookup.process_lhs`, `django/contrib/postgres/search.py:SearchVectorExact`):",
+   "tree": "django",
+   "path": "django/contrib/postgres/lookups.py",
+   "symbol": "SearchLookup.process_lhs",
+   "kind": "function",
+   "lines": [
+    58,
+    63
+   ],
+   "fingerprint": "a81e17c60f3230a1"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchVectorExact",
+   "line": 13,
+   "sentence": "It adds one step to `SearchVectorExact`: its `process_lhs` wraps the left side in a `SearchVector`, with the right side's configuration if it has one; the inherited `process_rhs` wraps a right side that is not already a query in a `SearchQuery` with the vector's configuration; and `SearchVectorExact.as_sql` puts `\"@@\"` between them (`django/contrib/postgres/lookups.py:SearchLookup.process_lhs`, `django/contrib/postgres/search.py:SearchVectorExact`):",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchVectorExact",
+   "kind": "class",
+   "lines": [
+    54,
+    68
+   ],
+   "fingerprint": "40d032aaa03028d9"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchVectorExact.process_rhs",
+   "line": 23,
+   "sentence": "The lookup registered on it as `\"exact\"` is `SearchVectorExact`, so a filter by a plain string on a vector field, or on an annotation whose output is one, compares it with a `SearchQuery` in the vector's configuration, if it has one (`django/contrib/postgres/search.py:SearchVectorExact.process_rhs`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchVectorExact.process_rhs",
+   "kind": "function",
+   "lines": [
+    57,
+    62
+   ],
+   "fingerprint": "1058bb326faabd21"
+  },
+  {
+   "pointer": "docs/ref/contrib/postgres/search.txt",
+   "line": 23,
+   "sentence": "Nothing in the module fills a vector column; the documentation suggests a trigger or a `GeneratedField` (`docs/ref/contrib/postgres/search.txt`), and an index over the vector ([PostgreSQL indexes and `ExclusionConstraint`](postgres-indexes.md)).",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/search.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    512
+   ],
+   "fingerprint": "7b19b5692e7b4ca1"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchVector.as_sql",
+   "line": 27,
+   "sentence": "A weight, one of PostgreSQL's labels A to D, wraps the call in `\"setweight\"`, which labels that part's lexemes for the ranking (`django/contrib/postgres/search.py:SearchVector.as_sql`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchVector.as_sql",
+   "kind": "function",
+   "lines": [
+    153,
+    188
+   ],
+   "fingerprint": "ac6d4db3b1920d14"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchConfig",
+   "line": 27,
+   "sentence": "A configuration, a name or an expression such as an `F` of a column that holds one, becomes a `SearchConfig`, written cast to `\"regconfig\"` as the first argument of `\"to_tsvector\"` (`django/contrib/postgres/search.py:SearchConfig`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchConfig",
+   "kind": "class",
+   "lines": [
+    86,
+    107
+   ],
+   "fingerprint": "8ccedb5f8eabc01e"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchVectorCombinable._combine",
+   "line": 29,
+   "sentence": "Vectors combine with `+`, and only with each other. `SearchVectorCombinable` sets `ADD` to `\"||\"`, PostgreSQL's concatenation of vectors, and its `_combine` makes a `CombinedSearchVector` that keeps the left side's configuration, or raises `TypeError`: \"SearchVector can only be combined with other SearchVector instances, got SearchQuery.\" (`django/contrib/postgres/search.py:SearchVectorCombinable._combine`). The combination's type comes from the table of combinable fields, where the module registers at import `\"||\"` between two `SearchVectorField`s as giving a `SearchVectorField` ([Expressions: `resolve_expression` and `as_sql`](../sql/expressions.md)).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchVectorCombinable._combine",
+   "kind": "function",
+   "lines": [
+    113,
+    121
+   ],
+   "fingerprint": "4dd4fc4f8b82b614"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchQuery.__init__",
+   "line": 33,
+   "sentence": "Any other type raises `ValueError` (`django/contrib/postgres/search.py:SearchQuery.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchQuery.__init__",
+   "kind": "function",
+   "lines": [
+    236,
+    258
+   ],
+   "fingerprint": "e9698dbb622d5f8d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Combinable.__and__",
+   "line": 33,
+   "sentence": "`Combinable` refuses `&` and `|` unless both sides are conditions (`django/db/models/expressions.py:Combinable.__and__`); `SearchQueryCombinable` defines them again to make a `CombinedSearchQuery` with PostgreSQL's `\"&&\"` or `\"||\"` between (`django/contrib/postgres/search.py:SearchQueryCombinable`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Combinable.__and__",
+   "kind": "function",
+   "lines": [
+    97,
+    102
+   ],
+   "fingerprint": "ba8b96e8da20ed93"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchQueryCombinable",
+   "line": 33,
+   "sentence": "`Combinable` refuses `&` and `|` unless both sides are conditions (`django/db/models/expressions.py:Combinable.__and__`); `SearchQueryCombinable` defines them again to make a `CombinedSearchQuery` with PostgreSQL's `\"&&\"` or `\"||\"` between (`django/contrib/postgres/search.py:SearchQueryCombinable`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchQueryCombinable",
+   "kind": "class",
+   "lines": [
+    197,
+    224
+   ],
+   "fingerprint": "cd0727d690266563"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:Lexeme.as_sql",
+   "line": 35,
+   "sentence": "It is a `Value` of one string, and its `as_sql` writes one parameter: the string with each character of `spec_chars_re` (the apostrophe, the backslash, the null character and `\"[]()|&:*!@<>\"`) made a space, spaces collapsed, and quoted as a string literal by the driver; then, after a colon, `\"*\"` for a prefix and the weight's letter, and `\"!\"` in front when inverted (`django/contrib/postgres/search.py:Lexeme.as_sql`, `django/contrib/postgres/search.py:psql_escape`, `django/contrib/postgres/search.py:quote_lexeme`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "Lexeme.as_sql",
+   "kind": "function",
+   "lines": [
+    484,
+    497
+   ],
+   "fingerprint": "7b2f010ce1961805"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:psql_escape",
+   "line": 35,
+   "sentence": "It is a `Value` of one string, and its `as_sql` writes one parameter: the string with each character of `spec_chars_re` (the apostrophe, the backslash, the null character and `\"[]()|&:*!@<>\"`) made a space, spaces collapsed, and quoted as a string literal by the driver; then, after a colon, `\"*\"` for a prefix and the weight's letter, and `\"!\"` in front when inverted (`django/contrib/postgres/search.py:Lexeme.as_sql`, `django/contrib/postgres/search.py:psql_escape`, `django/contrib/postgres/search.py:quote_lexeme`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "psql_escape",
+   "kind": "function",
+   "lines": [
+    48,
+    51
+   ],
+   "fingerprint": "d2c7360f336f7171"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:quote_lexeme",
+   "line": 35,
+   "sentence": "It is a `Value` of one string, and its `as_sql` writes one parameter: the string with each character of `spec_chars_re` (the apostrophe, the backslash, the null character and `\"[]()|&:*!@<>\"`) made a space, spaces collapsed, and quoted as a string literal by the driver; then, after a colon, `\"*\"` for a prefix and the weight's letter, and `\"!\"` in front when inverted (`django/contrib/postgres/search.py:Lexeme.as_sql`, `django/contrib/postgres/search.py:psql_escape`, `django/contrib/postgres/search.py:quote_lexeme`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "quote_lexeme",
+   "kind": "function",
+   "lines": [
+    25,
+    26
+   ],
+   "more": [
+    [
+     31,
+     34
+    ]
+   ],
+   "fingerprint": "d2f56c645bd027e5"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:CombinedLexeme.__invert__",
+   "line": 35,
+   "sentence": "Lexemes combine with `&` and `|` into a `CombinedLexeme`, which writes both sides into one string, so a whole tree is still one parameter; `~` on a combination applies De Morgan's theorem, as its comment says, swapping the operator and inverting both sides (`django/contrib/postgres/search.py:CombinedLexeme.__invert__`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "CombinedLexeme.__invert__",
+   "kind": "function",
+   "lines": [
+    520,
+    526
+   ],
+   "fingerprint": "1e2b10817442b5ee"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:NegatedExpression.resolve_expression",
+   "line": 50,
+   "sentence": "`CombinedSearchQuery` declares no `__invert__`, and the `NegatedExpression` that `Combinable.__invert__` makes needs an output field that no combination of two queries has (`django/db/models/expressions.py:NegatedExpression.resolve_expression`): filtering by `~(SearchQuery(\"pilot\") & SearchQuery(\"boat\"))` raised `FieldError`.",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "NegatedExpression.resolve_expression",
+   "kind": "function",
+   "lines": [
+    1609,
+    1617
+   ],
+   "fingerprint": "48cb72363a436cef"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 52,
+   "sentence": "`Lexeme` is new (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchRank.__init__",
+   "line": 56,
+   "sentence": "Weights, four numbers for the labels D, C, B and A in that order, go first, cast to `\"float4[]\"` by a `Cast` to an `ArrayField`; a normalization, an integer of flags, goes last (`django/contrib/postgres/search.py:SearchRank.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchRank.__init__",
+   "kind": "function",
+   "lines": [
+    289,
+    315
+   ],
+   "fingerprint": "4e0275281119082b"
+  },
+  {
+   "pointer": "docs/ref/contrib/postgres/search.txt",
+   "line": 56,
+   "sentence": "Without weights the server uses its own, which the documentation gives as 0.1, 0.2, 0.4 and 1.0 (`docs/ref/contrib/postgres/search.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/postgres/search.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    512
+   ],
+   "fingerprint": "7b19b5692e7b4ca1"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:SearchHeadline.as_sql",
+   "line": 69,
+   "sentence": "Its options, kept under PostgreSQL's names (`\"StartSel\"`, `\"MaxWords\"` and the rest) when given, are written by `SearchHeadline.as_sql` into one string parameter with the connection's `compose_sql`, which on PostgreSQL has the driver format each value through a cursor (`django/contrib/postgres/search.py:SearchHeadline.as_sql`, `django/db/backends/postgresql/psycopg_any.py:mogrify`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "SearchHeadline.as_sql",
+   "kind": "function",
+   "lines": [
+    359,
+    377
+   ],
+   "fingerprint": "b13cd91bfba34640"
+  },
+  {
+   "pointer": "django/db/backends/postgresql/psycopg_any.py:mogrify",
+   "line": 69,
+   "sentence": "Its options, kept under PostgreSQL's names (`\"StartSel\"`, `\"MaxWords\"` and the rest) when given, are written by `SearchHeadline.as_sql` into one string parameter with the connection's `compose_sql`, which on PostgreSQL has the driver format each value through a cursor (`django/contrib/postgres/search.py:SearchHeadline.as_sql`, `django/db/backends/postgresql/psycopg_any.py:mogrify`).",
+   "tree": "django",
+   "path": "django/db/backends/postgresql/psycopg_any.py",
+   "symbol": "mogrify",
+   "kind": "function",
+   "lines": [
+    23,
+    25
+   ],
+   "more": [
+    [
+     111,
+     113
+    ]
+   ],
+   "fingerprint": "d7abca5e12464740"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:TrigramBase",
+   "line": 73,
+   "sentence": "`TrigramSimilarity` writes `\"SIMILARITY\"` of an expression and a string; `TrigramWordSimilarity` and `TrigramStrictWordSimilarity` write `\"WORD_SIMILARITY\"` and `\"STRICT_WORD_SIMILARITY\"` with the string first; the distances, `TrigramDistance`, `TrigramWordDistance` and `TrigramStrictWordDistance`, are written by their `arg_joiner` as the operators `\"<->\"`, `\"<<->\"` and `\"<<<->\"` (`django/contrib/postgres/search.py:TrigramBase`, `django/contrib/postgres/search.py:TrigramWordBase`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "TrigramBase",
+   "kind": "class",
+   "lines": [
+    383,
+    389
+   ],
+   "fingerprint": "ea084ebdf110e5a9"
+  },
+  {
+   "pointer": "django/contrib/postgres/search.py:TrigramWordBase",
+   "line": 73,
+   "sentence": "`TrigramSimilarity` writes `\"SIMILARITY\"` of an expression and a string; `TrigramWordSimilarity` and `TrigramStrictWordSimilarity` write `\"WORD_SIMILARITY\"` and `\"STRICT_WORD_SIMILARITY\"` with the string first; the distances, `TrigramDistance`, `TrigramWordDistance` and `TrigramStrictWordDistance`, are written by their `arg_joiner` as the operators `\"<->\"`, `\"<<->\"` and `\"<<<->\"` (`django/contrib/postgres/search.py:TrigramBase`, `django/contrib/postgres/search.py:TrigramWordBase`).",
+   "tree": "django",
+   "path": "django/contrib/postgres/search.py",
+   "symbol": "TrigramWordBase",
+   "kind": "class",
+   "lines": [
+    392,
+    398
+   ],
+   "fingerprint": "1563c83a77423037"
+  },
+  {
+   "pointer": "django/contrib/postgres/lookups.py:TrigramSimilar",
+   "line": 73,
+   "sentence": "The lookups `\"trigram_similar\"`, `\"trigram_word_similar\"` and `\"trigram_strict_word_similar\"`, registered by `PostgresConfig.ready` on the same two fields, are `PostgresOperatorLookup`s whose operators, `\"%%\"`, `\"%%>\"` and `\"%%>>\"`, are PostgreSQL's with the percent sign doubled for the driver (`django/contrib/postgres/lookups.py:TrigramSimilar`, [Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md)).",
+   "tree": "django",
+   "path": "django/contrib/postgres/lookups.py",
+   "symbol": "TrigramSimilar",
+   "kind": "class",
+   "lines": [
+    66,
+    68
+   ],
+   "fingerprint": "af2966f5abbe7f1d"
+  },
+  {
+   "pointer": "django/contrib/postgres/lookups.py:Unaccent",
+   "line": 81,
+   "sentence": "It is bilateral, so the value compared goes through the same function (`django/contrib/postgres/lookups.py:Unaccent`, [Transforms and database functions: `Transform` and `Func`](../sql/functions.md)):",
+   "tree": "django",
+   "path": "django/contrib/postgres/lookups.py",
+   "symbol": "Unaccent",
+   "kind": "class",
+   "lines": [
+    49,
+    52
+   ],
+   "fingerprint": "abb78f2b795758b6"
+  }
+ ]
+}

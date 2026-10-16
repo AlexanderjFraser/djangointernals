@@ -1,0 +1,277 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "sites.md",
+ "pointers": [
+  {
+   "pointer": "docs/ref/contrib/sites.txt",
+   "line": 9,
+   "sentence": "With `SITE_ID` a process serves one site, and the documentation's way to serve several is a settings module for each (`docs/ref/contrib/sites.txt`); without it, the request's host picks the row.",
+   "tree": "django",
+   "path": "docs/ref/contrib/sites.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    521
+   ],
+   "fingerprint": "10abe63b7ef66e0d"
+  },
+  {
+   "pointer": "django/contrib/sites/models.py:Site",
+   "line": 13,
+   "sentence": "`Site.natural_key` is the domain, which `SiteManager.get_by_natural_key` matches exactly (`django/contrib/sites/models.py:Site`).",
+   "tree": "django",
+   "path": "django/contrib/sites/models.py",
+   "symbol": "Site",
+   "kind": "class",
+   "lines": [
+    79,
+    100
+   ],
+   "fingerprint": "6b855117043d709b"
+  },
+  {
+   "pointer": "django/contrib/sites/models.py:SiteManager.get_current",
+   "line": 17,
+   "sentence": "With no `SITE_ID` and no request it raises `ImproperlyConfigured` (`django/contrib/sites/models.py:SiteManager.get_current`, `django/contrib/sites/models.py:SiteManager._get_site_by_request`).",
+   "tree": "django",
+   "path": "django/contrib/sites/models.py",
+   "symbol": "SiteManager.get_current",
+   "kind": "function",
+   "lines": [
+    48,
+    68
+   ],
+   "fingerprint": "dde32060fd804657"
+  },
+  {
+   "pointer": "django/contrib/sites/models.py:SiteManager._get_site_by_request",
+   "line": 17,
+   "sentence": "With no `SITE_ID` and no request it raises `ImproperlyConfigured` (`django/contrib/sites/models.py:SiteManager.get_current`, `django/contrib/sites/models.py:SiteManager._get_site_by_request`).",
+   "tree": "django",
+   "path": "django/contrib/sites/models.py",
+   "symbol": "SiteManager._get_site_by_request",
+   "kind": "function",
+   "lines": [
+    34,
+    46
+   ],
+   "fingerprint": "656eb812c82412d0"
+  },
+  {
+   "pointer": "django/contrib/sites/models.py:SiteManager._get_site_by_request",
+   "line": 32,
+   "sentence": "A miss is not kept, so a host with a port, where the table holds the domain alone, costs a query at every call (`django/contrib/sites/models.py:SiteManager._get_site_by_request`).",
+   "tree": "django",
+   "path": "django/contrib/sites/models.py",
+   "symbol": "SiteManager._get_site_by_request",
+   "kind": "function",
+   "lines": [
+    34,
+    46
+   ],
+   "fingerprint": "656eb812c82412d0"
+  },
+  {
+   "pointer": "django/contrib/sites/models.py:clear_site_cache",
+   "line": 34,
+   "sentence": "On a site's `pre_save` and `pre_delete`, `clear_site_cache`, connected when the models module is imported, removes two entries: the one under the site's key, and the one under the domain the database holds for it, read with a query first (`django/contrib/sites/models.py:clear_site_cache`).",
+   "tree": "django",
+   "path": "django/contrib/sites/models.py",
+   "symbol": "clear_site_cache",
+   "kind": "function",
+   "lines": [
+    103,
+    116
+   ],
+   "fingerprint": "753114811d53f12e"
+  },
+  {
+   "pointer": "django/contrib/sites/models.py:SiteManager.clear_cache",
+   "line": 44,
+   "sentence": "`SiteManager.clear_cache` binds the module's name to a new dictionary; one imported earlier keeps its entries (`django/contrib/sites/models.py:SiteManager.clear_cache`).",
+   "tree": "django",
+   "path": "django/contrib/sites/models.py",
+   "symbol": "SiteManager.clear_cache",
+   "kind": "function",
+   "lines": [
+    70,
+    73
+   ],
+   "fingerprint": "81810525348aa70f"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase.__new__",
+   "line": 48,
+   "sentence": "Its comment says why it imports the model inside the function: not to import `Site` when the application is not installed, where defining the model raises `RuntimeError` (`django/db/models/base.py:ModelBase.__new__`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase.__new__",
+   "kind": "function",
+   "lines": [
+    105,
+    397
+   ],
+   "fingerprint": "0088098d570317e1"
+  },
+  {
+   "pointer": "django/contrib/sites/shortcuts.py:get_current_site",
+   "line": 48,
+   "sentence": "So modules that work either way, like the content types' views, import `get_current_site` at their top (`django/contrib/sites/shortcuts.py:get_current_site`).",
+   "tree": "django",
+   "path": "django/contrib/sites/shortcuts.py",
+   "symbol": "get_current_site",
+   "kind": "function",
+   "lines": [
+    6,
+    18
+   ],
+   "fingerprint": "3c02ca3f68e660a0"
+  },
+  {
+   "pointer": "django/contrib/sites/requests.py:RequestSite",
+   "line": 48,
+   "sentence": "A `RequestSite` has a domain and a name, both the host as sent, and no key; its `save` and `delete` raise `NotImplementedError` (`django/contrib/sites/requests.py:RequestSite`).",
+   "tree": "django",
+   "path": "django/contrib/sites/requests.py",
+   "symbol": "RequestSite",
+   "kind": "class",
+   "lines": [
+    1,
+    20
+   ],
+   "fingerprint": "a285e1e595119974"
+  },
+  {
+   "pointer": "django/contrib/sites/managers.py:CurrentSiteManager.get_queryset",
+   "line": 54,
+   "sentence": "A manager has no request, so it reads the setting alone, and without `SITE_ID` asking it for a queryset raises `AttributeError` (`django/contrib/sites/managers.py:CurrentSiteManager.get_queryset`).",
+   "tree": "django",
+   "path": "django/contrib/sites/managers.py",
+   "symbol": "CurrentSiteManager.get_queryset",
+   "kind": "function",
+   "lines": [
+    60,
+    65
+   ],
+   "fingerprint": "5f81e338449c8e31"
+  },
+  {
+   "pointer": "django/contrib/sites/managers.py:CurrentSiteManager._check_field_name",
+   "line": 56,
+   "sentence": "It does not ask where the field leads: given the bulletin's port, a foreign key to ports, it passed, and would filter by a port's key (`django/contrib/sites/managers.py:CurrentSiteManager._check_field_name`).",
+   "tree": "django",
+   "path": "django/contrib/sites/managers.py",
+   "symbol": "CurrentSiteManager._check_field_name",
+   "kind": "function",
+   "lines": [
+    21,
+    46
+   ],
+   "fingerprint": "417e53d9d839e6e9"
+  },
+  {
+   "pointer": "django/contrib/sites/middleware.py:CurrentSiteMiddleware.process_request",
+   "line": 58,
+   "sentence": "`CurrentSiteMiddleware` sets `HttpRequest.site` on every request to what `get_current_site` returns (`django/contrib/sites/middleware.py:CurrentSiteMiddleware.process_request`).",
+   "tree": "django",
+   "path": "django/contrib/sites/middleware.py",
+   "symbol": "CurrentSiteMiddleware.process_request",
+   "kind": "function",
+   "lines": [
+    13,
+    14
+   ],
+   "fingerprint": "6a16dd7c4faf7f83"
+  },
+  {
+   "pointer": "django/contrib/sites/middleware.py:CurrentSiteMiddleware.process_request",
+   "line": 63,
+   "sentence": "HttpRequest.site django/contrib/sites/middleware.py:CurrentSiteMiddleware.process_request # set on each request by CurrentSiteMiddleware: the current site",
+   "tree": "django",
+   "path": "django/contrib/sites/middleware.py",
+   "symbol": "CurrentSiteMiddleware.process_request",
+   "kind": "function",
+   "lines": [
+    13,
+    14
+   ],
+   "fingerprint": "6a16dd7c4faf7f83"
+  },
+  {
+   "pointer": "django/contrib/sites/apps.py:SitesConfig.ready",
+   "line": 68,
+   "sentence": "`SitesConfig.ready` connects `create_default_site` to `post_migrate`, with the sites application's config as sender, and registers `check_site_id` under the tag `\"sites\"` (`django/contrib/sites/apps.py:SitesConfig.ready`). migrate sends `post_migrate` as it ends, and flush after emptying the tables ([The migrate command, showmigrations and sqlmigrate](../migrations/migrate.md)).",
+   "tree": "django",
+   "path": "django/contrib/sites/apps.py",
+   "symbol": "SitesConfig.ready",
+   "kind": "function",
+   "lines": [
+    15,
+    17
+   ],
+   "fingerprint": "347fb2512e31b056"
+  },
+  {
+   "pointer": "django/contrib/sites/management.py:create_default_site",
+   "line": 68,
+   "sentence": "If the table is empty, it saves example.com, named example.com, under the key `SITE_ID` names (1 without the setting, the database's next with `None`); then it runs the statements `BaseDatabaseOperations.sequence_reset_sql` gives for `Site` on that backend (`django/contrib/sites/management.py:create_default_site`): none on SQLite, and for PostgreSQL, with no server behind it:",
+   "tree": "django",
+   "path": "django/contrib/sites/management.py",
+   "symbol": "create_default_site",
+   "kind": "function",
+   "lines": [
+    11,
+    47
+   ],
+   "fingerprint": "415aae6cfe9bd980"
+  },
+  {
+   "pointer": "django/conf/global_settings.py",
+   "line": 74,
+   "sentence": "Its claim that the default settings set `SITE_ID` to 1 does not hold: `django/conf/global_settings.py` sets none, and nor does the project template.",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    692
+   ],
+   "fingerprint": "3c82ce45a0f468df"
+  },
+  {
+   "pointer": "django/contrib/sites/checks.py:check_site_id",
+   "line": 76,
+   "sentence": "`check_site_id` passes the setting through the key field's `to_python` and reports `\"sites.E101\"` when that fails or changes the value: \"The SITE_ID setting must be of type int.\" for \"1\" (`django/contrib/sites/checks.py:check_site_id`).",
+   "tree": "django",
+   "path": "django/contrib/sites/checks.py",
+   "symbol": "check_site_id",
+   "kind": "function",
+   "lines": [
+    6,
+    30
+   ],
+   "fingerprint": "fcf05839ddba92b2"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/views.py:shortcut",
+   "line": 80,
+   "sentence": "The admin's \"View on site\" link goes through it, after a permission check, unless `BaseModelAdmin.view_on_site` is a callable ([The site's own pages: the index, the login and `AdminSite.each_context`](../admin/site-views.md)), and the harbour office serves it at r/ (`django/contrib/contenttypes/views.py:shortcut`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/views.py",
+   "symbol": "shortcut",
+   "kind": "function",
+   "lines": [
+    9,
+    88
+   ],
+   "fingerprint": "d7fecf0551beb2ea"
+  }
+ ]
+}

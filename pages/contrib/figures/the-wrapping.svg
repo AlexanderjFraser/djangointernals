@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 385">
+  <!-- the call; each frame below is a layer the call passes through, and the C function is at the centre -->
+  <text class="name" x="0" y="16">harbour.contains(point)</text>
+
+  <!-- the method -->
+  <rect class="ground" x="0.5" y="30.5" width="645" height="354" rx="4"/>
+  <text class="name strong" x="12" y="52">GEOSGeometryBase.contains</text>
+  <text x="12" y="74"><tspan class="name">geos_contains(self.ptr, other.ptr)</tspan>: each a C pointer (<tspan class="name">CPointerBase.ptr</tspan>)</text>
+
+  <!-- the factory -->
+  <rect class="box" x="12.5" y="88.5" width="621" height="284" rx="4"/>
+  <text x="24" y="110"><tspan class="name strong">geos_contains</tspan>: a <tspan class="name">BinaryPredicate</tspan>, a <tspan class="name">GEOSFuncFactory</tspan> for <tspan class="name">"GEOSContains"</tspan></text>
+  <text x="24" y="132">two geometry pointers in, a byte out, <tspan class="name">check_predicate</tspan> as the check</text>
+  <text x="24" y="152">its <tspan class="name">GEOSFunc</tspan> made at the first call and kept</text>
+
+  <!-- the thread-safe function -->
+  <rect class="ground" x="24.5" y="166.5" width="597" height="194" rx="4"/>
+  <text x="36" y="188"><tspan class="name strong">GEOSFunc</tspan>: <tspan class="name">GEOSContains_r</tspan>, from <tspan class="name">lgeos</tspan> (<tspan class="name">load_geos</tspan>, at first use)</text>
+  <text x="36" y="210">first argument: the pointer of this thread's <tspan class="name">GEOSContextHandle</tspan></text>
+  <text class="quiet small" x="36" y="228">(<tspan class="name small">GEOS_init_r</tspan>, once a thread)</text>
+
+  <!-- the C library -->
+  <rect class="mark-box" x="36.5" y="242.5" width="573" height="58" rx="4"/>
+  <text class="name strong" x="48" y="264">libgeos_c</text>
+  <text x="48" y="286"><tspan class="name">GEOSContains_r(</tspan>handle, the harbour's pointer, the point's pointer<tspan class="name">)</tspan></text>
+
+  <!-- what comes back, and its check -->
+  <path class="line" d="M60 301 V318"/>
+  <polygon class="head" points="60,328 55,318 65,318"/>
+  <text class="quiet small" x="72" y="320">a byte</text>
+  <text x="36" y="346"><tspan class="name">check_predicate</tspan>: 1 → <tspan class="name">True</tspan>, 0 → <tspan class="name">False</tspan>, anything else → <tspan class="name">GEOSException</tspan></text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 492">
+  <!-- one file, down the page: where it is at each step, and between the steps what moves it -->
+
+  <!-- 1: where the file is kept -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="56" rx="4"/>
+  <text class="name" x="12" y="24">notes/static/notes/harbour.css</text>
+  <text class="quiet small" x="12" y="44">a file in the notes application's static directory</text>
+
+  <!-- collectstatic finds it and copies it -->
+  <path class="line" d="M24 57 V130"/>
+  <polygon class="head" points="24,140 19,130 29,130"/>
+  <text class="name" x="48" y="84">python manage.py collectstatic</text>
+  <text class="small" x="48" y="104">each finder of <tspan class="name small">STATICFILES_FINDERS</tspan> lists its files;</text>
+  <text class="small" x="48" y="120"><tspan class="name small">AppDirectoriesFinder</tspan> lists <tspan class="name small">"notes/harbour.css"</tspan></text>
+
+  <!-- 2: the copy -->
+  <rect class="ground" x="0.5" y="140.5" width="645" height="56" rx="4"/>
+  <text class="name" x="12" y="164">STATIC_ROOT/notes/harbour.css</text>
+  <text class="quiet small" x="12" y="184">copied by the <tspan class="name small">"staticfiles"</tspan> storage</text>
+
+  <!-- the manifest storage reads the original, rewrites it and hashes it -->
+  <path class="line" d="M24 197 V286"/>
+  <polygon class="head" points="24,296 19,286 29,286"/>
+  <text class="name" x="48" y="224">ManifestFilesMixin.post_process</text>
+  <text class="small" x="48" y="244">reads the original, <tspan class="name small">notes/static/notes/harbour.css</tspan>, not this copy;</text>
+  <text class="small" x="48" y="260">rewrites its references to <tspan class="name small">base.css</tspan> and <tspan class="name small">anchor.png</tspan> to their hashed names,</text>
+  <text class="small" x="48" y="276">then hashes the content: <tspan class="name small">md5</tspan>, the first 12 hex digits</text>
+
+  <!-- 3: the hashed file and the manifest that records its name -->
+  <rect class="ground" x="0.5" y="296.5" width="645" height="82" rx="4"/>
+  <text class="name" x="12" y="320">STATIC_ROOT/notes/harbour.f60ecf1ef40a.css</text>
+  <text class="name" x="12" y="346">STATIC_ROOT/staticfiles.json</text>
+  <text class="quiet small" x="246" y="346">the manifest</text>
+  <text class="name" x="36" y="366">"notes/harbour.css": "notes/harbour.f60ecf1ef40a.css"</text>
+
+  <!-- the tag asks the storage, which reads the manifest -->
+  <path class="line" d="M24 379 V440"/>
+  <polygon class="head" points="24,450 19,440 29,440"/>
+  <text x="48" y="406"><tspan class="name">{% static "notes/harbour.css" %}</tspan> in a template</text>
+  <text class="small" x="48" y="426"><tspan class="name small">staticfiles_storage.url</tspan>, which looks the name up in the manifest</text>
+
+  <!-- 4: the URL a page links it by -->
+  <rect class="mark-box" x="0.5" y="450.5" width="645" height="40" rx="4"/>
+  <text class="name mark" x="12" y="475">/static/notes/harbour.f60ecf1ef40a.css</text>
+</svg>

@@ -135,6 +135,6 @@ Two of the module's helpers decide how a deprecated feature warns. `warn_about_e
 | `django/utils/log.py` | the logging configuration and its handlers | [Logging](startup/logging.md) |
 | `django/utils/autoreload.py` | the development server's reloader | [The autoreloader](commands/autoreload.md) |
 | `django/utils/termcolors.py` | a command's coloured output | [Running a command: `BaseCommand`](commands/running.md) |
-| `django/utils/feedgenerator.py` | RSS and Atom feeds | [Content types, static files and the other contrib apps](contrib.md) |
+| `django/utils/feedgenerator.py` | RSS and Atom feeds | [Feeds: `django.contrib.syndication` and the feed generator](contrib/feeds.md) |
 
 *The modules of `django/utils/` that belong to another subsystem, and where each is told.*

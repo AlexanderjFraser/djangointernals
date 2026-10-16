@@ -1,0 +1,402 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "spatial-backends.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/gis/db/backends/",
+   "line": 7,
+   "sentence": "A **spatial backend** is one of the database backends under `django/contrib/gis/db/backends/`, PostGIS, SpatiaLite, MySQL and Oracle: a subclass of the plain backend whose operations, a `BaseSpatialOperations`, answer what a geometry asks of the database, and whose features, schema editor and adapter know its spatial types.",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e08dd33e84297ffe"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField.db_type",
+   "line": 9,
+   "sentence": "On the example's plain `\"postgres\"` alias, a schema editor asked to create the moorings' table raised `AttributeError`, \"'DatabaseOperations' object has no attribute 'geo_db_type'\" (`django/contrib/gis/db/models/fields.py:BaseSpatialField.db_type`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "BaseSpatialField.db_type",
+   "kind": "function",
+   "lines": [
+    123,
+    124
+   ],
+   "fingerprint": "df72719973d47e3f"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/base.py:DatabaseWrapper",
+   "line": 13,
+   "sentence": "Each backend's `base.py` defines a wrapper that subclasses the plain backend's and replaces the classes it makes its helpers from, `BaseDatabaseWrapper.ops_class`, `BaseDatabaseWrapper.features_class`, `BaseDatabaseWrapper.introspection_class` and `BaseDatabaseWrapper.SchemaEditorClass` (`django/contrib/gis/db/backends/postgis/base.py:DatabaseWrapper`) ([The connection object: `BaseDatabaseWrapper` and what a backend provides](../backends/wrapper.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    91,
+    161
+   ],
+   "fingerprint": "cbb6bbf041fe3d49"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations",
+   "line": 15,
+   "sentence": "The operations come in two halves: `PostGISOperations` has `BaseSpatialOperations` first among its bases and PostgreSQL's operations second, and every backend's operations and features, over `BaseSpatialFeatures`, are built so (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations",
+   "kind": "class",
+   "lines": [
+    121,
+    435
+   ],
+   "fingerprint": "865217834e86b4b9"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.check_expression_support",
+   "line": 15,
+   "sentence": "The spatial half calls `super()` into the plain half: `BaseSpatialOperations.check_expression_support` refuses an aggregate of `BaseSpatialOperations.disallowed_aggregates`, then asks the plain backend, and `BaseSpatialOperations.get_db_converters` adds a geometry's converter to the plain backend's (`django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.check_expression_support`) ([The SQL a backend writes: `BaseDatabaseOperations`](../backends/operations.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": "BaseSpatialOperations.check_expression_support",
+   "kind": "function",
+   "lines": [
+    147,
+    153
+   ],
+   "fingerprint": "5ef99d99f4150dee"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations",
+   "line": 19,
+   "sentence": "`BaseSpatialOperations` declares what every spatial backend answers, raising `NotImplementedError` where only the backend can, and flags such as `BaseSpatialOperations.postgis` say which backend it is (`django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": "BaseSpatialOperations",
+   "kind": "class",
+   "lines": [
+    9,
+    215
+   ],
+   "fingerprint": "a6aeb5f51ba7ec2d"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_geom_placeholder_sql",
+   "line": 23,
+   "sentence": "Where the features say there is no table of coordinate systems the SRID is left out, which a comment gives as compatibility with MySQL, ticket 27464 (`django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.get_geom_placeholder_sql`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": "BaseSpatialOperations.get_geom_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    122,
+    145
+   ],
+   "fingerprint": "eb56772f159d9cf1"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:GeometryField.select_format",
+   "line": 25,
+   "sentence": "`GeometryField.select_format` wraps a column selected outside a subquery in the template `BaseSpatialOperations.select`: `\"ST_AsBinary(%s)\"` on MySQL, `\"SDO_UTIL.TO_WKBGEOMETRY(%s)\"` on Oracle, the bare column on PostGIS under psycopg 3 (`django/contrib/gis/db/models/fields.py:GeometryField.select_format`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "GeometryField.select_format",
+   "kind": "function",
+   "lines": [
+    346,
+    354
+   ],
+   "fingerprint": "317d2f71061d49b3"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/mysql/operations.py:MySQLOperations.get_geometry_converter",
+   "line": 25,
+   "sentence": "The converter from `BaseSpatialOperations.get_geometry_converter` reads the value with GEOS's WKB reader into the field's `GeometryField.geom_class`; MySQL's and Oracle's, which select plain WKB, also set the field's SRID (`django/contrib/gis/db/backends/mysql/operations.py:MySQLOperations.get_geometry_converter`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/mysql/operations.py",
+   "symbol": "MySQLOperations.get_geometry_converter",
+   "kind": "function",
+   "lines": [
+    135,
+    151
+   ],
+   "fingerprint": "0f7ab9f4ea386a77"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.spatial_function_name",
+   "line": 27,
+   "sentence": "A function in `BaseSpatialOperations.unsupported_functions` is refused with `NotSupportedError`; the base class lists every function there, so a backend supports none it does not claim, and PostGIS's set is empty (`django/contrib/gis/db/backends/base/operations.py:BaseSpatialOperations.spatial_function_name`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": "BaseSpatialOperations.spatial_function_name",
+   "kind": "function",
+   "lines": [
+    160,
+    165
+   ],
+   "fingerprint": "897804952c4faac4"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/features.py:BaseSpatialFeatures.__getattr__",
+   "line": 31,
+   "sentence": "A flag for each function is computed on demand from the unsupported functions, `\"has_Centroid_function\"` true on PostGIS, and one for a name that is not a function raises `ValueError` (`django/contrib/gis/db/backends/base/features.py:BaseSpatialFeatures.__getattr__`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/features.py",
+   "symbol": "BaseSpatialFeatures.__getattr__",
+   "kind": "function",
+   "lines": [
+    98,
+    109
+   ],
+   "fingerprint": "3cae1079b75479c8"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.spatial_version",
+   "line": 44,
+   "sentence": "Otherwise it asks the server for `\"version()\"`, so that a failure of PostgreSQL itself is not blamed on PostGIS (ticket 24862), then for `\"postgis_lib_version()\"` (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.spatial_version`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.spatial_version",
+   "kind": "function",
+   "lines": [
+    191,
+    219
+   ],
+   "at": 192,
+   "fingerprint": "54d1807801484d70"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/base.py:DatabaseWrapper.prepare_database",
+   "line": 44,
+   "sentence": "`DatabaseWrapper.prepare_database`, which migrate calls, runs `\"CREATE EXTENSION IF NOT EXISTS postgis\"` where `\"pg_extension\"` lacks it (`django/contrib/gis/db/backends/postgis/base.py:DatabaseWrapper.prepare_database`) ([The migrate command, showmigrations and sqlmigrate](../migrations/migrate.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/base.py",
+   "symbol": "DatabaseWrapper.prepare_database",
+   "kind": "function",
+   "lines": [
+    112,
+    123
+   ],
+   "fingerprint": "af61e66557197bbd"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/adapter.py:PostGISAdapter",
+   "line": 46,
+   "sentence": "A `PostGISAdapter` holds a geometry's EWKB, its WKB with the SRID inside (`django/contrib/gis/db/backends/postgis/adapter.py:PostGISAdapter`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/adapter.py",
+   "symbol": "PostGISAdapter",
+   "kind": "class",
+   "lines": [
+    10,
+    63
+   ],
+   "fingerprint": "394281f5f08ddb31"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/base.py:postgis_adapters",
+   "line": 46,
+   "sentence": "Under psycopg 3, `DatabaseWrapper.register_geometry_adapters` fetches on a new connection the type numbers of `\"geometry\"`, `\"geography\"` and `\"raster\"`, once for each alias, and registers the dumpers `postgis_adapters` makes for them, which send the value typed as one of the three (`django/contrib/gis/db/backends/postgis/base.py:postgis_adapters`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/base.py",
+   "symbol": "postgis_adapters",
+   "kind": "function",
+   "lines": [
+    48,
+    88
+   ],
+   "at": 49,
+   "fingerprint": "845f3a1c16add890"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geom_placeholder_sql",
+   "line": 46,
+   "sentence": "The placeholder is a bare `\"%s\"`, inside `\"ST_Transform\"` when the SRIDs differ (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geom_placeholder_sql`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.get_geom_placeholder_sql",
+   "kind": "function",
+   "lines": [
+    307,
+    332
+   ],
+   "fingerprint": "cb03b58591581982"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/schema.py:PostGISSchemaEditor._create_spatial_index_sql",
+   "line": 58,
+   "sentence": "The schema editor gives a field with `BaseSpatialField.spatial_index` a GiST index, with the operator class `\"GIST_GEOMETRY_OPS_ND\"` for a geometry, not a geography, of three dimensions (`django/contrib/gis/db/backends/postgis/schema.py:PostGISSchemaEditor._create_spatial_index_sql`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/schema.py",
+   "symbol": "PostGISSchemaEditor._create_spatial_index_sql",
+   "kind": "function",
+   "lines": [
+    98,
+    122
+   ],
+   "fingerprint": "e242f10b2df02d9c"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.geo_db_type",
+   "line": 77,
+   "sentence": "A geography field in another SRID than 4326 was refused with `NotSupportedError`, \"PostGIS only supports geography columns with an SRID of 4326.\" (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.geo_db_type`). What the backend asks the server, the version without the setting, the extension, a row of `\"spatial_ref_sys\"`, the run could not ask.",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/operations.py",
+   "symbol": "PostGISOperations.geo_db_type",
+   "kind": "function",
+   "lines": [
+    247,
+    268
+   ],
+   "fingerprint": "a346a6f30c6ea5e3"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/spatialite/base.py:DatabaseWrapper.get_new_connection",
+   "line": 81,
+   "sentence": "`DatabaseWrapper.get_new_connection` enables extension loading and loads the setting `SPATIALITE_LIBRARY_PATH` where it is set, or else the first that loads of `\"mod_spatialite.so\"`, `\"mod_spatialite\"` and what `ctypes.util.find_library` finds (`django/contrib/gis/db/backends/spatialite/base.py:DatabaseWrapper.get_new_connection`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/spatialite/base.py",
+   "symbol": "DatabaseWrapper.get_new_connection",
+   "kind": "function",
+   "lines": [
+    40,
+    68
+   ],
+   "fingerprint": "55547552c838366b"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/spatialite/schema.py:SpatialiteSchemaEditor.column_sql",
+   "line": 81,
+   "sentence": "`SpatialiteSchemaEditor.column_sql` returns no column for a geometry field but collects calls of `\"AddGeometryColumn\"` and `\"CreateSpatialIndex\"`, run once the table exists (`django/contrib/gis/db/backends/spatialite/schema.py:SpatialiteSchemaEditor.column_sql`) ([SQLite](../backends/sqlite.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/spatialite/schema.py",
+   "symbol": "SpatialiteSchemaEditor.column_sql",
+   "kind": "function",
+   "lines": [
+    39,
+    66
+   ],
+   "fingerprint": "82f7d91bf7213cad"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/mysql/operations.py:MySQLOperations",
+   "line": 85,
+   "sentence": "The two databases differ in operators and functions, among them `\"relate\"` on MariaDB only and `\"covers\"` on MySQL only, and MariaDB allows the operator `\"coveredby\"` and the aggregate `Collect` only from 12.0.1 (`django/contrib/gis/db/backends/mysql/operations.py:MySQLOperations`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/mysql/operations.py",
+   "symbol": "MySQLOperations",
+   "kind": "class",
+   "lines": [
+    12,
+    154
+   ],
+   "fingerprint": "707ac148dee991b0"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/mysql/schema.py:MySQLGISSchemaEditor._field_indexes_sql",
+   "line": 85,
+   "sentence": "A spatial index is made only for a field that is not null, and only where the table's storage engine is MyISAM, Aria or InnoDB (`django/contrib/gis/db/backends/mysql/schema.py:MySQLGISSchemaEditor._field_indexes_sql`) ([MySQL and MariaDB](../backends/mysql.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/mysql/schema.py",
+   "symbol": "MySQLGISSchemaEditor._field_indexes_sql",
+   "kind": "function",
+   "lines": [
+    18,
+    35
+   ],
+   "fingerprint": "9777fa5bfaffd345"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/oracle/operations.py:SDOOperator",
+   "line": 89,
+   "sentence": "`SDOOperator` writes most of Oracle's lookups as a function compared with `'TRUE'` (`django/contrib/gis/db/backends/oracle/operations.py:SDOOperator`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/oracle/operations.py",
+   "symbol": "SDOOperator",
+   "kind": "class",
+   "lines": [
+    26,
+    27
+   ],
+   "fingerprint": "55d33325226a8c1e"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/oracle/schema.py:OracleGISSchemaEditor.column_sql",
+   "line": 89,
+   "sentence": "The schema editor adds a row to `\"USER_SDO_GEOM_METADATA\"` for each geometry column, with the field's extent and tolerance, and makes an index of type `\"MDSYS.SPATIAL_INDEX\"` (`django/contrib/gis/db/backends/oracle/schema.py:OracleGISSchemaEditor.column_sql`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/oracle/schema.py",
+   "symbol": "OracleGISSchemaEditor.column_sql",
+   "kind": "function",
+   "lines": [
+    48,
+    64
+   ],
+   "fingerprint": "1965478a828b8336"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/oracle/adapter.py:OracleSpatialAdapter.__init__",
+   "line": 89,
+   "sentence": "`OracleSpatialAdapter` sends WKT, after turning a polygon's rings to the orientation its docstring says Oracle requires (`django/contrib/gis/db/backends/oracle/adapter.py:OracleSpatialAdapter.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/oracle/adapter.py",
+   "symbol": "OracleSpatialAdapter.__init__",
+   "kind": "function",
+   "lines": [
+    10,
+    28
+   ],
+   "fingerprint": "5a0213af10e888dc"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/models.py:SpatialRefSysMixin.srs",
+   "line": 93,
+   "sentence": "The second has `SpatialRefSysMixin`, which makes a GDAL `SpatialReference` from the row's WKT or, failing that, from the PROJ string of a PostGIS or SpatiaLite row, and answers units and spheroid from it (`django/contrib/gis/db/backends/base/models.py:SpatialRefSysMixin.srs`); a field reads its units there, on MySQL from GDAL (`django/contrib/gis/db/models/fields.py:get_srid_info`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/models.py",
+   "symbol": "SpatialRefSysMixin.srs",
+   "kind": "function",
+   "lines": [
+    11,
+    30
+   ],
+   "at": 12,
+   "fingerprint": "78547f0d3ad9ffef"
+  },
+  {
+   "pointer": "django/contrib/gis/db/models/fields.py:get_srid_info",
+   "line": 93,
+   "sentence": "The second has `SpatialRefSysMixin`, which makes a GDAL `SpatialReference` from the row's WKT or, failing that, from the PROJ string of a PostGIS or SpatiaLite row, and answers units and spheroid from it (`django/contrib/gis/db/backends/base/models.py:SpatialRefSysMixin.srs`); a field reads its units there, on MySQL from GDAL (`django/contrib/gis/db/models/fields.py:get_srid_info`).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/models/fields.py",
+   "symbol": "get_srid_info",
+   "kind": "function",
+   "lines": [
+    36,
+    71
+   ],
+   "fingerprint": "f37bbaa53027c7f1"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/postgis/introspection.py:PostGISIntrospection.get_geometry_type",
+   "line": 93,
+   "sentence": "Introspection tells the GIS inspectdb a geometry column's type, on Oracle only the generic geometry field, and, where the metadata keeps them, its SRID and dimensions (`django/contrib/gis/db/backends/postgis/introspection.py:PostGISIntrospection.get_geometry_type`) ([GeoDjango's forms, admin, feeds and data tools](gis-extras.md)).",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/postgis/introspection.py",
+   "symbol": "PostGISIntrospection.get_geometry_type",
+   "kind": "function",
+   "lines": [
+    36,
+    73
+   ],
+   "fingerprint": "9d4e652e26e56a00"
+  }
+ ]
+}
