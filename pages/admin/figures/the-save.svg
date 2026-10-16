@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 582">
+  <!-- the request -->
+  <text x="0" y="16">nora's <tspan class="name">"POST"</tspan> to <tspan class="name">/admin/fleet/ship/1/change/</tspan>: tonnage 368, <tspan class="name">"_save"</tspan></text>
+
+  <!-- the two columns -->
+  <text class="strong" x="0" y="48">the code</text>
+  <text class="strong" x="314" y="48">the SQL it sent</text>
+
+  <!-- before the transaction -->
+  <text class="name" x="0" y="74">AdminSite.admin_view: has_permission</text>
+  <text x="314" y="74">the session's row; the user</text>
+
+  <!-- the transaction, from BEGIN to COMMIT -->
+  <path class="mark-line" d="M309 105 H302 V561 H309"/>
+
+  <!-- changeform_view, and inside it _changeform_view -->
+  <rect class="box" x="0.5" y="88.5" width="290" height="492" rx="4"/>
+  <text class="name" x="12" y="110">ModelAdmin.changeform_view</text>
+  <text class="name mark" x="314" y="110">BEGIN</text>
+
+  <rect class="ground" x="12.5" y="122.5" width="266" height="420" rx="4"/>
+  <text class="name" x="24" y="144">_changeform_view</text>
+
+  <text class="name" x="24" y="168">get_object</text>
+  <text x="314" y="168">the ship, pk 1</text>
+  <text class="name" x="24" y="188">has_view_or_change_permission</text>
+  <text x="314" y="188">the user's permissions; the groups' permissions</text>
+  <text class="name" x="24" y="208">get_fieldsets, get_form</text>
+  <text class="name" x="24" y="228">has_change_permission</text>
+  <text x="24" y="248">the form bound; no formsets</text>
+
+  <!-- validation, and the four queries it sent -->
+  <text class="name" x="24" y="268">is_valid</text>
+  <text x="314" y="268">the port, pk 1, for the form field</text>
+  <text x="314" y="290">that the port exists, for the foreign key</text>
+  <text x="314" y="312"><tspan class="name">SAVEPOINT</tspan>; the check constraint;</text>
+  <text class="name" x="314" y="329">RELEASE SAVEPOINT</text>
+  <text x="314" y="351">another Endeavour at Valletta,</text>
+  <text x="314" y="368">for the unique constraint</text>
+
+  <!-- the save, the log, the answer -->
+  <text class="name" x="24" y="392">save_form</text>
+  <text class="name" x="24" y="412">save_model</text>
+  <text class="name" x="314" y="412">UPDATE "fleet_ship"</text>
+  <text class="name" x="24" y="432">save_related</text>
+  <text class="name" x="24" y="452">construct_change_message</text>
+  <text class="name" x="24" y="472">log_change</text>
+  <text class="name" x="314" y="472">INSERT INTO "django_admin_log"</text>
+  <text x="24" y="492"><tspan class="name">response_change</tspan>: the message</text>
+  <text class="name" x="40" y="512">response_post_save_change:</text>
+  <text x="40" y="530">302 to <tspan class="name">/admin/fleet/ship/</tspan></text>
+
+  <!-- the atomic block ends -->
+  <text x="24" y="566">the block ends</text>
+  <text class="name mark" x="314" y="566">COMMIT</text>
+</svg>

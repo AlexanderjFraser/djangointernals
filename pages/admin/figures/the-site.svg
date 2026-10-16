@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 692">
+  <!-- the site, and inside it the registry: each model mapped to the model admin made for it, in the order they were registered -->
+  <rect class="box" x="0.5" y="0.5" width="645" height="192" rx="4"/>
+  <text x="12" y="24"><tspan class="name">admin.site</tspan>, an <tspan class="name">AdminSite</tspan> named <tspan class="name">"admin"</tspan></text>
+
+  <rect class="ground" x="12.5" y="40.5" width="621" height="140" rx="4"/>
+  <text class="strong" x="24" y="62">its registry</text>
+
+  <text class="name" x="24" y="86">Group</text>
+  <path class="line" d="M84 82 H104"/>
+  <polygon class="head" points="114,82 104,77 104,87"/>
+  <text class="name" x="126" y="86">GroupAdmin(Group, admin.site)</text>
+
+  <text class="name" x="24" y="106">User</text>
+  <path class="line" d="M84 102 H104"/>
+  <polygon class="head" points="114,102 104,97 104,107"/>
+  <text class="name" x="126" y="106">UserAdmin(User, admin.site)</text>
+
+  <!-- the two the auth application registers -->
+  <path class="line" d="M378 73 V109"/>
+  <text class="quiet small" x="390" y="95">the auth application's</text>
+
+  <text class="name" x="24" y="126">Port</text>
+  <path class="line" d="M84 122 H104"/>
+  <polygon class="head" points="114,122 104,117 104,127"/>
+  <text class="name" x="126" y="126">PortAdmin(Port, admin.site)</text>
+
+  <!-- the entry the figure opens out below -->
+  <text class="name mark" x="24" y="146">Ship</text>
+  <path class="mark-line" d="M84 142 H104"/>
+  <polygon class="head mark" points="114,142 104,137 104,147"/>
+  <text class="name mark" x="126" y="146">ShipAdmin(Ship, admin.site)</text>
+
+  <text class="name" x="24" y="166">Voyage</text>
+  <path class="line" d="M84 162 H104"/>
+  <polygon class="head" points="114,162 104,157 104,167"/>
+  <text class="name" x="126" y="166">ModelAdmin(Voyage, admin.site)</text>
+
+  <!-- the site's urls make the URLconf -->
+  <path class="line" d="M40 193 V221"/>
+  <polygon class="head" points="40,231 35,221 45,221"/>
+  <text class="name" x="54" y="216">AdminSite.urls</text>
+
+  <!-- the URLconf: pattern, view, name -->
+  <rect class="ground" x="0.5" y="231.5" width="645" height="428" rx="4"/>
+  <text class="name strong" x="12" y="255">path("admin/", admin.site.urls)</text>
+
+  <!-- the site's own pages -->
+  <text class="name" x="12" y="283">""</text>
+  <text class="name" x="246" y="283">AdminSite.index</text>
+  <text class="name" x="408" y="283">admin:index</text>
+  <text class="name" x="12" y="303">login/, logout/, password_change/,</text>
+  <text class="name" x="12" y="321">password_change/done/, autocomplete/, jsi18n/,</text>
+  <text class="name" x="12" y="339">r/&lt;path:content_type_id&gt;/&lt;path:object_id&gt;/</text>
+  <text class="quiet small" x="408" y="321">the site's own pages</text>
+
+  <!-- one include for each entry of the registry, in its order -->
+  <text class="name" x="12" y="367">auth/group/</text>
+  <text class="name" x="246" y="367">include(GroupAdmin.urls)</text>
+  <text class="name" x="12" y="387">auth/user/</text>
+  <text class="name" x="246" y="387">include(UserAdmin.urls)</text>
+  <text class="name" x="12" y="407">fleet/port/</text>
+  <text class="name" x="246" y="407">include(PortAdmin.urls)</text>
+  <text class="name mark" x="12" y="427">fleet/ship/</text>
+  <text class="name mark" x="246" y="427">include(ShipAdmin.urls)</text>
+
+  <!-- ShipAdmin's patterns, opened out -->
+  <rect class="mark-box" x="24.5" y="439.5" width="609" height="134" rx="4"/>
+  <text class="name" x="36" y="461">""</text>
+  <text class="name" x="246" y="461">changelist_view</text>
+  <text class="name" x="408" y="461">admin:fleet_ship_changelist</text>
+  <text class="name" x="36" y="481">add/</text>
+  <text class="name" x="246" y="481">add_view</text>
+  <text class="name" x="408" y="481">admin:fleet_ship_add</text>
+  <text class="name" x="36" y="501">&lt;path:object_id&gt;/history/</text>
+  <text class="name" x="246" y="501">history_view</text>
+  <text class="name" x="408" y="501">admin:fleet_ship_history</text>
+  <text class="name" x="36" y="521">&lt;path:object_id&gt;/delete/</text>
+  <text class="name" x="246" y="521">delete_view</text>
+  <text class="name" x="408" y="521">admin:fleet_ship_delete</text>
+  <text class="name" x="36" y="541">&lt;path:object_id&gt;/change/</text>
+  <text class="name" x="246" y="541">change_view</text>
+  <text class="name" x="408" y="541">admin:fleet_ship_change</text>
+  <text class="name" x="36" y="561">&lt;path:object_id&gt;/</text>
+  <text class="quiet small" x="246" y="561">a redirect to <tspan class="name small">&lt;path:object_id&gt;/change/</tspan></text>
+
+  <text class="name" x="12" y="597">fleet/voyage/</text>
+  <text class="name" x="246" y="597">include(ModelAdmin.urls)</text>
+
+  <!-- each application's index, and the catch-all -->
+  <text class="name" x="12" y="625">^(?P&lt;app_label&gt;auth|fleet)/$</text>
+  <text class="name" x="246" y="625">AdminSite.app_index</text>
+  <text class="name" x="408" y="625">admin:app_list</text>
+  <text class="name" x="12" y="645">(?P&lt;url&gt;.*)$</text>
+  <text class="name" x="246" y="645">AdminSite.catch_all_view</text>
+
+  <!-- outside the URLconf -->
+  <text x="0" y="685">Every view but the login is wrapped in <tspan class="name">AdminSite.admin_view</tspan>.</text>
+</svg>

@@ -103,7 +103,7 @@ A function that is a bound method of the proxy is shown only by its name, to avo
 | `django.conf.settings`, `django/conf/__init__.py:LazySettings` | a `Settings` from `"DJANGO_SETTINGS_MODULE"`, unless `LazySettings.configure` came first | [The settings object](../startup/settings.md) |
 | `default_storage`, `django/core/files/storage/__init__.py:DefaultStorage` | the `"default"` storage | [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md) |
 | `staticfiles_storage`, `django/contrib/staticfiles/storage.py:ConfiguredStorage` | the `"staticfiles"` storage | [Content types, static files and the other contrib apps](../contrib.md) |
-| the admin's `site`, `django/contrib/admin/sites.py:DefaultAdminSite` | the class `SimpleAdminConfig.default_site` names | [The admin](../admin.md) |
+| the admin's `site`, `django/contrib/admin/sites.py:DefaultAdminSite` | the class `SimpleAdminConfig.default_site` names | [Registering models: `AdminSite.register` and `ModelAdmin`](../admin/registration.md) |
 | a request's nonce, `django/utils/csp.py:LazyNonce` | `generate_nonce()` | [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md) |
 | a `Truncator`, `django/utils/text.py:Truncator` | its text as a string | [Text helpers: `Truncator` and `django/utils/text.py`](text.md) |
 | `HttpRequest.user`, `django/contrib/auth/middleware.py:AuthenticationMiddleware` | the user `get_user` finds | [The user of a request: `login`, `logout` and `AuthenticationMiddleware`](../auth/login.md) |

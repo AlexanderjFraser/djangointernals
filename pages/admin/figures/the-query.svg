@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 682">
+  <!-- the request; the statements sent to the database are in the accent, the clauses only added to the queryset are not -->
+  <text x="0" y="16"><tspan class="name strong">GET /admin/fleet/ship/?home__id__exact=1&amp;q=end&amp;o=2</tspan>, as nora</text>
+
+  <!-- ChangeList.__init__ -->
+  <rect class="box" x="0.5" y="32.5" width="645" height="555" rx="4"/>
+  <text class="name strong" x="12" y="55">ChangeList.__init__</text>
+  <text class="name" x="24" y="79">root_queryset</text>
+  <text x="196" y="79"><tspan class="name">ShipAdmin.get_queryset</tspan>: Ship's default manager</text>
+
+  <!-- get_queryset, its steps in their order -->
+  <rect class="ground" x="12.5" y="93.5" width="621" height="317" rx="4"/>
+  <text class="name strong" x="24" y="116">get_queryset</text>
+
+  <text class="name" x="24" y="140">get_filters</text>
+  <text class="name" x="196" y="140">lookup_allowed("home__id__exact", "1")</text>
+  <path class="line" d="M502 136 H516"/>
+  <polygon class="head" points="526,136 516,131 516,141"/>
+  <text class="name" x="534" y="140">True</text>
+  <text x="196" y="160">home's <tspan class="name">RelatedFieldListFilter</tspan> takes <tspan class="name">home__id__exact</tspan></text>
+  <text x="196" y="180">and reads the ports for its choices:</text>
+  <text class="name mark" x="196" y="200">SELECT ... FROM "fleet_port"</text>
+
+  <text x="24" y="226">the filter</text>
+  <text class="name" x="196" y="226">WHERE "fleet_ship"."home_id" = 1</text>
+
+  <text x="24" y="252">the leftovers</text>
+  <text x="196" y="252">none</text>
+
+  <text class="name" x="24" y="278">apply_select_related</text>
+  <text x="196" y="278">home is a column: <tspan class="name">INNER JOIN "fleet_port"</tspan></text>
+
+  <!-- the ordering: "o" is an index into the columns -->
+  <text class="name" x="24" y="304">get_ordering</text>
+  <text x="196" y="304"><tspan class="name">o=2</tspan>, index 2 of</text>
+  <text class="quiet small" x="196" y="324">0</text>
+  <text class="name" x="206" y="324">action_checkbox</text>
+  <text class="quiet small" x="339" y="324">1</text>
+  <text class="name" x="349" y="324">name</text>
+  <text class="quiet small" x="396" y="324">2</text>
+  <text class="name strong" x="406" y="324">tonnage</text>
+  <text class="quiet small" x="477" y="324">3</text>
+  <text class="name" x="487" y="324">home</text>
+  <text class="quiet small" x="534" y="324">4</text>
+  <text class="name" x="544" y="324">is_large</text>
+  <text x="196" y="344"><tspan class="name">tonnage</tspan>, then <tspan class="name">"-pk"</tspan>, tonnage not being total</text>
+
+  <text class="name" x="24" y="370">get_search_results</text>
+  <text x="196" y="370"><tspan class="name">"end"</tspan> in the name, OR in home's name</text>
+
+  <text class="name" x="24" y="396">distinct</text>
+  <text x="196" y="396">no: no path that repeats a row</text>
+
+  <!-- get_results: the two counts and the page -->
+  <rect class="ground" x="12.5" y="422.5" width="621" height="153" rx="4"/>
+  <text class="name strong" x="24" y="445">get_results</text>
+
+  <text x="24" y="469">the count</text>
+  <text x="196" y="469">filtered and searched:</text>
+  <text class="name mark" x="196" y="489">SELECT COUNT(*) ...</text>
+  <path class="line" d="M354 485 H368"/>
+  <polygon class="head" points="378,485 368,480 368,490"/>
+  <text class="name" x="386" y="489">1</text>
+
+  <text x="24" y="515">the full count</text>
+  <text x="196" y="515">of <tspan class="name">root_queryset</tspan>:</text>
+  <text class="name mark" x="196" y="535">SELECT COUNT(*) FROM "fleet_ship"</text>
+  <path class="line" d="M463 531 H477"/>
+  <polygon class="head" points="487,531 477,526 477,536"/>
+  <text class="name" x="495" y="535">2</text>
+
+  <text x="24" y="561">one page</text>
+  <text x="196" y="561">the result list is the whole queryset, not fetched</text>
+
+  <!-- changelist_view, where the list is fetched -->
+  <rect class="box" x="0.5" y="599.5" width="645" height="81" rx="4"/>
+  <text class="name strong" x="12" y="622">changelist_view</text>
+  <text x="24" y="646">"0 of 1 selected", the <tspan class="name">len</tspan> of the result list:</text>
+  <text class="name mark" x="196" y="666">SELECT ... ORDER BY tonnage ASC, id DESC</text>
+  <path class="line" d="M518 662 H532"/>
+  <polygon class="head" points="542,662 532,657 532,667"/>
+  <text x="550" y="666">Endeavour</text>
+</svg>

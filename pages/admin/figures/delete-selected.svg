@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 796">
+  <!-- 1: the first POST, from the action form; "index" and "post", which tell the two apart, are in the accent -->
+  <text class="strong" x="0" y="16">1</text>
+  <text class="name strong" x="24" y="16">POST /admin/fleet/ship/</text>
+  <text class="name" x="24" y="36">action=delete_selected</text>
+  <text class="name" x="216" y="36">select_across=0</text>
+  <text class="name mark" x="353" y="36">index=0</text>
+  <text class="name" x="428" y="36">_selected_action=2, 1</text>
+  <path class="line" d="M40 44 V62"/>
+  <polygon class="head" points="40,72 35,62 45,62"/>
+
+  <!-- the calls of the first POST, each inside the one that called it -->
+  <rect class="box" x="24.5" y="72.5" width="621" height="179" rx="4"/>
+  <text class="name" x="36" y="95">ModelAdmin.changelist_view</text>
+  <text x="252" y="95"><tspan class="name mark">"index"</tspan> posted, the first branch</text>
+  <rect class="ground" x="36.5" y="109.5" width="597" height="130" rx="4"/>
+  <text class="name" x="48" y="132">ModelAdmin.response_action</text>
+  <text x="264" y="132">the queryset narrowed to the keys 2 and 1</text>
+  <rect class="box" x="48.5" y="146.5" width="573" height="81" rx="4"/>
+  <text class="name strong" x="60" y="169">delete_selected</text>
+  <text class="name" x="60" y="193">ModelAdmin.get_deleted_objects</text>
+  <text x="310" y="193">what the delete would take</text>
+  <text x="60" y="213">no <tspan class="name mark">"post"</tspan>: the confirmation page</text>
+
+  <!-- the first response: the confirmation page and its form -->
+  <path class="line" d="M40 252 V270"/>
+  <polygon class="head" points="40,280 35,270 45,270"/>
+  <rect class="ground" x="24.5" y="280.5" width="621" height="56" rx="4"/>
+  <text x="36" y="302"><tspan class="name strong">200</tspan>  "Delete multiple objects", a form of hidden inputs:</text>
+  <text class="name" x="36" y="324">_selected_action=2, 1</text>
+  <text class="name" x="220" y="324">action=delete_selected</text>
+  <text class="name mark" x="412" y="324">post=yes</text>
+
+  <!-- 2: the second POST, the form's -->
+  <path class="line" d="M40 337 V355"/>
+  <polygon class="head" points="40,365 35,355 45,355"/>
+  <text class="strong" x="0" y="381">2</text>
+  <text class="name strong" x="24" y="381">POST /admin/fleet/ship/</text>
+  <text class="name" x="24" y="401">_selected_action=2, 1</text>
+  <text class="name" x="208" y="401">action=delete_selected</text>
+  <text class="name mark" x="400" y="401">post=yes</text>
+  <path class="line" d="M40 409 V427"/>
+  <polygon class="head" points="40,437 35,427 45,427"/>
+
+  <!-- the calls of the second POST -->
+  <rect class="box" x="24.5" y="437.5" width="621" height="305" rx="4"/>
+  <text class="name" x="36" y="460">ModelAdmin.changelist_view</text>
+  <text x="252" y="460">no <tspan class="name mark">"index"</tspan>, keys posted, the second branch</text>
+  <rect class="ground" x="36.5" y="474.5" width="597" height="256" rx="4"/>
+  <text class="name" x="48" y="497">ModelAdmin.response_action</text>
+  <text x="264" y="497">the same queryset</text>
+  <rect class="box" x="48.5" y="511.5" width="573" height="183" rx="4"/>
+  <text class="name strong" x="60" y="534">delete_selected</text>
+  <text class="name" x="60" y="558">ModelAdmin.get_deleted_objects</text>
+  <text x="310" y="558">again: nothing protected, no permission lacking</text>
+  <text x="60" y="578"><tspan class="name mark">"post"</tspan> posted:</text>
+  <text class="name" x="76" y="598">ModelAdmin.log_deletions</text>
+  <text x="296" y="598">INSERT two rows into <tspan class="name">"django_admin_log"</tspan></text>
+  <text class="name" x="76" y="618">ModelAdmin.delete_queryset</text>
+  <text x="296" y="618">SELECTs; BEGIN; DELETE port calls, manifests,</text>
+  <text x="296" y="636">voyages, ships; COMMIT</text>
+  <text class="name" x="76" y="656">ModelAdmin.message_user</text>
+  <text x="296" y="656">"Successfully deleted 2 ships."</text>
+  <text x="60" y="680">returns <tspan class="name">None</tspan></text>
+  <text x="48" y="716"><tspan class="name">None</tspan>: a redirect to the request's path</text>
+
+  <!-- the second response -->
+  <path class="line" d="M40 743 V761"/>
+  <polygon class="head" points="40,771 35,761 45,761"/>
+  <text x="24" y="789"><tspan class="name strong">302</tspan>  to <tspan class="name">/admin/fleet/ship/</tspan></text>
+</svg>

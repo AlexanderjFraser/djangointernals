@@ -76,7 +76,7 @@ slices django.VERSION
 
 ## `warn_about_implementation`: the line of a definition
 
-`warn_about_implementation` is for deprecations found in code a project wrote rather than in a call, such as an override with an old signature, where the line to name is its definition, which need not be on the stack. It takes a function, a class, a bound method, or a classmethod, staticmethod or property object, finds the unwrapped function's file and line with `inspect.getsourcefile` and `inspect.getsourcelines`, and calls `warnings.warn_explicit` with them (`django/utils/deprecation.py:warn_about_implementation`). `ModelAdmin` uses it for an override of `ModelAdmin.get_actions` without the action_location parameter (`django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location`; [The admin](../admin.md)).
+`warn_about_implementation` is for deprecations found in code a project wrote rather than in a call, such as an override with an old signature, where the line to name is its definition, which need not be on the stack. It takes a function, a class, a bound method, or a classmethod, staticmethod or property object, finds the unwrapped function's file and line with `inspect.getsourcefile` and `inspect.getsourcelines`, and calls `warnings.warn_explicit` with them (`django/utils/deprecation.py:warn_about_implementation`). `ModelAdmin` uses it for an override of `ModelAdmin.get_actions` without the action_location parameter (`django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location`; [Actions: `response_action` and `delete_selected`](../admin/actions.md)).
 
 ## `deprecate_posargs`
 

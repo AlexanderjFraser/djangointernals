@@ -1,0 +1,237 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "deleting.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.delete_view",
+   "line": 13,
+   "sentence": "`ModelAdmin.delete_view` is under `csrf_protect`, and runs a request whose method is not safe inside `atomic` on the database the router gives for writing the model, so a confirmed delete's collection, log and delete run in one transaction (`django/contrib/admin/options.py:ModelAdmin.delete_view`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.delete_view",
+   "kind": "function",
+   "lines": [
+    2503,
+    2509
+   ],
+   "at": 2504,
+   "fingerprint": "7f005d8e0018fcad"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._delete_view",
+   "line": 13,
+   "sentence": "`ModelAdmin._delete_view` does the work, in this order (`django/contrib/admin/options.py:ModelAdmin._delete_view`):",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._delete_view",
+   "kind": "function",
+   "lines": [
+    2511,
+    2576
+   ],
+   "fingerprint": "f34b707ac06415e7"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:get_deleted_objects",
+   "line": 37,
+   "sentence": "Its default calls the function of that name in `django.contrib.admin.utils`, which collects the objects with a `NestedObjects` on the database the router gives for writing them, and returns four values: the tree of what would be deleted, as nested lists of strings; the number of each model's objects, under its plural verbose name; the verbose names of the models the user may not delete; and the protected objects, as strings (`django/contrib/admin/utils.py:get_deleted_objects`).",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "get_deleted_objects",
+   "kind": "function",
+   "lines": [
+    127,
+    191
+   ],
+   "fingerprint": "52240e2fb12bbc14"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:NestedObjects",
+   "line": 43,
+   "sentence": "`NestedObjects` is a `Collector` made with `force_collection=True` (`django/contrib/admin/utils.py:NestedObjects`).",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "NestedObjects",
+   "kind": "class",
+   "lines": [
+    194,
+    251
+   ],
+   "fingerprint": "866b5ad93cc603cb"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:NestedObjects.collect",
+   "line": 45,
+   "sentence": "Then it calls `Collector.collect`, and catches `ProtectedError` and `RestrictedError` into its set of protected objects (`django/contrib/admin/utils.py:NestedObjects.collect`).",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "NestedObjects.collect",
+   "kind": "function",
+   "lines": [
+    204,
+    220
+   ],
+   "fingerprint": "834f68b3860f67f7"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:CASCADE",
+   "line": 45,
+   "sentence": "A cascade's nested call is this method too, so a `ProtectedError`, raised by the call whose rows a protected relation points at, ends only that call, and the collection goes on; a `RestrictedError` comes only from the outermost call, once everything is collected (`django/db/models/deletion.py:CASCADE`, `django/db/models/deletion.py:Collector.collect`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "CASCADE",
+   "kind": "function",
+   "lines": [
+    22,
+    31
+   ],
+   "fingerprint": "a2081a2a112e209f"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.collect",
+   "line": 45,
+   "sentence": "A cascade's nested call is this method too, so a `ProtectedError`, raised by the call whose rows a protected relation points at, ends only that call, and the collection goes on; a `RestrictedError` comes only from the outermost call, once everything is collected (`django/db/models/deletion.py:CASCADE`, `django/db/models/deletion.py:Collector.collect`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.collect",
+   "kind": "function",
+   "lines": [
+    271,
+    431
+   ],
+   "fingerprint": "4b113f3e23bad3b3"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:NestedObjects.related_objects",
+   "line": 47,
+   "sentence": "`NestedObjects.related_objects` adds `QuerySet.select_related` of the field, so each row arrives, whole, with the object the edge is read from (`django/contrib/admin/utils.py:NestedObjects.related_objects`).",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "NestedObjects.related_objects",
+   "kind": "function",
+   "lines": [
+    222,
+    226
+   ],
+   "fingerprint": "8229e7fefd367603"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:NestedObjects.nested",
+   "line": 47,
+   "sentence": "`NestedObjects.nested` walks the edges from the roots, depth first, and gives each object once, followed by a list of its children if it has any (`django/contrib/admin/utils.py:NestedObjects.nested`).",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "NestedObjects.nested",
+   "kind": "function",
+   "lines": [
+    243,
+    251
+   ],
+   "fingerprint": "fb4fc08a5a559ca2"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.render_delete_form",
+   "line": 70,
+   "sentence": "`ModelAdmin.render_delete_form` renders `\"admin/delete_confirmation.html\"`, unless the model or its application has its own, or `ModelAdmin.delete_confirmation_template` names one ([The admin's templates and media](templates.md)) (`django/contrib/admin/options.py:ModelAdmin.render_delete_form`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.render_delete_form",
+   "kind": "function",
+   "lines": [
+    1971,
+    1992
+   ],
+   "fingerprint": "192274988dc64438"
+  },
+  {
+   "pointer": "django/contrib/admin/templates/admin/delete_confirmation.html",
+   "line": 70,
+   "sentence": "The template shows the models the user may not delete; failing those, the protected objects; failing those, the summary, the tree and a form that posts `\"post\"` (`django/contrib/admin/templates/admin/delete_confirmation.html`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templates/admin/delete_confirmation.html",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    52
+   ],
+   "fingerprint": "1c0b77be2a41ad07"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_filters.py:truncated_unordered_list",
+   "line": 72,
+   "sentence": "The lists are drawn by `truncated_unordered_list`, given `BaseModelAdmin.delete_confirmation_max_display` (`django/contrib/admin/templatetags/admin_filters.py:truncated_unordered_list`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_filters.py",
+   "symbol": "truncated_unordered_list",
+   "kind": "function",
+   "lines": [
+    18,
+    79
+   ],
+   "at": 19,
+   "fingerprint": "b3941c1b9947dc29"
+  },
+  {
+   "pointer": "docs/ref/contrib/admin/index.txt",
+   "line": 72,
+   "sentence": "The documentation calls it purely a display setting, which does not change what is fetched (`docs/ref/contrib/admin/index.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/admin/index.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    3612
+   ],
+   "fingerprint": "398a4d6889026f7f"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.delete_model",
+   "line": 78,
+   "sentence": "Then `ModelAdmin.log_deletions` writes the log's row, first, as its docstring requires ([The log and the history: `LogEntry` and `history_view`](log.md)), and `ModelAdmin.delete_model` calls `Model.delete`, which collects again with an ordinary collector; `ModelAdmin.delete_queryset` is its counterpart for `delete_selected` (`django/contrib/admin/options.py:ModelAdmin.delete_model`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.delete_model",
+   "kind": "function",
+   "lines": [
+    1477,
+    1481
+   ],
+   "fingerprint": "9325da2fe8ee5b81"
+  },
+  {
+   "pointer": "docs/ref/contrib/admin/index.txt",
+   "line": 78,
+   "sentence": "The documentation warns that an override of `delete_model` must still delete: it is not for a veto (`docs/ref/contrib/admin/index.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/admin/index.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    3612
+   ],
+   "fingerprint": "398a4d6889026f7f"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.response_delete",
+   "line": 94,
+   "sentence": "Otherwise it adds \"The ship “Endeavour” was deleted successfully.\" at `SUCCESS`, and redirects to the change list, keeping the preserved filters, if the user may change the model's objects, and to the index if not (`django/contrib/admin/options.py:ModelAdmin.response_delete`). nora, allowed to view and delete voyages but not to change them, was sent to /admin/.",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.response_delete",
+   "kind": "function",
+   "lines": [
+    1923,
+    1969
+   ],
+   "fingerprint": "d069516e60d83320"
+  }
+ ]
+}

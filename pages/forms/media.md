@@ -79,4 +79,4 @@ A `Script` (new in 5.2) is a path and HTML attributes, drawn as a script element
 
 `BaseForm.media` adds the media of each field's widget, hidden ones too, in the order of the instance's fields, so a widget a form puts in place in its `__init__` counts (`django/forms/forms.py:BaseForm.media`). `MultiWidget.media` is the sum of its subwidgets' (`django/forms/widgets.py:MultiWidget._get_media`). `BaseFormSet.media` is its first form's, or with no forms its empty form's: all its forms, its comment says, are the same. A formset class is not made by `MediaDefiningClass`, so an inner `Media` on one is never read (`django/forms/formsets.py:BaseFormSet.media`) ([Formsets: `BaseFormSet` and the management form](formsets.md)).
 
-No widget of `django.forms` declares assets; some of the admin's do. `BaseModelAdmin` is made by `MediaDefiningClass` too, so a model admin's inner `Media` adds to its media ([The admin](../admin.md)).
+No widget of `django.forms` declares assets; some of the admin's do. `BaseModelAdmin` is made by `MediaDefiningClass` too, so a model admin's inner `Media` adds to its media ([The admin's templates and media](../admin/templates.md)).

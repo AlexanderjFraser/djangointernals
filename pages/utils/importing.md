@@ -44,7 +44,7 @@ Each import in `import_string` goes through `cached_import`, which returns the m
 
 ## `autodiscover_modules`
 
-`autodiscover_modules` imports each module name it is given from every installed application, in the order of `INSTALLED_APPS` (`django/utils/module_loading.py:autodiscover_modules`). Its user in Django is the admin: `django.contrib.admin.autodiscover` calls it for `"admin"` with the default site as the registry, and `AdminConfig.ready` calls that as Django starts ([The admin](../admin.md)) (`django/contrib/admin/__init__.py:autodiscover`).
+`autodiscover_modules` imports each module name it is given from every installed application, in the order of `INSTALLED_APPS` (`django/utils/module_loading.py:autodiscover_modules`). Its user in Django is the admin: `django.contrib.admin.autodiscover` calls it for `"admin"` with the default site as the registry, and `AdminConfig.ready` calls that as Django starts ([Registering models: `AdminSite.register` and `ModelAdmin`](../admin/registration.md)) (`django/contrib/admin/__init__.py:autodiscover`).
 
 When an import raises, a registry given as the register_to argument gets back the copy of its `_registry` taken before the import, undoing what the failed module registered; the comment's reason is that the import will have to happen again, and what was left registered could then raise `AlreadyRegistered` and `NotRegistered` (ticket 8245). Then the error is raised again only if the application has the module, by `module_has_submodule`. The test is on the application, not the error: an application without the module is passed over, and any error from a module that exists reaches the caller, a `ModuleNotFoundError` for a package it imports among them.
 

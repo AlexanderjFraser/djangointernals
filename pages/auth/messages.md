@@ -27,7 +27,7 @@ A level is an integer. The five of `django/contrib/messages/constants.py` are `D
 
 A level's **tag** is the word a template writes into a class attribute. `get_level_tags` lays `MESSAGE_TAGS` over `DEFAULT_TAGS`, which names each of the five levels in lower case (`django/contrib/messages/utils.py:get_level_tags`). The result is held in `LEVEL_TAGS`, a `SimpleLazyObject` in `django/contrib/messages/storage/base.py`, built when the first tag is asked for and kept for the life of the process. Only `update_level_tags` replaces it, a receiver that `MessagesConfig.ready` connects to `setting_changed`, and only the test framework sends that signal ([The signals Django sends](../services/builtin-signals.md)). So a `MESSAGE_TAGS` changed by `override_settings` is seen, and one assigned to the settings after the first tag is not (`django/contrib/messages/apps.py:update_level_tags`).
 
-> **Changed in 6.0.** The admin gives `DEBUG` and `INFO` messages icons and styling of their own instead of `SUCCESS`'s; `ModelAdmin.message_user` adds at `INFO` by default ([The admin](../admin.md)) (`docs/releases/6.0.txt`).
+> **Changed in 6.0.** The admin gives `DEBUG` and `INFO` messages icons and styling of their own instead of `SUCCESS`'s; `ModelAdmin.message_user` adds at `INFO` by default ([The change form: `changeform_view`](../admin/change-form.md)) (`docs/releases/6.0.txt`).
 
 ## `Message`
 

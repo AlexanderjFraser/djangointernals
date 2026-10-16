@@ -273,7 +273,7 @@ LogEntry.objects.count()  ->  0
 
 A row that the database deletes is never collected, and nothing Django does for a collected row is done for it: no signal is sent, and no relation that points at it is followed. The model checks refuse a project in which the two kinds meet ([The model checks](checks.md)).
 
-A collector made with `force_collection=True` marks nothing for a fast delete, and follows a relation declared with `DB_CASCADE` by calling `CASCADE`, which that value carries as its `DatabaseOnDelete.forced_collector`. Django's own source makes such collectors to find out what a delete would reach: the admin's `NestedObjects`, from which it draws its page of confirmation ([The admin](../admin.md)), and the command that removes stale content types (`django/contrib/admin/utils.py:NestedObjects`, `django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py`).
+A collector made with `force_collection=True` marks nothing for a fast delete, and follows a relation declared with `DB_CASCADE` by calling `CASCADE`, which that value carries as its `DatabaseOnDelete.forced_collector`. Django's own source makes such collectors to find out what a delete would reach: the admin's `NestedObjects`, from which it draws its page of confirmation ([Deleting: `delete_view` and `get_deleted_objects`](../admin/deleting.md)), and the command that removes stale content types (`django/contrib/admin/utils.py:NestedObjects`, `django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py`).
 
 ## `Collector.delete`
 

@@ -185,7 +185,7 @@ views.room(request, wing='east', room=12)
     the template renders as '/west/rooms/13/'
 ```
 
-The second half of the recording is how a view overrides the request's own namespace: an attribute on the request wins. The admin's views set it to the name of their site, which is the instance namespace `AdminSite.urls` gives the site's URLs ([The admin](../admin.md)) (`django/contrib/admin/sites.py:AdminSite.index`).
+The second half of the recording is how a view overrides the request's own namespace: an attribute on the request wins. The admin's views set it to the name of their site, which is the instance namespace `AdminSite.urls` gives the site's URLs ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](../admin/site-urls.md)) (`django/contrib/admin/sites.py:AdminSite.index`).
 
 ## What resolving records
 

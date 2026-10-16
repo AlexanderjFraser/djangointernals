@@ -1,0 +1,320 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "change-form.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.add_view",
+   "line": 9,
+   "sentence": "An add page and a change page differ in a few places, among them whether there is an object to load, which permission is asked, what the log says, and where the user goes afterwards; `ModelAdmin.add_view` and `ModelAdmin.change_view` each call `changeform_view`, the first with no object's key (`django/contrib/admin/options.py:ModelAdmin.add_view`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.add_view",
+   "kind": "function",
+   "lines": [
+    2248,
+    2249
+   ],
+   "fingerprint": "28e52c0221e9155e"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.changeform_view",
+   "line": 13,
+   "sentence": "For any method but `\"GET\"`, `\"HEAD\"`, `\"OPTIONS\"` and `\"TRACE\"` it runs `ModelAdmin._changeform_view` inside `atomic`, on the database the router gives for writing the model; the check stands outside the block (`django/contrib/admin/options.py:ModelAdmin.changeform_view`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md)).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.changeform_view",
+   "kind": "function",
+   "lines": [
+    2060,
+    2066
+   ],
+   "at": 2061,
+   "fingerprint": "2f96ca80965e6a96"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._changeform_view",
+   "line": 19,
+   "sentence": "A `\"POST\"` carrying `\"_saveasnew\"` has its object's key dropped: from there on it is an add, of the data posted (`django/contrib/admin/options.py:ModelAdmin._changeform_view`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._changeform_view",
+   "kind": "function",
+   "lines": [
+    2068,
+    2246
+   ],
+   "fingerprint": "577fc42c5fb2ee22"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._get_obj_does_not_exist_redirect",
+   "line": 21,
+   "sentence": "A change loads the object with `ModelAdmin.get_object`, through `BaseModelAdmin.get_queryset`, and asks `BaseModelAdmin.has_view_or_change_permission`; only then, when there is no object, does it redirect to the index with a warning (`django/contrib/admin/options.py:ModelAdmin._get_obj_does_not_exist_redirect`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._get_obj_does_not_exist_redirect",
+   "kind": "function",
+   "lines": [
+    2047,
+    2058
+   ],
+   "fingerprint": "bf8e33f57c0bbfa9"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.get_object",
+   "line": 21,
+   "sentence": "Ship \"abc\" got the same, since `get_object` returns `None` for a key its field cannot convert (`django/contrib/admin/options.py:ModelAdmin.get_object`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.get_object",
+   "kind": "function",
+   "lines": [
+    958,
+    973
+   ],
+   "fingerprint": "827a5041831ba00b"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._changeform_view",
+   "line": 27,
+   "sentence": "The view binds the form to the data, with the object as its instance, and `ModelAdmin._create_formsets` makes the inlines' formsets ([Inlines: `InlineModelAdmin` and its formsets](inlines.md)) (`django/contrib/admin/options.py:ModelAdmin._changeform_view`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._changeform_view",
+   "kind": "function",
+   "lines": [
+    2068,
+    2246
+   ],
+   "fingerprint": "577fc42c5fb2ee22"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.save_form",
+   "line": 29,
+   "sentence": "`ModelAdmin.save_form` calls `BaseModelForm.save` with `commit=False`: the instance with the cleaned values on it, unsaved (`django/contrib/admin/options.py:ModelAdmin.save_form`) ([Model forms: `ModelForm` and `fields_for_model`](../forms/model-forms.md)).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.save_form",
+   "kind": "function",
+   "lines": [
+    1464,
+    1469
+   ],
+   "fingerprint": "cc9e83487a2ebe33"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.save_related",
+   "line": 31,
+   "sentence": "`ModelAdmin.save_related` calls the form's `save_m2m`, then `ModelAdmin.save_formset`, the formset's `save`, for each formset (`django/contrib/admin/options.py:ModelAdmin.save_related`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.save_related",
+   "kind": "function",
+   "lines": [
+    1493,
+    1503
+   ],
+   "fingerprint": "995c2e932e14e75d"
+  },
+  {
+   "pointer": "docs/ref/contrib/admin/index.txt",
+   "line": 35,
+   "sentence": "An override of `save_model` must still save: the hook is for work around the save, says the documentation, not for a veto (`docs/ref/contrib/admin/index.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/admin/index.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    3612
+   ],
+   "fingerprint": "398a4d6889026f7f"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:Q.check",
+   "line": 65,
+   "sentence": "Validation checked the check constraint in a savepoint, since a transaction was open (`django/db/models/query_utils.py:Q.check`) ([Validating an instance](../models/validation.md)).",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "Q.check",
+   "kind": "function",
+   "lines": [
+    171,
+    201
+   ],
+   "fingerprint": "eb45db44eeacd5bc"
+  },
+  {
+   "pointer": "django/contrib/contenttypes/models.py:ContentTypeManager.get_for_model",
+   "line": 65,
+   "sentence": "The log's content type was cached by the change page's `\"GET\"`; else `log_change` selects it first (`django/contrib/contenttypes/models.py:ContentTypeManager.get_for_model`).",
+   "tree": "django",
+   "path": "django/contrib/contenttypes/models.py",
+   "symbol": "ContentTypeManager.get_for_model",
+   "kind": "function",
+   "lines": [
+    35,
+    61
+   ],
+   "fingerprint": "b869859d38a5a481"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.get_changeform_initial_data",
+   "line": 71,
+   "sentence": "A `\"GET\"` of an add page takes the form's initial values from `ModelAdmin.get_changeform_initial_data`: every parameter of the query string, a many-to-many field's value split at its commas (`django/contrib/admin/options.py:ModelAdmin.get_changeform_initial_data`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.get_changeform_initial_data",
+   "kind": "function",
+   "lines": [
+    2032,
+    2045
+   ],
+   "fingerprint": "e3a011ab29d61c5c"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.render_change_form",
+   "line": 73,
+   "sentence": "`ModelAdmin.render_change_form` adds the user's permissions and the options the buttons depend on, and returns a `TemplateResponse` of the template the model admin names, if any, or else of the first found of the model's, the application's and the admin's change form template ([The admin's templates and media](templates.md)) (`django/contrib/admin/options.py:ModelAdmin.render_change_form`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.render_change_form",
+   "kind": "function",
+   "lines": [
+    1505,
+    1568
+   ],
+   "fingerprint": "c670237e50ff0e77"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.response_add",
+   "line": 77,
+   "sentence": "Otherwise the response adds a success message linking the object's name to its change page, and redirects (`django/contrib/admin/options.py:ModelAdmin.response_add`, `django/contrib/admin/options.py:ModelAdmin.response_change`):",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.response_add",
+   "kind": "function",
+   "lines": [
+    1574,
+    1704
+   ],
+   "fingerprint": "7a70f4f8904ef621"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.response_change",
+   "line": 77,
+   "sentence": "Otherwise the response adds a success message linking the object's name to its change page, and redirects (`django/contrib/admin/options.py:ModelAdmin.response_add`, `django/contrib/admin/options.py:ModelAdmin.response_change`):",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.response_change",
+   "kind": "function",
+   "lines": [
+    1706,
+    1798
+   ],
+   "fingerprint": "b97747f8fa2152dc"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._response_post_save",
+   "line": 88,
+   "sentence": "Both of these go to the change list, with its preserved filters, for a user who may view or change the model, and to the index otherwise (`django/contrib/admin/options.py:ModelAdmin._response_post_save`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._response_post_save",
+   "kind": "function",
+   "lines": [
+    1800,
+    1812
+   ],
+   "fingerprint": "a1a1ead25bcc7c5d"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_modify.py:submit_row",
+   "line": 98,
+   "sentence": "The buttons a page shows are decided by `submit_row`, which offered nora only \"Save\" and \"Save and continue editing\", as nora may not add ships (`django/contrib/admin/templatetags/admin_modify.py:submit_row`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_modify.py",
+   "symbol": "submit_row",
+   "kind": "function",
+   "lines": [
+    62,
+    113
+   ],
+   "fingerprint": "a8a1af47bf4dbb37"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_modify.py:submit_row",
+   "line": 102,
+   "sentence": "`ModelAdmin.save_as` puts a \"Save as new\" button on a change page, for a user who may add, in place of \"Save and add another\", and `ModelAdmin.save_on_top` repeats the buttons above the form (`django/contrib/admin/templatetags/admin_modify.py:submit_row`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_modify.py",
+   "symbol": "submit_row",
+   "kind": "function",
+   "lines": [
+    62,
+    113
+   ],
+   "fingerprint": "a8a1af47bf4dbb37"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._changeform_view",
+   "line": 104,
+   "sentence": "A copy that fails validation is shown with the change page's template and without \"Save\" and \"Save and continue editing\", lest the interface get confusing, says the comment (`django/contrib/admin/options.py:ModelAdmin._changeform_view`); with `save_as` true that leaves \"Save as new\".",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._changeform_view",
+   "kind": "function",
+   "lines": [
+    2068,
+    2246
+   ],
+   "fingerprint": "577fc42c5fb2ee22"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.message_user",
+   "line": 108,
+   "sentence": "The level may be a number or a level's name, `\"warning\"`; another name raises `ValueError` (`django/contrib/admin/options.py:ModelAdmin.message_user`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.message_user",
+   "kind": "function",
+   "lines": [
+    1436,
+    1462
+   ],
+   "fingerprint": "f19d1aadf037f527"
+  },
+  {
+   "pointer": "django/contrib/messages/constants.py",
+   "line": 108,
+   "sentence": "The default is `INFO`, which since 6.0 the admin styles apart from `SUCCESS`, the level the change form's success messages pass (`django/contrib/messages/constants.py`, `docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "django/contrib/messages/constants.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    21
+   ],
+   "fingerprint": "243e13a5a4780b91"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 108,
+   "sentence": "The default is `INFO`, which since 6.0 the admin styles apart from `SUCCESS`, the level the change form's success messages pass (`django/contrib/messages/constants.py`, `docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  }
+ ]
+}

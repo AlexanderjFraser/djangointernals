@@ -40,7 +40,7 @@ One message serves a username no user has and a wrong password. `confirm_login_a
 {'__all__': [ValidationError(['This account is inactive.'])]}
 ```
 
-The admin's `AdminAuthenticationForm` extends `confirm_login_allowed` to refuse a user who is not staff (`django/contrib/admin/forms.py:AdminAuthenticationForm.confirm_login_allowed`) ([The admin](../admin.md)).
+The admin's `AdminAuthenticationForm` extends `confirm_login_allowed` to refuse a user who is not staff (`django/contrib/admin/forms.py:AdminAuthenticationForm.confirm_login_allowed`) ([The site's own pages: the index, the login and `AdminSite.each_context`](../admin/site-views.md)).
 
 ## Setting a password: `SetPasswordMixin`
 

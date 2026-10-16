@@ -1,0 +1,322 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "filters.md",
+ "pointers": [
+  {
+   "pointer": "django/contrib/admin/views/main.py:ChangeList.get_filters",
+   "line": 9,
+   "sentence": "`ChangeList.get_filters` first puts every parameter to `BaseModelAdmin.lookup_allowed`, which admits a lookup reaching into a related model only when a filter or the date hierarchy names it (or a raw-id popup needs it); then it lets each filter take its own parameters, and hands back the rest to be applied as plain lookups ([The change list: `changelist_view` and `ChangeList`](change-list.md)) (`django/contrib/admin/views/main.py:ChangeList.get_filters`).",
+   "tree": "django",
+   "path": "django/contrib/admin/views/main.py",
+   "symbol": "ChangeList.get_filters",
+   "kind": "function",
+   "lines": [
+    175,
+    277
+   ],
+   "fingerprint": "f82403a0777cc8d4"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:ListFilter",
+   "line": 21,
+   "sentence": "A filter without a title is refused with `ImproperlyConfigured` (`django/contrib/admin/filters.py:ListFilter`, `django/contrib/admin/templatetags/admin_list.py:admin_list_filter`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "ListFilter",
+   "kind": "class",
+   "lines": [
+    26,
+    74
+   ],
+   "fingerprint": "248d32d702af01e5"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_list.py:admin_list_filter",
+   "line": 21,
+   "sentence": "A filter without a title is refused with `ImproperlyConfigured` (`django/contrib/admin/filters.py:ListFilter`, `django/contrib/admin/templatetags/admin_list.py:admin_list_filter`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_list.py",
+   "symbol": "admin_list_filter",
+   "kind": "function",
+   "lines": [
+    525,
+    534
+   ],
+   "at": 526,
+   "fingerprint": "9334a87b1513263a"
+  },
+  {
+   "pointer": "django/contrib/admin/views/main.py:ChangeList.get_query_string",
+   "line": 23,
+   "sentence": "A choice's link comes from `ChangeList.get_query_string`, which copies the current parameters, drops the keys that begin with the prefixes it is given, and adds the new ones (`django/contrib/admin/views/main.py:ChangeList.get_query_string`).",
+   "tree": "django",
+   "path": "django/contrib/admin/views/main.py",
+   "symbol": "ChangeList.get_query_string",
+   "kind": "function",
+   "lines": [
+    279,
+    295
+   ],
+   "fingerprint": "2783e41ee70cf050"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:SimpleListFilter",
+   "line": 29,
+   "sentence": "`SimpleListFilter.value` is the parameter's last value, a string, or `None` (`django/contrib/admin/filters.py:SimpleListFilter`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "SimpleListFilter",
+   "kind": "class",
+   "lines": [
+    92,
+    168
+   ],
+   "fingerprint": "e058c73a728316ac"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:FieldListFilter",
+   "line": 53,
+   "sentence": "Its `queryset` joins the parameters with AND, and each one's values with OR, into a `Q`; a `ValueError` or `ValidationError` from a value becomes `IncorrectLookupParameters`, which the change list answers with a redirect to its bare path with \"e=1\" (`django/contrib/admin/filters.py:FieldListFilter`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "FieldListFilter",
+   "kind": "class",
+   "lines": [
+    171,
+    219
+   ],
+   "fingerprint": "9e470c211b413630"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:FieldListFilter.create",
+   "line": 55,
+   "sentence": "`FieldListFilter.register` appends a pair, or with priority puts it ahead of those registered without; `FieldListFilter.create` makes the first class whose test the field passes (`django/contrib/admin/filters.py:FieldListFilter.create`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "FieldListFilter.create",
+   "kind": "function",
+   "lines": [
+    213,
+    219
+   ],
+   "at": 214,
+   "fingerprint": "ecfc7e7052eb8cbb"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:RelatedFieldListFilter",
+   "line": 57,
+   "sentence": "It adds an empty choice for a nullable or many-to-many field, and has output only with more than one choice (`django/contrib/admin/filters.py:RelatedFieldListFilter`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "RelatedFieldListFilter",
+   "kind": "class",
+   "lines": [
+    222,
+    322
+   ],
+   "fingerprint": "706d0837806fdf3a"
+  },
+  {
+   "pointer": "django/contrib/admin/views/main.py:ChangeList.__init__",
+   "line": 61,
+   "sentence": "`ModelAdmin.show_facets` decides whether each choice shows the count of rows it would leave: `ShowFacets.ALLOW`, the default, when the query string has `\"_facets\"`; `ShowFacets.ALWAYS`; or `ShowFacets.NEVER` (`django/contrib/admin/views/main.py:ChangeList.__init__`).",
+   "tree": "django",
+   "path": "django/contrib/admin/views/main.py",
+   "symbol": "ChangeList.__init__",
+   "kind": "function",
+   "lines": [
+    70,
+    153
+   ],
+   "fingerprint": "decd5fe11c11c092"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:FacetsMixin.get_facet_queryset",
+   "line": 61,
+   "sentence": "For each filter, `FacetsMixin.get_facet_queryset` builds the change list's queryset again with every filter but this one, the search included, and aggregates over it a count for each choice, restricted by that choice's lookup; a `SimpleListFilter` runs its own `queryset` with each value in turn (`django/contrib/admin/filters.py:FacetsMixin.get_facet_queryset`, `django/contrib/admin/filters.py:SimpleListFilter.get_facet_counts`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "FacetsMixin.get_facet_queryset",
+   "kind": "function",
+   "lines": [
+    83,
+    89
+   ],
+   "fingerprint": "0ff44ef140501379"
+  },
+  {
+   "pointer": "django/contrib/admin/filters.py:SimpleListFilter.get_facet_counts",
+   "line": 61,
+   "sentence": "For each filter, `FacetsMixin.get_facet_queryset` builds the change list's queryset again with every filter but this one, the search included, and aggregates over it a count for each choice, restricted by that choice's lookup; a `SimpleListFilter` runs its own `queryset` with each value in turn (`django/contrib/admin/filters.py:FacetsMixin.get_facet_queryset`, `django/contrib/admin/filters.py:SimpleListFilter.get_facet_counts`).",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "SimpleListFilter.get_facet_counts",
+   "kind": "function",
+   "lines": [
+    134,
+    146
+   ],
+   "fingerprint": "fb9f99c78c8f6d38"
+  },
+  {
+   "pointer": "docs/ref/contrib/admin/index.txt",
+   "line": 61,
+   "sentence": "Building the queryset again makes every filter again: \"_facets\" added four queries to nora's list, the ports and the aggregate for each filter, a cost the documentation warns of (`docs/ref/contrib/admin/index.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/admin/index.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    3612
+   ],
+   "fingerprint": "398a4d6889026f7f"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.get_search_results",
+   "line": 65,
+   "sentence": "The change list calls `get_search_results` with the request, the queryset as the filters and the ordering have left it, and the term, and gets back the queryset narrowed and whether a row may now appear twice (`django/contrib/admin/options.py:ModelAdmin.get_search_results`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.get_search_results",
+   "kind": "function",
+   "lines": [
+    1304,
+    1408
+   ],
+   "fingerprint": "5aedbdf787e66394"
+  },
+  {
+   "pointer": "django/contrib/admin/formfields.py",
+   "line": 79,
+   "sentence": "An `\"exact\"` lookup on a field that is not text is treated apart: each piece is first converted by the field's form field (booleans more strictly, by `django/contrib/admin/formfields.py`), and where it does not convert the lookup is left out of that piece's OR; a piece no lookup can take matches nothing.",
+   "tree": "django",
+   "path": "django/contrib/admin/formfields.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    42
+   ],
+   "fingerprint": "a93327448ab1499d"
+  },
+  {
+   "pointer": "docs/ref/contrib/admin/index.txt",
+   "line": 81,
+   "sentence": "A term that a field's type cannot take is skipped for that field (`docs/ref/contrib/admin/index.txt`).",
+   "tree": "django",
+   "path": "docs/ref/contrib/admin/index.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    3612
+   ],
+   "fingerprint": "398a4d6889026f7f"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:lookup_spawns_duplicates",
+   "line": 83,
+   "sentence": "Last, `lookup_spawns_duplicates` asks of each searched path whether it crosses a relation that can repeat a row, a many-to-many or a foreign key followed backwards; if one does, the change list makes its queryset distinct (`django/contrib/admin/utils.py:lookup_spawns_duplicates`).",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "lookup_spawns_duplicates",
+   "kind": "function",
+   "lines": [
+    37,
+    60
+   ],
+   "fingerprint": "980643d2ee0a8c67"
+  },
+  {
+   "pointer": "django/contrib/admin/views/main.py:ChangeList.get_filters",
+   "line": 87,
+   "sentence": "A value that makes no date raises `IncorrectLookupParameters` (`django/contrib/admin/views/main.py:ChangeList.get_filters`).",
+   "tree": "django",
+   "path": "django/contrib/admin/views/main.py",
+   "symbol": "ChangeList.get_filters",
+   "kind": "function",
+   "lines": [
+    175,
+    277
+   ],
+   "fingerprint": "f82403a0777cc8d4"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_list.py:date_hierarchy",
+   "line": 89,
+   "sentence": "With no parameter it asks for the earliest and latest dates listed, and starts at the months of one year, or the days of one month, when every row falls in it; `QuerySet.dates`, or `QuerySet.datetimes`, at that level give the links (`django/contrib/admin/templatetags/admin_list.py:date_hierarchy`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_list.py",
+   "symbol": "date_hierarchy",
+   "kind": "function",
+   "lines": [
+    379,
+    485
+   ],
+   "fingerprint": "b7bf42fbac922f23"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.get_preserved_filters",
+   "line": 102,
+   "sentence": "`ModelAdmin.get_preserved_filters` gives, on the change list, its query string encoded as one parameter, `\"_changelist_filters\"`, and on the model admin's other pages the one they were given; with `ModelAdmin.preserve_filters` false, nothing (`django/contrib/admin/options.py:ModelAdmin.get_preserved_filters`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.get_preserved_filters",
+   "kind": "function",
+   "lines": [
+    1410,
+    1428
+   ],
+   "fingerprint": "f438a0db5e50b76e"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_urls.py:add_preserved_filters",
+   "line": 102,
+   "sentence": "`add_preserved_filters`, a template tag the views also call, adds it to a URL, unpacked when the URL is the change list's (`django/contrib/admin/templatetags/admin_urls.py:add_preserved_filters`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_urls.py",
+   "symbol": "add_preserved_filters",
+   "kind": "function",
+   "lines": [
+    21,
+    70
+   ],
+   "at": 22,
+   "fingerprint": "9038ee1b8ad2feb2"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin._response_post_save",
+   "line": 102,
+   "sentence": "The rows' links carry it, the change form keeps it, and the redirects back to the change list after a save or a delete give it back (`django/contrib/admin/options.py:ModelAdmin._response_post_save`, `django/contrib/admin/options.py:ModelAdmin.response_delete`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin._response_post_save",
+   "kind": "function",
+   "lines": [
+    1800,
+    1812
+   ],
+   "fingerprint": "a1a1ead25bcc7c5d"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:ModelAdmin.response_delete",
+   "line": 102,
+   "sentence": "The rows' links carry it, the change form keeps it, and the redirects back to the change list after a save or a delete give it back (`django/contrib/admin/options.py:ModelAdmin._response_post_save`, `django/contrib/admin/options.py:ModelAdmin.response_delete`).",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "ModelAdmin.response_delete",
+   "kind": "function",
+   "lines": [
+    1923,
+    1969
+   ],
+   "fingerprint": "d069516e60d83320"
+  }
+ ]
+}
