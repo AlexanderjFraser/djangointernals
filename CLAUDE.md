@@ -60,10 +60,15 @@ on the site but the book.
 Django's `main` at `4fab678a0739d54401ccee7eb587553657c9f76e` (2026-09-26;
 on its way to 6.2, the next long-term-support release; 6.1.1 is the newest
 release at that commit), and beside it the two libraries Django requires,
-`asgiref` 3.12.1 and `sqlparse` 0.6.0, each at its release's commit. The
+`asgiref` 3.12.1 and `sqlparse` 0.6.0, each at its release's commit, and
+the Django Enhancement Proposals (`deps`, the repository `django/deps` at
+its newest commit before the pin's date), which a page cites as a whole
+file, `deps:accepted/0009-async.rst`, for the reason behind a decision. The
 trees live under `reference/`, gitignored. `python tools/pin.py fetch`
 fetches each at its commit; `python tools/pin.py check` fails unless every
 file on disk is the commit's, byte for byte, and this file names the pin.
+Beside the trees, `reference/releases/` holds the older releases that
+`recordings/changes.py` installs and runs the same code under.
 
 This is not the Django a model remembers. Read the file before writing
 about it: at this commit `MiddlewareMixin` lives in `django/middleware/`,

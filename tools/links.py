@@ -2,6 +2,7 @@
 """The link gate: every link in a baked site resolves.
 
     python tools/links.py DIST [--site URL]   check the site baked at DIST
+    python tools/links.py --external DIST     the same, and then fetch every link out of the site
     python tools/links.py --probe             prove the gate fails on what it should
 
 DIST is a directory as `python manage.py bake` writes it and Cloudflare Pages serves it:
@@ -39,6 +40,17 @@ counted and not fetched: the build must work without the network. A stylesheet's
 references are not read, nor `srcset`, nor `_headers`, `_redirects` or a `.baked` marker.
 Nothing is written. One line per fault, `file: the link TARGET: why`, and a last line: `links:
 ok, N links in M files; E external not fetched`, or `FAILED` with how many did not resolve.
+
+With `--external`, run by hand before a page that links out of the book ships, every distinct
+`http` or `https` link to another host that a twin carries is then fetched once (`HEAD`, and
+`GET` where the host refuses `HEAD`; a redirect is followed; a protocol-relative link is tried
+as `https`), with a timeout, and one that answers anything but success is a fault, listed once
+for each twin that links it: `file: the link URL: HTTP 404`, or `no answer (why)`. The twins
+hold the links the book's writers wrote; the pages hold besides them the links the site makes
+of every pointer, thousands of addresses in one repository at one commit, which this does not
+fetch. `mailto:` and the like are not fetched. The last line is `external: ok, N fetched`, or
+`FAILED` with how many did not answer. A host that answers a program differently from a
+browser can fail here and work in one: the fault is read, not taken on trust.
 
 Vendored: the copy in a book's repository is written by a command and is not edited there.
 """
@@ -256,11 +268,14 @@ class Site:
         return f"{rel} is not a page: a fragment cannot be checked in it"
 
 
-def check(dist: str, site: str | None = None) -> tuple[list[str], dict]:
-    """Every fault, as `file: the link TARGET: why`, and the counts."""
+def check(dist: str, site: str | None = None, externals: dict[str, set[str]] | None = None) -> tuple[list[str], dict]:
+    """Every fault, as `file: the link TARGET: why`, and the counts. Given a dictionary as
+    `externals`, it is filled with every external link a twin carries (its fragment cut) and
+    the twins that carry it, for `fetch_external`."""
     held = Site(dist, site)
     faults: list[str] = []
     counts = {"files": 0, "links": 0, "external": 0, "outlined": 0}
+    carried = externals if externals is not None else {}
 
     def missing(address: str) -> str | None:
         """Why nothing answers at an address, or None when a planned page is linked."""
@@ -287,6 +302,8 @@ def check(dist: str, site: str | None = None) -> tuple[list[str], dict]:
             address = address_of(url) if SCHEME.match(url) else None
             if address is None:
                 counts["external"] += 1
+                if rel.endswith(".md"):
+                    carried.setdefault(url, set()).add(rel)
                 return None
             found = held.file_for(address)
             if found is None:
@@ -338,21 +355,75 @@ def check(dist: str, site: str | None = None) -> tuple[list[str], dict]:
     return faults, counts
 
 
+FETCHED = re.compile(r"^(https?:)?//", re.IGNORECASE)  # what --external fetches; mailto: and the like it does not
+USER_AGENT = "Mozilla/5.0 (compatible; links.py, the link gate of a book; +https://djangointernals.dev/)"
+
+
+def answer(url: str, timeout: float) -> str | None:
+    """Why a URL out of the site does not answer, or None when it does. `HEAD` first, and `GET`
+    when the host refuses `HEAD`; a redirect is followed to its end."""
+    import ssl
+    import urllib.error
+    import urllib.request
+    context = ssl.create_default_context()
+    try:
+        import certifi  # this machine's Python verifies no certificate without it
+        context.load_verify_locations(cafile=certifi.where())
+    except ImportError:
+        pass
+    for method in ("HEAD", "GET"):
+        request = urllib.request.Request(url, method=method, headers={"User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(request, timeout=timeout, context=context):
+                return None
+        except urllib.error.HTTPError as error:
+            if method == "HEAD" and error.code in (403, 405, 501):
+                continue  # the host does not take HEAD: ask again with GET
+            return f"HTTP {error.code}"
+        except (urllib.error.URLError, OSError, ValueError) as error:
+            reason = getattr(error, "reason", None) or error
+            return f"no answer ({reason})"
+    return None
+
+
+def fetch_external(externals: dict[str, set[str]], timeout: float = 20.0) -> tuple[list[str], int]:
+    """Every fetchable external link fetched once: the faults, one line for each file that
+    carries a link that does not answer, and how many links were fetched."""
+    faults: list[str] = []
+    fetched = 0
+    for url in sorted(externals):
+        if not FETCHED.match(url):
+            continue
+        fetched += 1
+        why = answer("https:" + url if url.startswith("//") else url, timeout)
+        if why:
+            faults += [f"{rel}: the link `{url}`: {why}" for rel in sorted(externals[url])]
+    return faults, fetched
+
+
 def count(n: int, what: str) -> str:
     return f"{n} {what}" + ("" if n == 1 else "s")
 
 
-def run(dist: str, site: str | None) -> int:
+def run(dist: str, site: str | None, external: bool = False) -> int:
     if not os.path.isdir(dist):
         raise SystemExit(f"{dist}: no such directory")
-    faults, counts = check(dist, site)
+    externals: dict[str, set[str]] = {}
+    faults, counts = check(dist, site, externals)
     for line in faults:
         print(line)
     print(f"links: {'FAILED' if faults else 'ok'}, {count(counts['links'], 'link')} in {count(counts['files'], 'file')}; "
-          f"{counts['external']} external not fetched"
+          f"{counts['external']} external{' not fetched' if not external else ''}"
           + (f"; {counts['outlined']} to a planned page, which has a line in the contents and no file" if counts["outlined"] else "")
           + (f"; {count(len(faults), 'link')} did not resolve" if faults else ""))
-    return 1 if faults else 0
+    if not external:
+        return 1 if faults else 0
+    outside, fetched = fetch_external(externals)
+    for line in outside:
+        print(line)
+    print(f"external: {'FAILED' if outside else 'ok'}, {fetched} fetched"
+          + (f"; {len({line.split('`')[1] for line in outside})} did not answer" if outside else ""))
+    return 1 if faults or outside else 0
 
 
 # ----------------------------------------------------------------------------
@@ -463,6 +534,44 @@ def probe() -> int:
                {"alone-with-no-page-beside-it", "where-is-_meta-kept", "a-quoted-heading", "in-a-list", "see-the-index", "figure-lone"})
         expect("a file answers only under its exact name", [Site(good).exact(c) for c in ("a/b.html", "A/b.html", "a/b.html.", "a/B.HTML")],
                [True, False, False, False])
+        externals: dict[str, set[str]] = {}
+        check(good, "https://example.test", externals)
+        expect("the external links the twins carry collected with the twins, and none of the pages' own",
+               externals, {"https://example.org/": {"a/b.md"}})
+        # a server of this machine's own stands in for the hosts: one page answers, one address does not,
+        # a port nobody listens on refuses the connection
+        import functools
+        import http.server
+        import socket
+        import socketserver
+        import threading
+        served = os.path.join(work, "served")
+        write(served, {"ok.html": "<p>ok</p>\n"})
+
+        class Quiet(http.server.SimpleHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+
+        server = socketserver.TCPServer(("127.0.0.1", 0), functools.partial(Quiet, directory=served))
+        port = server.server_address[1]
+        closed = socket.socket()
+        closed.bind(("127.0.0.1", 0))
+        refused = closed.getsockname()[1]
+        closed.close()
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        try:
+            here = f"http://127.0.0.1:{port}"
+            outside, fetched = fetch_external({f"{here}/ok.html": {"a.html"}, f"{here}/missing.html": {"a.html", "b.md"},
+                                               f"http://127.0.0.1:{refused}/x": {"c.html"}, "mailto:x@y.test": {"a.html"}},
+                                              timeout=5)
+            expect("three links fetched, mailto not", fetched, 3)
+            expect("a link that answers passes; one that answers 404 fails once for each file that carries it; a host that "
+                   "refuses the connection fails with why",
+                   [line.split(": ", 1)[0] + ": " + line.rsplit(": ", 1)[1].split(" (")[0] for line in outside],
+                   ["a.html: HTTP 404", "b.md: HTTP 404", "c.html: no answer"])
+        finally:
+            server.shutdown()
+            server.server_close()
     finally:
         shutil.rmtree(work, ignore_errors=True)
     if failed:
@@ -475,7 +584,9 @@ def probe() -> int:
           "brackets too; llms.txt's links are full URLs, its and llms-full.txt's bare URLs (sentence punctuation set aside) and "
           "the sitemap's locations resolve under the site's address, read from the flag or the canonical link; a link to a "
           "planned page is counted apart; external links are counted and not fetched; a link cannot leave the site; a site whose "
-          "every link resolves passes")
+          "every link resolves passes; asked to, the gate fetches each external link of the twins once, none of the pages' "
+          "own, and fails one that answers 404 or refuses the connection, once for each file that carries it, and fetches "
+          "no mailto")
     return 0
 
 
@@ -490,11 +601,12 @@ def main(argv: list[str]) -> int:
         del args[at:at + 2]
     if "--probe" in args:
         return probe()
-    flags = [a for a in args if a.startswith("--")]
+    external = "--external" in args
+    flags = [a for a in args if a.startswith("--") and a != "--external"]
     rest = [a for a in args if not a.startswith("--")]
     if flags or len(rest) != 1:
         raise SystemExit(__doc__)
-    return run(rest[0], site)
+    return run(rest[0], site, external)
 
 
 if __name__ == "__main__":

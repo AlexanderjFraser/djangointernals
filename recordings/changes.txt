@@ -1,0 +1,92 @@
+Django 5.2.17, 6.0.8 and 6.1.1 beside this commit, 6.2.dev20260926051415: the same habits run under each, over the journal project
+
+settings.USE_TZ, when the settings do not set it
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  True
+
+settings.DEFAULT_AUTO_FIELD, when the settings do not set it
+    5.2.17       'django.db.models.AutoField'
+    6.0.8        'django.db.models.BigAutoField'
+    6.1.1        'django.db.models.BigAutoField'
+    this commit  'django.db.models.BigAutoField'
+
+Entry._meta.pk: the key of a model that declares none, in an application that names no default
+    5.2.17       <django.db.models.fields.AutoField: id>
+    6.0.8        <django.db.models.fields.BigAutoField: id>
+    6.1.1        <django.db.models.fields.BigAutoField: id>
+    this commit  <django.db.models.fields.BigAutoField: id>
+
+JsonResponse([1, 2]).content
+    5.2.17       TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    6.0.8        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    6.1.1        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    this commit  b'[1, 2]'
+
+django.VERSION[:3]
+    5.2.17       (5, 2, 17)
+    6.0.8        (6, 0, 8)
+    6.1.1        (6, 1, 1)
+    this commit  (6, 2, 0), warns RemovedInDjango2028Warning
+
+from django.utils.deprecation import MiddlewareMixin
+    5.2.17       django.utils.deprecation
+    6.0.8        django.utils.deprecation
+    6.1.1        django.utils.deprecation
+    this commit  django.middleware, warns RemovedInDjango2029Warning
+
+CommonMiddleware.async_capable
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  False
+
+Entry.objects.select_related(), with no field named
+    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
+    6.0.8        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
+    6.1.1        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry", warns RemovedInDjango70Warning
+    this commit  SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry", warns RemovedInDjango2028Warning
+
+Entry.objects.values_list(flat=True), with no field named
+    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
+    6.0.8        SELECT "journal_entry"."id" AS "id" FROM "journal_entry"
+    6.1.1        SELECT "journal_entry"."id" AS "id" FROM "journal_entry", warns RemovedInDjango70Warning
+    this commit  SELECT "journal_entry"."id" AS "id" FROM "journal_entry", warns RemovedInDjango2028Warning
+
+salted_hmac("journal", "entry").name: the algorithm when none is named
+    5.2.17       'hmac-sha1'
+    6.0.8        'hmac-sha1'
+    6.1.1        'hmac-sha1', warns RemovedInDjango70Warning
+    this commit  'hmac-sha1', warns RemovedInDjango2028Warning
+
+urlize("journal.example.com"): the scheme assumed for a bare domain
+    5.2.17       <a href="http://journal.example.com">journal.example.com</a>
+    6.0.8        <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango70Warning
+    6.1.1        <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango70Warning
+    this commit  <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango2028Warning
+
+Paginator(range(10), 2, orphans=2).num_pages: orphans not fewer than the page
+    5.2.17       4
+    6.0.8        4, warns RemovedInDjango70Warning
+    6.1.1        4, warns RemovedInDjango70Warning
+    this commit  4, warns RemovedInDjango2028Warning
+
+from django.core.mail import BadHeaderError
+    5.2.17       django.core.mail.message.BadHeaderError
+    6.0.8        builtins.ValueError, warns RemovedInDjango70Warning
+    6.1.1        builtins.ValueError, warns RemovedInDjango70Warning
+    this commit  builtins.ValueError, warns RemovedInDjango2028Warning
+
+class Meta: index_together = [("title", "published")]
+    5.2.17       TypeError: 'class Meta' got invalid attribute(s): index_together
+    6.0.8        TypeError: 'class Meta' got invalid attribute(s): index_together
+    6.1.1        TypeError: 'class Meta' got invalid attribute(s): index_together
+    this commit  TypeError: 'class Meta' got invalid attribute(s): index_together
+
+from django.utils.timezone import utc
+    5.2.17       ImportError: cannot import name 'utc' from 'django.utils.timezone'
+    6.0.8        ImportError: cannot import name 'utc' from 'django.utils.timezone'
+    6.1.1        ImportError: cannot import name 'utc' from 'django.utils.timezone'
+    this commit  ImportError: cannot import name 'utc' from 'django.utils.timezone'
+
