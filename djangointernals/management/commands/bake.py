@@ -311,11 +311,13 @@ class Command(BaseCommand):
             put(extra, {"extra.txt": "kept\n", "site.css~": "an editor's backup\n", ".hidden": "hidden\n", "CVS/Entries": "cvs\n"})
             before_dirs, settings.STATICFILES_DIRS = settings.STATICFILES_DIRS, [str(extra)]
             before_indexable, settings.INDEXABLE = settings.INDEXABLE, False
+            before_delta, settings.DELTA_CHAPTER = settings.DELTA_CHAPTER, "p"  # the chapter llms.txt sends an agent to first
             finders.get_finder.cache_clear()
             try:
                 count, counts = self.write(books.load(good_root), written)
             finally:
                 settings.STATICFILES_DIRS = before_dirs
+                settings.DELTA_CHAPTER = before_delta
                 finders.get_finder.cache_clear()
             if not (written / "static" / "extra.txt").is_file() or any((written / "static" / name).exists() for name in ("site.css~", ".hidden", "CVS")):
                 fail("the static files were copied with an editor's backup, a hidden file or CVS, or without a plain file")
@@ -413,6 +415,10 @@ class Command(BaseCommand):
             if (f"- [A]({settings.SITE_URL}/a.md): Lede." not in llms or "\n## 1. A\n" not in llms or "b.md" in llms or "\n## 3. P\n" not in llms
                     or f"- [C]({settings.SITE_URL}/p/c.md): Lede of C." not in llms or f"> Its lede, which links [A]({settings.SITE_URL}/a.md)." not in llms):
                 fail("llms.txt does not list the written pages' twins with their ledes under their chapters, links made absolute")
+            if not 0 < llms.find(f"Read first if what you know of Django is an earlier release: [P]({settings.SITE_URL}/p.md): Lede of P.") < llms.find("\n## 1. A\n"):
+                fail("llms.txt does not send an agent to the chapter of what an older Django's reader must update, before the contents")
+            if "immutable" not in (written / "_headers").read_text(encoding="utf-8").split("/static/fonts/*", 1)[-1].split("\n\n")[0]:
+                fail("the headers do not let a browser keep the fonts")
             data = json.loads((written / "index.json").read_text(encoding="utf-8"))
             by_id = {entry["id"]: entry for entry in data["pages"]}
             if ([entry["id"] for entry in data["pages"]] != ["", "a", "b", "p", "p/c"] or by_id["b"]["url"] is not None

@@ -6,7 +6,10 @@ SITE_URL is where the baked book is published, and PAGES_PROJECT the
 Cloudflare Pages project `deploy` publishes it through; DIST_DIR is where
 the bake writes. INDEXABLE says whether what is baked may be indexed by
 search engines: while it is false every page carries `noindex`, and there
-is no sitemap, no canonical URL and no `llms-full.txt`.
+is no sitemap, no canonical URL and no `llms-full.txt`. DELTA_CHAPTER
+names the chapter that gathers what a reader of an older Django must
+update; llms.txt points to it before the contents, since an agent's
+characteristic failure is a confident memory of an older release.
 """
 import os
 from pathlib import Path
@@ -20,6 +23,7 @@ SITE_URL = "https://djangointernals.dev"
 PAGES_PROJECT = "djangointernals"
 REPOSITORY_URL = "https://github.com/AlexanderjFraser/djangointernals"
 INDEXABLE = False
+DELTA_CHAPTER = "changes"
 
 # The key signs nothing: the site has no sessions, no forms and no users.
 SECRET_KEY = "baked-to-static-files"

@@ -13,7 +13,11 @@ points at the code it is about; the tools in [tools/](tools/) check both.
 ## What is here
 
 - [pages/](pages/): the book, as markdown. Each page is also served as it
-  is, at its address with `.md` after it.
+  is, at its address with `.md` after it. The book's map, a line a page,
+  is [llms.txt](https://djangointernals.dev/llms.txt); the book as data is
+  [index.json](https://djangointernals.dev/index.json); every name the
+  book mentions, with the sections that mention it, is
+  [names.json](https://djangointernals.dev/names.json).
 - [SPEC.md](SPEC.md): what a page is.
 - [recordings/](recordings/): scripts that run Django and write down what
   happens, and their output. The chapters' flows are taken from these.

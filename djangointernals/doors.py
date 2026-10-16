@@ -2,7 +2,8 @@
 
     /<id>.md         the twin: the page's markdown file, byte for byte (`/index.md` for the front page)
     /llms.txt        the book's map, llmstxt.org's index form: one line per written page, linking
-                     its twin, with its lede, under its chapter
+                     its twin, with its lede, under its chapter; before the chapters, the chapter
+                     settings.DELTA_CHAPTER names, what a reader of an older Django must update
     /llms-full.txt   every written page in reading order, in one file (only when the book is indexable)
     /index.json      the book as data: the pin, every page's number, title, lede and headings,
                      planned pages included (a planned page has no address)
@@ -13,8 +14,8 @@
                      (`path:Symbol`), which tells them apart
     /sitemap.xml     every written page's address (only when the book is indexable)
 
-And two files for the host, Cloudflare Pages: `_headers` (the twins' media type; `noindex`
-while the book is not indexable) and `_redirects` (the addresses that have moved, which the
+And two files for the host, Cloudflare Pages: `_headers` (the twins' media type; the fonts
+kept by a browser for a year; `noindex` while the book is not indexable) and `_redirects` (the addresses that have moved, which the
 book lists in a file of that name at its root).
 
 One fact, one home: the title, the lede, the sections and the numbers are
@@ -96,6 +97,10 @@ def llms(book, indexable: bool) -> str:
         f"the sections that mention it, and for a pointer the link to its lines: {site}/names.json."
         + (f" The whole book in one file: {site}/llms-full.txt." if indexable else ""))
     lines.append("")
+    delta = book.pages.get(getattr(settings, "DELTA_CHAPTER", "") or "")
+    if delta is not None and delta.published and delta is not index:
+        lines += [f"Read first if what you know of Django is an earlier release: "
+                  f"[{absolute(delta.title_md, delta, book)}]({site}{twin_url(delta)}): {absolute(delta.lede_md, delta, book)}", ""]
     for chapter in book.index.children:
         written = [page for page in [chapter] + chapter.descendants if page.published]
         if not written:
@@ -217,8 +222,11 @@ def sitemap(book) -> str:
 
 
 def headers(indexable: bool) -> str:
-    """Cloudflare Pages's `_headers`: the twins as markdown, and nothing indexed when the book is not."""
-    out = "/*.md\n  Content-Type: text/markdown; charset=utf-8\n"
+    """Cloudflare Pages's `_headers`: the twins as markdown; the fonts kept by a browser for a
+    year without asking again, since they never change under their names (a font that did
+    would get a new one); and nothing indexed when the book is not."""
+    out = ("/*.md\n  Content-Type: text/markdown; charset=utf-8\n"
+           "\n/static/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n")
     if not indexable:
         out += "\n/*\n  X-Robots-Tag: noindex\n"
     return out
