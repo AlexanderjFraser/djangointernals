@@ -194,6 +194,14 @@ def beside(found: list[str], gates) -> str:
     return '<aside class="sources" aria-label="In the source">' + "".join(pointer(body, gates, full=True) for body in found) + "</aside>\n"
 
 
+NOTE_KINDS = (
+    ("why", ("why",)),
+    ("history", ("history",)),
+    ("trap", ("trap", "a trap")),
+    ("changed", ("changed in", "new in", "deprecated", "removed in")),
+)
+
+
 class Rules:
     """The render rules that differ from CommonMark's defaults. `env` carries the page being
     rendered, the book it is in, the line of the block being rendered, and the problems so far."""
@@ -207,7 +215,8 @@ class Rules:
         words = token.info.split()
         if words and words[0] == "runtime-names":
             return ""
-        kind = f' data-kind="{escape(words[0])}"' if words else ""
+        recorded = any(word.startswith("recording=") for word in words[1:])
+        kind = ' data-kind="recording"' if recorded else (f' data-kind="{escape(words[0])}"' if words else "")
         return f"<pre{kind}><code>{escape(token.content, quote=False)}</code></pre>\n"
 
     def table_open(self, tokens, idx, options, env):
@@ -243,12 +252,19 @@ class Rules:
         return opened
 
     def blockquote_open(self, tokens, idx, options, env):
-        """A quotation that opens with a phrase in bold is a note, and the phrase its label."""
+        """A quotation that opens with a phrase in bold is a note, and the phrase its label. A label
+        of one of the book's kinds (SPEC.md, "A note") marks the note with that kind, which the
+        stylesheet colours: `Why`, `History`, `Trap`, and the release notes `Changed in`, `New in`,
+        `Deprecated` and `Removed in`, which are one kind."""
         first = tokens[idx + 2] if idx + 2 < len(tokens) and tokens[idx + 1].type == "paragraph_open" else None
         opening = [child for child in (first.children or []) if not (child.type == "text" and not child.content)] if first is not None else []
         note = bool(opening) and opening[0].type == "strong_open"
         env.setdefault("quotes", []).append("aside" if note else "blockquote")
-        return '<aside class="note">\n' if note else "<blockquote>\n"
+        if not note:
+            return "<blockquote>\n"
+        label = opening[1].content.lower() if len(opening) > 1 and opening[1].type == "text" else ""
+        kind = next((kind for kind, starts in NOTE_KINDS if label.startswith(starts)), "")
+        return f'<aside class="note" data-kind="{kind}">\n' if kind else '<aside class="note">\n'
 
     def blockquote_close(self, tokens, idx, options, env):
         return f"</{env['quotes'].pop()}>\n"

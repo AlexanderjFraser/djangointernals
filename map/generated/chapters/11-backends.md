@@ -116,18 +116,18 @@ The map sees only import statements. What crosses an edge through a registry, a 
 | [10 · From QuerySet to SQL](10-sql.md) | 11+2 | `django/db/models/expressions.py` (5) `django/db/models/sql/compiler.py` (5) `django/db/models/functions/__init__.py` (1) `django/db/models/sql/__init__.py` (1) and 1 more | 9+1 | `django/db/__init__.py` (8) `django/db/backends/oracle/functions.py` (1) `django/db/transaction.py` (1) |
 | [12 · Migrations](12-migrations.md) | 0+1 | `django/db/migrations/loader.py` (1) | 6 | `django/db/__init__.py` (5) `django/db/transaction.py` (1) |
 | [13 · Templates](13-templates.md) | 1 | `django/utils/safestring.py` (1) | 0+1 | `django/db/__init__.py` (1) |
-| [15 · Security](15-security.md) | 1 | `django/utils/crypto.py` (1) | 0 |  |
-| [16 · Internationalization and time zones](16-i18n.md) | 6 | `django/utils/timezone.py` (6) | 0 |  |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 2 | `django/core/serializers/__init__.py` (1) `django/dispatch/__init__.py` (1) | 3 | `django/db/__init__.py` (3) `django/db/transaction.py` (1) |
-| [18 · The utility layer](18-utils.md) | 53 | `django/utils/functional.py` (13) `django/core/exceptions.py` (11) `django/utils/asyncio.py` (5) `django/utils/version.py` (5) and 8 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 7 | `django/db/__init__.py` (7) `django/db/transaction.py` (4) |
+| [15 · Internationalization and time zones](15-i18n.md) | 6 | `django/utils/timezone.py` (6) | 0 |  |
+| [16 · Caching, files, mail, signals and tasks](16-services.md) | 2 | `django/core/serializers/__init__.py` (1) `django/dispatch/__init__.py` (1) | 3 | `django/db/__init__.py` (3) `django/db/transaction.py` (1) |
+| [17 · The utility layer](17-utils.md) | 53 | `django/utils/functional.py` (13) `django/core/exceptions.py` (11) `django/utils/asyncio.py` (5) `django/utils/version.py` (5) and 8 more | 0 |  |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0 |  | 7 | `django/db/__init__.py` (7) `django/db/transaction.py` (4) |
+| [19 · The admin](19-admin.md) | 0 |  | 2 | `django/db/__init__.py` (2) `django/db/transaction.py` (1) |
 | [2 · Settings, apps and startup](2-startup.md) | 15+1 | `django/conf/__init__.py` (12) `django/apps/__init__.py` (3) `django/apps/registry.py` (1) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 2 | `django/db/__init__.py` (2) `django/db/transaction.py` (1) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 55 | `django/db/__init__.py` (17) `django/db/backends/postgresql/psycopg_any.py` (8) `django/db/transaction.py` (3) `django/db/backends/base/base.py` (2) and 24 more |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0 |  | 55 | `django/db/__init__.py` (17) `django/db/backends/postgresql/psycopg_any.py` (8) `django/db/transaction.py` (3) `django/db/backends/base/base.py` (2) and 24 more |
+| [21 · Management commands](21-commands.md) | 2+1 | `django/core/checks/__init__.py` (2) `django/core/management/__init__.py` (1) | 20 | `django/db/__init__.py` (19) `django/db/transaction.py` (2) `django/db/backends/utils.py` (1) |
 | [22 · The test framework](22-testing.md) | 0 |  | 7 | `django/db/__init__.py` (5) `django/db/backends/base/base.py` (1) `django/db/transaction.py` (1) `django/db/utils.py` (1) |
-| [3 · Management commands](3-commands.md) | 2+1 | `django/core/checks/__init__.py` (2) `django/core/management/__init__.py` (1) | 20 | `django/db/__init__.py` (19) `django/db/transaction.py` (2) `django/db/backends/utils.py` (1) |
-| [4 · Handlers and middleware](4-handlers.md) | 1 | `django/core/signals.py` (1) | 1 | `django/db/__init__.py` (1) `django/db/transaction.py` (1) |
-| [6 · URL routing](6-urls.md) | 6 | `django/utils/regex_helper.py` (6) | 0 |  |
+| [3 · Handlers and middleware](3-handlers.md) | 1 | `django/core/signals.py` (1) | 1 | `django/db/__init__.py` (1) `django/db/transaction.py` (1) |
+| [5 · URL routing](5-urls.md) | 6 | `django/utils/regex_helper.py` (6) | 0 |  |
+| [7 · Security](7-security.md) | 1 | `django/utils/crypto.py` (1) | 0 |  |
 | [8 · Models and fields](8-models.md) | 15+1 | `django/db/models/__init__.py` (14) `django/db/models/fields/composite.py` (2) | 14+2 | `django/db/__init__.py` (11) `django/db/backends/utils.py` (3) `django/db/transaction.py` (3) `django/db/utils.py` (2) |
 | [9 · QuerySets](9-querysets.md) | 4 | `django/db/models/constants.py` (4) | 2 | `django/db/__init__.py` (2) `django/db/transaction.py` (2) |
 

@@ -31,10 +31,10 @@ Sites by kind: `warn`, passed to a call named `warn` or `warn_explicit`; `passed
 | # | chapter | ticket citations | deprecation sites, imports aside |
 |---|---|---:|---:|
 | 2 | [Settings, apps and startup](chapters/2-startup.md) | 3 | 36 |
-| 3 | [Management commands](chapters/3-commands.md) | 8 | 0 |
-| 4 | [Handlers and middleware](chapters/4-handlers.md) | 1 | 1 |
-| 5 | [Requests and responses](chapters/5-http.md) | 2 | 4 |
-| 7 | [Views](chapters/7-views.md) | 4 | 0 |
+| 3 | [Handlers and middleware](chapters/3-handlers.md) | 1 | 1 |
+| 4 | [Requests and responses](chapters/4-http.md) | 2 | 4 |
+| 6 | [Views](chapters/6-views.md) | 4 | 0 |
+| 7 | [Security](chapters/7-security.md) | 0 | 7 |
 | 8 | [Models and fields](chapters/8-models.md) | 9 | 9 |
 | 9 | [QuerySets](chapters/9-querysets.md) | 1 | 14 |
 | 10 | [From QuerySet to SQL](chapters/10-sql.md) | 5 | 8 |
@@ -42,11 +42,11 @@ Sites by kind: `warn`, passed to a call named `warn` or `warn_explicit`; `passed
 | 12 | [Migrations](chapters/12-migrations.md) | 9 | 0 |
 | 13 | [Templates](chapters/13-templates.md) | 8 | 4 |
 | 14 | [Forms](chapters/14-forms.md) | 15 | 7 |
-| 15 | [Security](chapters/15-security.md) | 0 | 7 |
-| 16 | [Internationalization and time zones](chapters/16-i18n.md) | 4 | 0 |
-| 17 | [Caching, files, mail, signals and tasks](chapters/17-services.md) | 16 | 75 |
-| 18 | [The utility layer](chapters/18-utils.md) | 9 | 12 |
-| 19 | [Authentication, sessions and messages](chapters/19-auth.md) | 13 | 0 |
-| 20 | [The admin](chapters/20-admin.md) | 6 | 22 |
-| 21 | [Content types, static files and the other contrib apps](chapters/21-contrib.md) | 22 | 13 |
+| 15 | [Internationalization and time zones](chapters/15-i18n.md) | 4 | 0 |
+| 16 | [Caching, files, mail, signals and tasks](chapters/16-services.md) | 16 | 75 |
+| 17 | [The utility layer](chapters/17-utils.md) | 9 | 12 |
+| 18 | [Authentication, sessions and messages](chapters/18-auth.md) | 13 | 0 |
+| 19 | [The admin](chapters/19-admin.md) | 6 | 22 |
+| 20 | [Content types, static files and the other contrib apps](chapters/20-contrib.md) | 22 | 13 |
+| 21 | [Management commands](chapters/21-commands.md) | 8 | 0 |
 | 22 | [The test framework](chapters/22-testing.md) | 4 | 2 |

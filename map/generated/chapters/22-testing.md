@@ -55,17 +55,17 @@ The map sees only import statements. What crosses an edge through a registry, a 
 | [11 · Database backends](11-backends.md) | 7 | `django/db/__init__.py` (5) `django/db/backends/base/base.py` (1) `django/db/transaction.py` (1) `django/db/utils.py` (1) | 0 |  |
 | [13 · Templates](13-templates.md) | 3+3 | `django/template/__init__.py` (2) `django/template/base.py` (1) `django/template/engine.py` (1) `django/template/utils.py` (1) and 1 more | 0 |  |
 | [14 · Forms](14-forms.md) | 1+2 | `django/forms/renderers.py` (2) `django/forms/fields.py` (1) | 0 |  |
-| [16 · Internationalization and time zones](16-i18n.md) | 3+3 | `django/utils/translation/trans_real.py` (3) `django/utils/formats.py` (1) `django/utils/timezone.py` (1) `django/utils/translation/__init__.py` (1) | 0 |  |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 5+3 | `django/core/mail/__init__.py` (2) `django/core/cache/__init__.py` (1) `django/core/files/locks.py` (1) `django/core/files/storage/__init__.py` (1) and 3 more | 0 |  |
-| [18 · The utility layer](18-utils.md) | 10 | `django/core/exceptions.py` (3) `django/utils/functional.py` (3) `django/utils/version.py` (2) `django/utils/datastructures.py` (1) and 1 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0+15 | `django/contrib/auth/__init__.py` (8) `django/contrib/auth/backends.py` (2) `django/contrib/auth/forms.py` (1) `django/contrib/auth/handlers/modwsgi.py` (1) and 3 more | 0 |  |
+| [15 · Internationalization and time zones](15-i18n.md) | 3+3 | `django/utils/translation/trans_real.py` (3) `django/utils/formats.py` (1) `django/utils/timezone.py` (1) `django/utils/translation/__init__.py` (1) | 0 |  |
+| [16 · Caching, files, mail, signals and tasks](16-services.md) | 5+3 | `django/core/mail/__init__.py` (2) `django/core/cache/__init__.py` (1) `django/core/files/locks.py` (1) `django/core/files/storage/__init__.py` (1) and 3 more | 0 |  |
+| [17 · The utility layer](17-utils.md) | 10 | `django/core/exceptions.py` (3) `django/utils/functional.py` (3) `django/utils/version.py` (2) `django/utils/datastructures.py` (1) and 1 more | 0 |  |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0+15 | `django/contrib/auth/__init__.py` (8) `django/contrib/auth/backends.py` (2) `django/contrib/auth/forms.py` (1) `django/contrib/auth/handlers/modwsgi.py` (1) and 3 more | 0 |  |
 | [2 · Settings, apps and startup](2-startup.md) | 10 | `django/conf/__init__.py` (4) `django/apps/__init__.py` (3) `django/__init__.py` (1) `django/apps/registry.py` (1) and 1 more | 0 |  |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0+4 | `django/contrib/staticfiles/finders.py` (2) `django/contrib/staticfiles/storage.py` (2) | 1 | `django/test/__init__.py` (1) |
-| [3 · Management commands](3-commands.md) | 5+2 | `django/core/management/__init__.py` (3) `django/core/checks/registry.py` (1) `django/core/management/color.py` (1) `django/core/management/sql.py` (1) and 1 more | 2 | `django/test/runner.py` (1) `django/test/utils.py` (1) |
-| [4 · Handlers and middleware](4-handlers.md) | 8 | `django/core/signals.py` (4) `django/core/handlers/wsgi.py` (2) `django/core/handlers/asgi.py` (1) `django/core/handlers/base.py` (1) | 0 |  |
-| [5 · Requests and responses](5-http.md) | 4+1 | `django/http/__init__.py` (3) `django/http/request.py` (1) `django/utils/http.py` (1) | 0 |  |
-| [6 · URL routing](6-urls.md) | 4+1 | `django/urls/__init__.py` (3) `django/utils/regex_helper.py` (2) | 0 |  |
-| [7 · Views](7-views.md) | 1 | `django/views/static.py` (1) | 0 |  |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0+4 | `django/contrib/staticfiles/finders.py` (2) `django/contrib/staticfiles/storage.py` (2) | 1 | `django/test/__init__.py` (1) |
+| [21 · Management commands](21-commands.md) | 5+2 | `django/core/management/__init__.py` (3) `django/core/checks/registry.py` (1) `django/core/management/color.py` (1) `django/core/management/sql.py` (1) and 1 more | 2 | `django/test/runner.py` (1) `django/test/utils.py` (1) |
+| [3 · Handlers and middleware](3-handlers.md) | 8 | `django/core/signals.py` (4) `django/core/handlers/wsgi.py` (2) `django/core/handlers/asgi.py` (1) `django/core/handlers/base.py` (1) | 0 |  |
+| [4 · Requests and responses](4-http.md) | 4+1 | `django/http/__init__.py` (3) `django/http/request.py` (1) `django/utils/http.py` (1) | 0 |  |
+| [5 · URL routing](5-urls.md) | 4+1 | `django/urls/__init__.py` (3) `django/utils/regex_helper.py` (2) | 0 |  |
+| [6 · Views](6-views.md) | 1 | `django/views/static.py` (1) | 0 |  |
 | [8 · Models and fields](8-models.md) | 1 | `django/db/models/options.py` (1) | 0 |  |
 
 ## Imports from outside the tree

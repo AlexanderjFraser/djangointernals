@@ -118,10 +118,30 @@ The standard is a university textbook. A page explains.
   table for something a reader looks up. No device appears on every page:
   a page takes the shape of what it explains.
 - **A term is defined where it is first used**, in bold.
-- **A note** is a quotation that opens with its label in bold:
-  `> **Changed in 6.2.** …`, `> **Why.** …`. It is for what stands beside
-  the main line: what changed between releases, the reason behind a
-  design, a trap. Used sparingly.
+- **A note** is a quotation that opens with its label in bold, and stands
+  beside the main line as a tinted block whose colour is its kind. There
+  are four kinds, and the label says which. **Why** (`> **Why.** …`): the
+  reason a thing is built as it is, with its source (a ticket, a DEP, a
+  comment, a thread) and the alternative not taken where there was one.
+  **History** (`> **History.** …`): how it came to be, what stood there
+  before and when and why it changed, told as a story and not as a release
+  note. **Trap** (`> **Trap.** …`): what the code does that a careful
+  reader would not expect. **Changed in**, **New in**, **Deprecated** and
+  **Removed in** (`> **Changed in 6.2.** …`): what a reader who knows an
+  older Django must update, which the last chapter gathers. The main line
+  of a page says how the system works; the notes are where it says why,
+  what it was, and where it bites. A note is a paragraph or two, never a
+  section in disguise, and a page without one is short of nothing.
+- **A fenced block earns its place.** It shows what prose carries badly:
+  an order of calls, the exact text of a statement or a message, a shape.
+  A result that is one value is told in the sentence. The sentence before
+  a block says what the block shows and what to look for in it, and two
+  blocks never stand together without prose between them. On the site a
+  quote of a recording is labelled as recorded from a running Django,
+  so that a reader knows it is a trace and not code.
+- **A section is one sitting's reading**: about 12,000 characters. Past
+  18,000 it is two sections, or has something to cut. A chapter's opening
+  page is shorter than its sections.
 - **Newest version only.** What a reader may believe from an older release
   is corrected in a note where it matters, and collected in the last
   chapter.
@@ -218,7 +238,10 @@ WSGI, GET /plain/: a view that returns a response
 ## Figures
 
 A figure shows what words carry badly: an order, a nesting, a boundary, a
-crossing. If a table says it, it is a table.
+crossing. If a table says it, it is a table. A chapter's opening page has
+the figure of its model, and a section whose subject has a shape (a nest,
+a tree, a path through stations, a boundary crossed) has one too. The text
+introduces a figure before it stands, saying what to look for in it.
 
 ````
 ```text figure=the-chain
@@ -237,7 +260,9 @@ request  ->  A  ->  B  ->  C  ->  the view
   (`pages/figures/` for the front page), put into the page in place of the
   block. Its address is `#figure-<name>`.
 - **The caption** is the paragraph directly under the block, one italic
-  run. It says what the picture shows.
+  run. It says what the picture shows and how to read it: where the
+  drawing does not make it plain, what a box, an arrow, a dashed line or
+  the accent stands for on this figure.
 - **A figure never carries a fact the text does not**, and a figure of a
   flow is drawn from a recording.
 - **The file is one `<svg>` element** with a `viewBox` and `class="fig"`:

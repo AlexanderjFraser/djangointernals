@@ -473,8 +473,8 @@ class Command(BaseCommand):
                 fail("a long name in a table may not break between its words, or a name outside a table may")
             if '<figure class="figure" id="figure-one"' not in with_numbers or "<svg" not in with_numbers or "figure=one" in with_numbers:
                 fail("a figure is not put into the page as its SVG, or its source is shown beside it")
-            if with_numbers.count('<aside class="note">') != 1 or with_numbers.count("<blockquote>") != 1:
-                fail("a quotation that opens with a label in bold is not a note, or one that does not is")
+            if with_numbers.count('<aside class="note" data-kind="why">') != 1 or with_numbers.count("<blockquote>") != 1:
+                fail("a quotation that opens with a label in bold is not a note of its label's kind, or one that does not is")
             # the book published: indexable, with its sitemap and its whole
             settings.INDEXABLE = True
             try:

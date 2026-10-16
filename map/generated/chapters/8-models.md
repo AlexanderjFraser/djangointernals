@@ -73,17 +73,17 @@ The map sees only import statements. What crosses an edge through a registry, a 
 | [11 · Database backends](11-backends.md) | 14+2 | `django/db/__init__.py` (11) `django/db/backends/utils.py` (3) `django/db/transaction.py` (3) `django/db/utils.py` (2) | 15+1 | `django/db/models/__init__.py` (14) `django/db/models/fields/composite.py` (2) |
 | [12 · Migrations](12-migrations.md) | 0 |  | 14 | `django/db/models/__init__.py` (8) `django/db/models/fields/related.py` (2) `django/db/models/options.py` (2) `django/db/models/deletion.py` (1) and 1 more |
 | [14 · Forms](14-forms.md) | 5 | `django/forms/__init__.py` (4) `django/core/validators.py` (1) | 2+5 | `django/db/models/__init__.py` (5) `django/db/models/utils.py` (2) |
-| [16 · Internationalization and time zones](16-i18n.md) | 8 | `django/utils/translation/__init__.py` (7) `django/utils/timezone.py` (1) | 0 |  |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 5 | `django/core/files/base.py` (1) `django/core/files/images.py` (1) `django/core/files/storage/__init__.py` (1) `django/core/files/utils.py` (1) and 1 more | 6 | `django/db/models/__init__.py` (5) `django/db/models/enums.py` (1) |
-| [18 · The utility layer](18-utils.md) | 37 | `django/core/exceptions.py` (10) `django/utils/functional.py` (10) `django/utils/text.py` (3) `django/utils/datastructures.py` (2) and 9 more | 0+1 | `django/db/models/enums.py` (1) |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 18 | `django/db/models/__init__.py` (16) `django/db/models/manager.py` (1) `django/db/models/signals.py` (1) |
+| [15 · Internationalization and time zones](15-i18n.md) | 8 | `django/utils/translation/__init__.py` (7) `django/utils/timezone.py` (1) | 0 |  |
+| [16 · Caching, files, mail, signals and tasks](16-services.md) | 5 | `django/core/files/base.py` (1) `django/core/files/images.py` (1) `django/core/files/storage/__init__.py` (1) `django/core/files/utils.py` (1) and 1 more | 6 | `django/db/models/__init__.py` (5) `django/db/models/enums.py` (1) |
+| [17 · The utility layer](17-utils.md) | 37 | `django/core/exceptions.py` (10) `django/utils/functional.py` (10) `django/utils/text.py` (3) `django/utils/datastructures.py` (2) and 9 more | 0+1 | `django/db/models/enums.py` (1) |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0 |  | 18 | `django/db/models/__init__.py` (16) `django/db/models/manager.py` (1) `django/db/models/signals.py` (1) |
+| [19 · The admin](19-admin.md) | 0 |  | 16 | `django/db/models/__init__.py` (12) `django/db/models/base.py` (1) `django/db/models/deletion.py` (1) `django/db/models/fields/related.py` (1) and 1 more |
 | [2 · Settings, apps and startup](2-startup.md) | 9+1 | `django/conf/__init__.py` (5) `django/apps/__init__.py` (4) `django/__init__.py` (1) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 16 | `django/db/models/__init__.py` (12) `django/db/models/base.py` (1) `django/db/models/deletion.py` (1) `django/db/models/fields/related.py` (1) and 1 more |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 64 | `django/db/models/__init__.py` (49) `django/db/models/fields/mixins.py` (3) `django/db/models/signals.py` (3) `django/db/models/deletion.py` (2) and 6 more |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0 |  | 64 | `django/db/models/__init__.py` (49) `django/db/models/fields/mixins.py` (3) `django/db/models/signals.py` (3) `django/db/models/deletion.py` (2) and 6 more |
+| [21 · Management commands](21-commands.md) | 10 | `django/core/checks/__init__.py` (10) | 3+2 | `django/db/models/__init__.py` (3) `django/db/models/deletion.py` (1) `django/db/models/signals.py` (1) |
 | [22 · The test framework](22-testing.md) | 0 |  | 1 | `django/db/models/options.py` (1) |
-| [3 · Management commands](3-commands.md) | 10 | `django/core/checks/__init__.py` (10) | 3+2 | `django/db/models/__init__.py` (3) `django/db/models/deletion.py` (1) `django/db/models/signals.py` (1) |
-| [4 · Handlers and middleware](4-handlers.md) | 1 | `django/core/signals.py` (1) | 0 |  |
-| [7 · Views](7-views.md) | 0 |  | 3 | `django/db/models/__init__.py` (3) |
+| [3 · Handlers and middleware](3-handlers.md) | 1 | `django/core/signals.py` (1) | 0 |  |
+| [6 · Views](6-views.md) | 0 |  | 3 | `django/db/models/__init__.py` (3) |
 | [9 · QuerySets](9-querysets.md) | 20 | `django/db/models/query_utils.py` (9) `django/db/models/constants.py` (5) `django/db/models/query.py` (4) `django/db/models/fetch_modes.py` (2) | 4+3 | `django/db/models/__init__.py` (4) `django/db/models/deletion.py` (1) `django/db/models/manager.py` (1) `django/db/models/utils.py` (1) |
 
 ## Imports from outside the tree

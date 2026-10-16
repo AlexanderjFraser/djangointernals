@@ -67,11 +67,11 @@ The map sees only import statements. What crosses an edge through a registry, a 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
 | [11 · Database backends](11-backends.md) | 6 | `django/db/__init__.py` (5) `django/db/transaction.py` (1) | 0+1 | `django/db/migrations/loader.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 3 | `django/utils/timezone.py` (3) | 0 |  |
-| [18 · The utility layer](18-utils.md) | 18 | `django/utils/functional.py` (6) `django/utils/module_loading.py` (3) `django/utils/version.py` (3) `django/utils/copy.py` (2) and 3 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 14 | `django/db/migrations/__init__.py` (14) |
+| [15 · Internationalization and time zones](15-i18n.md) | 3 | `django/utils/timezone.py` (3) | 0 |  |
+| [17 · The utility layer](17-utils.md) | 18 | `django/utils/functional.py` (6) `django/utils/module_loading.py` (3) `django/utils/version.py` (3) `django/utils/copy.py` (2) and 3 more | 0 |  |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0 |  | 14 | `django/db/migrations/__init__.py` (14) |
+| [19 · The admin](19-admin.md) | 0 |  | 3 | `django/db/migrations/__init__.py` (3) |
 | [2 · Settings, apps and startup](2-startup.md) | 14 | `django/conf/__init__.py` (5) `django/apps/__init__.py` (4) `django/apps/registry.py` (4) `django/__init__.py` (1) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 3 | `django/db/migrations/__init__.py` (3) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 12 | `django/db/migrations/__init__.py` (9) `django/db/migrations/operations/base.py` (1) `django/db/migrations/serializer.py` (1) `django/db/migrations/writer.py` (1) |
-| [3 · Management commands](3-commands.md) | 2+1 | `django/core/checks/model_checks.py` (1) `django/core/management/__init__.py` (1) `django/core/management/base.py` (1) | 26+1 | `django/db/migrations/loader.py` (6) `django/db/migrations/__init__.py` (3) `django/db/migrations/optimizer.py` (3) `django/db/migrations/writer.py` (3) and 8 more |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0 |  | 12 | `django/db/migrations/__init__.py` (9) `django/db/migrations/operations/base.py` (1) `django/db/migrations/serializer.py` (1) `django/db/migrations/writer.py` (1) |
+| [21 · Management commands](21-commands.md) | 2+1 | `django/core/checks/model_checks.py` (1) `django/core/management/__init__.py` (1) `django/core/management/base.py` (1) | 26+1 | `django/db/migrations/loader.py` (6) `django/db/migrations/__init__.py` (3) `django/db/migrations/optimizer.py` (3) `django/db/migrations/writer.py` (3) and 8 more |
 | [8 · Models and fields](8-models.md) | 14 | `django/db/models/__init__.py` (8) `django/db/models/fields/related.py` (2) `django/db/models/options.py` (2) `django/db/models/deletion.py` (1) and 1 more | 0 |  |

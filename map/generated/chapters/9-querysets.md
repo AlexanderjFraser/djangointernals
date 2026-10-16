@@ -43,13 +43,13 @@ The map sees only import statements. What crosses an edge through a registry, a 
 |---|---|---|---|---|
 | [10 · From QuerySet to SQL](10-sql.md) | 4+5 | `django/db/models/lookups.py` (2) `django/db/models/sql/__init__.py` (2) `django/db/models/sql/constants.py` (2) `django/db/models/expressions.py` (1) and 2 more | 7+1 | `django/db/models/query_utils.py` (4) `django/db/models/constants.py` (3) `django/db/models/query.py` (1) |
 | [11 · Database backends](11-backends.md) | 2 | `django/db/__init__.py` (2) `django/db/transaction.py` (2) | 4 | `django/db/models/constants.py` (4) |
-| [16 · Internationalization and time zones](16-i18n.md) | 1 | `django/utils/timezone.py` (1) | 0 |  |
-| [18 · The utility layer](18-utils.md) | 10 | `django/core/exceptions.py` (3) `django/utils/functional.py` (2) `django/utils/deprecation.py` (1) `django/utils/hashable.py` (1) and 3 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 1 | `django/db/models/query_utils.py` (1) |
+| [15 · Internationalization and time zones](15-i18n.md) | 1 | `django/utils/timezone.py` (1) | 0 |  |
+| [17 · The utility layer](17-utils.md) | 10 | `django/core/exceptions.py` (3) `django/utils/functional.py` (2) `django/utils/deprecation.py` (1) `django/utils/hashable.py` (1) and 3 more | 0 |  |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0 |  | 1 | `django/db/models/query_utils.py` (1) |
+| [19 · The admin](19-admin.md) | 0 |  | 5 | `django/db/models/constants.py` (5) |
 | [2 · Settings, apps and startup](2-startup.md) | 2 | `django/__init__.py` (1) `django/conf/__init__.py` (1) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 5 | `django/db/models/constants.py` (5) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 4 | `django/db/models/query.py` (2) `django/db/models/query_utils.py` (2) |
-| [3 · Management commands](3-commands.md) | 0 |  | 1 | `django/db/models/constants.py` (1) |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0 |  | 4 | `django/db/models/query.py` (2) `django/db/models/query_utils.py` (2) |
+| [21 · Management commands](21-commands.md) | 0 |  | 1 | `django/db/models/constants.py` (1) |
 | [8 · Models and fields](8-models.md) | 4+3 | `django/db/models/__init__.py` (4) `django/db/models/deletion.py` (1) `django/db/models/manager.py` (1) `django/db/models/utils.py` (1) | 20 | `django/db/models/query_utils.py` (9) `django/db/models/constants.py` (5) `django/db/models/query.py` (4) `django/db/models/fetch_modes.py` (2) |
 
 ## Imports from outside the tree

@@ -47,6 +47,10 @@
   --ink-2: #5e594f;
   --rule: #dcd6c9;
   --accent: #a3301a;
+  --why: #35557d;
+  --history: #6b5423;
+  --trap: #9a4a0c;
+  --changed: #2e6b3f;
   --serif: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
   --sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Source Code Pro", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -67,6 +71,10 @@
     --ink-2: #a8a195;
     --rule: #3d3931;
     --accent: #e9866c;
+    --why: #93b4dc;
+    --history: #cdb27a;
+    --trap: #e8a060;
+    --changed: #86c492;
   }
 }
 :root[data-colours="paper"], :root[data-colours="white"], :root[data-colours="sepia"] { color-scheme: light; }
@@ -93,6 +101,10 @@
   --ink-2: #a8a195;
   --rule: #3d3931;
   --accent: #e9866c;
+  --why: #93b4dc;
+  --history: #cdb27a;
+  --trap: #e8a060;
+  --changed: #86c492;
 }
 :root[data-colours="night"] {
   --paper: #000000;
@@ -101,6 +113,10 @@
   --ink-2: #9c968b;
   --rule: #302d28;
   --accent: #e9866c;
+  --why: #93b4dc;
+  --history: #cdb27a;
+  --trap: #e8a060;
+  --changed: #86c492;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -264,9 +280,20 @@ td a.src code { display: block; }
 td a.src .in { display: block; font-family: var(--sans); font-size: 0.86em; color: var(--ink-2); }
 
 /* A note: a quotation that opens with its label in bold. */
-.note { margin: 1.3em 0 1.4em; padding: 0.1em 0 0.1em 1.1em; border-left: 2px solid var(--accent); font-size: 0.94em; line-height: 1.5; }
+/* Notes: what stands beside the main line, each a tinted block whose colour says its kind
+   (SPEC.md, "A note"): why it is so, how it came to be, a trap, what changed between releases.
+   A note of no kind takes the accent. The kind is data-kind on the aside, set from the label. */
+.note { --kind: var(--accent); margin: 1.3em 0 1.4em; padding: 0.7em 1.1em 0.75em 1.1em; border-left: 2px solid var(--kind); border-radius: 0 3px 3px 0; background: color-mix(in srgb, var(--kind) 6%, var(--paper)); font-size: 0.94em; line-height: 1.5; }
+.note[data-kind="why"] { --kind: var(--why); }
+.note[data-kind="history"] { --kind: var(--history); }
+.note[data-kind="trap"] { --kind: var(--trap); }
+.note[data-kind="changed"] { --kind: var(--changed); }
 .note > :last-child { margin-bottom: 0; }
-.note > p:first-child > strong:first-child { margin-right: 0.35em; font-family: var(--sans); font-size: 0.8em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); }
+.note > p:first-child > strong:first-child { margin-right: 0.35em; font-family: var(--sans); font-size: 0.8em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--kind); }
+.note pre { background: color-mix(in srgb, var(--kind) 4%, var(--paper-2)); }
+
+/* A recording's quote says what it is: a trace from a running Django, not code to read. */
+pre[data-kind="recording"]::before { content: "Recorded from a running Django"; display: block; margin: -0.15em 0 0.65em; font-family: var(--sans); font-size: 0.95em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
 
 /* Tables: ruled above and below, a hairline between rows, no boxes. */
 .table { margin: 1.3em 0 1.5em; overflow-x: auto; justify-self: start; width: max-content; min-width: min(100%, var(--measure)); max-width: 100%; }

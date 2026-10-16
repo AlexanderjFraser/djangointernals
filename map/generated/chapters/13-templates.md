@@ -85,19 +85,19 @@ The map sees only import statements. What crosses an edge through a registry, a 
 |---|---|---|---|---|
 | [11 · Database backends](11-backends.md) | 0+1 | `django/db/__init__.py` (1) | 1 | `django/utils/safestring.py` (1) |
 | [14 · Forms](14-forms.md) | 1+1 | `django/core/validators.py` (1) `django/forms/renderers.py` (1) | 8+1 | `django/utils/html.py` (3) `django/utils/safestring.py` (2) `django/template/backends/django.py` (1) `django/template/backends/jinja2.py` (1) and 2 more |
-| [15 · Security](15-security.md) | 5 | `django/middleware/csrf.py` (2) `django/utils/csp.py` (2) `django/middleware/csp.py` (1) | 2+1 | `django/template/__init__.py` (1) `django/template/context_processors.py` (1) `django/template/loader.py` (1) `django/utils/html.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 11+2 | `django/utils/timezone.py` (4) `django/utils/translation/__init__.py` (4) `django/utils/formats.py` (3) `django/utils/dateformat.py` (1) and 1 more | 5 | `django/utils/safestring.py` (2) `django/template/__init__.py` (1) `django/template/base.py` (1) `django/utils/html.py` (1) |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 3+1 | `django/core/cache/__init__.py` (1) `django/core/cache/utils.py` (1) `django/core/serializers/json.py` (1) `django/dispatch/__init__.py` (1) | 0 |  |
-| [18 · The utility layer](18-utils.md) | 34 | `django/utils/functional.py` (8) `django/core/exceptions.py` (6) `django/utils/text.py` (5) `django/utils/_os.py` (3) and 7 more | 0+1 | `django/utils/html.py` (1) |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 7 | `django/utils/html.py` (3) `django/template/__init__.py` (1) `django/template/loader.py` (1) `django/template/response.py` (1) and 1 more |
+| [15 · Internationalization and time zones](15-i18n.md) | 11+2 | `django/utils/timezone.py` (4) `django/utils/translation/__init__.py` (4) `django/utils/formats.py` (3) `django/utils/dateformat.py` (1) and 1 more | 5 | `django/utils/safestring.py` (2) `django/template/__init__.py` (1) `django/template/base.py` (1) `django/utils/html.py` (1) |
+| [16 · Caching, files, mail, signals and tasks](16-services.md) | 3+1 | `django/core/cache/__init__.py` (1) `django/core/cache/utils.py` (1) `django/core/serializers/json.py` (1) `django/dispatch/__init__.py` (1) | 0 |  |
+| [17 · The utility layer](17-utils.md) | 34 | `django/utils/functional.py` (8) `django/core/exceptions.py` (6) `django/utils/text.py` (5) `django/utils/_os.py` (3) and 7 more | 0+1 | `django/utils/html.py` (1) |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0 |  | 7 | `django/utils/html.py` (3) `django/template/__init__.py` (1) `django/template/loader.py` (1) `django/template/response.py` (1) and 1 more |
+| [19 · The admin](19-admin.md) | 0 |  | 30 | `django/template/__init__.py` (6) `django/utils/html.py` (6) `django/utils/safestring.py` (6) `django/template/response.py` (3) and 8 more |
 | [2 · Settings, apps and startup](2-startup.md) | 10+1 | `django/conf/__init__.py` (8) `django/apps/__init__.py` (3) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 30 | `django/template/__init__.py` (6) `django/utils/html.py` (6) `django/utils/safestring.py` (6) `django/template/response.py` (3) and 8 more |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0+1 | `django/contrib/staticfiles/storage.py` (1) | 10 | `django/template/__init__.py` (3) `django/template/loader.py` (3) `django/utils/safestring.py` (2) `django/template/defaultfilters.py` (1) and 2 more |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0+1 | `django/contrib/staticfiles/storage.py` (1) | 10 | `django/template/__init__.py` (3) `django/template/loader.py` (3) `django/utils/safestring.py` (2) `django/template/defaultfilters.py` (1) and 2 more |
+| [21 · Management commands](21-commands.md) | 2 | `django/core/checks/__init__.py` (1) `django/utils/autoreload.py` (1) | 1+1 | `django/template/__init__.py` (2) |
 | [22 · The test framework](22-testing.md) | 0 |  | 3+3 | `django/template/__init__.py` (2) `django/template/base.py` (1) `django/template/engine.py` (1) `django/template/utils.py` (1) and 1 more |
-| [3 · Management commands](3-commands.md) | 2 | `django/core/checks/__init__.py` (1) `django/utils/autoreload.py` (1) | 1+1 | `django/template/__init__.py` (2) |
-| [5 · Requests and responses](5-http.md) | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) | 0 |  |
-| [6 · URL routing](6-urls.md) | 2+1 | `django/utils/regex_helper.py` (2) `django/urls/__init__.py` (1) | 0 |  |
-| [7 · Views](7-views.md) | 0 |  | 6 | `django/template/__init__.py` (3) `django/template/loader.py` (3) `django/template/defaultfilters.py` (1) `django/template/response.py` (1) |
+| [4 · Requests and responses](4-http.md) | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) | 0 |  |
+| [5 · URL routing](5-urls.md) | 2+1 | `django/utils/regex_helper.py` (2) `django/urls/__init__.py` (1) | 0 |  |
+| [6 · Views](6-views.md) | 0 |  | 6 | `django/template/__init__.py` (3) `django/template/loader.py` (3) `django/template/defaultfilters.py` (1) `django/template/response.py` (1) |
+| [7 · Security](7-security.md) | 5 | `django/middleware/csrf.py` (2) `django/utils/csp.py` (2) `django/middleware/csp.py` (1) | 2+1 | `django/template/__init__.py` (1) `django/template/context_processors.py` (1) `django/template/loader.py` (1) `django/utils/html.py` (1) |
 
 ## Imports from outside the tree
 

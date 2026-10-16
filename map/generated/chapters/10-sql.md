@@ -72,11 +72,11 @@ The map sees only import statements. What crosses an edge through a registry, a 
 |---|---|---|---|---|
 | [11 · Database backends](11-backends.md) | 9+1 | `django/db/__init__.py` (8) `django/db/backends/oracle/functions.py` (1) `django/db/transaction.py` (1) | 11+2 | `django/db/models/expressions.py` (5) `django/db/models/sql/compiler.py` (5) `django/db/models/functions/__init__.py` (1) `django/db/models/sql/__init__.py` (1) and 1 more |
 | [14 · Forms](14-forms.md) | 0 |  | 0+1 | `django/db/models/expressions.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 1 | `django/utils/timezone.py` (1) | 0 |  |
-| [18 · The utility layer](18-utils.md) | 27 | `django/core/exceptions.py` (9) `django/utils/functional.py` (5) `django/utils/deprecation.py` (3) `django/utils/hashable.py` (3) and 5 more | 0 |  |
+| [15 · Internationalization and time zones](15-i18n.md) | 1 | `django/utils/timezone.py` (1) | 0 |  |
+| [17 · The utility layer](17-utils.md) | 27 | `django/core/exceptions.py` (9) `django/utils/functional.py` (5) `django/utils/deprecation.py` (3) `django/utils/hashable.py` (3) and 5 more | 0 |  |
+| [19 · The admin](19-admin.md) | 0 |  | 2+2 | `django/db/models/expressions.py` (4) |
 | [2 · Settings, apps and startup](2-startup.md) | 1 | `django/conf/__init__.py` (1) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 2+2 | `django/db/models/expressions.py` (4) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 16 | `django/db/models/functions/__init__.py` (4) `django/db/models/lookups.py` (4) `django/db/models/expressions.py` (3) `django/db/models/sql/__init__.py` (2) and 2 more |
-| [6 · URL routing](6-urls.md) | 3 | `django/utils/regex_helper.py` (3) | 0 |  |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0 |  | 16 | `django/db/models/functions/__init__.py` (4) `django/db/models/lookups.py` (4) `django/db/models/expressions.py` (3) `django/db/models/sql/__init__.py` (2) and 2 more |
+| [5 · URL routing](5-urls.md) | 3 | `django/utils/regex_helper.py` (3) | 0 |  |
 | [8 · Models and fields](8-models.md) | 15+3 | `django/db/models/fields/__init__.py` (12) `django/db/models/__init__.py` (4) `django/db/models/fields/composite.py` (2) `django/db/models/fields/json.py` (1) | 25+8 | `django/db/models/expressions.py` (14) `django/db/models/functions/__init__.py` (6) `django/db/models/lookups.py` (5) `django/db/models/sql/__init__.py` (3) and 4 more |
 | [9 · QuerySets](9-querysets.md) | 7+1 | `django/db/models/query_utils.py` (4) `django/db/models/constants.py` (3) `django/db/models/query.py` (1) | 4+5 | `django/db/models/lookups.py` (2) `django/db/models/sql/__init__.py` (2) `django/db/models/sql/constants.py` (2) `django/db/models/expressions.py` (1) and 2 more |

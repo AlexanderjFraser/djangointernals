@@ -1,6 +1,6 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
-contents: overview, startup, commands, handlers, http, urls, views, models, querysets, sql, backends, migrations, templates, forms, security, i18n, services, utils, auth, admin, contrib, testing, changes
+contents: overview, startup, handlers, http, urls, views, security, models, querysets, sql, backends, migrations, templates, forms, i18n, services, utils, auth, admin, contrib, commands, testing, changes
 ---
 
 # Django Internals

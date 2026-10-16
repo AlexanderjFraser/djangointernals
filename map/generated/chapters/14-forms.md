@@ -49,16 +49,16 @@ The map sees only import statements. What crosses an edge through a registry, a 
 |---|---|---|---|---|
 | [10 · From QuerySet to SQL](10-sql.md) | 0+1 | `django/db/models/expressions.py` (1) | 0 |  |
 | [13 · Templates](13-templates.md) | 8+1 | `django/utils/html.py` (3) `django/utils/safestring.py` (2) `django/template/backends/django.py` (1) `django/template/backends/jinja2.py` (1) and 2 more | 1+1 | `django/core/validators.py` (1) `django/forms/renderers.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 17 | `django/utils/translation/__init__.py` (12) `django/utils/formats.py` (3) `django/utils/dates.py` (1) `django/utils/timezone.py` (1) | 0 |  |
-| [18 · The utility layer](18-utils.md) | 27 | `django/core/exceptions.py` (8) `django/utils/functional.py` (4) `django/utils/choices.py` (3) `django/utils/datastructures.py` (2) and 9 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 2 | `django/core/validators.py` (1) `django/forms/__init__.py` (1) |
+| [15 · Internationalization and time zones](15-i18n.md) | 17 | `django/utils/translation/__init__.py` (12) `django/utils/formats.py` (3) `django/utils/dates.py` (1) `django/utils/timezone.py` (1) | 0 |  |
+| [17 · The utility layer](17-utils.md) | 27 | `django/core/exceptions.py` (8) `django/utils/functional.py` (4) `django/utils/choices.py` (3) `django/utils/datastructures.py` (2) and 9 more | 0 |  |
+| [18 · Authentication, sessions and messages](18-auth.md) | 0 |  | 2 | `django/core/validators.py` (1) `django/forms/__init__.py` (1) |
+| [19 · The admin](19-admin.md) | 0 |  | 14+1 | `django/forms/__init__.py` (5) `django/core/validators.py` (2) `django/forms/formsets.py` (2) `django/forms/models.py` (2) and 2 more |
 | [2 · Settings, apps and startup](2-startup.md) | 2 | `django/conf/__init__.py` (2) | 0 |  |
-| [20 · The admin](20-admin.md) | 0 |  | 14+1 | `django/forms/__init__.py` (5) `django/core/validators.py` (2) `django/forms/formsets.py` (2) `django/forms/models.py` (2) and 2 more |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 15 | `django/forms/__init__.py` (8) `django/core/validators.py` (2) `django/forms/models.py` (2) `django/forms/widgets.py` (2) and 1 more |
+| [20 · Content types, static files and the other contrib apps](20-contrib.md) | 0 |  | 15 | `django/forms/__init__.py` (8) `django/core/validators.py` (2) `django/forms/models.py` (2) `django/forms/widgets.py` (2) and 1 more |
 | [22 · The test framework](22-testing.md) | 0 |  | 1+2 | `django/forms/renderers.py` (2) `django/forms/fields.py` (1) |
-| [5 · Requests and responses](5-http.md) | 1 | `django/utils/http.py` (1) | 0 |  |
-| [6 · URL routing](6-urls.md) | 3 | `django/utils/regex_helper.py` (3) | 0 |  |
-| [7 · Views](7-views.md) | 0 |  | 2 | `django/forms/__init__.py` (1) `django/forms/models.py` (1) |
+| [4 · Requests and responses](4-http.md) | 1 | `django/utils/http.py` (1) | 0 |  |
+| [5 · URL routing](5-urls.md) | 3 | `django/utils/regex_helper.py` (3) | 0 |  |
+| [6 · Views](6-views.md) | 0 |  | 2 | `django/forms/__init__.py` (1) `django/forms/models.py` (1) |
 | [8 · Models and fields](8-models.md) | 2+5 | `django/db/models/__init__.py` (5) `django/db/models/utils.py` (2) | 5 | `django/forms/__init__.py` (4) `django/core/validators.py` (1) |
 
 ## Imports from outside the tree
