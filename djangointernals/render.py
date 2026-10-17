@@ -29,6 +29,9 @@ What is changed on the way to HTML and nowhere else:
   where they were written, which is where an agent wants them.
 - A quotation that opens with a phrase in bold is a note with that phrase
   as its label (`> **Why.** …`).
+- A quote of a recording is labelled with what ran it, from the recording's
+  first line: a running Django, or the versions of Django a recording that
+  runs several releases ran (`recording_label`).
 - A link to `other.md` becomes that page's address; a link to a page that
   is only planned becomes plain text.
 - A figure's fenced source becomes the SVG drawn from it, numbered, with
@@ -43,10 +46,11 @@ What is changed on the way to HTML and nowhere else:
 """
 from __future__ import annotations
 
+import functools
 import re
 import xml.etree.ElementTree as ET
 from html import escape
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 from urllib.parse import urlsplit
 
 from django.conf import settings
@@ -194,6 +198,34 @@ def beside(found: list[str], gates) -> str:
     return '<aside class="sources" aria-label="In the source">' + "".join(pointer(body, gates, full=True) for body in found) + "</aside>\n"
 
 
+RAN_BESIDE = re.compile(r"Django (\d+(?:\.\d+)+(?:(?:, | and )\d+(?:\.\d+)+)*) beside this commit\b")
+NUMBER_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
+
+
+def recording_label(first_line: str) -> str:
+    """What the site says over a quote of a recording, from the recording's first line, which
+    names the Django that ran it (SPEC.md, *Recordings*). A recording ran this commit and is
+    recorded from a running Django; one whose first line names releases it ran beside this
+    commit (recordings/changes.py) says how many versions ran, each named on its own lines."""
+    found = RAN_BESIDE.match(first_line)
+    if not found:
+        return "Recorded from a running Django"
+    ran = len(re.findall(r"\d+(?:\.\d+)+", found.group(1))) + 1
+    return f"Recorded from {NUMBER_WORDS.get(ran, str(ran))} versions of Django"
+
+
+@functools.cache
+def labelled(name: str) -> str:
+    """The label over a quote of the recording `name`; one that has no output is the recording
+    gate's to refuse, and is labelled as any other."""
+    try:
+        with open(Path(settings.BASE_DIR) / "recordings" / f"{name}.txt", encoding="utf-8") as output:
+            first = output.readline().rstrip("\n")
+    except OSError:
+        first = ""
+    return recording_label(first)
+
+
 NOTE_KINDS = (
     ("why", ("why",)),
     ("history", ("history",)),
@@ -215,8 +247,11 @@ class Rules:
         words = token.info.split()
         if words and words[0] == "runtime-names":
             return ""
-        recorded = any(word.startswith("recording=") for word in words[1:])
-        kind = ' data-kind="recording"' if recorded else (f' data-kind="{escape(words[0])}"' if words else "")
+        named = [word[len("recording="):] for word in words[1:] if word.startswith("recording=")]
+        if named:
+            kind = f' data-kind="recording" data-label="{escape(labelled(named[0]))}"'
+        else:
+            kind = f' data-kind="{escape(words[0])}"' if words else ""
         return f"<pre{kind}><code>{escape(token.content, quote=False)}</code></pre>\n"
 
     def table_open(self, tokens, idx, options, env):

@@ -292,8 +292,9 @@ td a.src .in { display: block; font-family: var(--sans); font-size: 0.86em; colo
 .note > p:first-child > strong:first-child { margin-right: 0.35em; font-family: var(--sans); font-size: 0.8em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--kind); }
 .note pre { background: color-mix(in srgb, var(--kind) 4%, var(--paper-2)); }
 
-/* A recording's quote says what it is: a trace from a running Django, not code to read. */
-pre[data-kind="recording"]::before { content: "Recorded from a running Django"; display: block; margin: -0.15em 0 0.65em; font-family: var(--sans); font-size: 0.95em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
+/* A recording's quote says what it is: a trace from a running Django, not code to read. The words
+   are the renderer's, from the recording's first line (render.py, recording_label). */
+pre[data-kind="recording"]::before { content: attr(data-label); display: block; margin: -0.15em 0 0.65em; font-family: var(--sans); font-size: 0.95em; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-2); }
 
 /* Tables: ruled above and below, a hairline between rows, no boxes. */
 .table { margin: 1.3em 0 1.5em; overflow-x: auto; justify-self: start; width: max-content; min-width: min(100%, var(--measure)); max-width: 100%; }

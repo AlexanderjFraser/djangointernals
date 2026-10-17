@@ -103,7 +103,7 @@ the order as_sql makes the clauses                   the order the statement has
 | `CURSOR` | the cursor, which the caller is to close | nothing in Django's tree |
 | `NO_RESULTS` | `None`; the cursor closed | `UpdateQuery.update_batch` |
 
-*The result types of `django/db/models/sql/constants.py`, what each returns, and the callers that pass each at the pin. The writing compilers' callers are told in [INSERT, UPDATE and DELETE: the insert, update and delete compilers](writing.md).*
+*The result types of `django/db/models/sql/constants.py`, what each returns, and the callers that pass each at this commit. The writing compilers' callers are told in [INSERT, UPDATE and DELETE: the insert, update and delete compilers](writing.md).*
 
 Asked of the compiler for the ships over a hundred tons, each line below sent the one statement, which is left out:
 

@@ -138,7 +138,8 @@ The standard is a university textbook. A page explains.
   a block says what the block shows and what to look for in it, and two
   blocks never stand together without prose between them. On the site a
   quote of a recording is labelled as recorded from a running Django,
-  so that a reader knows it is a trace and not code.
+  or from the versions of Django a recording ran, so that a reader knows
+  it is a trace and not code.
 - **A section is one sitting's reading**: about 12,000 characters. Past
   18,000 it is two sections, or has something to cut. A chapter's opening
   page is shorter than its sections.

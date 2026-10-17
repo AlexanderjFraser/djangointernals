@@ -8,6 +8,31 @@ Every deprecation in the code at this commit: what warns with `RemovedInDjango20
 
 The deprecation timeline, `docs/internals/deprecation.txt`, lists under each coming release what it will remove or change. At this commit each entry but the one for `select_related(True)`, which fails already, is code that keeps the old use working beside the new, and comments naming the warning class mark lines that must change when a deprecation ends, often with the code that will replace them.
 
+Which release ends a deprecation follows from the release that began it, by the rule that [What changed](../changes.md#how-a-change-is-carried) gives (`docs/internals/release-process.txt`). The figure sets each feature release since 5.0 beside the release that removes what it deprecated; the bars with a label are what still warns at this commit: what 6.0 and 6.1 deprecated, and what 6.2, the release this commit is on its way to, has deprecated already.
+
+```text figure=deprecation-spans
+What each feature release from 5.0 deprecated, from that release to the one that removes it.
+LTS: a long-term support release.
+
+   4 December 2023    5.0
+   7 August 2024      5.1
+   2 April 2025       5.2 LTS
+   3 December 2025    6.0
+   5 August 2026      6.1
+  26 September 2026   this commit: main, a pre-alpha of 6.2, django.VERSION (6, 2, 0, "alpha", 0)
+   April 2027         6.2 LTS, expected
+                      Django 2028, then Django 2029: calendar versions, under DEP 20
+
+Where what a release deprecated is removed:
+  deprecated in 5.0 and 5.1    removed in 6.0
+  deprecated in 5.2            removed in 6.1
+  deprecated in 6.0 and 6.1    removed in Django 2028    warns RemovedInDjango2028Warning
+  deprecated in 6.2            removed in Django 2029    warns RemovedInDjango2029Warning
+                               (the readings of django.VERSION that 6.2 deprecated end in Django 2028)
+```
+
+*Each bar runs from the release that deprecated a feature to the one that removes it, over an axis of the feature releases from 5.0 to Django 2029; the upright line is this commit. A bar's label is the class its deprecations warn with at this commit, but for the bar of the readings of `django.VERSION`, deprecated in 6.2, which end a release early, in Django 2028.*
+
 ## Removed in Django 2029
 
 What 6.2 deprecated, but for the readings of `django.VERSION`, warns with `RemovedInDjango2029Warning`, a `PendingDeprecationWarning`. [What changed in handlers, requests, URLs and views](request-cycle.md) tells the first two; [What changed in querysets](querysets.md), [What changed in expressions, lookups and the compiler](sql.md) and [What changed in forms and validators](forms.md) one each.

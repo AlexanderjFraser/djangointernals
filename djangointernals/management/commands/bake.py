@@ -191,6 +191,7 @@ class Command(BaseCommand):
         svg = '<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 10 10"><rect class="box" width="5" height="5"/></svg>'
         drawn = "a/figures/one.svg"
         with_figure = {**good, "a.md": figure + "\n| x | y |\n|---|---|\n| 1 | 2 |\n\n*What the table shows.*\n\n> **Why.** A reason.\n\n> Somebody's words.\n"
+                                                "\nA run.\n\n```text recording=handlers\nWSGI, GET /plain/: a view that returns a response\n```\n"
                                                 "\n| w | x | y |\n|---|---|---|\n| 1 | 2 | 3 |\n| 4 | | `process_template_response` |\n",
                        drawn: svg}
         plain = head + "# A\n\nLede.\n\n## First\n\nText.\n"
@@ -481,6 +482,15 @@ class Command(BaseCommand):
                 fail("a figure is not put into the page as its SVG, or its source is shown beside it")
             if with_numbers.count('<aside class="note" data-kind="why">') != 1 or with_numbers.count("<blockquote>") != 1:
                 fail("a quotation that opens with a label in bold is not a note of its label's kind, or one that does not is")
+            # a quote of a recording is labelled with what ran it, from the recording's first line
+            if '<pre data-kind="recording" data-label="Recorded from a running Django">' not in with_numbers:
+                fail("a quote of a recording of this commit is not labelled as recorded from a running Django")
+            from djangointernals.render import recording_label
+            ran = {"Django 6.2.dev20260926051415 with MIDDLEWARE = [A, B, C]": "Recorded from a running Django",
+                   "Django 5.2.17, 6.0.8 and 6.1.1 beside this commit, 6.2.dev: the same habits run under each": "Recorded from four versions of Django",
+                   "Django 6.1.1 beside this commit, 6.2.dev: one release beside it": "Recorded from two versions of Django"}
+            if any(recording_label(first) != label for first, label in ran.items()):
+                fail("a recording's label does not count the versions its first line names beside this commit, or one of this commit's says it ran several")
             # the book published: indexable, with its sitemap and its whole
             settings.INDEXABLE = True
             try:
@@ -523,7 +533,8 @@ class Command(BaseCommand):
                           f"does not exist and a name bound only in another section among them; a bake writes the pages, their twins (the "
                           f"files themselves), llms.txt, index.json and names.json as the head says; a planned page gets a line in the "
                           f"contents and no file; a pointer in parentheses stands beside its paragraph and every pointer links to the pin; "
-                          f"chapters, sections, parts, figures and captioned tables carry their numbers; no page prints a section sign or "
+                          f"chapters, sections, parts, figures and captioned tables carry their numbers; a quote of a recording is "
+                          f"labelled with the versions of Django that ran it; no page prints a section sign or "
                           f"a block about itself; the book's contents stand beside every page (the page shown marked, its chapter open) "
                           f"with the colours the stylesheet has palettes for, put on before it is read; the sitemap, the whole and a "
                           f"canonical URL are written for an indexable book alone; the book's list of addresses that have moved is "
