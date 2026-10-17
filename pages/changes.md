@@ -1,7 +1,7 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
 part: Django in time
-contents: startup-and-commands, request-cycle, models, querysets, sql, backends-and-migrations, templates, forms, security, i18n-and-utils, mail-and-tasks, caching-files-signals, auth, admin, contrib, testing, security-fixes-sql, security-fixes-exposure, security-fixes-limits, requirements, deprecations
+contents: first-decade, second-decade, startup-and-commands, request-cycle, models, querysets, sql, backends-and-migrations, templates, forms, security, i18n-and-utils, mail-and-tasks, caching-files-signals, auth, admin, contrib, testing, security-fixes-sql, security-fixes-exposure, security-fixes-limits, requirements, deprecations
 ---
 
 # What changed

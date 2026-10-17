@@ -30,7 +30,7 @@ Which code spans are pointers. Any slash makes one: a span is taken for a pointe
 has no white space and holds a slash; or holds `.py:` or `.py#`; or a backslash and `.py`;
 or begins with the path of a Python file and then white space; or begins with a tree's
 name, or a near miss of one in any case, and a colon before something with a dot or a slash
-in it. A span that opens with a quote, or holds one and no `.py:`, is literal text and
+in it; or is a tree's own name, a colon and a file's name with no dot (`django:LICENSE`). A span that opens with a quote, or holds one and no `.py:`, is literal text and
 never a pointer, and neither is one that holds `://`. A span taken for a pointer must be
 one: a bracket, an `=`, a `#`, a comma, a backslash or white space in it is refused. So
 literal text with a slash in it is written with its quotes inside the span: a media type
@@ -173,6 +173,7 @@ HEX = re.compile(r"(?<![0-9a-f])[0-9a-f]{12,40}(?![0-9a-f])")
 RUN = re.compile("`+")
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+ROOT_FILE = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.-]*")  # a file's name at a tree's root, as `tree:NAME` gives it
 HEADING = re.compile(r"^\s*#{1,6}\s")
 SECTION = re.compile(r"^ {0,3}##(?!#)\s")  # a top-level `##` heading: where a page's section begins (tools/names.py --sections)
 QUOTED = re.compile(r"^\s*(?:>\s?)+")
@@ -802,6 +803,8 @@ def is_pointer(body: str, world: World) -> bool:
     if "/" in body or ("\\" in body and ".py" in body):
         return True
     left, colon, right = body.partition(":")
+    if colon and left in world.names and ROOT_FILE.fullmatch(right):
+        return True  # a tree's own name before a file at its root, dotted or not: `django:LICENSE`
     if not colon or not ("." in right or "/" in right):
         return False
     known = [name.casefold() for name in world.names]
@@ -1156,6 +1159,7 @@ PROBE_TREE = {
     "docs/notes.txt": "one\ntwo\n",
     "docs/bare.txt": "no final newline",
     "top.txt": "at the root\n",
+    "TOP": "a root file with no dot in its name\n",
 }
 PROBE_LIBRARY = {"lib/core.py": "class Thing:\n    pass\n", "setup.cfg": "[metadata]\n"}
 
@@ -1265,6 +1269,8 @@ def probe() -> int:
         expect("in a library", lands("lib:lib/core.py:Thing"), ("class", [[1, 2]]))
         expect("a library's root file", lands("lib:setup.cfg"), ("file", []))
         expect("the subject's root file", lands("subject:top.txt"), ("file", []))
+        expect("a root file with no dot in its name", lands("subject:TOP"), ("file", []))
+        refused("subject:NOPE", "holds no file NOPE")
         refused("pkg/a.py:outer.x", "binds no `x`")
         refused("pkg/a.py:A.missing", "binds no `missing`")
         refused("pkg/a.py:A.inherited", "`B` in pkg/b.py declares it")
@@ -1328,7 +1334,8 @@ def probe() -> int:
                            ("https://x.org/y", False), ("f(a/b)", True), ("x=a/b", True), ("<int:pk>/", True),
                            ("pkg/a.py:A, B", True), ("see a.py#L1", True), ("pkg\\a.py", True), ("\\d+", False),
                            ("subjec:top.txt", True), ("SUBJECT:top.txt", True), ("key:value", False), ("dict:a.b", False),
-                           ("subject:thing", False), ("pkg.a.A", False), ("other:thing", False), ("a`b/c", False),
+                           ("subject:thing", True), ("subjec:thing", False), ("subject:a b", False),
+                           ("pkg.a.A", False), ("other:thing", False), ("a`b/c", False),
                            ("pkg/a.py A", True), ("pkg/a.py :A", True), ("cd pkg/sub", False), ("pkg/a.py:'A'", True),
                            ("'pkg/a.py:A'", False)):
             expect(f"is `{body}` a pointer", is_pointer(body, world), want)

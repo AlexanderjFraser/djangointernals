@@ -1,0 +1,1218 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "parts.md",
+ "pointers": [
+  {
+   "pointer": "django/",
+   "line": 7,
+   "sentence": "Django's source is a set of packages under `django/`, and their imports stand them in layers, the departments of [What Django is](../introduction.md), each leaning on those beneath it.",
+   "tree": "django",
+   "path": "django/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4842baf7ebf76511"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/db.py:SessionStore.get_model_class",
+   "line": 11,
+   "sentence": "The database session store imports its model inside a method, which \"avoids a circular import\" (`django/contrib/sessions/backends/db.py:SessionStore.get_model_class`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/db.py",
+   "symbol": "SessionStore.get_model_class",
+   "kind": "function",
+   "lines": [
+    20,
+    26
+   ],
+   "at": 21,
+   "fingerprint": "af2771dfe0722d0a"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db",
+   "line": 11,
+   "sentence": "Making a test database imports the management package inside the method, so as not to import it \"if it isn't needed\" (`django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.create_test_db",
+   "kind": "function",
+   "lines": [
+    45,
+    129
+   ],
+   "fingerprint": "dc7cb1465332c24b"
+  },
+  {
+   "pointer": "django/utils/deprecation.py",
+   "line": 11,
+   "sentence": "And `django/utils/deprecation.py` still hands out `MiddlewareMixin`, now in `django/middleware/`, but imports it only inside the module's `__getattr__`, which Python calls for a name the module does not define: reading `django.__version__` loads the module, a build backend reads the version before Django's own dependencies are installed, and `django/middleware/` imports one of them, asgiref (`django/utils/deprecation.py:__getattr__`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    420
+   ],
+   "fingerprint": "698c40e276677df8"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 11,
+   "sentence": "And `django/utils/deprecation.py` still hands out `MiddlewareMixin`, now in `django/middleware/`, but imports it only inside the module's `__getattr__`, which Python calls for a name the module does not define: reading `django.__version__` loads the module, a build backend reads the version before Django's own dependencies are installed, and `django/middleware/` imports one of them, asgiref (`django/utils/deprecation.py:__getattr__`).",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 11,
+   "sentence": "And `django/utils/deprecation.py` still hands out `MiddlewareMixin`, now in `django/middleware/`, but imports it only inside the module's `__getattr__`, which Python calls for a name the module does not define: reading `django.__version__` loads the module, a build backend reads the version before Django's own dependencies are installed, and `django/middleware/` imports one of them, asgiref (`django/utils/deprecation.py:__getattr__`).",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:__getattr__",
+   "line": 11,
+   "sentence": "And `django/utils/deprecation.py` still hands out `MiddlewareMixin`, now in `django/middleware/`, but imports it only inside the module's `__getattr__`, which Python calls for a name the module does not define: reading `django.__version__` loads the module, a build backend reads the version before Django's own dependencies are installed, and `django/middleware/` imports one of them, asgiref (`django/utils/deprecation.py:__getattr__`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "__getattr__",
+   "kind": "function",
+   "lines": [
+    24,
+    47
+   ],
+   "fingerprint": "fc2f84f4daf68ded"
+  },
+  {
+   "pointer": "django/core/exceptions.py",
+   "line": 13,
+   "sentence": "At the bottom is the **floor**, the utilities, the settings and the app registry, and with them `django/core/exceptions.py`; every other package imports from it.",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    265
+   ],
+   "fingerprint": "57b1f04d9a423a4d"
+  },
+  {
+   "pointer": "django/contrib/",
+   "line": 39,
+   "sentence": "The arrows are a selection, not all there are: the floor's by every package, and every layer's by `django/contrib/`, are one arrow each, and the accented ones are the crossings the text tells.*",
+   "tree": "django",
+   "path": "django/contrib/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "14b58eee8a825a58"
+  },
+  {
+   "pointer": "django/utils/",
+   "line": 47,
+   "sentence": "| `django/utils/`: lazy objects, importing by dotted path, data structures, text | in modules that belong to other parts, the mail package, the cache, `django.http` | every other package | [The utility layer](../utils.md) |",
+   "tree": "django",
+   "path": "django/utils/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "6c235fe9c1712577"
+  },
+  {
+   "pointer": "django/core/exceptions.py",
+   "line": 48,
+   "sentence": "| `django/core/exceptions.py`: the exceptions the parts share | nothing | | [Django's exceptions: `django.core.exceptions`](../utils/exceptions.md) |",
+   "tree": "django",
+   "path": "django/core/exceptions.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    265
+   ],
+   "fingerprint": "57b1f04d9a423a4d"
+  },
+  {
+   "pointer": "django/conf/__init__.py",
+   "line": 49,
+   "sentence": "| `django/conf/__init__.py`: the settings | nothing | | [Settings, apps and startup](../startup.md) |",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    423
+   ],
+   "fingerprint": "35e464d088aaef57"
+  },
+  {
+   "pointer": "django/apps/",
+   "line": 50,
+   "sentence": "| `django/apps/`: the app registry | nothing | | [Settings, apps and startup](../startup.md) |",
+   "tree": "django",
+   "path": "django/apps/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "7740923b499cfe09"
+  },
+  {
+   "pointer": "django/dispatch/",
+   "line": 51,
+   "sentence": "| `django/dispatch/`: `Signal` | nothing | | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/dispatch/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "c84146af7db913bb"
+  },
+  {
+   "pointer": "django/core/signals.py",
+   "line": 52,
+   "sentence": "| `django/core/signals.py`: a request's signals, `setting_changed` | only `django.dispatch` | | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/core/signals.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    6
+   ],
+   "fingerprint": "e6f8757bb2203cde"
+  },
+  {
+   "pointer": "django/core/mail/",
+   "line": 53,
+   "sentence": "| `django/core/mail/`: mail | nothing | | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/core/mail/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "26a6c773d876868a"
+  },
+  {
+   "pointer": "django/core/files/",
+   "line": 54,
+   "sentence": "| `django/core/files/`: files | only `setting_changed` | | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/core/files/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "5d0eaf199f1b6347"
+  },
+  {
+   "pointer": "django/core/cache/",
+   "line": 55,
+   "sentence": "| `django/core/cache/`: the cache | the ORM, in its database backend | | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/core/cache/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "ab22b846dfc12a0e"
+  },
+  {
+   "pointer": "django/core/serializers/",
+   "line": 56,
+   "sentence": "| `django/core/serializers/`: serialization | the ORM | | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/core/serializers/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "bddf023337f7e7a4"
+  },
+  {
+   "pointer": "django/tasks/",
+   "line": 57,
+   "sentence": "| `django/tasks/`: tasks | the ORM's `TextChoices` | nothing outside it | [Caching, files, mail, signals and tasks](../services.md) |",
+   "tree": "django",
+   "path": "django/tasks/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "6fa11b72dba87174"
+  },
+  {
+   "pointer": "django/core/checks/",
+   "line": 58,
+   "sentence": "| `django/core/checks/`: the system checks | the database connections, the caches, the mail package | | [The system checks](../commands/checks.md) |",
+   "tree": "django",
+   "path": "django/core/checks/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "6bf221093cede969"
+  },
+  {
+   "pointer": "django/db/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/db/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4e2db64ef98336f9"
+  },
+  {
+   "pointer": "django/core/files/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/core/files/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "5d0eaf199f1b6347"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/core/mail/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/core/mail/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "26a6c773d876868a"
+  },
+  {
+   "pointer": "django/core/files/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/core/files/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "5d0eaf199f1b6347"
+  },
+  {
+   "pointer": "django/dispatch/",
+   "line": 59,
+   "sentence": "| `django/db/`: models, querysets, SQL, backends, migrations | the checks, `django/core/files/`, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, `django.forms` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/mail/`, `django/core/files/`, `django/dispatch/` | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |",
+   "tree": "django",
+   "path": "django/dispatch/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "c84146af7db913bb"
+  },
+  {
+   "pointer": "django/template/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/template/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "62ea5343a37aa927"
+  },
+  {
+   "pointer": "django/templatetags/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/templatetags/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "86e5995bb90e4f86"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/db/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/db/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4e2db64ef98336f9"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/core/handlers/",
+   "line": 60,
+   "sentence": "| `django/template/`, `django/templatetags/`: the template engine and its backends, the libraries a template loads | `django/http/`, `django/middleware/` | never `django/db/`, `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Templates](../templates.md) |",
+   "tree": "django",
+   "path": "django/core/handlers/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f1f712763e27de"
+  },
+  {
+   "pointer": "django/forms/",
+   "line": 61,
+   "sentence": "| `django/forms/`: forms, fields, widgets, renderers | the template system, `django/db/models/utils.py` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Forms](../forms.md) |",
+   "tree": "django",
+   "path": "django/forms/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "cb013ba9a9007677"
+  },
+  {
+   "pointer": "django/db/models/utils.py",
+   "line": 61,
+   "sentence": "| `django/forms/`: forms, fields, widgets, renderers | the template system, `django/db/models/utils.py` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Forms](../forms.md) |",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    81
+   ],
+   "fingerprint": "1c55b4bcc196b6a9"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 61,
+   "sentence": "| `django/forms/`: forms, fields, widgets, renderers | the template system, `django/db/models/utils.py` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Forms](../forms.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 61,
+   "sentence": "| `django/forms/`: forms, fields, widgets, renderers | the template system, `django/db/models/utils.py` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Forms](../forms.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 61,
+   "sentence": "| `django/forms/`: forms, fields, widgets, renderers | the template system, `django/db/models/utils.py` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Forms](../forms.md) |",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/core/handlers/",
+   "line": 61,
+   "sentence": "| `django/forms/`: forms, fields, widgets, renderers | the template system, `django/db/models/utils.py` | never `django/http/`, `django/urls/`, `django/middleware/`, `django/core/handlers/` | [Forms](../forms.md) |",
+   "tree": "django",
+   "path": "django/core/handlers/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f1f712763e27de"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 62,
+   "sentence": "| `django/http/`: the request and the response | the upload handlers of `django/core/files/`, `request_finished`, `DjangoJSONEncoder` | | [Requests and responses](../http.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/core/files/",
+   "line": 62,
+   "sentence": "| `django/http/`: the request and the response | the upload handlers of `django/core/files/`, `request_finished`, `DjangoJSONEncoder` | | [Requests and responses](../http.md) |",
+   "tree": "django",
+   "path": "django/core/files/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "5d0eaf199f1b6347"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 63,
+   "sentence": "| `django/urls/`: the resolver, and beside it `django/conf/urls/` | `django/http/`; `django/conf/urls/` also `django/views/` | | [URL routing](../urls.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/conf/urls/",
+   "line": 63,
+   "sentence": "| `django/urls/`: the resolver, and beside it `django/conf/urls/` | `django/http/`; `django/conf/urls/` also `django/views/` | | [URL routing](../urls.md) |",
+   "tree": "django",
+   "path": "django/conf/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "132458b426bfade6"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 63,
+   "sentence": "| `django/urls/`: the resolver, and beside it `django/conf/urls/` | `django/http/`; `django/conf/urls/` also `django/views/` | | [URL routing](../urls.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/conf/urls/",
+   "line": 63,
+   "sentence": "| `django/urls/`: the resolver, and beside it `django/conf/urls/` | `django/http/`; `django/conf/urls/` also `django/views/` | | [URL routing](../urls.md) |",
+   "tree": "django",
+   "path": "django/conf/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "132458b426bfade6"
+  },
+  {
+   "pointer": "django/views/",
+   "line": 63,
+   "sentence": "| `django/urls/`: the resolver, and beside it `django/conf/urls/` | `django/http/`; `django/conf/urls/` also `django/views/` | | [URL routing](../urls.md) |",
+   "tree": "django",
+   "path": "django/views/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "223e16b5351ecba9"
+  },
+  {
+   "pointer": "django/views/",
+   "line": 64,
+   "sentence": "| `django/views/`: the views Django ships | `django/urls/`, `django/http/`, the template system, the forms, the ORM | beyond the tools and `django/contrib/`, only the handler, `django/conf/urls/`, `django/urls/` | [Views](../views.md) |",
+   "tree": "django",
+   "path": "django/views/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "223e16b5351ecba9"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 64,
+   "sentence": "| `django/views/`: the views Django ships | `django/urls/`, `django/http/`, the template system, the forms, the ORM | beyond the tools and `django/contrib/`, only the handler, `django/conf/urls/`, `django/urls/` | [Views](../views.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 64,
+   "sentence": "| `django/views/`: the views Django ships | `django/urls/`, `django/http/`, the template system, the forms, the ORM | beyond the tools and `django/contrib/`, only the handler, `django/conf/urls/`, `django/urls/` | [Views](../views.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/contrib/",
+   "line": 64,
+   "sentence": "| `django/views/`: the views Django ships | `django/urls/`, `django/http/`, the template system, the forms, the ORM | beyond the tools and `django/contrib/`, only the handler, `django/conf/urls/`, `django/urls/` | [Views](../views.md) |",
+   "tree": "django",
+   "path": "django/contrib/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "14b58eee8a825a58"
+  },
+  {
+   "pointer": "django/conf/urls/",
+   "line": 64,
+   "sentence": "| `django/views/`: the views Django ships | `django/urls/`, `django/http/`, the template system, the forms, the ORM | beyond the tools and `django/contrib/`, only the handler, `django/conf/urls/`, `django/urls/` | [Views](../views.md) |",
+   "tree": "django",
+   "path": "django/conf/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "132458b426bfade6"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 64,
+   "sentence": "| `django/views/`: the views Django ships | `django/urls/`, `django/http/`, the template system, the forms, the ORM | beyond the tools and `django/contrib/`, only the handler, `django/conf/urls/`, `django/urls/` | [Views](../views.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/middleware/",
+   "line": 65,
+   "sentence": "| `django/middleware/`: the middleware | `django/urls/`, `django/http/` | | [Handlers and middleware](../handlers.md), [Security](../security.md) |",
+   "tree": "django",
+   "path": "django/middleware/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "502929da26221a62"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 65,
+   "sentence": "| `django/middleware/`: the middleware | `django/urls/`, `django/http/` | | [Handlers and middleware](../handlers.md), [Security](../security.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 65,
+   "sentence": "| `django/middleware/`: the middleware | `django/urls/`, `django/http/` | | [Handlers and middleware](../handlers.md), [Security](../security.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/core/handlers/",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/core/handlers/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f1f712763e27de"
+  },
+  {
+   "pointer": "django/urls/",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/urls/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "be11571bf418d7ac"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/views/debug.py",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    683
+   ],
+   "fingerprint": "9f5ffe7cba2932b5"
+  },
+  {
+   "pointer": "django/contrib/",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/contrib/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "14b58eee8a825a58"
+  },
+  {
+   "pointer": "django/core/wsgi.py",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/core/wsgi.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    13
+   ],
+   "fingerprint": "dac60c49edc806b1"
+  },
+  {
+   "pointer": "django/core/asgi.py",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/core/asgi.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    13
+   ],
+   "fingerprint": "3762f7192e85ea82"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py",
+   "line": 66,
+   "sentence": "| `django/core/handlers/`: the handler | `django/urls/`, `django/http/`, the ORM, `django/views/debug.py` | beyond the tools and `django/contrib/`, only `django/core/wsgi.py`, `django/core/asgi.py`, `django/core/servers/basehttp.py` | [Handlers and middleware](../handlers.md) |",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    277
+   ],
+   "fingerprint": "aae42b603c526747"
+  },
+  {
+   "pointer": "django/core/management/",
+   "line": 67,
+   "sentence": "| `django/core/management/`: the commands | more of the ORM than of any other part | | [Management commands](../commands.md) |",
+   "tree": "django",
+   "path": "django/core/management/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "01cde6f945e4e4ac"
+  },
+  {
+   "pointer": "django/test/",
+   "line": 68,
+   "sentence": "| `django/test/`: the test framework | the handler, the ORM, the mail package, the template system | only the test command, `django/contrib/staticfiles/testing.py` | [The test framework](../testing.md) |",
+   "tree": "django",
+   "path": "django/test/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4f6c0380aff7ea28"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/testing.py",
+   "line": 68,
+   "sentence": "| `django/test/`: the test framework | the handler, the ORM, the mail package, the template system | only the test command, `django/contrib/staticfiles/testing.py` | [The test framework](../testing.md) |",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/testing.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    13
+   ],
+   "fingerprint": "e17f84b4e7d79f09"
+  },
+  {
+   "pointer": "django/contrib/",
+   "line": 69,
+   "sentence": "| `django/contrib/`: the applications | every layer | nothing at load; inside functions, only `django/templatetags/static.py`, `django/test/client.py`, `django/test/signals.py` | [Authentication, sessions and messages](../auth.md), [The admin](../admin.md), [Content types, static files and the other contrib apps](../contrib.md) |",
+   "tree": "django",
+   "path": "django/contrib/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "14b58eee8a825a58"
+  },
+  {
+   "pointer": "django/templatetags/static.py",
+   "line": 69,
+   "sentence": "| `django/contrib/`: the applications | every layer | nothing at load; inside functions, only `django/templatetags/static.py`, `django/test/client.py`, `django/test/signals.py` | [Authentication, sessions and messages](../auth.md), [The admin](../admin.md), [Content types, static files and the other contrib apps](../contrib.md) |",
+   "tree": "django",
+   "path": "django/templatetags/static.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    179
+   ],
+   "fingerprint": "5b846ab770cdfd8b"
+  },
+  {
+   "pointer": "django/test/client.py",
+   "line": 69,
+   "sentence": "| `django/contrib/`: the applications | every layer | nothing at load; inside functions, only `django/templatetags/static.py`, `django/test/client.py`, `django/test/signals.py` | [Authentication, sessions and messages](../auth.md), [The admin](../admin.md), [Content types, static files and the other contrib apps](../contrib.md) |",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1763
+   ],
+   "fingerprint": "04fab2a961cd37be"
+  },
+  {
+   "pointer": "django/test/signals.py",
+   "line": 69,
+   "sentence": "| `django/contrib/`: the applications | every layer | nothing at load; inside functions, only `django/templatetags/static.py`, `django/test/client.py`, `django/test/signals.py` | [Authentication, sessions and messages](../auth.md), [The admin](../admin.md), [Content types, static files and the other contrib apps](../contrib.md) |",
+   "tree": "django",
+   "path": "django/test/signals.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    261
+   ],
+   "fingerprint": "0a445b89832f1f3d"
+  },
+  {
+   "pointer": "django/utils/timezone.py",
+   "line": 75,
+   "sentence": "The utilities import the settings: `django/utils/timezone.py` reads `TIME_ZONE` and `USE_TZ`, and `BaseConnectionHandler` the setting its subclass names (`django/utils/connection.py:BaseConnectionHandler.configure_settings`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    259
+   ],
+   "fingerprint": "ceaad7cc041ee185"
+  },
+  {
+   "pointer": "django/utils/connection.py:BaseConnectionHandler.configure_settings",
+   "line": 75,
+   "sentence": "The utilities import the settings: `django/utils/timezone.py` reads `TIME_ZONE` and `USE_TZ`, and `BaseConnectionHandler` the setting its subclass names (`django/utils/connection.py:BaseConnectionHandler.configure_settings`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "BaseConnectionHandler.configure_settings",
+   "kind": "function",
+   "lines": [
+    48,
+    51
+   ],
+   "fingerprint": "e9f438f84d0fb454"
+  },
+  {
+   "pointer": "django/conf/__init__.py",
+   "line": 75,
+   "sentence": "The utility modules that `django/conf/__init__.py` imports import nothing of `django.conf`, and `settings` reads the settings module only the first time the settings are needed (`django/conf/__init__.py:LazySettings._setup`), so a utility can import it as it loads and read it later.",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    423
+   ],
+   "fingerprint": "35e464d088aaef57"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings._setup",
+   "line": 75,
+   "sentence": "The utility modules that `django/conf/__init__.py` imports import nothing of `django.conf`, and `settings` reads the settings module only the first time the settings are needed (`django/conf/__init__.py:LazySettings._setup`), so a utility can import it as it loads and read it later.",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings._setup",
+   "kind": "function",
+   "lines": [
+    93,
+    109
+   ],
+   "fingerprint": "6721d7ba7192c979"
+  },
+  {
+   "pointer": "django/utils/",
+   "line": 77,
+   "sentence": "Some modules of `django/utils/` belong by subject to another part and import upward: `django/utils/log.py` imports the mail package for `AdminEmailHandler`, and `django/utils/cache.py` the cache and `django.http` ([The utility layer](../utils.md#where-the-other-modules-of-djangoutils-are-told)).",
+   "tree": "django",
+   "path": "django/utils/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "6c235fe9c1712577"
+  },
+  {
+   "pointer": "django/utils/log.py",
+   "line": 77,
+   "sentence": "Some modules of `django/utils/` belong by subject to another part and import upward: `django/utils/log.py` imports the mail package for `AdminEmailHandler`, and `django/utils/cache.py` the cache and `django.http` ([The utility layer](../utils.md#where-the-other-modules-of-djangoutils-are-told)).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    324
+   ],
+   "fingerprint": "1c87308f2bf7d32c"
+  },
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 77,
+   "sentence": "Some modules of `django/utils/` belong by subject to another part and import upward: `django/utils/log.py` imports the mail package for `AdminEmailHandler`, and `django/utils/cache.py` the cache and `django.http` ([The utility layer](../utils.md#where-the-other-modules-of-djangoutils-are-told)).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/core/signals.py",
+   "line": 81,
+   "sentence": "`django/core/signals.py` defines a request's signals, `request_started`, `request_finished` and `got_request_exception`, with `setting_changed`, and imports only `django.dispatch`.",
+   "tree": "django",
+   "path": "django/core/signals.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    6
+   ],
+   "fingerprint": "e6f8757bb2203cde"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 81,
+   "sentence": "Through it a lower part hears of a request without importing the handler: `django/db/__init__.py` connects `close_old_connections` to the first two (`django/db/__init__.py:close_old_connections`), and the cache closes its connections on `request_finished` (`django/core/cache/__init__.py:close_caches`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/__init__.py:close_old_connections",
+   "line": 81,
+   "sentence": "Through it a lower part hears of a request without importing the handler: `django/db/__init__.py` connects `close_old_connections` to the first two (`django/db/__init__.py:close_old_connections`), and the cache closes its connections on `request_finished` (`django/core/cache/__init__.py:close_caches`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": "close_old_connections",
+   "kind": "function",
+   "lines": [
+    57,
+    59
+   ],
+   "fingerprint": "f5cf044cab3a61cd"
+  },
+  {
+   "pointer": "django/core/cache/__init__.py:close_caches",
+   "line": 81,
+   "sentence": "Through it a lower part hears of a request without importing the handler: `django/db/__init__.py` connects `close_old_connections` to the first two (`django/db/__init__.py:close_old_connections`), and the cache closes its connections on `request_finished` (`django/core/cache/__init__.py:close_caches`).",
+   "tree": "django",
+   "path": "django/core/cache/__init__.py",
+   "symbol": "close_caches",
+   "kind": "function",
+   "lines": [
+    61,
+    64
+   ],
+   "fingerprint": "2ba32d3f493faede"
+  },
+  {
+   "pointer": "django/core/cache/__init__.py:CacheHandler.create_connection",
+   "line": 83,
+   "sentence": "The cache's database backend imports the ORM, but the cache loads it only when `CACHES` names it (`django/core/cache/__init__.py:CacheHandler.create_connection`).",
+   "tree": "django",
+   "path": "django/core/cache/__init__.py",
+   "symbol": "CacheHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    43,
+    53
+   ],
+   "fingerprint": "3fa7f56f6ec1f6dc"
+  },
+  {
+   "pointer": "django/core/serializers/",
+   "line": 83,
+   "sentence": "The serializers stand among the services but lean on the data side: `django/core/serializers/` writes model instances, and imports `django.db.models` and the app registry as it loads.",
+   "tree": "django",
+   "path": "django/core/serializers/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "bddf023337f7e7a4"
+  },
+  {
+   "pointer": "django/core/checks/",
+   "line": 85,
+   "sentence": "The system checks are a tool by purpose, but their imports put them among the services: the models, the fields, the URL resolver and the template backend import `django/core/checks/` as they load, and it imports the database connections, the caches and the mail package as it loads, and the URLconf and the template engines, among others, only inside functions.",
+   "tree": "django",
+   "path": "django/core/checks/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "6bf221093cede969"
+  },
+  {
+   "pointer": "django/db/",
+   "line": 89,
+   "sentence": "`django/db/` imports from two parts above it as it loads.",
+   "tree": "django",
+   "path": "django/db/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4e2db64ef98336f9"
+  },
+  {
+   "pointer": "django/db/migrations/loader.py",
+   "line": 89,
+   "sentence": "For the migrations it takes `CommandError` and `OutputWrapper` from the management package (`django/db/migrations/loader.py`, `django/db/migrations/questioner.py`).",
+   "tree": "django",
+   "path": "django/db/migrations/loader.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    433
+   ],
+   "fingerprint": "cdc323bdf802553c"
+  },
+  {
+   "pointer": "django/db/migrations/questioner.py",
+   "line": 89,
+   "sentence": "For the migrations it takes `CommandError` and `OutputWrapper` from the management package (`django/db/migrations/loader.py`, `django/db/migrations/questioner.py`).",
+   "tree": "django",
+   "path": "django/db/migrations/questioner.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    347
+   ],
+   "fingerprint": "06c410c810c92283"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py",
+   "line": 89,
+   "sentence": "And `django/db/models/fields/__init__.py` imports `django.forms`, for the method with which a model field makes the form field that edits it (`django/db/models/fields/__init__.py:Field.formfield`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2978
+   ],
+   "fingerprint": "9ed3436cd4b17f2c"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.formfield",
+   "line": 89,
+   "sentence": "And `django/db/models/fields/__init__.py` imports `django.forms`, for the method with which a model field makes the form field that edits it (`django/db/models/fields/__init__.py:Field.formfield`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.formfield",
+   "kind": "function",
+   "lines": [
+    1143,
+    1190
+   ],
+   "fingerprint": "24859070081d7deb"
+  },
+  {
+   "pointer": "django/db/models/utils.py",
+   "line": 91,
+   "sentence": "The forms import back, as they load, only a helper module, `django/db/models/utils.py`, and the rest of the ORM inside functions (`django/forms/models.py:construct_instance`).",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    81
+   ],
+   "fingerprint": "1c55b4bcc196b6a9"
+  },
+  {
+   "pointer": "django/forms/models.py:construct_instance",
+   "line": 91,
+   "sentence": "The forms import back, as they load, only a helper module, `django/db/models/utils.py`, and the rest of the ORM inside functions (`django/forms/models.py:construct_instance`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "construct_instance",
+   "kind": "function",
+   "lines": [
+    50,
+    93
+   ],
+   "fingerprint": "3ce771638a2d45f8"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 93,
+   "sentence": "`django/http/` imports nothing of the ORM, yet importing it loads `django.db.models`: `django/http/response.py` takes `DjangoJSONEncoder` from the serializers, whose base module imports the ORM (`django/core/serializers/base.py`).",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/http/response.py",
+   "line": 93,
+   "sentence": "`django/http/` imports nothing of the ORM, yet importing it loads `django.db.models`: `django/http/response.py` takes `DjangoJSONEncoder` from the serializers, whose base module imports the ORM (`django/core/serializers/base.py`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    785
+   ],
+   "fingerprint": "a00beb269d355a88"
+  },
+  {
+   "pointer": "django/core/serializers/base.py",
+   "line": 93,
+   "sentence": "`django/http/` imports nothing of the ORM, yet importing it loads `django.db.models`: `django/http/response.py` takes `DjangoJSONEncoder` from the serializers, whose base module imports the ORM (`django/core/serializers/base.py`).",
+   "tree": "django",
+   "path": "django/core/serializers/base.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    416
+   ],
+   "fingerprint": "f510a55ae1d12bfe"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine.template_context_processors",
+   "line": 97,
+   "sentence": "The modules of the template engine, its compiler and its context import only the utilities, the exceptions and one another, though an engine always includes the `csrf` context processor, imported by its dotted path (`django/template/engine.py:Engine.template_context_processors`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine.template_context_processors",
+   "kind": "function",
+   "lines": [
+    114,
+    118
+   ],
+   "at": 115,
+   "fingerprint": "9240faf16e3cdca1"
+  },
+  {
+   "pointer": "django/template/response.py:SimpleTemplateResponse",
+   "line": 97,
+   "sentence": "`SimpleTemplateResponse` is a subclass of `HttpResponse` (`django/template/response.py:SimpleTemplateResponse`); the `querystring` tag builds a `QueryDict` (`django/template/defaulttags.py:querystring`); the `csrf` context processor takes the token from `get_token` in `django/middleware/csrf.py` (`django/template/context_processors.py:csrf`); and so does the backends' `csrf_input`.",
+   "tree": "django",
+   "path": "django/template/response.py",
+   "symbol": "SimpleTemplateResponse",
+   "kind": "class",
+   "lines": [
+    10,
+    144
+   ],
+   "fingerprint": "2cc51481d854ce65"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:querystring",
+   "line": 97,
+   "sentence": "`SimpleTemplateResponse` is a subclass of `HttpResponse` (`django/template/response.py:SimpleTemplateResponse`); the `querystring` tag builds a `QueryDict` (`django/template/defaulttags.py:querystring`); the `csrf` context processor takes the token from `get_token` in `django/middleware/csrf.py` (`django/template/context_processors.py:csrf`); and so does the backends' `csrf_input`.",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "querystring",
+   "kind": "function",
+   "lines": [
+    1286,
+    1349
+   ],
+   "at": 1287,
+   "fingerprint": "c124c7a8cbce92fd"
+  },
+  {
+   "pointer": "django/middleware/csrf.py",
+   "line": 97,
+   "sentence": "`SimpleTemplateResponse` is a subclass of `HttpResponse` (`django/template/response.py:SimpleTemplateResponse`); the `querystring` tag builds a `QueryDict` (`django/template/defaulttags.py:querystring`); the `csrf` context processor takes the token from `get_token` in `django/middleware/csrf.py` (`django/template/context_processors.py:csrf`); and so does the backends' `csrf_input`.",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    486
+   ],
+   "fingerprint": "454dff42f4a7ddb3"
+  },
+  {
+   "pointer": "django/template/context_processors.py:csrf",
+   "line": 97,
+   "sentence": "`SimpleTemplateResponse` is a subclass of `HttpResponse` (`django/template/response.py:SimpleTemplateResponse`); the `querystring` tag builds a `QueryDict` (`django/template/defaulttags.py:querystring`); the `csrf` context processor takes the token from `get_token` in `django/middleware/csrf.py` (`django/template/context_processors.py:csrf`); and so does the backends' `csrf_input`.",
+   "tree": "django",
+   "path": "django/template/context_processors.py",
+   "symbol": "csrf",
+   "kind": "function",
+   "lines": [
+    19,
+    35
+   ],
+   "fingerprint": "9b26b0072fe6705a"
+  }
+ ]
+}

@@ -1,0 +1,743 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "philosophies.md",
+ "pointers": [
+  {
+   "pointer": "docs/misc/design-philosophies.txt",
+   "line": 7,
+   "sentence": "Django's design philosophies are a page of its documentation naming the principles it is built by: loose coupling, less code, quick development, don't repeat yourself, explicit over implicit, consistency, and principles of their own for the models, the database API, URLs, templates, views and the cache (`docs/misc/design-philosophies.txt`).",
+   "tree": "django",
+   "path": "docs/misc/design-philosophies.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    327
+   ],
+   "fingerprint": "0effcf850ac82c7a"
+  },
+  {
+   "pointer": "docs/faq/general.txt",
+   "line": 11,
+   "sentence": "So model, template and view: \"MTV\" (`docs/faq/general.txt`).",
+   "tree": "django",
+   "path": "docs/faq/general.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    233
+   ],
+   "fingerprint": "8bba3b77b3922154"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 11,
+   "sentence": "In the code that machinery is the handler, whose centre resolves the path and calls the view (`django/core/handlers/base.py:BaseHandler._get_response`; [Handlers and middleware](../handlers.md)).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
+   "lines": [
+    176,
+    228
+   ],
+   "fingerprint": "8a7faacfec18a9da"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 17,
+   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`).",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/template/response.py:SimpleTemplateResponse",
+   "line": 17,
+   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`).",
+   "tree": "django",
+   "path": "django/template/response.py",
+   "symbol": "SimpleTemplateResponse",
+   "kind": "class",
+   "lines": [
+    10,
+    144
+   ],
+   "fingerprint": "2cc51481d854ce65"
+  },
+  {
+   "pointer": "django/template/context.py:RequestContext",
+   "line": 17,
+   "sentence": "A request reaches templates all the same, without an import: `RequestContext` holds one and hands it to every **context processor**, a callable that returns variables for the template from the request (`django/template/context.py:RequestContext`).",
+   "tree": "django",
+   "path": "django/template/context.py",
+   "symbol": "RequestContext",
+   "kind": "class",
+   "lines": [
+    224,
+    287
+   ],
+   "fingerprint": "6d8b2bf24ee62c6f"
+  },
+  {
+   "pointer": "django/db/",
+   "line": 19,
+   "sentence": "`django/db/` imports nothing from the template system, `django/http/` or the views, but its model fields import `django.forms`, so that each can make its own form field (`django/db/models/fields/__init__.py:Field.formfield`).",
+   "tree": "django",
+   "path": "django/db/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4e2db64ef98336f9"
+  },
+  {
+   "pointer": "django/http/",
+   "line": 19,
+   "sentence": "`django/db/` imports nothing from the template system, `django/http/` or the views, but its model fields import `django.forms`, so that each can make its own form field (`django/db/models/fields/__init__.py:Field.formfield`).",
+   "tree": "django",
+   "path": "django/http/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "00f269dd200238e2"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.formfield",
+   "line": 19,
+   "sentence": "`django/db/` imports nothing from the template system, `django/http/` or the views, but its model fields import `django.forms`, so that each can make its own form field (`django/db/models/fields/__init__.py:Field.formfield`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.formfield",
+   "kind": "function",
+   "lines": [
+    1143,
+    1190
+   ],
+   "fingerprint": "24859070081d7deb"
+  },
+  {
+   "pointer": "django/template/loader.py:get_template",
+   "line": 21,
+   "sentence": "The `render` shortcut and `TemplateResponse` ask each engine in `TEMPLATES` in turn, so a view works the same over a Jinja2 backend (`django/template/loader.py:get_template`).",
+   "tree": "django",
+   "path": "django/template/loader.py",
+   "symbol": "get_template",
+   "kind": "function",
+   "lines": [
+    5,
+    19
+   ],
+   "fingerprint": "b33402ea8c09d58e"
+  },
+  {
+   "pointer": "django/template/engine.py:Engine",
+   "line": 21,
+   "sentence": "Some of Django's own pages are the exception, among them the debug pages and the fallback when no `\"404.html\"` is found: each is rendered by an `Engine` (`django/template/engine.py:Engine`) made in the code, in the Django template language whatever `TEMPLATES` names (`django/views/debug.py:DEBUG_ENGINE`).",
+   "tree": "django",
+   "path": "django/template/engine.py",
+   "symbol": "Engine",
+   "kind": "class",
+   "lines": [
+    13,
+    234
+   ],
+   "fingerprint": "f1ba0c186599665f"
+  },
+  {
+   "pointer": "django/views/debug.py:DEBUG_ENGINE",
+   "line": 21,
+   "sentence": "Some of Django's own pages are the exception, among them the debug pages and the fallback when no `\"404.html\"` is found: each is rendered by an `Engine` (`django/template/engine.py:Engine`) made in the code, in the Django template language whatever `TEMPLATES` names (`django/views/debug.py:DEBUG_ENGINE`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "DEBUG_ENGINE",
+   "kind": "assignment",
+   "lines": [
+    28,
+    31
+   ],
+   "fingerprint": "c64095f71cbe722f"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase.__new__",
+   "line": 27,
+   "sentence": "A model is a class statement, and `ModelBase.__new__` reads it: it collects the fields, reads the inner `Meta`, and builds the `Options` kept as `Model._meta` (`django/db/models/base.py:ModelBase.__new__`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase.__new__",
+   "kind": "function",
+   "lines": [
+    105,
+    397
+   ],
+   "fingerprint": "0088098d570317e1"
+  },
+  {
+   "pointer": "django/forms/models.py:fields_for_model",
+   "line": 27,
+   "sentence": "A `ModelForm` gets its fields by asking each model field for its form field (`django/forms/models.py:fields_for_model`), and the admin does the same through a hook of its own (`django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield`): a registered model has an editing interface without a line of form code, which is \"quick development\" at its plainest.",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "fields_for_model",
+   "kind": "function",
+   "lines": [
+    141,
+    257
+   ],
+   "fingerprint": "5803f69eae6b47c7"
+  },
+  {
+   "pointer": "django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield",
+   "line": 27,
+   "sentence": "A `ModelForm` gets its fields by asking each model field for its form field (`django/forms/models.py:fields_for_model`), and the admin does the same through a hook of its own (`django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield`): a registered model has an editing interface without a line of form code, which is \"quick development\" at its plainest.",
+   "tree": "django",
+   "path": "django/contrib/admin/options.py",
+   "symbol": "BaseModelAdmin.formfield_for_dbfield",
+   "kind": "function",
+   "lines": [
+    213,
+    283
+   ],
+   "fingerprint": "2fb87faa277cdc9f"
+  },
+  {
+   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector",
+   "line": 27,
+   "sentence": "The schema is written twice, the second time by a program: makemigrations compares the models with the state the existing migration files describe and writes the difference as new files (`django/db/migrations/autodetector.py:MigrationAutodetector`), so the second copy is a history of the models' changes, file by file.",
+   "tree": "django",
+   "path": "django/db/migrations/autodetector.py",
+   "symbol": "MigrationAutodetector",
+   "kind": "class",
+   "lines": [
+    42,
+    2050
+   ],
+   "fingerprint": "68f489757fe92a8d"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options",
+   "line": 29,
+   "sentence": "An instance holds its row's values as attributes and writes itself with `Model.save`; its class holds the human-readable name and the default ordering in `Meta` (`django/db/models/options.py:Options`; [Models and fields](../models.md)).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options",
+   "kind": "class",
+   "lines": [
+    90,
+    1052
+   ],
+   "fingerprint": "53c718b2cb5253fa"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.__init__",
+   "line": 33,
+   "sentence": "Nor does one: whether a field is the primary key, may be null or must be unique is given to it as an argument (`django/db/models/fields/__init__.py:Field.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.__init__",
+   "kind": "function",
+   "lines": [
+    220,
+    280
+   ],
+   "fingerprint": "f276ecc01c0ac167"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options._prepare",
+   "line": 35,
+   "sentence": "A model that declares no primary key, and has no parent to take one from, is given a field called `\"id\"`, of the class `DEFAULT_AUTO_FIELD` names unless its application's `AppConfig.default_auto_field` names another (`django/db/models/options.py:Options._prepare`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options._prepare",
+   "kind": "function",
+   "lines": [
+    292,
+    334
+   ],
+   "fingerprint": "e9369c2bd16f7c86"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelBase._prepare",
+   "line": 35,
+   "sentence": "One that has no manager, its own or inherited, is given a manager called `\"objects\"` (`django/db/models/base.py:ModelBase._prepare`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase._prepare",
+   "kind": "function",
+   "lines": [
+    405,
+    458
+   ],
+   "fingerprint": "f8e5007832b262d0"
+  },
+  {
+   "pointer": "django/db/models/fields/__init__.py:Field.contribute_to_class",
+   "line": 35,
+   "sentence": "A field with choices gives its model a method named after the field, get_status_display for a field called status (`django/db/models/fields/__init__.py:Field.contribute_to_class`).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field.contribute_to_class",
+   "kind": "function",
+   "lines": [
+    985,
+    1007
+   ],
+   "fingerprint": "04ce48f3125a21ba"
+  },
+  {
+   "pointer": "django/db/models/fields/reverse_related.py:ForeignObjectRel.get_accessor_name",
+   "line": 35,
+   "sentence": "A foreign key puts on the model at its other end an accessor named after the first model, with \"_set\" after it (`django/db/models/fields/reverse_related.py:ForeignObjectRel.get_accessor_name`).",
+   "tree": "django",
+   "path": "django/db/models/fields/reverse_related.py",
+   "symbol": "ForeignObjectRel.get_accessor_name",
+   "kind": "function",
+   "lines": [
+    214,
+    230
+   ],
+   "fingerprint": "65d46b59bb056a65"
+  },
+  {
+   "pointer": "django/test/utils.py:setup_test_environment",
+   "line": 37,
+   "sentence": "The documentation calls one mechanism \"black magic\" in so many words: to record which templates a view rendered, the test environment replaces `Template._render` with a function that sends `template_rendered` (`django/test/utils.py:setup_test_environment`), a patching that \"only happens during test running\" (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "setup_test_environment",
+   "kind": "function",
+   "lines": [
+    120,
+    164
+   ],
+   "fingerprint": "fe1cc481eddb9aad"
+  },
+  {
+   "pointer": "docs/topics/testing/tools.txt",
+   "line": 37,
+   "sentence": "The documentation calls one mechanism \"black magic\" in so many words: to record which templates a view rendered, the test environment replaces `Template._render` with a function that sends `template_rendered` (`django/test/utils.py:setup_test_environment`), a patching that \"only happens during test running\" (`docs/topics/testing/tools.txt`).",
+   "tree": "django",
+   "path": "docs/topics/testing/tools.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2204
+   ],
+   "fingerprint": "43873ca13283782a"
+  },
+  {
+   "pointer": "docs/internals/git.txt",
+   "line": 39,
+   "sentence": "Django 0.95, released in July 2006, merged a branch called magic-removal, \"a major refactoring of both the internals and public APIs of Django's object-relational mapper\" (`docs/internals/git.txt`).",
+   "tree": "django",
+   "path": "docs/internals/git.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    225
+   ],
+   "fingerprint": "e62c8f133114fce3"
+  },
+  {
+   "pointer": "docs/releases/0.95.txt",
+   "line": 39,
+   "sentence": "With 0.95, an application's models stayed in the module that defined them, where before they were \"magically transferred\" into one namespace of Django's, and a model overrode `save` and `delete` where before it hooked into methods called pre_save and post_save (`docs/releases/0.95.txt`).",
+   "tree": "django",
+   "path": "docs/releases/0.95.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    122
+   ],
+   "fingerprint": "be442d7a0d52da03"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.save",
+   "line": 43,
+   "sentence": "Setting an attribute changes only the instance; nothing is written until `Model.save` is called, \"rather than the framework saving things behind the scenes silently\" (`django/db/models/base.py:Model.save`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.save",
+   "kind": "function",
+   "lines": [
+    847,
+    915
+   ],
+   "fingerprint": "8403ee1903e1064e"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._fetch_all",
+   "line": 43,
+   "sentence": "A queryset sends nothing while it is built, runs its query when its results are first needed, and keeps them (`django/db/models/query.py:QuerySet._fetch_all`; [QuerySets](../querysets.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._fetch_all",
+   "kind": "function",
+   "lines": [
+    2326,
+    2330
+   ],
+   "fingerprint": "8b80eba4532fba23"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__get__",
+   "line": 45,
+   "sentence": "Reading a foreign key whose object is not loaded sends a query for that one object, so a loop that reads it from many instances sends a query for each (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__get__`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "ForwardManyToOneDescriptor.__get__",
+   "kind": "function",
+   "lines": [
+    234,
+    277
+   ],
+   "fingerprint": "f9bf8f5d72628ab6"
+  },
+  {
+   "pointer": "django/db/models/fetch_modes.py",
+   "line": 45,
+   "sentence": "Another, `FETCH_PEERS`, the \"optional performance booster\" of \"SQL efficiency\", fetches the object for every instance the same queryset produced, in one query (`django/db/models/fetch_modes.py`; [Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).",
+   "tree": "django",
+   "path": "django/db/models/fetch_modes.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    61
+   ],
+   "fingerprint": "f9db293407877ac3"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.setup_joins",
+   "line": 47,
+   "sentence": "\"Terse, powerful syntax\": the double underscores of a keyword argument name a path through relations, and `Query.setup_joins` turns it into joins (`django/db/models/sql/query.py:Query.setup_joins`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.setup_joins",
+   "kind": "function",
+   "lines": [
+    1898,
+    2013
+   ],
+   "fingerprint": "03a5136e0ffb24f1"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.raw",
+   "line": 49,
+   "sentence": "The \"option to drop into raw SQL easily\" is a call away: `QuerySet.raw` maps the rows of an SQL query onto instances (`django/db/models/query.py:QuerySet.raw`), `RawSQL` puts a fragment in an expression, and the connection's cursor runs anything (`django/db/backends/base/base.py:BaseDatabaseWrapper.cursor`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.raw",
+   "kind": "function",
+   "lines": [
+    1560,
+    1572
+   ],
+   "fingerprint": "53a4b0aef8fe90a3"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.cursor",
+   "line": 49,
+   "sentence": "The \"option to drop into raw SQL easily\" is a call away: `QuerySet.raw` maps the rows of an SQL query onto instances (`django/db/models/query.py:QuerySet.raw`), `RawSQL` puts a fragment in an expression, and the connection's cursor runs anything (`django/db/backends/base/base.py:BaseDatabaseWrapper.cursor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.cursor",
+   "kind": "function",
+   "lines": [
+    317,
+    320
+   ],
+   "at": 318,
+   "fingerprint": "e0ac61a7eb8adfd4"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 53,
+   "sentence": "A URLconf maps a route to a callable, and code that needs a URL asks for it by the pattern's name: `reverse` walks the resolver back from the name to a path (`django/urls/base.py:reverse`; [URL routing](../urls.md)).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/urls/conf.py:include",
+   "line": 53,
+   "sentence": "`include` mounts an application's patterns under any prefix, and an instance namespace lets a URL be reversed in either of two mounts of one application (`django/urls/conf.py:include`). \"Definitive URLs\" asks Django to \"normalize\" URLs, since search-engine robots would treat a path with and without a trailing slash as separate pages.",
+   "tree": "django",
+   "path": "django/urls/conf.py",
+   "symbol": "include",
+   "kind": "function",
+   "lines": [
+    17,
+    59
+   ],
+   "fingerprint": "dbdde8addf1e3a34"
+  },
+  {
+   "pointer": "django/middleware/common.py:CommonMiddleware.should_redirect_with_slash",
+   "line": 53,
+   "sentence": "Its answer is the `APPEND_SLASH` setting: when a path without a trailing slash matches no pattern and has produced a 404, and the path with one would resolve to a view not marked `no_append_slash`, `CommonMiddleware` redirects to it (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`).",
+   "tree": "django",
+   "path": "django/middleware/common.py",
+   "symbol": "CommonMiddleware.should_redirect_with_slash",
+   "kind": "function",
+   "lines": [
+    63,
+    75
+   ],
+   "fingerprint": "cef28aef1cb723b0"
+  },
+  {
+   "pointer": "django/template/base.py:Lexer.tokenize",
+   "line": 57,
+   "sentence": "The lexer splits it into text, variables, tags and comments (`django/template/base.py:Lexer.tokenize`; [Templates](../templates.md)); a tag is a name looked up among the registered libraries; a variable is a dotted path, and a callable met on the path is never given arguments: a template can call `BaseManager.all` but cannot pass a method anything (`django/template/base.py:Variable._resolve_lookup`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Lexer.tokenize",
+   "kind": "function",
+   "lines": [
+    419,
+    431
+   ],
+   "fingerprint": "abb81f5f83dbb4ef"
+  },
+  {
+   "pointer": "django/template/base.py:Variable._resolve_lookup",
+   "line": 57,
+   "sentence": "The lexer splits it into text, variables, tags and comments (`django/template/base.py:Lexer.tokenize`; [Templates](../templates.md)); a tag is a name looked up among the registered libraries; a variable is a dotted path, and a callable met on the path is never given arguments: a template can call `BaseManager.all` but cannot pass a method anything (`django/template/base.py:Variable._resolve_lookup`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Variable._resolve_lookup",
+   "kind": "function",
+   "lines": [
+    965,
+    1045
+   ],
+   "fingerprint": "e7f5c1cb99dd5024"
+  },
+  {
+   "pointer": "django/db/models/utils.py:AltersData",
+   "line": 59,
+   "sentence": "The database layer sets the flag on its own writes, `Model.save`, `QuerySet.delete`, `QuerySet.update` and the related managers', and the mixin `AltersData` carries it onto a subclass's override (`django/db/models/utils.py:AltersData`).",
+   "tree": "django",
+   "path": "django/db/models/utils.py",
+   "symbol": "AltersData",
+   "kind": "class",
+   "lines": [
+    55,
+    69
+   ],
+   "fingerprint": "a6f5470d5e20f2b7"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:ForNode.render",
+   "line": 59,
+   "sentence": "Reading is allowed: a `{% for %}` over a queryset takes its length, which runs the query (`django/template/defaulttags.py:ForNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "ForNode.render",
+   "kind": "function",
+   "lines": [
+    191,
+    256
+   ],
+   "fingerprint": "baec01f8c0647928"
+  },
+  {
+   "pointer": "django/template/loader_tags.py:ExtendsNode",
+   "line": 61,
+   "sentence": "Inheritance, against redundancy, is `{% extends %}` (`django/template/loader_tags.py:ExtendsNode`).",
+   "tree": "django",
+   "path": "django/template/loader_tags.py",
+   "symbol": "ExtendsNode",
+   "kind": "class",
+   "lines": [
+    86,
+    160
+   ],
+   "fingerprint": "ce6e0ca9add18e9f"
+  },
+  {
+   "pointer": "django/template/library.py:Library",
+   "line": 61,
+   "sentence": "Custom tags and filters, the \"extensibility\", are Python registered in a `Library` (`django/template/library.py:Library`). \"Be decoupled from HTML\" is half kept: the engine renders any text, but its autoescaping, on by default, is HTML's, so a `\"<\"` in a value comes out as an entity unless the value is marked safe or autoescaping is turned off (`django/template/base.py:render_value_in_context`).",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library",
+   "kind": "class",
+   "lines": [
+    17,
+    310
+   ],
+   "fingerprint": "8a6ead2e397db946"
+  },
+  {
+   "pointer": "django/template/base.py:render_value_in_context",
+   "line": 61,
+   "sentence": "Custom tags and filters, the \"extensibility\", are Python registered in a `Library` (`django/template/library.py:Library`). \"Be decoupled from HTML\" is half kept: the engine renders any text, but its autoescaping, on by default, is HTML's, so a `\"<\"` in a value comes out as an entity unless the value is marked safe or autoescaping is turned off (`django/template/base.py:render_value_in_context`).",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "render_value_in_context",
+   "kind": "function",
+   "lines": [
+    1140,
+    1153
+   ],
+   "fingerprint": "91ac09cc182b2d7b"
+  },
+  {
+   "pointer": "django/views/generic/base.py:View.as_view",
+   "line": 65,
+   "sentence": "A class-based view enters the URLconf as the function `View.as_view` returns, which makes an instance for each request and calls `View.dispatch` (`django/views/generic/base.py:View.as_view`; [Views](../views.md)).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.as_view",
+   "kind": "function",
+   "lines": [
+    81,
+    124
+   ],
+   "at": 82,
+   "fingerprint": "2cb7c2fdb4ae4ca3"
+  },
+  {
+   "pointer": "django/test/client.py:RequestFactory",
+   "line": 65,
+   "sentence": "The request is an argument, not a global, so a test can build one with `RequestFactory` and call a view directly (`django/test/client.py:RequestFactory`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "RequestFactory",
+   "kind": "class",
+   "lines": [
+    373,
+    674
+   ],
+   "fingerprint": "6df1bc9241f324ac"
+  },
+  {
+   "pointer": "django/urls/base.py:set_urlconf",
+   "line": 65,
+   "sentence": "What Django derives from the request is another matter: the active language, the URLconf and the **script prefix**, the path at which the project is mounted, are kept in state local to the thread or task serving it, set by the handler and the middleware, and read by `gettext` and `reverse` without the request (`django/urls/base.py:set_urlconf`, `django/utils/translation/trans_real.py:activate`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "set_urlconf",
+   "kind": "function",
+   "lines": [
+    148,
+    158
+   ],
+   "fingerprint": "66cf34bc3bb8bfe5"
+  },
+  {
+   "pointer": "django/utils/translation/trans_real.py:activate",
+   "line": 65,
+   "sentence": "What Django derives from the request is another matter: the active language, the URLconf and the **script prefix**, the path at which the project is mounted, are kept in state local to the thread or task serving it, set by the handler and the middleware, and read by `gettext` and `reverse` without the request (`django/urls/base.py:set_urlconf`, `django/utils/translation/trans_real.py:activate`).",
+   "tree": "django",
+   "path": "django/utils/translation/trans_real.py",
+   "symbol": "activate",
+   "kind": "function",
+   "lines": [
+    299,
+    306
+   ],
+   "fingerprint": "77447792dc39b0bd"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 67,
+   "sentence": "`GET` is the parsed query string, whatever the method; `POST` is the parsed form body of a \"POST\" request and empty for any other method (`django/http/request.py:HttpRequest._load_post_and_files`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
+   "pointer": "django/views/decorators/http.py:require_http_methods",
+   "line": 67,
+   "sentence": "`View.dispatch` sends each method in `View.http_method_names` to the view's method of that name in lower case, and `require_http_methods` answers a method not listed with a 405 (`django/views/decorators/http.py:require_http_methods`).",
+   "tree": "django",
+   "path": "django/views/decorators/http.py",
+   "symbol": "require_http_methods",
+   "kind": "function",
+   "lines": [
+    20,
+    67
+   ],
+   "fingerprint": "e88b294b424f07ee"
+  },
+  {
+   "pointer": "django/utils/connection.py:ConnectionProxy",
+   "line": 71,
+   "sentence": "`cache` is a proxy that hands each attribute to the backend of the default alias (`django/utils/connection.py:ConnectionProxy`), so its `get` is the backend's own method: `BaseCache.get` only raises `NotImplementedError`, and the local-memory backend's makes the key and reads its store (`django/core/cache/backends/locmem.py:LocMemCache.get`; [Caching, files, mail, signals and tasks](../services.md)).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "ConnectionProxy",
+   "kind": "class",
+   "lines": [
+    7,
+    27
+   ],
+   "fingerprint": "608ab426ee5e8883"
+  },
+  {
+   "pointer": "django/core/cache/backends/locmem.py:LocMemCache.get",
+   "line": 71,
+   "sentence": "`cache` is a proxy that hands each attribute to the backend of the default alias (`django/utils/connection.py:ConnectionProxy`), so its `get` is the backend's own method: `BaseCache.get` only raises `NotImplementedError`, and the local-memory backend's makes the key and reads its store (`django/core/cache/backends/locmem.py:LocMemCache.get`; [Caching, files, mail, signals and tasks](../services.md)).",
+   "tree": "django",
+   "path": "django/core/cache/backends/locmem.py",
+   "symbol": "LocMemCache.get",
+   "kind": "function",
+   "lines": [
+    35,
+    43
+   ],
+   "fingerprint": "8294a56a46beb808"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:BaseCache",
+   "line": 71,
+   "sentence": "Consistency is that every backend Django ships is a `BaseCache` (`django/core/cache/backends/base.py:BaseCache`); extensibility, that `\"KEY_FUNCTION\"` replaces the function that makes a key (`django/core/cache/backends/base.py:get_key_func`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "BaseCache",
+   "kind": "class",
+   "lines": [
+    58,
+    418
+   ],
+   "fingerprint": "adbdf2723191e18c"
+  },
+  {
+   "pointer": "django/core/cache/backends/base.py:get_key_func",
+   "line": 71,
+   "sentence": "Consistency is that every backend Django ships is a `BaseCache` (`django/core/cache/backends/base.py:BaseCache`); extensibility, that `\"KEY_FUNCTION\"` replaces the function that makes a key (`django/core/cache/backends/base.py:get_key_func`).",
+   "tree": "django",
+   "path": "django/core/cache/backends/base.py",
+   "symbol": "get_key_func",
+   "kind": "function",
+   "lines": [
+    44,
+    55
+   ],
+   "fingerprint": "826028ab97436577"
+  }
+ ]
+}

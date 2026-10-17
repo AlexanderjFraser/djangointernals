@@ -51,7 +51,7 @@ The handler itself therefore never closes a database connection. Connections tha
 
 ## An ASGI request
 
-An ASGI server calls its application once for each request, with a dictionary called the scope and two coroutines, one to receive messages and one to send them. `ASGIHandler.__call__` accepts only a scope of the type `"http"` and raises `ValueError` for any other, a WebSocket included. It then runs `ASGIHandler.handle` inside a `ThreadSensitiveContext`. That class comes from asgiref, the library of adapters between synchronous and asynchronous code that Django depends on, and its effect is that the synchronous code of this request's middleware and view runs on a thread of the request's own (`django/core/handlers/asgi.py:ASGIHandler.__call__`, `asgiref:asgiref/sync.py:ThreadSensitiveContext`).
+An ASGI server calls its application once for each request, with a dictionary called the scope and two awaitable callables, one to receive messages and one to send them. `ASGIHandler.__call__` accepts only a scope of the type `"http"` and raises `ValueError` for any other, a WebSocket included. It then runs `ASGIHandler.handle` inside a `ThreadSensitiveContext`. That class comes from asgiref, the library of adapters between synchronous and asynchronous code that Django depends on, and its effect is that the synchronous code of this request's middleware and view runs on a thread of the request's own (`django/core/handlers/asgi.py:ASGIHandler.__call__`, `asgiref:asgiref/sync.py:ThreadSensitiveContext`).
 
 `ASGIHandler.handle` then does what the WSGI handler does, with these differences (`django/core/handlers/asgi.py:ASGIHandler.handle`).
 

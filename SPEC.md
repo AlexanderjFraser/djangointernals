@@ -181,13 +181,16 @@ A code span holds a name of the source, a pointer, or code.
 A pointer says where in the source a passage's subject is. It is written in
 a code span as `path:Symbol`: the path from the tree's root, a colon, the
 symbol dotted from module level. A bare path is a whole file; a final
-slash, a directory; a library's tree is named first.
+slash, a directory; a library's tree is named first, and so is the tree of
+a file at its root, which has no slash to be known by.
 
 ```
 django/core/handlers/base.py:BaseHandler.load_middleware
 django/conf/global_settings.py
 django/core/handlers/
 asgiref:asgiref/sync.py:sync_to_async
+django:LICENSE
+deps:accepted/0009-async.rst
 ```
 
 - **A pointer follows what it supports, in parentheses**, before the full
