@@ -10,7 +10,7 @@
   {
    "pointer": "django/shortcuts.py:render",
    "line": 9,
-   "sentence": "The view's second line is `render`, a shortcut of two lines itself: it calls `render_to_string` with the template's name, the context dictionary and the request, and wraps the string it gets in an `HttpResponse` (`django/shortcuts.py:render`).",
+   "sentence": "The view's second line is `render`, which calls `render_to_string` with the template's name, the context dictionary and the request, and wraps the string in an `HttpResponse` (`django/shortcuts.py:render`).",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": "render",
@@ -22,37 +22,9 @@
    "fingerprint": "90d0e7c66cc3732f"
   },
   {
-   "pointer": "django/template/base.py",
-   "line": 71,
-   "sentence": "The engine's, in `django/template/base.py`, is the compiled template, which renders; the backend's, in `django/template/backends/django.py`, is a thin wrapper around it that `get_template` returns and whose `render` makes the context (`django/template/base.py:Template`, `django/template/backends/django.py:Template`).",
-   "tree": "django",
-   "path": "django/template/base.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1224
-   ],
-   "fingerprint": "8081c7be906f9c15"
-  },
-  {
-   "pointer": "django/template/backends/django.py",
-   "line": 71,
-   "sentence": "The engine's, in `django/template/base.py`, is the compiled template, which renders; the backend's, in `django/template/backends/django.py`, is a thin wrapper around it that `get_template` returns and whose `render` makes the context (`django/template/base.py:Template`, `django/template/backends/django.py:Template`).",
-   "tree": "django",
-   "path": "django/template/backends/django.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    182
-   ],
-   "fingerprint": "c1b394853550cb3d"
-  },
-  {
    "pointer": "django/template/base.py:Template",
-   "line": 71,
-   "sentence": "The engine's, in `django/template/base.py`, is the compiled template, which renders; the backend's, in `django/template/backends/django.py`, is a thin wrapper around it that `get_template` returns and whose `render` makes the context (`django/template/base.py:Template`, `django/template/backends/django.py:Template`).",
+   "line": 54,
+   "sentence": "Two classes in it are called `Template`: the engine's is the compiled template, which renders, and the backend's is the thin wrapper around it that `get_template` returns, whose `render` makes the context (`django/template/base.py:Template`, `django/template/backends/django.py:Template`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Template",
@@ -65,8 +37,8 @@
   },
   {
    "pointer": "django/template/backends/django.py:Template",
-   "line": 71,
-   "sentence": "The engine's, in `django/template/base.py`, is the compiled template, which renders; the backend's, in `django/template/backends/django.py`, is a thin wrapper around it that `get_template` returns and whose `render` makes the context (`django/template/base.py:Template`, `django/template/backends/django.py:Template`).",
+   "line": 54,
+   "sentence": "Two classes in it are called `Template`: the engine's is the compiled template, which renders, and the backend's is the thin wrapper around it that `get_template` returns, whose `render` makes the context (`django/template/base.py:Template`, `django/template/backends/django.py:Template`).",
    "tree": "django",
    "path": "django/template/backends/django.py",
    "symbol": "Template",
@@ -79,8 +51,8 @@
   },
   {
    "pointer": "django/template/loader.py:get_template",
-   "line": 75,
-   "sentence": "`get_template` asks each configured engine in turn for the template, and returns the first that has it; an engine that does not raises `TemplateDoesNotExist`, and the exceptions are chained onto the one raised when none has it (`django/template/loader.py:get_template`).",
+   "line": 58,
+   "sentence": "`get_template` asks each configured engine in turn for the template, and returns the first that has it (`django/template/loader.py:get_template`).",
    "tree": "django",
    "path": "django/template/loader.py",
    "symbol": "get_template",
@@ -93,8 +65,8 @@
   },
   {
    "pointer": "django/template/utils.py:EngineHandler.templates",
-   "line": 75,
-   "sentence": "Its first use reads `settings.TEMPLATES`, gives each entry an alias, by default the second-last part of its backend's dotted path, `django` for Django's own, and then makes each engine on demand: `EngineHandler.__getitem__` imports the backend class and instantiates it with the rest of the entry, and keeps the instance for the life of the process (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).",
+   "line": 58,
+   "sentence": "`EngineHandler.__getitem__` makes an engine the first time its alias, here `\"django\"`, is asked for: it imports the backend class, calls it with the rest of the entry, and keeps the instance for the life of the process (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).",
    "tree": "django",
    "path": "django/template/utils.py",
    "symbol": "EngineHandler.templates",
@@ -108,8 +80,8 @@
   },
   {
    "pointer": "django/template/utils.py:EngineHandler.__getitem__",
-   "line": 75,
-   "sentence": "Its first use reads `settings.TEMPLATES`, gives each entry an alias, by default the second-last part of its backend's dotted path, `django` for Django's own, and then makes each engine on demand: `EngineHandler.__getitem__` imports the backend class and instantiates it with the rest of the entry, and keeps the instance for the life of the process (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).",
+   "line": 58,
+   "sentence": "`EngineHandler.__getitem__` makes an engine the first time its alias, here `\"django\"`, is asked for: it imports the backend class, calls it with the rest of the entry, and keeps the instance for the life of the process (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).",
    "tree": "django",
    "path": "django/template/utils.py",
    "symbol": "EngineHandler.__getitem__",
@@ -121,19 +93,9 @@
    "fingerprint": "fb1491113fd312c3"
   },
   {
-   "pointer": "django/templatetags/",
-   "line": 77,
-   "sentence": "`DjangoTemplates.__init__` fills in the options a project left out, autoescaping on and debugging as `settings.DEBUG` has it, and then collects the template tag libraries: `get_installed_libraries` imports Django's own `django/templatetags/` and the package named `\"templatetags\"` of every installed application, with every module in them, and keeps the modules that have a `\"register\"`, which is why making the engine imports the admin's tag libraries, for a page that uses none of them (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/backends/django.py:get_installed_libraries`).",
-   "tree": "django",
-   "path": "django/templatetags/",
-   "symbol": null,
-   "kind": "directory",
-   "fingerprint": "86e5995bb90e4f86"
-  },
-  {
    "pointer": "django/template/backends/django.py:DjangoTemplates.__init__",
-   "line": 77,
-   "sentence": "`DjangoTemplates.__init__` fills in the options a project left out, autoescaping on and debugging as `settings.DEBUG` has it, and then collects the template tag libraries: `get_installed_libraries` imports Django's own `django/templatetags/` and the package named `\"templatetags\"` of every installed application, with every module in them, and keeps the modules that have a `\"register\"`, which is why making the engine imports the admin's tag libraries, for a page that uses none of them (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/backends/django.py:get_installed_libraries`).",
+   "line": 60,
+   "sentence": "`DjangoTemplates.__init__` fills in the options a project left out, autoescaping on among them, collects the template tag libraries, and makes the `Engine`, which holds the directories, the loaders and the libraries (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/engine.py:Engine.__init__`).",
    "tree": "django",
    "path": "django/template/backends/django.py",
    "symbol": "DjangoTemplates.__init__",
@@ -145,23 +107,9 @@
    "fingerprint": "7038b81e8184db54"
   },
   {
-   "pointer": "django/template/backends/django.py:get_installed_libraries",
-   "line": 77,
-   "sentence": "`DjangoTemplates.__init__` fills in the options a project left out, autoescaping on and debugging as `settings.DEBUG` has it, and then collects the template tag libraries: `get_installed_libraries` imports Django's own `django/templatetags/` and the package named `\"templatetags\"` of every installed application, with every module in them, and keeps the modules that have a `\"register\"`, which is why making the engine imports the admin's tag libraries, for a page that uses none of them (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/backends/django.py:get_installed_libraries`).",
-   "tree": "django",
-   "path": "django/template/backends/django.py",
-   "symbol": "get_installed_libraries",
-   "kind": "function",
-   "lines": [
-    155,
-    164
-   ],
-   "fingerprint": "34cdf5a5ed315ba3"
-  },
-  {
    "pointer": "django/template/engine.py:Engine.__init__",
-   "line": 77,
-   "sentence": "It then makes the `Engine`, the object that holds the directories, the loaders, the libraries and the three builtin libraries every template may use without loading them (`django/template/engine.py:Engine.__init__`).",
+   "line": 60,
+   "sentence": "`DjangoTemplates.__init__` fills in the options a project left out, autoescaping on among them, collects the template tag libraries, and makes the `Engine`, which holds the directories, the loaders and the libraries (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/engine.py:Engine.__init__`).",
    "tree": "django",
    "path": "django/template/engine.py",
    "symbol": "Engine.__init__",
@@ -173,9 +121,47 @@
    "fingerprint": "3f85ac396a1880be"
   },
   {
+   "pointer": "django/templatetags/",
+   "line": 62,
+   "sentence": "To collect the tag libraries, making the engine imports every module of Django's own `django/templatetags/` and of each installed application's package named `\"templatetags\"`, whether or not a template loads it.",
+   "tree": "django",
+   "path": "django/templatetags/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "86e5995bb90e4f86"
+  },
+  {
+   "pointer": "django/template/backends/django.py:get_installed_libraries",
+   "line": 62,
+   "sentence": "A module whose import raises `ImportError` makes `get_package_libraries` raise `InvalidTemplateLibrary`, and making the engine fails with it: a page that loads no library fails all the same (`django/template/backends/django.py:get_installed_libraries`, `django/template/backends/django.py:get_package_libraries`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "get_installed_libraries",
+   "kind": "function",
+   "lines": [
+    155,
+    164
+   ],
+   "fingerprint": "34cdf5a5ed315ba3"
+  },
+  {
+   "pointer": "django/template/backends/django.py:get_package_libraries",
+   "line": 62,
+   "sentence": "A module whose import raises `ImportError` makes `get_package_libraries` raise `InvalidTemplateLibrary`, and making the engine fails with it: a page that loads no library fails all the same (`django/template/backends/django.py:get_installed_libraries`, `django/template/backends/django.py:get_package_libraries`).",
+   "tree": "django",
+   "path": "django/template/backends/django.py",
+   "symbol": "get_package_libraries",
+   "kind": "function",
+   "lines": [
+    167,
+    182
+   ],
+   "fingerprint": "ba07835e7d176191"
+  },
+  {
    "pointer": "django/template/engine.py:Engine.find_template",
-   "line": 83,
-   "sentence": "`Engine.get_template` asks `Engine.find_template`, which tries each loader until one returns a template; the loaders themselves are made at the first call, by `Engine.template_loaders`, a property computed once by calling `Engine.get_template_loaders`; the cached loader's constructor calls the same method for its children, which is the nesting the recording shows (`django/template/engine.py:Engine.find_template`, `django/template/engine.py:Engine.template_loaders`).",
+   "line": 68,
+   "sentence": "The loaders are made at its first call and kept, by the property `Engine.template_loaders` (`django/template/engine.py:Engine.find_template`, `django/template/engine.py:Engine.template_loaders`).",
    "tree": "django",
    "path": "django/template/engine.py",
    "symbol": "Engine.find_template",
@@ -188,8 +174,8 @@
   },
   {
    "pointer": "django/template/engine.py:Engine.template_loaders",
-   "line": 83,
-   "sentence": "`Engine.get_template` asks `Engine.find_template`, which tries each loader until one returns a template; the loaders themselves are made at the first call, by `Engine.template_loaders`, a property computed once by calling `Engine.get_template_loaders`; the cached loader's constructor calls the same method for its children, which is the nesting the recording shows (`django/template/engine.py:Engine.find_template`, `django/template/engine.py:Engine.template_loaders`).",
+   "line": 68,
+   "sentence": "The loaders are made at its first call and kept, by the property `Engine.template_loaders` (`django/template/engine.py:Engine.find_template`, `django/template/engine.py:Engine.template_loaders`).",
    "tree": "django",
    "path": "django/template/engine.py",
    "symbol": "Engine.template_loaders",
@@ -203,8 +189,8 @@
   },
   {
    "pointer": "django/template/loaders/cached.py:Loader.get_template",
-   "line": 85,
-   "sentence": "The cached loader keeps a dictionary from a template's name, with the origins to skip when there are any, to the compiled template, or, for a template that does not exist, to the bare exception class when debugging is off and a copy of the exception when it is on; a name it has not seen it looks up with the method it inherits from the base loader (`django/template/loaders/cached.py:Loader.get_template`).",
+   "line": 68,
+   "sentence": "The cached loader keeps a dictionary from a template's name to the compiled template, and remembers a name no loader has as a miss (`django/template/loaders/cached.py:Loader.get_template`).",
    "tree": "django",
    "path": "django/template/loaders/cached.py",
    "symbol": "Loader.get_template",
@@ -217,8 +203,8 @@
   },
   {
    "pointer": "django/template/loaders/base.py:Loader.get_template",
-   "line": 85,
-   "sentence": "That lookup walks the origins the child loaders offer and opens each until one exists (`django/template/loaders/base.py:Loader.get_template`).",
+   "line": 68,
+   "sentence": "A name it has not seen it looks up with the method it inherits from the base loader, which walks the origins the child loaders offer and opens each until one exists (`django/template/loaders/base.py:Loader.get_template`).",
    "tree": "django",
    "path": "django/template/loaders/base.py",
    "symbol": "Loader.get_template",
@@ -231,8 +217,8 @@
   },
   {
    "pointer": "django/template/loaders/app_directories.py:Loader.get_dirs",
-   "line": 85,
-   "sentence": "The application-directories loader offers one per installed application that has a `templates` directory, in the order of `settings.INSTALLED_APPS`: the admin's, the auth application's, and then journal's, which is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`).",
+   "line": 70,
+   "sentence": "That is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`).",
    "tree": "django",
    "path": "django/template/loaders/app_directories.py",
    "symbol": "Loader.get_dirs",
@@ -245,8 +231,8 @@
   },
   {
    "pointer": "django/template/utils.py:get_app_template_dirs",
-   "line": 85,
-   "sentence": "The application-directories loader offers one per installed application that has a `templates` directory, in the order of `settings.INSTALLED_APPS`: the admin's, the auth application's, and then journal's, which is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`).",
+   "line": 70,
+   "sentence": "That is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`).",
    "tree": "django",
    "path": "django/template/utils.py",
    "symbol": "get_app_template_dirs",
@@ -260,8 +246,8 @@
   },
   {
    "pointer": "django/template/loaders/filesystem.py:Loader.get_contents",
-   "line": 85,
-   "sentence": "The application-directories loader offers one per installed application that has a `templates` directory, in the order of `settings.INSTALLED_APPS`: the admin's, the auth application's, and then journal's, which is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`).",
+   "line": 70,
+   "sentence": "That is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`).",
    "tree": "django",
    "path": "django/template/loaders/filesystem.py",
    "symbol": "Loader.get_contents",
@@ -274,8 +260,8 @@
   },
   {
    "pointer": "django/template/base.py",
-   "line": 89,
-   "sentence": "With the file's text in hand, the base loader makes a `Template` of `django/template/base.py`, and the constructor compiles it at once (`django/template/base.py:Template.__init__`).",
+   "line": 74,
+   "sentence": "With the file's text in hand, the base loader makes a `Template` of `django/template/base.py`, whose constructor compiles it at once (`django/template/base.py:Template.__init__`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": null,
@@ -288,8 +274,8 @@
   },
   {
    "pointer": "django/template/base.py:Template.__init__",
-   "line": 89,
-   "sentence": "With the file's text in hand, the base loader makes a `Template` of `django/template/base.py`, and the constructor compiles it at once (`django/template/base.py:Template.__init__`).",
+   "line": 74,
+   "sentence": "With the file's text in hand, the base loader makes a `Template` of `django/template/base.py`, whose constructor compiles it at once (`django/template/base.py:Template.__init__`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Template.__init__",
@@ -302,8 +288,8 @@
   },
   {
    "pointer": "django/template/base.py:Lexer.tokenize",
-   "line": 89,
-   "sentence": "`Lexer.tokenize` splits the source at every `{% %}`, `{{ }}` and `{# #}` into tokens of four kinds, text, variable, block and comment (`django/template/base.py:Lexer.tokenize`).",
+   "line": 74,
+   "sentence": "`Lexer.tokenize` splits the source into tokens, and `Parser.parse` turns them into nodes, handing each tag to the compile function registered for it (`django/template/base.py:Lexer.tokenize`, `django/template/base.py:Parser.parse`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Lexer.tokenize",
@@ -316,8 +302,8 @@
   },
   {
    "pointer": "django/template/base.py:Parser.parse",
-   "line": 89,
-   "sentence": "`Parser.parse` then turns the tokens into a list of nodes: a text token becomes a `TextNode`; a variable token is compiled into a `FilterExpression`, which resolves the filter names to their functions now and keeps a constant argument like `\"j F\"` as a value, and is held by a `VariableNode`; a block token's first word names a tag, and the compile function registered for that tag is called with the parser (`django/template/base.py:Parser.parse`, `django/template/base.py:FilterExpression.__init__`).",
+   "line": 74,
+   "sentence": "`Lexer.tokenize` splits the source into tokens, and `Parser.parse` turns them into nodes, handing each tag to the compile function registered for it (`django/template/base.py:Lexer.tokenize`, `django/template/base.py:Parser.parse`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Parser.parse",
@@ -329,23 +315,9 @@
    "fingerprint": "1209ee26f1f2fa8c"
   },
   {
-   "pointer": "django/template/base.py:FilterExpression.__init__",
-   "line": 89,
-   "sentence": "`Parser.parse` then turns the tokens into a list of nodes: a text token becomes a `TextNode`; a variable token is compiled into a `FilterExpression`, which resolves the filter names to their functions now and keeps a constant argument like `\"j F\"` as a value, and is held by a `VariableNode`; a block token's first word names a tag, and the compile function registered for that tag is called with the parser (`django/template/base.py:Parser.parse`, `django/template/base.py:FilterExpression.__init__`).",
-   "tree": "django",
-   "path": "django/template/base.py",
-   "symbol": "FilterExpression.__init__",
-   "kind": "function",
-   "lines": [
-    757,
-    801
-   ],
-   "fingerprint": "1adc503d8e9d9cb6"
-  },
-  {
    "pointer": "django/template/defaulttags.py:do_for",
-   "line": 89,
-   "sentence": "The function for `\"for\"`, `do_for`, parses the tag's words, then calls the parser again to collect the body up to `\"endfor\"` or `\"empty\"`, which is the inner `Parser.parse` in the recording, and returns a `ForNode` holding the loop variables, the sequence expression and the body (`django/template/defaulttags.py:do_for`).",
+   "line": 74,
+   "sentence": "The function for `\"for\"`, `do_for`, calls the parser again to collect the body up to `\"endfor\"` or `\"empty\"`, and returns a `ForNode` holding the loop variables, the sequence and the body (`django/template/defaulttags.py:do_for`).",
    "tree": "django",
    "path": "django/template/defaulttags.py",
    "symbol": "do_for",
@@ -359,8 +331,8 @@
   },
   {
    "pointer": "django/template/autoreload.py:reset_loaders",
-   "line": 91,
-   "sentence": "Under the development server a change to a template file clears it instead of restarting the process (`django/template/autoreload.py:reset_loaders`).",
+   "line": 76,
+   "sentence": "The cache lasts as long as the process, unless the development server clears it when a template file changes (`django/template/autoreload.py:reset_loaders`).",
    "tree": "django",
    "path": "django/template/autoreload.py",
    "symbol": "reset_loaders",
@@ -373,8 +345,8 @@
   },
   {
    "pointer": "django/template/backends/django.py:Template.render",
-   "line": 95,
-   "sentence": "It makes the context and renders (`django/template/backends/django.py:Template.render`).",
+   "line": 80,
+   "sentence": "A request was given, so it makes a `RequestContext` and pushes the view's dictionary on top of it (`django/template/backends/django.py:Template.render`, `django/template/context.py:make_context`).",
    "tree": "django",
    "path": "django/template/backends/django.py",
    "symbol": "Template.render",
@@ -387,8 +359,8 @@
   },
   {
    "pointer": "django/template/context.py:make_context",
-   "line": 95,
-   "sentence": "`make_context` makes a `RequestContext` because a request was given, and pushes the view's dictionary on top of it (`django/template/context.py:make_context`).",
+   "line": 80,
+   "sentence": "A request was given, so it makes a `RequestContext` and pushes the view's dictionary on top of it (`django/template/backends/django.py:Template.render`, `django/template/context.py:make_context`).",
    "tree": "django",
    "path": "django/template/context.py",
    "symbol": "make_context",
@@ -401,8 +373,8 @@
   },
   {
    "pointer": "django/template/context.py:RequestContext.__init__",
-   "line": 95,
-   "sentence": "A context is a stack of dictionaries, looked up from the top: the builtins `True`, `False` and `None` at the bottom, then an empty slot reserved for the context processors, then an empty dictionary for whatever is added later, then the view's dictionary, so that what the view passed wins over what a processor adds (`django/template/context.py:RequestContext.__init__`).",
+   "line": 80,
+   "sentence": "The view's dictionary sits above the slot `RequestContext.__init__` reserves for the context processors, so what the view passed wins over what a processor adds (`django/template/context.py:RequestContext.__init__`).",
    "tree": "django",
    "path": "django/template/context.py",
    "symbol": "RequestContext.__init__",
@@ -415,8 +387,8 @@
   },
   {
    "pointer": "django/template/base.py:Template.render",
-   "line": 97,
-   "sentence": "The engine's `Template.render` binds the template to the context, and binding is when the context processors run (`django/template/base.py:Template.render`, `django/template/context.py:RequestContext.bind_template`).",
+   "line": 82,
+   "sentence": "The engine's `Template.render` binds the template to the context, and binding runs the context processors (`django/template/base.py:Template.render`, `django/template/context.py:RequestContext.bind_template`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Template.render",
@@ -429,8 +401,8 @@
   },
   {
    "pointer": "django/template/context.py:RequestContext.bind_template",
-   "line": 97,
-   "sentence": "The engine's `Template.render` binds the template to the context, and binding is when the context processors run (`django/template/base.py:Template.render`, `django/template/context.py:RequestContext.bind_template`).",
+   "line": 82,
+   "sentence": "The engine's `Template.render` binds the template to the context, and binding runs the context processors (`django/template/base.py:Template.render`, `django/template/context.py:RequestContext.bind_template`).",
    "tree": "django",
    "path": "django/template/context.py",
    "symbol": "RequestContext.bind_template",
@@ -444,8 +416,8 @@
   },
   {
    "pointer": "django/template/engine.py:Engine.template_context_processors",
-   "line": 97,
-   "sentence": "The list is the engine's `Engine.template_context_processors`, computed once per engine: a builtin one first, then those the settings name, each imported by its dotted path (`django/template/engine.py:Engine.template_context_processors`).",
+   "line": 82,
+   "sentence": "Their list, `Engine.template_context_processors`, is computed once per engine, which is the import in the recording: the builtin `csrf` first, then those the settings name, each imported by its dotted path (`django/template/engine.py:Engine.template_context_processors`).",
    "tree": "django",
    "path": "django/template/engine.py",
    "symbol": "Engine.template_context_processors",
@@ -459,8 +431,8 @@
   },
   {
    "pointer": "django/template/context_processors.py:csrf",
-   "line": 97,
-   "sentence": "The builtin processor, `csrf`, adds a lazy `\"csrf_token\"` that is computed only if a template reads it (`django/template/context_processors.py:csrf`).",
+   "line": 84,
+   "sentence": "`csrf` adds a lazy `\"csrf_token\"`, computed only if a template reads it (`django/template/context_processors.py:csrf`).",
    "tree": "django",
    "path": "django/template/context_processors.py",
    "symbol": "csrf",
@@ -473,8 +445,8 @@
   },
   {
    "pointer": "django/template/context_processors.py:request",
-   "line": 97,
-   "sentence": "Of the three a default project configures, `request` adds the request; `auth` adds the request's user as `\"user\"`, which is still the lazy object the middleware set, and `\"perms\"`; `messages` adds the request's messages and the level constants (`django/template/context_processors.py:request`, `django/contrib/auth/context_processors.py:auth`, `django/contrib/messages/context_processors.py:messages`).",
+   "line": 84,
+   "sentence": "The three a default project configures add the request, the user and `\"perms\"`, and the messages (`django/template/context_processors.py:request`, `django/contrib/auth/context_processors.py:auth`, `django/contrib/messages/context_processors.py:messages`).",
    "tree": "django",
    "path": "django/template/context_processors.py",
    "symbol": "request",
@@ -487,8 +459,8 @@
   },
   {
    "pointer": "django/contrib/auth/context_processors.py:auth",
-   "line": 97,
-   "sentence": "Of the three a default project configures, `request` adds the request; `auth` adds the request's user as `\"user\"`, which is still the lazy object the middleware set, and `\"perms\"`; `messages` adds the request's messages and the level constants (`django/template/context_processors.py:request`, `django/contrib/auth/context_processors.py:auth`, `django/contrib/messages/context_processors.py:messages`).",
+   "line": 84,
+   "sentence": "The three a default project configures add the request, the user and `\"perms\"`, and the messages (`django/template/context_processors.py:request`, `django/contrib/auth/context_processors.py:auth`, `django/contrib/messages/context_processors.py:messages`).",
    "tree": "django",
    "path": "django/contrib/auth/context_processors.py",
    "symbol": "auth",
@@ -501,8 +473,8 @@
   },
   {
    "pointer": "django/contrib/messages/context_processors.py:messages",
-   "line": 97,
-   "sentence": "Of the three a default project configures, `request` adds the request; `auth` adds the request's user as `\"user\"`, which is still the lazy object the middleware set, and `\"perms\"`; `messages` adds the request's messages and the level constants (`django/template/context_processors.py:request`, `django/contrib/auth/context_processors.py:auth`, `django/contrib/messages/context_processors.py:messages`).",
+   "line": 84,
+   "sentence": "The three a default project configures add the request, the user and `\"perms\"`, and the messages (`django/template/context_processors.py:request`, `django/contrib/auth/context_processors.py:auth`, `django/contrib/messages/context_processors.py:messages`).",
    "tree": "django",
    "path": "django/contrib/messages/context_processors.py",
    "symbol": "messages",
@@ -515,7 +487,7 @@
   },
   {
    "pointer": "django/template/base.py:NodeList.render",
-   "line": 101,
+   "line": 88,
    "sentence": "`NodeList.render` renders each node and joins the strings (`django/template/base.py:NodeList.render`).",
    "tree": "django",
    "path": "django/template/base.py",
@@ -529,7 +501,7 @@
   },
   {
    "pointer": "django/template/base.py:VariableNode.render",
-   "line": 101,
+   "line": 88,
    "sentence": "A `VariableNode` resolves its expression and then formats the value for output (`django/template/base.py:VariableNode.render`).",
    "tree": "django",
    "path": "django/template/base.py",
@@ -543,8 +515,8 @@
   },
   {
    "pointer": "django/template/base.py:Variable._resolve_lookup",
-   "line": 103,
-   "sentence": "Resolving is `Variable._resolve_lookup`: for each dotted part it tries a dictionary key, then an attribute, then an integer index, and if what it finds is callable it calls it, unless the callable is marked `\"do_not_call_in_templates\"` or `\"alters_data\"`, which is how a model's `Model.delete` cannot be called from a template (`django/template/base.py:Variable._resolve_lookup`).",
+   "line": 90,
+   "sentence": "Resolving looks each dotted part up in turn: `\"year\"` is found in the view's dictionary, and `\"entry.published\"` is an attribute of a model instance (`django/template/base.py:Variable._resolve_lookup`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Variable._resolve_lookup",
@@ -557,7 +529,7 @@
   },
   {
    "pointer": "django/template/defaultfilters.py:date",
-   "line": 103,
+   "line": 90,
    "sentence": "The filters are then applied in order, `date` formatting the date by its argument (`django/template/defaultfilters.py:date`).",
    "tree": "django",
    "path": "django/template/defaultfilters.py",
@@ -572,8 +544,8 @@
   },
   {
    "pointer": "django/template/base.py:render_value_in_context",
-   "line": 105,
-   "sentence": "Formatting for output is `render_value_in_context`: a datetime is moved to the current time zone, a number is localised, which turns the year into the string `\"2026\"`, and then, because autoescaping is on, the value passes through `conditional_escape` (`django/template/base.py:render_value_in_context`, `django/utils/html.py:conditional_escape`).",
+   "line": 92,
+   "sentence": "Formatting is `render_value_in_context` (`django/template/base.py:render_value_in_context`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "render_value_in_context",
@@ -586,8 +558,8 @@
   },
   {
    "pointer": "django/utils/html.py:conditional_escape",
-   "line": 105,
-   "sentence": "Formatting for output is `render_value_in_context`: a datetime is moved to the current time zone, a number is localised, which turns the year into the string `\"2026\"`, and then, because autoescaping is on, the value passes through `conditional_escape` (`django/template/base.py:render_value_in_context`, `django/utils/html.py:conditional_escape`).",
+   "line": 92,
+   "sentence": "Autoescaping is on, so it passes the value through `conditional_escape`, which escapes anything but a value that declares itself safe with an `__html__` method, as a `SafeString` does (`django/utils/html.py:conditional_escape`).",
    "tree": "django",
    "path": "django/utils/html.py",
    "symbol": "conditional_escape",
@@ -600,8 +572,8 @@
   },
   {
    "pointer": "django/template/defaulttags.py:ForNode.render",
-   "line": 107,
-   "sentence": "It pushes a dictionary onto the context, resolves the sequence expression to the queryset, and takes its length, because the `\"forloop\"` variables it maintains include `\"revcounter\"` and `\"last\"`, which need the total before the first iteration; that `len` call is what sends the query, and [A queryset becomes SQL](query.md) follows it from there (`django/template/defaulttags.py:ForNode.render`).",
+   "line": 94,
+   "sentence": "That `len` is what sends the query (`django/template/defaulttags.py:ForNode.render`).",
    "tree": "django",
    "path": "django/template/defaulttags.py",
    "symbol": "ForNode.render",

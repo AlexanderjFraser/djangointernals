@@ -4,7 +4,7 @@ and deleted.
 
     python recordings/models.py > recordings/models.txt
 
-Chapter 8 of the book (pages/models.md and the pages under it) is written against this
+The chapter of the book (pages/models.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
 small project beside it, `harbour/`: a shipping line in three applications, `fleet`, `crew`
 and `office`, entered in INSTALLED_APPS in that order. The database is a SQLite file made

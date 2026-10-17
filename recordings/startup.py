@@ -4,7 +4,7 @@ before, during and after.
 
     python recordings/startup.py > recordings/startup.txt
 
-Chapter 2 of the book (pages/startup.md and the pages under it) is written against this
+The chapter of the book (pages/startup.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
 small project beside it, `library/`: three applications, entered in INSTALLED_APPS in the
 three forms an entry can take, one of them with a model that names two others by string. Run

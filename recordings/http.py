@@ -4,7 +4,7 @@ WSGI and under ASGI.
 
     python recordings/http.py > recordings/http.txt
 
-Chapter 5 of the book (pages/http.md and the pages under it) is written against this output.
+The chapter of the book (pages/http.md and the pages under it) is written against this output.
 It needs only the pinned Django (the project's virtual environment has it) and configures a
 project of its own in this one file: no middleware, a handful of views, and a script that
 plays the server's part. Run it again after a re-pin: where the output changes, the chapter

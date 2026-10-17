@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 615">
+  <!-- two columns: every request's steps on the left; on the right, the first request's work alone -->
+  <path class="line" d="M0.5 24 H284.5"/>
+  <path class="line" d="M324.5 24 H645.5"/>
+  <text class="strong" x="142.5" y="14" text-anchor="middle">every request</text>
+  <text class="strong" x="485" y="14" text-anchor="middle">the first request alone</text>
+
+  <!-- the template's name, from render -->
+  <text x="142.5" y="46" text-anchor="middle"><tspan class="name">"journal/entries.html"</tspan><tspan class="quiet small">, from <tspan class="name">render</tspan></tspan></text>
+
+  <!-- every request's path, step to step, in the accent -->
+  <path class="mark-line" d="M142.5 54 V66"/>
+  <polygon class="head mark" points="142.5,76 137.5,66 147.5,66"/>
+  <path class="mark-line" d="M142.5 123 V164"/>
+  <polygon class="head mark" points="142.5,174 137.5,164 147.5,164"/>
+  <path class="mark-line" d="M142.5 237 V328"/>
+  <polygon class="head mark" points="142.5,338 137.5,328 147.5,328"/>
+  <path class="mark-line" d="M142.5 385 V394"/>
+  <polygon class="head mark" points="142.5,404 137.5,394 147.5,394"/>
+  <path class="mark-line" d="M142.5 451 V460"/>
+  <polygon class="head mark" points="142.5,470 137.5,460 147.5,460"/>
+  <path class="mark-line" d="M142.5 549 V558"/>
+  <polygon class="head mark" points="142.5,568 137.5,558 147.5,558"/>
+
+  <!-- every request's steps; the cached loader, where the second request finds the template, is accented -->
+  <rect class="box" x="0.5" y="76.5" width="284" height="46" rx="4"/>
+  <text class="name" x="12" y="95">get_template</text>
+  <text class="quiet small" x="12" y="112">asks the engine</text>
+
+  <rect class="mark-box" x="0.5" y="174.5" width="284" height="62" rx="4"/>
+  <text x="12" y="193">the cached loader</text>
+  <text class="quiet small" x="12" y="210">looks the name up</text>
+  <text class="quiet small" x="12" y="226">the second request finds the <tspan class="name">Template</tspan> here</text>
+
+  <rect class="box" x="0.5" y="338.5" width="284" height="46" rx="4"/>
+  <text x="12" y="357">a <tspan class="name">RequestContext</tspan></text>
+  <text class="quiet small" x="12" y="374">the view's dictionary on top</text>
+
+  <rect class="box" x="0.5" y="404.5" width="284" height="46" rx="4"/>
+  <text x="12" y="423">the context processors called</text>
+  <text class="quiet small" x="12" y="440"><tspan class="name">csrf</tspan>, <tspan class="name">request</tspan>, <tspan class="name">auth</tspan>, <tspan class="name">messages</tspan></text>
+
+  <rect class="box" x="0.5" y="470.5" width="284" height="78" rx="4"/>
+  <text x="12" y="489">the nodes rendered</text>
+  <text class="quiet small" x="12" y="506">each value escaped;</text>
+  <text class="quiet small" x="12" y="522"><tspan class="name">{% for %}</tspan> takes the queryset's len,</text>
+  <text class="quiet small" x="12" y="538">which sends the query</text>
+
+  <rect class="box" x="0.5" y="568.5" width="284" height="46" rx="4"/>
+  <text x="12" y="587">a <tspan class="name">SafeString</tspan></text>
+  <text class="quiet small" x="12" y="604">which <tspan class="name">render</tspan> makes an <tspan class="name">HttpResponse</tspan> of</text>
+
+  <!-- from each step to the first request's work beside it, dashed -->
+  <path class="line dashed" d="M285 100 H314"/>
+  <polygon class="head" points="324,100 314,95 314,105"/>
+  <path class="line dashed" d="M285 196 H314"/>
+  <polygon class="head" points="324,196 314,191 314,201"/>
+  <path class="line dashed" d="M485 237 V246"/>
+  <polygon class="head" points="485,256 480,246 490,246"/>
+  <path class="line dashed" d="M324 287 H304.5 V226 H295"/>
+  <polygon class="head" points="285,226 295,221 295,231"/>
+  <path class="line dashed" d="M285 428 H314"/>
+  <polygon class="head" points="324,428 314,423 314,433"/>
+
+  <!-- the first request's work alone: the engine made -->
+  <rect class="ground dashed" x="324.5" y="76.5" width="321" height="78" rx="4"/>
+  <text class="name" x="336" y="95">EngineHandler</text>
+  <text class="quiet small" x="336" y="112">makes <tspan class="name">DjangoTemplates</tspan> and its <tspan class="name">Engine</tspan></text>
+  <text class="quiet small" x="336" y="128">from <tspan class="name">settings.TEMPLATES</tspan>,</text>
+  <text class="quiet small" x="336" y="144">kept for the process</text>
+
+  <!-- the loaders made, and the file found after a miss in the cache -->
+  <rect class="ground dashed" x="324.5" y="174.5" width="321" height="62" rx="4"/>
+  <text x="336" y="193">the loaders made; not found:</text>
+  <text class="quiet small" x="336" y="210">the app-directories loader tries <tspan class="name">admin/templates</tspan>,</text>
+  <text class="quiet small" x="336" y="226"><tspan class="name">auth/templates</tspan>, then reads journal's file</text>
+
+  <!-- the compile, whose template the cached loader stores -->
+  <rect class="ground dashed" x="324.5" y="256.5" width="321" height="62" rx="4"/>
+  <text x="336" y="275"><tspan class="name">Lexer.tokenize</tspan> and <tspan class="name">Parser.parse</tspan></text>
+  <text class="quiet small" x="336" y="292">make a <tspan class="name">Template</tspan> of nodes,</text>
+  <text class="quiet small" x="336" y="308">which the cached loader stores</text>
+
+  <!-- the context processors imported -->
+  <rect class="ground dashed" x="324.5" y="404.5" width="321" height="46" rx="4"/>
+  <text x="336" y="432">they are imported</text>
+</svg>

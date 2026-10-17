@@ -6,7 +6,7 @@ the executor, the autodetector, the questioner, the optimizer, the serializer an
 
     python recordings/migrations.py > recordings/migrations.txt
 
-Chapter 12 of the book (pages/migrations.md and the pages under it) is written against this
+The chapter of the book (pages/migrations.md and the pages under it) is written against this
 output. It needs the pinned Django (the project's virtual environment has it), the small project
 beside it, `harbour/`, which chapters 8 to 11 record over too, and for two blocks the drivers of
 other backends (`requirements.txt`), whose servers never run: the block on a migration in a
@@ -109,7 +109,7 @@ nothing). A call followed by `(what it called is not written, nor the N statemen
 every statement it sent; what it printed, what a callback of the script's wrote and what it
 returned still stand under it. One followed by `(what it called is not written, and of the N
 statements it sent the first and the last)` has those two under it and between them a count of
-the rest: SQLite's _remake_table, which chapter 11 follows, in the blocks of operations run by
+the rest: SQLite's _remake_table, which the chapter on the backends follows, in the blocks of operations run by
 hand.
 
 What is left out of the calls. The state half of an operation is not written when
@@ -2655,7 +2655,7 @@ class database_kept:
 
 
 def remade(frame) -> str:
-    """SQLite's _remake_table, which chapter 11 follows: its first and last statements are written."""
+    """SQLite's _remake_table, which the chapter on the backends follows: its first and last statements are written."""
     return Ends(generic(frame))
 
 

@@ -4,9 +4,9 @@ fetched beside them, and what its methods that write do.
 
     python recordings/querysets.py > recordings/querysets.txt
 
-Chapter 9 of the book (pages/querysets.md and the pages under it) is written against this
+The chapter of the book (pages/querysets.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
-small project beside it, `harbour/`, which chapter 8's recording uses too: a shipping line
+small project beside it, `harbour/`, which the models chapter's recording uses too: a shipping line
 in three applications, `fleet`, `crew` and `office`. The database is a SQLite file made for
 the run. Run it again after a re-pin: where the output changes, the chapter has to.
 

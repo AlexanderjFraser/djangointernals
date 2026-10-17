@@ -3,7 +3,7 @@ what order and on which thread, for a request through it.
 
     python recordings/handlers.py > recordings/handlers.txt
 
-Chapter 4 of the book (pages/handlers.md and the pages under it) is written against this
+The chapter of the book (pages/handlers.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and
 configures a project of its own in this one file: three middleware, A, B and C, that
 write down every hook Django calls on them, and a handful of views. Run it again after a

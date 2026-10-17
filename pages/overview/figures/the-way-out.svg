@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 855">
+  <!-- the groups, in the left margin: the chain, the handler, the server -->
+  <text class="strong" x="0" y="19">the chain</text>
+  <text class="quiet" x="0" y="88">innermost</text>
+  <text class="quiet" x="0" y="412">outermost</text>
+  <text class="strong" x="0" y="500">the handler</text>
+  <text class="strong" x="0" y="642">the server</text>
+
+  <!-- the response's way, station to station; time runs down -->
+  <path class="line" d="M194.5 47 V56"/>
+  <polygon class="head" points="194.5,66 189.5,56 199.5,56"/>
+  <path class="line" d="M194.5 101 V110"/>
+  <polygon class="head" points="194.5,120 189.5,110 199.5,110"/>
+  <path class="line" d="M194.5 155 V164"/>
+  <polygon class="head" points="194.5,174 189.5,164 199.5,164"/>
+  <path class="line" d="M194.5 209 V218"/>
+  <polygon class="head" points="194.5,228 189.5,218 199.5,218"/>
+  <path class="line" d="M194.5 263 V272"/>
+  <polygon class="head" points="194.5,282 189.5,272 199.5,272"/>
+  <path class="line" d="M194.5 317 V326"/>
+  <polygon class="head" points="194.5,336 189.5,326 199.5,326"/>
+  <path class="line" d="M194.5 371 V380"/>
+  <polygon class="head" points="194.5,390 189.5,380 199.5,380"/>
+  <path class="line" d="M194.5 425 V468"/>
+  <polygon class="head" points="194.5,478 189.5,468 199.5,468"/>
+  <path class="line" d="M194.5 513 V522"/>
+  <polygon class="head" points="194.5,532 189.5,522 199.5,522"/>
+  <path class="line" d="M194.5 567 V610"/>
+  <polygon class="head" points="194.5,620 189.5,610 199.5,610"/>
+  <path class="line" d="M194.5 655 V664"/>
+  <polygon class="head" points="194.5,674 189.5,664 199.5,664"/>
+
+  <!-- the view, where the response is made -->
+  <rect class="box" x="88.5" y="0.5" width="212" height="46" rx="4"/>
+  <text x="100" y="19">the view</text>
+  <text class="quiet small" x="100" y="36">render makes an <tspan class="name">HttpResponse</tspan></text>
+  <text x="324" y="19">Content-Type<tspan class="quiet" dx="8">from the constructor</tspan></text>
+
+  <!-- the seven layers, the innermost first, and what each did; the five headers in the accent -->
+  <rect class="box" x="88.5" y="66.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="88">XFrameOptionsMiddleware</text>
+  <text class="mark" x="324" y="88">X-Frame-Options: DENY</text>
+
+  <rect class="box" x="88.5" y="120.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="142">MessageMiddleware</text>
+  <text class="quiet" x="324" y="142">nothing: no messages to store</text>
+
+  <rect class="box" x="88.5" y="174.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="196">AuthenticationMiddleware</text>
+  <text class="quiet" x="324" y="196">nothing: it has no <tspan class="name">process_response</tspan></text>
+
+  <rect class="box" x="88.5" y="228.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="250">CsrfViewMiddleware</text>
+  <text class="quiet" x="324" y="250">nothing: no token was asked for</text>
+
+  <rect class="box" x="88.5" y="282.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="304">CommonMiddleware</text>
+  <text class="mark" x="324" y="304">Content-Length: the length of the body</text>
+
+  <rect class="box" x="88.5" y="336.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="358">SessionMiddleware</text>
+  <text class="quiet" x="324" y="358">nothing: the session was never touched</text>
+
+  <rect class="box" x="88.5" y="390.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="412">SecurityMiddleware</text>
+  <text class="mark" x="324" y="412">X-Content-Type-Options: nosniff</text>
+  <text class="mark" x="324" y="432">Referrer-Policy: same-origin</text>
+  <text class="mark" x="324" y="452">Cross-Origin-Opener-Policy: same-origin</text>
+
+  <!-- the handler's last two steps -->
+  <rect class="box" x="88.5" y="478.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="500">BaseHandler.get_response</text>
+  <text class="quiet" x="324" y="500">the request's <tspan class="name">close</tspan> added to the response's closers</text>
+
+  <rect class="box" x="88.5" y="532.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="554">WSGIHandler.__call__</text>
+  <text class="quiet" x="324" y="554"><tspan class="name">start_response</tspan>: the status line and the six headers</text>
+
+  <!-- the line across: the handler has returned -->
+  <path class="line dashed" d="M0 593.5 H646"/>
+  <text x="646" y="585" text-anchor="end">the handler has returned</text>
+
+  <!-- the server sends the body, then closes the response -->
+  <rect class="ground dashed" x="88.5" y="620.5" width="212" height="34" rx="4"/>
+  <text x="100" y="642">sends the body</text>
+
+  <rect class="box" x="88.5" y="674.5" width="212" height="34" rx="4"/>
+  <text class="name" x="100" y="696">HttpResponseBase.close</text>
+  <text class="quiet" x="324" y="696">the closers, <tspan class="name">HttpRequest.close</tspan> among them;</text>
+  <text class="quiet" x="324" y="716">then <tspan class="name">request_finished</tspan>:</text>
+
+  <!-- request_finished and its three receivers -->
+  <path class="line" d="M98 709 V837.5"/>
+  <path class="line" d="M98 745.5 H102"/>
+  <polygon class="head" points="112,745.5 102,740.5 102,750.5"/>
+  <path class="line" d="M98 791.5 H102"/>
+  <polygon class="head" points="112,791.5 102,786.5 102,796.5"/>
+  <path class="line" d="M98 837.5 H102"/>
+  <polygon class="head" points="112,837.5 102,832.5 102,842.5"/>
+
+  <rect class="box" x="112.5" y="728.5" width="188" height="34" rx="4"/>
+  <text class="name" x="124" y="750">close_old_connections</text>
+  <text class="quiet" x="324" y="750">closes the database connection</text>
+
+  <rect class="box" x="112.5" y="774.5" width="188" height="34" rx="4"/>
+  <text class="name" x="124" y="796">close_caches</text>
+
+  <rect class="box" x="112.5" y="820.5" width="188" height="34" rx="4"/>
+  <text class="name" x="124" y="842">reset_urlconf</text>
+  <text class="quiet" x="324" y="842">clears the thread's URLconf</text>
+</svg>

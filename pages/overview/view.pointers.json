@@ -2,6 +2,7 @@
  "generated": {
   "tool": "tools/pointers.py",
   "trees": {
+   "asgiref": "ef9d4b8b371cf8a7bb63dea3d0fdc60923e9e081",
    "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
   }
  },
@@ -10,7 +11,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
    "line": 9,
-   "sentence": "It does four things in order: resolve the path to a view, offer the view to the view middleware, call it, and refuse what is not a response (`django/core/handlers/base.py:BaseHandler._get_response`).",
+   "sentence": "It does four things in order: resolve the path to a view, offer the view to the middleware's `process_view` hooks, call it, and check its result (`django/core/handlers/base.py:BaseHandler._get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler._get_response",
@@ -23,7 +24,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
-   "line": 31,
+   "line": 33,
    "sentence": "`BaseHandler.resolve_request` asks `get_resolver` for the resolver of the current URLconf, which is `settings.ROOT_URLCONF` unless a middleware has set an attribute named `\"urlconf\"` on the request (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -37,7 +38,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:get_resolver",
-   "line": 31,
+   "line": 33,
    "sentence": "`get_resolver` is backed by a function wrapped in `functools.cache`, so one `URLResolver` is made for each URLconf a process ever resolves with, and kept (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -51,7 +52,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:_get_cached_resolver",
-   "line": 31,
+   "line": 33,
    "sentence": "`get_resolver` is backed by a function wrapped in `functools.cache`, so one `URLResolver` is made for each URLconf a process ever resolves with, and kept (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -66,7 +67,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.url_patterns",
-   "line": 33,
+   "line": 35,
    "sentence": "Those patterns are a `cached_property`, `URLResolver.url_patterns`, and reading it for the first time reads another, `URLResolver.urlconf_module`, which imports the module `settings.ROOT_URLCONF` names (`django/urls/resolvers.py:URLResolver.url_patterns`, `django/urls/resolvers.py:URLResolver.urlconf_module`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -81,7 +82,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.urlconf_module",
-   "line": 33,
+   "line": 35,
    "sentence": "Those patterns are a `cached_property`, `URLResolver.url_patterns`, and reading it for the first time reads another, `URLResolver.urlconf_module`, which imports the module `settings.ROOT_URLCONF` names (`django/urls/resolvers.py:URLResolver.url_patterns`, `django/urls/resolvers.py:URLResolver.urlconf_module`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -96,8 +97,8 @@
   },
   {
    "pointer": "django/urls/conf.py:_path",
-   "line": 37,
-   "sentence": "`path` is `_path` with the pattern class fixed to `RoutePattern` (`django/urls/conf.py:_path`).",
+   "line": 39,
+   "sentence": "`path` and `re_path` are one function, `_path`, with the pattern class fixed to `RoutePattern` for the first and to `RegexPattern` for the second, so the two make the same objects around a different pattern (`django/urls/conf.py:_path`).",
    "tree": "django",
    "path": "django/urls/conf.py",
    "symbol": "_path",
@@ -110,8 +111,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:_route_to_regex",
-   "line": 39,
-   "sentence": "`_route_to_regex` walks the route for angle-bracketed parameters, and for each one looks up the converter named before the colon, `int` here, in the registered converters, escapes the literal text between parameters, and writes the parameter as a named group whose body is the converter's own regular expression; for a view's pattern it anchors the end (`django/urls/resolvers.py:_route_to_regex`, `django/urls/converters.py:IntConverter`).",
+   "line": 41,
+   "sentence": "`_route_to_regex` writes each parameter in angle brackets as a named group whose body is its converter's own regular expression, and for a view's pattern it anchors the end (`django/urls/resolvers.py:_route_to_regex`, `django/urls/converters.py:IntConverter`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "_route_to_regex",
@@ -125,8 +126,8 @@
   },
   {
    "pointer": "django/urls/converters.py:IntConverter",
-   "line": 39,
-   "sentence": "`_route_to_regex` walks the route for angle-bracketed parameters, and for each one looks up the converter named before the colon, `int` here, in the registered converters, escapes the literal text between parameters, and writes the parameter as a named group whose body is the converter's own regular expression; for a view's pattern it anchors the end (`django/urls/resolvers.py:_route_to_regex`, `django/urls/converters.py:IntConverter`).",
+   "line": 41,
+   "sentence": "`_route_to_regex` writes each parameter in angle brackets as a named group whose body is its converter's own regular expression, and for a view's pattern it anchors the end (`django/urls/resolvers.py:_route_to_regex`, `django/urls/converters.py:IntConverter`).",
    "tree": "django",
    "path": "django/urls/converters.py",
    "symbol": "IntConverter",
@@ -139,7 +140,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve",
-   "line": 43,
+   "line": 45,
    "sentence": "`URLResolver.resolve` tries its patterns in the order of the list and returns at the first match (`django/urls/resolvers.py:URLResolver.resolve`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -153,7 +154,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLPattern.resolve",
-   "line": 43,
+   "line": 45,
    "sentence": "For a `URLPattern` that is `URLPattern.resolve`, which asks its `RoutePattern` to match what is left of the path (`django/urls/resolvers.py:URLPattern.resolve`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -167,7 +168,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:RoutePattern.match",
-   "line": 43,
+   "line": 45,
    "sentence": "A converter that raises `ValueError` makes the pattern not match, which is how a route with `<int:year>` declines a path whose year is not a number (`django/urls/resolvers.py:RoutePattern.match`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -181,8 +182,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:ResolverMatch.__init__",
-   "line": 45,
-   "sentence": "A match is a `ResolverMatch`: the view, its positional and keyword arguments, the pattern's name, the route, and the namespaces on the way (`django/urls/resolvers.py:ResolverMatch.__init__`).",
+   "line": 47,
+   "sentence": "A `ResolverMatch` holds the view, its positional and keyword arguments, the pattern's name, the route, and the namespaces on the way (`django/urls/resolvers.py:ResolverMatch.__init__`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "ResolverMatch.__init__",
@@ -195,7 +196,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:ResolverMatch.__getitem__",
-   "line": 47,
+   "line": 49,
    "sentence": "`resolve_request` keeps the match as `HttpRequest.resolver_match`, where the view and anything after it can read which pattern answered, and returns it; `_get_response` unpacks it into the three things it needs, the view, its positional arguments and its keyword arguments (`django/urls/resolvers.py:ResolverMatch.__getitem__`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -209,8 +210,8 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
-   "line": 51,
-   "sentence": "For a `GET`, or any other method the HTTP specification calls safe, it accepts the request at once; for any other method it checks the origin or the referer, and then that the token sent with the request matches the secret from the cookie (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "line": 53,
+   "sentence": "For any other method it checks the origin if sent, or else on a secure request the referer, and then that the request's token matches the secret from the cookie (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware.process_view",
@@ -222,9 +223,37 @@
    "fingerprint": "105c7f59f625c860"
   },
   {
+   "pointer": "django/views/decorators/csrf.py:csrf_exempt",
+   "line": 55,
+   "sentence": "An exempt view is one that `csrf_exempt` has marked (`django/views/decorators/csrf.py:csrf_exempt`), and the middleware reads the mark off the view.",
+   "tree": "django",
+   "path": "django/views/decorators/csrf.py",
+   "symbol": "csrf_exempt",
+   "kind": "function",
+   "lines": [
+    50,
+    68
+   ],
+   "fingerprint": "9ecf5d113ebb9418"
+  },
+  {
+   "pointer": "docs/topics/http/middleware.txt",
+   "line": 55,
+   "sentence": "`process_request` runs before the path is resolved and is handed only the request; `process_view` is handed the view, just before the view is called (`docs/topics/http/middleware.txt`).",
+   "tree": "django",
+   "path": "docs/topics/http/middleware.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    474
+   ],
+   "fingerprint": "e412378a1f20253d"
+  },
+  {
    "pointer": "django/core/handlers/base.py:BaseHandler.make_view_atomic",
-   "line": 53,
-   "sentence": "`BaseHandler.make_view_atomic` then wraps the view in a transaction for each database whose settings have `\"ATOMIC_REQUESTS\"` true, unless the view was marked with `non_atomic_requests` for it; none has by default, and the view is returned unchanged (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
+   "line": 57,
+   "sentence": "No database has the setting by default, and the view is returned unchanged (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.make_view_atomic",
@@ -236,8 +265,36 @@
    "fingerprint": "b70830155a851958"
   },
   {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 57,
+   "sentence": "An asynchronous view would then be wrapped in `async_to_sync`, which runs it in an event loop on another thread and returns its response, because `_get_response` is synchronous and cannot await it (`django/core/handlers/base.py:BaseHandler._get_response`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
+   "lines": [
+    176,
+    228
+   ],
+   "fingerprint": "8a7faacfec18a9da"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.__call__",
+   "line": 57,
+   "sentence": "An asynchronous view would then be wrapped in `async_to_sync`, which runs it in an event loop on another thread and returns its response, because `_get_response` is synchronous and cannot await it (`django/core/handlers/base.py:BaseHandler._get_response`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.__call__",
+   "kind": "function",
+   "lines": [
+    217,
+    332
+   ],
+   "fingerprint": "95cabb14938d5e3f"
+  },
+  {
    "pointer": "django/core/handlers/base.py:BaseHandler.check_response",
-   "line": 59,
+   "line": 63,
    "sentence": "`BaseHandler.check_response` raises `ValueError` for a view that returned `None`, with the message naming the view, and for a coroutine that was never awaited (`django/core/handlers/base.py:BaseHandler.check_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",

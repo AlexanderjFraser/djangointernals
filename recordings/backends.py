@@ -6,7 +6,7 @@ and, for the questions that need no server, on PostgreSQL, MySQL, MariaDB and Or
 
     python recordings/backends.py > recordings/backends.txt
 
-Chapter 11 of the book (pages/backends.md and the pages under it) is written against this
+The chapter of the book (pages/backends.md and the pages under it) is written against this
 output. It needs the pinned Django (the project's virtual environment has it), the small project
 beside it, `harbour/`, which chapters 8 to 10 record over too (a shipping line in three
 applications, `fleet`, `crew` and `office`), with a router written for this recording,

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 559">
+  <!-- the line, and beyond it the database -->
+  <path class="line" d="M540.5 0 V559"/>
+  <text class="strong" x="552" y="14">the database</text>
+
+  <!-- the view's moment: two clones, and nothing sent -->
+  <text class="strong" x="0" y="14">the view builds the queryset</text>
+  <path class="line" d="M0.5 24 H390.5"/>
+  <rect class="box" x="0.5" y="36.5" width="390" height="46" rx="4"/>
+  <text x="12" y="56">a clone; its <tspan class="name">Query</tspan> gets the condition</text>
+  <text class="name quiet" x="12" y="73">QuerySet.filter</text>
+  <rect class="box" x="0.5" y="94.5" width="390" height="46" rx="4"/>
+  <text x="12" y="114">a clone; its <tspan class="name">Query</tspan> gets the ordering</text>
+  <text class="name quiet" x="12" y="131">QuerySet.order_by</text>
+  <text class="quiet" x="0" y="164">the queryset is handed to the template</text>
+
+  <!-- the template's moment: the loop asks for the rows, and the query runs -->
+  <text class="strong" x="0" y="200">the template's loop runs it</text>
+  <path class="line" d="M0.5 210 H390.5"/>
+  <rect class="box" x="0.5" y="222.5" width="390" height="46" rx="4"/>
+  <text x="12" y="242">the loop takes the queryset's length</text>
+  <text class="quiet" x="12" y="259"><tspan class="name">QuerySet.__len__</tspan> calls <tspan class="name">QuerySet._fetch_all</tspan></text>
+  <rect class="box" x="0.5" y="280.5" width="390" height="46" rx="4"/>
+  <text x="12" y="300">compile: the <tspan class="name">Query</tspan> becomes one SELECT and its parameters</text>
+  <text class="name quiet" x="12" y="317">SQLCompiler.as_sql</text>
+  <rect class="box" x="0.5" y="338.5" width="390" height="46" rx="4"/>
+  <text x="12" y="358">connect</text>
+  <text class="name quiet" x="12" y="375">BaseDatabaseWrapper.connect</text>
+  <rect class="box" x="0.5" y="396.5" width="390" height="46" rx="4"/>
+  <text x="12" y="416">execute, then fetch</text>
+  <text class="name quiet" x="12" y="433">CursorWrapper.execute</text>
+  <rect class="box" x="0.5" y="454.5" width="390" height="46" rx="4"/>
+  <text x="12" y="474">rows: each row becomes an instance, kept in the cache</text>
+  <text class="name quiet" x="12" y="491">Model.from_db</text>
+  <rect class="box" x="0.5" y="512.5" width="390" height="46" rx="4"/>
+  <text x="12" y="532">the loop iterates: the cache is already filled</text>
+  <text class="name quiet" x="12" y="549">QuerySet.__iter__</text>
+
+  <!-- the calls that reach the database, in the accent: the connect, and the execute with the rows it brings back -->
+  <path class="mark-line" d="M391 362 H564"/>
+  <polygon class="head mark" points="574,362 564,357 564,367"/>
+  <text class="quiet" x="403" y="403">the SELECT</text>
+  <path class="mark-line" d="M391 410 H564"/>
+  <polygon class="head mark" points="574,410 564,405 564,415"/>
+  <path class="mark-line" d="M574 430 H401"/>
+  <polygon class="head mark" points="391,430 401,425 401,435"/>
+  <text class="quiet" x="403" y="449">the rows</text>
+</svg>

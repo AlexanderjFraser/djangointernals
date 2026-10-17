@@ -4,7 +4,7 @@ thread while it does so.
 
     python recordings/urls.py > recordings/urls.txt
 
-Chapter 6 of the book (pages/urls.md and the pages under it) is written against this output.
+The chapter of the book (pages/urls.md and the pages under it) is written against this output.
 It needs only the pinned Django (the project's virtual environment has it) and the small
 project beside it, `museum/`: a root URLconf that includes one application's URLs twice, a
 converter of its own, and five more URLconfs, each for a particular part of the recording. The

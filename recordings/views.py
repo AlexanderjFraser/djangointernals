@@ -4,7 +4,7 @@ views, the debug pages and the static file view answer.
 
     python recordings/views.py > recordings/views.txt
 
-Chapter 7 of the book (pages/views.md and the pages under it) is written against this output.
+The chapter of the book (pages/views.md and the pages under it) is written against this output.
 It needs only the pinned Django (the project's virtual environment has it) and the small
 project beside it, `gazette/`: a town's newspaper, with one model, views of every kind the
 chapter describes, and a template for each view that renders one. The database is a SQLite

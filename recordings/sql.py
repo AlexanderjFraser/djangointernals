@@ -4,7 +4,7 @@ and how the compiler assembles and runs the statement.
 
     python recordings/sql.py > recordings/sql.txt
 
-Chapter 10 of the book (pages/sql.md and the pages under it) is written against this
+The chapter of the book (pages/sql.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
 small project beside it, `harbour/`, which chapters 8 and 9 record over too: a shipping line
 in three applications, `fleet`, `crew` and `office`. The database is a SQLite file made for

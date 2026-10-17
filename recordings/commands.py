@@ -5,7 +5,7 @@ reloader, which is three processes.
 
     python recordings/commands.py > recordings/commands.txt
 
-Chapter 3 of the book (pages/commands.md and the pages under it) is written against this
+The chapter of the book (pages/commands.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
 small project beside it, `orchard/`: a manage.py, two applications that each have a
 management/commands directory, one model, one system check, and django.contrib.staticfiles,

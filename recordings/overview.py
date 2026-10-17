@@ -3,7 +3,7 @@ same page, written down as Django serves them.
 
     python recordings/overview.py > recordings/overview.txt
 
-Chapter 1 of the book (pages/overview.md and the pages under it) is written against this
+The chapter of the book (pages/overview.md and the pages under it) is written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
 small project beside it, `journal/`: what `django-admin startproject` writes, with one app
 that has one model, one URL pattern, one view and one template. The database is a SQLite file
