@@ -4,61 +4,81 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in settings, startup and the commands
 
-The changes from Django 5.0 to this commit in the settings object, the project template and the management commands: deprecated settings beside `MAILERS`, the shell's automatic imports, `BaseCommand.get_check_kwargs`, `BaseCommand.requires_settings`, the checks' databases, and listurls.
+The changes from Django 5.0 to this commit in the settings object, the project templates and the management commands: the email settings deprecated beside `MAILERS`, every database given to the system checks, `BaseCommand.requires_settings`, `BaseCommand.get_check_kwargs`, the shell's automatic imports and listurls.
 
-## A deprecated setting in the settings object
+In 6.1 the settings object began to enforce a deprecation: the email settings that `MAILERS` replaces warn when read as well as when set, and cannot stand beside it. In 6.1 too the system checks began to be given every database when their caller names none, so a check may connect to one. And in 6.2 a command that needs settings is refused in one line when none are named or the module named is the one missing, where it used to start and fail with a traceback; an `ImportError` of any other kind, such as a missing package's, now stops every command.
 
-Since 6.1 the settings object ([The settings object](../startup/settings.md)) watches a few names: the email settings that `MAILERS` replaces, listed in `DEPRECATED_EMAIL_SETTINGS`, and the transitional settings `USE_BLANK_CHOICE_DASH` and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK`. Setting one warns with `RemovedInDjango2028Warning`. `Settings.__init__` warns for each that the settings module defines, attributed to the first frame outside Django (`django/conf/__init__.py:Settings.__init__`). `LazySettings.configure`, `override_settings` and an assignment to `settings` set values through `UserSettingsHolder.__setattr__` or `LazySettings.__setattr__`, which warn only when the code that set the value is outside Django (`django/conf/__init__.py:_show_settings_deprecation_warning`).
+## The deprecated email settings and `MAILERS`
 
-The email settings are watched when read, too. `LazySettings.__getattr__` warns when the code reading one is outside Django, and keeps the value on the proxy: later reads do not reach it, so none warns, even where Django's own code made the first. Where the project defines `MAILERS`, the read raises `AttributeError` instead, and `LazySettings.__dir__` leaves their defaults out of `dir(settings)` (`django/conf/__init__.py:LazySettings.__getattr__`, `django/conf/__init__.py:LazySettings.__dir__`). Defining both is refused with `ImproperlyConfigured` in the settings module or in one call of `configure` (`django/conf/__init__.py:_check_email_settings_conflicts`); `override_settings` does not check, and an email setting it sets beside `MAILERS` is refused when read.
+At this commit the settings object knows the email settings that `MAILERS` replaces, as `DEPRECATED_EMAIL_SETTINGS`: `EMAIL_BACKEND`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `EMAIL_USE_SSL`, `EMAIL_TIMEOUT`, `EMAIL_SSL_CERTFILE`, `EMAIL_SSL_KEYFILE` and EMAIL_FILE_PATH. A project that defines them and no `MAILERS` still sends mail through them (`django/core/mail/__init__.py:get_connection`; [What changed in mail and tasks](mail-and-tasks.md)). One that the settings module defines warns as the module loads (`django/conf/__init__.py:Settings.__init__`); one set by `LazySettings.configure`, `override_settings` or an assignment warns as it is set; the first read warns, and the settings object then keeps the value, so that later reads do not warn while it is kept. Setting and reading warn only from code outside Django. A value that Django's own code read first therefore warns no later reader (`django/conf/__init__.py:_show_settings_deprecation_warning`). Nothing warns under 5.2.17 and 6.0.8; 6.1.1 and this commit warn. The transitional settings `USE_BLANK_CHOICE_DASH` and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` warn in the same places when defined or set.
 
-```text
-# deprecated_settings.py at this commit, every warning recorded; settings modules
-# with EMAIL_HOST, with it and MAILERS, with MAILERS; then an override
-EMAIL_HOST: the first read of any setting, SECRET_KEY
-    -> 'harbour-office-not-a-secret'
-    warns RemovedInDjango2028Warning: The EMAIL_HOST setting is deprecated. Migrate to MAILERS before Django 2028.
-  settings.EMAIL_HOST
-    -> 'smtp.harbour.example'
-    warns RemovedInDjango2028Warning: The EMAIL_HOST setting is deprecated. Migrate to MAILERS before Django 2028.
-  settings.EMAIL_HOST, again
-    -> 'smtp.harbour.example'
-EMAIL_HOST and MAILERS: the first read
-    raises ImproperlyConfigured: Deprecated email settings are not allowed when MAILERS is defined: EMAIL_HOST.
-MAILERS: settings.EMAIL_BACKEND
-    raises AttributeError: The EMAIL_BACKEND setting is not available when MAILERS is defined.
-override_settings(MAILERS={...}, EMAIL_PORT=587), entered
-    warns RemovedInDjango2028Warning: The EMAIL_PORT setting is deprecated. Migrate to MAILERS before Django 2028.
-  settings.EMAIL_PORT
-    raises AttributeError: The EMAIL_PORT setting is not available when MAILERS is defined.
+Beside `MAILERS` they are refused. A settings module, or one call of `LazySettings.configure`, that defines both is refused with `ImproperlyConfigured` (`django/conf/__init__.py:_check_email_settings_conflicts`), where 5.2.17 and 6.0.8 load it. Where `MAILERS` is defined, an email setting cannot be read, even one left at its default (`django/conf/__init__.py:LazySettings.__getattr__`). Here settings that define only `MAILERS` are asked for `EMAIL_BACKEND`:
+
+```text recording=changes
+settings.EMAIL_BACKEND, when the settings module defines MAILERS and not EMAIL_BACKEND
+    5.2.17       'django.core.mail.backends.smtp.EmailBackend'
+    6.0.8        'django.core.mail.backends.smtp.EmailBackend'
+    6.1.1        AttributeError: The EMAIL_BACKEND setting is not available when MAILERS is defined.
+    this commit  AttributeError: The EMAIL_BACKEND setting is not available when MAILERS is defined.
 ```
 
-[What changed in mail and tasks](mail-and-tasks.md) tells what `MAILERS` configures; [What still warns: the deprecations and the releases that end them](deprecations.md) lists every deprecation.
+Code that still reads an email setting fails in a project that has moved to `MAILERS`. `override_settings` does not check for a conflict, so an override may set one beside `MAILERS` that cannot then be read. [What still warns: the deprecations and the releases that end them](deprecations.md) lists the warnings.
 
-## What startproject and startapp write
+## The system checks and the databases
 
-Since 5.2 the `TEMPLATES` of the settings module that startproject writes omits the debug context processor, which still exists (`django/conf/project_template/project_name/settings.py-tpl`, `django/template/context_processors.py:debug`). Since 6.0 that module sets no `DEFAULT_AUTO_FIELD`, and the `AppConfig` that startapp writes no `AppConfig.default_auto_field` (`django/conf/app_template/apps.py-tpl`): both named `BigAutoField`, which 6.0 made the setting's default ([What changed in models and fields](models.md)). Since 6.1 the module defines `MAILERS`, with the console backend as the default mailer.
+Since 5.2 `BaseCommand.execute` takes its arguments for `BaseCommand.check` from `BaseCommand.get_check_kwargs`, which a command may override (`django/core/management/base.py:BaseCommand.get_check_kwargs`): migrate adds its database, and runserver names an empty set of tags, which selects no check, and runs the checks itself, naming no tags, as it starts serving (`django/core/management/commands/runserver.py:Command.inner_run`).
 
-## Before a command's `handle`
+6.1 changed what a check is given when no database is named. `CheckRegistry.run_checks` used to pass on `None`, which Django's checks read as no database; at this commit it passes every configured alias, and, where no tags are named either, leaves out the checks tagged database (`django/core/checks/registry.py:CheckRegistry.run_checks`). The notes name the check command; the change is the registry's, and reaches every command whose checks name no database, runserver among them. The aliases reach the model checks, which are not tagged database: a field's backend checks ask MySQL's backend for the field's column type (`django/db/models/fields/__init__.py:Field._check_backend_specific_checks`), and the backend connects to learn its features (`django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`). The habit runs the check command with a MySQL database beside SQLite's and no server, the driver's connect replaced by a stand-in that refuses; the error's text is the stand-in's:
 
-`ManagementUtility.execute` reads the settings before it loads the command, and keeps the `ImproperlyConfigured` of a failed read: no settings named, a module not found (an `ImportError` that `Settings.__init__` turns into that exception), a list setting that is not a list, email settings beside `MAILERS`. Since 6.2 `ManagementUtility.fetch_command` then refuses, with that message and status 1, a command whose `BaseCommand.requires_settings` is true, the default (`django/core/management/__init__.py:ManagementUtility.fetch_command`). Before, the notes say, an `ImportError` from the settings module was suppressed for every command (`docs/releases/6.2.txt`). At this commit an `ImportError` raised inside the settings module is not caught, and ends every command with a traceback ([Finding the command](../commands/finding.md)).
+```text recording=changes
+call_command("check"): DATABASES names a MySQL database beside SQLite's, and no MySQL server answers
+    5.2.17       System check identified no issues (0 silenced).
+    6.0.8        System check identified no issues (0 silenced).
+    6.1.1        OperationalError: (2003, "Can't connect to MySQL server (refused by a stand-in for MySQLdb.connect)")
+    this commit  OperationalError: (2003, "Can't connect to MySQL server (refused by a stand-in for MySQLdb.connect)")
+```
 
-Since 5.2 `BaseCommand.execute` asks `BaseCommand.get_check_kwargs` for the arguments of its call of `BaseCommand.check`, a method a command may override (`django/core/management/base.py:BaseCommand.get_check_kwargs`). migrate overrides it to add its database, whose checks then run before it migrates; runserver returns an empty collection of tags, which selects nothing, and runs them itself in the serving process ([The development server](../commands/runserver.md)).
+The notes say that callers "should be prepared for databases to be accessed" (`docs/releases/6.1.txt`; [The system checks](../commands/checks.md)).
 
-Since 6.1 `CheckRegistry.run_checks` gives the check functions every configured alias when its caller leaves the databases argument at None, where it used to give none (`django/core/checks/registry.py:CheckRegistry.run_checks`). It holds for every command whose checks leave it at None, not only the check command the notes name. The checks tagged database are still left out unless asked for. The change reaches the checks that work per database, among them the model checks of long column names, indexes, constraints and table comments (`django/db/models/base.py:Model.check`) and the fields' checks that ask the backend (`django/db/models/fields/__init__.py:Field._check_backend_specific_checks`): they now run against the connection of each alias the router lets the model migrate to, and where a backend learns its features from the server, as MySQL's does, the first read of one connects (`django/db/backends/mysql/base.py:DatabaseWrapper.mysql_server_data`). Callers, the notes say, "should be prepared for databases to be accessed" (`docs/releases/6.1.txt`; [The system checks](../commands/checks.md)).
+## A settings module that cannot be loaded: `BaseCommand.requires_settings`
 
-## The shell
+`ManagementUtility.execute` reads `settings.INSTALLED_APPS` before it looks a command up, and catches and keeps the `ImproperlyConfigured` that loading the settings may raise (`django/core/management/__init__.py:ManagementUtility.execute`). Until 6.2 it kept an `ImportError` too and ran the command, which failed with a traceback if it read a setting. At this commit `Settings.__init__` turns into `ImproperlyConfigured` an `ImportError` that names the settings module itself (`django/conf/__init__.py:Settings.__init__`). `ManagementUtility.fetch_command` then refuses, with the exception's message and status 1, a command whose `BaseCommand.requires_settings` is true, the default; startproject, startapp, shell and makemessages set it false (`django/core/management/__init__.py:ManagementUtility.fetch_command`). Here `"DJANGO_SETTINGS_MODULE"` names no module; a line gives the exit status and the command's standard error:
 
-Since 5.2 the shell fills its namespace before it starts. `Command.get_auto_imports` returns dotted paths to import, among them every model that `Apps.get_models` returns, which leaves out the automatic through models of many-to-many relations and swapped models (`django/core/management/commands/shell.py:Command.get_auto_imports`). Since 6.0 the list begins with common utilities: at this commit the settings object, the default connection, `django.db.models`, `django.db.models.functions`, `reset_queries` and `django.utils.timezone`. Code given with `--command` or on standard input gets the namespace too, and `--no-imports` empties it ([The commands Django ships](../commands/builtin.md#the-shell)).
+```text recording=changes
+python -m django check, DJANGO_SETTINGS_MODULE naming a module that does not exist
+    5.2.17       exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_nowhere'
+    6.0.8        exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_nowhere'
+    6.1.1        exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_nowhere'
+    this commit  exit 1: No module named 'almanac_nowhere'.
+```
 
-## Other changes
+The traceback has become one line, as it has where no settings are named at all ([Finding the command](../commands/finding.md)).
+
+Any other `ImportError`, for the module's own package or for a package the module imports that is not installed, is another matter: `Settings.__init__` lets it through, and `ManagementUtility.execute` no longer catches it, so it ends every command before the command is found. Here startproject, which needs no settings, is run with `"DJANGO_SETTINGS_MODULE"` set in its environment to a module that imports a package not installed:
+
+```text recording=changes
+python -m django startproject almanac, the settings module importing a package that is not installed
+    5.2.17       exit 0
+    6.0.8        exit 0
+    6.1.1        exit 0
+    this commit  exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_missing_package'
+```
+
+The 6.2 notes say `BaseCommand.requires_settings` makes configurable "whether to suppress an ImportError escaping from a settings module" (`docs/releases/6.2.txt`); at this commit it decides only where loading the settings raises `ImproperlyConfigured`.
+
+## What startproject, startapp and the shell give a new project
+
+In 6.0 the settings module that startproject writes (`django/conf/project_template/project_name/settings.py-tpl`) lost `DEFAULT_AUTO_FIELD`, and startapp's class lost `AppConfig.default_auto_field`, both `BigAutoField` under 5.2.17, whose default was `AutoField`; 6.0 made `BigAutoField` the default and removed the lines (`docs/releases/6.0.txt`). In 6.1 the settings module gained `MAILERS`, the console backend as `"default"`. Since 6.0 both commands make a missing target directory, parents and all, where 5.2.17 refused (`django/core/management/templates.py:TemplateCommand.handle`).
+
+Since 5.2 the shell fills its namespace before it starts, from the dotted paths `Command.get_auto_imports` returns (`django/core/management/commands/shell.py:Command.get_auto_imports`): in 5.2 the models that `Apps.get_models` lists, and from 6.0, before them, the settings object, the default connection, `django.db.models`, `django.db.models.functions`, `reset_queries` and `django.utils.timezone` ([The commands Django ships](../commands/builtin.md#the-shell)).
+
+## Smaller changes
+
+The rest, by name:
 
 | what | what changed | release | where now |
 |---|---|---|---|
-| a query before the app registry is ready | warns with `RuntimeWarning`, unless a test has the installed applications overridden, and still runs ([Cursors: executing a statement, the query log and execute wrappers](../backends/cursors.md)) | 5.0 | `django/db/backends/utils.py:CursorWrapper._execute` |
-| runserver's banner | ends with a warning that the server is for development, unless the environment sets `"DJANGO_RUNSERVER_HIDE_WARNING"` to `"true"` | 5.2 | `django/core/management/commands/runserver.py:Command.on_bind` |
-| startproject and startapp given a directory | make it, and its missing parents, if it does not exist | 6.0 | `django/core/management/templates.py:TemplateCommand.handle` |
-| a mistyped choice or subcommand | on Python 3.14 argparse suggests the nearest, the parser being made with `suggest_on_error=True`; on later versions Django leaves argparse's own default | 6.1 | `django/core/management/base.py:CommandParser.__init__` |
-| listurls | new: prints the root URLconf's patterns, views and names | 6.2 | [The URL checks, and listing the patterns](../urls/checks.md) |
-
-*Smaller changes to startup and the management commands.*
+| the setting `TIME_ZONE` | checked with `zoneinfo.ZoneInfo` as a settings module loads, where 5.2.17 to 6.1.1 looked for a file under /usr/share/zoneinfo; still not checked on Windows; no release note says so | 6.2 | `django/conf/__init__.py:Settings.__init__` |
+| a mistyped choice | on Python 3.14, argparse's error offers the nearest choice | 6.1 | `django/core/management/base.py:CommandParser.__init__` |
+| listurls | new ([The URL checks, and listing the patterns](../urls/checks.md)) | 6.2 | `django/core/management/commands/listurls.py:Command.handle` |
+| the debug context processor | left out of the `TEMPLATES` that startproject writes, and still in Django | 5.2 | `django/template/context_processors.py:debug` |

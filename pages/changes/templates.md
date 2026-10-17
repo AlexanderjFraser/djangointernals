@@ -4,39 +4,91 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in templates
 
-What changed in Django's template language and in the helpers that build safe HTML, from 5.0 to this commit: template partials, `{% querystring %}`, `{{ forloop.length }}`, `Library.simple_block_tag`, the deprecated two dots in a variable, the scheme `|urlize` assumes, the create methods a template no longer calls, and `format_html` without arguments.
+What changed in Django's template language and its safe-HTML helpers from 5.0 to this commit: template partials, `{% querystring %}`, `{{ forloop.length }}`, two dots in a variable, `parse_bits`, the queryset's and `UserManager`'s methods that create rows, which a template no longer calls, `format_html` without arguments, and the scheme `django.utils.html.urlize` gives a bare domain.
 
-A template is compiled once into a tree of nodes, which renders with a context ([Templates](../templates.md)), and the changes fall at both ends. The parser gained a store a tag can fill for the compiled template, on which partials are built, and a warning for two dots in a variable; rendering gained `{% querystring %}` and a loop's length, and stopped calling the methods of a queryset and of the user manager that create rows.
+A template is compiled, by default once, into a tree of nodes, which renders with a context ([Templates](../templates.md)), and both halves changed. The compiler gained a place where a tag can leave data for the compiled template (5.1), on which 6.0 built **template partials**: named fragments of a template, which a name with a `"#"` loads alone. Rendering gained `{% querystring %}` (5.1), for the query string a template had built with a loop, and the loop's length (6.0).
 
-## Template partials and the parser's extra data
+Other changes make templates and their helpers stricter. 6.1 deprecates two dots in a variable, and refuses, as it is decorated, a custom tag that is declared to take the context and lacks its `"context"` parameter; 6.0 refuses `format_html` with nothing to format; since 6.0 linking a bare domain warns, unless `URLIZE_ASSUME_HTTPS` is true, that its scheme will change; and since 5.2 a template does not call the queryset's and `UserManager`'s methods that create rows.
 
-Since 6.0 a template can hold named fragments of itself. `{% partialdef ship_row %}` … `{% endpartialdef %}` defines one, which renders nothing where it stands unless the tag adds `"inline"`; `{% partial ship_row %}` renders it with the context at that point; and a name such as `"fleet/port_detail.html#ship_row"`, given to `Engine.get_template` and so to `render_to_string` and `{% include %}`, loads the fragment alone, a `PartialTemplate` (`django/template/defaulttags.py:partialdef_func`, `django/template/engine.py:Engine.get_template`). The store they rely on came in 5.1: `Parser.extra_data`, a dictionary a compile function may fill, which `Template.compile_nodelist` keeps as `Template.extra_data` once the parse succeeds; `{% partialdef %}` files each fragment there under `"partials"` (`django/template/base.py:Template.compile_nodelist`). [Template partials: `{% partialdef %}` and `{% partial %}`](../templates/partials.md) tells how a partial is made, found and rendered.
+## Template partials, on the parser's extra data
 
-## Compiling: two dots, and tags made from functions
+In 5.1 the parser gained `Parser.extra_data`, a dictionary in which a tag's compile function may leave data, kept as `Template.extra_data` once the parse succeeds (`django/template/base.py:Template.compile_nodelist`); partials (6.0) are built on it. `{% partialdef row %}` … `{% endpartialdef %}` files a `PartialTemplate` there under `"partials"`, and renders nothing where it stands unless the tag adds `"inline"` (`django/template/defaulttags.py:partialdef_func`); `{% partial row %}` renders the fragment in the context at that point (`django/template/defaulttags.py:PartialNode.render`). A name such as `"entries.html#row"`, given to `Engine.get_template` and so to `render_to_string` and `{% include %}`, is split at its first `"#"`: the template before it is loaded, and the partial filed under the rest returned (`django/template/engine.py:Engine.get_template`). The 6.0 notes give the purpose, "to encapsulate and reuse small named fragments within a template file", and a guide for users of django-template-partials (`docs/releases/6.0.txt`).
 
-In `{{ port..name }}` the lookup's middle part is an empty name, tried as a key, an attribute and an index like any other (`django/template/base.py:Variable._resolve_lookup`). The release notes call this normally a mistake (`docs/releases/6.1.txt`), and since 6.1 `Parser.parse` warns with `RemovedInDjango2028Warning` as it compiles a variable tag whose variable holds two dots in a row; a comment there says the warning becomes an error when the deprecation ends (`django/template/base.py:Parser.parse`). The check is made only when the expression starts from a `Variable` (`FilterExpression.is_var`), so a string literal such as `{{ "a..b" }}`, translated or not, does not warn, since a fix in 6.1.1. The arguments of filters and tags are not checked: `{{ x|default:port..name }}` and `{% if port..name %}` compile without a warning. [Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md) tells the lookup.
+The recording loads one fragment by name:
 
-`Library.simple_block_tag` (5.2) makes a tag with a body from a function: the compile function parses up to the end tag, and at each render the body, rendered in the same context, is passed as the function's `"content"` argument (`django/template/library.py:Library.simple_block_tag`, `django/template/library.py:SimpleBlockNode.get_resolved_arguments`). `parse_bits`, which matches a tag's words against the function's signature, no longer takes the takes_context flag (6.1): each decorator given takes_context checks for a first parameter `"context"` as it runs, and strikes it from the list it passes (`django/template/library.py:parse_bits`, `django/template/library.py:Library.simple_tag`). [Libraries: `Library`, custom tags and `{% load %}`](../templates/libraries.md) tells both.
+```text recording=changes
+get_template("entries.html#row").render(...): one partial of a template, loaded by its name
+    5.2.17       TemplateDoesNotExist: entries.html#row
+    6.0.8        '<li>Harbour</li>'
+    6.1.1        '<li>Harbour</li>'
+    this commit  '<li>Harbour</li>'
+```
 
-## Rendering: `{% querystring %}`, the loop and `"alters_data"`
+5.2.17 looks for a template named `"entries.html#row"`, `"#"` and all; from 6.0.8 the fragment renders alone ([Template partials: `{% partialdef %}` and `{% partial %}`](../templates/partials.md)).
 
-`{% querystring %}`, new in 5.1, writes a link's query string from the request's and the template's values, so that a link to the next page keeps the rest of the query (`django/template/defaulttags.py:querystring`). Its positional arguments must be mappings, and with none the request's `HttpRequest.GET` stands in; each mapping, then the keyword arguments, is applied in order to an empty `QueryDict`, where `None` removes a key. 6.0 made the result begin with `"?"` whatever it holds, and accepted several positional mappings: on a request for `"/ports/?q=brig&page=2"`, `{% querystring page=3 %}` renders `"?q=brig&amp;page=3"`, and `{% querystring q=None page=None %}` renders `"?"`. [The built-in tags](../templates/tags.md) has the tag, and `{{ forloop.length }}` (6.0), the sequence's length, which `ForNode.render` sets before the first item (`django/template/defaulttags.py:ForNode.render`). `{% csp_nonce_attr %}` (6.1) is told in [What changed in security: Content Security Policy and signing](security.md).
+## Two dots in a variable
 
-A callable a variable's lookup finds is not called if it carries a true `"alters_data"`: the value becomes the engine's `"string_if_invalid"`, unless a true `"do_not_call_in_templates"`, tested first, keeps the callable itself (`django/template/base.py:Variable._resolve_lookup`). In 5.2 the flag was set on `QuerySet.create`, `QuerySet.bulk_create`, `QuerySet.get_or_create`, `QuerySet.update_or_create`, `UserManager.create_user`, `UserManager.create_superuser` and their coroutine twins, to prevent side effects when a template is rendered, say the release notes (`django/db/models/query.py:QuerySet.create`, `django/contrib/auth/models.py:UserManager.create_user`, `docs/releases/5.2.txt`). A manager's copy of a queryset's method carries it too, being made with `functools.wraps` (`django/db/models/manager.py:BaseManager._get_queryset_methods`): given Port's manager as ports, `{{ ports.create }}` renders the empty string, and the table stays empty.
+In `{{ entry..title }}` the empty name between the dots is looked up like any other part (`django/template/base.py:Variable._resolve_lookup`). 6.1 deprecated the form, "normally a mistake" in its notes (`docs/releases/6.1.txt`): `Parser.parse` warns as it compiles a variable tag whose variable holds two dots in a row, and a comment there says it becomes an error when the deprecation ends, in Django 2028 (`django/template/base.py:Parser.parse`).
 
-## Safe HTML and links
+```text recording=changes
+{{ entry..title }}: two dots in a variable
+    5.2.17       ''
+    6.0.8        ''
+    6.1.1        '', warns RemovedInDjango70Warning
+    this commit  '', warns RemovedInDjango2028Warning
+```
 
-The function `urlize`, behind the filters `|urlize` and `|urlizetrunc`, links an address that begins `"http://"` or `"https://"`, and a name with no scheme, such as `"www.harbour.org"` or one ending in one of the seven original top-level domains (`django/utils/html.py:Urlizer`). Such a name still gets `"http://"`, with a `RemovedInDjango2028Warning` since 6.0, unless the transitional setting `URLIZE_ASSUME_HTTPS` is true, which gives it `"https://"` (`django/utils/html.py:Urlizer.handle_word`). Django 2028 gives every such name `"https://"` and removes the setting, which 6.0 deprecated with the change. Setting it raises no warning: the settings object warns for the other transitional settings, not this one (`django/conf/__init__.py:Settings.__init__`). [What still warns: the deprecations and the releases that end them](deprecations.md) lists it.
+A literal is not checked (`FilterExpression.is_var`): `{{ "a..b" }}` warns under neither 6.1.1 nor this commit, 6.1.1 having stopped 6.1's warning for them (`docs/releases/6.1.1.txt`; [Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md)).
+
+> **Trap.** Only the variable that heads a variable tag is checked. `{% if entry..title %}` compiles without a warning under 5.2.17 and every release since, its condition false, and `Parser.parse` does not look at a filter's argument such as `default:entry..title`, which fails only at render (`django/template/base.py:FilterExpression.resolve`).
+
+## Custom tags and `parse_bits`
+
+6.1 changed where `takes_context=True` is checked. Until then `parse_bits`, which matches a tag's words to the function's signature as a template compiles, was given that flag; the 6.1 notes say only that the undocumented function no longer accepts it (`docs/releases/6.1.txt`), and an old call with it is a `TypeError` from 6.1.1, with no warning before. Each of the decorators `Library.simple_tag`, `Library.simple_block_tag` and `Library.inclusion_tag` now checks that the function's first parameter is `"context"`, and strikes it, as it decorates the function (`django/template/library.py:Library.simple_tag`):
+
+```text recording=changes
+@register.simple_tag(takes_context=True) on def page_link(number): the decoration
+    5.2.17       accepted
+    6.0.8        accepted
+    6.1.1        TemplateSyntaxError: 'page_link' is decorated with takes_context=True so it must have a first argument of 'context'
+    this commit  TemplateSyntaxError: 'page_link' is decorated with takes_context=True so it must have a first argument of 'context'
+```
+
+Until 6.1 the error came from `parse_bits`, as a template using the tag compiled; now it comes as the library's module is imported ([Libraries: `Library`, custom tags and `{% load %}`](../templates/libraries.md)).
+
+## `{% querystring %}`
+
+`{% querystring %}`, new in 5.1, writes a link's query string from the request's parameters and the template's, where a template had looped over them (`docs/releases/5.1.txt`). 6.0 let it take several positional mappings, applied in order before the keyword arguments, and made the result always begin with `"?"` (`django/template/defaulttags.py:querystring`): on a request for `"/entries/"`, `{% querystring %}` wrote nothing under 5.2.17 and `"?"` from 6.0.8, and two mappings, which 5.2.17 refused at compile time ("received too many positional arguments"), make one query string from 6.0.8 ([The built-in tags](../templates/tags.md)).
+
+## What a template does not call: `"alters_data"`
+
+A callable that a variable's lookup finds is not called if it carries a true `"alters_data"`; the value becomes the engine's `"string_if_invalid"` (`django/template/base.py:Variable._resolve_lookup`). 5.2 set the flag on `QuerySet.create`, `QuerySet.bulk_create`, `QuerySet.get_or_create`, `QuerySet.update_or_create`, `UserManager.create_user`, `UserManager.create_superuser` and their coroutine twins, "to prevent side effects when rendering a template context" (`docs/releases/5.2.txt`). A manager's copies, made with `functools.wraps`, carry it too (`django/db/models/manager.py:BaseManager._get_queryset_methods`): with a manager as entries, `{{ entries.create }}` renders the empty string under 5.2.17, which already carries 5.2's change, and every release since.
+
+## Safe HTML: `format_html` and links without a scheme
+
+`format_html` passes each argument through `conditional_escape` and marks the result safe (`django/utils/html.py:format_html`), so a call with nothing to format would mark its text safe unexamined. 5.0 deprecated such a call, and 6.0 refuses it:
+
+```text recording=changes
+format_html("<b>journal</b>"): given nothing to format
+    5.2.17       <b>journal</b>, warns RemovedInDjango60Warning
+    6.0.8        TypeError: args or kwargs must be provided.
+    6.1.1        TypeError: args or kwargs must be provided.
+    this commit  TypeError: args or kwargs must be provided.
+```
+
+`urlize`, behind the filters `|urlize` and `|urlizetrunc`, links a name without a scheme that begins `"www."` or whose domain ends in one of the seven original top-level domains, and gives it `"http://"`, or `"https://"` when the transitional setting `URLIZE_ASSUME_HTTPS` is true (`django/utils/html.py:Urlizer.handle_word`). 6.0 deprecated the default, which Django 2028 makes `"https://"`, removing the setting (`docs/internals/deprecation.txt`). A bare domain gets `"http://"` under 5.2.17 and every release since, warning from 6.0.8, and, with the setting made true by `override_settings`, `"https://"` and no warning from 6.0.8 (5.2.17 has no such setting). The 6.0 notes call the setting deprecated, but nothing warns when it is set (`docs/releases/6.0.txt`, `django/conf/__init__.py:Settings.__init__`).
+
+## The smaller changes
+
+The rest, to look up by name:
 
 | name | what changed | release | where now |
 |---|---|---|---|
-| `escapeseq` | a new filter: each item through `conditional_escape`, for a list joined where autoescaping is off | 5.0 | `django/template/defaultfilters.py:escapeseq` |
-| `format_html` | given no arguments, it would escape nothing and return its string marked safe; deprecated, then a `TypeError` | 5.0, 6.0 | `django/utils/html.py:format_html` |
-| `format_html_join` | an item that is a mapping is passed to `format_html` as keyword arguments | 5.2 | `django/utils/html.py:format_html_join` |
-| `SafeString.__add__` | returns `NotImplemented` for a right operand that is not a `str`, so the operand's `__radd__` is tried | 5.2 | `django/utils/safestring.py:SafeString.__add__` |
-
-*The changes to the helpers of [Autoescaping and safe strings](../templates/autoescape.md).*
-
-## Removed, and the engines' checks
-
-The length_is filter was removed in 5.1, and a template that uses it now fails to compile with a `TemplateSyntaxError` that says `"Invalid filter: 'length_is'"` (`django/template/base.py:Parser.find_filter`, [The built-in filters](../templates/filters.md)). Since 5.1 a template backend has `BaseEngine.check`, which returns no messages unless overridden, and the check `check_templates` calls it on every engine; `DjangoTemplates.check` reports a `"string_if_invalid"` that is not a string, `"templates.E002"`, and a library name two modules use, `"templates.W003"` (`django/core/checks/templates.py:check_templates`, `django/template/backends/django.py:DjangoTemplates.check`, [Template engines: `TEMPLATES` and the backends](../templates/engines.md)).
+| `{{ forloop.length }}` | new: the sequence's length; 5.2.17 renders nothing for it | 6.0 | `django/template/defaulttags.py:ForNode.render` |
+| `Library.simple_block_tag` | new: a tag with a body, passed rendered as `"content"` | 5.2 | `django/template/library.py:Library.simple_block_tag` |
+| `escapeseq` | a new filter: `conditional_escape` on each item of a sequence | 5.0 | `django/template/defaultfilters.py:escapeseq` |
+| `format_html_join` | an item that is a mapping is passed as keyword arguments | 5.2 | `django/utils/html.py:format_html_join` |
+| `SafeString.__add__` | `NotImplemented` for an operand not a `str`, so its `__radd__` is tried | 5.2 | `django/utils/safestring.py:SafeString.__add__` |
+| the filter length_is | removed: a template that uses it fails to compile, `"Invalid filter: 'length_is'"` | 5.1 | `django/template/base.py:Parser.find_filter` |
+| `BaseEngine.check` | new: a backend's checks, which `check_templates` runs for every engine | 5.1 | `django/core/checks/templates.py:check_templates` |
+| `{% csp_nonce_attr %}` | a new tag, for a Content Security Policy nonce | 6.1 | [What changed in security: Content Security Policy and signing](security.md) |

@@ -4,79 +4,99 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in models and fields
 
-The changes from Django 5.0 to this commit in how a model and its fields work: `db_default=` and `GeneratedField`, the `on_delete` actions left to the database, `CompositePrimaryKey`, `BigAutoField` as the automatic key, choices, `Model.NotUpdated`, the constraints, and smaller changes to saving and to the field classes.
+The changes from Django 5.0 to this commit in how a model and its fields work: `db_default` and `GeneratedField`, what a save reads back, `on_delete` left to the database, `CompositePrimaryKey` and unsaved instances' equality, `Model.NotUpdated`, choices, constraints, and the field classes.
 
-Over these releases a model came to leave more to its database, a default, a computed column, a delete, and a save learnt to read back what it made. And 6.0 removed what 5.0 and 5.1 had deprecated. Old habits fail, or are answered otherwise:
-
-```text
-# model_habits.py at this commit: petrel is a saved Ship, leith and bergen are Ports, a Berth's key is port and number
-petrel.save(False)
-    TypeError: Model.save() takes 1 positional argument but 2 were given
-models.CheckConstraint(check=Q(tonnage__gt=0), name="positive")
-    TypeError: CheckConstraint.__init__() got an unexpected keyword argument 'check'
-Ship(pk=999, name="Ghost", tonnage=1, home=bergen).save(force_update=True)
-    Ship.NotUpdated: Forced update did not affect any rows.
-Berth(port=leith, metres=60) == Berth(port=leith, metres=60)
-    False
-```
+Since 6.0 a save asks, in the same statement where the backend can, what an expression became, and after an update a generated column too. Since 6.1 an instance whose key the database will supply counts as having no key yet. Over these releases a model came to leave more to its database: a default and a computed column (5.0), a key of several columns (5.2), and a delete (6.1). 6.0 removed what 5.0 and 5.1 had deprecated, so code that 5.2 ran with a warning raises.
 
 ## Values the database supplies: `db_default` and `GeneratedField`
 
-A field may have a default that the database applies, `db_default=` (5.0), beside the `default=` that Django applies to a new instance (`django/db/models/fields/__init__.py:Field._get_default`). A new instance given no value holds a `DatabaseDefault` in the value's place, unless the field also has `default=`, and the insert leaves the column out where it can, or writes `"DEFAULT"` or the default's expression (`django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`, `django/db/models/expressions.py:DatabaseDefault`).
+`Field.db_default` (5.0) is a default the database applies. A new instance given no value holds a `DatabaseDefault` in its place, unless the field has Django's default too. The insert then leaves the column out where no other row of a bulk insert gives it a value and it is not the only column left, and otherwise writes `"DEFAULT"`, or the default's expression where the backend lacks that keyword (`django/db/models/fields/__init__.py:Field._get_default`, `django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`).
 
-`GeneratedField` (5.0) is a column the database computes from others in its row, and no save writes it (`django/db/models/fields/generated.py:GeneratedField`). Since 6.0 a save reads back such a field, and one assigned an expression such as `F("tonnage") + 20`, which the release notes say it did not do before. `Model._save_table` asks for both in the statement's `"RETURNING"` clause on SQLite, PostgreSQL and Oracle, and on MariaDB for an insert. On MySQL, and on MariaDB for an update, `Model._assign_returned_values` removes the attribute, so that the next read fetches it (`django/db/models/base.py:Model._assign_returned_values`).
+`GeneratedField` (5.0) is a column the database computes from its row, and no save writes it (`django/db/models/fields/generated.py:GeneratedField`). Since 5.2 a constraint over one can be validated (`django/db/models/base.py:Model._get_field_expression_map`). Since 6.1 PostgreSQL from 18 may have a virtual one and Oracle from 23.7 a stored one; each had had only the other kind (`django/db/backends/postgresql/features.py:DatabaseFeatures.supports_virtual_generated_columns`, `django/db/backends/oracle/features.py:DatabaseFeatures.supports_stored_generated_columns`). [The field classes](../models/field-types.md) tells both.
 
-Since 6.1 Django makes virtual generated columns on PostgreSQL 18 and stored ones on Oracle 23.7, each having had only the other kind: `GeneratedField.db_persist` chooses, and a check refuses the kind a database lacks (`django/db/models/fields/generated.py:GeneratedField._check_persistence`). Since 5.2 a constraint's validation handles a generated field, taking it as its expression over the instance's values (`django/db/models/base.py:Model._get_field_expression_map`). [The field classes](../models/field-types.md) tells the field, and [Validating an instance](../models/validation.md) the validation.
+## What a save reads back
+
+Until 6.0 a save read back only after an insert, and only the fields `Options.db_returning_fields` names: the automatic key and, where the backend returns columns from an insert, a database default or a generated column. Since 6.0 `Model._save_table` also asks for a field assigned an expression. After an update it also asks for the generated fields that depend on a field it writes (`django/db/models/base.py:Model._save_table`). The habit increments a counter by an expression, saves, and reads it, on SQLite:
+
+```text recording=changes
+tally.count = F("count") + 1; tally.save(); tally.count: a field assigned an expression, after the save
+    5.2.17       <CombinedExpression: F(count) + Value(1)>
+    6.0.8        1
+    6.1.1        1
+    this commit  1
+```
+
+From 6.0 the instance holds what the database wrote, from the statement's `"RETURNING"` clause. Under 5.2.17 on SQLite a generated column was right after an insert but stale after an update, so on SQLite the 6.0 notes' "now refreshed" is new for it only on an update (`docs/releases/6.0.txt`). Where the backend cannot return columns, as on MySQL, and on MariaDB after an update, the field is instead removed from the instance and so deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).
+
+Since 6.0 the insert of a save that is not raw calls `django.db.models.Field.pre_save` twice for each field it writes: in `_save_table`, to see if the value is an expression, and in the compiler (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`). A field that counted its calls was called once under 5.2.17 and twice under 6.0.8 ([Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).
 
 ## A delete left to the database: `DB_CASCADE`, `DB_SET_NULL` and `DB_SET_DEFAULT`
 
-Before 6.1 every `on_delete` was a Python function, which the `Collector` calls for each relation it follows, so that a cascade or a null set was Django's own work (`django/db/models/deletion.py:CASCADE`). Since 6.1 `DB_CASCADE`, `DB_SET_NULL` and `DB_SET_DEFAULT` leave the work to the foreign key's own `ON DELETE` clause. Each is a `DatabaseOnDelete`, which stands with `DO_NOTHING` in `SKIP_COLLECTION`, so the collector that a delete makes does not follow the relation, fetches none of the rows the database removes, and sends them no signal (`django/db/models/deletion.py:DatabaseOnDelete`). The release notes give the fetch saved as the reason (docs/releases/6.1.txt). The checks refuse `DB_SET_NULL` on a field that cannot be null, `DB_SET_DEFAULT` on one without `db_default=`, and a chain of references that mixes the database's actions with Python's (`django/db/models/fields/related.py:ForeignKey._check_on_delete`). [Deleting: the `Collector`](../models/deleting.md) tells it.
+Before 6.1 the `Collector` carried out every `on_delete` but `DO_NOTHING`. Under `CASCADE` the collector deletes the related rows itself, and fetches them first where a receiver of `pre_delete` or `post_delete` must be called, or their own relations followed (`django/db/models/deletion.py:Collector.can_fast_delete`). 6.1 added three `DatabaseOnDelete` values that leave the work to the `ON DELETE` clause the schema editor writes (`django/db/models/deletion.py:DatabaseOnDelete`). They are in `SKIP_COLLECTION` with `DO_NOTHING`, so a delete's collector passes the relation over (`django/db/models/deletion.py:Collector.collect`). The habit deletes a harbour with one mooring while a receiver of `post_delete` listens for moorings, and gives the statements sent:
 
-## A key of several columns: `CompositePrimaryKey`
+```text recording=changes
+harbour.delete(), a Mooring's key to it on_delete=DB_CASCADE, post_delete heard on Mooring: the statements sent
+    5.2.17       ImportError: cannot import name 'DB_CASCADE' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'DB_CASCADE' from 'django.db.models'
+    6.1.1        DELETE FROM "journal_harbour" WHERE "journal_harbour"."id" IN (1)
+    this commit  DELETE FROM "journal_harbour" WHERE "journal_harbour"."id" IN (1)
+```
 
-`CompositePrimaryKey` (5.2) is a field with no column, assigned to `"pk"`, that names the fields making up the key; its value is a tuple of theirs (`django/db/models/fields/composite.py:CompositePrimaryKey`). In 6.0 `QuerySet.raw` came to accept such a model ([What changed in querysets](querysets.md)), and a subquery returning such a key to serve lookups other than `"in"` ([What changed in expressions, lookups and the compiler](sql.md)). Also in 6.0, `Model._check_local_fields` began to refuse, as `"models.E049"`, a `ForeignObject` with several `from_fields=` named in `"indexes"`, `"constraints"` or `"unique_together"` (`django/db/models/base.py:Model._check_local_fields`).
+From 6.1 Django leaves the mooring to the database ([Deleting: the `Collector`](../models/deleting.md) shows the rows gone). The 6.1 notes give the saved fetch as the reason, and the unsent signals as its consequence (`docs/releases/6.1.txt`). The checks refuse a key with one of the database's actions to a model whose own key has one of the collector's, or the reverse (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).
 
-`Model._is_pk_set` says whether a key is set: not when it is `None`, not when a part of a tuple is, and since 6.1 not when it is the `DatabaseDefault` of a key the database will supply (`django/db/models/base.py:Model._is_pk_set`). `Model.__eq__` asks it, so an unsaved instance with such a key is equal only to itself, as the two Berths of the run are; the release notes say those with a composite or a `db_default=` key compared equal to others before 6.2 (docs/releases/6.2.txt). [An instance and its state](../models/instances.md) tells it.
+> **Trap.** `Collector.delete` sends `post_delete` only for the rows it collected, and counts only those (`django/db/models/deletion.py:Collector.delete`). The harbour's delete calls no receiver and returns `(1, {'journal.Harbour': 1})`, with the mooring gone too.
 
-## The automatic key: `BigAutoField`
+## Keys: several columns, a database default, and the automatic key
 
-`DEFAULT_AUTO_FIELD` has been `"django.db.models.BigAutoField"` by default since 6.0, where it was `"django.db.models.AutoField"` (`django/conf/global_settings.py`). `Options._get_default_pk_class` picks the class of the `"id"` a model with no primary key is given: that one, unless the application's `AppConfig.default_auto_field` names another (`django/db/models/options.py:Options._get_default_pk_class`). A project that set neither now gets 64-bit keys, and the autodetector, comparing a key made under the old default with the model, makes an `AlterField` for it (`django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields`). The check models.W042, which had warned of such keys since 3.2, is gone, and the project and application templates no longer write either ([What changed in settings, startup and the commands](startup-and-commands.md)).
+`CompositePrimaryKey` (5.2) is a field without a column, assigned to `pk`, whose value is a tuple (`django/db/models/fields/composite.py:CompositePrimaryKey`). 6.0 let `QuerySet.raw` load such a model ([What changed in querysets](querysets.md)), and let a subquery returning such a key serve more lookups ([What changed in expressions, lookups and the compiler](sql.md)). It also refused, as `"models.E049"`, a `ForeignObject` given several fields as `from_fields=` and named in an index, a constraint or `Options.unique_together`, which 5.2.17 let pass (`django/db/models/base.py:Model._check_local_fields`).
 
-## Choices: a mapping, a callable or an enumeration
+`Model._is_pk_set` counts a key unset when it is `None` or a tuple with a part unset, and since 6.1 when it holds a `DatabaseDefault` (`django/db/models/base.py:Model._is_pk_set`). `Model.__eq__` has asked it only since 6.2; before, it compared any key but `None`. The habit compares two unsaved instances whose integer key has `db_default=1`:
 
-Since 5.0 `choices=` may be a mapping, a callable or an enumeration class itself, as in the harbour's `choices=Rank`, where it had to be a list of pairs or the enumeration's `ChoicesType.choices`. The setter of `Field.choices` passes the value to `normalize_choices`, which makes the list of pairs and wraps a callable in a `CallableChoiceIterator`, called each time the choices are read (`django/utils/choices.py:normalize_choices`, `django/db/models/fields/__init__.py:Field.choices`). The metaclass once named ChoicesMeta was renamed `ChoicesType` in 5.0, and the old name went in 6.0. In 6.1 the blank choice that `Field.get_choices` puts first took `BLANK_CHOICE_LABEL` as its label in place of dashes, which `USE_BLANK_CHOICE_DASH` brings back until Django 2028 ([What changed in forms and validators](forms.md)). [Choices: `normalize_choices` and the choice iterators](../utils/choices.md) tells it.
+```text recording=changes
+Ticket() == Ticket(): unsaved, the key one the database supplies (db_default=1)
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  False
+```
+
+`_is_pk_set` changed in 6.1, and equality followed in 6.2. An unsaved instance whose key is unset is now equal only to itself (`django/db/models/base.py:Model.__eq__`; [An instance and its state](../models/instances.md)). Two unsaved instances with a composite key, a part of it unset, changed in the same way. The 6.2 notes say unsaved instances with a composite key "no longer compare equal to other instances" (`docs/releases/6.2.txt`); two with the same whole key still do.
+
+The automatic key's default became `BigAutoField` in 6.0 (`django/conf/global_settings.py`; [What changed](../changes.md#an-old-habit-release-by-release)). The warning models.W042, which 5.2.17 gave a model with an automatic key in a project and an application that named no class, went with it.
 
 ## `Model.NotUpdated`
 
-Since 6.0 a save told to update, by `force_update=True` or `update_fields=`, that matches no row raises the model's `Model.NotUpdated` in place of a plain `DatabaseError` (`django/db/models/base.py:Model._save_table`; [Saving an instance](../models/saving.md)). `ModelBase.__new__` makes it a subclass of the same class on each base that is a model and not abstract, or else of `ObjectNotUpdated` and `DatabaseError`. Its comment gives the second base as backward compatibility, an `except` clause not consulting `__subclasshook__`, so code that catches `DatabaseError` still catches it (`django/db/models/base.py:ModelBase.__new__`; [`ModelBase`: a class statement becomes a model](../models/metaclass.md)).
+Before 6.0 a save told to update, by `force_update=True` or update_fields, raised a plain `DatabaseError` when no row matched. Since 6.0 it raises the model's own `Model.NotUpdated` (`django/db/models/base.py:Model._save_table`). `ModelBase.__new__` makes it a subclass of a concrete parent's, or else of `ObjectNotUpdated` and `DatabaseError`, which it keeps for backward compatibility (`django/db/models/base.py:ModelBase.__new__`; [`ModelBase`: a class statement becomes a model](../models/metaclass.md)). Under 5.2.17 `except DatabaseError` around a forced update of a missing row caught a `DatabaseError`, and from 6.0.8 an Entry.NotUpdated with the same message.
+
+## Choices: a mapping, a callable or an enumeration
+
+Since 5.0 a field's choices may be a mapping, a callable or an enumeration class, where they had to be pairs or `ChoicesType.choices`. The setter of `Field.choices` passes them to `normalize_choices`, which makes the pairs (`django/db/models/fields/__init__.py:Field.choices`, `django/utils/choices.py:normalize_choices`; [Choices: `normalize_choices` and the choice iterators](../utils/choices.md)). ChoicesMeta, renamed `ChoicesType` in 5.0, warned under 5.2.17 and is an `ImportError` from 6.0. In 6.1 the blank choice that `Field.get_choices` puts first changed from dashes to `"- Select an option -"`. `USE_BLANK_CHOICE_DASH` brings the dashes back until Django 2028 (`django/db/models/utils.py:get_blank_choice_label`; [What changed in forms and validators](forms.md)).
 
 ## Constraints
 
-`CheckConstraint` has taken its condition as `condition=` since 5.1, which deprecated `check=`, removed in 6.0 (`django/db/models/constraints.py:CheckConstraint.__init__`). The name went to a method. Since 6.0 `BaseConstraint.check` returns the system check's messages for a model and a connection, and `Model._check_constraints` calls it for each database that may hold the model (`django/db/models/base.py:Model._check_constraints`).
+Since 5.1 a `CheckConstraint` takes its condition by the keyword condition. The keyword check, deprecated in 5.1, raises a `TypeError` from 6.0 (`django/db/models/constraints.py:CheckConstraint.__init__`). The name check went to a method. Since 6.0 `BaseConstraint.check` returns the system check's messages, and `Model._check_constraints` calls it (`django/db/models/base.py:Model._check_constraints`). 5.2 had read check as the condition, with a warning. Giving `BaseConstraint` its name or message by position, deprecated in 5.0, is a `TypeError` from 6.0.
 
-`BaseConstraint.violation_error_code` (5.0) sets the code of the `ValidationError` that a failed validation raises. Giving the name or the message by position, deprecated in 5.0, is refused since 6.0 (`django/db/models/constraints.py:BaseConstraint.__init__`). `UniqueConstraint.nulls_distinct` (5.0) asks the database to treat nulls as distinct or not, where its features allow, as PostgreSQL's do; with `False` the validation counts a null as a value that can be taken.
+`BaseConstraint.violation_error_code` (5.0) sets the code of a failed validation's error, and `UniqueConstraint.nulls_distinct` (5.0) how PostgreSQL treats nulls. Until 5.2 a `UniqueConstraint` over fields and without a condition raised the error a unique field or `Options.unique_together` raises, whatever it was given. Since 5.2 a message given is used, with the code given (`django/db/models/constraints.py:UniqueConstraint.validate`).
 
-Until 5.2 a `UniqueConstraint` over fields and without a condition answered with a unique field's message whatever it had been given. Now a message given is used, with the code given (`django/db/models/constraints.py:UniqueConstraint.validate`). The release notes say the code is always used; at this commit a code without a message is not, the test being of the message alone. Given only `violation_error_code="taken"`, a constraint over `"name"` raised for a second Petrel an error coded `"unique"`.
+> **Trap.** The 5.2 notes say the code and the message "are now always used when provided" (`docs/releases/5.2.txt`). Over fields and without a condition, a code is used only if a message is given: over one field, given only `violation_error_code="taken"`, the error's code was `"unique"` from 5.2.17 to this commit.
 
-The `Meta` option index_together was removed in 5.1. `Options.contribute_to_class` refuses it with a `TypeError`, and an `Index` in `"indexes"` takes its place (`django/db/models/options.py:Options.contribute_to_class`). `AlterIndexTogether` stays, so that old migrations still apply (`django/db/migrations/operations/models.py:AlterIndexTogether`). [Constraints and indexes](../models/constraints.md) tells the rest.
+The option index_together, removed in 5.1, is refused as a class is made ([What changed](../changes.md#an-old-habit-release-by-release)). `AlterIndexTogether` stays for old migrations (`django/db/migrations/operations/models.py:AlterIndexTogether`; [Constraints and indexes](../models/constraints.md)).
 
 ## Smaller changes
 
-The deprecations among these are in [What still warns: the deprecations and the releases that end them](deprecations.md).
+What still warns is in [What still warns: the deprecations and the releases that end them](deprecations.md).
+
+The rest, by name:
 
 | name | what changed | release | now |
 |---|---|---|---|
-| `Model.save`, `Model.asave` | positional arguments deprecated, then refused | 5.1, 6.0 | `django/db/models/base.py:Model.save` |
-| `force_insert=` | may be a tuple of parent classes whose tables are forced too | 5.0 | `django/db/models/base.py:Model._validate_force_insert` |
-| `Model.refresh_from_db` | takes `from_queryset=`, the queryset to reload from | 5.1 | `django/db/models/base.py:Model.refresh_from_db` |
-| `Field.pre_save` | may be called more than once in one save | 6.0 | `django/db/models/fields/__init__.py:Field.pre_save`, called by `django/db/models/base.py:Model._save_table` |
-| `DecimalField` | both sizes may be left out where the backend allows: SQLite, PostgreSQL, Oracle | 6.1 | `django/db/models/fields/__init__.py:DecimalField._check_decimal_places` |
-| `CharField` | may be made without `max_length=` on SQLite, as on PostgreSQL | 5.2 | `django/db/models/fields/__init__.py:CharField._check_max_length_attribute` |
-| `GenericIPAddressField` | a bad IPv6 address raises `ValidationError` in a save or a filter too, and white space is stripped | 6.2 | `django/db/models/fields/__init__.py:GenericIPAddressField.to_python` |
-| `BinaryField` | a string that is not strict Base64 raises `ValidationError` | 6.1 | `django/db/models/fields/__init__.py:BinaryField.to_python` |
+| `Model.save`, `Model.asave` | arguments by position deprecated, then a `TypeError` | 5.1, 6.0 | `django/db/models/base.py:Model.save` |
+| `DecimalField` | both sizes may be left out on SQLite, PostgreSQL and Oracle | 6.1 | `django/db/models/fields/__init__.py:DecimalField._check_decimal_places` |
+| `CharField` | max_length may be left out on SQLite | 5.2 | `django/db/models/fields/__init__.py:CharField._check_max_length_attribute` |
+| `GenericIPAddressField` | a bad IPv6 address raises `ValidationError` on a save or a filter, where it was passed as given; spaces are stripped | 6.2 | `django/db/models/fields/__init__.py:GenericIPAddressField.to_python` |
+| `BinaryField` | Base64 that is not strict raises `ValidationError` | 6.1 | `django/db/models/fields/__init__.py:BinaryField.to_python` |
 | `FileField` | saving a file with no name raises `FieldError` | 5.1 | `django/db/models/fields/files.py:FileField.pre_save` |
-| `ImageField` | measured on `post_init` only for a field with a width or height field (5.0), and after a save from the content, not the stored file (5.1) | 5.0, 5.1 | [File fields](../models/files.md) |
-| `m2m_changed` | receivers get `"raw"`, true when serialized data sets the relation | 6.1 | [Many-to-many relations](../models/many-to-many.md) |
-| a field's get_placeholder | deprecated for `get_placeholder_sql`, which returns the SQL and its parameters | 6.1 | `django/db/models/fields/__init__.py:Field.__init_subclass__` |
-| get_cache_name of `FieldCacheMixin` | replaced by `FieldCacheMixin.cache_name`: deprecated, then removed | 5.1, 6.0 | `django/db/models/fields/mixins.py:FieldCacheMixin` |
-| `UUIDField` on MariaDB | a `"uuid"` column, not `"char(32)"` | 5.0 | [What changed in the database backends and migrations](backends-and-migrations.md) |
+| `ImageField` | measured on `post_init` only with a width or height field (5.0), not again after a save (5.1) | 5.0, 5.1 | `django/db/models/fields/files.py:ImageField.contribute_to_class` |
+| `m2m_changed` | receivers are given raw, true when serialized data sets the relation | 6.1 | [Many-to-many relations](../models/many-to-many.md) |
+| get_placeholder of a field | deprecated for `get_placeholder_sql`, with a warning as the class is made | 6.1 | `django/db/models/fields/__init__.py:Field.__init_subclass__` |
+| get_cache_name of `FieldCacheMixin` | replaced by `FieldCacheMixin.cache_name`, which from 6.0 never calls it | 5.1, 6.0 | `django/db/models/fields/mixins.py:FieldCacheMixin` |

@@ -8,9 +8,23 @@
  "document": "templates.md",
  "pointers": [
   {
+   "pointer": "django/template/base.py:Template.compile_nodelist",
+   "line": 15,
+   "sentence": "In 5.1 the parser gained `Parser.extra_data`, a dictionary in which a tag's compile function may leave data, kept as `Template.extra_data` once the parse succeeds (`django/template/base.py:Template.compile_nodelist`); partials (6.0) are built on it.",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "Template.compile_nodelist",
+   "kind": "function",
+   "lines": [
+    179,
+    214
+   ],
+   "fingerprint": "b7cae1bac3f46aa5"
+  },
+  {
    "pointer": "django/template/defaulttags.py:partialdef_func",
-   "line": 13,
-   "sentence": "`{% partialdef ship_row %}` … `{% endpartialdef %}` defines one, which renders nothing where it stands unless the tag adds `\"inline\"`; `{% partial ship_row %}` renders it with the context at that point; and a name such as `\"fleet/port_detail.html#ship_row\"`, given to `Engine.get_template` and so to `render_to_string` and `{% include %}`, loads the fragment alone, a `PartialTemplate` (`django/template/defaulttags.py:partialdef_func`, `django/template/engine.py:Engine.get_template`).",
+   "line": 15,
+   "sentence": "`{% partialdef row %}` … `{% endpartialdef %}` files a `PartialTemplate` there under `\"partials\"`, and renders nothing where it stands unless the tag adds `\"inline\"` (`django/template/defaulttags.py:partialdef_func`); `{% partial row %}` renders the fragment in the context at that point (`django/template/defaulttags.py:PartialNode.render`).",
    "tree": "django",
    "path": "django/template/defaulttags.py",
    "symbol": "partialdef_func",
@@ -23,9 +37,23 @@
    "fingerprint": "7aa1ada24a0034bc"
   },
   {
+   "pointer": "django/template/defaulttags.py:PartialNode.render",
+   "line": 15,
+   "sentence": "`{% partialdef row %}` … `{% endpartialdef %}` files a `PartialTemplate` there under `\"partials\"`, and renders nothing where it stands unless the tag adds `\"inline\"` (`django/template/defaulttags.py:partialdef_func`); `{% partial row %}` renders the fragment in the context at that point (`django/template/defaulttags.py:PartialNode.render`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "PartialNode.render",
+   "kind": "function",
+   "lines": [
+    429,
+    435
+   ],
+   "fingerprint": "aa5720864c1368cb"
+  },
+  {
    "pointer": "django/template/engine.py:Engine.get_template",
-   "line": 13,
-   "sentence": "`{% partialdef ship_row %}` … `{% endpartialdef %}` defines one, which renders nothing where it stands unless the tag adds `\"inline\"`; `{% partial ship_row %}` renders it with the context at that point; and a name such as `\"fleet/port_detail.html#ship_row\"`, given to `Engine.get_template` and so to `render_to_string` and `{% include %}`, loads the fragment alone, a `PartialTemplate` (`django/template/defaulttags.py:partialdef_func`, `django/template/engine.py:Engine.get_template`).",
+   "line": 15,
+   "sentence": "A name such as `\"entries.html#row\"`, given to `Engine.get_template` and so to `render_to_string` and `{% include %}`, is split at its first `\"#\"`: the template before it is loaded, and the partial filed under the rest returned (`django/template/engine.py:Engine.get_template`).",
    "tree": "django",
    "path": "django/template/engine.py",
    "symbol": "Engine.get_template",
@@ -37,23 +65,23 @@
    "fingerprint": "ccc2fde964ac6e7c"
   },
   {
-   "pointer": "django/template/base.py:Template.compile_nodelist",
-   "line": 13,
-   "sentence": "The store they rely on came in 5.1: `Parser.extra_data`, a dictionary a compile function may fill, which `Template.compile_nodelist` keeps as `Template.extra_data` once the parse succeeds; `{% partialdef %}` files each fragment there under `\"partials\"` (`django/template/base.py:Template.compile_nodelist`).",
+   "pointer": "docs/releases/6.0.txt",
+   "line": 15,
+   "sentence": "The 6.0 notes give the purpose, \"to encapsulate and reuse small named fragments within a template file\", and a guide for users of django-template-partials (`docs/releases/6.0.txt`).",
    "tree": "django",
-   "path": "django/template/base.py",
-   "symbol": "Template.compile_nodelist",
-   "kind": "function",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    179,
-    214
+    1,
+    642
    ],
-   "fingerprint": "b7cae1bac3f46aa5"
+   "fingerprint": "0ea24de54cb358c8"
   },
   {
    "pointer": "django/template/base.py:Variable._resolve_lookup",
-   "line": 17,
-   "sentence": "In `{{ port..name }}` the lookup's middle part is an empty name, tried as a key, an attribute and an index like any other (`django/template/base.py:Variable._resolve_lookup`).",
+   "line": 31,
+   "sentence": "In `{{ entry..title }}` the empty name between the dots is looked up like any other part (`django/template/base.py:Variable._resolve_lookup`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Variable._resolve_lookup",
@@ -66,8 +94,8 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 17,
-   "sentence": "The release notes call this normally a mistake (`docs/releases/6.1.txt`), and since 6.1 `Parser.parse` warns with `RemovedInDjango2028Warning` as it compiles a variable tag whose variable holds two dots in a row; a comment there says the warning becomes an error when the deprecation ends (`django/template/base.py:Parser.parse`).",
+   "line": 31,
+   "sentence": "6.1 deprecated the form, \"normally a mistake\" in its notes (`docs/releases/6.1.txt`): `Parser.parse` warns as it compiles a variable tag whose variable holds two dots in a row, and a comment there says it becomes an error when the deprecation ends, in Django 2028 (`django/template/base.py:Parser.parse`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -80,8 +108,8 @@
   },
   {
    "pointer": "django/template/base.py:Parser.parse",
-   "line": 17,
-   "sentence": "The release notes call this normally a mistake (`docs/releases/6.1.txt`), and since 6.1 `Parser.parse` warns with `RemovedInDjango2028Warning` as it compiles a variable tag whose variable holds two dots in a row; a comment there says the warning becomes an error when the deprecation ends (`django/template/base.py:Parser.parse`).",
+   "line": 31,
+   "sentence": "6.1 deprecated the form, \"normally a mistake\" in its notes (`docs/releases/6.1.txt`): `Parser.parse` warns as it compiles a variable tag whose variable holds two dots in a row, and a comment there says it becomes an error when the deprecation ends, in Django 2028 (`django/template/base.py:Parser.parse`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Parser.parse",
@@ -93,51 +121,51 @@
    "fingerprint": "1209ee26f1f2fa8c"
   },
   {
-   "pointer": "django/template/library.py:Library.simple_block_tag",
-   "line": 19,
-   "sentence": "`Library.simple_block_tag` (5.2) makes a tag with a body from a function: the compile function parses up to the end tag, and at each render the body, rendered in the same context, is passed as the function's `\"content\"` argument (`django/template/library.py:Library.simple_block_tag`, `django/template/library.py:SimpleBlockNode.get_resolved_arguments`).",
+   "pointer": "docs/releases/6.1.1.txt",
+   "line": 41,
+   "sentence": "A literal is not checked (`FilterExpression.is_var`): `{{ \"a..b\" }}` warns under neither 6.1.1 nor this commit, 6.1.1 having stopped 6.1's warning for them (`docs/releases/6.1.1.txt`; [Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md)).",
    "tree": "django",
-   "path": "django/template/library.py",
-   "symbol": "Library.simple_block_tag",
-   "kind": "function",
+   "path": "docs/releases/6.1.1.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    166,
-    252
+    1,
+    64
    ],
-   "fingerprint": "2d5e40aa8ceb572b"
+   "fingerprint": "b58cca3e7b08a877"
   },
   {
-   "pointer": "django/template/library.py:SimpleBlockNode.get_resolved_arguments",
-   "line": 19,
-   "sentence": "`Library.simple_block_tag` (5.2) makes a tag with a body from a function: the compile function parses up to the end tag, and at each render the body, rendered in the same context, is passed as the function's `\"content\"` argument (`django/template/library.py:Library.simple_block_tag`, `django/template/library.py:SimpleBlockNode.get_resolved_arguments`).",
+   "pointer": "django/template/base.py:FilterExpression.resolve",
+   "line": 43,
+   "sentence": "`{% if entry..title %}` compiles without a warning under 5.2.17 and every release since, its condition false, and `Parser.parse` does not look at a filter's argument such as `default:entry..title`, which fails only at render (`django/template/base.py:FilterExpression.resolve`).",
    "tree": "django",
-   "path": "django/template/library.py",
-   "symbol": "SimpleBlockNode.get_resolved_arguments",
+   "path": "django/template/base.py",
+   "symbol": "FilterExpression.resolve",
    "kind": "function",
    "lines": [
-    357,
-    366
+    803,
+    838
    ],
-   "fingerprint": "fd352911839a47f2"
+   "fingerprint": "d802b4ad01b64e59"
   },
   {
-   "pointer": "django/template/library.py:parse_bits",
-   "line": 19,
-   "sentence": "`parse_bits`, which matches a tag's words against the function's signature, no longer takes the takes_context flag (6.1): each decorator given takes_context checks for a first parameter `\"context\"` as it runs, and strikes it from the list it passes (`django/template/library.py:parse_bits`, `django/template/library.py:Library.simple_tag`).",
+   "pointer": "docs/releases/6.1.txt",
+   "line": 47,
+   "sentence": "Until then `parse_bits`, which matches a tag's words to the function's signature as a template compiles, was given that flag; the 6.1 notes say only that the undocumented function no longer accepts it (`docs/releases/6.1.txt`), and an old call with it is a `TypeError` from 6.1.1, with no warning before.",
    "tree": "django",
-   "path": "django/template/library.py",
-   "symbol": "parse_bits",
-   "kind": "function",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    406,
-    482
+    1,
+    760
    ],
-   "fingerprint": "6c3b71a2a111984b"
+   "fingerprint": "283b7ce3a441f06c"
   },
   {
    "pointer": "django/template/library.py:Library.simple_tag",
-   "line": 19,
-   "sentence": "`parse_bits`, which matches a tag's words against the function's signature, no longer takes the takes_context flag (6.1): each decorator given takes_context checks for a first parameter `\"context\"` as it runs, and strikes it from the list it passes (`django/template/library.py:parse_bits`, `django/template/library.py:Library.simple_tag`).",
+   "line": 47,
+   "sentence": "Each of the decorators `Library.simple_tag`, `Library.simple_block_tag` and `Library.inclusion_tag` now checks that the function's first parameter is `\"context\"`, and strikes it, as it decorates the function (`django/template/library.py:Library.simple_tag`):",
    "tree": "django",
    "path": "django/template/library.py",
    "symbol": "Library.simple_tag",
@@ -149,9 +177,23 @@
    "fingerprint": "26fbe50d2be7a554"
   },
   {
+   "pointer": "docs/releases/5.1.txt",
+   "line": 61,
+   "sentence": "`{% querystring %}`, new in 5.1, writes a link's query string from the request's parameters and the template's, where a template had looped over them (`docs/releases/5.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "3a1b214427111cf2"
+  },
+  {
    "pointer": "django/template/defaulttags.py:querystring",
-   "line": 23,
-   "sentence": "`{% querystring %}`, new in 5.1, writes a link's query string from the request's and the template's values, so that a link to the next page keeps the rest of the query (`django/template/defaulttags.py:querystring`).",
+   "line": 61,
+   "sentence": "6.0 let it take several positional mappings, applied in order before the keyword arguments, and made the result always begin with `\"?\"` (`django/template/defaulttags.py:querystring`): on a request for `\"/entries/\"`, `{% querystring %}` wrote nothing under 5.2.17 and `\"?\"` from 6.0.8, and two mappings, which 5.2.17 refused at compile time (\"received too many positional arguments\"), make one query string from 6.0.8 ([The built-in tags](../templates/tags.md)).",
    "tree": "django",
    "path": "django/template/defaulttags.py",
    "symbol": "querystring",
@@ -164,23 +206,9 @@
    "fingerprint": "c124c7a8cbce92fd"
   },
   {
-   "pointer": "django/template/defaulttags.py:ForNode.render",
-   "line": 23,
-   "sentence": "[The built-in tags](../templates/tags.md) has the tag, and `{{ forloop.length }}` (6.0), the sequence's length, which `ForNode.render` sets before the first item (`django/template/defaulttags.py:ForNode.render`).",
-   "tree": "django",
-   "path": "django/template/defaulttags.py",
-   "symbol": "ForNode.render",
-   "kind": "function",
-   "lines": [
-    191,
-    256
-   ],
-   "fingerprint": "baec01f8c0647928"
-  },
-  {
    "pointer": "django/template/base.py:Variable._resolve_lookup",
-   "line": 25,
-   "sentence": "A callable a variable's lookup finds is not called if it carries a true `\"alters_data\"`: the value becomes the engine's `\"string_if_invalid\"`, unless a true `\"do_not_call_in_templates\"`, tested first, keeps the callable itself (`django/template/base.py:Variable._resolve_lookup`).",
+   "line": 65,
+   "sentence": "A callable that a variable's lookup finds is not called if it carries a true `\"alters_data\"`; the value becomes the engine's `\"string_if_invalid\"` (`django/template/base.py:Variable._resolve_lookup`).",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Variable._resolve_lookup",
@@ -192,37 +220,9 @@
    "fingerprint": "e7f5c1cb99dd5024"
   },
   {
-   "pointer": "django/db/models/query.py:QuerySet.create",
-   "line": 25,
-   "sentence": "In 5.2 the flag was set on `QuerySet.create`, `QuerySet.bulk_create`, `QuerySet.get_or_create`, `QuerySet.update_or_create`, `UserManager.create_user`, `UserManager.create_superuser` and their coroutine twins, to prevent side effects when a template is rendered, say the release notes (`django/db/models/query.py:QuerySet.create`, `django/contrib/auth/models.py:UserManager.create_user`, `docs/releases/5.2.txt`).",
-   "tree": "django",
-   "path": "django/db/models/query.py",
-   "symbol": "QuerySet.create",
-   "kind": "function",
-   "lines": [
-    764,
-    782
-   ],
-   "fingerprint": "8e522e9cbd79fded"
-  },
-  {
-   "pointer": "django/contrib/auth/models.py:UserManager.create_user",
-   "line": 25,
-   "sentence": "In 5.2 the flag was set on `QuerySet.create`, `QuerySet.bulk_create`, `QuerySet.get_or_create`, `QuerySet.update_or_create`, `UserManager.create_user`, `UserManager.create_superuser` and their coroutine twins, to prevent side effects when a template is rendered, say the release notes (`django/db/models/query.py:QuerySet.create`, `django/contrib/auth/models.py:UserManager.create_user`, `docs/releases/5.2.txt`).",
-   "tree": "django",
-   "path": "django/contrib/auth/models.py",
-   "symbol": "UserManager.create_user",
-   "kind": "function",
-   "lines": [
-    177,
-    180
-   ],
-   "fingerprint": "2260f3c54ae28170"
-  },
-  {
    "pointer": "docs/releases/5.2.txt",
-   "line": 25,
-   "sentence": "In 5.2 the flag was set on `QuerySet.create`, `QuerySet.bulk_create`, `QuerySet.get_or_create`, `QuerySet.update_or_create`, `UserManager.create_user`, `UserManager.create_superuser` and their coroutine twins, to prevent side effects when a template is rendered, say the release notes (`django/db/models/query.py:QuerySet.create`, `django/contrib/auth/models.py:UserManager.create_user`, `docs/releases/5.2.txt`).",
+   "line": 65,
+   "sentence": "5.2 set the flag on `QuerySet.create`, `QuerySet.bulk_create`, `QuerySet.get_or_create`, `QuerySet.update_or_create`, `UserManager.create_user`, `UserManager.create_superuser` and their coroutine twins, \"to prevent side effects when rendering a template context\" (`docs/releases/5.2.txt`).",
    "tree": "django",
    "path": "docs/releases/5.2.txt",
    "symbol": null,
@@ -235,8 +235,8 @@
   },
   {
    "pointer": "django/db/models/manager.py:BaseManager._get_queryset_methods",
-   "line": 25,
-   "sentence": "A manager's copy of a queryset's method carries it too, being made with `functools.wraps` (`django/db/models/manager.py:BaseManager._get_queryset_methods`): given Port's manager as ports, `{{ ports.create }}` renders the empty string, and the table stays empty.",
+   "line": 65,
+   "sentence": "A manager's copies, made with `functools.wraps`, carry it too (`django/db/models/manager.py:BaseManager._get_queryset_methods`): with a manager as entries, `{{ entries.create }}` renders the empty string under 5.2.17, which already carries 5.2's change, and every release since.",
    "tree": "django",
    "path": "django/db/models/manager.py",
    "symbol": "BaseManager._get_queryset_methods",
@@ -249,23 +249,23 @@
    "fingerprint": "5e74335544ea5ef4"
   },
   {
-   "pointer": "django/utils/html.py:Urlizer",
-   "line": 29,
-   "sentence": "The function `urlize`, behind the filters `|urlize` and `|urlizetrunc`, links an address that begins `\"http://\"` or `\"https://\"`, and a name with no scheme, such as `\"www.harbour.org\"` or one ending in one of the seven original top-level domains (`django/utils/html.py:Urlizer`).",
+   "pointer": "django/utils/html.py:format_html",
+   "line": 69,
+   "sentence": "`format_html` passes each argument through `conditional_escape` and marks the result safe (`django/utils/html.py:format_html`), so a call with nothing to format would mark its text safe unexamined.",
    "tree": "django",
    "path": "django/utils/html.py",
-   "symbol": "Urlizer",
-   "kind": "class",
+   "symbol": "format_html",
+   "kind": "function",
    "lines": [
-    289,
-    495
+    135,
+    145
    ],
-   "fingerprint": "e0c508ceb1b014f2"
+   "fingerprint": "5bb23907b75e1981"
   },
   {
    "pointer": "django/utils/html.py:Urlizer.handle_word",
-   "line": 29,
-   "sentence": "Such a name still gets `\"http://\"`, with a `RemovedInDjango2028Warning` since 6.0, unless the transitional setting `URLIZE_ASSUME_HTTPS` is true, which gives it `\"https://\"` (`django/utils/html.py:Urlizer.handle_word`).",
+   "line": 79,
+   "sentence": "`urlize`, behind the filters `|urlize` and `|urlizetrunc`, links a name without a scheme that begins `\"www.\"` or whose domain ends in one of the seven original top-level domains, and gives it `\"http://\"`, or `\"https://\"` when the transitional setting `URLIZE_ASSUME_HTTPS` is true (`django/utils/html.py:Urlizer.handle_word`).",
    "tree": "django",
    "path": "django/utils/html.py",
    "symbol": "Urlizer.handle_word",
@@ -277,9 +277,37 @@
    "fingerprint": "5cd4f12d686e3e5b"
   },
   {
+   "pointer": "docs/internals/deprecation.txt",
+   "line": 79,
+   "sentence": "6.0 deprecated the default, which Django 2028 makes `\"https://\"`, removing the setting (`docs/internals/deprecation.txt`).",
+   "tree": "django",
+   "path": "docs/internals/deprecation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1585
+   ],
+   "fingerprint": "f80d8f829f2033b6"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 79,
+   "sentence": "The 6.0 notes call the setting deprecated, but nothing warns when it is set (`docs/releases/6.0.txt`, `django/conf/__init__.py:Settings.__init__`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
    "pointer": "django/conf/__init__.py:Settings.__init__",
-   "line": 29,
-   "sentence": "Setting it raises no warning: the settings object warns for the other transitional settings, not this one (`django/conf/__init__.py:Settings.__init__`).",
+   "line": 79,
+   "sentence": "The 6.0 notes call the setting deprecated, but nothing warns when it is set (`docs/releases/6.0.txt`, `django/conf/__init__.py:Settings.__init__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "Settings.__init__",
@@ -291,9 +319,37 @@
    "fingerprint": "203785028e2e9bc4"
   },
   {
+   "pointer": "django/template/defaulttags.py:ForNode.render",
+   "line": 87,
+   "sentence": "| `{{ forloop.length }}` | new: the sequence's length; 5.2.17 renders nothing for it | 6.0 | `django/template/defaulttags.py:ForNode.render` |",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "ForNode.render",
+   "kind": "function",
+   "lines": [
+    191,
+    256
+   ],
+   "fingerprint": "baec01f8c0647928"
+  },
+  {
+   "pointer": "django/template/library.py:Library.simple_block_tag",
+   "line": 88,
+   "sentence": "| `Library.simple_block_tag` | new: a tag with a body, passed rendered as `\"content\"` | 5.2 | `django/template/library.py:Library.simple_block_tag` |",
+   "tree": "django",
+   "path": "django/template/library.py",
+   "symbol": "Library.simple_block_tag",
+   "kind": "function",
+   "lines": [
+    166,
+    252
+   ],
+   "fingerprint": "2d5e40aa8ceb572b"
+  },
+  {
    "pointer": "django/template/defaultfilters.py:escapeseq",
-   "line": 33,
-   "sentence": "| `escapeseq` | a new filter: each item through `conditional_escape`, for a list joined where autoescaping is off | 5.0 | `django/template/defaultfilters.py:escapeseq` |",
+   "line": 89,
+   "sentence": "| `escapeseq` | a new filter: `conditional_escape` on each item of a sequence | 5.0 | `django/template/defaultfilters.py:escapeseq` |",
    "tree": "django",
    "path": "django/template/defaultfilters.py",
    "symbol": "escapeseq",
@@ -306,23 +362,9 @@
    "fingerprint": "c38ab3caa2958791"
   },
   {
-   "pointer": "django/utils/html.py:format_html",
-   "line": 34,
-   "sentence": "| `format_html` | given no arguments, it would escape nothing and return its string marked safe; deprecated, then a `TypeError` | 5.0, 6.0 | `django/utils/html.py:format_html` |",
-   "tree": "django",
-   "path": "django/utils/html.py",
-   "symbol": "format_html",
-   "kind": "function",
-   "lines": [
-    135,
-    145
-   ],
-   "fingerprint": "5bb23907b75e1981"
-  },
-  {
    "pointer": "django/utils/html.py:format_html_join",
-   "line": 35,
-   "sentence": "| `format_html_join` | an item that is a mapping is passed to `format_html` as keyword arguments | 5.2 | `django/utils/html.py:format_html_join` |",
+   "line": 90,
+   "sentence": "| `format_html_join` | an item that is a mapping is passed as keyword arguments | 5.2 | `django/utils/html.py:format_html_join` |",
    "tree": "django",
    "path": "django/utils/html.py",
    "symbol": "format_html_join",
@@ -335,8 +377,8 @@
   },
   {
    "pointer": "django/utils/safestring.py:SafeString.__add__",
-   "line": 36,
-   "sentence": "| `SafeString.__add__` | returns `NotImplemented` for a right operand that is not a `str`, so the operand's `__radd__` is tried | 5.2 | `django/utils/safestring.py:SafeString.__add__` |",
+   "line": 91,
+   "sentence": "| `SafeString.__add__` | `NotImplemented` for an operand not a `str`, so its `__radd__` is tried | 5.2 | `django/utils/safestring.py:SafeString.__add__` |",
    "tree": "django",
    "path": "django/utils/safestring.py",
    "symbol": "SafeString.__add__",
@@ -349,8 +391,8 @@
   },
   {
    "pointer": "django/template/base.py:Parser.find_filter",
-   "line": 42,
-   "sentence": "The length_is filter was removed in 5.1, and a template that uses it now fails to compile with a `TemplateSyntaxError` that says `\"Invalid filter: 'length_is'\"` (`django/template/base.py:Parser.find_filter`, [The built-in filters](../templates/filters.md)).",
+   "line": 92,
+   "sentence": "| the filter length_is | removed: a template that uses it fails to compile, `\"Invalid filter: 'length_is'\"` | 5.1 | `django/template/base.py:Parser.find_filter` |",
    "tree": "django",
    "path": "django/template/base.py",
    "symbol": "Parser.find_filter",
@@ -363,8 +405,8 @@
   },
   {
    "pointer": "django/core/checks/templates.py:check_templates",
-   "line": 42,
-   "sentence": "Since 5.1 a template backend has `BaseEngine.check`, which returns no messages unless overridden, and the check `check_templates` calls it on every engine; `DjangoTemplates.check` reports a `\"string_if_invalid\"` that is not a string, `\"templates.E002\"`, and a library name two modules use, `\"templates.W003\"` (`django/core/checks/templates.py:check_templates`, `django/template/backends/django.py:DjangoTemplates.check`, [Template engines: `TEMPLATES` and the backends](../templates/engines.md)).",
+   "line": 93,
+   "sentence": "| `BaseEngine.check` | new: a backend's checks, which `check_templates` runs for every engine | 5.1 | `django/core/checks/templates.py:check_templates` |",
    "tree": "django",
    "path": "django/core/checks/templates.py",
    "symbol": "check_templates",
@@ -375,20 +417,6 @@
    ],
    "at": 5,
    "fingerprint": "44fa45b45642667f"
-  },
-  {
-   "pointer": "django/template/backends/django.py:DjangoTemplates.check",
-   "line": 42,
-   "sentence": "Since 5.1 a template backend has `BaseEngine.check`, which returns no messages unless overridden, and the check `check_templates` calls it on every engine; `DjangoTemplates.check` reports a `\"string_if_invalid\"` that is not a string, `\"templates.E002\"`, and a library name two modules use, `\"templates.W003\"` (`django/core/checks/templates.py:check_templates`, `django/template/backends/django.py:DjangoTemplates.check`, [Template engines: `TEMPLATES` and the backends](../templates/engines.md)).",
-   "tree": "django",
-   "path": "django/template/backends/django.py",
-   "symbol": "DjangoTemplates.check",
-   "kind": "function",
-   "lines": [
-    30,
-    34
-   ],
-   "fingerprint": "7b6a9da1cfee5517"
   }
  ]
 }

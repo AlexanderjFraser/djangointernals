@@ -4,64 +4,117 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in handlers, requests, URLs and views
 
-The changes from Django 5.0 to this commit in the request cycle: Django's middleware made synchronous under ASGI, `MiddlewareMixin` moved and error responses made on the request's thread (6.2); the ASGI request's disconnect and cookies; decorators that keep a coroutine view a coroutine function; `JsonResponse` without safe; the multipart parser's strict Base64; and smaller changes to requests, responses, redirects, `reverse` and converters.
+The changes from Django 5.0 to this commit in the request cycle: Django's middleware under ASGI, error responses on the request's thread and `MiddlewareMixin` moved (6.2); the ASGI request's disconnect and cookies; decorators around coroutine views; `JsonResponse` without safe; strict Base64 in multipart bodies; and smaller changes to requests, redirects, `reverse` and converters.
 
-Most of these changes are additions. The largest to a running site is 6.2's, to the mode Django's own middleware runs in under ASGI.
+Two changes of 6.2 alter how a request is served under ASGI, and both concern the one thread each ASGI request has, on which Django runs the synchronous code it calls with `thread_sensitive=True` (`django/core/handlers/asgi.py:ASGIHandler.__call__`). Most of Django's own middleware now runs on that thread in a single call, where it used to send each hook there from the event loop and back, and an error view runs there too, where it ran on a shared pool. The notes' reasons are the cost of the switching and the database connections an error view uses (`docs/releases/6.2.txt`).
+
+Two guards changed too: `JsonResponse` stopped refusing a list (6.2), and the multipart parser became strict about Base64 (6.1).
 
 ## Django's middleware under ASGI
 
-Before 6.2 Django's middleware classes inherited `async_capable = True` from `MiddlewareMixin`, so under ASGI a chain of them ran in the mixin's async mode: the chain stayed on the event loop, and each `process_request` and `process_response` went to a thread and back. Since 6.2 each that has either hook sets it to false, and `BaseHandler.load_middleware` runs them synchronously: together they make one call into the request's thread, and the centre of the chain one call back to the loop (`django/middleware/common.py:CommonMiddleware.async_capable`, `django/core/handlers/base.py:BaseHandler.load_middleware`). The release notes give the repeated switching as the reason, and allow that a deployment with much concurrent I/O outside the ORM may prefer it to a thread held for each request (`docs/releases/6.2.txt`). [Sync and async in one chain](../handlers/async.md) tells the rule and draws both arrangements.
+Before 6.2 the middleware classes Django builds on `MiddlewareMixin` took its `async_capable = True`, so under ASGI a chain of them ran in the mixin's async mode, on the event loop, sending each `process_request` and `process_response` to the request's thread and back. Since 6.2 every one built on the mixin with either hook has the flag false, and `BaseHandler.load_middleware` therefore runs them synchronously: together they make one call into the request's thread, and the centre of the chain, where the handler resolves the view and calls it, one call back to the loop (`django/middleware/common.py:CommonMiddleware.async_capable`, `django/core/handlers/base.py:BaseHandler.load_middleware`). Here a GET for a synchronous view passes through startproject's `MIDDLEWARE`, and the run counts the calls handed to a thread:
 
-The mixin's own flag is still true (`django/middleware/__init__.py:MiddlewareMixin`), so a project's middleware built on it can still run asynchronously, and a subclass of Django's that sets the flag back can run in async mode again. But the chain runs a layer synchronously whenever the layer inside it is synchronous and it can be, so one of Django's middleware listed after a project's puts the project's in sync mode too. `RemoteUserMiddleware`, not built on the mixin, declares both flags; `LoginRequiredMiddleware` and `XViewMiddleware` have neither hook and keep the mixin's (`django/contrib/auth/middleware.py:RemoteUserMiddleware`).
+```text recording=changes
+A GET under ASGI through startproject's MIDDLEWARE to a synchronous view: the calls handed to a thread
+    5.2.17       16 calls handed to a thread
+    6.0.8        16 calls handed to a thread
+    6.1.1        16 calls handed to a thread
+    this commit  5 calls handed to a thread
+```
 
-`MiddlewareMixin` itself moved in 6.2, from `django.utils.deprecation` to `django.middleware`. The old module answers the old import through its module-level `__getattr__`, which warns with `RemovedInDjango2029Warning` and returns the same class (`django/utils/deprecation.py:__getattr__`; [What still warns: the deprecations and the releases that end them](deprecations.md)).
+With `MIDDLEWARE` empty the same GET hands three under all four, for the receivers of `request_started`, the view and the closing of the response; the rest are the middleware's. Since 6.2 the chain is one call, and only `CsrfViewMiddleware.process_view` is still handed over on its own, as the view is (`django/core/handlers/base.py:BaseHandler._get_response_async`). Each call is one switch from the event loop to the thread and back, so a request gains the switches saved. [Sync and async in one chain](../handlers/async.md) tells the rule, and when the 6.2 notes say the old arrangement may still be preferred.
+
+`LoginRequiredMiddleware` and `XViewMiddleware`, which have only a `process_view`, keep the mixin's flag, still true (`django/middleware/__init__.py:MiddlewareMixin.async_capable`), and `RemoteUserMiddleware`, not built on the mixin, declares it true (`django/contrib/auth/middleware.py:RemoteUserMiddleware`). A project's own class built directly on the mixin keeps the flag true unless it sets it, and so takes the mode of the layer inside it, the next in `MIDDLEWARE`: after all of Django's synchronous ones it runs in async mode as before, and directly before one it now runs synchronously, in their one call (`django/core/handlers/base.py:BaseHandler.load_middleware`).
+
+`MiddlewareMixin` itself moved in 6.2, from `django.utils.deprecation` to `django.middleware`; the old import still works, and warns with `RemovedInDjango2029Warning` (`django/utils/deprecation.py:__getattr__`; [What changed](../changes.md#an-old-habit-release-by-release)).
 
 ## Error responses on the request's thread
 
-Under ASGI the wrapper `convert_exception_to_response` puts around an asynchronous layer, the centre of the chain or a middleware in async mode, is a coroutine, which runs `response_for_exception`, error view and all, through `sync_to_async` when the layer raises. Since 6.2 it passes `thread_sensitive=True`, so the error view runs on the request's own thread, where before it ran on a shared pool (`django/core/handlers/exception.py:convert_exception_to_response`). The release notes' reason is the database: a connection belongs to the thread that opened it, and the change lets `close_old_connections`, which runs on the request's thread as the request starts and ends, manage the connections a `handler404` or a `handler500` uses (`django/db/utils.py:ConnectionHandler.thread_critical`, `django/db/__init__.py:close_old_connections`). [How an exception becomes a response](../handlers/exceptions.md) tells the conversion, and [Sync and async in one chain](../handlers/async.md#one-thread-per-request) the request's thread.
+Under ASGI the wrapper that `convert_exception_to_response` puts around an asynchronous layer is a coroutine function, and when the layer raises it runs `response_for_exception`, error view and all, through `sync_to_async`. Before 6.2 that ran on a shared pool of threads, the notes say; since 6.2 the call passes `thread_sensitive=True`, which sends it to the request's own thread (`django/core/handlers/exception.py:convert_exception_to_response`). Here a synchronous view raises under an `ASGIHandler`, and the run compares the thread the project's `handler500` runs on with the view's:
 
-## The ASGI request: a disconnect and several cookies
+```text recording=changes
+handler500 under ASGI, when a synchronous view raises: the thread it runs on
+    5.2.17       another thread
+    6.0.8        another thread
+    6.1.1        another thread
+    this commit  the view's thread
+```
 
-Since 5.0 an `"http.disconnect"` that comes before the response is made is handled, so that a view can clean up (`docs/releases/5.0.txt`). At this commit `ASGIHandler.handle` hears it while it reads the body, and then runs a listener beside the chain and the sending of the response in one `asyncio.TaskGroup`. A disconnect cancels the work: a coroutine view is cancelled where it awaits, and can clean up, while synchronous code already running in the request's thread runs to its end (`django/core/handlers/asgi.py:ASGIHandler.handle`; [The two entry points](../handlers/entry.md#an-asgi-request)).
+The notes' reason is the database. A connection belongs to the thread that opened it (`django/db/utils.py:ConnectionHandler.thread_critical`), and `close_old_connections`, which closes one that is broken or past its age, runs on the request's thread as the request starts and ends (`django/db/__init__.py:close_old_connections`); before 6.2 it could not reach a connection that a `handler404` or a `handler500` opened on a pool thread. [How an exception becomes a response](../handlers/exceptions.md) tells the conversion.
 
-Since 6.0 the several `"cookie"` headers that HTTP/2 allows are joined with a semicolon and a space into one `"HTTP_COOKIE"`, where any other repeated header is joined with commas (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)).
+## The ASGI request: a disconnect, and cookies sent separately
+
+Since 5.0 an `"http.disconnect"` that arrives before the response is made cancels the work, so that a view can clean up (`docs/releases/5.0.txt`). A coroutine view is cancelled where it awaits, while synchronous code already running on the request's thread runs to its end (`django/core/handlers/asgi.py:ASGIHandler.handle`; [The two entry points](../handlers/entry.md#an-asgi-request)).
+
+HTTP/2 lets a client send each cookie as a `"cookie"` header of its own. Here an `ASGIRequest` is made with two:
+
+```text recording=changes
+request.COOKIES under ASGI, sent as two "cookie" headers: year=2026 and order=newest
+    5.2.17       {'year': '2026,order=newest'}
+    6.0.8        {'year': '2026', 'order': 'newest'}
+    6.1.1        {'year': '2026', 'order': 'newest'}
+    this commit  {'year': '2026', 'order': 'newest'}
+```
+
+Under 5.2.17 the second cookie disappeared into the first. Since 6.0 the `"cookie"` headers are joined with a semicolon and a space into `"HTTP_COOKIE"`, where any other repeated header is joined with commas (`django/core/handlers/asgi.py:ASGIRequest.__init__`), and the cookie parser, which splits on semicolons alone, finds both (`django/http/cookie.py:parse_cookie`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).
 
 ## Decorators around a coroutine view
 
-The handler decides how to call a view by asking whether it is a coroutine function, and it asks the outermost decorator's wrapper: a wrapper written with `def` makes an `async def` view look synchronous. The view decorators did not support coroutine views before 5.0 (`docs/releases/5.0.txt`). Since then each decorator of `django/views/decorators/` but `sensitive_variables`, and each made from a middleware, picks when it is applied a `def` wrapper or an `async def` one that awaits the view (`django/views/decorators/http.py:require_http_methods`, `django/utils/decorators.py:make_middleware_decorator`); since 5.2 `method_decorator` marks its replacement as a coroutine function when the method is one (`django/utils/decorators.py:_multi_decorate`). `sensitive_variables` takes a coroutine by not wrapping it: it records the names under the function's file and first line, where the error reporter looks (`django/views/decorators/debug.py:sensitive_variables`). [Asynchronous views](../views/async.md#what-a-decorator-has-to-keep) tells what the handler's test needs.
-
-> **Trap.** Around a coroutine view, a decorator made from a middleware calls the middleware's hooks directly, so they run on the event loop ([A middleware as a decorator](../views/middleware-decorators.md#a-coroutine-view)).
+The handler asks the outermost wrapper whether a view is a coroutine function, so a wrapper written with `def` makes an `async def` view look synchronous. Django's view decorators did not support coroutine views before 5.0, the notes say (`docs/releases/5.0.txt`). Since then each decorator in `django/views/decorators/` but `sensitive_variables`, and each made from a middleware, chooses between a `def` wrapper and an `async def` one that awaits the view (`django/views/decorators/http.py:require_http_methods`, `django/utils/decorators.py:make_middleware_decorator`); `sensitive_variables` records which of a coroutine function's variables are sensitive without wrapping it (`django/views/decorators/debug.py:sensitive_variables`). Since 5.2 `method_decorator` marks its replacement as a coroutine function when the method is one (`django/utils/decorators.py:_multi_decorate`; [Asynchronous views](../views/async.md#what-a-decorator-has-to-keep)).
 
 ## `JsonResponse` and its safe argument
 
-`JsonResponse` used to refuse anything but a dictionary unless it was given `safe=False`, a guard against an attack on a JSON array through JavaScript's array prototype that, the release notes say, ECMAScript 5 closed. Since 6.2 the argument's default is `None`, read as false, so a list is serialised without it. Passing it any value but `None` warns with `RemovedInDjango2029Warning`, and `safe=True` still raises `TypeError` for a value that is not a dictionary (`django/http/response.py:JsonResponse.__init__`; [The response object](../http/response.md#jsonresponse)).
+`JsonResponse` refused anything but a dictionary unless given `safe=False`. The guard was against an attack on a JSON array through JavaScript's array prototype, which, the 6.2 notes say, ECMAScript 5 closed (`docs/releases/6.2.txt`). Since 6.2 the default is `None`, read as false, so a list is serialised (`django/http/response.py:JsonResponse.__init__`). Here a list is given without safe; 5.2.17 and 6.0.8 raised as 6.1.1 did, and are left out:
+
+```text recording=changes
+JsonResponse([1, 2]).content
+...
+    6.1.1        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    this commit  b'[1, 2]'
+```
+
+Passing safe at all now warns, the argument to go in Django 2029 ([What still warns: the deprecations and the releases that end them](deprecations.md)): `safe=False`, the habit of a 5.x project, gives the same bytes as before and warns, and `safe=True` warns and still refuses a list.
 
 ## The multipart parser's Base64
 
-Since 6.1 `MultiPartParser.parse` decodes a part sent with a `"base64"` transfer encoding through `base64.b64decode` with `validate=True`, so a character outside the Base64 alphabet makes the data invalid (in a file, white space is removed first); before, the notes say, invalid data could be silently ignored or give empty values (`django/http/multipartparser.py:MultiPartParser.parse`; [Multipart parsing and upload handlers](../http/uploads.md)). They say it now raises `MultiPartParserError`. At this commit that holds for a file, which the handler answers with a 400; a field that does not decode is kept as sent.
+A part of a multipart body may declare its Content-Transfer-Encoding as `"base64"`. Before 6.1 the parser decoded it leniently: invalid data "could be silently ignored or result in empty values", the 6.1 notes say (`docs/releases/6.1.txt`). Since 6.1 `MultiPartParser.parse` decodes with `validate=True`, which refuses any character outside the Base64 alphabet (`django/http/multipartparser.py:MultiPartParser.parse`; [Multipart parsing and upload handlers](../http/uploads.md)). Here a file's data has an exclamation mark inside it:
 
-```text
-# base64_parts.py at this commit: one part of a multipart body, with Content-Transfer-Encoding: base64
-a field, 'aGFyYm91cg=='    POST {'berth': ['harbour']}
-a field, 'aGFy!Ym91cg=='   POST {'berth': ['aGFy!Ym91cg==']}
-a file,  'aGFyYm91cg=='    FILES {'log': b'harbour'}
-a file,  'aGFy!Ym91cg=='   raises MultiPartParserError: Could not decode base64 data.
+```text recording=changes
+request.FILES["notes"].read(): a file sent as base64, "TW9u!ZGF5"
+    5.2.17       b'Monday'
+    6.0.8        b'Monday'
+    6.1.1        MultiPartParserError: Could not decode base64 data.
+    this commit  MultiPartParserError: Could not decode base64 data.
 ```
+
+Under 5.2.17 and 6.0.8 the mark was dropped and the rest decoded; the handler answers `MultiPartParserError` with a 400. The notes say invalid data now raises that error, but that holds for a file alone: a field that fails is kept as sent, "TW9u!ZGF5" where 5.2.17 and 6.0.8 gave "Monday".
+
+The parser's branches for a file and for a field also differ over white space: the file's removes it before decoding, and the field's does not. Here a field's Base64 is broken into lines:
+
+```text recording=changes
+request.POST["body"]: a multipart field sent as base64 over two lines, "TW9u" and "ZGF5"
+    5.2.17       'Monday'
+    6.0.8        'Monday'
+    6.1.1        'TW9u\r\nZGF5'
+    this commit  'TW9u\r\nZGF5'
+```
+
+> **Trap.** Nothing warns or fails: from 6.1 a field whose Base64 is written in lines, as MIME writes it, arrives undecoded, while the same data in a file still decodes (`django/http/multipartparser.py:MultiPartParser.parse`).
 
 ## The smaller changes
 
+The rest, by name:
+
 | what | at this commit | release | where |
 |---|---|---|---|
-| a form not in UTF-8 | loading `POST` or `FILES` for an `"application/x-www-form-urlencoded"` request with an encoding other than `"utf-8"` raises `BadRequest`, a 400 | 5.0 | `django/http/request.py:HttpRequest._load_post_and_files` |
-| `HttpRequest.accepted_types` | sorted by the client's preference: weight first, then how specific the type is | 5.2 | [Headers, host and scheme](../http/headers.md) |
-| `HttpRequest.get_preferred_type` | new: of the types given, the one the client prefers, or `None` | 5.2 | [Headers, host and scheme](../http/headers.md) |
-| `HttpRequest.multipart_parser_class` | new: the parser's class, settable until `POST` or `FILES` is loaded, then `RuntimeError` | 6.1 | [Multipart parsing and upload handlers](../http/uploads.md) |
-| `HttpResponse.text` | new: the content decoded with the charset; a streaming response raises `AttributeError` | 5.2 | [The response object](../http/response.md) |
-| a redirect with `preserve_request=True` | 307 in place of 302, 308 in place of 301; `redirect` passes the argument on | 5.2 | `django/http/response.py:HttpResponseRedirectBase.__init__` |
-| `RedirectView.preserve_request` | new, passed to the response | 6.1 | `django/views/generic/base.py:RedirectView.get` |
-| a redirect's maximum length | keyword-only, `MAX_URL_REDIRECT_LENGTH` by default, no check for `max_length=None`; `redirect` passes it on; the limit came with a security fix, [Security fixes: limits against denial of service](security-fixes-limits.md) | 6.1 | [The response object](../http/response.md) |
-| `reverse` | keyword-only arguments for a query string and a fragment, added after the path; `reverse_lazy` takes them too | 5.2 | [Reversing a name](../urls/reversing.md) |
-| `register_converter` | a name already registered, or a default one, raises `ValueError`; overriding warned from 5.1 | 6.0 | [Routes, regular expressions and converters](../urls/patterns.md) |
-| get_converter | removed; the converters are read through `get_converters` | 5.1 | `django/urls/converters.py:get_converters` |
-| `aget_object_or_404`, `aget_list_or_404` | new: the shortcuts' twins for a coroutine | 5.0 | [The shortcuts](../views/shortcuts.md) |
-| `SafeExceptionReporterFilter.hidden_settings` | matches `"AUTH"` too, so `AUTH_USER_MODEL` and `AUTHENTICATION_BACKENDS` are starred in an error report | 5.2 | [The debug pages and `ExceptionReporter`](../views/debug.md) |
+| a form not in UTF-8 | an `"application/x-www-form-urlencoded"` body declared in another charset raises `BadRequest`, a 400 | 5.0 | `django/http/request.py:HttpRequest._load_post_and_files` |
+| `HttpRequest.accepted_types`, `HttpRequest.get_preferred_type` | the first sorted by the client's preference; the second new, the given type the client prefers | 5.2 | [Headers, host and scheme](../http/headers.md) |
+| `HttpRequest.multipart_parser_class` | new: the parser's class, replaceable until the body is parsed | 6.1 | [Multipart parsing and upload handlers](../http/uploads.md#changing-the-handlers) |
+| preserve_request on a redirect | 307 for 302 and 308 for 301, in `HttpResponseRedirect`, `HttpResponsePermanentRedirect` and `redirect` | 5.2 | [The response object](../http/response.md#redirects) |
+| `RedirectView.preserve_request` | new, given to the response the view makes | 6.1 | `django/views/generic/base.py:RedirectView.get` |
+| a redirect's maximum length | a keyword-only max_length, also taken by `redirect`: `MAX_URL_REDIRECT_LENGTH` unless given, `None` for no check; the limit now measures the escaped `"Location"` | 6.1 | `django/http/response.py:HttpResponseRedirectBase.__init__` |
+| `reverse` | keyword-only query and fragment; `reverse_lazy` takes them too | 5.2 | [Reversing a name](../urls/reversing.md#the-query-string-and-the-fragment) |
+| `register_converter` | a name already registered, a default's included, raises `ValueError`; deprecated in 5.1, so 5.2.17 warns RemovedInDjango60Warning and replaces it | 6.0 | [Routes, regular expressions and converters](../urls/patterns.md#converters) |
+| get_converter | removed; the registry is read through `get_converters` | 5.1 | `django/urls/converters.py:get_converters` |
+
+*The redirect's limit came with a security fix ([Security fixes: limits against denial of service](security-fixes-limits.md)).*

@@ -10,7 +10,7 @@
   {
    "pointer": "django/core/validators.py",
    "line": 7,
-   "sentence": "The changes from Django 5.0 to this commit in `django.forms` and `django/core/validators.py`: the div layout as the default, `RenderableFieldMixin.as_field_group`, `bound_field_class`, the ARIA attributes, the URL field's `\"https\"`, the blank choice's label, and `EmailValidator`'s new methods.",
+   "sentence": "The changes from Django 5.0 to this commit in `django.forms` and `django/core/validators.py`: the division layout and `RenderableFieldMixin.as_field_group`, the attributes for screen readers, `bound_field_class`, the URL field's `\"https\"`, the blank choice's label, and `EmailValidator`'s new methods.",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": null,
@@ -22,23 +22,37 @@
    "fingerprint": "2909214bd9ebfac9"
   },
   {
-   "pointer": "django/forms/renderers.py:BaseRenderer",
-   "line": 13,
-   "sentence": "Since 5.0 a form draws itself as divisions: `BaseRenderer.form_template_name` is `\"django/forms/div.html\"` and `BaseRenderer.formset_template_name` `\"django/forms/formsets/div.html\"`, and `str(form)` renders the renderer's (`django/forms/renderers.py:BaseRenderer`, `django/forms/forms.py:BaseForm.template_name`).",
+   "pointer": "docs/releases/6.1.txt",
+   "line": 9,
+   "sentence": "6.1 replaced the blank choice's dashes with a label \"more accessible and translatable\" (`docs/releases/6.1.txt`).",
    "tree": "django",
-   "path": "django/forms/renderers.py",
-   "symbol": "BaseRenderer",
-   "kind": "class",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    17,
-    29
+    1,
+    760
    ],
-   "fingerprint": "87f5ef4b967f0679"
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "docs/releases/4.1.txt",
+   "line": 9,
+   "sentence": "5.0 made the division layout the default, which the 4.1 notes had recommended as \"easier for screen reader users to navigate\" (`docs/releases/4.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    754
+   ],
+   "fingerprint": "9740cd5b06b1247b"
   },
   {
    "pointer": "django/forms/forms.py:BaseForm.template_name",
    "line": 13,
-   "sentence": "Since 5.0 a form draws itself as divisions: `BaseRenderer.form_template_name` is `\"django/forms/div.html\"` and `BaseRenderer.formset_template_name` `\"django/forms/formsets/div.html\"`, and `str(form)` renders the renderer's (`django/forms/renderers.py:BaseRenderer`, `django/forms/forms.py:BaseForm.template_name`).",
+   "sentence": "Since 5.0 a form rendered as a string uses `BaseRenderer.form_template_name`, `\"django/forms/div.html\"` (`django/forms/forms.py:BaseForm.template_name`).",
    "tree": "django",
    "path": "django/forms/forms.py",
    "symbol": "BaseForm.template_name",
@@ -51,23 +65,37 @@
    "fingerprint": "e82f21aabdc5ff0b"
   },
   {
-   "pointer": "django/forms/utils.py:RenderableFieldMixin.as_field_group",
-   "line": 15,
-   "sentence": "It prints `{{ field.as_field_group }}`, and `RenderableFieldMixin.as_field_group` renders the bound field's template, which draws label, help text, errors and widget (`django/forms/utils.py:RenderableFieldMixin.as_field_group`).",
+   "pointer": "docs/releases/4.0.txt",
+   "line": 13,
+   "sentence": "5.0 removed the former default, the table layout's django/forms/default.html and its formset twin, and BaseForm's _html_output, which drew the layouts in Python before 4.0 (`docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
    "tree": "django",
-   "path": "django/forms/utils.py",
-   "symbol": "RenderableFieldMixin.as_field_group",
-   "kind": "function",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    62,
-    63
+    1,
+    772
    ],
-   "fingerprint": "d675c5e8b1266a77"
+   "fingerprint": "75c28734cc7b3883"
+  },
+  {
+   "pointer": "docs/releases/5.0.txt",
+   "line": 13,
+   "sentence": "5.0 removed the former default, the table layout's django/forms/default.html and its formset twin, and BaseForm's _html_output, which drew the layouts in Python before 4.0 (`docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "f78c0112c823f44f"
   },
   {
    "pointer": "django/forms/boundfield.py:BoundField.template_name",
-   "line": 15,
-   "sentence": "That template is one given to the form field as `template_name=`, or else the renderer's `BaseRenderer.field_template_name`, `\"django/forms/field.html\"` (`django/forms/boundfield.py:BoundField.template_name`).",
+   "line": 13,
+   "sentence": "The division template prints each field's `RenderableFieldMixin.as_field_group` (5.0), which renders the bound field's template (the form field's own, if it was given one, or the renderer's, `\"django/forms/field.html\"`) to draw label, help text, errors and widget (`django/forms/boundfield.py:BoundField.template_name`; [Rendering a form: renderers and templates](../forms/rendering.md#the-built-in-templates)).",
    "tree": "django",
    "path": "django/forms/boundfield.py",
    "symbol": "BoundField.template_name",
@@ -80,65 +108,66 @@
    "fingerprint": "11afdc373f0546d7"
   },
   {
-   "pointer": "django/forms/forms.py:BaseForm.get_context",
-   "line": 17,
-   "sentence": "`BaseForm.get_context` hands the template each field's `ErrorList` as it is, and the template escapes a plain string (`django/forms/forms.py:BaseForm.get_context`): in a run, an error class whose `__str__` returned `\"<b>…</b>\"` unmarked drew `&lt;b&gt;`.",
+   "pointer": "django/forms/renderers.py:get_default_renderer",
+   "line": 15,
+   "sentence": "A form given no renderer, whose class names none, reads the setting (`django/forms/renderers.py:get_default_renderer`).",
    "tree": "django",
-   "path": "django/forms/forms.py",
-   "symbol": "BaseForm.get_context",
+   "path": "django/forms/renderers.py",
+   "symbol": "get_default_renderer",
    "kind": "function",
    "lines": [
-    231,
-    251
+    11,
+    14
    ],
-   "fingerprint": "516c17930c9ae5c8"
+   "at": 12,
+   "fingerprint": "c35adbc84a135762"
   },
   {
-   "pointer": "django/forms/utils.py:RenderableMixin.render",
-   "line": 17,
-   "sentence": "Django's own error lists are marked safe by `RenderableMixin.render` (`django/forms/utils.py:RenderableMixin.render`).",
+   "pointer": "docs/releases/5.0.txt",
+   "line": 27,
+   "sentence": "5.2 added the errors to it (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`, `docs/releases/5.2.txt`).",
    "tree": "django",
-   "path": "django/forms/utils.py",
-   "symbol": "RenderableMixin.render",
-   "kind": "function",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    51,
-    55
+    1,
+    759
    ],
-   "fingerprint": "286728d492a8edd4"
+   "fingerprint": "f78c0112c823f44f"
   },
   {
-   "pointer": "django/forms/fields.py:Field.get_bound_field",
-   "line": 21,
-   "sentence": "Before 5.2 a field had bound fields of another class only by an override of `Field.get_bound_field` (`django/forms/fields.py:Field.get_bound_field`).",
+   "pointer": "docs/releases/5.1.txt",
+   "line": 27,
+   "sentence": "5.2 added the errors to it (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`, `docs/releases/5.2.txt`).",
    "tree": "django",
-   "path": "django/forms/fields.py",
-   "symbol": "Field.get_bound_field",
-   "kind": "function",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    253,
-    261
+    1,
+    495
    ],
-   "fingerprint": "3c3a6e6b5d31b372"
+   "fingerprint": "3a1b214427111cf2"
   },
   {
-   "pointer": "django/forms/forms.py:BaseForm.__init__",
-   "line": 21,
-   "sentence": "The form's is settled by `BaseForm.__init__`: its argument, else its class's `BaseForm.bound_field_class`, else the renderer's `BaseRenderer.bound_field_class`, `None` on Django's renderers (`django/forms/forms.py:BaseForm.__init__`).",
+   "pointer": "docs/releases/5.2.txt",
+   "line": 27,
+   "sentence": "5.2 added the errors to it (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`, `docs/releases/5.2.txt`).",
    "tree": "django",
-   "path": "django/forms/forms.py",
-   "symbol": "BaseForm.__init__",
-   "kind": "function",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    73,
-    134
+    1,
+    495
    ],
-   "fingerprint": "e47ea31886a1592d"
+   "fingerprint": "56a4c82a284e4c7a"
   },
   {
    "pointer": "django/forms/boundfield.py:BoundField.aria_describedby",
-   "line": 25,
-   "sentence": "At this commit `BoundField.aria_describedby` (5.2) joins `BoundField.auto_id` with `\"_helptext\"` and `\"_error\"`, as the field has help text and errors (`django/forms/boundfield.py:BoundField.aria_describedby`).",
+   "line": 27,
+   "sentence": "At this commit `BoundField.aria_describedby` (5.2) gives the ids of the help text and errors the field has (`django/forms/boundfield.py:BoundField.aria_describedby`).",
    "tree": "django",
    "path": "django/forms/boundfield.py",
    "symbol": "BoundField.aria_describedby",
@@ -151,23 +180,9 @@
    "fingerprint": "6f2804f0bd4838d6"
   },
   {
-   "pointer": "django/forms/boundfield.py:BoundField.build_widget_attrs",
-   "line": 25,
-   "sentence": "`BoundField.build_widget_attrs` puts it on the widget unless the widget has its own or asks for a fieldset; then `\"django/forms/field.html\"` puts it on the fieldset (`django/forms/boundfield.py:BoundField.build_widget_attrs`).",
-   "tree": "django",
-   "path": "django/forms/boundfield.py",
-   "symbol": "BoundField.build_widget_attrs",
-   "kind": "function",
-   "lines": [
-    272,
-    303
-   ],
-   "fingerprint": "d8cb793b212c9e42"
-  },
-  {
    "pointer": "django/forms/forms.py:BaseForm.add_error",
-   "line": 25,
-   "sentence": "The errors' id is written by `\"django/forms/errors/list/ul.html\"` from `ErrorList.field_id` (5.2), which `BaseForm.add_error` sets to the field's `auto_id` (`django/forms/forms.py:BaseForm.add_error`).",
+   "line": 27,
+   "sentence": "The error list takes its id from `ErrorList.field_id` (5.2), which `BaseForm.add_error` sets (`django/forms/forms.py:BaseForm.add_error`).",
    "tree": "django",
    "path": "django/forms/forms.py",
    "symbol": "BaseForm.add_error",
@@ -179,9 +194,23 @@
    "fingerprint": "06b0ee586a1d975e"
   },
   {
+   "pointer": "django/forms/fields.py:URLField.to_python",
+   "line": 45,
+   "sentence": "`URLField.to_python` puts a scheme in front of a value that has none (`django/forms/fields.py:URLField.to_python`).",
+   "tree": "django",
+   "path": "django/forms/fields.py",
+   "symbol": "URLField.to_python",
+   "kind": "function",
+   "lines": [
+    783,
+    802
+   ],
+   "fingerprint": "3479f08369e289c1"
+  },
+  {
    "pointer": "django/forms/fields.py:URLField.__init__",
-   "line": 42,
-   "sentence": "In 5.0 the scheme `URLField.to_python` puts in front of a value that has none became `URLField.assume_scheme`, an argument whose default, `\"http\"`, was deprecated at once; in 6.0 the default became `\"https\"`, and FORMS_URLFIELD_ASSUME_HTTPS, the transitional setting that took it early, was removed (`django/forms/fields.py:URLField.__init__`).",
+   "line": 45,
+   "sentence": "6.0 made the default `\"https\"` and removed the setting (`django/forms/fields.py:URLField.__init__`).",
    "tree": "django",
    "path": "django/forms/fields.py",
    "symbol": "URLField.__init__",
@@ -194,8 +223,8 @@
   },
   {
    "pointer": "django/db/models/utils.py:get_blank_choice_label",
-   "line": 46,
-   "sentence": "Since 6.1 its label comes from `get_blank_choice_label`: `BLANK_CHOICE_LABEL`, a translated `\"- Select an option -\"`, or the dashes of `BLANK_CHOICE_DASH` while `USE_BLANK_CHOICE_DASH` is true (`django/db/models/utils.py:get_blank_choice_label`).",
+   "line": 59,
+   "sentence": "Since 6.1 `get_blank_choice_label` gives the label: `BLANK_CHOICE_LABEL`, a translated `\"- Select an option -\"`, or the dashes of `BLANK_CHOICE_DASH` while `USE_BLANK_CHOICE_DASH` is true (`django/db/models/utils.py:get_blank_choice_label`).",
    "tree": "django",
    "path": "django/db/models/utils.py",
    "symbol": "get_blank_choice_label",
@@ -208,8 +237,8 @@
   },
   {
    "pointer": "django/conf/__init__.py:Settings.__init__",
-   "line": 46,
-   "sentence": "Defining the setting warns with `RemovedInDjango2028Warning` (`django/conf/__init__.py:Settings.__init__`); in a run, reading the constant did not ([Choices: `ChoiceField`, `ModelChoiceField` and the choice widgets](../forms/choices.md#the-blank-choices-label)).",
+   "line": 69,
+   "sentence": "Setting `USE_BLANK_CHOICE_DASH` warns in 6.1.1 and at this commit (`django/conf/__init__.py:Settings.__init__`); reading `BLANK_CHOICE_DASH`, a plain constant, warned under no release (`django/db/models/fields/__init__.py:BLANK_CHOICE_DASH`; [Choices: `ChoiceField`, `ModelChoiceField` and the choice widgets](../forms/choices.md#the-blank-choices-label)).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "Settings.__init__",
@@ -221,9 +250,51 @@
    "fingerprint": "203785028e2e9bc4"
   },
   {
+   "pointer": "django/db/models/fields/__init__.py:BLANK_CHOICE_DASH",
+   "line": 69,
+   "sentence": "Setting `USE_BLANK_CHOICE_DASH` warns in 6.1.1 and at this commit (`django/conf/__init__.py:Settings.__init__`); reading `BLANK_CHOICE_DASH`, a plain constant, warned under no release (`django/db/models/fields/__init__.py:BLANK_CHOICE_DASH`; [Choices: `ChoiceField`, `ModelChoiceField` and the choice widgets](../forms/choices.md#the-blank-choices-label)).",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "BLANK_CHOICE_DASH",
+   "kind": "assignment",
+   "lines": [
+    93,
+    93
+   ],
+   "fingerprint": "cf429715456acf5c"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceField.__init__",
+   "line": 71,
+   "sentence": "Since 6.1, `ModelChoiceField.__init__` defaults `empty_label` to `\"\"` and replaces `\"\"` with the blank choice's label (`django/forms/models.py:ModelChoiceField.__init__`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceField.__init__",
+   "kind": "function",
+   "lines": [
+    1487,
+    1523
+   ],
+   "fingerprint": "291be943e9fb0ef4"
+  },
+  {
+   "pointer": "django/forms/models.py:ModelChoiceIterator.__iter__",
+   "line": 71,
+   "sentence": "Only the constructor does this: an `empty_label` set to `\"\"` after the field is made is drawn as it is (`django/forms/models.py:ModelChoiceIterator.__iter__`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "ModelChoiceIterator.__iter__",
+   "kind": "function",
+   "lines": [
+    1449,
+    1457
+   ],
+   "fingerprint": "88de3d31831a74e4"
+  },
+  {
    "pointer": "django/core/validators.py:EmailValidator.validate",
-   "line": 50,
-   "sentence": "Now the call is `EmailValidator.parse_address`, then `EmailValidator.validate`, which hands the user part to `EmailValidator.validate_username` and the domain to `EmailValidator.validate_domain`; each raises `ValidationError` itself, with the part as the parameter `\"username\"` or `\"domain\"` beside `\"value\"` (`django/core/validators.py:EmailValidator.validate`).",
+   "line": 75,
+   "sentence": "Now `EmailValidator.parse_address` splits the address at its last `\"@\"`, and `EmailValidator.validate` hands the user part to `EmailValidator.validate_username` and the domain to `EmailValidator.validate_domain` (`django/core/validators.py:EmailValidator.validate`).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": "EmailValidator.validate",
@@ -235,9 +306,51 @@
    "fingerprint": "d2763a0cd055a77d"
   },
   {
+   "pointer": "django/core/validators.py:EmailValidator.validate_username",
+   "line": 75,
+   "sentence": "These two raise `ValidationError` with their part as the parameter `\"username\"` or `\"domain\"` (`django/core/validators.py:EmailValidator.validate_username`, `django/core/validators.py:EmailValidator.validate_domain`); under 5.2.17, 6.0.8 and 6.1.1 the error for a bad domain carried `\"value\"` alone.",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.validate_username",
+   "kind": "function",
+   "lines": [
+    300,
+    306
+   ],
+   "fingerprint": "6db3b3c37bd3fd46"
+  },
+  {
+   "pointer": "django/core/validators.py:EmailValidator.validate_domain",
+   "line": 75,
+   "sentence": "These two raise `ValidationError` with their part as the parameter `\"username\"` or `\"domain\"` (`django/core/validators.py:EmailValidator.validate_username`, `django/core/validators.py:EmailValidator.validate_domain`); under 5.2.17, 6.0.8 and 6.1.1 the error for a bad domain carried `\"value\"` alone.",
+   "tree": "django",
+   "path": "django/core/validators.py",
+   "symbol": "EmailValidator.validate_domain",
+   "kind": "function",
+   "lines": [
+    308,
+    327
+   ],
+   "fingerprint": "9c78591704dd26b5"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 75,
+   "sentence": "The methods, the notes say, \"can be overridden to customize how the address is parsed and validated\" (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
    "pointer": "django/core/validators.py:EmailValidator.__init_subclass__",
-   "line": 50,
-   "sentence": "The old method is deprecated, to go in Django 2029: a subclass that defines it warns with `RemovedInDjango2029Warning` as the class is made, and `validate` then calls it in place of `validate_domain` (`django/core/validators.py:EmailValidator.__init_subclass__`; [Validators: `django/core/validators.py`](../forms/validators.md#domain-names-urls-and-email-addresses)).",
+   "line": 77,
+   "sentence": "A subclass that defines it warns as the class is made, and `validate` calls it in place of `validate_domain` (`django/core/validators.py:EmailValidator.__init_subclass__`; [Validators: `django/core/validators.py`](../forms/validators.md#domain-names-urls-and-email-addresses)).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": "EmailValidator.__init_subclass__",
@@ -250,8 +363,8 @@
   },
   {
    "pointer": "django/core/validators.py",
-   "line": 50,
-   "sentence": "The old method is deprecated, to go in Django 2029: a subclass that defines it warns with `RemovedInDjango2029Warning` as the class is made, and `validate` then calls it in place of `validate_domain` (`django/core/validators.py:EmailValidator.__init_subclass__`; [Validators: `django/core/validators.py`](../forms/validators.md#domain-names-urls-and-email-addresses)).",
+   "line": 77,
+   "sentence": "A subclass that defines it warns as the class is made, and `validate` calls it in place of `validate_domain` (`django/core/validators.py:EmailValidator.__init_subclass__`; [Validators: `django/core/validators.py`](../forms/validators.md#domain-names-urls-and-email-addresses)).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": null,
@@ -263,52 +376,37 @@
    "fingerprint": "2909214bd9ebfac9"
   },
   {
-   "pointer": "django/forms/widgets.py:ColorInput",
-   "line": 56,
-   "sentence": "| `ColorInput`, `SearchInput`, `TelInput` | new inputs of the types `\"color\"`, `\"search\"` and `\"tel\"`; no Django field uses them | 5.2 | `django/forms/widgets.py:ColorInput` |",
+   "pointer": "django/forms/fields.py:Field.get_bound_field",
+   "line": 93,
+   "sentence": "| `bound_field_class` | on a form field, a form or a renderer, the class of bound field; before, only an override of `Field.get_bound_field` chose one | 5.2 | `django/forms/fields.py:Field.get_bound_field`, [`BoundField`: a field in a form](../forms/bound-fields.md#who-makes-a-bound-field) |",
    "tree": "django",
-   "path": "django/forms/widgets.py",
-   "symbol": "ColorInput",
-   "kind": "class",
-   "lines": [
-    453,
-    455
-   ],
-   "fingerprint": "9b92dd22f059cc4d"
-  },
-  {
-   "pointer": "django/forms/widgets.py:Script",
-   "line": 57,
-   "sentence": "| `Script` | a script of a `Media` declaration, with HTML attributes | 5.2 | `django/forms/widgets.py:Script` |",
-   "tree": "django",
-   "path": "django/forms/widgets.py",
-   "symbol": "Script",
-   "kind": "class",
-   "lines": [
-    124,
-    129
-   ],
-   "fingerprint": "28924258ae6759e1"
-  },
-  {
-   "pointer": "django/forms/widgets.py:Media._normalize_css",
-   "line": 58,
-   "sentence": "| `Stylesheet` | the same for a stylesheet; at this commit a path given as a string becomes one, or a `Script` | 6.1 | `django/forms/widgets.py:Media._normalize_css`, `django/forms/widgets.py:Media._normalize_js`, [Form assets: `Media`](../forms/media.md) |",
-   "tree": "django",
-   "path": "django/forms/widgets.py",
-   "symbol": "Media._normalize_css",
+   "path": "django/forms/fields.py",
+   "symbol": "Field.get_bound_field",
    "kind": "function",
    "lines": [
-    157,
-    165
+    253,
+    261
    ],
-   "at": 158,
-   "fingerprint": "af42fd5ddc6d5592"
+   "fingerprint": "3c3a6e6b5d31b372"
+  },
+  {
+   "pointer": "django/template/base.py:render_value_in_context",
+   "line": 94,
+   "sentence": "| `ErrorList`, `ErrorDict` | a plain string from their rendering, deprecated in 4.0, is now escaped | 5.0 | `django/template/base.py:render_value_in_context` |",
+   "tree": "django",
+   "path": "django/template/base.py",
+   "symbol": "render_value_in_context",
+   "kind": "function",
+   "lines": [
+    1140,
+    1153
+   ],
+   "fingerprint": "91ac09cc182b2d7b"
   },
   {
    "pointer": "django/forms/widgets.py:Media._normalize_js",
-   "line": 58,
-   "sentence": "| `Stylesheet` | the same for a stylesheet; at this commit a path given as a string becomes one, or a `Script` | 6.1 | `django/forms/widgets.py:Media._normalize_css`, `django/forms/widgets.py:Media._normalize_js`, [Form assets: `Media`](../forms/media.md) |",
+   "line": 95,
+   "sentence": "| `Script`, `Stylesheet` | a `Media` asset with HTML attributes; since 6.1 a path given as a string becomes one | 5.2, 6.1 | `django/forms/widgets.py:Media._normalize_js`, `django/forms/widgets.py:Media._normalize_css`, [Form assets: `Media`](../forms/media.md) |",
    "tree": "django",
    "path": "django/forms/widgets.py",
    "symbol": "Media._normalize_js",
@@ -321,9 +419,24 @@
    "fingerprint": "51545173b97f11ad"
   },
   {
+   "pointer": "django/forms/widgets.py:Media._normalize_css",
+   "line": 95,
+   "sentence": "| `Script`, `Stylesheet` | a `Media` asset with HTML attributes; since 6.1 a path given as a string becomes one | 5.2, 6.1 | `django/forms/widgets.py:Media._normalize_js`, `django/forms/widgets.py:Media._normalize_css`, [Form assets: `Media`](../forms/media.md) |",
+   "tree": "django",
+   "path": "django/forms/widgets.py",
+   "symbol": "Media._normalize_css",
+   "kind": "function",
+   "lines": [
+    157,
+    165
+   ],
+   "at": 158,
+   "fingerprint": "af42fd5ddc6d5592"
+  },
+  {
    "pointer": "django/forms/fields.py:FilePathField.set_choices",
-   "line": 59,
-   "sentence": "| `FilePathField.set_choices` | reads the directory again; the field calls it when made, and a form's `__init__` may call it | 6.1 | `django/forms/fields.py:FilePathField.set_choices` |",
+   "line": 96,
+   "sentence": "| `FilePathField.set_choices` | scans the directory; the field's `__init__` calls it, and a form's `__init__` may call it again | 6.1 | `django/forms/fields.py:FilePathField.set_choices` |",
    "tree": "django",
    "path": "django/forms/fields.py",
    "symbol": "FilePathField.set_choices",
@@ -336,8 +449,8 @@
   },
   {
    "pointer": "django/forms/models.py:BaseModelFormSet.save_existing_objects",
-   "line": 60,
-   "sentence": "| `BaseModelFormSet.save_existing` | its second argument, once named instance, is named obj; Django passes it by position | 5.0 | `django/forms/models.py:BaseModelFormSet.save_existing_objects` |",
+   "line": 97,
+   "sentence": "| `BaseModelFormSet.save_existing` | its second argument, instance, renamed obj; Django passes it positionally | 5.0 | `django/forms/models.py:BaseModelFormSet.save_existing_objects` |",
    "tree": "django",
    "path": "django/forms/models.py",
    "symbol": "BaseModelFormSet.save_existing_objects",
@@ -349,23 +462,9 @@
    "fingerprint": "20b45dc2bc40895d"
   },
   {
-   "pointer": "django/core/validators.py:StepValueValidator.__call__",
-   "line": 61,
-   "sentence": "| `StepValueValidator` | takes an offset to count the steps from; at this commit the form `IntegerField` and its subclasses give `min_value=` as the offset | 5.0 | `django/core/validators.py:StepValueValidator.__call__`, `django/forms/fields.py:IntegerField.__init__` |",
-   "tree": "django",
-   "path": "django/core/validators.py",
-   "symbol": "StepValueValidator.__call__",
-   "kind": "function",
-   "lines": [
-    524,
-    540
-   ],
-   "fingerprint": "89c994fe1fcf19ea"
-  },
-  {
    "pointer": "django/forms/fields.py:IntegerField.__init__",
-   "line": 61,
-   "sentence": "| `StepValueValidator` | takes an offset to count the steps from; at this commit the form `IntegerField` and its subclasses give `min_value=` as the offset | 5.0 | `django/core/validators.py:StepValueValidator.__call__`, `django/forms/fields.py:IntegerField.__init__` |",
+   "line": 98,
+   "sentence": "| `StepValueValidator` | an offset to count the steps from; the form `IntegerField` and its subclasses give their `min_value` | 5.0 | `django/forms/fields.py:IntegerField.__init__` |",
    "tree": "django",
    "path": "django/forms/fields.py",
    "symbol": "IntegerField.__init__",
@@ -378,8 +477,8 @@
   },
   {
    "pointer": "django/core/validators.py:DomainNameValidator",
-   "line": 62,
-   "sentence": "| `DomainNameValidator` | new; at this commit `URLValidator` and `EmailValidator` take its host-name patterns; a newline refused since a security fix ([Security fixes: disclosure, spoofing and privilege](security-fixes-exposure.md)) | 5.1 | `django/core/validators.py:DomainNameValidator` |",
+   "line": 99,
+   "sentence": "| `DomainNameValidator` | new, with `validate_domain_name`; `URLValidator` and `EmailValidator` take its host-name patterns; a newline refused since a security fix ([Security fixes: disclosure, spoofing and privilege](security-fixes-exposure.md)) | 5.1 | `django/core/validators.py:DomainNameValidator` |",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": "DomainNameValidator",

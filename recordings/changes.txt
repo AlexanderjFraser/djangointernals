@@ -1,5 +1,325 @@
 Django 5.2.17, 6.0.8 and 6.1.1 beside this commit, 6.2.dev20260926051415: the same habits run under each, over the journal project
 
+transaction.savepoint() inside transaction.atomic(): the savepoint's name, the thread's number written (the thread)
+    5.2.17       s(the thread)_x1
+    6.0.8        s(the thread)_x1
+    6.1.1        s(the thread)_x1, warns RemovedInDjango70Warning
+    this commit  s(the thread)_x1, warns RemovedInDjango2028Warning
+
+from django.db.transaction import savepoint_create
+    5.2.17       ImportError: cannot import name 'savepoint_create' from 'django.db.transaction'
+    6.0.8        ImportError: cannot import name 'savepoint_create' from 'django.db.transaction'
+    6.1.1        django.db.transaction.savepoint_create
+    this commit  django.db.transaction.savepoint_create
+
+connection.ops.integer_field_range("SmallIntegerField") on SQLite
+    5.2.17       (-9223372036854775808, 9223372036854775807)
+    6.0.8        (-9223372036854775808, 9223372036854775807)
+    6.1.1        (-9223372036854775808, 9223372036854775807)
+    this commit  (-9223372036854775808, 9223372036854775807)
+
+MySQL's DatabaseWrapper.get_connection_params()["charset"], no "charset" in OPTIONS
+    5.2.17       'utf8mb4'
+    6.0.8        'utf8mb4'
+    6.1.1        'utf8mb4'
+    this commit  'utf8mb4'
+
+a backend's operations that override field_cast_sql: the WHERE clause of Entry.objects.filter(title="Hull")
+    5.2.17       CAST("journal_entry"."title" AS TEXT) = %s, warns RemovedInDjango60Warning
+    6.0.8        "journal_entry"."title" = %s
+    6.1.1        "journal_entry"."title" = %s
+    this commit  "journal_entry"."title" = %s
+
+BaseDatabaseOperations.return_insert_columns
+    5.2.17       BaseDatabaseOperations.return_insert_columns
+    6.0.8        AttributeError: type object 'BaseDatabaseOperations' has no attribute 'return_insert_columns'
+    6.1.1        AttributeError: type object 'BaseDatabaseOperations' has no attribute 'return_insert_columns'
+    this commit  AttributeError: type object 'BaseDatabaseOperations' has no attribute 'return_insert_columns'
+
+PostgreSQL's DatabaseSchemaEditor.sql_delete_column
+    5.2.17       'ALTER TABLE %(table)s DROP COLUMN %(column)s CASCADE'
+    6.0.8        'ALTER TABLE %(table)s DROP COLUMN %(column)s'
+    6.1.1        'ALTER TABLE %(table)s DROP COLUMN %(column)s'
+    this commit  'ALTER TABLE %(table)s DROP COLUMN %(column)s'
+
+DurationField().get_db_prep_value(timedelta(seconds=1), connection): a backend whose features set has_native_duration_field and whose operations add no adapt_durationfield_value
+    5.2.17       datetime.timedelta(seconds=1)
+    6.0.8        datetime.timedelta(seconds=1)
+    6.1.1        1000000
+    this commit  1000000
+
+connection.introspection.get_relations(cursor, "journal_volume") on SQLite, its key declared ON DELETE CASCADE
+    5.2.17       {'shelf_id': ('id', 'journal_shelf')}
+    6.0.8        {'shelf_id': ('id', 'journal_shelf')}
+    6.1.1        {'shelf_id': ('id', 'journal_shelf', DB_CASCADE)}
+    this commit  {'shelf_id': ('id', 'journal_shelf', DB_CASCADE)}
+
+BaseDatabaseFeatures.prohibits_dollar_signs_in_column_aliases
+    5.2.17       AttributeError: type object 'BaseDatabaseFeatures' has no attribute 'prohibits_dollar_signs_in_column_aliases'
+    6.0.8        AttributeError: type object 'BaseDatabaseFeatures' has no attribute 'prohibits_dollar_signs_in_column_aliases'
+    6.1.1        AttributeError: type object 'BaseDatabaseFeatures' has no attribute 'prohibits_dollar_signs_in_column_aliases'
+    this commit  AttributeError: type object 'BaseDatabaseFeatures' has no attribute 'prohibits_dollar_signs_in_column_aliases'
+
+serializer_factory(tides.high_water).serialize()[0]: a function under functools.cache
+    5.2.17       tides.high_water
+    6.0.8        tides.high_water
+    6.1.1        tides.high_water
+    this commit  tides.high_water
+
+serializer_factory(zoneinfo.ZoneInfo("Europe/London")).serialize()[0]
+    5.2.17       ValueError: Cannot serialize: zoneinfo.ZoneInfo(key='Europe/London')
+    6.0.8        zoneinfo.ZoneInfo(key='Europe/London')
+    6.1.1        zoneinfo.ZoneInfo(key='Europe/London')
+    this commit  zoneinfo.ZoneInfo(key='Europe/London')
+
+serializer_factory(tides.Chart(**{"x-scale": 2, "depth": 5})).serialize()[0]: a keyword that is not an identifier
+    5.2.17       tides.Chart(depth=5, x-scale=2)
+    6.0.8        tides.Chart(depth=5, **{'x-scale': 2})
+    6.1.1        tides.Chart(depth=5, **{'x-scale': 2})
+    this commit  tides.Chart(depth=5, **{'x-scale': 2})
+
+serializer_factory(functools.partial(int, base=2)).serialize()[0]
+    5.2.17       functools.partial(int, *(), **{'base': 2})
+    6.0.8        functools.partial(int, base=2)
+    6.1.1        functools.partial(int, base=2)
+    this commit  functools.partial(int, base=2)
+
+serializer_factory(list[int]).serialize()[0]: a generic alias
+    5.2.17       RecursionError: maximum recursion depth exceeded
+    6.0.8        RecursionError: maximum recursion depth exceeded
+    6.1.1        list[int]
+    this commit  list[int]
+
+from django.db.migrations.serializer import DeconstructableSerializer
+    5.2.17       django.db.migrations.serializer.DeconstructableSerializer
+    6.0.8        ImportError: cannot import name 'DeconstructableSerializer' from 'django.db.migrations.serializer'
+    6.1.1        ImportError: cannot import name 'DeconstructableSerializer' from 'django.db.migrations.serializer'
+    this commit  ImportError: cannot import name 'DeconstructableSerializer' from 'django.db.migrations.serializer'
+
+squashmigrations journal 0003_ledger_note, where 0001_squashed_0002_ledger_page is among the migrations it squashes: what the new migration replaces
+    5.2.17       CommandError: You cannot squash squashed migrations! Please transition it to a normal migration first: https://docs.djangoproject.com/en/5.2/topics/migrations/#squashing-migrations
+    6.0.8        0001_squashed_0003_ledger_note replaces [('journal', '0001_squashed_0002_ledger_page'), ('journal', '0003_ledger_note')]
+    6.1.1        0001_squashed_0003_ledger_note replaces [('journal', '0001_squashed_0002_ledger_page'), ('journal', '0003_ledger_note')]
+    this commit  0001_squashed_0003_ledger_note replaces [('journal', '0001_squashed_0002_ledger_page'), ('journal', '0003_ledger_note')]
+
+MigrationAutodetector, as makemigrations journal runs it, when an unmanaged model (Meta.managed = False) gains a field: the operations
+    5.2.17       []
+    6.0.8        []
+    6.1.1        []
+    this commit  ['AddField']
+
+AddField on an unmanaged model (Meta.managed = False), applied by a schema editor that collects its SQL: the statements
+    5.2.17       []
+    6.0.8        []
+    6.1.1        []
+    this commit  []
+
+FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer": the class of a form's renderer
+    5.2.17       DjangoDivFormRenderer, warns RemovedInDjango60Warning
+    6.0.8        ImportError: Module "django.forms.renderers" does not define a "DjangoDivFormRenderer" attribute/class
+    6.1.1        ImportError: Module "django.forms.renderers" does not define a "DjangoDivFormRenderer" attribute/class
+    this commit  ImportError: Module "django.forms.renderers" does not define a "DjangoDivFormRenderer" attribute/class
+
+form["title"].as_field_group(): a required field with help text, sent empty
+    5.2.17
+        <label for="id_title">Title:</label>
+        <div class="helptext" id="id_title_helptext">At most twenty characters.</div>
+        <ul class="errorlist" id="id_title_error"><li>This field is required.</li></ul>
+        <input type="text" name="title" maxlength="20" required aria-invalid="true" aria-describedby="id_title_helptext id_title_error" id="id_title">
+    6.0.8
+        <label for="id_title">Title:</label>
+        <div class="helptext" id="id_title_helptext">At most twenty characters.</div>
+        <ul class="errorlist" id="id_title_error"><li>This field is required.</li></ul>
+        <input type="text" name="title" maxlength="20" required aria-invalid="true" aria-describedby="id_title_helptext id_title_error" id="id_title">
+    6.1.1
+        <label for="id_title">Title:</label>
+        <div class="helptext" id="id_title_helptext">At most twenty characters.</div>
+        <ul class="errorlist" id="id_title_error"><li>This field is required.</li></ul>
+        <input type="text" name="title" maxlength="20" required aria-invalid="true" aria-describedby="id_title_helptext id_title_error" id="id_title">
+    this commit
+        <label for="id_title">Title:</label>
+        <div class="helptext" id="id_title_helptext">At most twenty characters.</div>
+        <ul class="errorlist" id="id_title_error"><li>This field is required.</li></ul>
+        <input type="text" name="title" maxlength="20" required aria-invalid="true" aria-describedby="id_title_helptext id_title_error" id="id_title">
+
+form["mood"].as_field_group(): a RadioSelect field with help text, sent empty
+    5.2.17
+        <fieldset aria-describedby="id_mood_helptext id_mood_error">
+        <legend>Mood:</legend>
+        <div class="helptext" id="id_mood_helptext">How the day went.</div>
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div></fieldset>
+    6.0.8
+        <fieldset aria-describedby="id_mood_helptext id_mood_error">
+        <legend>Mood:</legend>
+        <div class="helptext" id="id_mood_helptext">How the day went.</div>
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div></fieldset>
+    6.1.1
+        <fieldset aria-describedby="id_mood_helptext id_mood_error">
+        <legend>Mood:</legend>
+        <div class="helptext" id="id_mood_helptext">How the day went.</div>
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div></fieldset>
+    this commit
+        <fieldset aria-describedby="id_mood_helptext id_mood_error">
+        <legend>Mood:</legend>
+        <div class="helptext" id="id_mood_helptext">How the day went.</div>
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div></fieldset>
+
+form.as_p(): a RadioSelect field with help text, sent empty
+    5.2.17
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <p>
+        <label>Mood:</label>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div>
+        <span class="helptext" id="id_mood_helptext">How the day went.</span>
+        </p>
+    6.0.8
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <p>
+        <label>Mood:</label>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div>
+        <span class="helptext" id="id_mood_helptext">How the day went.</span>
+        </p>
+    6.1.1
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <p>
+        <label>Mood:</label>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div>
+        <span class="helptext" id="id_mood_helptext">How the day went.</span>
+        </p>
+    this commit
+        <ul class="errorlist" id="id_mood_error"><li>This field is required.</li></ul>
+        <p>
+        <label>Mood:</label>
+        <div id="id_mood"><div>
+        <label for="id_mood_0"><input type="radio" name="mood" value="calm" required aria-invalid="true" id="id_mood_0">
+        Calm</label>
+        </div><div>
+        <label for="id_mood_1"><input type="radio" name="mood" value="stormy" required aria-invalid="true" id="id_mood_1">
+        Stormy</label>
+        </div>
+        </div>
+        <span class="helptext" id="id_mood_helptext">How the day went.</span>
+        </p>
+
+form["heading"].as_field_group(): an error class whose __str__ returns "<b>" and the message, unmarked
+    5.2.17
+        <label for="id_heading">Heading:</label>
+        &lt;b&gt;This field is required.&lt;/b&gt;
+        <input type="text" name="heading" required aria-invalid="true" aria-describedby="id_heading_error" id="id_heading">
+    6.0.8
+        <label for="id_heading">Heading:</label>
+        &lt;b&gt;This field is required.&lt;/b&gt;
+        <input type="text" name="heading" required aria-invalid="true" aria-describedby="id_heading_error" id="id_heading">
+    6.1.1
+        <label for="id_heading">Heading:</label>
+        &lt;b&gt;This field is required.&lt;/b&gt;
+        <input type="text" name="heading" required aria-invalid="true" aria-describedby="id_heading_error" id="id_heading">
+    this commit
+        <label for="id_heading">Heading:</label>
+        &lt;b&gt;This field is required.&lt;/b&gt;
+        <input type="text" name="heading" required aria-invalid="true" aria-describedby="id_heading_error" id="id_heading">
+
+forms.URLField().clean("journal.example.com")
+    5.2.17       'http://journal.example.com', warns RemovedInDjango60Warning
+    6.0.8        'https://journal.example.com'
+    6.1.1        'https://journal.example.com'
+    this commit  'https://journal.example.com'
+
+models.URLField().formfield().clean("journal.example.com"): the form field a model's URL field makes
+    5.2.17       'http://journal.example.com', warns RemovedInDjango60Warning
+    6.0.8        'https://journal.example.com'
+    6.1.1        'https://journal.example.com'
+    this commit  'https://journal.example.com'
+
+forms.ModelChoiceField(Entry.objects.all()).empty_label
+    5.2.17       '---------'
+    6.0.8        '---------'
+    6.1.1        '- Select an option -'
+    this commit  '- Select an option -'
+
+forms.ModelChoiceField(Entry.objects.all(), empty_label="").empty_label
+    5.2.17       ''
+    6.0.8        ''
+    6.1.1        '- Select an option -'
+    this commit  '- Select an option -'
+
+USE_BLANK_CHOICE_DASH = True: forms.ModelChoiceField(Entry.objects.all()).empty_label
+    5.2.17       '---------'
+    6.0.8        '---------'
+    6.1.1        '---------', warns RemovedInDjango70Warning
+    this commit  '---------', warns RemovedInDjango2028Warning
+
+from django.db.models.fields import BLANK_CHOICE_DASH
+    5.2.17       [('', '---------')]
+    6.0.8        [('', '---------')]
+    6.1.1        [('', '---------')]
+    this commit  [('', '---------')]
+
+validate_email("entry@journal..example"): the params of the ValidationError
+    5.2.17       {'value': 'entry@journal..example'}
+    6.0.8        {'value': 'entry@journal..example'}
+    6.1.1        {'value': 'entry@journal..example'}
+    this commit  {'value': 'entry@journal..example', 'domain': 'journal..example'}
+
+class LocalEmailValidator(EmailValidator) defining validate_domain_part, given "entry@journal": the domains it is asked about
+    5.2.17       ['journal']
+    6.0.8        ['journal']
+    6.1.1        ['journal']
+    this commit  ['journal'], warns RemovedInDjango2029Warning
+
 settings.USE_TZ, when the settings do not set it
     5.2.17       True
     6.0.8        True
@@ -18,12 +338,6 @@ Entry._meta.pk: the key of a model that declares none, in an application that na
     6.1.1        <django.db.models.fields.BigAutoField: id>
     this commit  <django.db.models.fields.BigAutoField: id>
 
-JsonResponse([1, 2]).content
-    5.2.17       TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
-    6.0.8        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
-    6.1.1        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
-    this commit  b'[1, 2]'
-
 django.VERSION[:3]
     5.2.17       (5, 2, 17)
     6.0.8        (6, 0, 8)
@@ -36,35 +350,11 @@ from django.utils.deprecation import MiddlewareMixin
     6.1.1        django.utils.deprecation
     this commit  django.middleware, warns RemovedInDjango2029Warning
 
-CommonMiddleware.async_capable
-    5.2.17       True
-    6.0.8        True
-    6.1.1        True
-    this commit  False
-
-Entry.objects.select_related(), with no field named
-    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
-    6.0.8        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
-    6.1.1        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry", warns RemovedInDjango70Warning
-    this commit  SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry", warns RemovedInDjango2028Warning
-
-Entry.objects.values_list(flat=True), with no field named
-    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
-    6.0.8        SELECT "journal_entry"."id" AS "id" FROM "journal_entry"
-    6.1.1        SELECT "journal_entry"."id" AS "id" FROM "journal_entry", warns RemovedInDjango70Warning
-    this commit  SELECT "journal_entry"."id" AS "id" FROM "journal_entry", warns RemovedInDjango2028Warning
-
 salted_hmac("journal", "entry").name: the algorithm when none is named
     5.2.17       'hmac-sha1'
     6.0.8        'hmac-sha1'
     6.1.1        'hmac-sha1', warns RemovedInDjango70Warning
     this commit  'hmac-sha1', warns RemovedInDjango2028Warning
-
-urlize("journal.example.com"): the scheme assumed for a bare domain
-    5.2.17       <a href="http://journal.example.com">journal.example.com</a>
-    6.0.8        <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango70Warning
-    6.1.1        <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango70Warning
-    this commit  <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango2028Warning
 
 Paginator(range(10), 2, orphans=2).num_pages: orphans not fewer than the page
     5.2.17       4
@@ -89,4 +379,774 @@ from django.utils.timezone import utc
     6.0.8        ImportError: cannot import name 'utc' from 'django.utils.timezone'
     6.1.1        ImportError: cannot import name 'utc' from 'django.utils.timezone'
     this commit  ImportError: cannot import name 'utc' from 'django.utils.timezone'
+
+Square.objects.create(side=3).area: a generated field, after the insert
+    5.2.17       9
+    6.0.8        9
+    6.1.1        9
+    this commit  9
+
+square.side = 4; square.save(); square.area: a generated field, after an update
+    5.2.17       9
+    6.0.8        16
+    6.1.1        16
+    this commit  16
+
+tally.count = F("count") + 1; tally.save(); tally.count: a field assigned an expression, after the save
+    5.2.17       <CombinedExpression: F(count) + Value(1)>
+    6.0.8        1
+    6.1.1        1
+    this commit  1
+
+Log(line="moored").save(): the add of each call of the field's pre_save, on an insert
+    5.2.17       [True]
+    6.0.8        [True, True]
+    6.1.1        [True, True]
+    this commit  [True, True]
+
+harbour.delete(), a Mooring's key to it on_delete=DB_CASCADE, post_delete heard on Mooring: the statements sent
+    5.2.17       ImportError: cannot import name 'DB_CASCADE' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'DB_CASCADE' from 'django.db.models'
+    6.1.1        DELETE FROM "journal_harbour" WHERE "journal_harbour"."id" IN (1)
+    this commit  DELETE FROM "journal_harbour" WHERE "journal_harbour"."id" IN (1)
+
+dock.delete(), a Pontoon's key to it on_delete=DB_CASCADE: what it returns
+    5.2.17       ImportError: cannot import name 'DB_CASCADE' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'DB_CASCADE' from 'django.db.models'
+    6.1.1        (1, {'journal.Dock': 1})
+    this commit  (1, {'journal.Dock': 1})
+
+port.delete(), a Slip's key to it on_delete=CASCADE, post_delete heard on Slip: the statements sent
+    5.2.17
+        SELECT "journal_slip"."id", "journal_slip"."port_id" FROM "journal_slip" WHERE "journal_slip"."port_id" IN (1)
+        BEGIN
+        DELETE FROM "journal_slip" WHERE "journal_slip"."id" IN (1)
+        DELETE FROM "journal_port" WHERE "journal_port"."id" IN (1)
+        COMMIT
+    6.0.8
+        SELECT "journal_slip"."id", "journal_slip"."port_id" FROM "journal_slip" WHERE "journal_slip"."port_id" IN (1)
+        BEGIN
+        DELETE FROM "journal_slip" WHERE "journal_slip"."id" IN (1)
+        DELETE FROM "journal_port" WHERE "journal_port"."id" IN (1)
+        COMMIT
+    6.1.1
+        SELECT "journal_slip"."id", "journal_slip"."port_id" FROM "journal_slip" WHERE "journal_slip"."port_id" IN (1)
+        BEGIN
+        DELETE FROM "journal_slip" WHERE "journal_slip"."id" IN (1)
+        DELETE FROM "journal_port" WHERE "journal_port"."id" IN (1)
+        COMMIT
+    this commit
+        SELECT "journal_slip"."id", "journal_slip"."port_id" FROM "journal_slip" WHERE "journal_slip"."port_id" IN (1)
+        BEGIN
+        DELETE FROM "journal_slip" WHERE "journal_slip"."id" IN (1)
+        DELETE FROM "journal_port" WHERE "journal_port"."id" IN (1)
+        COMMIT
+
+Berth(quay="North") == Berth(quay="North"): unsaved, a part of the composite key unset
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  False
+
+Berth(quay="North", number=1) == Berth(quay="North", number=1): unsaved, the composite key whole
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  True
+
+Ticket()._is_pk_set(): unsaved, the key one the database supplies (db_default=1)
+    5.2.17       True
+    6.0.8        True
+    6.1.1        False
+    this commit  False
+
+Ticket() == Ticket(): unsaved, the key one the database supplies (db_default=1)
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  False
+
+Index(fields=["quay"]), quay a ForeignObject of two from_fields: the model's checks
+    5.2.17       no messages
+    6.0.8        models.E049
+    6.1.1        models.E049
+    this commit  models.E049
+
+Entry.check(): the checks of a model given its automatic key by default
+    5.2.17       models.W042
+    6.0.8        no messages
+    6.1.1        no messages
+    this commit  no messages
+
+from django.db.models.enums import ChoicesMeta
+    5.2.17       ChoicesType, warns RemovedInDjango60Warning
+    6.0.8        ImportError: cannot import name 'ChoicesMeta' from 'django.db.models.enums'
+    6.1.1        ImportError: cannot import name 'ChoicesMeta' from 'django.db.models.enums'
+    this commit  ImportError: cannot import name 'ChoicesMeta' from 'django.db.models.enums'
+
+models.CharField(choices=[("gale", "Gale")]).get_choices(): the blank choice put first
+    5.2.17       ('', '---------')
+    6.0.8        ('', '---------')
+    6.1.1        ('', '- Select an option -')
+    this commit  ('', '- Select an option -')
+
+entry.save(force_update=True), no row with its key: what except DatabaseError catches
+    5.2.17       DatabaseError: Forced update did not affect any rows.
+    6.0.8        Entry.NotUpdated: Forced update did not affect any rows.
+    6.1.1        Entry.NotUpdated: Forced update did not affect any rows.
+    this commit  Entry.NotUpdated: Forced update did not affect any rows.
+
+CheckConstraint(check=Q(title__gt=""), name="titled").condition
+    5.2.17       <Q: (AND: ('title__gt', ''))>, warns RemovedInDjango60Warning
+    6.0.8        TypeError: CheckConstraint.__init__() got an unexpected keyword argument 'check'
+    6.1.1        TypeError: CheckConstraint.__init__() got an unexpected keyword argument 'check'
+    this commit  TypeError: CheckConstraint.__init__() got an unexpected keyword argument 'check'
+
+CheckConstraint(condition=Q(title__gt=""), name="titled").check: what the name check is
+    5.2.17       <Q: (AND: ('title__gt', ''))>, warns RemovedInDjango60Warning
+    6.0.8        <bound method CheckConstraint.check of <CheckConstraint: condition=(AND: ('title__gt', '')) name='titled'>>
+    6.1.1        <bound method CheckConstraint.check of <CheckConstraint: condition=(AND: ('title__gt', '')) name='titled'>>
+    this commit  <bound method CheckConstraint.check of <CheckConstraint: condition=(AND: ('title__gt', '')) name='titled'>>
+
+BaseConstraint("titled", "Every entry needs a title.").name: the name and message by position
+    5.2.17       'titled', warns RemovedInDjango60Warning
+    6.0.8        TypeError: BaseConstraint.__init__() takes 1 positional argument but 3 were given
+    6.1.1        TypeError: BaseConstraint.__init__() takes 1 positional argument but 3 were given
+    this commit  TypeError: BaseConstraint.__init__() takes 1 positional argument but 3 were given
+
+UniqueConstraint(fields=["name"], ..., violation_error_code="taken"), no message: the code for a second row
+    5.2.17       'unique'
+    6.0.8        'unique'
+    6.1.1        'unique'
+    this commit  'unique'
+
+entry.save(True): force_insert given by position
+    5.2.17       saved, warns RemovedInDjango60Warning
+    6.0.8        TypeError: Model.save() takes 1 positional argument but 2 were given
+    6.1.1        TypeError: Model.save() takes 1 positional argument but 2 were given
+    this commit  TypeError: Model.save() takes 1 positional argument but 2 were given
+
+models.DecimalField(), neither size given: its checks on SQLite
+    5.2.17       fields.E130, fields.E132
+    6.0.8        fields.E130, fields.E132
+    6.1.1        no messages
+    this commit  no messages
+
+models.BinaryField().to_python("am91*cm5hbA=="): Base64 with a character outside its alphabet
+    5.2.17       b'journal'
+    6.0.8        b'journal'
+    6.1.1        ValidationError: ['“am91*cm5hbA==” is not a valid binary value.']
+    this commit  ValidationError: ['“am91*cm5hbA==” is not a valid binary value.']
+
+models.GenericIPAddressField().get_prep_value("2001:db8::zz"): not an address, as a save or a filter prepares it
+    5.2.17       '2001:db8::zz'
+    6.0.8        '2001:db8::zz'
+    6.1.1        '2001:db8::zz'
+    this commit  ValidationError: ['Enter a valid IPv6 address.']
+
+models.GenericIPAddressField().get_prep_value(" 2001:DB8::1 "): an address with spaces around it
+    5.2.17       ' 2001:DB8::1 '
+    6.0.8        ' 2001:DB8::1 '
+    6.1.1        ' 2001:DB8::1 '
+    this commit  '2001:db8::1'
+
+note.tags.add(tag): the arguments a receiver of m2m_changed is given
+    5.2.17       action, instance, model, pk_set, reverse, sender, signal, using
+    6.0.8        action, instance, model, pk_set, reverse, sender, signal, using
+    6.1.1        action, instance, model, pk_set, raw, reverse, sender, signal, using
+    this commit  action, instance, model, pk_set, raw, reverse, sender, signal, using
+
+def get_placeholder(self, value, compiler, connection), on a subclass of a field
+    5.2.17       the class is made
+    6.0.8        the class is made
+    6.1.1        the class is made, warns RemovedInDjango70Warning
+    this commit  the class is made, warns RemovedInDjango2028Warning
+
+def get_cache_name(self): return "home", on a FieldCacheMixin subclass: its cache_name
+    5.2.17       'home', warns RemovedInDjango60Warning
+    6.0.8        NotImplementedError
+    6.1.1        NotImplementedError
+    this commit  NotImplementedError
+
+[r.paper.name for r in Reporter.objects.all()]: the statements it runs, four reporters on two papers
+    5.2.17       5 statements
+    6.0.8        5 statements
+    6.1.1        5 statements
+    this commit  5 statements
+
+[r.paper.name for r in Reporter.objects.fetch_mode(FETCH_PEERS)]: the statements it runs
+    5.2.17       ImportError: cannot import name 'FETCH_PEERS' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'FETCH_PEERS' from 'django.db.models'
+    6.1.1        2 statements
+    this commit  2 statements
+
+Reporter.objects.fetch_mode(FETCH_RAISE).first().paper
+    5.2.17       ImportError: cannot import name 'FETCH_RAISE' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'FETCH_RAISE' from 'django.db.models'
+    6.1.1        FieldFetchBlocked: Fetching of Reporter.paper blocked.
+    this commit  FieldFetchBlocked: Fetching of Reporter.paper blocked.
+
+[r.paper.publisher.name for r in Reporter.objects.select_related("paper").fetch_mode(FETCH_PEERS)]: the statements it runs
+    5.2.17       ImportError: cannot import name 'FETCH_PEERS' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'FETCH_PEERS' from 'django.db.models'
+    6.1.1        5 statements
+    this commit  2 statements
+
+[n.title for n in Notice.objects.all()]: a model whose own from_db() takes no fetch_mode
+    5.2.17       ['Closed on Monday']
+    6.0.8        ['Closed on Monday']
+    6.1.1        ['Closed on Monday'], warns RemovedInDjango70Warning
+    this commit  ['Closed on Monday'], warns RemovedInDjango2028Warning
+
+Entry.objects.select_related(), with no field named
+    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
+    6.0.8        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
+    6.1.1        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry", warns RemovedInDjango70Warning
+    this commit  SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry", warns RemovedInDjango2028Warning
+
+Entry.objects.order_by().first(): the statement it runs
+    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry" ORDER BY "journal_entry"."id" ASC LIMIT 1
+    6.0.8        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry" ORDER BY "journal_entry"."id" ASC LIMIT 1
+    6.1.1        SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry" LIMIT 1
+    this commit  SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry" LIMIT 1
+
+Entry.objects.order_by("title").totally_ordered
+    5.2.17       AttributeError: 'QuerySet' object has no attribute 'totally_ordered'
+    6.0.8        AttributeError: 'QuerySet' object has no attribute 'totally_ordered'
+    6.1.1        False
+    this commit  False
+
+titles.union(titles): its statement, with titles = Letter.objects.order_by().values("title") and Letter ordered by title
+    5.2.17       SELECT "journal_letter"."title" AS "title" FROM "journal_letter" UNION SELECT "journal_letter"."title" AS "title" FROM "journal_letter"
+    6.0.8        SELECT "journal_letter"."title" AS "title" FROM "journal_letter" UNION SELECT "journal_letter"."title" AS "title" FROM "journal_letter"
+    6.1.1        SELECT "journal_letter"."title" AS "title" FROM "journal_letter" UNION SELECT "journal_letter"."title" AS "title" FROM "journal_letter" ORDER BY 1 ASC
+    this commit  SELECT "journal_letter"."title" AS "title" FROM "journal_letter" UNION SELECT "journal_letter"."title" AS "title" FROM "journal_letter" ORDER BY 1 ASC
+
+list(pages.union(pages)), with pages = Letter.objects.order_by().values("pages") and Letter ordered by title
+    5.2.17       [{'pages': 3}, {'pages': 12}]
+    6.0.8        [{'pages': 3}, {'pages': 12}]
+    6.1.1        DatabaseError: ORDER BY term does not match any column in the result set.
+    this commit  DatabaseError: ORDER BY term does not match any column in the result set.
+
+list(pages.union(pages).order_by()), with the same pages
+    5.2.17       [{'pages': 3}, {'pages': 12}]
+    6.0.8        [{'pages': 3}, {'pages': 12}]
+    6.1.1        [{'pages': 3}, {'pages': 12}]
+    this commit  [{'pages': 3}, {'pages': 12}]
+
+Entry.objects.values_list(flat=True), with no field named
+    5.2.17       SELECT "journal_entry"."id", "journal_entry"."title", "journal_entry"."published" FROM "journal_entry"
+    6.0.8        SELECT "journal_entry"."id" AS "id" FROM "journal_entry"
+    6.1.1        SELECT "journal_entry"."id" AS "id" FROM "journal_entry", warns RemovedInDjango70Warning
+    this commit  SELECT "journal_entry"."id" AS "id" FROM "journal_entry", warns RemovedInDjango2028Warning
+
+list(Entry.objects.values_list(flat=True)), with no field named
+    5.2.17       [1, 2]
+    6.0.8        [1, 2]
+    6.1.1        [1, 2], warns RemovedInDjango70Warning
+    this commit  [1, 2], warns RemovedInDjango2028Warning
+
+Entry.objects.values("title").in_bulk()
+    5.2.17       TypeError: in_bulk() cannot be used with values() or values_list().
+    6.0.8        TypeError: in_bulk() cannot be used with values() or values_list().
+    6.1.1        {1: {'title': 'Spring'}, 2: {'title': 'Autumn'}}
+    this commit  {1: {'title': 'Spring'}, 2: {'title': 'Autumn'}}
+
+[r.paper.name async for r in Reporter.objects.prefetch_related("paper").aiterator()]
+    5.2.17       ['Gazette', 'Gazette', 'Courier', 'Courier']
+    6.0.8        ['Gazette', 'Gazette', 'Courier', 'Courier']
+    6.1.1        ['Gazette', 'Gazette', 'Courier', 'Courier']
+    this commit  ['Gazette', 'Gazette', 'Courier', 'Courier'], warns RemovedInDjango2029Warning
+
+Prefetch("paper").get_current_queryset(0)
+    5.2.17       None, warns RemovedInDjango60Warning
+    6.0.8        AttributeError: 'Prefetch' object has no attribute 'get_current_queryset'
+    6.1.1        AttributeError: 'Prefetch' object has no attribute 'get_current_queryset'
+    this commit  AttributeError: 'Prefetch' object has no attribute 'get_current_queryset'
+
+prefetch_related_objects(clippings, "earlier"): a descriptor that defines get_prefetch_queryset() alone
+    5.2.17       get_prefetch_queryset() called for 2 instances, warns RemovedInDjango60Warning
+    6.0.8        ValueError: 'earlier' does not resolve to an item that supports prefetching - this is an invalid parameter to prefetch_related().
+    6.1.1        ValueError: 'earlier' does not resolve to an item that supports prefetching - this is an invalid parameter to prefetch_related().
+    this commit  ValueError: 'earlier' does not resolve to an item that supports prefetching - this is an invalid parameter to prefetch_related().
+
+[e.pk for e in Edition.objects.raw('SELECT * FROM journal_edition')]: a composite primary key
+    5.2.17       FieldDoesNotExist: Raw query must include the primary key
+    6.0.8        [(1, 2)]
+    6.1.1        [(1, 2)]
+    this commit  [(1, 2)]
+
+Reporter.objects.filter(paper=Paper(id=1)).count(): an instance given a key and never saved
+    5.2.17       2
+    6.0.8        2
+    6.1.1        2
+    this commit  2
+
+CommonMiddleware.async_capable
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  False
+
+A GET under ASGI through startproject's MIDDLEWARE to a synchronous view: the calls handed to a thread
+    5.2.17       16 calls handed to a thread
+    6.0.8        16 calls handed to a thread
+    6.1.1        16 calls handed to a thread
+    this commit  5 calls handed to a thread
+
+The same GET with MIDDLEWARE empty: the calls handed to a thread
+    5.2.17       3 calls handed to a thread
+    6.0.8        3 calls handed to a thread
+    6.1.1        3 calls handed to a thread
+    this commit  3 calls handed to a thread
+
+handler500 under ASGI, when a synchronous view raises: the thread it runs on
+    5.2.17       another thread
+    6.0.8        another thread
+    6.1.1        another thread
+    this commit  the view's thread
+
+request.COOKIES under ASGI, sent as two "cookie" headers: year=2026 and order=newest
+    5.2.17       {'year': '2026,order=newest'}
+    6.0.8        {'year': '2026', 'order': 'newest'}
+    6.1.1        {'year': '2026', 'order': 'newest'}
+    this commit  {'year': '2026', 'order': 'newest'}
+
+JsonResponse([1, 2]).content
+    5.2.17       TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    6.0.8        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    6.1.1        TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.
+    this commit  b'[1, 2]'
+
+JsonResponse([1, 2], safe=False).content
+    5.2.17       b'[1, 2]'
+    6.0.8        b'[1, 2]'
+    6.1.1        b'[1, 2]'
+    this commit  b'[1, 2]', warns RemovedInDjango2029Warning
+
+request.POST["title"]: a multipart field sent as base64, "TW9u!ZGF5"
+    5.2.17       'Monday'
+    6.0.8        'Monday'
+    6.1.1        'TW9u!ZGF5'
+    this commit  'TW9u!ZGF5'
+
+request.FILES["notes"].read(): a file sent as base64, "TW9u!ZGF5"
+    5.2.17       b'Monday'
+    6.0.8        b'Monday'
+    6.1.1        MultiPartParserError: Could not decode base64 data.
+    this commit  MultiPartParserError: Could not decode base64 data.
+
+request.POST["body"]: a multipart field sent as base64 over two lines, "TW9u" and "ZGF5"
+    5.2.17       'Monday'
+    6.0.8        'Monday'
+    6.1.1        'TW9u\r\nZGF5'
+    this commit  'TW9u\r\nZGF5'
+
+HttpRequest().multipart_parser_class
+    5.2.17       AttributeError: 'HttpRequest' object has no attribute 'multipart_parser_class'
+    6.0.8        AttributeError: 'HttpRequest' object has no attribute 'multipart_parser_class'
+    6.1.1        <class 'django.http.multipartparser.MultiPartParser'>
+    this commit  <class 'django.http.multipartparser.MultiPartParser'>
+
+RedirectView.as_view(url="/entries/2026/", preserve_request=True)(request).status_code: a POST
+    5.2.17       TypeError: RedirectView() received an invalid keyword 'preserve_request'. as_view only accepts arguments that are already attributes of the class.
+    6.0.8        TypeError: RedirectView() received an invalid keyword 'preserve_request'. as_view only accepts arguments that are already attributes of the class.
+    6.1.1        307
+    this commit  307
+
+HttpResponseRedirect("/entries/" + "x" * 20000, max_length=None).status_code
+    5.2.17       TypeError: HttpResponseBase.__init__() got an unexpected keyword argument 'max_length'
+    6.0.8        TypeError: HttpResponseBase.__init__() got an unexpected keyword argument 'max_length'
+    6.1.1        302
+    this commit  302
+
+HttpResponseRedirect("/entries/" + "é" * 3000).status_code: within the limit until it is encoded
+    5.2.17       302
+    6.0.8        302
+    6.1.1        DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+    this commit  DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+
+register_converter(YearConverter, "int"): a name Django already defines
+    5.2.17       YearConverter, warns RemovedInDjango60Warning
+    6.0.8        ValueError: Converter 'int' is already registered.
+    6.1.1        ValueError: Converter 'int' is already registered.
+    this commit  ValueError: Converter 'int' is already registered.
+
+Lower(Value("Dawn")).as_sql(compiler, connection)
+    5.2.17       ('LOWER(%s)', ['Dawn'])
+    6.0.8        ('LOWER(%s)', ('Dawn',))
+    6.1.1        ('LOWER(%s)', ('Dawn',))
+    this commit  ('LOWER(%s)', ('Dawn',))
+
+Entry.objects.filter(title__within=("Dawn", "Dusk")): a custom lookup whose as_sql returns lhs_params + list(self.rhs)
+    5.2.17       ['Dawn', 'Dusk']
+    6.0.8        TypeError: can only concatenate tuple (not "list") to tuple
+    6.1.1        TypeError: can only concatenate tuple (not "list") to tuple
+    this commit  TypeError: can only concatenate tuple (not "list") to tuple
+
+str(Entry.objects.annotate(Calm=FilteredRelation("notes", condition=Q(notes__title="mood calm"))).values("Calm__title").query)
+    5.2.17       SELECT Calm."title" AS "Calm__title" FROM "journal_entry" LEFT OUTER JOIN "journal_note" Calm ON ("journal_entry"."id" = Calm."entry_id" AND (Calm."title" = mood calm))
+    6.0.8        SELECT Calm."title" AS "Calm__title" FROM "journal_entry" LEFT OUTER JOIN "journal_note" Calm ON ("journal_entry"."id" = Calm."entry_id" AND (Calm."title" = mood calm))
+    6.1.1        SELECT "Calm"."title" AS "Calm__title" FROM "journal_entry" LEFT OUTER JOIN "journal_note" "Calm" ON ("journal_entry"."id" = "Calm"."entry_id" AND ("Calm"."title" = mood calm))
+    this commit  SELECT "Calm"."title" AS "Calm__title" FROM "journal_entry" LEFT OUTER JOIN "journal_note" "Calm" ON ("journal_entry"."id" = "Calm"."entry_id" AND ("Calm"."title" = mood calm))
+
+compiler.quote_name_unless_alias("T3"), where T3 is the alias of a join
+    5.2.17       'T3'
+    6.0.8        'T3'
+    6.1.1        '"T3"', warns RemovedInDjango70Warning
+    this commit  '"T3"', warns RemovedInDjango2028Warning
+
+Entry.objects.annotate(**{"share%": Value(1)}).values_list("share%", flat=True)
+    5.2.17       [1, 1, 1]
+    6.0.8        [1, 1, 1], warns RemovedInDjango70Warning
+    6.1.1        [1, 1, 1], warns RemovedInDjango70Warning
+    this commit  [1, 1, 1], warns RemovedInDjango2028Warning
+
+[name for name in ("StringAgg", "AnyValue", "BitAnd", "BitOr", "BitXor", "JSONNull") if hasattr(django.db.models, name)]
+    5.2.17       []
+    6.0.8        ['StringAgg', 'AnyValue']
+    6.1.1        ['StringAgg', 'AnyValue', 'BitAnd', 'BitOr', 'BitXor', 'JSONNull']
+    this commit  ['StringAgg', 'AnyValue', 'BitAnd', 'BitOr', 'BitXor', 'JSONNull']
+
+Entry.objects.aggregate(titles=StringAgg("title", Value(", "), order_by="published"))
+    5.2.17       ImportError: cannot import name 'StringAgg' from 'django.db.models'
+    6.0.8        {'titles': 'Dawn, Dusk, Noon'}
+    6.1.1        {'titles': 'Dawn, Dusk, Noon'}
+    this commit  {'titles': 'Dawn, Dusk, Noon'}
+
+Entry.objects.aggregate(first=Max("title", order_by="published")): an aggregate that takes no ordering
+    5.2.17       {'first': 'Noon'}
+    6.0.8        TypeError: Max does not allow order_by.
+    6.1.1        TypeError: Max does not allow order_by.
+    this commit  TypeError: Max does not allow order_by.
+
+Entry.objects.aggregate(titles=StringAgg("title", Value(","), distinct=True)), on SQLite: distinct, the delimiter a bare comma
+    5.2.17       ImportError: cannot import name 'StringAgg' from 'django.db.models'
+    6.0.8        NotSupportedError: StringAgg does not support distinct with multiple expressions on this database backend.
+    6.1.1        {'titles': 'Dawn,Dusk,Noon'}
+    this commit  {'titles': 'Dawn,Dusk,Noon'}
+
+Entry.objects.aggregate(n=Total("id", filter=Q(title="Dawn"))): Total an Aggregate whose template is "%(function)s(%(expressions)s)"
+    5.2.17       {'n': 1}
+    6.0.8        ProgrammingError: Incorrect number of bindings supplied. The current statement uses 0, and there are 1 supplied.
+    6.1.1        ProgrammingError: Incorrect number of bindings supplied. The current statement uses 0, and there are 1 supplied.
+    this commit  ProgrammingError: Incorrect number of bindings supplied. The current statement uses 0, and there are 1 supplied.
+
+Entry.objects.aggregate(n=Total("id", filter=Q(published__lt=F("published")))): Total an Aggregate whose template is "%(function)s(%(expressions)s)", and a filter no entry passes
+    5.2.17       {'n': 0}
+    6.0.8        {'n': 3}
+    6.1.1        {'n': 3}
+    this commit  {'n': 3}
+
+Sum("id", "title")
+    5.2.17       TypeError: 'Sum' takes exactly 1 argument (2 given)
+    6.0.8        TypeError: 'Sum' takes exactly 1 argument (2 given)
+    6.1.1        TypeError: 'Sum' takes exactly 1 argument (2 given)
+    this commit  TypeError: 'Sum' takes exactly 1 argument (2 given)
+
+Entry.objects.aggregate(n=Count("title", "published"))
+    5.2.17       AttributeError: 'str' object has no attribute 'resolve_expression'
+    6.0.8        {'n': 3}
+    6.1.1        {'n': 3}
+    this commit  {'n': 3}
+
+Note.objects.filter(data=None): the notes that match
+    5.2.17       ['JSON null']
+    6.0.8        ['JSON null']
+    6.1.1        ['JSON null'], warns RemovedInDjango70Warning
+    this commit  ['JSON null'], warns RemovedInDjango2028Warning
+
+Note.objects.filter(data=JSONNull()): the notes that match
+    5.2.17       ImportError: cannot import name 'JSONNull' from 'django.db.models'
+    6.0.8        ImportError: cannot import name 'JSONNull' from 'django.db.models'
+    6.1.1        ['JSON null']
+    this commit  ['JSON null']
+
+Note.objects.filter(data__mood=None): the notes that match
+    5.2.17       ['mood null']
+    6.0.8        ['mood null']
+    6.1.1        ['mood null']
+    this commit  ['mood null']
+
+Note.objects.filter(data__mood__iexact=None): the notes that match
+    5.2.17       ['JSON null', 'SQL NULL', 'no mood']
+    6.0.8        ['JSON null', 'SQL NULL', 'no mood']
+    6.1.1        ['mood null']
+    this commit  ['mood null']
+
+Note.objects.filter(**{"data__tags__-1": "sun"}), on SQLite: the notes that match
+    5.2.17       OperationalError: bad JSON path: '$."tags"[-1]'
+    6.0.8        ['mood calm']
+    6.1.1        ['mood calm']
+    this commit  ['mood calm']
+
+from django.db.models.fields.json import compile_json_path
+    5.2.17       django.db.models.fields.json.compile_json_path
+    6.0.8        ImportError: cannot import name 'compile_json_path' from 'django.db.models.fields.json'
+    6.1.1        ImportError: cannot import name 'compile_json_path' from 'django.db.models.fields.json'
+    this commit  ImportError: cannot import name 'compile_json_path' from 'django.db.models.fields.json'
+
+JSONField().get_db_prep_value("[]", connection)
+    5.2.17       '"[]"'
+    6.0.8        '"[]"'
+    6.1.1        '"[]"'
+    this commit  '"[]"'
+
+Note._meta.get_field("entry").get_joining_columns()
+    5.2.17       (('entry_id', 'id'),), warns RemovedInDjango60Warning
+    6.0.8        AttributeError: 'ForeignKey' object has no attribute 'get_joining_columns'
+    6.1.1        AttributeError: 'ForeignKey' object has no attribute 'get_joining_columns'
+    this commit  AttributeError: 'ForeignKey' object has no attribute 'get_joining_columns'
+
+Line.objects.filter(pk=Line.objects.filter(number=2).values("pk")[:1]): a composite key equal to a subquery's
+    5.2.17       [('Dawn', 2)]
+    6.0.8        [('Dawn', 2)]
+    6.1.1        [('Dawn', 2)]
+    this commit  [('Dawn', 2)]
+
+Line.objects.filter(pk__gt=Line.objects.filter(number=2).values("pk")[:1]), on SQLite: a composite key greater than a subquery's
+    5.2.17       TypeError: 'Query' object is not iterable
+    6.0.8        [('Dusk', 1), ('Dusk', 2), ('Noon', 1), ('Noon', 2)]
+    6.1.1        [('Dusk', 1), ('Dusk', 2), ('Noon', 1), ('Noon', 2)]
+    this commit  [('Dusk', 1), ('Dusk', 2), ('Noon', 1), ('Noon', 2)]
+
+Entry.objects.annotate(n=Value(1)).values("n").query.annotation_select_mask
+    5.2.17       {'n'}
+    6.0.8        {'n'}
+    6.1.1        {'n'}
+    this commit  {'n'}
+
+TruncDay("published").deconstruct(): as a migration writes it, with no tzinfo and USE_TZ at its default, True
+    5.2.17       ('django.db.models.functions.datetime.TruncDay', ('published',), {})
+    6.0.8        ('django.db.models.functions.datetime.TruncDay', ('published',), {})
+    6.1.1        ('django.db.models.functions.datetime.TruncDay', ('published',), {})
+    this commit  ('django.db.models.functions.datetime.TruncDay', ('published',), {}), warns RemovedInDjango2029Warning
+
+EMAIL_HOST = "smtp.harbour.example" in the settings module: the module loaded
+    5.2.17       (no value, no error, no warning)
+    6.0.8        (no value, no error, no warning)
+    6.1.1        warns RemovedInDjango70Warning
+    this commit  warns RemovedInDjango2028Warning
+
+settings.EMAIL_HOST, which the settings module sets
+    5.2.17       'smtp.harbour.example'
+    6.0.8        'smtp.harbour.example'
+    6.1.1        'smtp.harbour.example', warns RemovedInDjango70Warning
+    this commit  'smtp.harbour.example', warns RemovedInDjango2028Warning
+
+settings.EMAIL_HOST; settings.EMAIL_HOST, which the settings module sets: the second read, the first's warning silenced
+    5.2.17       'smtp.harbour.example'
+    6.0.8        'smtp.harbour.example'
+    6.1.1        'smtp.harbour.example'
+    this commit  'smtp.harbour.example'
+
+EMAIL_HOST and MAILERS in the settings module: the module loaded
+    5.2.17       (no value, no error, no warning)
+    6.0.8        (no value, no error, no warning)
+    6.1.1        ImproperlyConfigured: Deprecated email settings are not allowed when MAILERS is defined: EMAIL_HOST.
+    this commit  ImproperlyConfigured: Deprecated email settings are not allowed when MAILERS is defined: EMAIL_HOST.
+
+settings.EMAIL_BACKEND, when the settings module defines MAILERS and not EMAIL_BACKEND
+    5.2.17       'django.core.mail.backends.smtp.EmailBackend'
+    6.0.8        'django.core.mail.backends.smtp.EmailBackend'
+    6.1.1        AttributeError: The EMAIL_BACKEND setting is not available when MAILERS is defined.
+    this commit  AttributeError: The EMAIL_BACKEND setting is not available when MAILERS is defined.
+
+with override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend"): entered and left
+    5.2.17       (no value, no error, no warning)
+    6.0.8        (no value, no error, no warning)
+    6.1.1        warns RemovedInDjango70Warning
+    this commit  warns RemovedInDjango2028Warning
+
+django-admin startproject almanac: DEFAULT_AUTO_FIELD in the settings module it writes
+    5.2.17       'django.db.models.BigAutoField'
+    6.0.8        not defined
+    6.1.1        not defined
+    this commit  not defined
+
+django-admin startproject almanac: MAILERS in the settings module it writes
+    5.2.17       not defined
+    6.0.8        not defined
+    6.1.1        {'default': {'BACKEND': 'django.core.mail.backends.console.EmailBackend'}}
+    this commit  {'default': {'BACKEND': 'django.core.mail.backends.console.EmailBackend'}}
+
+django-admin startapp logbook: default_auto_field on the AppConfig it writes
+    5.2.17       'django.db.models.BigAutoField'
+    6.0.8        not set
+    6.1.1        not set
+    this commit  not set
+
+django-admin startproject almanac …/site/almanac: a directory that does not exist, nor its parent
+    5.2.17       CommandError: Destination directory '…/site/almanac' does not exist, please create it first.
+    6.0.8        almanac, manage.py
+    6.1.1        almanac, manage.py
+    this commit  almanac, manage.py
+
+shell.Command().get_auto_imports(): what the shell imports before it starts
+    5.2.17
+        journal.models.Entry
+        django.contrib.sessions.models.Session
+        django.contrib.auth.models.User
+        django.contrib.auth.models.Group
+        django.contrib.auth.models.Permission
+        django.contrib.contenttypes.models.ContentType
+    6.0.8
+        django.conf.settings
+        django.db.connection
+        django.db.models
+        django.db.models.functions
+        django.db.reset_queries
+        django.utils.timezone
+        journal.models.Entry
+        django.contrib.sessions.models.Session
+        django.contrib.auth.models.User
+        django.contrib.auth.models.Group
+        django.contrib.auth.models.Permission
+        django.contrib.contenttypes.models.ContentType
+    6.1.1
+        django.conf.settings
+        django.db.connection
+        django.db.models
+        django.db.models.functions
+        django.db.reset_queries
+        django.utils.timezone
+        journal.models.Entry
+        django.contrib.sessions.models.Session
+        django.contrib.auth.models.User
+        django.contrib.auth.models.Group
+        django.contrib.auth.models.Permission
+        django.contrib.contenttypes.models.ContentType
+    this commit
+        django.conf.settings
+        django.db.connection
+        django.db.models
+        django.db.models.functions
+        django.db.reset_queries
+        django.utils.timezone
+        journal.models.Entry
+        django.contrib.sessions.models.Session
+        django.contrib.auth.models.User
+        django.contrib.auth.models.Group
+        django.contrib.auth.models.Permission
+        django.contrib.contenttypes.models.ContentType
+
+CheckRegistry().run_checks(): the databases a check function is given when none are named
+    5.2.17       None
+    6.0.8        None
+    6.1.1        ['default', 'mysql']
+    this commit  ['default', 'mysql']
+
+call_command("check"): DATABASES names a MySQL database beside SQLite's, and no MySQL server answers
+    5.2.17       System check identified no issues (0 silenced).
+    6.0.8        System check identified no issues (0 silenced).
+    6.1.1        OperationalError: (2003, "Can't connect to MySQL server (refused by a stand-in for MySQLdb.connect)")
+    this commit  OperationalError: (2003, "Can't connect to MySQL server (refused by a stand-in for MySQLdb.connect)")
+
+python -m django check, DJANGO_SETTINGS_MODULE naming a module that does not exist
+    5.2.17       exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_nowhere'
+    6.0.8        exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_nowhere'
+    6.1.1        exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_nowhere'
+    this commit  exit 1: No module named 'almanac_nowhere'.
+
+python -m django startproject almanac, the settings module importing a package that is not installed
+    5.2.17       exit 0
+    6.0.8        exit 0
+    6.1.1        exit 0
+    this commit  exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_missing_package'
+
+call_command("check", "--fail-level=WARN"): a mistyped choice, on Python 3.14
+    5.2.17       CommandError: Error: argument --fail-level: invalid choice: 'WARN' (choose from 'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG')
+    6.0.8        CommandError: Error: argument --fail-level: invalid choice: 'WARN' (choose from 'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG')
+    6.1.1        CommandError: Error: argument --fail-level: invalid choice: 'WARN', maybe you meant 'WARNING'? (choose from 'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG')
+    this commit  CommandError: Error: argument --fail-level: invalid choice: 'WARN', maybe you meant 'WARNING'? (choose from 'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG')
+
+call_command("listurls", no_color=True)
+    5.2.17       CommandError: Unknown command: 'listurls'
+    6.0.8        CommandError: Unknown command: 'listurls'
+    6.1.1        CommandError: Unknown command: 'listurls'
+    this commit  /entries/<int:year>/  journal.views.by_year  entries-by-year
+
+get_template("entries.html#row").render(...): one partial of a template, loaded by its name
+    5.2.17       TemplateDoesNotExist: entries.html#row
+    6.0.8        '<li>Harbour</li>'
+    6.1.1        '<li>Harbour</li>'
+    this commit  '<li>Harbour</li>'
+
+{% for entry in entries %}{{ forloop.length }}{% endfor %}, over three entries
+    5.2.17       ''
+    6.0.8        '333'
+    6.1.1        '333'
+    this commit  '333'
+
+{% querystring %}, on a request for /entries/ with no query string
+    5.2.17       '<a href="">'
+    6.0.8        '<a href="?">'
+    6.1.1        '<a href="?">'
+    this commit  '<a href="?">'
+
+{% querystring first second %}, given two mappings, {"year": "2026"} and {"page": "2"}
+    5.2.17       TemplateSyntaxError: 'querystring' received too many positional arguments
+    6.0.8        '<a href="?year=2026&amp;page=2">'
+    6.1.1        '<a href="?year=2026&amp;page=2">'
+    this commit  '<a href="?year=2026&amp;page=2">'
+
+{{ entry..title }}: two dots in a variable
+    5.2.17       ''
+    6.0.8        ''
+    6.1.1        '', warns RemovedInDjango70Warning
+    this commit  '', warns RemovedInDjango2028Warning
+
+{{ "a..b" }}: two dots in a string literal
+    5.2.17       'a..b'
+    6.0.8        'a..b'
+    6.1.1        'a..b'
+    this commit  'a..b'
+
+{% if entry..title %}yes{% else %}no{% endif %}: two dots in a tag's argument
+    5.2.17       'no'
+    6.0.8        'no'
+    6.1.1        'no'
+    this commit  'no'
+
+{{ entries|length_is:3 }}, over three entries
+    5.2.17       TemplateSyntaxError: Invalid filter: 'length_is'
+    6.0.8        TemplateSyntaxError: Invalid filter: 'length_is'
+    6.1.1        TemplateSyntaxError: Invalid filter: 'length_is'
+    this commit  TemplateSyntaxError: Invalid filter: 'length_is'
+
+{{ entries.create }}, given Entry.objects: a method that creates a row
+    5.2.17       ''
+    6.0.8        ''
+    6.1.1        ''
+    this commit  ''
+
+parse_bits(parser, bits, params, varargs, varkw, defaults, kwonly, kwonly_defaults, takes_context, name)
+    5.2.17       (['3'], {})
+    6.0.8        (['3'], {})
+    6.1.1        TypeError: parse_bits() takes 9 positional arguments but 10 were given
+    this commit  TypeError: parse_bits() takes 9 positional arguments but 10 were given
+
+@register.simple_tag(takes_context=True) on def page_link(number): the decoration
+    5.2.17       accepted
+    6.0.8        accepted
+    6.1.1        TemplateSyntaxError: 'page_link' is decorated with takes_context=True so it must have a first argument of 'context'
+    this commit  TemplateSyntaxError: 'page_link' is decorated with takes_context=True so it must have a first argument of 'context'
+
+format_html("<b>journal</b>"): given nothing to format
+    5.2.17       <b>journal</b>, warns RemovedInDjango60Warning
+    6.0.8        TypeError: args or kwargs must be provided.
+    6.1.1        TypeError: args or kwargs must be provided.
+    this commit  TypeError: args or kwargs must be provided.
+
+urlize("journal.example.com"): the scheme assumed for a bare domain
+    5.2.17       <a href="http://journal.example.com">journal.example.com</a>
+    6.0.8        <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango70Warning
+    6.1.1        <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango70Warning
+    this commit  <a href="http://journal.example.com">journal.example.com</a>, warns RemovedInDjango2028Warning
+
+urlize("journal.example.com") under the setting URLIZE_ASSUME_HTTPS = True
+    5.2.17       <a href="http://journal.example.com">journal.example.com</a>
+    6.0.8        <a href="https://journal.example.com">journal.example.com</a>
+    6.1.1        <a href="https://journal.example.com">journal.example.com</a>
+    this commit  <a href="https://journal.example.com">journal.example.com</a>
 

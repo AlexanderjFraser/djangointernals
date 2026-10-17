@@ -3,6 +3,7 @@ commit: the habits of an older Django, run under 5.2.17, 6.0.8 and 6.1.1 and und
 tree, so that what an older release did is shown by a run and not told from its release notes.
 
     python recordings/changes.py > recordings/changes.txt
+    python recordings/changes.py models sql      only these modules' blocks, for their writers
 
 The chapter "What changed" (pages/changes.md and the pages under it) quotes this output.
 Every habits module in recordings/changes/ (each .py there whose name does not begin with an
@@ -22,7 +23,9 @@ The releases are the newest of each series that was supported on the date of thi
 2026-09-26 (pin.json says what the commit is): 5.2.17 and 6.0.8, both released 2026-08-04,
 and 6.1.1, released 2026-09-02. Each is installed from PyPI into a virtual environment of its
 own under reference/releases/, beside the pinned trees and gitignored with them, the first
-time this runs, by the Python that runs this script; after that it is used as it is. An
+time this runs, by the Python that runs this script, with the database drivers the recordings
+need (recordings/requirements.txt), so that a habit can ask a backend what it would write
+without a server; after that it is used as it is. An
 environment whose Django is not the version named here is refused, never repaired: delete
 it and run again. The habits run over the journal project of the chapter "A request, end to
 end" (recordings/journal/), the smallest project of the book, which every release here loads.
@@ -66,7 +69,7 @@ def ensure(version: str) -> str:
         os.makedirs(ENVIRONMENTS, exist_ok=True)
         subprocess.run([sys.executable, "-m", "venv", environment], check=True)
         subprocess.run([python, "-m", "pip", "install", "--quiet", "--disable-pip-version-check",
-                        f"Django=={version}"], check=True)
+                        f"Django=={version}", "-r", os.path.join(HERE, "requirements.txt")], check=True)
     found = version_in(python)
     if found != version:
         raise SystemExit(f"reference/releases/django-{version} holds Django {found or 'not at all'}, not {version}: "
@@ -95,13 +98,19 @@ def line(label: str, record: dict) -> list[str]:
     return [f"    {label:<{WIDTH}}{warned}".rstrip()] + [f"        {text_line}" for text_line in lines]
 
 
-def main() -> None:
+def main(only: list[str]) -> None:
     pythons = [(version, ensure(version)) for version in RELEASES] + [(THIS, sys.executable)]
     modules = sorted(name for name in os.listdir(HABITS) if name.endswith(".py") and not name.startswith("_"))
+    if only:
+        missing = [name for name in only if f"{name}.py" not in modules]
+        if missing:
+            raise SystemExit(f"no habits module named {', '.join(missing)} in recordings/changes/")
+        modules = [name for name in modules if name[:-3] in only]
     this = version_in(sys.executable)
     print(f"Django {', '.join(RELEASES[:-1])} and {RELEASES[-1]} beside this commit, {this}: the same habits run "
           f"under each, over the journal project")
     print()
+    seen: dict[str, str] = {}
     for name in modules:
         module = os.path.join(HABITS, name)
         results = {label: run(python, module) for label, python in pythons}
@@ -110,6 +119,11 @@ def main() -> None:
             if [record["title"] for record in records] != titles:
                 raise SystemExit(f"{name}: the habits under {label} are not those under {THIS}: a habits module "
                                  f"defines the same habits, in the same order, under every release")
+        for title in titles:
+            if title in seen:
+                raise SystemExit(f"{name}: the title {title!r} is {seen[title]}'s too: a title names one block "
+                                 f"of the recording")
+            seen[title] = name
         for index, title in enumerate(titles):
             print(title)
             for label, records in results.items():
@@ -119,4 +133,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

@@ -9,8 +9,8 @@
  "pointers": [
   {
    "pointer": "django/db/models/fields/__init__.py:Field._get_default",
-   "line": 25,
-   "sentence": "A field may have a default that the database applies, `db_default=` (5.0), beside the `default=` that Django applies to a new instance (`django/db/models/fields/__init__.py:Field._get_default`).",
+   "line": 13,
+   "sentence": "The insert then leaves the column out where no other row of a bulk insert gives it a value and it is not the only column left, and otherwise writes `\"DEFAULT\"`, or the default's expression where the backend lacks that keyword (`django/db/models/fields/__init__.py:Field._get_default`, `django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field._get_default",
@@ -24,8 +24,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql",
-   "line": 25,
-   "sentence": "A new instance given no value holds a `DatabaseDefault` in the value's place, unless the field also has `default=`, and the insert leaves the column out where it can, or writes `\"DEFAULT\"` or the default's expression (`django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`, `django/db/models/expressions.py:DatabaseDefault`).",
+   "line": 13,
+   "sentence": "The insert then leaves the column out where no other row of a bulk insert gives it a value and it is not the only column left, and otherwise writes `\"DEFAULT\"`, or the default's expression where the backend lacks that keyword (`django/db/models/fields/__init__.py:Field._get_default`, `django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLInsertCompiler.as_sql",
@@ -37,23 +37,9 @@
    "fingerprint": "915d3dd6e1884b1b"
   },
   {
-   "pointer": "django/db/models/expressions.py:DatabaseDefault",
-   "line": 25,
-   "sentence": "A new instance given no value holds a `DatabaseDefault` in the value's place, unless the field also has `default=`, and the insert leaves the column out where it can, or writes `\"DEFAULT\"` or the default's expression (`django/db/models/sql/compiler.py:SQLInsertCompiler.as_sql`, `django/db/models/expressions.py:DatabaseDefault`).",
-   "tree": "django",
-   "path": "django/db/models/expressions.py",
-   "symbol": "DatabaseDefault",
-   "kind": "class",
-   "lines": [
-    1311,
-    1348
-   ],
-   "fingerprint": "f9a802df353cdb34"
-  },
-  {
    "pointer": "django/db/models/fields/generated.py:GeneratedField",
-   "line": 27,
-   "sentence": "`GeneratedField` (5.0) is a column the database computes from others in its row, and no save writes it (`django/db/models/fields/generated.py:GeneratedField`).",
+   "line": 15,
+   "sentence": "`GeneratedField` (5.0) is a column the database computes from its row, and no save writes it (`django/db/models/fields/generated.py:GeneratedField`).",
    "tree": "django",
    "path": "django/db/models/fields/generated.py",
    "symbol": "GeneratedField",
@@ -65,37 +51,9 @@
    "fingerprint": "81ac2813b3dbb1b7"
   },
   {
-   "pointer": "django/db/models/base.py:Model._assign_returned_values",
-   "line": 27,
-   "sentence": "On MySQL, and on MariaDB for an update, `Model._assign_returned_values` removes the attribute, so that the next read fetches it (`django/db/models/base.py:Model._assign_returned_values`).",
-   "tree": "django",
-   "path": "django/db/models/base.py",
-   "symbol": "Model._assign_returned_values",
-   "kind": "function",
-   "lines": [
-    1267,
-    1274
-   ],
-   "fingerprint": "fd8cf507b6e68fda"
-  },
-  {
-   "pointer": "django/db/models/fields/generated.py:GeneratedField._check_persistence",
-   "line": 29,
-   "sentence": "Since 6.1 Django makes virtual generated columns on PostgreSQL 18 and stored ones on Oracle 23.7, each having had only the other kind: `GeneratedField.db_persist` chooses, and a check refuses the kind a database lacks (`django/db/models/fields/generated.py:GeneratedField._check_persistence`).",
-   "tree": "django",
-   "path": "django/db/models/fields/generated.py",
-   "symbol": "GeneratedField._check_persistence",
-   "kind": "function",
-   "lines": [
-    150,
-    189
-   ],
-   "fingerprint": "6045eafd008811db"
-  },
-  {
    "pointer": "django/db/models/base.py:Model._get_field_expression_map",
-   "line": 29,
-   "sentence": "Since 5.2 a constraint's validation handles a generated field, taking it as its expression over the instance's values (`django/db/models/base.py:Model._get_field_expression_map`).",
+   "line": 15,
+   "sentence": "Since 5.2 a constraint over one can be validated (`django/db/models/base.py:Model._get_field_expression_map`).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._get_field_expression_map",
@@ -107,23 +65,122 @@
    "fingerprint": "dfaa04b6a2140c70"
   },
   {
-   "pointer": "django/db/models/deletion.py:CASCADE",
-   "line": 33,
-   "sentence": "Before 6.1 every `on_delete` was a Python function, which the `Collector` calls for each relation it follows, so that a cascade or a null set was Django's own work (`django/db/models/deletion.py:CASCADE`).",
+   "pointer": "django/db/backends/postgresql/features.py:DatabaseFeatures.supports_virtual_generated_columns",
+   "line": 15,
+   "sentence": "Since 6.1 PostgreSQL from 18 may have a virtual one and Oracle from 23.7 a stored one; each had had only the other kind (`django/db/backends/postgresql/features.py:DatabaseFeatures.supports_virtual_generated_columns`, `django/db/backends/oracle/features.py:DatabaseFeatures.supports_stored_generated_columns`).",
    "tree": "django",
-   "path": "django/db/models/deletion.py",
-   "symbol": "CASCADE",
+   "path": "django/db/backends/postgresql/features.py",
+   "symbol": "DatabaseFeatures.supports_virtual_generated_columns",
+   "kind": "assignment",
+   "lines": [
+    187,
+    189
+   ],
+   "fingerprint": "63aadaa46cef81ee"
+  },
+  {
+   "pointer": "django/db/backends/oracle/features.py:DatabaseFeatures.supports_stored_generated_columns",
+   "line": 15,
+   "sentence": "Since 6.1 PostgreSQL from 18 may have a virtual one and Oracle from 23.7 a stored one; each had had only the other kind (`django/db/backends/postgresql/features.py:DatabaseFeatures.supports_virtual_generated_columns`, `django/db/backends/oracle/features.py:DatabaseFeatures.supports_stored_generated_columns`).",
+   "tree": "django",
+   "path": "django/db/backends/oracle/features.py",
+   "symbol": "DatabaseFeatures.supports_stored_generated_columns",
    "kind": "function",
    "lines": [
-    22,
-    31
+    243,
+    245
    ],
-   "fingerprint": "a2081a2a112e209f"
+   "at": 244,
+   "fingerprint": "6c0442431caf3010"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 19,
+   "sentence": "After an update it also asks for the generated fields that depend on a field it writes (`django/db/models/base.py:Model._save_table`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
+   "kind": "function",
+   "lines": [
+    1075,
+    1212
+   ],
+   "fingerprint": "52c8d3bbd3d1cbaf"
+  },
+  {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 29,
+   "sentence": "Under 5.2.17 on SQLite a generated column was right after an insert but stale after an update, so on SQLite the 6.0 notes' \"now refreshed\" is new for it only on an update (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._assign_returned_values",
+   "line": 29,
+   "sentence": "Where the backend cannot return columns, as on MySQL, and on MariaDB after an update, the field is instead removed from the instance and so deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._assign_returned_values",
+   "kind": "function",
+   "lines": [
+    1267,
+    1274
+   ],
+   "fingerprint": "fd8cf507b6e68fda"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 31,
+   "sentence": "Since 6.0 the insert of a save that is not raw calls `django.db.models.Field.pre_save` twice for each field it writes: in `_save_table`, to see if the value is an expression, and in the compiler (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
+   "kind": "function",
+   "lines": [
+    1075,
+    1212
+   ],
+   "fingerprint": "52c8d3bbd3d1cbaf"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val",
+   "line": 31,
+   "sentence": "Since 6.0 the insert of a save that is not raw calls `django.db.models.Field.pre_save` twice for each field it writes: in `_save_table`, to see if the value is an expression, and in the compiler (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLInsertCompiler.pre_save_val",
+   "kind": "function",
+   "lines": [
+    1773,
+    1780
+   ],
+   "fingerprint": "aefd01cb2cc25928"
+  },
+  {
+   "pointer": "django/db/models/deletion.py:Collector.can_fast_delete",
+   "line": 35,
+   "sentence": "Under `CASCADE` the collector deletes the related rows itself, and fetches them first where a receiver of `pre_delete` or `post_delete` must be called, or their own relations followed (`django/db/models/deletion.py:Collector.can_fast_delete`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.can_fast_delete",
+   "kind": "function",
+   "lines": [
+    210,
+    254
+   ],
+   "fingerprint": "cd92cb96035bb45b"
   },
   {
    "pointer": "django/db/models/deletion.py:DatabaseOnDelete",
-   "line": 33,
-   "sentence": "Each is a `DatabaseOnDelete`, which stands with `DO_NOTHING` in `SKIP_COLLECTION`, so the collector that a delete makes does not follow the relation, fetches none of the rows the database removes, and sends them no signal (`django/db/models/deletion.py:DatabaseOnDelete`).",
+   "line": 35,
+   "sentence": "6.1 added three `DatabaseOnDelete` values that leave the work to the `ON DELETE` clause the schema editor writes (`django/db/models/deletion.py:DatabaseOnDelete`).",
    "tree": "django",
    "path": "django/db/models/deletion.py",
    "symbol": "DatabaseOnDelete",
@@ -135,9 +192,37 @@
    "fingerprint": "d98e9b5b9746bf70"
   },
   {
+   "pointer": "django/db/models/deletion.py:Collector.collect",
+   "line": 35,
+   "sentence": "They are in `SKIP_COLLECTION` with `DO_NOTHING`, so a delete's collector passes the relation over (`django/db/models/deletion.py:Collector.collect`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.collect",
+   "kind": "function",
+   "lines": [
+    271,
+    431
+   ],
+   "fingerprint": "4b113f3e23bad3b3"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 45,
+   "sentence": "The 6.1 notes give the saved fetch as the reason, and the unsent signals as its consequence (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
    "pointer": "django/db/models/fields/related.py:ForeignKey._check_on_delete",
-   "line": 33,
-   "sentence": "The checks refuse `DB_SET_NULL` on a field that cannot be null, `DB_SET_DEFAULT` on one without `db_default=`, and a chain of references that mixes the database's actions with Python's (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).",
+   "line": 45,
+   "sentence": "The checks refuse a key with one of the database's actions to a model whose own key has one of the collector's, or the reverse (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).",
    "tree": "django",
    "path": "django/db/models/fields/related.py",
    "symbol": "ForeignKey._check_on_delete",
@@ -149,9 +234,23 @@
    "fingerprint": "c4e3d84bb76f3d23"
   },
   {
+   "pointer": "django/db/models/deletion.py:Collector.delete",
+   "line": 47,
+   "sentence": "`Collector.delete` sends `post_delete` only for the rows it collected, and counts only those (`django/db/models/deletion.py:Collector.delete`).",
+   "tree": "django",
+   "path": "django/db/models/deletion.py",
+   "symbol": "Collector.delete",
+   "kind": "function",
+   "lines": [
+    466,
+    552
+   ],
+   "fingerprint": "e04d0d5583b5ecd6"
+  },
+  {
    "pointer": "django/db/models/fields/composite.py:CompositePrimaryKey",
-   "line": 37,
-   "sentence": "`CompositePrimaryKey` (5.2) is a field with no column, assigned to `\"pk\"`, that names the fields making up the key; its value is a tuple of theirs (`django/db/models/fields/composite.py:CompositePrimaryKey`).",
+   "line": 51,
+   "sentence": "`CompositePrimaryKey` (5.2) is a field without a column, assigned to `pk`, whose value is a tuple (`django/db/models/fields/composite.py:CompositePrimaryKey`).",
    "tree": "django",
    "path": "django/db/models/fields/composite.py",
    "symbol": "CompositePrimaryKey",
@@ -164,8 +263,8 @@
   },
   {
    "pointer": "django/db/models/base.py:Model._check_local_fields",
-   "line": 37,
-   "sentence": "Also in 6.0, `Model._check_local_fields` began to refuse, as `\"models.E049\"`, a `ForeignObject` with several `from_fields=` named in `\"indexes\"`, `\"constraints\"` or `\"unique_together\"` (`django/db/models/base.py:Model._check_local_fields`).",
+   "line": 51,
+   "sentence": "It also refused, as `\"models.E049\"`, a `ForeignObject` given several fields as `from_fields=` and named in an index, a constraint or `Options.unique_together`, which 5.2.17 let pass (`django/db/models/base.py:Model._check_local_fields`).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._check_local_fields",
@@ -179,8 +278,8 @@
   },
   {
    "pointer": "django/db/models/base.py:Model._is_pk_set",
-   "line": 39,
-   "sentence": "`Model._is_pk_set` says whether a key is set: not when it is `None`, not when a part of a tuple is, and since 6.1 not when it is the `DatabaseDefault` of a key the database will supply (`django/db/models/base.py:Model._is_pk_set`).",
+   "line": 53,
+   "sentence": "`Model._is_pk_set` counts a key unset when it is `None` or a tuple with a part unset, and since 6.1 when it holds a `DatabaseDefault` (`django/db/models/base.py:Model._is_pk_set`).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._is_pk_set",
@@ -192,9 +291,37 @@
    "fingerprint": "fd146ce28995dda4"
   },
   {
+   "pointer": "django/db/models/base.py:Model.__eq__",
+   "line": 63,
+   "sentence": "An unsaved instance whose key is unset is now equal only to itself (`django/db/models/base.py:Model.__eq__`; [An instance and its state](../models/instances.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.__eq__",
+   "kind": "function",
+   "lines": [
+    645,
+    652
+   ],
+   "fingerprint": "ea5167859235a3bd"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 63,
+   "sentence": "The 6.2 notes say unsaved instances with a composite key \"no longer compare equal to other instances\" (`docs/releases/6.2.txt`); two with the same whole key still do.",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
    "pointer": "django/conf/global_settings.py",
-   "line": 43,
-   "sentence": "`DEFAULT_AUTO_FIELD` has been `\"django.db.models.BigAutoField\"` by default since 6.0, where it was `\"django.db.models.AutoField\"` (`django/conf/global_settings.py`).",
+   "line": 65,
+   "sentence": "The automatic key's default became `BigAutoField` in 6.0 (`django/conf/global_settings.py`; [What changed](../changes.md#an-old-habit-release-by-release)).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
    "symbol": null,
@@ -206,51 +333,37 @@
    "fingerprint": "3c82ce45a0f468df"
   },
   {
-   "pointer": "django/db/models/options.py:Options._get_default_pk_class",
-   "line": 43,
-   "sentence": "`Options._get_default_pk_class` picks the class of the `\"id\"` a model with no primary key is given: that one, unless the application's `AppConfig.default_auto_field` names another (`django/db/models/options.py:Options._get_default_pk_class`).",
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 69,
+   "sentence": "Since 6.0 it raises the model's own `Model.NotUpdated` (`django/db/models/base.py:Model._save_table`).",
    "tree": "django",
-   "path": "django/db/models/options.py",
-   "symbol": "Options._get_default_pk_class",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
    "kind": "function",
    "lines": [
-    261,
-    290
+    1075,
+    1212
    ],
-   "fingerprint": "84e0bce05bcda97e"
+   "fingerprint": "52c8d3bbd3d1cbaf"
   },
   {
-   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields",
-   "line": 43,
-   "sentence": "A project that set neither now gets 64-bit keys, and the autodetector, comparing a key made under the old default with the model, makes an `AlterField` for it (`django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields`).",
+   "pointer": "django/db/models/base.py:ModelBase.__new__",
+   "line": 69,
+   "sentence": "`ModelBase.__new__` makes it a subclass of a concrete parent's, or else of `ObjectNotUpdated` and `DatabaseError`, which it keeps for backward compatibility (`django/db/models/base.py:ModelBase.__new__`; [`ModelBase`: a class statement becomes a model](../models/metaclass.md)).",
    "tree": "django",
-   "path": "django/db/migrations/autodetector.py",
-   "symbol": "MigrationAutodetector.generate_altered_fields",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase.__new__",
    "kind": "function",
    "lines": [
-    1241,
-    1370
+    105,
+    397
    ],
-   "fingerprint": "e5eed3797cfaf2a9"
-  },
-  {
-   "pointer": "django/utils/choices.py:normalize_choices",
-   "line": 47,
-   "sentence": "The setter of `Field.choices` passes the value to `normalize_choices`, which makes the list of pairs and wraps a callable in a `CallableChoiceIterator`, called each time the choices are read (`django/utils/choices.py:normalize_choices`, `django/db/models/fields/__init__.py:Field.choices`).",
-   "tree": "django",
-   "path": "django/utils/choices.py",
-   "symbol": "normalize_choices",
-   "kind": "function",
-   "lines": [
-    72,
-    116
-   ],
-   "fingerprint": "332b66b5be7b86e0"
+   "fingerprint": "0088098d570317e1"
   },
   {
    "pointer": "django/db/models/fields/__init__.py:Field.choices",
-   "line": 47,
-   "sentence": "The setter of `Field.choices` passes the value to `normalize_choices`, which makes the list of pairs and wraps a callable in a `CallableChoiceIterator`, called each time the choices are read (`django/utils/choices.py:normalize_choices`, `django/db/models/fields/__init__.py:Field.choices`).",
+   "line": 73,
+   "sentence": "The setter of `Field.choices` passes them to `normalize_choices`, which makes the pairs (`django/db/models/fields/__init__.py:Field.choices`, `django/utils/choices.py:normalize_choices`; [Choices: `normalize_choices` and the choice iterators](../utils/choices.md)).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field.choices",
@@ -269,37 +382,37 @@
    "fingerprint": "cb83a6027bd2ed87"
   },
   {
-   "pointer": "django/db/models/base.py:Model._save_table",
-   "line": 51,
-   "sentence": "Since 6.0 a save told to update, by `force_update=True` or `update_fields=`, that matches no row raises the model's `Model.NotUpdated` in place of a plain `DatabaseError` (`django/db/models/base.py:Model._save_table`; [Saving an instance](../models/saving.md)).",
+   "pointer": "django/utils/choices.py:normalize_choices",
+   "line": 73,
+   "sentence": "The setter of `Field.choices` passes them to `normalize_choices`, which makes the pairs (`django/db/models/fields/__init__.py:Field.choices`, `django/utils/choices.py:normalize_choices`; [Choices: `normalize_choices` and the choice iterators](../utils/choices.md)).",
    "tree": "django",
-   "path": "django/db/models/base.py",
-   "symbol": "Model._save_table",
+   "path": "django/utils/choices.py",
+   "symbol": "normalize_choices",
    "kind": "function",
    "lines": [
-    1075,
-    1212
+    72,
+    116
    ],
-   "fingerprint": "52c8d3bbd3d1cbaf"
+   "fingerprint": "332b66b5be7b86e0"
   },
   {
-   "pointer": "django/db/models/base.py:ModelBase.__new__",
-   "line": 51,
-   "sentence": "Its comment gives the second base as backward compatibility, an `except` clause not consulting `__subclasshook__`, so code that catches `DatabaseError` still catches it (`django/db/models/base.py:ModelBase.__new__`; [`ModelBase`: a class statement becomes a model](../models/metaclass.md)).",
+   "pointer": "django/db/models/utils.py:get_blank_choice_label",
+   "line": 73,
+   "sentence": "`USE_BLANK_CHOICE_DASH` brings the dashes back until Django 2028 (`django/db/models/utils.py:get_blank_choice_label`; [What changed in forms and validators](forms.md)).",
    "tree": "django",
-   "path": "django/db/models/base.py",
-   "symbol": "ModelBase.__new__",
+   "path": "django/db/models/utils.py",
+   "symbol": "get_blank_choice_label",
    "kind": "function",
    "lines": [
-    105,
-    397
+    74,
+    81
    ],
-   "fingerprint": "0088098d570317e1"
+   "fingerprint": "bd1ea9e85089e8ac"
   },
   {
    "pointer": "django/db/models/constraints.py:CheckConstraint.__init__",
-   "line": 55,
-   "sentence": "`CheckConstraint` has taken its condition as `condition=` since 5.1, which deprecated `check=`, removed in 6.0 (`django/db/models/constraints.py:CheckConstraint.__init__`).",
+   "line": 77,
+   "sentence": "The keyword check, deprecated in 5.1, raises a `TypeError` from 6.0 (`django/db/models/constraints.py:CheckConstraint.__init__`).",
    "tree": "django",
    "path": "django/db/models/constraints.py",
    "symbol": "CheckConstraint.__init__",
@@ -312,8 +425,8 @@
   },
   {
    "pointer": "django/db/models/base.py:Model._check_constraints",
-   "line": 55,
-   "sentence": "Since 6.0 `BaseConstraint.check` returns the system check's messages for a model and a connection, and `Model._check_constraints` calls it for each database that may hold the model (`django/db/models/base.py:Model._check_constraints`).",
+   "line": 77,
+   "sentence": "Since 6.0 `BaseConstraint.check` returns the system check's messages, and `Model._check_constraints` calls it (`django/db/models/base.py:Model._check_constraints`).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._check_constraints",
@@ -326,23 +439,9 @@
    "fingerprint": "ed1f00d1e5531bc2"
   },
   {
-   "pointer": "django/db/models/constraints.py:BaseConstraint.__init__",
-   "line": 57,
-   "sentence": "Giving the name or the message by position, deprecated in 5.0, is refused since 6.0 (`django/db/models/constraints.py:BaseConstraint.__init__`).",
-   "tree": "django",
-   "path": "django/db/models/constraints.py",
-   "symbol": "BaseConstraint.__init__",
-   "kind": "function",
-   "lines": [
-    35,
-    44
-   ],
-   "fingerprint": "279dec4472d83759"
-  },
-  {
    "pointer": "django/db/models/constraints.py:UniqueConstraint.validate",
-   "line": 59,
-   "sentence": "Now a message given is used, with the code given (`django/db/models/constraints.py:UniqueConstraint.validate`).",
+   "line": 79,
+   "sentence": "Since 5.2 a message given is used, with the code given (`django/db/models/constraints.py:UniqueConstraint.validate`).",
    "tree": "django",
    "path": "django/db/models/constraints.py",
    "symbol": "UniqueConstraint.validate",
@@ -354,23 +453,23 @@
    "fingerprint": "c7af07c5058b1201"
   },
   {
-   "pointer": "django/db/models/options.py:Options.contribute_to_class",
-   "line": 61,
-   "sentence": "`Options.contribute_to_class` refuses it with a `TypeError`, and an `Index` in `\"indexes\"` takes its place (`django/db/models/options.py:Options.contribute_to_class`).",
+   "pointer": "docs/releases/5.2.txt",
+   "line": 81,
+   "sentence": "The 5.2 notes say the code and the message \"are now always used when provided\" (`docs/releases/5.2.txt`).",
    "tree": "django",
-   "path": "django/db/models/options.py",
-   "symbol": "Options.contribute_to_class",
-   "kind": "function",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    185,
-    249
+    1,
+    495
    ],
-   "fingerprint": "99f2ba7634e3d0b9"
+   "fingerprint": "56a4c82a284e4c7a"
   },
   {
    "pointer": "django/db/migrations/operations/models.py:AlterIndexTogether",
-   "line": 61,
-   "sentence": "`AlterIndexTogether` stays, so that old migrations still apply (`django/db/migrations/operations/models.py:AlterIndexTogether`).",
+   "line": 83,
+   "sentence": "`AlterIndexTogether` stays for old migrations (`django/db/migrations/operations/models.py:AlterIndexTogether`; [Constraints and indexes](../models/constraints.md)).",
    "tree": "django",
    "path": "django/db/migrations/operations/models.py",
    "symbol": "AlterIndexTogether",
@@ -383,8 +482,8 @@
   },
   {
    "pointer": "django/db/models/base.py:Model.save",
-   "line": 69,
-   "sentence": "| `Model.save`, `Model.asave` | positional arguments deprecated, then refused | 5.1, 6.0 | `django/db/models/base.py:Model.save` |",
+   "line": 93,
+   "sentence": "| `Model.save`, `Model.asave` | arguments by position deprecated, then a `TypeError` | 5.1, 6.0 | `django/db/models/base.py:Model.save` |",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model.save",
@@ -396,66 +495,9 @@
    "fingerprint": "8403ee1903e1064e"
   },
   {
-   "pointer": "django/db/models/base.py:Model._validate_force_insert",
-   "line": 70,
-   "sentence": "| `force_insert=` | may be a tuple of parent classes whose tables are forced too | 5.0 | `django/db/models/base.py:Model._validate_force_insert` |",
-   "tree": "django",
-   "path": "django/db/models/base.py",
-   "symbol": "Model._validate_force_insert",
-   "kind": "function",
-   "lines": [
-    936,
-    954
-   ],
-   "at": 937,
-   "fingerprint": "c829416225891de3"
-  },
-  {
-   "pointer": "django/db/models/base.py:Model.refresh_from_db",
-   "line": 71,
-   "sentence": "| `Model.refresh_from_db` | takes `from_queryset=`, the queryset to reload from | 5.1 | `django/db/models/base.py:Model.refresh_from_db` |",
-   "tree": "django",
-   "path": "django/db/models/base.py",
-   "symbol": "Model.refresh_from_db",
-   "kind": "function",
-   "lines": [
-    741,
-    823
-   ],
-   "fingerprint": "4a13341830abd54d"
-  },
-  {
-   "pointer": "django/db/models/fields/__init__.py:Field.pre_save",
-   "line": 72,
-   "sentence": "| `Field.pre_save` | may be called more than once in one save | 6.0 | `django/db/models/fields/__init__.py:Field.pre_save`, called by `django/db/models/base.py:Model._save_table` |",
-   "tree": "django",
-   "path": "django/db/models/fields/__init__.py",
-   "symbol": "Field.pre_save",
-   "kind": "function",
-   "lines": [
-    1027,
-    1029
-   ],
-   "fingerprint": "f875aa1bbd8c51ec"
-  },
-  {
-   "pointer": "django/db/models/base.py:Model._save_table",
-   "line": 72,
-   "sentence": "| `Field.pre_save` | may be called more than once in one save | 6.0 | `django/db/models/fields/__init__.py:Field.pre_save`, called by `django/db/models/base.py:Model._save_table` |",
-   "tree": "django",
-   "path": "django/db/models/base.py",
-   "symbol": "Model._save_table",
-   "kind": "function",
-   "lines": [
-    1075,
-    1212
-   ],
-   "fingerprint": "52c8d3bbd3d1cbaf"
-  },
-  {
    "pointer": "django/db/models/fields/__init__.py:DecimalField._check_decimal_places",
-   "line": 73,
-   "sentence": "| `DecimalField` | both sizes may be left out where the backend allows: SQLite, PostgreSQL, Oracle | 6.1 | `django/db/models/fields/__init__.py:DecimalField._check_decimal_places` |",
+   "line": 94,
+   "sentence": "| `DecimalField` | both sizes may be left out on SQLite, PostgreSQL and Oracle | 6.1 | `django/db/models/fields/__init__.py:DecimalField._check_decimal_places` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "DecimalField._check_decimal_places",
@@ -468,8 +510,8 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:CharField._check_max_length_attribute",
-   "line": 74,
-   "sentence": "| `CharField` | may be made without `max_length=` on SQLite, as on PostgreSQL | 5.2 | `django/db/models/fields/__init__.py:CharField._check_max_length_attribute` |",
+   "line": 95,
+   "sentence": "| `CharField` | max_length may be left out on SQLite | 5.2 | `django/db/models/fields/__init__.py:CharField._check_max_length_attribute` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "CharField._check_max_length_attribute",
@@ -482,8 +524,8 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:GenericIPAddressField.to_python",
-   "line": 75,
-   "sentence": "| `GenericIPAddressField` | a bad IPv6 address raises `ValidationError` in a save or a filter too, and white space is stripped | 6.2 | `django/db/models/fields/__init__.py:GenericIPAddressField.to_python` |",
+   "line": 96,
+   "sentence": "| `GenericIPAddressField` | a bad IPv6 address raises `ValidationError` on a save or a filter, where it was passed as given; spaces are stripped | 6.2 | `django/db/models/fields/__init__.py:GenericIPAddressField.to_python` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "GenericIPAddressField.to_python",
@@ -496,8 +538,8 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:BinaryField.to_python",
-   "line": 76,
-   "sentence": "| `BinaryField` | a string that is not strict Base64 raises `ValidationError` | 6.1 | `django/db/models/fields/__init__.py:BinaryField.to_python` |",
+   "line": 97,
+   "sentence": "| `BinaryField` | Base64 that is not strict raises `ValidationError` | 6.1 | `django/db/models/fields/__init__.py:BinaryField.to_python` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "BinaryField.to_python",
@@ -510,7 +552,7 @@
   },
   {
    "pointer": "django/db/models/fields/files.py:FileField.pre_save",
-   "line": 77,
+   "line": 98,
    "sentence": "| `FileField` | saving a file with no name raises `FieldError` | 5.1 | `django/db/models/fields/files.py:FileField.pre_save` |",
    "tree": "django",
    "path": "django/db/models/fields/files.py",
@@ -523,9 +565,23 @@
    "fingerprint": "dc357fb2f4f88f67"
   },
   {
+   "pointer": "django/db/models/fields/files.py:ImageField.contribute_to_class",
+   "line": 99,
+   "sentence": "| `ImageField` | measured on `post_init` only with a width or height field (5.0), not again after a save (5.1) | 5.0, 5.1 | `django/db/models/fields/files.py:ImageField.contribute_to_class` |",
+   "tree": "django",
+   "path": "django/db/models/fields/files.py",
+   "symbol": "ImageField.contribute_to_class",
+   "kind": "function",
+   "lines": [
+    468,
+    476
+   ],
+   "fingerprint": "84cafb2c50474170"
+  },
+  {
    "pointer": "django/db/models/fields/__init__.py:Field.__init_subclass__",
-   "line": 80,
-   "sentence": "| a field's get_placeholder | deprecated for `get_placeholder_sql`, which returns the SQL and its parameters | 6.1 | `django/db/models/fields/__init__.py:Field.__init_subclass__` |",
+   "line": 101,
+   "sentence": "| get_placeholder of a field | deprecated for `get_placeholder_sql`, with a warning as the class is made | 6.1 | `django/db/models/fields/__init__.py:Field.__init_subclass__` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field.__init_subclass__",
@@ -538,8 +594,8 @@
   },
   {
    "pointer": "django/db/models/fields/mixins.py:FieldCacheMixin",
-   "line": 81,
-   "sentence": "| get_cache_name of `FieldCacheMixin` | replaced by `FieldCacheMixin.cache_name`: deprecated, then removed | 5.1, 6.0 | `django/db/models/fields/mixins.py:FieldCacheMixin` |",
+   "line": 102,
+   "sentence": "| get_cache_name of `FieldCacheMixin` | replaced by `FieldCacheMixin.cache_name`, which from 6.0 never calls it | 5.1, 6.0 | `django/db/models/fields/mixins.py:FieldCacheMixin` |",
    "tree": "django",
    "path": "django/db/models/fields/mixins.py",
    "symbol": "FieldCacheMixin",

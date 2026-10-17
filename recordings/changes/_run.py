@@ -33,6 +33,9 @@ from one release to another: the same habits, in the same order, under each.
 `configure(**settings)` passes its keywords to settings.configure over the base below, and
 calls django.setup() with warnings silenced for the duration of setup only. `tables()` makes
 every installed model's table (migrate with run_syncdb), for a habit that needs rows.
+`create(*models)` makes the tables of models a habit defines in its own function, with the
+schema editor; such a model is given `app_label = "journal"` in its Meta and a name no other
+habit of its module uses, since the app registry keeps a model for the whole run.
 """
 import json
 import os
@@ -91,6 +94,14 @@ def tables() -> None:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         call_command("migrate", run_syncdb=True, verbosity=0)
+
+
+def create(*models) -> None:
+    from django.db import connection
+
+    with connection.schema_editor() as editor:
+        for model in models:
+            editor.create_model(model)
 
 
 def run(function) -> tuple[str, list[str]]:
