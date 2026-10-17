@@ -9,8 +9,8 @@
  "pointers": [
   {
    "pointer": "docs/releases/6.0.txt",
-   "line": 11,
-   "sentence": "The release notes give the reason for adding one: a policy tells the browser which scripts, styles and images a page may load, a defence against content injection such as cross-site scripting (`docs/releases/6.0.txt`).",
+   "line": 13,
+   "sentence": "A Content Security Policy tells the browser which scripts, styles and images a page may load; the 6.0 notes give it as a defence against content injection such as cross-site scripting (`docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -24,7 +24,7 @@
   {
    "pointer": "django/conf/global_settings.py",
    "line": 13,
-   "sentence": "Each is a dictionary from a directive to its sources, and each is empty by default, which writes no header (`django/conf/global_settings.py`).",
+   "sentence": "Each maps a directive to its sources and is empty by default, which writes no header (`django/conf/global_settings.py`).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
    "symbol": null,
@@ -38,7 +38,7 @@
   {
    "pointer": "django/utils/csp.py:CSP",
    "line": 13,
-   "sentence": "`CSP`, in `django.utils.csp`, is a string enumeration of the two headers' names, of some of the specification's quoted keywords, such as `CSP.SELF`, and of one placeholder of Django's own, `CSP.NONCE`, which stands in a directive for the request's nonce (`django/utils/csp.py:CSP`).",
+   "sentence": "The enumeration `CSP` names the two headers, the specification's quoted keywords such as `CSP.SELF`, and one placeholder of Django's own, `CSP.NONCE`, which stands in a policy for the request's nonce (`django/utils/csp.py:CSP`).",
    "tree": "django",
    "path": "django/utils/csp.py",
    "symbol": "CSP",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/middleware/csp.py:ContentSecurityPolicyMiddleware",
    "line": 15,
-   "sentence": "`build_policy` puts the nonce in place of the placeholder only if something in the request read it, and otherwise drops it (`django/middleware/csp.py:ContentSecurityPolicyMiddleware`, `django/utils/csp.py:build_policy`).",
+   "sentence": "`ContentSecurityPolicyMiddleware` gives each request a `LazyNonce`, made only when first read, on the way in, and on the way out writes each header whose policy is not empty and which the response lacks (`django/middleware/csp.py:ContentSecurityPolicyMiddleware`).",
    "tree": "django",
    "path": "django/middleware/csp.py",
    "symbol": "ContentSecurityPolicyMiddleware",
@@ -64,23 +64,9 @@
    "fingerprint": "770d876a28c34fb5"
   },
   {
-   "pointer": "django/utils/csp.py:build_policy",
-   "line": 15,
-   "sentence": "`build_policy` puts the nonce in place of the placeholder only if something in the request read it, and otherwise drops it (`django/middleware/csp.py:ContentSecurityPolicyMiddleware`, `django/utils/csp.py:build_policy`).",
-   "tree": "django",
-   "path": "django/utils/csp.py",
-   "symbol": "build_policy",
-   "kind": "function",
-   "lines": [
-    97,
-    128
-   ],
-   "fingerprint": "4a62a37911cbb837"
-  },
-  {
    "pointer": "django/template/context_processors.py:csp",
    "line": 15,
-   "sentence": "The context processor `django.template.context_processors.csp` puts the nonce in a template's context as `\"csp_nonce\"` (`django/template/context_processors.py:csp`).",
+   "sentence": "The context processor `django.template.context_processors.csp` gives a template the nonce as `\"csp_nonce\"` (`django/template/context_processors.py:csp`).",
    "tree": "django",
    "path": "django/template/context_processors.py",
    "symbol": "csp",
@@ -92,9 +78,23 @@
    "fingerprint": "ed509f20b667050c"
   },
   {
+   "pointer": "django/utils/csp.py:build_policy",
+   "line": 15,
+   "sentence": "The function `build_policy` puts the nonce in place of the placeholder if something read it, and otherwise drops the placeholder (`django/utils/csp.py:build_policy`).",
+   "tree": "django",
+   "path": "django/utils/csp.py",
+   "symbol": "build_policy",
+   "kind": "function",
+   "lines": [
+    97,
+    128
+   ],
+   "fingerprint": "4a62a37911cbb837"
+  },
+  {
    "pointer": "django/views/decorators/csp.py:_make_csp_decorator",
    "line": 15,
-   "sentence": "`csp_override` and `csp_report_only_override` give one view's response a policy that replaces the setting's whole, and an empty dictionary leaves that header off (`django/views/decorators/csp.py:_make_csp_decorator`).",
+   "sentence": "The decorators `csp_override` and `csp_report_only_override` give one view a policy that replaces the setting's entirely; an empty one leaves that header off (`django/views/decorators/csp.py:_make_csp_decorator`).",
    "tree": "django",
    "path": "django/views/decorators/csp.py",
    "symbol": "_make_csp_decorator",
@@ -108,7 +108,7 @@
   {
    "pointer": "django/conf/project_template/project_name/settings.py-tpl",
    "line": 15,
-   "sentence": "A project has no policy until it asks for one: the settings module startproject writes lists neither the middleware nor the processor (`django/conf/project_template/project_name/settings.py-tpl`).",
+   "sentence": "A new project has no policy: the settings startproject writes name neither the middleware nor the processor (`django/conf/project_template/project_name/settings.py-tpl`).",
    "tree": "django",
    "path": "django/conf/project_template/project_name/settings.py-tpl",
    "symbol": null,
@@ -122,7 +122,7 @@
   {
    "pointer": "django/utils/csp.py:nonce_attr",
    "line": 19,
-   "sentence": "`{% csp_nonce_attr %}` writes `nonce=\"…\"` from the context's `\"csp_nonce\"`, and given a `Media` renders it with that attribute on each `MediaAsset` in it; with no nonce in the context it writes none (`django/utils/csp.py:nonce_attr`) ([The built-in tags](../templates/tags.md)).",
+   "sentence": "Without an argument, `{% csp_nonce_attr %}` writes `nonce=\"…\"` from the context's `\"csp_nonce\"`, or nothing when the context has none; given a form's media, it writes the media's tags, with the nonce if any (`django/utils/csp.py:nonce_attr`; [The built-in tags](../templates/tags.md)).",
    "tree": "django",
    "path": "django/utils/csp.py",
    "symbol": "nonce_attr",
@@ -134,9 +134,23 @@
    "fingerprint": "c60887ce72a1e513"
   },
   {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 19,
+   "sentence": "Since 6.1 the admin's templates, admindocs' and the CSRF failure page carry it on their `<script>`, `<style>` and `<link>` elements (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
    "pointer": "django/views/csrf.py:csrf_failure",
-   "line": 21,
-   "sentence": "Django's own templates write it too since 6.1: the `<script>`, `<style>` and `<link>` elements of the admin's templates, the documentation generator's and the CSRF failure page carry the tag, and `csrf_failure`, which renders that page with an engine of its own, adds the processor's dictionary to its context (`django/views/csrf.py:csrf_failure`).",
+   "line": 19,
+   "sentence": "Django's own failure page does not: when the project has no `\"403_csrf.html\"`, the view `csrf_failure` renders the built-in `\"csrf_403.html\"` with an `Engine` of its own, and adds the nonce itself (`django/views/csrf.py:csrf_failure`).",
    "tree": "django",
    "path": "django/views/csrf.py",
    "symbol": "csrf_failure",
@@ -148,9 +162,23 @@
    "fingerprint": "141725332d9c81b8"
   },
   {
+   "pointer": "docs/ref/csp.txt",
+   "line": 29,
+   "sentence": "Under 6.0.8 the page's inline style had no nonce, so a browser would refuse it (`docs/ref/csp.txt`).",
+   "tree": "django",
+   "path": "docs/ref/csp.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    323
+   ],
+   "fingerprint": "692d45850988c8d7"
+  },
+  {
    "pointer": "django/core/checks/security/base.py:check_csp_nonce_context_processor",
-   "line": 23,
-   "sentence": "It is not a deployment check, so it runs on every check (`django/core/checks/security/base.py:check_csp_nonce_context_processor`) ([The security checks](../security/checks.md)).",
+   "line": 31,
+   "sentence": "It is registered without `deploy=True`, so check reports it without --deploy (`django/core/checks/security/base.py:check_csp_nonce_context_processor`; [The security checks](../security/checks.md)).",
    "tree": "django",
    "path": "django/core/checks/security/base.py",
    "symbol": "check_csp_nonce_context_processor",
@@ -163,37 +191,23 @@
    "fingerprint": "9c8e7562d206b4dd"
   },
   {
-   "pointer": "django/http/response.py:HttpResponseBase.set_signed_cookie",
-   "line": 27,
-   "sentence": "`HttpResponseBase.set_signed_cookie` signs with the signer of `get_cookie_signer`, given a salt that `_cookie_signer_salt` makes from the cookie's name and the caller's salt (`django/http/response.py:HttpResponseBase.set_signed_cookie`).",
+   "pointer": "docs/releases/5.2.15.txt",
+   "line": 43,
+   "sentence": "Until 5.2.15 and 6.0.6 that salt was the cookie's name followed by the caller's salt, so the cookie \"draft\" with the salt \"s\" and the cookie \"drafts\" with none made the same one, and a value signed for either was accepted for the other (CVE-2026-6873, `docs/releases/5.2.15.txt`; [Security fixes: disclosure, spoofing and privilege](security-fixes-exposure.md)).",
    "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "HttpResponseBase.set_signed_cookie",
-   "kind": "function",
-   "lines": [
-    291,
-    295
-   ],
-   "fingerprint": "3b10957ad13bb4fd"
-  },
-  {
-   "pointer": "docs/releases/6.0.6.txt",
-   "line": 27,
-   "sentence": "Until 5.2.15 and 6.0.6 that salt was the name followed by the caller's salt, so that two pairs could make one string and a cookie be accepted where it had not been signed (`docs/releases/6.0.6.txt`).",
-   "tree": "django",
-   "path": "docs/releases/6.0.6.txt",
+   "path": "docs/releases/5.2.15.txt",
    "symbol": null,
    "kind": "file",
    "lines": [
     1,
-    87
+    79
    ],
-   "fingerprint": "6dfea6a36794b928"
+   "fingerprint": "33465a99d8adb687"
   },
   {
    "pointer": "django/core/signing.py:_cookie_signer_salt",
-   "line": 27,
-   "sentence": "At this commit the salt is `\"django.http.cookies.v2:\"`, the length of the caller's salt, a colon, that salt and the name; the comment says the length is there so that the pairs cannot collide (`django/core/signing.py:_cookie_signer_salt`).",
+   "line": 43,
+   "sentence": "`HttpResponseBase.set_signed_cookie` has since signed with a salt of a fixed prefix, the length of the caller's salt, that salt and the name, so that no two pairs make one string (`django/core/signing.py:_cookie_signer_salt`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "_cookie_signer_salt",
@@ -206,8 +220,8 @@
   },
   {
    "pointer": "django/core/signing.py:_unsign_cookie",
-   "line": 29,
-   "sentence": "`HttpRequest.get_signed_cookie` reads through `_unsign_cookie`, which checks the signature under the new salt (`django/core/signing.py:_unsign_cookie`).",
+   "line": 45,
+   "sentence": "For the cookies signed before, the function `_unsign_cookie` tries the old salt when the new one fails for any reason but age, if `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true (`django/core/signing.py:_unsign_cookie`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "_unsign_cookie",
@@ -219,51 +233,65 @@
    "fingerprint": "0d65ea5849dceb3a"
   },
   {
-   "pointer": "docs/ref/settings.txt",
-   "line": 29,
-   "sentence": "In 5.2.15 and 6.0.6 it was on by default, so that cookies signed before the fix stayed good (`docs/ref/settings.txt`); since 6.1 its default is false, and the setting is deprecated, to go with the old salt in Django 2028, and warns when a project sets it ([What changed in settings, startup and the commands](startup-and-commands.md)).",
+   "pointer": "docs/releases/6.1.txt",
+   "line": 45,
+   "sentence": "The 6.1 notes list \"Signed cookies now use an unambiguous salt derivation by default\" among its features (`docs/releases/6.1.txt`), but 5.2.17 and 6.0.8 already sign with the new salt: what 6.1 changed is what is read.",
    "tree": "django",
-   "path": "docs/ref/settings.txt",
+   "path": "docs/releases/6.1.txt",
    "symbol": null,
    "kind": "file",
    "lines": [
     1,
-    4179
+    760
    ],
-   "fingerprint": "23ab897ca680e6a7"
+   "fingerprint": "283b7ce3a441f06c"
   },
   {
-   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage.__init__",
-   "line": 45,
-   "sentence": "The messages' `CookieStorage` passes a salt of its own to `get_cookie_signer` directly, and the fallback has no part in it (`django/contrib/messages/storage/cookie.py:CookieStorage.__init__`).",
+   "pointer": "django/core/signing.py:_cookie_signer_legacy_salt",
+   "line": 55,
+   "sentence": "Since 6.1, at the default, a project's own cookies signed before the fix are refused too, under every name and salt: what `set_signed_cookie(\"draft\", \"4\", salt=\"s\")` wrote then was signed with the same old salt, \"drafts\" (`django/core/signing.py:_cookie_signer_legacy_salt`).",
    "tree": "django",
-   "path": "django/contrib/messages/storage/cookie.py",
-   "symbol": "CookieStorage.__init__",
+   "path": "django/core/signing.py",
+   "symbol": "_cookie_signer_legacy_salt",
    "kind": "function",
    "lines": [
-    90,
-    92
+    129,
+    130
    ],
-   "fingerprint": "7b188ce8d1b52ec1"
+   "fingerprint": "760e0de666996a89"
   },
   {
-   "pointer": "django/utils/crypto.py:salted_hmac",
-   "line": 49,
-   "sentence": "`salted_hmac` and `base64_hmac` given no algorithm use SHA-1, as before, and since 6.1 warn with `RemovedInDjango2028Warning`; in Django 2028 the default becomes SHA-256 (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:base64_hmac`).",
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 55,
+   "sentence": "6.1.1 and this commit warn when a project sets the fallback, to either value (`django/conf/__init__.py:Settings.__init__`).",
    "tree": "django",
-   "path": "django/utils/crypto.py",
-   "symbol": "salted_hmac",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
    "kind": "function",
    "lines": [
-    23,
-    61
+    243,
+    314
    ],
-   "fingerprint": "2a2e7d76a37fdbcc"
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.get_signed_cookie",
+   "line": 57,
+   "sentence": "Nothing warns when an old cookie is refused: from 6.1, at the default, `HttpRequest.get_signed_cookie` raises `BadSignature` for it, or returns the default it was given, as for a forged one (`django/http/request.py:HttpRequest.get_signed_cookie`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_signed_cookie",
+   "kind": "function",
+   "lines": [
+    239,
+    261
+   ],
+   "fingerprint": "68b31391edbd56e4"
   },
   {
    "pointer": "django/core/signing.py:base64_hmac",
-   "line": 49,
-   "sentence": "`salted_hmac` and `base64_hmac` given no algorithm use SHA-1, as before, and since 6.1 warn with `RemovedInDjango2028Warning`; in Django 2028 the default becomes SHA-256 (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:base64_hmac`).",
+   "line": 61,
+   "sentence": "6.1 deprecated SHA-1 as the default algorithm of `salted_hmac`, the keyed hash under Django's signing ([What changed](../changes.md#an-old-habit-release-by-release)), and of `base64_hmac`, with which `Signer` signs: under 5.2.17 and 6.0.8 `base64_hmac(\"journal\", \"entry\", \"journal-key\")` returns its digest without a word, and 6.1.1 and this commit return the same digest and warn (`django/core/signing.py:base64_hmac`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "base64_hmac",
@@ -275,9 +303,37 @@
    "fingerprint": "b038e03c6a14c165"
   },
   {
+   "pointer": "django/core/signing.py:Signer.signature",
+   "line": 61,
+   "sentence": "Django's own callers name the algorithm, `Signer` the one it was made with, SHA-256 by default, so signing never meets the warning (`django/core/signing.py:Signer.signature`; [Secret keys and `django.utils.crypto`](../security/keys.md), [Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](../security/signing.md)).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.signature",
+   "kind": "function",
+   "lines": [
+    240,
+    242
+   ],
+   "fingerprint": "055285e51d6c7144"
+  },
+  {
+   "pointer": "docs/releases/5.1.txt",
+   "line": 65,
+   "sentence": "`Signer` takes keyword arguments only: positional ones, deprecated in 4.2, were removed in 5.1 (`docs/releases/5.1.txt`), and `TimestampSigner` inherits the same `__init__` (`django/core/signing.py:Signer.__init__`).",
+   "tree": "django",
+   "path": "docs/releases/5.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "3a1b214427111cf2"
+  },
+  {
    "pointer": "django/core/signing.py:Signer.__init__",
-   "line": 53,
-   "sentence": "`Signer.__init__` takes keyword arguments only: positional ones, deprecated in 4.2, were removed in 5.1, and `TimestampSigner` has the same `__init__` (`django/core/signing.py:Signer.__init__`).",
+   "line": 65,
+   "sentence": "`Signer` takes keyword arguments only: positional ones, deprecated in 4.2, were removed in 5.1 (`docs/releases/5.1.txt`), and `TimestampSigner` inherits the same `__init__` (`django/core/signing.py:Signer.__init__`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "Signer.__init__",
@@ -290,8 +346,8 @@
   },
   {
    "pointer": "docs/releases/4.1.txt",
-   "line": 55,
-   "sentence": "It came in 4.1, when `CsrfViewMiddleware` stopped masking the secret in its cookie, to keep the cookie masked while a project's instances were upgraded (`docs/releases/4.1.txt`).",
+   "line": 67,
+   "sentence": "It came in 4.1, when `CsrfViewMiddleware` stopped masking the secret in its cookie, to keep it masked while a project's instances were upgraded (`docs/releases/4.1.txt`).",
    "tree": "django",
    "path": "docs/releases/4.1.txt",
    "symbol": null,
@@ -304,8 +360,8 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie",
-   "line": 55,
-   "sentence": "The cookie holds the secret itself, 32 characters (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`), and a cookie of 64, a masked secret, is still accepted and unmasked as it is read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`) ([The CSRF secret and its token](../security/csrf-token.md)).",
+   "line": 67,
+   "sentence": "Nothing at this commit reads it: under 5.2.17 and every later release a project that sets it true gets, without a warning, a cookie of 32 characters, the secret itself (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._set_csrf_cookie",
@@ -318,8 +374,8 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._get_secret",
-   "line": 55,
-   "sentence": "The cookie holds the secret itself, 32 characters (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`), and a cookie of 64, a masked secret, is still accepted and unmasked as it is read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`) ([The CSRF secret and its token](../security/csrf-token.md)).",
+   "line": 67,
+   "sentence": "A cookie of 64, a masked secret, is still accepted, and unmasked as it is read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`; [The CSRF secret and its token](../security/csrf-token.md)).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._get_secret",

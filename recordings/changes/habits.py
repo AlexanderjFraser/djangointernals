@@ -1,18 +1,11 @@
-"""The old habits the chapter's opening page shows, release by release: a default that changed
-without a word, a deprecated use that still works and warns, and a removed one that fails; and
-those of the sections that have no module of their own. A section's habits are in the module
-named after it. Run by recordings/changes.py under each release; _run.py says how a habit is
-written.
+"""The old habits the chapter's opening page tells, release by release: a default that changed
+without a word, a deprecated use that still works and warns, and a removed one that fails.
+Each section by part of the book has its habits in the module named after it. Run by
+recordings/changes.py under each release; _run.py says how a habit is written.
 """
 from _run import configure, habit, main
 
 configure()
-
-
-@habit("settings.USE_TZ, when the settings do not set it")
-def use_tz():
-    from django.conf import settings
-    return repr(settings.USE_TZ)
 
 
 @habit("settings.DEFAULT_AUTO_FIELD, when the settings do not set it")
@@ -27,12 +20,6 @@ def primary_key():
     return repr(Entry._meta.pk)
 
 
-@habit("django.VERSION[:3]")
-def version_sliced():
-    import django
-    return repr(django.VERSION[:3])
-
-
 @habit("from django.utils.deprecation import MiddlewareMixin")
 def middleware_mixin_from_its_old_module():
     from django.utils.deprecation import MiddlewareMixin
@@ -43,18 +30,6 @@ def middleware_mixin_from_its_old_module():
 def salted_hmac_algorithm():
     from django.utils.crypto import salted_hmac
     return repr(salted_hmac("journal", "entry").name)
-
-
-@habit("Paginator(range(10), 2, orphans=2).num_pages: orphans not fewer than the page")
-def paginator_orphans():
-    from django.core.paginator import Paginator
-    return repr(Paginator(range(10), 2, orphans=2).num_pages)
-
-
-@habit("from django.core.mail import BadHeaderError")
-def bad_header_error():
-    from django.core.mail import BadHeaderError
-    return f"{BadHeaderError.__module__}.{BadHeaderError.__name__}"
 
 
 @habit("class Meta: index_together = [(\"title\", \"published\")]")
@@ -70,12 +45,6 @@ def index_together():
             index_together = [("title", "published")]
 
     return "the class is made"
-
-
-@habit("from django.utils.timezone import utc")
-def utc_alias():
-    from django.utils.timezone import utc
-    return repr(utc)
 
 
 main()

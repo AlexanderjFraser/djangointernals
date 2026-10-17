@@ -8,9 +8,37 @@
  "document": "security-fixes-exposure.md",
  "pointers": [
   {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 9,
+   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), with a patch for each fix of that day, the security archive says (`docs/releases/security.txt`), and 6.1.1 lists no security fix.",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "docs/releases/security.txt",
+   "line": 9,
+   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), with a patch for each fix of that day, the security archive says (`docs/releases/security.txt`), and 6.1.1 lists no security fix.",
+   "tree": "django",
+   "path": "docs/releases/security.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2076
+   ],
+   "fingerprint": "7e2a7a8564c8b22e"
+  },
+  {
    "pointer": "django/middleware/cache.py:UpdateCacheMiddleware.process_response",
    "line": 13,
-   "sentence": "`UpdateCacheMiddleware.process_response`, which `cache_page` runs too, returns a response unstored at the first of its checks that holds, among them checks on the flag `FetchFromCacheMiddleware` leaves, streaming, a status other than 200 or 304 and a `\"max-age\"` of 0, and stores a 200 that passes them all unless its timeout is 0; the fixes of 2026 changed what it refuses and adds to `\"Vary\"` (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`).",
+   "sentence": "`UpdateCacheMiddleware.process_response`, which `cache_page` runs too, returns a response unstored at the first check that holds (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/cache.py",
    "symbol": "UpdateCacheMiddleware.process_response",
@@ -24,7 +52,7 @@
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
    "line": 15,
-   "sentence": "`SessionMiddleware.process_response` now adds `\"Cookie\"` to `\"Vary\"` whenever it sets or deletes the cookie; standing inside `UpdateCacheMiddleware`, it hands on a response that sets a cookie and varies on `\"Cookie\"`, which is refused (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`; [`SessionMiddleware`: the cookie and the save](../auth/session-middleware.md)).",
+   "sentence": "`SessionMiddleware.process_response` now adds `\"Cookie\"` to `\"Vary\"` whenever it sets or deletes the cookie, and when the session was read (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`; [`SessionMiddleware`: the cookie and the save](../auth/session-middleware.md)).",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
    "symbol": "SessionMiddleware.process_response",
@@ -38,7 +66,7 @@
   {
    "pointer": "django/utils/http.py:split_directive_names",
    "line": 17,
-   "sentence": "`split_directive_names` lowers each name and drops its value, so `private=\"Set-Cookie\"` counts as `\"private\"` (`django/utils/http.py:split_directive_names`).",
+   "sentence": "Cache-Control's `\"private\"`, `\"no-cache\"` and `\"no-store\"` are found whatever their case, where only a lower-case private used to be (CVE-2026-8404; 5.2.15, 6.0.6), and with a value, as `private=\"Set-Cookie\"` (`django/utils/http.py:split_directive_names`).",
    "tree": "django",
    "path": "django/utils/http.py",
    "symbol": "split_directive_names",
@@ -50,23 +78,9 @@
    "fingerprint": "d974bb37106cef05"
   },
   {
-   "pointer": "django/utils/http.py:split_header_value",
-   "line": 17,
-   "sentence": "`split_header_value` now strips every part it yields, and `has_vary_header` the name it is asked about (`django/utils/http.py:split_header_value`, `django/utils/cache.py:has_vary_header`).",
-   "tree": "django",
-   "path": "django/utils/http.py",
-   "symbol": "split_header_value",
-   "kind": "function",
-   "lines": [
-    200,
-    209
-   ],
-   "fingerprint": "b072f440b4b2c6a7"
-  },
-  {
    "pointer": "django/utils/cache.py:has_vary_header",
    "line": 17,
-   "sentence": "`split_header_value` now strips every part it yields, and `has_vary_header` the name it is asked about (`django/utils/http.py:split_header_value`, `django/utils/cache.py:has_vary_header`).",
+   "sentence": "A `\"Vary\"` of `\"*\"` used to be stored (CVE-2026-6907; 5.2.14, 6.0.5), as did a star with white space around it (CVE-2026-48587; 5.2.15, 6.0.6); `has_vary_header` now compares stripped names (`django/utils/cache.py:has_vary_header`).",
    "tree": "django",
    "path": "django/utils/cache.py",
    "symbol": "has_vary_header",
@@ -78,23 +92,9 @@
    "fingerprint": "99370d72b2d0c7ba"
   },
   {
-   "pointer": "django/middleware/cache.py:UpdateCacheMiddleware.process_response",
-   "line": 19,
-   "sentence": "It now varies on Authorization unless its Cache-Control has `\"public\"`, as RFC 9111's section 3.5 allows, the comment says (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`).",
-   "tree": "django",
-   "path": "django/middleware/cache.py",
-   "symbol": "UpdateCacheMiddleware.process_response",
-   "kind": "function",
-   "lines": [
-    90,
-    146
-   ],
-   "fingerprint": "86dea3d2d0472ba4"
-  },
-  {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
    "line": 49,
-   "sentence": "Under WSGI that is the server's affair; Daphne, the release notes say, ignores them too (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)).",
+   "sentence": "It writes a header into `HttpRequest.META` as WSGI does, its hyphens as underscores, so a header sent as x_forwarded_for, which a proxy stripping X-Forwarded-For let through, landed on X-Forwarded-For's key (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest.__init__",
@@ -108,7 +108,7 @@
   {
    "pointer": "django/core/validators.py:DomainNameValidator.__init__",
    "line": 51,
-   "sentence": "`DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7): its pattern ends at `\"\\Z\"`, the string's end (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
+   "sentence": "`DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7): its pattern ends at `\"\\Z\"`, where `\"$\"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": "DomainNameValidator.__init__",
@@ -122,7 +122,7 @@
   {
    "pointer": "django/core/validators.py",
    "line": 51,
-   "sentence": "`DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7): its pattern ends at `\"\\Z\"`, the string's end (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
+   "sentence": "`DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7): its pattern ends at `\"\\Z\"`, where `\"$\"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": null,
@@ -134,9 +134,23 @@
    "fingerprint": "2909214bd9ebfac9"
   },
   {
+   "pointer": "django/http/response.py:ResponseHeaders._convert_to_charset",
+   "line": 51,
+   "sentence": "A newline let through could inject a header into a response, though `HttpResponse` refuses one in a header (`django/http/response.py:ResponseHeaders._convert_to_charset`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "ResponseHeaders._convert_to_charset",
+   "kind": "function",
+   "lines": [
+    51,
+    88
+   ],
+   "fingerprint": "b61e31318c19a6be"
+  },
+  {
    "pointer": "django/utils/log.py:log_message",
    "line": 53,
-   "sentence": "The notes put the escaping in `log_response`, which calls it, as does the development server (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).",
+   "sentence": "At this commit `log_message` does it for `log_response` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_message",
@@ -148,9 +162,37 @@
    "fingerprint": "6fd85549bf556a44"
   },
   {
+   "pointer": "django/core/servers/basehttp.py:WSGIRequestHandler.log_message",
+   "line": 63,
+   "sentence": "Since 6.0 `WSGIRequestHandler.log_message` hands its arguments to `log_message` (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`; [The development server](../commands/runserver.md)); no 6.0 note lists the change.",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "WSGIRequestHandler.log_message",
+   "kind": "function",
+   "lines": [
+    185,
+    206
+   ],
+   "fingerprint": "253ff422c0dcbe5f"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:check_password_with_timing_attack_mitigation",
+   "line": 67,
+   "sentence": "`ModelBackend.authenticate` hands the user, or `None`, to `check_password_with_timing_attack_mitigation`, which hashes for nothing when there is none (`django/contrib/auth/__init__.py:check_password_with_timing_attack_mitigation`; [Authenticating: `authenticate` and the backends](../auth/authenticating.md)).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "check_password_with_timing_attack_mitigation",
+   "kind": "function",
+   "lines": [
+    391,
+    399
+   ],
+   "fingerprint": "34ffd6909854cfaf"
+  },
+  {
    "pointer": "django/contrib/auth/hashers.py:verify_password",
-   "line": 57,
-   "sentence": "A user with an unusable password could still be told apart by timing (CVE-2024-39329; 5.0.7): `verify_password` now runs the default hasher once on random characters when the stored password is unusable, its hasher unknown or the password given `None` (`django/contrib/auth/hashers.py:verify_password`; [Password hashing: `make_password` and the hashers](../auth/hashers.md)).",
+   "line": 67,
+   "sentence": "An unusable password ran no hasher, and so told its user apart (CVE-2024-39329; 5.0.7); `verify_password` now hashes random characters when the stored password is unusable or its hasher unknown, or the password given is `None` (`django/contrib/auth/hashers.py:verify_password`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "verify_password",
@@ -163,8 +205,8 @@
   },
   {
    "pointer": "django/contrib/auth/handlers/modwsgi.py:check_password",
-   "line": 57,
-   "sentence": "The mod_wsgi handler's `check_password` let names be told apart by timing too (CVE-2025-13473; 5.2.11, 6.0.2), and now calls the same mitigation (`django/contrib/auth/handlers/modwsgi.py:check_password`).",
+   "line": 67,
+   "sentence": "The mod_wsgi handler hashed nothing for a name with no account (CVE-2025-13473; 5.2.11, 6.0.2), and at this commit calls the same function (`django/contrib/auth/handlers/modwsgi.py:check_password`).",
    "tree": "django",
    "path": "django/contrib/auth/handlers/modwsgi.py",
    "symbol": "check_password",
@@ -177,8 +219,8 @@
   },
   {
    "pointer": "django/contrib/auth/forms.py:PasswordResetForm.send_mail",
-   "line": 59,
-   "sentence": "`PasswordResetForm.send_mail` catches any exception from the send and logs it to `\"django.contrib.auth\"` (`django/contrib/auth/forms.py:PasswordResetForm.send_mail`; [Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md)).",
+   "line": 69,
+   "sentence": "A password reset whose mail failed raised, and so showed whether an address had an account (CVE-2024-45231; 5.0.9, 5.1.1); `PasswordResetForm.send_mail` now logs the failure to `\"django.contrib.auth\"` (`django/contrib/auth/forms.py:PasswordResetForm.send_mail`; [Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md)).",
    "tree": "django",
    "path": "django/contrib/auth/forms.py",
    "symbol": "PasswordResetForm.send_mail",
@@ -191,8 +233,8 @@
   },
   {
    "pointer": "django/core/files/storage/base.py:Storage.save",
-   "line": 63,
-   "sentence": "`Storage.save` checks a name with `validate_file_name` on arrival, after `Storage.get_available_name` and after `_save`: a subclass that overrode `Storage.generate_filename` without its checks could save outside its directory, though Django's own could not (CVE-2024-39330; 5.0.7) (`django/core/files/storage/base.py:Storage.save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
+   "line": 73,
+   "sentence": "`Storage.save` checks a name with `validate_file_name` as it arrives, after `Storage.get_available_name` and after `_save`, refusing an absolute name or one with `\"..\"` among its parts (`django/core/files/storage/base.py:Storage.save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
    "tree": "django",
    "path": "django/core/files/storage/base.py",
    "symbol": "Storage.save",
@@ -205,8 +247,8 @@
   },
   {
    "pointer": "django/utils/archive.py:BaseArchive.target_filename",
-   "line": 65,
-   "sentence": "`extract`, which startproject and startapp use for a template given as an archive, refuses a member unless `os.path.commonpath` of its path and the target is the target: a path into a sibling directory whose name began with the target's passed before (CVE-2025-59682; 5.1.13, 5.2.7) (`django/utils/archive.py:BaseArchive.target_filename`; [Paths and archives: `safe_join`, `safe_makedirs` and `extract`](../utils/paths.md)).",
+   "line": 75,
+   "sentence": "`extract`, which startproject and startapp use for a template archive, refuses a member unless `os.path.commonpath` of its path and the target is the target (`django/utils/archive.py:BaseArchive.target_filename`; [Paths and archives: `safe_join`, `safe_makedirs` and `extract`](../utils/paths.md)); a member bound for a sibling whose name begins with the target's used to pass (CVE-2025-59682; 5.1.13, 5.2.7).",
    "tree": "django",
    "path": "django/utils/archive.py",
    "symbol": "BaseArchive.target_filename",
@@ -219,8 +261,8 @@
   },
   {
    "pointer": "django/utils/_os.py:makedirs",
-   "line": 67,
-   "sentence": "They used to change the process's umask for a moment, which in a threaded server could reach another thread's files and directories (CVE-2026-25674; 5.2.12, 6.0.3) (`django/utils/_os.py:makedirs`, `django/core/cache/backends/filebased.py:FileBasedCache._createdir`).",
+   "line": 77,
+   "sentence": "`FileSystemStorage`, given a mode for directories, and `FileBasedCache` make them through `safe_makedirs` and so `makedirs`, which sets each mode with `os.chmod` after `os.mkdir` (`django/utils/_os.py:makedirs`).",
    "tree": "django",
    "path": "django/utils/_os.py",
    "symbol": "makedirs",
@@ -232,23 +274,9 @@
    "fingerprint": "d6afab2e4feb68f6"
   },
   {
-   "pointer": "django/core/cache/backends/filebased.py:FileBasedCache._createdir",
-   "line": 67,
-   "sentence": "They used to change the process's umask for a moment, which in a threaded server could reach another thread's files and directories (CVE-2026-25674; 5.2.12, 6.0.3) (`django/utils/_os.py:makedirs`, `django/core/cache/backends/filebased.py:FileBasedCache._createdir`).",
-   "tree": "django",
-   "path": "django/core/cache/backends/filebased.py",
-   "symbol": "FileBasedCache._createdir",
-   "kind": "function",
-   "lines": [
-    120,
-    124
-   ],
-   "fingerprint": "c51e76359a81c298"
-  },
-  {
    "pointer": "django/contrib/contenttypes/admin.py:GenericInlineModelAdmin.get_formset",
-   "line": 71,
-   "sentence": "`GenericInlineModelAdmin.get_formset` gives its forms a `BaseForm.has_changed` that answers false for an existing row the user may not change and, since this fix, for a new row they may not add, as `InlineModelAdmin.get_formset` does, so the formset never saves it (CVE-2026-4277; 5.2.13, 6.0.4) (`django/contrib/contenttypes/admin.py:GenericInlineModelAdmin.get_formset`; [Inlines: `InlineModelAdmin` and its formsets](../admin/inlines.md)).",
+   "line": 81,
+   "sentence": "`GenericInlineModelAdmin.get_formset` gives its forms a `BaseForm.has_changed` that answers false for a new row the user may not add and for an existing one they may not change, as `InlineModelAdmin.get_formset` does (CVE-2026-4277; 5.2.13, 6.0.4) (`django/contrib/contenttypes/admin.py:GenericInlineModelAdmin.get_formset`; [Inlines: `InlineModelAdmin` and its formsets](../admin/inlines.md)).",
    "tree": "django",
    "path": "django/contrib/contenttypes/admin.py",
    "symbol": "GenericInlineModelAdmin.get_formset",
@@ -261,8 +289,8 @@
   },
   {
    "pointer": "django/contrib/admin/options.py:ModelAdmin._save_formset",
-   "line": 71,
-   "sentence": "The change list's formset for `ModelAdmin.list_editable` could create rows; `ModelAdmin._save_formset` raises `BadRequest` for a changed form whose object is new (CVE-2026-4292; 5.2.13, 6.0.4) (`django/contrib/admin/options.py:ModelAdmin._save_formset`; [The change list's columns: `list_display` and `list_editable`](../admin/list-display.md)).",
+   "line": 81,
+   "sentence": "`ModelAdmin.list_editable`'s formset could create rows; `ModelAdmin._save_formset` raises `BadRequest` for a changed form whose object is new (CVE-2026-4292; 5.2.13, 6.0.4) (`django/contrib/admin/options.py:ModelAdmin._save_formset`; [The change list's columns: `list_display` and `list_editable`](../admin/list-display.md)).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "ModelAdmin._save_formset",
@@ -275,8 +303,8 @@
   },
   {
    "pointer": "django/contrib/admin/utils.py:display_for_field",
-   "line": 73,
-   "sentence": "The field's own validators, the comment says, may allow such schemes (`django/contrib/admin/utils.py:display_for_field`).",
+   "line": 83,
+   "sentence": "`display_for_field` makes a model's URL field a link only if `URLValidator` accepts the value, whatever the field's own validators allow (`django/contrib/admin/utils.py:display_for_field`); a value with a dangerous scheme was a link (CVE-2026-15920; 5.2.17, 6.0.8).",
    "tree": "django",
    "path": "django/contrib/admin/utils.py",
    "symbol": "display_for_field",
@@ -289,8 +317,8 @@
   },
   {
    "pointer": "django/core/signing.py:_cookie_signer_salt",
-   "line": 77,
-   "sentence": "The salt now carries a prefix and the given salt's length (`django/core/signing.py:_cookie_signer_salt`); [What changed in security: Content Security Policy and signing](security.md) tells it, with `SIGNED_COOKIE_LEGACY_SALT_FALLBACK`, which when true reads cookies signed the old way.",
+   "line": 87,
+   "sentence": "The salt now carries a prefix and the given salt's length (`django/core/signing.py:_cookie_signer_salt`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "_cookie_signer_salt",
@@ -302,9 +330,23 @@
    "fingerprint": "ade2da5a1d2387e6"
   },
   {
+   "pointer": "django/core/signing.py:_unsign_cookie",
+   "line": 87,
+   "sentence": "A cookie signed with the old salt is still read while the setting `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true, its default until 6.1 (`django/core/signing.py:_unsign_cookie`; [What changed in security: Content Security Policy and signing](security.md)).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "_unsign_cookie",
+   "kind": "function",
+   "lines": [
+    133,
+    147
+   ],
+   "fingerprint": "0d65ea5849dceb3a"
+  },
+  {
    "pointer": "django/core/mail/backends/smtp.py:EmailBackend.open",
-   "line": 81,
-   "sentence": "`EmailBackend.open` now holds a new connection aside until STARTTLS and the login have succeeded, makes it the backend's connection only then, and closes what a failed attempt left at its next call or in `EmailBackend.close` (`django/core/mail/backends/smtp.py:EmailBackend.open`; [Sending email: `mailers` and the email backends](../services/mailers.md)).",
+   "line": 91,
+   "sentence": "`EmailBackend.open` now makes a new connection the backend's only once STARTTLS and the login have succeeded (`django/core/mail/backends/smtp.py:EmailBackend.open`; [Sending email: `mailers` and the email backends](../services/mailers.md)).",
    "tree": "django",
    "path": "django/core/mail/backends/smtp.py",
    "symbol": "EmailBackend.open",
@@ -317,8 +359,8 @@
   },
   {
    "pointer": "django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value",
-   "line": 85,
-   "sentence": "`GDALRaster.check_raster_lookup_value` raises `DisallowedRasterLookup`, a `SuspiciousOperation`, for a dictionary, a string or a path, and `BaseSpatialField.get_prep_value` tries a string only as a geometry, refusing it when `GEOSGeometry` cannot read it; a value wrapped in a `GDALRaster` passes, and assigning to a field is unchanged (`django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value`, `django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).",
+   "line": 95,
+   "sentence": "`GDALRaster.check_raster_lookup_value` refuses a dictionary, a string or a path with `DisallowedRasterLookup`, a `SuspiciousOperation` (`django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value`).",
    "tree": "django",
    "path": "django/contrib/gis/gdal/raster/source.py",
    "symbol": "GDALRaster.check_raster_lookup_value",
@@ -332,8 +374,8 @@
   },
   {
    "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value",
-   "line": 85,
-   "sentence": "`GDALRaster.check_raster_lookup_value` raises `DisallowedRasterLookup`, a `SuspiciousOperation`, for a dictionary, a string or a path, and `BaseSpatialField.get_prep_value` tries a string only as a geometry, refusing it when `GEOSGeometry` cannot read it; a value wrapped in a `GDALRaster` passes, and assigning to a field is unchanged (`django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value`, `django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).",
+   "line": 95,
+   "sentence": "A `GDALRaster` passes (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).",
    "tree": "django",
    "path": "django/contrib/gis/db/models/fields.py",
    "symbol": "BaseSpatialField.get_prep_value",
@@ -346,8 +388,8 @@
   },
   {
    "pointer": "django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__",
-   "line": 87,
-   "sentence": "A `GDALRaster` made from bytes now gives its in-memory file the bytes' length, so `GDALRaster.vsi_buffer` reads back exactly them; it could read some 32 bytes past the buffer (CVE-2026-53877; 5.2.16, 6.0.7) (`django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__`, `tests/gis_tests/gdal_tests/test_raster.py:GDALRasterTests.test_vsi_buffer_length`).",
+   "line": 97,
+   "sentence": "A `GDALRaster` made from bytes gives its in-memory file exactly their length, which `GDALRaster.vsi_buffer` reads back; it read some 32 bytes past the buffer (CVE-2026-53877; 5.2.16, 6.0.7) (`django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__`).",
    "tree": "django",
    "path": "django/contrib/gis/gdal/raster/source.py",
    "symbol": "GDALRaster.__init__",
@@ -357,20 +399,6 @@
     217
    ],
    "fingerprint": "28a4c4bae802ad32"
-  },
-  {
-   "pointer": "tests/gis_tests/gdal_tests/test_raster.py:GDALRasterTests.test_vsi_buffer_length",
-   "line": 87,
-   "sentence": "A `GDALRaster` made from bytes now gives its in-memory file the bytes' length, so `GDALRaster.vsi_buffer` reads back exactly them; it could read some 32 bytes past the buffer (CVE-2026-53877; 5.2.16, 6.0.7) (`django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__`, `tests/gis_tests/gdal_tests/test_raster.py:GDALRasterTests.test_vsi_buffer_length`).",
-   "tree": "django",
-   "path": "tests/gis_tests/gdal_tests/test_raster.py",
-   "symbol": "GDALRasterTests.test_vsi_buffer_length",
-   "kind": "function",
-   "lines": [
-    273,
-    277
-   ],
-   "fingerprint": "75d211b053660c08"
   }
  ]
 }

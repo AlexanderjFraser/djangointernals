@@ -10,7 +10,7 @@
   {
    "pointer": "django/utils/",
    "line": 7,
-   "sentence": "The changes from Django 5.0 to this commit in time zones, localization, translation and the smaller modules of `django/utils/`: `USE_TZ` true by default, pytz, the is_dst argument and the alias utc gone, USE_L10N gone, Uyghur and Haitian Creole added, and what changed in `cached_property`, `Truncator`, `parse_duration`, `import_string` and `django.VERSION`.",
+   "sentence": "The changes from Django 5.0 to this commit in time zones, localization, translation and the smaller modules of `django/utils/`: the functions `import_string` and `parse_duration`, `django.VERSION`, the module itercompat, Haitian Creole, the setting `USE_TZ`, pytz and is_dst, the alias utc and the setting USE_L10N.",
    "tree": "django",
    "path": "django/utils/",
    "symbol": null,
@@ -19,8 +19,8 @@
   },
   {
    "pointer": "docs/releases/4.0.txt",
-   "line": 9,
-   "sentence": "Most of what 5.0 changed here ended deprecations that 4.0 began, when Django moved from pytz to the standard library's `zoneinfo` and made localized output the default (`docs/releases/4.0.txt`).",
+   "line": 11,
+   "sentence": "The 4.0 notes give the reason for the new defaults of `USE_TZ` and of localization: they follow \"good practice\" (`docs/releases/4.0.txt`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -33,8 +33,8 @@
   },
   {
    "pointer": "django/conf/__init__.py:Settings.__init__",
-   "line": 9,
-   "sentence": "What 5.0 removed is an error where it was a module, a name or an argument, with one exception, and is passed over in silence where it was a setting: the settings object takes any upper-case name (`django/conf/__init__.py:Settings.__init__`), and nothing at this commit reads these.",
+   "line": 11,
+   "sentence": "Where it was a setting, it is passed over in silence: the settings object takes any upper-case name (`django/conf/__init__.py:Settings.__init__`), and nothing at this commit reads the removed settings.",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "Settings.__init__",
@@ -47,7 +47,7 @@
   },
   {
    "pointer": "django/conf/global_settings.py",
-   "line": 13,
+   "line": 15,
    "sentence": "`USE_TZ` has been true by default since 5.0 (`django/conf/global_settings.py`).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
@@ -61,8 +61,8 @@
   },
   {
    "pointer": "docs/releases/4.0.txt",
-   "line": 13,
-   "sentence": "The project template has written `USE_TZ = True` into a new project's settings since 1.4 (`docs/releases/4.0.txt`), so the change reached the settings that never set it: a settings module written by hand, or `settings.configure` in a script.",
+   "line": 15,
+   "sentence": "The project template has written `USE_TZ = True` since 1.4, so the change reached settings that never set it, such as `settings.configure` in a script (`docs/releases/4.0.txt`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -75,8 +75,8 @@
   },
   {
    "pointer": "django/utils/timezone.py:now",
-   "line": 13,
-   "sentence": "With it on, `django.utils.timezone.now` is aware, in UTC (`django/utils/timezone.py:now`), and a model's datetime field given a naive value warns and takes it to be in the default zone (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
+   "line": 15,
+   "sentence": "With it on, `django.utils.timezone.now` is aware, in UTC (`django/utils/timezone.py:now`), and a datetime field given a naive value warns and takes it to be in the default zone (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
    "tree": "django",
    "path": "django/utils/timezone.py",
    "symbol": "now",
@@ -89,8 +89,8 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:DateTimeField.get_prep_value",
-   "line": 13,
-   "sentence": "With it on, `django.utils.timezone.now` is aware, in UTC (`django/utils/timezone.py:now`), and a model's datetime field given a naive value warns and takes it to be in the default zone (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
+   "line": 15,
+   "sentence": "With it on, `django.utils.timezone.now` is aware, in UTC (`django/utils/timezone.py:now`), and a datetime field given a naive value warns and takes it to be in the default zone (`django/db/models/fields/__init__.py:DateTimeField.get_prep_value`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "DateTimeField.get_prep_value",
@@ -102,9 +102,66 @@
    "fingerprint": "6a05034625aafc79"
   },
   {
+   "pointer": "docs/releases/4.0.txt",
+   "line": 17,
+   "sentence": "pytz's zones went in 5.0 with USE_DEPRECATED_PYTZ, the transitional setting that had kept them through 4.x (`docs/releases/4.0.txt`, `docs/releases/5.0.txt`), and no module of Django imports pytz at this commit.",
+   "tree": "django",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    772
+   ],
+   "fingerprint": "75c28734cc7b3883"
+  },
+  {
+   "pointer": "docs/releases/5.0.txt",
+   "line": 17,
+   "sentence": "pytz's zones went in 5.0 with USE_DEPRECATED_PYTZ, the transitional setting that had kept them through 4.x (`docs/releases/4.0.txt`, `docs/releases/5.0.txt`), and no module of Django imports pytz at this commit.",
+   "tree": "django",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "f78c0112c823f44f"
+  },
+  {
+   "pointer": "django/utils/timezone.py:get_default_timezone",
+   "line": 17,
+   "sentence": "`TIME_ZONE`, and a name given to `django.utils.timezone.activate`, become a `zoneinfo.ZoneInfo` (`django/utils/timezone.py:get_default_timezone`, `django/utils/timezone.py:activate`), and a zone given as an object, a pytz zone among them, is used as any `datetime.tzinfo` is, never through pytz's localize.",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "get_default_timezone",
+   "kind": "function",
+   "lines": [
+    45,
+    52
+   ],
+   "at": 46,
+   "fingerprint": "852d3ad35aab0558"
+  },
+  {
+   "pointer": "django/utils/timezone.py:activate",
+   "line": 17,
+   "sentence": "`TIME_ZONE`, and a name given to `django.utils.timezone.activate`, become a `zoneinfo.ZoneInfo` (`django/utils/timezone.py:get_default_timezone`, `django/utils/timezone.py:activate`), and a zone given as an object, a pytz zone among them, is used as any `datetime.tzinfo` is, never through pytz's localize.",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "activate",
+   "kind": "function",
+   "lines": [
+    88,
+    100
+   ],
+   "fingerprint": "071d7162f106dcd4"
+  },
+  {
    "pointer": "django/utils/timezone.py:make_aware",
-   "line": 15,
-   "sentence": "`TIME_ZONE`, and a name given to `django.utils.timezone.activate`, become a `zoneinfo.ZoneInfo`, and a zone given as an object is treated as any `tzinfo`: `make_aware` attaches it with `datetime.datetime.replace` (`django/utils/timezone.py:make_aware`).",
+   "line": 17,
+   "sentence": "`make_aware` now only attaches the zone, and a `zoneinfo.ZoneInfo` reads such a time by the value's attribute `datetime.datetime.fold` (`django/utils/timezone.py:make_aware`).",
    "tree": "django",
    "path": "django/utils/timezone.py",
    "symbol": "make_aware",
@@ -116,23 +173,9 @@
    "fingerprint": "e01904cdaed1cbc3"
   },
   {
-   "pointer": "docs/releases/3.0.txt",
-   "line": 15,
-   "sentence": "The is_dst argument, which decided the treatment of local times that never happen or happen twice (`docs/releases/3.0.txt`), went from `make_aware`, `QuerySet.datetimes`, `Trunc` and the truncations by unit; for `make_aware`, which only attaches the zone, a `zoneinfo.ZoneInfo` takes such a time's offset from the value's `datetime.datetime.fold`.",
-   "tree": "django",
-   "path": "docs/releases/3.0.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    656
-   ],
-   "fingerprint": "51f2374385c5b170"
-  },
-  {
    "pointer": "django/db/models/functions/datetime.py:TruncBase.__init__",
-   "line": 34,
-   "sentence": "`TruncBase.__init__` passes on the keywords it does not name, and `Func` keeps them as extra values for its SQL template, which a truncation's SQL does not use (`django/db/models/functions/datetime.py:TruncBase.__init__`, `django/db/models/expressions.py:Func.__init__`).",
+   "line": 19,
+   "sentence": "`TruncBase.__init__` passes on the keywords it does not name, `Func.__init__` keeps them as extra values for its SQL template, and a truncation's SQL reads none of them (`django/db/models/functions/datetime.py:TruncBase.__init__`, `django/db/models/expressions.py:Func.__init__`).",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
    "symbol": "TruncBase.__init__",
@@ -145,8 +188,8 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Func.__init__",
-   "line": 34,
-   "sentence": "`TruncBase.__init__` passes on the keywords it does not name, and `Func` keeps them as extra values for its SQL template, which a truncation's SQL does not use (`django/db/models/functions/datetime.py:TruncBase.__init__`, `django/db/models/expressions.py:Func.__init__`).",
+   "line": 19,
+   "sentence": "`TruncBase.__init__` passes on the keywords it does not name, `Func.__init__` keeps them as extra values for its SQL template, and a truncation's SQL reads none of them (`django/db/models/functions/datetime.py:TruncBase.__init__`, `django/db/models/expressions.py:Func.__init__`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "Func.__init__",
@@ -158,23 +201,9 @@
    "fingerprint": "27f2b594d772c75d"
   },
   {
-   "pointer": "docs/releases/4.0.txt",
-   "line": 38,
-   "sentence": "USE_L10N, the setting that switched localized formats on, was deprecated in 4.0, which made its default true, and removed in 5.0; the 4.0 notes give the consequence, that by default any date or number Django displays is localized (`docs/releases/4.0.txt`).",
-   "tree": "django",
-   "path": "docs/releases/4.0.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    772
-   ],
-   "fingerprint": "75c28734cc7b3883"
-  },
-  {
    "pointer": "django/utils/formats.py:get_format",
-   "line": 38,
-   "sentence": "At this commit `get_format` takes use_l10n=None to mean true, and so do `localize` and the functions under it (`django/utils/formats.py:get_format`).",
+   "line": 23,
+   "sentence": "At this commit `get_format` takes use_l10n=None to mean true, as `localize` and the functions under it do (`django/utils/formats.py:get_format`).",
    "tree": "django",
    "path": "django/utils/formats.py",
    "symbol": "get_format",
@@ -187,8 +216,8 @@
   },
   {
    "pointer": "django/templatetags/l10n.py:LocalizeNode",
-   "line": 38,
-   "sentence": "Localization is turned off by a caller, as a template is inside `{% localize off %}`, which sets the context's flag (`django/templatetags/l10n.py:LocalizeNode`).",
+   "line": 23,
+   "sentence": "Localization is turned off by a caller, as a template is inside `{% localize off %}` (`django/templatetags/l10n.py:LocalizeNode`).",
    "tree": "django",
    "path": "django/templatetags/l10n.py",
    "symbol": "LocalizeNode",
@@ -200,80 +229,80 @@
    "fingerprint": "ec59709523d56e5f"
   },
   {
-   "pointer": "django/conf/global_settings.py",
-   "line": 52,
-   "sentence": "Uyghur, `\"ug\"`, joined `LANGUAGES` in 5.0, written right to left and so in `LANGUAGES_BIDI`, and Haitian Creole, `\"ht\"`, in 6.0 (`django/conf/global_settings.py`).",
+   "pointer": "docs/releases/5.0.txt",
+   "line": 27,
+   "sentence": "The undocumented modules baseconv and datetime_safe went in 5.0, after their deprecation in 4.0 (`docs/releases/5.0.txt`). itercompat, with its one function is_iterable, was deprecated in 5.1 and removed in 6.0 (`docs/releases/6.0.txt`).",
    "tree": "django",
-   "path": "django/conf/global_settings.py",
+   "path": "docs/releases/5.0.txt",
    "symbol": null,
    "kind": "file",
    "lines": [
     1,
-    692
+    759
    ],
-   "fingerprint": "3c82ce45a0f468df"
+   "fingerprint": "f78c0112c823f44f"
   },
   {
-   "pointer": "django/utils/translation/trans_real.py:translation_catalog_exists",
-   "line": 52,
-   "sentence": "With `USE_I18N` on, `check_for_language` asks for a catalogue (`django/utils/translation/trans_real.py:translation_catalog_exists`), so for `\"ht\"` it is false and `get_supported_language_variant` raises `LookupError`: unless a project or an application provides a catalogue, the language is never chosen from a request's path, cookie or Accept-Language (`django/utils/translation/trans_real.py:get_language_from_request`), and in a run, activated by hand, it left Django's messages in English.",
+   "pointer": "docs/releases/6.0.txt",
+   "line": 27,
+   "sentence": "The undocumented modules baseconv and datetime_safe went in 5.0, after their deprecation in 4.0 (`docs/releases/5.0.txt`). itercompat, with its one function is_iterable, was deprecated in 5.1 and removed in 6.0 (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "django/utils/module_loading.py:import_string",
+   "line": 31,
+   "sentence": "Since 6.2 a path without a dot is imported as a module, and any other path is first imported whole, an `ImportError` passed over, before the attribute is read (`django/utils/module_loading.py:import_string`).",
+   "tree": "django",
+   "path": "django/utils/module_loading.py",
+   "symbol": "import_string",
+   "kind": "function",
+   "lines": [
+    20,
+    49
+   ],
+   "fingerprint": "bded96086ec62ac9"
+  },
+  {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 51,
+   "sentence": "Importing the submodule puts it on the package in the string's place, so the attribute read next is the module; before 6.2 the string came back until something imported the submodule (`docs/releases/6.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "django/utils/translation/trans_real.py:get_supported_language_variant",
+   "line": 60,
+   "sentence": "| `LANGUAGES` | holds Uyghur, `\"ug\"`, which `LANGUAGES_BIDI` lists too, and Haitian Creole, `\"ht\"`, which has a format module and, though the 6.0 notes speak of \"support and translations\", no catalogue, so a request's path, cookie or header never selects it unless a project or an application provides one (`django/utils/translation/trans_real.py:get_supported_language_variant`) | 5.0, 6.0 | [Choosing a language: `LocaleMiddleware`](../i18n/choosing.md) |",
    "tree": "django",
    "path": "django/utils/translation/trans_real.py",
-   "symbol": "translation_catalog_exists",
+   "symbol": "get_supported_language_variant",
    "kind": "function",
    "lines": [
-    480,
-    493
+    505,
+    555
    ],
-   "at": 481,
-   "fingerprint": "e34ed1d595c1cb65"
-  },
-  {
-   "pointer": "django/utils/translation/trans_real.py:get_language_from_request",
-   "line": 52,
-   "sentence": "With `USE_I18N` on, `check_for_language` asks for a catalogue (`django/utils/translation/trans_real.py:translation_catalog_exists`), so for `\"ht\"` it is false and `get_supported_language_variant` raises `LookupError`: unless a project or an application provides a catalogue, the language is never chosen from a request's path, cookie or Accept-Language (`django/utils/translation/trans_real.py:get_language_from_request`), and in a run, activated by hand, it left Django's messages in English.",
-   "tree": "django",
-   "path": "django/utils/translation/trans_real.py",
-   "symbol": "get_language_from_request",
-   "kind": "function",
-   "lines": [
-    575,
-    619
-   ],
-   "fingerprint": "19a6327038e8bc03"
-  },
-  {
-   "pointer": "django/core/signing.py:b62_encode",
-   "line": 56,
-   "sentence": "At this commit signing writes its base 62 with its own `b62_encode` and `b62_decode` (`django/core/signing.py:b62_encode`); the 5.1 notes named `collections.abc.Iterable` in is_iterable's place, which is how the check registry tests a check's result (`django/core/checks/registry.py:CheckRegistry.run_checks`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "b62_encode",
-   "kind": "function",
-   "lines": [
-    68,
-    77
-   ],
-   "fingerprint": "a4d16e3da71ecf76"
-  },
-  {
-   "pointer": "django/core/checks/registry.py:CheckRegistry.run_checks",
-   "line": 56,
-   "sentence": "At this commit signing writes its base 62 with its own `b62_encode` and `b62_decode` (`django/core/signing.py:b62_encode`); the 5.1 notes named `collections.abc.Iterable` in is_iterable's place, which is how the check registry tests a check's result (`django/core/checks/registry.py:CheckRegistry.run_checks`).",
-   "tree": "django",
-   "path": "django/core/checks/registry.py",
-   "symbol": "CheckRegistry.run_checks",
-   "kind": "function",
-   "lines": [
-    74,
-    106
-   ],
-   "fingerprint": "698a8954c64ca523"
+   "at": 506,
+   "fingerprint": "ac515d755bc78dde"
   },
   {
    "pointer": "django/utils/text.py:TruncateHTMLParser",
    "line": 61,
-   "sentence": "| `Truncator` | with html=True, for the `truncatechars_html` and `truncatewords_html` filters, parses with subclasses of `html.parser.HTMLParser`, more robust and faster in the notes' words, with small differences in output (`django/utils/text.py:TruncateHTMLParser`) | 5.1 | [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md) |",
+   "sentence": "| `Truncator` | with html=True, for the `truncatechars_html` and `truncatewords_html` filters, parses with subclasses of `html.parser.HTMLParser`, \"more robust and faster\" in the notes, which say the output may differ slightly (`django/utils/text.py:TruncateHTMLParser`) | 5.1 | [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md) |",
    "tree": "django",
    "path": "django/utils/text.py",
    "symbol": "TruncateHTMLParser",
@@ -287,7 +316,7 @@
   {
    "pointer": "django/utils/text.py",
    "line": 61,
-   "sentence": "| `Truncator` | with html=True, for the `truncatechars_html` and `truncatewords_html` filters, parses with subclasses of `html.parser.HTMLParser`, more robust and faster in the notes' words, with small differences in output (`django/utils/text.py:TruncateHTMLParser`) | 5.1 | [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md) |",
+   "sentence": "| `Truncator` | with html=True, for the `truncatechars_html` and `truncatewords_html` filters, parses with subclasses of `html.parser.HTMLParser`, \"more robust and faster\" in the notes, which say the output may differ slightly (`django/utils/text.py:TruncateHTMLParser`) | 5.1 | [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md) |",
    "tree": "django",
    "path": "django/utils/text.py",
    "symbol": null,
@@ -300,8 +329,8 @@
   },
   {
    "pointer": "django/utils/dateparse.py:iso8601_duration_re",
-   "line": 63,
-   "sentence": "| `parse_duration` | reads ISO 8601's weeks, alone or before days and a time: in a run `\"P1W2DT3H\"` was nine days and three hours (`django/utils/dateparse.py:iso8601_duration_re`) | 6.1 | [Dates, durations and addresses: `parse_datetime`, `parse_duration` and `clean_ipv6_address`](../utils/parsing.md) |",
+   "line": 62,
+   "sentence": "| `parse_duration` | reads ISO 8601's weeks, alone or before days and a time (`django/utils/dateparse.py:iso8601_duration_re`): `\"P1W2DT3H\"` gives `None` under 6.0.8, and nine days and three hours from 6.1.1 | 6.1 | [Dates, durations and addresses: `parse_datetime`, `parse_duration` and `clean_ipv6_address`](../utils/parsing.md) |",
    "tree": "django",
    "path": "django/utils/dateparse.py",
    "symbol": "iso8601_duration_re",
@@ -311,34 +340,6 @@
     51
    ],
    "fingerprint": "a4cf09cb6f93578e"
-  },
-  {
-   "pointer": "django/utils/module_loading.py:import_string",
-   "line": 64,
-   "sentence": "| `import_string` | imports the whole path as a module first, so it returns a top-level module, and for a longer path a submodule rather than its package's attribute of the same name, unless the package itself rebinds the name after importing the submodule (`django/utils/module_loading.py:import_string`) | 6.2 | [Importing by name: `import_string` and `autodiscover_modules`](../utils/importing.md) |",
-   "tree": "django",
-   "path": "django/utils/module_loading.py",
-   "symbol": "import_string",
-   "kind": "function",
-   "lines": [
-    20,
-    49
-   ],
-   "fingerprint": "bded96086ec62ac9"
-  },
-  {
-   "pointer": "django/utils/version.py:VersionTuple",
-   "line": 65,
-   "sentence": "| `django.VERSION` | a `VersionTuple`: an index or slice past its second part, its length, unpacking, or a comparison with three parts or more warns with `RemovedInDjango2028Warning`, the class once named for 7.0 (`django/utils/version.py:VersionTuple`) | 6.2 | [Django's version: `VersionTuple` and `get_version`](../utils/version.md) |",
-   "tree": "django",
-   "path": "django/utils/version.py",
-   "symbol": "VersionTuple",
-   "kind": "class",
-   "lines": [
-    33,
-    161
-   ],
-   "fingerprint": "2a6e23d45db3dd82"
   }
  ]
 }

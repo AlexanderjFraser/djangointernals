@@ -43,7 +43,7 @@ Which of the two it is decides much else: most of the features that ask the serv
 
 ## The driver, `MySQLdb`, and opening a connection
 
-The backend's base module imports `MySQLdb`, from the package mysqlclient, as `DatabaseWrapper.Database`, and raises `ImproperlyConfigured` where the import fails or `MySQLdb.version_info` is older than 2.2.1 (`django/db/backends/mysql/base.py`). The driver takes Django's `"%s"` placeholders as they are, and the backend rewrites none ([Cursors: executing a statement, the query log and execute wrappers](cursors.md)).
+The backend's base module imports `MySQLdb`, from the package mysqlclient, as `DatabaseWrapper.Database`, raises `ImproperlyConfigured` where the import fails, and refuses a `MySQLdb.version_info` older than 2.2.1 (`django/db/backends/mysql/base.py`). The driver takes Django's `"%s"` placeholders as they are, and the backend rewrites none ([Cursors: executing a statement, the query log and execute wrappers](cursors.md)).
 
 `DatabaseWrapper.get_connection_params` builds the keyword arguments for `MySQLdb.connect` (`django/db/backends/mysql/base.py:DatabaseWrapper.get_connection_params`). It passes on whichever of the user, database, password, host and port are set, a `"HOST"` that begins with a slash as a Unix socket, with `django_conversions`, the driver's table of conversions ([Values in and out: adapters, converters and time zones](values.md)), `"utf8mb4"` for the `"charset"`, and the client flag FOUND_ROWS. Then it lays `"OPTIONS"`, less `"isolation_level"`, over the arguments, so that anything `MySQLdb.connect` accepts can be given there and wins over the settings.
 

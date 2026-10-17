@@ -4,72 +4,98 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in authentication, sessions and messages
 
-The changes from Django 5.0 to this commit in `django.contrib.auth`, `django.contrib.sessions` and `django.contrib.messages`: `LoginRequiredMiddleware`, the asynchronous twins down to the backends' coroutines, `RemoteUserMiddleware` under ASGI, the PBKDF2 iterations, the hashers removed and the old uses that now fail.
+The changes from Django 5.0 to this commit in `django.contrib.auth`, `django.contrib.sessions` and `django.contrib.messages`: `LoginRequiredMiddleware`; the asynchronous functions and the backends' coroutines; `RemoteUserMiddleware` under ASGI; the function `login` given no user; the PBKDF2 iterations and the hashers removed; `SessionBase.__bool__`; and smaller changes.
 
-Two changes alter the model: a middleware can require a login of every view, and since 5.2 an asynchronous caller reaches a backend's own coroutines, which need not do what its synchronous methods do.
+6.1 ended two supports 5.2 had deprecated: `login` taking the request's user when given none, and `RemoteUserMiddleware`'s coroutine running a subclass's `process_request`. It also made an empty session false and let permissions follow a renamed model. Every feature release raised the PBKDF2 hasher's iterations, so each rewrites a user's stored string at the next login.
+
+The 5.x changes alter the model more. 5.1's `LoginRequiredMiddleware` lets a project close every view by default, and from 5.0 to 5.2 the asynchronous side of authentication became code of its own, down to the backends' own coroutines, which an asynchronous caller now reaches directly.
 
 ## A login for every view: `LoginRequiredMiddleware`
 
-`LoginRequiredMiddleware` (5.1) turns the default round. Without it a view is open unless a decorator or a mixin closes it; with it, after `AuthenticationMiddleware`, `LoginRequiredMiddleware.process_view` redirects an anonymous request from every view whose attribute `"login_required"` is not false, which `login_not_required` (5.1) sets (`django/contrib/auth/middleware.py:LoginRequiredMiddleware.process_view`). The redirect goes to the login URL a decorator left on the view, else to `LOGIN_URL`, whatever login URL a view's `LoginRequiredMixin` names. Django marks its login and password-reset views, not `LogoutView` ([Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](../auth/requiring-login.md#loginrequiredmiddleware)).
+Without `LoginRequiredMiddleware` (5.1) a view is open unless a decorator or a mixin closes it; with it, after `AuthenticationMiddleware`, every view is closed to an anonymous request unless the decorator `login_not_required` (5.1) opens it (`django/contrib/auth/middleware.py:LoginRequiredMiddleware.process_view`). The redirect goes to the login URL `login_required` left on the view, or to `LOGIN_URL`. A `LoginRequiredMixin`'s login URL, an attribute of the class, is not read: under 5.2.17 as at this commit, a mixin's `"/journal/login/"` loses to `LOGIN_URL`. Django opens its login and password-reset views, not `LogoutView` ([Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](../auth/requiring-login.md#loginrequiredmiddleware)).
 
-## The asynchronous functions and methods
+## The asynchronous functions, and a backend's own coroutines
 
-The coroutine twins came in three releases. 5.0 added `aauthenticate`, `aget_user`, `alogin`, `alogout` and `aupdate_session_auth_hash` (`django/contrib/auth/__init__.py`), `HttpRequest.auser` beside `HttpRequest.user` (`django/contrib/auth/middleware.py:auser`) and `AbstractBaseUser.acheck_password`. 5.1 gave the session store and its backends asynchronous methods, such as `SessionBase.aget` ([The session store: `SessionBase`](../auth/sessions.md#the-asynchronous-methods)), and let `login_required`, `permission_required` and `user_passes_test` wrap a coroutine view; at this commit the wrapper awaits `HttpRequest.auser`, and the test of `permission_required` awaits `PermissionsMixin.ahas_perms` (`django/contrib/auth/decorators.py:user_passes_test`, `django/contrib/auth/decorators.py:permission_required`). 5.2 added `UserManager.acreate_user`, `UserManager.acreate_superuser`, `BaseUserManager.aget_by_natural_key`, `PermissionsMixin.ahas_perm` and the other permission methods, and the backends'.
+5.0 added the functions `aauthenticate`, `aget_user`, `alogin`, `alogout` and `aupdate_session_auth_hash` (`django/contrib/auth/__init__.py`) with `HttpRequest.auser`, 5.1 the session store's coroutines, such as `SessionBase.aget` ([The session store: `SessionBase`](../auth/sessions.md#the-asynchronous-methods)), and 5.2 `UserManager.acreate_user`, `PermissionsMixin.ahas_perm` and the other permission methods' coroutines, and those of the backends.
 
-The backends' twins changed what an asynchronous caller runs. `aauthenticate` picks the backends by the signature of their synchronous `authenticate`, then awaits each one's `BaseBackend.aauthenticate` (`django/contrib/auth/__init__.py:aauthenticate`). `BaseBackend.aauthenticate` runs the synchronous method through `sync_to_async`; since 5.2 `ModelBackend` and `RemoteUserBackend` have their own, which query with the asynchronous ORM, to switch less, the release notes say, between the event loop and a thread (`django/contrib/auth/backends.py:ModelBackend.aauthenticate`, `docs/releases/5.2.txt`). `aget_user` awaits the backend's `BaseBackend.aget_user` the same way, and `PermissionsMixin.ahas_perm` asks only the backends that have an `ahas_perm` (`django/contrib/auth/models.py:_auser_has_perm`).
+`aauthenticate` picks the backends by the signature of their synchronous `authenticate`, then awaits each one's `BaseBackend.aauthenticate` (`django/contrib/auth/__init__.py:aauthenticate`). `BaseBackend.aauthenticate` wraps `authenticate` in `sync_to_async`, but since 5.2 `ModelBackend` and `RemoteUserBackend` have their own, on the asynchronous ORM, to "reduce context-switching", the 5.2 notes say (`django/contrib/auth/backends.py:ModelBackend.aauthenticate`, `docs/releases/5.2.txt`). `PermissionsMixin.ahas_perm` asks only the backends that have an `ahas_perm` (`django/contrib/auth/models.py:_auser_has_perm`; [Authenticating: `authenticate` and the backends](../auth/authenticating.md#aauthenticate-and-basebackend)).
 
-So a backend's two kinds of method are separate code. Where a subclass of `ModelBackend` overrides `authenticate` alone, `aauthenticate` passes the override over and runs the inherited coroutine; a backend not built on `BaseBackend` that defines no coroutines makes `aauthenticate` raise when it comes to it, and has no say in `ahas_perm`. The documentation asks a project that extends Django's backends to change both versions (`docs/topics/auth/customizing.txt`).
-
-```text
-# auth_blocks.py at this commit: first a ModelBackend subclass whose authenticate alone refuses tomas,
-# then PlainBackend, a class with no base whose has_perm says yes
-authenticate(username="tomas", password="Beagle-1831")   None
-aauthenticate(username="tomas", password="Beagle-1831")  <User: tomas>
-aauthenticate(username="nora", password="x")             AttributeError: 'PlainBackend' object has no attribute 'aauthenticate'
-nora.has_perm("fleet.change_ship")                       True
-nora.ahas_perm("fleet.change_ship")                      False
-```
+> **Trap.** `ModelBackend`'s two kinds of method are separate code, and nothing warns where they differ. Under 5.2.17 as at this commit, a subclass whose `authenticate` alone refuses the user olga lets `aauthenticate` return olga; a backend not built on `BaseBackend`, and with no coroutines of its own, makes `aauthenticate` raise `AttributeError` on reaching it, and its yes from `has_perm` is a no from `ahas_perm`. The documentation asks a project extending Django's backends to change both (`docs/topics/auth/customizing.txt`).
 
 ## `RemoteUserMiddleware` under ASGI
 
-`RemoteUserMiddleware.aprocess_request` serves an asynchronous chain, awaiting `HttpRequest.auser`, `aauthenticate` and `alogin` ([Authenticating: `authenticate` and the backends](../auth/authenticating.md#the-servers-user-remoteusermiddleware-and-remoteuserbackend)). A subclass that overrode `RemoteUserMiddleware.process_request` alone was still served there, a support deprecated in 5.2 and removed in 6.1. At this commit `RemoteUserMiddleware.__call__` gives the request to the coroutine alone whenever the middleware runs asynchronously, as under ASGI it does when the layer inside it does ([Sync and async in one chain](../handlers/async.md)) (`django/contrib/auth/middleware.py:RemoteUserMiddleware.__call__`). In a run, such an override ran in a synchronous chain; in an asynchronous one the base class's coroutine logged nora in instead, and nothing warned.
+`RemoteUserMiddleware`, which logs in the user a server names, is not built on `MiddlewareMixin`; it can run either way, and so takes the mode of the layer inside it, the next in `MIDDLEWARE` (`django/core/handlers/base.py:BaseHandler.load_middleware`). In an asynchronous chain `RemoteUserMiddleware.__call__` hands the request to `RemoteUserMiddleware.aprocess_request` alone, in a synchronous one to `RemoteUserMiddleware.process_request` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.__call__`). Here a subclass overriding `process_request` alone serves a GET under ASGI, directly after `AuthenticationMiddleware` in startproject's `MIDDLEWARE`, as the documentation places it. This commit's line differs from 6.1.1's though the class is the same: since 6.2 the middleware inside it, `MessageMiddleware` among them, runs only synchronously, and `RemoteUserMiddleware` takes their mode ([What changed in handlers, requests, URLs and views](request-cycle.md)):
 
-5.2 also made the middleware read a custom header under ASGI with `"HTTP_"` before it, and 6.1 undid that: `RemoteUserMiddleware.get_username` adds the prefix to the default `RemoteUserMiddleware.header` alone, reading `"HTTP_REMOTE_USER"` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username`).
-
-## Passwords and the hashers
-
-The PBKDF2 hasher's iterations rose in every feature release: 720,000 in 5.0, 870,000 in 5.1, 1,000,000 in 5.2, 1,200,000 in 6.0, 1,500,000 in 6.1 and 1,800,000 in 6.2 (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher`). `ScryptPasswordHasher.parallelism` went from 1 to 5 in 5.1, to follow OWASP's recommendations, the release notes say (`docs/releases/5.1.txt`). A stored string carries its own cost and still checks; but `PBKDF2PasswordHasher.must_update` and `ScryptPasswordHasher.must_update` compare that cost with the class's, so where the hasher comes first in `PASSWORD_HASHERS`, a right password checked through `AbstractBaseUser.check_password` against an older string is hashed again and saved ([Password hashing: `make_password` and the hashers](../auth/hashers.md#the-upgrade-at-a-login)). The session's hash is made from the stored string, so the upgrade ends the user's sessions in other browsers ([The user of a request: `login`, `logout` and `AuthenticationMiddleware`](../auth/login.md#the-session-hash)).
-
-CryptPasswordHasher was removed in 5.0, and SHA1PasswordHasher, UnsaltedSHA1PasswordHasher and UnsaltedMD5PasswordHasher in 5.1. A string they made finds no hasher of Django's: `identify_hasher` still recognises the unsalted forms by their shape, `get_hasher` raises `ValueError` for an algorithm no listed hasher has, and `verify_password` answers that as a password that does not match (`django/contrib/auth/hashers.py:verify_password`). A user whose row holds such a string cannot log in by password, and nothing warns.
-
-## What else was removed
-
-| removed | release | at this commit |
-|---|---|---|
-| logging out by `"GET"` | 5.0 | `LogoutView.http_method_names` is `"post"` and `"options"`, so a `"GET"` gets 405, and `logout_then_login` logs out only on a `"POST"` ([The login and password views: `LoginView`, `LogoutView` and `PasswordChangeView`](../auth/login-views.md#logoutview-and-logout_then_login)) |
-| `RemoteUserBackend.configure_user` without created | 5.0 | `RemoteUserBackend.authenticate` always passes `created=`, so an override without it raises `TypeError` (`django/contrib/auth/backends.py:RemoteUserBackend.authenticate`) |
-| the sessions' PickleSerializer | 5.0 | `django/contrib/sessions/serializers.py` holds `JSONSerializer` alone, and `SessionBase.__init__` imports the class `SESSION_SERIALIZER` names for every store (`django/contrib/sessions/backends/base.py:SessionBase.__init__`) |
-| make_random_password of `BaseUserManager` | 5.1 | no such method |
-| the request's user, when `login` or `alogin` is given `None` | 5.2 to 6.1 | both ask the user they are given for its session hash first (`django/contrib/auth/__init__.py:login`) |
-
-```text
-# auth_blocks.py at this commit: OldRemoteUserBackend overrides configure_user(self, request, user);
-# for the third line SESSION_SERIALIZER names "django.contrib.sessions.serializers.PickleSerializer"
-login(request, None)                AttributeError: 'NoneType' object has no attribute 'get_session_auth_hash'
-authenticate(remote_user="ingrid")  TypeError: OldRemoteUserBackend.configure_user() got an unexpected keyword argument 'created'
-SessionStore()                      ImportError: Module "django.contrib.sessions.serializers" does not define a "PickleSerializer" attribute/class
+```text recording=changes
+A subclass of RemoteUserMiddleware that overrides process_request alone, after AuthenticationMiddleware in startproject's MIDDLEWARE, under ASGI: is the override called
+    5.2.17       the override is called, warns RemovedInDjango61Warning
+    6.0.8        the override is called, warns RemovedInDjango61Warning
+    6.1.1        the override is not called
+    this commit  the override is called
 ```
 
-## Forms, permissions, sessions and messages
+5.2 deprecated the support for such a subclass, and 6.1 removed it. 5.2.0 and 5.2.1 had lost it (`docs/releases/5.2.2.txt`). Placed last in `MIDDLEWARE`, before the asynchronous centre, the subclass is passed over under 6.1.1 and at this commit, and nothing warns.
 
-| change | release | at this commit |
-|---|---|---|
-| `AdminUserCreationForm` | 5.1 | `UserAdmin.add_form` (`django/contrib/auth/admin.py:UserAdmin`); it, and `AdminPasswordChangeForm` for a usable password, can save an unusable one ([The authentication forms: `AuthenticationForm` and the password forms](../auth/user-forms.md#setunusablepasswordmixin-and-the-admins-forms)) |
-| `ReadOnlyPasswordHashWidget` | 5.1 | draws a button to the password page, where the field's help text held a link (`django/contrib/auth/templates/auth/widgets/read_only_password_hash.html`) |
-| the password validators' `get_error_message` | 5.2 | each of Django's raises the message the method returns (`django/contrib/auth/password_validation.py:MinimumLengthValidator.get_error_message`) |
-| a model renamed by a migration | 6.1 | its default permissions' codenames and names follow it ([Making the permissions: `create_permissions`](../auth/creating-permissions.md#renaming-with-the-model-rename_permissions_after_model_rename)) |
-| `Permission.user_perm_str` | 6.1 | the string `PermissionsMixin.has_perm` takes, `"fleet.change_ship"` (`django/contrib/auth/models.py:Permission`) |
-| `SessionBase.__bool__` | 6.1 | false for a store with no key and no data, answered without loading ([The session store: `SessionBase`](../auth/sessions.md#empty-is_empty-and-__bool)) |
-| the cached database store | 5.1, 6.2 | logs to `"django.contrib.sessions"` an exception from the cache on a save (5.1) or a delete (6.2), and the row's change stands ([The session backends](../auth/session-backends.md#the-cached-database-backend)) |
-| the admin's debug and info messages | 6.0 | an icon and a colour of their own, where both looked like success; `ModelAdmin.message_user` adds at info unless told otherwise (`django/contrib/admin/static/admin/css/base.css`) |
-| `MessagesTestMixin.assertMessages` | 5.0 | compares the messages of a test response's request with a list, in order unless `ordered=False` (`django/contrib/messages/test.py:MessagesTestMixin.assertMessages`); the other assertions are in [What changed in the test framework](testing.md) |
+Under 5.2.17 and 6.0.8 the coroutine read `"HTTP_"` and the header's name, so a subclass whose `header` was `"HTTP_AUTHUSER"` looked up `"HTTP_HTTP_AUTHUSER"` and found no user. Since 6.1 `RemoteUserMiddleware.get_username` serves both paths, adding the prefix only to the default header of an `ASGIRequest` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username`); a custom header the synchronous path always read as written ([Authenticating: `authenticate` and the backends](../auth/authenticating.md#the-servers-user-remoteusermiddleware-and-remoteuserbackend)).
+
+## `login` given no user, and the request's user after a login
+
+From 5.2 `login` and `alogin` warned when given `None`, and logged in the request's user; 6.1 removed the fallback, and both ask the user they are given for its session hash first (`django/contrib/auth/__init__.py:login`). Here piet is the request's user, so piet is the fallback at work:
+
+```text recording=changes
+login(request, None), request.user being piet: the user the session is given
+    5.2.17       piet, warns RemovedInDjango61Warning
+    6.0.8        piet, warns RemovedInDjango61Warning
+    6.1.1        AttributeError: 'NoneType' object has no attribute 'get_session_auth_hash'
+    this commit  AttributeError: 'NoneType' object has no attribute 'get_session_auth_hash'
+```
+
+Since 6.1 `login` and `logout` replace `HttpRequest.auser` as they replace `user` (`django/contrib/auth/__init__.py:_set_auth_user`). Under 5.2.17 and 6.0.8, `await request.auser()` awaited before a `login` still gave the anonymous user after it, which no 6.1 note says.
+
+## Passwords: the iterations, and the hashers removed
+
+`PBKDF2PasswordHasher`, first in the default `PASSWORD_HASHERS`, has had more iterations in every feature release, 720,000 in 5.0 and 870,000 in 5.1 (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher`). A stored string carries its own count and still checks, but `PBKDF2PasswordHasher.must_update` compares the count with the class's, and a right password checked against an older string is hashed again and saved (`django/contrib/auth/base_user.py:AbstractBaseUser.check_password`; [Password hashing: `make_password` and the hashers](../auth/hashers.md#the-upgrade-at-a-login)). Here a string stored at 5.0's count is checked:
+
+```text recording=changes
+user.check_password("Beagle-1831"), the password stored at 5.0's 720,000 iterations: what is stored after
+    5.2.17       pbkdf2_sha256, 1,000,000 iterations
+    6.0.8        pbkdf2_sha256, 1,200,000 iterations
+    6.1.1        pbkdf2_sha256, 1,500,000 iterations
+    this commit  pbkdf2_sha256, 1,800,000 iterations
+```
+
+The session hash is made from the stored string, so the rewrite ends the user's sessions in other browsers: under 5.2.17 as at this commit, a session logged in before the check is anonymous after it ([The user of a request: `login`, `logout` and `AuthenticationMiddleware`](../auth/login.md#the-session-hash)).
+
+CryptPasswordHasher went in 5.0, and SHA1PasswordHasher, UnsaltedSHA1PasswordHasher and UnsaltedMD5PasswordHasher in 5.1 (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`). A project still naming one in `PASSWORD_HASHERS` can neither check nor make a password, since `get_hashers` imports every class of the list: under 5.2.17 as at this commit, a check raises `ImportError` (`django/contrib/auth/hashers.py:get_hashers`). With the name gone, the string finds no hasher, and `verify_password` answers it as a wrong password, without a warning (`django/contrib/auth/hashers.py:verify_password`).
+
+## An empty session is false: `SessionBase.__bool__`
+
+Until 6.1 a session store had neither `__bool__` nor `__len__`, and was always true. Since 6.1 `SessionBase.__bool__` answers the opposite of `SessionBase.is_empty`: false for a store with no key and no data, without loading (`django/contrib/sessions/backends/base.py:SessionBase.__bool__`; [The session store: `SessionBase`](../auth/sessions.md#empty-is_empty-and-__bool)). Here the store is new:
+
+```text recording=changes
+bool(SessionStore()): a new session, with no key and no data
+    5.2.17       True
+    6.0.8        True
+    6.1.1        False
+    this commit  False
+```
+
+> **Trap.** `if request.session:`, always true before 6.1, is now false for a request with no valid key and nothing stored, and nothing warns.
+
+## The smaller changes
+
+The rest, by name:
+
+| what | at this commit | release | where |
+|---|---|---|---|
+| logging out by `"GET"` | `LogoutView.http_method_names` is `"post"` and `"options"`: a `"GET"`, through `logout_then_login` too, gets 405 | 5.0 | `django/contrib/auth/views.py:LogoutView` |
+| `RemoteUserBackend.configure_user` | always given `created=`, so an override without it raises `TypeError` | 5.0 | `django/contrib/auth/backends.py:RemoteUserBackend.authenticate` |
+| the sessions' PickleSerializer | removed; with `SESSION_SERIALIZER` naming it, a store raises `ImportError` as it is made | 5.0 | `django/contrib/sessions/backends/base.py:SessionBase.__init__` |
+| make_random_password | removed from `BaseUserManager` | 5.1 | `django/contrib/auth/base_user.py:BaseUserManager` |
+| `ScryptPasswordHasher.parallelism` | 5, where it was 1, "to follow OWASP recommendations" (`docs/releases/5.1.txt`) | 5.1 | `django/contrib/auth/hashers.py:ScryptPasswordHasher` |
+| `AdminUserCreationForm` | `UserAdmin.add_form`; it and `AdminPasswordChangeForm` can save an unusable password | 5.1 | `django/contrib/auth/forms.py:SetUnusablePasswordMixin` |
+| the validators' `get_error_message` | each of Django's raises the message it returns | 5.2 | `django/contrib/auth/password_validation.py:MinimumLengthValidator.get_error_message` |
+| a model renamed by a migration | its default permissions follow it; under 6.0.8 the old rows stayed beside new ones | 6.1 | `django/contrib/auth/management/__init__.py:rename_permissions_after_model_rename` |
+| `Permission.user_perm_str` | new: `"journal.change_entry"`, the string `PermissionsMixin.has_perm` takes | 6.1 | `django/contrib/auth/models.py:Permission.user_perm_str` |
+| the cached database store | a failure of the cache is logged to `"django.contrib.sessions"`, and the row's change stands: after a save since 5.1, after a delete since 6.2 | 5.1, 6.2 | [The session backends](../auth/session-backends.md#the-cached-database-backend) |
+| `MessagesTestMixin.assertMessages` | new: a test response's messages against a list | 5.0 | `django/contrib/messages/test.py:MessagesTestMixin.assertMessages` |

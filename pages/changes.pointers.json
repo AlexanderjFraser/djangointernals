@@ -260,7 +260,7 @@
   {
    "pointer": "docs/internals/release-process.txt",
    "line": 77,
-   "sentence": "It can change a behaviour outright: its notes list each such change as backwards incompatible, and the release process allows one where a path through deprecation is not possible or not worth its cost (`docs/internals/release-process.txt`).",
+   "sentence": "It can change a behaviour outright, which the release process allows where a path through deprecation is not possible or not worth its cost (`docs/internals/release-process.txt`); its notes list such changes as backwards incompatible, though not every one, and the sections by part meet some that no note lists.",
    "tree": "django",
    "path": "docs/internals/release-process.txt",
    "symbol": null,
@@ -272,9 +272,37 @@
    "fingerprint": "d8a20c142daa9aa0"
   },
   {
+   "pointer": "django/utils/deprecation.py:warn_about_external_use",
+   "line": 77,
+   "sentence": "It can **deprecate** a behaviour, which is the ordinary path: the old behaviour stays for at least two feature releases and ordinarily warns, some of its warnings only when the use comes from outside Django's own code (`django/utils/deprecation.py:warn_about_external_use`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "warn_about_external_use",
+   "kind": "function",
+   "lines": [
+    50,
+    126
+   ],
+   "fingerprint": "6b8d6bf8462df763"
+  },
+  {
+   "pointer": "django/utils/deprecation.py",
+   "line": 79,
+   "sentence": "The warning classes are named for the release that ends what they mark: `RemovedInDjango2028Warning` is a `DeprecationWarning` and `RemovedInDjango2029Warning` a `PendingDeprecationWarning` (`django/utils/deprecation.py`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    420
+   ],
+   "fingerprint": "698c40e276677df8"
+  },
+  {
    "pointer": "docs/releases/6.2.txt",
    "line": 79,
-   "sentence": "The warning classes are named for the release that ends what they mark: `RemovedInDjango2028Warning` is a `DeprecationWarning` and `RemovedInDjango2029Warning` a `PendingDeprecationWarning`, and they were RemovedInDjango70Warning and RemovedInDjango71Warning until 6.2 renamed them for the calendar versions (`docs/releases/6.2.txt`).",
+   "sentence": "The first was RemovedInDjango70Warning until 6.2 renamed it for the calendar versions (`docs/releases/6.2.txt`), and in 6.0 and 6.1 that class was a `PendingDeprecationWarning`.",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
    "symbol": null,
@@ -288,7 +316,7 @@
   {
    "pointer": "django/utils/deprecation.py:__getattr__",
    "line": 81,
-   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` written before 6.1 gave it a fetch mode, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
+   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` that accepts no fetch_mode argument, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
    "symbol": "__getattr__",
@@ -302,7 +330,7 @@
   {
    "pointer": "django/utils/deprecation.py:deprecate_posargs",
    "line": 81,
-   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` written before 6.1 gave it a fetch mode, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
+   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` that accepts no fetch_mode argument, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
    "symbol": "deprecate_posargs",
@@ -316,7 +344,7 @@
   {
    "pointer": "django/db/models/query.py:_get_from_db",
    "line": 81,
-   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` written before 6.1 gave it a fetch mode, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
+   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` that accepts no fetch_mode argument, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "_get_from_db",
@@ -330,7 +358,7 @@
   {
    "pointer": "django/db/models/fields/__init__.py:Field.__init_subclass__",
    "line": 81,
-   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` written before 6.1 gave it a fetch mode, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
+   "sentence": "To keep an old use working, the code has to recognise it: an old import of `MiddlewareMixin`, by its old module's `__getattr__` (`django/utils/deprecation.py:__getattr__`); an argument in its old position, through `deprecate_posargs` (`django/utils/deprecation.py:deprecate_posargs`); a model's own `from_db` that accepts no fetch_mode argument, by inspecting its signature (`django/db/models/query.py:_get_from_db`); a field class that defines the old hook get_placeholder, as the class is made (`django/db/models/fields/__init__.py:Field.__init_subclass__`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field.__init_subclass__",

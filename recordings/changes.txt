@@ -1,5 +1,239 @@
 Django 5.2.17, 6.0.8 and 6.1.1 beside this commit, 6.2.dev20260926051415: the same habits run under each, over the journal project
 
+entry_admin.get_actions(request)["delete_selected"]: the class of the value
+    5.2.17       tuple
+    6.0.8        tuple
+    6.1.1        Action
+    this commit  Action
+
+func, name, description = entry_admin.get_actions(request)["delete_selected"]
+    5.2.17       'delete_selected'
+    6.0.8        'delete_selected'
+    6.1.1        'delete_selected', warns RemovedInDjango70Warning
+    this commit  'delete_selected', warns RemovedInDjango2028Warning
+
+old_admin.get_action_choices(request, default_choices=[]), get_actions(self, request) overridden: the actions offered
+    5.2.17       ['delete_selected']
+    6.0.8        ['delete_selected']
+    6.1.1        ['delete_selected'], warns RemovedInDjango70Warning
+    this commit  ['delete_selected'], warns RemovedInDjango2028Warning
+
+entry_admin.get_action_choices(request, default_choices=[], action_location=ActionLocation.CHANGE_FORM): an archive action declared for both locations
+    5.2.17       ImportError: cannot import name 'ActionLocation' from 'django.contrib.admin'
+    6.0.8        ImportError: cannot import name 'ActionLocation' from 'django.contrib.admin'
+    6.1.1        [('archive', 'Archive this entry')]
+    this commit  [('archive', 'Archive this entry')]
+
+old_admin.get_action_choices(request, default_choices=[], action_location=ActionLocation.CHANGE_FORM), get_actions(self, request) overridden: an archive action declared for both locations
+    5.2.17       ImportError: cannot import name 'ActionLocation' from 'django.contrib.admin'
+    6.0.8        ImportError: cannot import name 'ActionLocation' from 'django.contrib.admin'
+    6.1.1        [], warns RemovedInDjango70Warning
+    this commit  [], warns RemovedInDjango2028Warning
+
+entry_admin.log_deletions(request, Entry.objects.all()), two entries: the post_save signals for LogEntry
+    5.2.17       0 post_save sent
+    6.0.8        0 post_save sent
+    6.1.1        0 post_save sent
+    this commit  0 post_save sent
+
+entry_admin.log_deletions(request, [entry]): the post_save signals for LogEntry
+    5.2.17       1 post_save sent
+    6.0.8        1 post_save sent
+    6.1.1        1 post_save sent
+    this commit  1 post_save sent
+
+log_deletions(request, Entry.objects.all()), in a ModelAdmin that overrides log_deletion: the entries the override is called for
+    5.2.17       ['Monday', 'Tuesday'], warns RemovedInDjango60Warning
+    6.0.8        []
+    6.1.1        []
+    this commit  []
+
+The change list for "?title=Monday", in a ModelAdmin whose lookup_allowed(self, lookup, value) takes no request: the entries listed
+    5.2.17       ['Monday'], warns RemovedInDjango60Warning
+    6.0.8        TypeError: EntryAdmin.lookup_allowed() takes 3 positional arguments but 4 were given
+    6.1.1        TypeError: EntryAdmin.lookup_allowed() takes 3 positional arguments but 4 were given
+    this commit  TypeError: EntryAdmin.lookup_allowed() takes 3 positional arguments but 4 were given
+
+list_display = ("title", "author"), on a Note with foreign keys author and notebook, and editor, which may be null: the change list's joins
+    5.2.17       INNER JOIN "journal_author" ON author_id, INNER JOIN "journal_notebook" ON notebook_id
+    6.0.8        INNER JOIN "journal_author" ON author_id, INNER JOIN "journal_notebook" ON notebook_id
+    6.1.1        INNER JOIN "journal_author" ON author_id
+    this commit  INNER JOIN "journal_author" ON author_id
+
+list_display = ("title", "editor"), editor the foreign key that may be null: the change list's joins
+    5.2.17       INNER JOIN "journal_author" ON author_id, INNER JOIN "journal_notebook" ON notebook_id
+    6.0.8        INNER JOIN "journal_author" ON author_id, INNER JOIN "journal_notebook" ON notebook_id
+    6.1.1        LEFT OUTER JOIN "journal_author" ON editor_id
+    this commit  LEFT OUTER JOIN "journal_author" ON editor_id
+
+list_display = ("title", "author__name"): the change list's joins
+    5.2.17       no join
+    6.0.8        no join
+    6.1.1        no join
+    this commit  no join
+
+class NoteAdmin(admin.ModelAdmin): list_select_related = True
+    5.2.17       the class is made
+    6.0.8        the class is made
+    6.1.1        the class is made, warns RemovedInDjango70Warning
+    this commit  the class is made, warns RemovedInDjango2028Warning
+
+list_display = ("title", "author__active"): the cell drawn for a note whose author is active
+    5.2.17       <td class="field-author__active">True</td>
+    6.0.8        <td class="field-author__active">True</td>
+    6.1.1        <td class="field-author__active"><img src="/static/admin/img/icon-yes.svg" alt="True"></td>
+    this commit  <td class="field-author__active"><img src="/static/admin/img/icon-yes.svg" alt="True"></td>
+
+GET /admin/journal/entry/999/history/ by a staff user without permissions: entry 999 does not exist
+    5.2.17       302 to /admin/
+    6.0.8        302 to /admin/
+    6.1.1        302 to /admin/
+    this commit  PermissionDenied
+
+GET /admin/journal/entry/1/history/ by a staff user without permissions: entry 1 exists
+    5.2.17       PermissionDenied
+    6.0.8        PermissionDenied
+    6.1.1        PermissionDenied
+    this commit  PermissionDenied
+
+"View on site" for a bulletin whose get_absolute_url is "/bulletins/1/", followed by a staff user without permissions
+    5.2.17       302 to http://journal.example/bulletins/1/
+    6.0.8        302 to http://journal.example/bulletins/1/
+    6.1.1        302 to http://journal.example/bulletins/1/
+    this commit  PermissionDenied
+
+GET /admin/login/?next=/admin/journal/entry/ by a staff user already signed in
+    5.2.17       302 to /admin/
+    6.0.8        302 to /admin/
+    6.1.1        302 to /admin/journal/entry/
+    this commit  302 to /admin/journal/entry/
+
+from django.contrib.admin.sites import NotRegistered: the module that defines the class
+    5.2.17       django.contrib.admin.exceptions
+    6.0.8        django.contrib.admin.exceptions
+    6.1.1        django.contrib.admin.exceptions
+    this commit  django.contrib.admin.exceptions
+
+user.check_password("Beagle-1831"), the password stored at 5.0's 720,000 iterations: what is stored after
+    5.2.17       pbkdf2_sha256, 1,000,000 iterations
+    6.0.8        pbkdf2_sha256, 1,200,000 iterations
+    6.1.1        pbkdf2_sha256, 1,500,000 iterations
+    this commit  pbkdf2_sha256, 1,800,000 iterations
+
+get_user(request) for a session logged in before user.check_password stored the password again
+    5.2.17       AnonymousUser
+    6.0.8        AnonymousUser
+    6.1.1        AnonymousUser
+    this commit  AnonymousUser
+
+check_password("Beagle-1831", stored), stored by SHA1PasswordHasher, PASSWORD_HASHERS naming it
+    5.2.17       ImportError: Module "django.contrib.auth.hashers" does not define a "SHA1PasswordHasher" attribute/class
+    6.0.8        ImportError: Module "django.contrib.auth.hashers" does not define a "SHA1PasswordHasher" attribute/class
+    6.1.1        ImportError: Module "django.contrib.auth.hashers" does not define a "SHA1PasswordHasher" attribute/class
+    this commit  ImportError: Module "django.contrib.auth.hashers" does not define a "SHA1PasswordHasher" attribute/class
+
+aauthenticate(username="olga", password="Beagle-1831"), the backend a ModelBackend whose authenticate alone refuses olga
+    5.2.17       <User: olga>
+    6.0.8        <User: olga>
+    6.1.1        <User: olga>
+    this commit  <User: olga>
+
+aauthenticate(username="nora", password="x"), the one backend a class on no base of Django's
+    5.2.17       AttributeError: 'PlainBackend' object has no attribute 'aauthenticate'
+    6.0.8        AttributeError: 'PlainBackend' object has no attribute 'aauthenticate'
+    6.1.1        AttributeError: 'PlainBackend' object has no attribute 'aauthenticate'
+    this commit  AttributeError: 'PlainBackend' object has no attribute 'aauthenticate'
+
+await nora.ahas_perm("journal.change_entry"), the one backend that class, whose has_perm says yes
+    5.2.17       False
+    6.0.8        False
+    6.1.1        False
+    this commit  False
+
+A subclass of RemoteUserMiddleware that overrides process_request alone, after AuthenticationMiddleware in startproject's MIDDLEWARE, under ASGI: is the override called
+    5.2.17       the override is called, warns RemovedInDjango61Warning
+    6.0.8        the override is called, warns RemovedInDjango61Warning
+    6.1.1        the override is not called
+    this commit  the override is called
+
+The same subclass last in MIDDLEWARE, under ASGI: is the override called
+    5.2.17       the override is called, warns RemovedInDjango61Warning
+    6.0.8        the override is called, warns RemovedInDjango61Warning
+    6.1.1        the override is not called
+    this commit  the override is not called
+
+header = "HTTP_AUTHUSER" on a subclass of RemoteUserMiddleware last in MIDDLEWARE, under ASGI, sent "authuser: rafa": the request's user
+    5.2.17       AnonymousUser
+    6.0.8        AnonymousUser
+    6.1.1        rafa
+    this commit  rafa
+
+login(request, None), request.user being piet: the user the session is given
+    5.2.17       piet, warns RemovedInDjango61Warning
+    6.0.8        piet, warns RemovedInDjango61Warning
+    6.1.1        AttributeError: 'NoneType' object has no attribute 'get_session_auth_hash'
+    this commit  AttributeError: 'NoneType' object has no attribute 'get_session_auth_hash'
+
+await request.auser() after login(request, ada), when it was awaited before the login
+    5.2.17       AnonymousUser
+    6.0.8        AnonymousUser
+    6.1.1        ada
+    this commit  ada
+
+bool(SessionStore()): a new session, with no key and no data
+    5.2.17       True
+    6.0.8        True
+    6.1.1        False
+    this commit  False
+
+SessionStore.delete() of the cached database store, when the cache raises on a delete
+    5.2.17       ConnectionError: the cache is unreachable
+    6.0.8        ConnectionError: the cache is unreachable
+    6.1.1        ConnectionError: the cache is unreachable
+    this commit  the error logged to "django.contrib.sessions", at ERROR
+
+migrate: RenameModel("Notebook", "Ledger") in journal, then the codenames of the change permissions of Ledger
+    5.2.17       ['change_ledger', 'change_notebook']
+    6.0.8        ['change_ledger', 'change_notebook']
+    6.1.1        ['change_ledger']
+    this commit  ['change_ledger']
+
+Permission.objects.get(codename="change_entry").user_perm_str
+    5.2.17       AttributeError: 'Permission' object has no attribute 'user_perm_str'
+    6.0.8        AttributeError: 'Permission' object has no attribute 'user_perm_str'
+    6.1.1        'journal.change_entry'
+    this commit  'journal.change_entry'
+
+LoginRequiredMiddleware, a LoginRequiredMixin view whose login_url is "/journal/login/", an anonymous GET: where it is sent
+    5.2.17       /accounts/login/?next=/entries/2026/
+    6.0.8        /accounts/login/?next=/entries/2026/
+    6.1.1        /accounts/login/?next=/entries/2026/
+    this commit  /accounts/login/?next=/entries/2026/
+
+LogoutView.as_view()(request).status_code: a GET
+    5.2.17       405
+    6.0.8        405
+    6.1.1        405
+    this commit  405
+
+authenticate(remote_user="ingrid"), the backend a RemoteUserBackend whose configure_user takes (request, user)
+    5.2.17       TypeError: OldRemoteUserBackend.configure_user() got an unexpected keyword argument 'created'
+    6.0.8        TypeError: OldRemoteUserBackend.configure_user() got an unexpected keyword argument 'created'
+    6.1.1        TypeError: OldRemoteUserBackend.configure_user() got an unexpected keyword argument 'created'
+    this commit  TypeError: OldRemoteUserBackend.configure_user() got an unexpected keyword argument 'created'
+
+SessionStore(), SESSION_SERIALIZER naming "django.contrib.sessions.serializers.PickleSerializer"
+    5.2.17       ImportError: Module "django.contrib.sessions.serializers" does not define a "PickleSerializer" attribute/class
+    6.0.8        ImportError: Module "django.contrib.sessions.serializers" does not define a "PickleSerializer" attribute/class
+    6.1.1        ImportError: Module "django.contrib.sessions.serializers" does not define a "PickleSerializer" attribute/class
+    this commit  ImportError: Module "django.contrib.sessions.serializers" does not define a "PickleSerializer" attribute/class
+
+User.objects.make_random_password()
+    5.2.17       AttributeError: 'UserManager' object has no attribute 'make_random_password'
+    6.0.8        AttributeError: 'UserManager' object has no attribute 'make_random_password'
+    6.1.1        AttributeError: 'UserManager' object has no attribute 'make_random_password'
+    this commit  AttributeError: 'UserManager' object has no attribute 'make_random_password'
+
 transaction.savepoint() inside transaction.atomic(): the savepoint's name, the thread's number written (the thread)
     5.2.17       s(the thread)_x1
     6.0.8        s(the thread)_x1
@@ -113,6 +347,271 @@ AddField on an unmanaged model (Meta.managed = False), applied by a schema edito
     6.0.8        []
     6.1.1        []
     this commit  []
+
+make_template_fragment_key("sidebar", ["a:b", "c"]) == make_template_fragment_key("sidebar", ["a", "b:c"])
+    5.2.17       True
+    6.0.8        True
+    6.1.1        False
+    this commit  False
+
+make_template_fragment_key("sidebar"): the key of a fragment that varies on nothing
+    5.2.17       'template.cache.sidebar.d41d8cd98f00b204e9800998ecf8427e'
+    6.0.8        'template.cache.sidebar.d41d8cd98f00b204e9800998ecf8427e'
+    6.1.1        'template.cache.sidebar.d41d8cd98f00b204e9800998ecf8427e'
+    this commit  'template.cache.sidebar.d41d8cd98f00b204e9800998ecf8427e'
+
+learn_cache_key(request, response), Vary: Accept-Encoding, Cookie: one key for "EU" in either header?
+    5.2.17       True
+    6.0.8        True
+    6.1.1        False
+    this commit  False
+
+cache.get("harbour") from DatabaseCache, a newline put into the row's Base64
+    5.2.17       'Leith'
+    6.0.8        'Leith'
+    6.1.1        binascii.Error: Only base64 data is allowed
+    this commit  binascii.Error: Only base64 data is allowed
+
+DatabaseCache with "MAX_ENTRIES": 2 and "CULL_PROBABILITY": 0: the rows after five writes
+    5.2.17       3
+    6.0.8        3
+    6.1.1        3
+    this commit  5
+
+bool(File(BytesIO(b"Monday"))): a File without a name
+    5.2.17       False
+    6.0.8        False
+    6.1.1        True
+    this commit  True
+
+bool(ContentFile(b"Monday")): a ContentFile without a name
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  True
+
+OS_OPEN_FLAGS without os.O_EXCL and get_available_name returning the name, on a FileSystemStorage subclass: storage.save("notes.txt", ...) when notes.txt exists
+    5.2.17       notes.txt holds b'second', warns RemovedInDjango60Warning
+    6.0.8        save() does not return: os.open refuses notes.txt, get_available_name gives the same name again (stopped at the tenth asking)
+    6.1.1        save() does not return: os.open refuses notes.txt, get_available_name gives the same name again (stopped at the tenth asking)
+    this commit  save() does not return: os.open refuses notes.txt, get_available_name gives the same name again (stopped at the tenth asking)
+
+DEFAULT_FILE_STORAGE = "django.core.files.storage.InMemoryStorage": the class of storages["default"]
+    5.2.17       FileSystemStorage
+    6.0.8        FileSystemStorage
+    6.1.1        FileSystemStorage
+    this commit  FileSystemStorage
+
+await signal.asend(None), a receiver of each kind: does the coroutine one wait for the synchronous one to return?
+    5.2.17       no, it has run before the synchronous one returns
+    6.0.8        no, it has run before the synchronous one returns
+    6.1.1        yes, it runs after the synchronous one returns
+    this commit  yes, it runs after the synchronous one returns
+
+await signal.asend(None), one coroutine receiver raising ValueError, another waiting: the waiting one when the ValueError reaches the sender
+    5.2.17       still waiting
+    6.0.8        still waiting
+    6.1.1        cancelled
+    this commit  cancelled
+
+signal.send(None), two coroutine receivers raising ValueError: what reaches the sender
+    5.2.17       ValueError: no berth
+    6.0.8        ValueError: no berth
+    6.1.1        ExceptionGroup: unhandled errors in a TaskGroup (2 sub-exceptions)
+    this commit  ExceptionGroup: unhandled errors in a TaskGroup (2 sub-exceptions)
+
+await signal.asend(None), two coroutine receivers each adding 1 to a ContextVar the sender set to 1: what the sender reads after
+    5.2.17       1
+    6.0.8        1
+    6.1.1        3
+    this commit  3
+
+serialize("json", []): no indent
+    5.2.17       '[]'
+    6.0.8        '[]\n'
+    6.1.1        '[]\n'
+    this commit  '[]\n'
+
+DjangoJSONEncoder().encode(datetime.datetime(2000, 1, 1, 0, 0, 0, 1)): one microsecond
+    5.2.17       "2000-01-01T00:00:00.000"
+    6.0.8        "2000-01-01T00:00:00.000"
+    6.1.1        "2000-01-01T00:00:00.000"
+    this commit  "2000-01-01T00:00:00"
+
+serialize("python", [wharf], use_natural_primary_keys=True), Wharf.natural_key() returning ()
+    5.2.17       [{'model': 'journal.wharf', 'fields': {'name': 'Leith'}}]
+    6.0.8        [{'model': 'journal.wharf', 'fields': {'name': 'Leith'}}]
+    6.1.1        [{'model': 'journal.wharf', 'pk': 1, 'fields': {'name': 'Leith'}}]
+    this commit  [{'model': 'journal.wharf', 'pk': 1, 'fields': {'name': 'Leith'}}]
+
+serialize("python", [lighter], use_natural_foreign_keys=True): its key to a Wharf whose natural_key() returns ()
+    5.2.17       ()
+    6.0.8        ()
+    6.1.1        1
+    this commit  1
+
+deserialize("xml", ...): an Entry whose title is written <b>Valletta</b>
+    5.2.17       'Valletta'
+    6.0.8        'Valletta'
+    6.1.1        SuspiciousOperation: Unexpected element: 'b'
+    this commit  SuspiciousOperation: Unexpected element: 'b'
+
+DeserializedObject.save(), a Hold with a crate: the raw that m2m_changed's receivers are given
+    5.2.17       no raw argument
+    6.0.8        no raw argument
+    6.1.1        raw: True
+    this commit  raw: True
+
+Paginator(range(10), 2, orphans=2).num_pages: orphans not fewer than the page
+    5.2.17       4
+    6.0.8        4, warns RemovedInDjango70Warning
+    6.1.1        4, warns RemovedInDjango70Warning
+    this commit  4, warns RemovedInDjango2028Warning
+
+len(await AsyncPaginator(range(10), 2).apage(1)): before aget_object_list
+    5.2.17       ImportError: cannot import name 'AsyncPaginator' from 'django.core.paginator'
+    6.0.8        TypeError: AsyncPage.aget_object_list() must be awaited before calling len().
+    6.1.1        TypeError: AsyncPage.aget_object_list() must be awaited before calling len().
+    this commit  TypeError: AsyncPage.aget_object_list() must be awaited before calling len().
+
+Note.content_object.ct_field: the generic foreign key read on its model's class
+    5.2.17       'content_type'
+    6.0.8        'content_type'
+    6.1.1        AttributeError: 'GenericForeignKeyDescriptor' object has no attribute 'ct_field'
+    this commit  AttributeError: 'GenericForeignKeyDescriptor' object has no attribute 'ct_field'
+
+find("entry.css", all=True), where both directories of STATICFILES_DIRS hold the file: the directories it was found in
+    5.2.17       ['first', 'second'], warns RemovedInDjango61Warning
+    6.0.8        ['first', 'second'], warns RemovedInDjango61Warning
+    6.1.1        TypeError: find() got an unexpected keyword argument 'all'
+    this commit  TypeError: find() got an unexpected keyword argument 'all'
+
+find("entry.css"), with STATICFILES_FINDERS a project's finder whose find(self, path, all=False) takes all
+    5.2.17       TypeError: OldFinder.find() got an unexpected keyword argument 'find_all'
+    6.0.8        TypeError: OldFinder.find() got an unexpected keyword argument 'find_all'
+    6.1.1        TypeError: OldFinder.find() got an unexpected keyword argument 'find_all'
+    this commit  TypeError: OldFinder.find() got an unexpected keyword argument 'find_all'
+
+collectstatic --noinput, where both directories of STATICFILES_DIRS hold entry.css: what it writes at verbosity 1
+    5.2.17
+        Found another file with the destination path 'entry.css'. It will be ignored since only the first encountered file is collected. If this is not what you want, make sure every static file has a unique path.
+        1 static file copied to 'STATIC_ROOT'.
+    6.0.8        1 static file copied to 'STATIC_ROOT', 1 skipped due to conflict.
+    6.1.1        1 static file copied to 'STATIC_ROOT', 1 skipped due to conflict.
+    this commit  1 static file copied to 'STATIC_ROOT', 1 skipped due to conflict.
+
+ManifestStaticFilesStorage.save_manifest(), its hashed_files holding journal/entry.css and then admin/base.css: the order of "paths" in staticfiles.json
+    5.2.17       ['journal/entry.css', 'admin/base.css']
+    6.0.8        ['admin/base.css', 'journal/entry.css']
+    6.1.1        ['admin/base.css', 'journal/entry.css']
+    this commit  ['admin/base.css', 'journal/entry.css']
+
+Atom1Feed("Journal", "/", "", stylesheets=["/feed.xsl"]).writeString("utf-8"): the processing instructions it writes
+    5.2.17       []
+    6.0.8        []
+    6.1.1        []
+    this commit  []
+
+ArrayAgg("title", ordering="-title"), compiled for PostgreSQL
+    5.2.17       ARRAY_AGG("journal_entry"."title" ORDER BY "journal_entry"."title" DESC), warns RemovedInDjango61Warning
+    6.0.8        ARRAY_AGG("journal_entry"."title" ORDER BY "journal_entry"."title" DESC), warns RemovedInDjango61Warning
+    6.1.1        ARRAY_AGG("journal_entry"."title")
+    this commit  ARRAY_AGG("journal_entry"."title")
+
+django.contrib.postgres.aggregates.StringAgg("title", delimiter=", "), compiled for PostgreSQL
+    5.2.17       STRING_AGG("journal_entry"."title", %s ), (', ',)
+    6.0.8        STRING_AGG("journal_entry"."title", %s), (', ',), warns RemovedInDjango70Warning
+    6.1.1        STRING_AGG("journal_entry"."title", %s), (', ',), warns RemovedInDjango70Warning
+    this commit  STRING_AGG("journal_entry"."title", %s), (', ',), warns RemovedInDjango2028Warning
+
+django.contrib.postgres.aggregates.BitAnd("id"), compiled for PostgreSQL
+    5.2.17       BIT_AND("journal_entry"."id")
+    6.0.8        BIT_AND("journal_entry"."id")
+    6.1.1        BIT_AND("journal_entry"."id"), warns RemovedInDjango70Warning
+    this commit  BIT_AND("journal_entry"."id"), warns RemovedInDjango2028Warning
+
+class Agg(OrderableAggMixin, Aggregate)
+    5.2.17       the class is made
+    6.0.8        the class is made, warns RemovedInDjango70Warning
+    6.1.1        the class is made, warns RemovedInDjango70Warning
+    this commit  the class is made, warns RemovedInDjango2028Warning
+
+ArrayField(JSONField()).get_db_prep_save([None, {"tide": "high"}], connection), for PostgreSQL
+    5.2.17       [Jsonb(None), Jsonb({'tide': 'high'})]
+    6.0.8        [Jsonb(None), Jsonb({'tide': 'high'})]
+    6.1.1        [None, Jsonb({'tide': 'high'})]
+    this commit  [None, Jsonb({'tide': 'high'})]
+
+Tagged._meta.get_field("tags").check(), an ArrayField, django.contrib.postgres not in INSTALLED_APPS: the ids
+    5.2.17       []
+    6.0.8        ['postgres.E005']
+    6.1.1        ['postgres.E005']
+    this commit  ['postgres.E005']
+
+python -Wd main.py, main.py running diary.py's deprecated calls: each call that warns, its warning, and the line the warning names
+    5.2.17       nothing written
+    6.0.8
+        from django.core.mail import BadHeaderError               RemovedInDjango70Warning    django/core/mail/__init__.py, in __getattr__
+        Paginator(range(10), 2, orphans=2)                        RemovedInDjango70Warning    diary.py, this line
+        AsyncPaginator(range(10), 2, orphans=2)                   RemovedInDjango70Warning    django/core/paginator.py, in AsyncPaginator.__init__
+        urlize("journal.example.com")                             RemovedInDjango70Warning    django/utils/html.py, in Urlizer.__call__
+    6.1.1
+        from django.core.mail import BadHeaderError               RemovedInDjango70Warning    django/core/mail/__init__.py, in __getattr__
+        class EntryAdmin(ModelAdmin): list_select_related = True  RemovedInDjango70Warning    diary.py, this line
+        Entry.objects.select_related()                            RemovedInDjango70Warning    diary.py, this line
+        Paginator(range(10), 2, orphans=2)                        RemovedInDjango70Warning    diary.py, this line
+        AsyncPaginator(range(10), 2, orphans=2)                   RemovedInDjango70Warning    django/core/paginator.py, in AsyncPaginator.__init__
+        urlize("journal.example.com")                             RemovedInDjango70Warning    django/utils/html.py, in Urlizer.__call__
+    this commit
+        from django.utils.deprecation import MiddlewareMixin      RemovedInDjango2029Warning  diary.py, this line
+        from django.core.mail import BadHeaderError               RemovedInDjango2028Warning  django/core/mail/__init__.py, in __getattr__
+        class EntryAdmin(ModelAdmin): list_select_related = True  RemovedInDjango2028Warning  diary.py, this line
+        Entry.objects.select_related()                            RemovedInDjango2028Warning  diary.py, this line
+        Paginator(range(10), 2, orphans=2)                        RemovedInDjango2028Warning  diary.py, this line
+        AsyncPaginator(range(10), 2, orphans=2)                   RemovedInDjango2028Warning  django/core/paginator.py, in AsyncPaginator.__init__
+        urlize("journal.example.com")                             RemovedInDjango2028Warning  django/utils/html.py, in Urlizer.__call__
+
+python main.py, the same calls without -Wd: what Python writes to stderr
+    5.2.17       nothing written
+    6.0.8        nothing written
+    6.1.1        nothing written
+    this commit  nothing written
+
+python manage.py check, the settings module setting EMAIL_HOST: what Python writes to stderr
+    5.2.17       nothing written
+    6.0.8        nothing written
+    6.1.1        nothing written
+    this commit
+        manage.py:18: RemovedInDjango2028Warning: The EMAIL_HOST setting is deprecated. Migrate to MAILERS before Django 2028.
+          execute_from_command_line(sys.argv)
+
+python -Wd manage.py check, the same settings: what Python writes to stderr
+    5.2.17       nothing written
+    6.0.8        nothing written
+    6.1.1
+        manage.py:18: RemovedInDjango70Warning: The EMAIL_HOST setting is deprecated. Migrate to MAILERS before Django 7.0.
+          execute_from_command_line(sys.argv)
+    this commit
+        manage.py:18: RemovedInDjango2028Warning: The EMAIL_HOST setting is deprecated. Migrate to MAILERS before Django 2028.
+          execute_from_command_line(sys.argv)
+
+The warning a settings module setting EMAIL_HOST raises: the base of its class
+    5.2.17       no warning
+    6.0.8        no warning
+    6.1.1        PendingDeprecationWarning, warns RemovedInDjango70Warning
+    this commit  DeprecationWarning, warns RemovedInDjango2028Warning
+
+from django.utils.deprecation import RemovedInDjango70Warning: the class it gives
+    5.2.17       ImportError: cannot import name 'RemovedInDjango70Warning' from 'django.utils.deprecation'
+    6.0.8        django.utils.deprecation.RemovedInDjango70Warning
+    6.1.1        django.utils.deprecation.RemovedInDjango70Warning
+    this commit  django.utils.deprecation.RemovedInDjango2028Warning, warns UserWarning
+
+from django.utils.deprecation import RemovedInDjango71Warning: whether the name exists
+    5.2.17       ImportError: cannot import name 'RemovedInDjango71Warning' from 'django.utils.deprecation'
+    6.0.8        ImportError: cannot import name 'RemovedInDjango71Warning' from 'django.utils.deprecation'
+    6.1.1        ImportError: cannot import name 'RemovedInDjango71Warning' from 'django.utils.deprecation'
+    this commit  ImportError: cannot import name 'RemovedInDjango71Warning' from 'django.utils.deprecation'
 
 FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer": the class of a form's renderer
     5.2.17       DjangoDivFormRenderer, warns RemovedInDjango60Warning
@@ -320,11 +819,41 @@ class LocalEmailValidator(EmailValidator) defining validate_domain_part, given "
     6.1.1        ['journal']
     this commit  ['journal'], warns RemovedInDjango2029Warning
 
-settings.USE_TZ, when the settings do not set it
-    5.2.17       True
-    6.0.8        True
-    6.1.1        True
-    this commit  True
+OGRGeometry("POINT (1 2)").coord_dim = 3
+    5.2.17       coord_dim is 3, warns RemovedInDjango60Warning
+    6.0.8        AttributeError: property 'coord_dim' of 'Point' object has no setter
+    6.1.1        AttributeError: property 'coord_dim' of 'Point' object has no setter
+    this commit  AttributeError: property 'coord_dim' of 'Point' object has no setter
+
+DataSource("seen.geojson")[0][0]["seen"].value: a property written "2026-10-17T10:00:30.250"
+    5.2.17       datetime.datetime(2026, 10, 17, 10, 0, 30)
+    6.0.8        datetime.datetime(2026, 10, 17, 10, 0, 30)
+    6.1.1        datetime.datetime(2026, 10, 17, 10, 0, 30)
+    this commit  datetime.datetime(2026, 10, 17, 10, 0, 30, 250000)
+
+DataSource("seen.geojson")[0][0]["seen"].as_datetime()[5].value: the seconds of "2026-10-17T10:00:30.250"
+    5.2.17       30
+    6.0.8        30
+    6.1.1        30
+    this commit  30.25
+
+GeoIP2.coords: the method read on the class
+    5.2.17       GeoIP2.coords
+    6.0.8        AttributeError: type object 'GeoIP2' has no attribute 'coords'
+    6.1.1        AttributeError: type object 'GeoIP2' has no attribute 'coords'
+    this commit  AttributeError: type object 'GeoIP2' has no attribute 'coords'
+
+OpenLayersWidget().render("position", None, attrs={"id": "id_position"}): the opening tag of each script element
+    5.2.17       ['<script>']
+    6.0.8        ['<script id="id_position_mapwidget_options" type="application/json">']
+    6.1.1        ['<script id="id_position_mapwidget_options" type="application/json">']
+    this commit  ['<script id="id_position_mapwidget_options" type="application/json">']
+
+OpenLayersWidget().media.render_js(): the OpenLayers script
+    5.2.17       <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+    6.0.8        <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+    6.1.1        <script src="https://cdn.jsdelivr.net/npm/ol@v10.9.0/dist/ol.js"></script>
+    this commit  <script src="https://cdn.jsdelivr.net/npm/ol@v10.9.0/dist/ol.js"></script>
 
 settings.DEFAULT_AUTO_FIELD, when the settings do not set it
     5.2.17       'django.db.models.AutoField'
@@ -338,12 +867,6 @@ Entry._meta.pk: the key of a model that declares none, in an application that na
     6.1.1        <django.db.models.fields.BigAutoField: id>
     this commit  <django.db.models.fields.BigAutoField: id>
 
-django.VERSION[:3]
-    5.2.17       (5, 2, 17)
-    6.0.8        (6, 0, 8)
-    6.1.1        (6, 1, 1)
-    this commit  (6, 2, 0), warns RemovedInDjango2028Warning
-
 from django.utils.deprecation import MiddlewareMixin
     5.2.17       django.utils.deprecation
     6.0.8        django.utils.deprecation
@@ -356,11 +879,101 @@ salted_hmac("journal", "entry").name: the algorithm when none is named
     6.1.1        'hmac-sha1', warns RemovedInDjango70Warning
     this commit  'hmac-sha1', warns RemovedInDjango2028Warning
 
-Paginator(range(10), 2, orphans=2).num_pages: orphans not fewer than the page
-    5.2.17       4
-    6.0.8        4, warns RemovedInDjango70Warning
-    6.1.1        4, warns RemovedInDjango70Warning
-    this commit  4, warns RemovedInDjango2028Warning
+class Meta: index_together = [("title", "published")]
+    5.2.17       TypeError: 'class Meta' got invalid attribute(s): index_together
+    6.0.8        TypeError: 'class Meta' got invalid attribute(s): index_together
+    6.1.1        TypeError: 'class Meta' got invalid attribute(s): index_together
+    this commit  TypeError: 'class Meta' got invalid attribute(s): index_together
+
+settings.USE_TZ, when the settings do not set it
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True
+    this commit  True
+
+from django.utils.timezone import utc
+    5.2.17       ImportError: cannot import name 'utc' from 'django.utils.timezone'
+    6.0.8        ImportError: cannot import name 'utc' from 'django.utils.timezone'
+    6.1.1        ImportError: cannot import name 'utc' from 'django.utils.timezone'
+    this commit  ImportError: cannot import name 'utc' from 'django.utils.timezone'
+
+timezone.make_aware(datetime(2026, 10, 25, 2, 30), is_dst=True)
+    5.2.17       TypeError: make_aware() got an unexpected keyword argument 'is_dst'
+    6.0.8        TypeError: make_aware() got an unexpected keyword argument 'is_dst'
+    6.1.1        TypeError: make_aware() got an unexpected keyword argument 'is_dst'
+    this commit  TypeError: make_aware() got an unexpected keyword argument 'is_dst'
+
+TruncDay("arrived", is_dst=True): the query's SQL, beside the same query without is_dst
+    5.2.17       accepted, and the SQL is the same
+    6.0.8        accepted, and the SQL is the same
+    6.1.1        accepted, and the SQL is the same
+    this commit  accepted, and the SQL is the same
+
+formats.localize(1234.5) in Dutch, under the setting USE_L10N = False
+    5.2.17       '1234,5'
+    6.0.8        '1234,5'
+    6.1.1        '1234,5'
+    this commit  '1234,5'
+
+"ht" in dict(settings.LANGUAGES): Haitian Creole
+    5.2.17       False
+    6.0.8        True
+    6.1.1        True
+    this commit  True
+
+translation.get_language_from_request(request): a request sent with Accept-Language: ht
+    5.2.17       'en'
+    6.0.8        'en'
+    6.1.1        'en'
+    this commit  'en'
+
+from django.utils.itercompat import is_iterable; is_iterable(["Harbour"])
+    5.2.17       True, warns RemovedInDjango60Warning
+    6.0.8        ModuleNotFoundError: No module named 'django.utils.itercompat'
+    6.1.1        ModuleNotFoundError: No module named 'django.utils.itercompat'
+    this commit  ModuleNotFoundError: No module named 'django.utils.itercompat'
+
+parse_duration("P1W2DT3H"): a week, two days and three hours
+    5.2.17       None
+    6.0.8        None
+    6.1.1        datetime.timedelta(days=9, seconds=10800)
+    this commit  datetime.timedelta(days=9, seconds=10800)
+
+import_string("json"): a top-level module
+    5.2.17       ImportError: json doesn't look like a module path
+    6.0.8        ImportError: json doesn't look like a module path
+    6.1.1        ImportError: json doesn't look like a module path
+    this commit  the module json
+
+import_string("django.utils.archive"): a submodule nothing has imported
+    5.2.17       ImportError: Module "django.utils" does not define a "archive" attribute/class
+    6.0.8        ImportError: Module "django.utils" does not define a "archive" attribute/class
+    6.1.1        ImportError: Module "django.utils" does not define a "archive" attribute/class
+    this commit  the module django.utils.archive
+
+import_string("almanac.tides"): a submodule, where almanac's __init__.py binds tides = "high water"
+    5.2.17       'high water'
+    6.0.8        'high water'
+    6.1.1        'high water'
+    this commit  the module almanac.tides
+
+import_string("unittest.main"): a submodule that unittest's __init__.py imports, then rebinds to a class
+    5.2.17       <class 'unittest.main.TestProgram'>
+    6.0.8        <class 'unittest.main.TestProgram'>
+    6.1.1        <class 'unittest.main.TestProgram'>
+    this commit  <class 'unittest.main.TestProgram'>
+
+django.VERSION[:3]
+    5.2.17       (5, 2, 17)
+    6.0.8        (6, 0, 8)
+    6.1.1        (6, 1, 1)
+    this commit  (6, 2, 0), warns RemovedInDjango2028Warning
+
+EmailMessage("Monday", "Published.", to=["ada@example.com"]).message(): its class
+    5.2.17       django.core.mail.message.SafeMIMEText
+    6.0.8        email.message.EmailMessage
+    6.1.1        email.message.EmailMessage
+    this commit  email.message.EmailMessage
 
 from django.core.mail import BadHeaderError
     5.2.17       django.core.mail.message.BadHeaderError
@@ -368,17 +981,131 @@ from django.core.mail import BadHeaderError
     6.1.1        builtins.ValueError, warns RemovedInDjango70Warning
     this commit  builtins.ValueError, warns RemovedInDjango2028Warning
 
-class Meta: index_together = [("title", "published")]
-    5.2.17       TypeError: 'class Meta' got invalid attribute(s): index_together
-    6.0.8        TypeError: 'class Meta' got invalid attribute(s): index_together
-    6.1.1        TypeError: 'class Meta' got invalid attribute(s): index_together
-    this commit  TypeError: 'class Meta' got invalid attribute(s): index_together
+EmailMessage("Monday\nBcc: eve@example.com", "Published.", to=["ada@example.com"]).message()
+    5.2.17       BadHeaderError: Header values can't contain newlines (got 'Monday\nBcc: eve@example.com' for header 'Subject')
+    6.0.8        ValueError: Header values may not contain linefeed or carriage return characters
+    6.1.1        ValueError: Header values may not contain linefeed or carriage return characters
+    this commit  ValueError: Header values may not contain linefeed or carriage return characters
 
-from django.utils.timezone import utc
-    5.2.17       ImportError: cannot import name 'utc' from 'django.utils.timezone'
-    6.0.8        ImportError: cannot import name 'utc' from 'django.utils.timezone'
-    6.1.1        ImportError: cannot import name 'utc' from 'django.utils.timezone'
-    this commit  ImportError: cannot import name 'utc' from 'django.utils.timezone'
+message.mixed_subtype = "related", with a file attached: the type of message.message()
+    5.2.17       multipart/related
+    6.0.8        AttributeError: EmailMessage no longer supports the undocumented `mixed_subtype` attribute
+    6.1.1        AttributeError: EmailMessage no longer supports the undocumented `mixed_subtype` attribute
+    this commit  AttributeError: EmailMessage no longer supports the undocumented `mixed_subtype` attribute
+
+message.encoding = email.charset.Charset("utf-8"): the charset of message.message()
+    5.2.17       'utf-8'
+    6.0.8        TypeError: decoding to str: need a bytes-like object, Charset found
+    6.1.1        TypeError: decoding to str: need a bytes-like object, Charset found
+    this commit  TypeError: decoding to str: need a bytes-like object, Charset found
+
+message.attach(part), part an email.message.MIMEPart: the files of message.message()
+    5.2.17       ValueError: content must be provided.
+    6.0.8        ['entry.txt']
+    6.1.1        ['entry.txt']
+    this commit  ['entry.txt']
+
+message.attach(MIMEText("Monday")), a legacy email.mime.base.MIMEBase: the types in message.attachments
+    5.2.17       ['MIMEText']
+    6.0.8        ['MIMEText'], warns RemovedInDjango70Warning
+    6.1.1        ['MIMEText'], warns RemovedInDjango70Warning
+    this commit  ['MIMEText'], warns RemovedInDjango2028Warning
+
+message.alternatives.append(("<p>Published.</p>", "text/html")), then message.message()
+    5.2.17       AttributeError: 'tuple' object has no attribute 'content'
+    6.0.8        AttributeError: 'tuple' object has no attribute 'mimetype'
+    6.1.1        AttributeError: 'tuple' object has no attribute 'mimetype'
+    this commit  AttributeError: 'tuple' object has no attribute 'mimetype'
+
+headers={"Bcc": "eve@example.com"}: the "Bcc" header of message.message()
+    5.2.17       'eve@example.com'
+    6.0.8        'eve@example.com'
+    6.1.1        ValueError: Bcc is not a valid email header. Use the "bcc" argument to specify blind carbon copy recipients.
+    this commit  ValueError: Bcc is not a valid email header. Use the "bcc" argument to specify blind carbon copy recipients.
+
+EmailMessage("Monday", "Published.", None, ["ada@example.com"], ["eve@example.com"]).bcc
+    5.2.17       ['eve@example.com']
+    6.0.8        ['eve@example.com'], warns RemovedInDjango70Warning
+    6.1.1        ['eve@example.com'], warns RemovedInDjango70Warning
+    this commit  ['eve@example.com'], warns RemovedInDjango2028Warning
+
+ADMINS = ["ada@example.com"], then mail_admins("Monday", "Published."): the message's To
+    5.2.17       ValueError: The ADMINS setting must be a list of 2-tuples.
+    6.0.8        ['ada@example.com']
+    6.1.1        ['ada@example.com']
+    this commit  ['ada@example.com']
+
+ADMINS = [("Ada", "ada@example.com")], then mail_admins("Monday", "Published."): the message's To
+    5.2.17       ['ada@example.com']
+    6.0.8        ['ada@example.com'], warns RemovedInDjango70Warning
+    6.1.1        ['ada@example.com'], warns RemovedInDjango70Warning
+    this commit  ['ada@example.com'], warns RemovedInDjango2028Warning
+
+mailers["default"]: in a project that defines no MAILERS, every setting at its default
+    5.2.17       ImportError: cannot import name 'mailers' from 'django.core.mail'
+    6.0.8        ImportError: cannot import name 'mailers' from 'django.core.mail'
+    6.1.1        django.core.mail.backends.smtp.EmailBackend, alias None, host 'localhost', port 25, warns RemovedInDjango70Warning
+    this commit  django.core.mail.backends.smtp.EmailBackend, alias None, host 'localhost', port 25, warns RemovedInDjango2028Warning
+
+get_connection(): MAILERS = {"default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"}}
+    5.2.17       django.core.mail.backends.smtp.EmailBackend
+    6.0.8        django.core.mail.backends.smtp.EmailBackend
+    6.1.1        django.core.mail.backends.locmem.EmailBackend, warns RemovedInDjango70Warning
+    this commit  django.core.mail.backends.locmem.EmailBackend, warns RemovedInDjango2028Warning
+
+smtp.EmailBackend(host="mail.example.com").port: in a project that defines MAILERS
+    5.2.17       25
+    6.0.8        25
+    6.1.1        AttributeError: The EMAIL_PORT setting is not available when MAILERS is defined., warns RemovedInDjango70Warning
+    this commit  AttributeError: The EMAIL_PORT setting is not available when MAILERS is defined., warns RemovedInDjango2028Warning
+
+locmem.EmailBackend(region="africa-1"): a keyword argument the backend does not take
+    5.2.17       django.core.mail.backends.locmem.EmailBackend
+    6.0.8        django.core.mail.backends.locmem.EmailBackend
+    6.1.1        django.core.mail.backends.locmem.EmailBackend, warns RemovedInDjango70Warning
+    this commit  django.core.mail.backends.locmem.EmailBackend, warns RemovedInDjango2028Warning
+
+send_mail("Monday", "Published.", None, ["ada@example.com"], fail_silently=True, connection=backend)
+    5.2.17       1
+    6.0.8        1
+    6.1.1        TypeError: fail_silently cannot be used with a connection. Pass fail_silently to get_connection() instead., warns RemovedInDjango70Warning
+    this commit  TypeError: fail_silently cannot be used with a connection. Pass fail_silently to get_connection() instead., warns RemovedInDjango2028Warning
+
+class Notice(EmailMessage) that defines get_connection(): Notice("Monday", "Published.", to=["ada@example.com"]).send()
+    5.2.17       1
+    6.0.8        1
+    6.1.1        AttributeError: EmailMessage no longer supports the undocumented get_connection() method.
+    this commit  AttributeError: EmailMessage no longer supports the undocumented get_connection() method.
+
+message.send(), then message.connection: the backend the message holds
+    5.2.17       django.core.mail.backends.locmem.EmailBackend
+    6.0.8        django.core.mail.backends.locmem.EmailBackend
+    6.1.1        None, warns RemovedInDjango70Warning
+    this commit  None, warns RemovedInDjango2028Warning
+
+class Reporting(AdminEmailHandler) that defines connection(): Reporting()
+    5.2.17       the handler is made
+    6.0.8        the handler is made
+    6.1.1        AttributeError: The undocumented AdminEmailHandler.connection() method is no longer used.
+    this commit  AttributeError: The undocumented AdminEmailHandler.connection() method is no longer used.
+
+publish_entry.enqueue().return_value: @task def publish_entry(), with TASKS at its default
+    5.2.17       ModuleNotFoundError: No module named 'django.tasks'
+    6.0.8        'published'
+    6.1.1        'published'
+    this commit  'published'
+
+@task(retries=3) def publish_entry(): a keyword argument the decorator does not name
+    5.2.17       ModuleNotFoundError: No module named 'django.tasks'
+    6.0.8        TypeError: task() got an unexpected keyword argument 'retries'
+    6.1.1        TypeError: Task.__init__() got an unexpected keyword argument 'retries'
+    this commit  TypeError: Task.__init__() got an unexpected keyword argument 'retries'
+
+pickle.loads(pickle.dumps(publish_entry)).name: a task
+    5.2.17       ModuleNotFoundError: No module named 'django.tasks'
+    6.0.8        PicklingError: Can't pickle <function publish_entry>: it's not the same object as __main__.publish_entry
+    6.1.1        'publish_entry'
+    this commit  'publish_entry'
 
 Square.objects.create(side=3).area: a generated field, after the insert
     5.2.17       9
@@ -772,6 +1499,444 @@ register_converter(YearConverter, "int"): a name Django already defines
     6.1.1        ValueError: Converter 'int' is already registered.
     this commit  ValueError: Converter 'int' is already registered.
 
+importlib.metadata.metadata("Django")["Requires-Python"]
+    5.2.17       >=3.10
+    6.0.8        >=3.12
+    6.1.1        >=3.12
+    this commit  >=3.12
+
+importlib.metadata.requires("Django"): the requirements outside the extras
+    5.2.17       asgiref>=3.8.1, sqlparse>=0.3.1, tzdata; sys_platform == "win32"
+    6.0.8        asgiref>=3.9.1, sqlparse>=0.5.0, tzdata; sys_platform == "win32"
+    6.1.1        asgiref>=3.9.1, sqlparse>=0.5.0, tzdata; sys_platform == "win32"
+    this commit  asgiref>=3.12.1, sqlparse>=0.5.0, tzdata; sys_platform == "win32"
+
+importlib.metadata.requires("Django"): the extras
+    5.2.17       argon2-cffi>=19.1.0; extra == "argon2", bcrypt; extra == "bcrypt"
+    6.0.8        argon2-cffi>=23.1.0; extra == "argon2", bcrypt>=4.1.1; extra == "bcrypt"
+    6.1.1        argon2-cffi>=23.1.0; extra == "argon2", bcrypt>=4.1.1; extra == "bcrypt"
+    this commit  argon2-cffi>=23.1.0; extra == "argon2", bcrypt>=4.1.1; extra == "bcrypt"
+
+PostgreSQL's DatabaseFeatures.minimum_database_version
+    5.2.17       (14,)
+    6.0.8        (14,)
+    6.1.1        (15,)
+    this commit  (16,)
+
+SQLite's DatabaseFeatures.minimum_database_version
+    5.2.17       (3, 31)
+    6.0.8        (3, 31)
+    6.1.1        (3, 37)
+    this commit  (3, 37)
+
+Oracle's DatabaseFeatures.minimum_database_version
+    5.2.17       (19,)
+    6.0.8        (19,)
+    6.1.1        (19,)
+    this commit  (19,)
+
+MySQL's DatabaseFeatures.minimum_database_version, the server answering as MySQL 8.4.6
+    5.2.17       (8, 0, 11)
+    6.0.8        (8, 0, 11)
+    6.1.1        (8, 4)
+    this commit  (8, 4)
+
+MySQL's DatabaseFeatures.minimum_database_version, the server answering as MariaDB 11.4.5
+    5.2.17       (10, 5)
+    6.0.8        (10, 6)
+    6.1.1        (10, 11)
+    this commit  (10, 11)
+
+connection.cursor() on MySQL's backend, the server answering as MySQL 8.0.36
+    5.2.17       the connection opens
+    6.0.8        the connection opens
+    6.1.1        NotSupportedError: MySQL 8.4 or later is required (found 8.0.36).
+    this commit  NotSupportedError: MySQL 8.4 or later is required (found 8.0.36).
+
+import django.db.backends.postgresql.base, psycopg's __version__ "3.1.10"
+    5.2.17       the module is imported
+    6.0.8        ImproperlyConfigured: psycopg version 3.1.12 or newer is required; you have 3.1.10
+    6.1.1        ImproperlyConfigured: psycopg version 3.1.12 or newer is required; you have 3.1.10
+    this commit  ImproperlyConfigured: psycopg version 3.1.12 or newer is required; you have 3.1.10
+
+import django.db.backends.mysql.base, MySQLdb as mysqlclient 2.1.1 has it: version_info (2, 1, 1, "final", 0), no __version__
+    5.2.17       the module is imported
+    6.0.8        AttributeError: module 'MySQLdb' has no attribute '__version__'
+    6.1.1        AttributeError: module 'MySQLdb' has no attribute '__version__'
+    this commit  AttributeError: module 'MySQLdb' has no attribute '__version__'
+
+SESSION_SAVE_EVERY_REQUEST = True behind the page cache: what answers a visitor without a session, after one with a session the view never touched
+    5.2.17       the view, setting no cookie
+    6.0.8        the view, setting no cookie
+    6.1.1        the view, setting no cookie
+    this commit  the view, setting no cookie
+
+response["Cache-Control"] = "Private": whether UpdateCacheMiddleware stores it
+    5.2.17       not stored
+    6.0.8        not stored
+    6.1.1        not stored
+    this commit  not stored
+
+response["Vary"] = "*": whether UpdateCacheMiddleware stores it
+    5.2.17       not stored
+    6.0.8        not stored
+    6.1.1        not stored
+    this commit  not stored
+
+response["Vary"] = " * ", the star between spaces: whether UpdateCacheMiddleware stores it
+    5.2.17       not stored
+    6.0.8        not stored
+    6.1.1        not stored
+    this commit  not stored
+
+response.set_cookie("sessionid", "ada") with "Vary: Cookie", the request carrying only theme=dark: whether UpdateCacheMiddleware stores it
+    5.2.17       not stored
+    6.0.8        not stored
+    6.1.1        not stored
+    this commit  not stored
+
+A GET bearing "Authorization: Bearer ada": the Vary UpdateCacheMiddleware leaves on the response
+    5.2.17       'Authorization'
+    6.0.8        'Authorization'
+    6.1.1        'Authorization'
+    this commit  'Authorization'
+
+ASGIRequest(scope).META.get("HTTP_X_FORWARDED_FOR"): the header sent as "x_forwarded_for"
+    5.2.17       None
+    6.0.8        None
+    6.1.1        None
+    this commit  None
+
+DomainNameValidator()("journal.example\n")
+    5.2.17       ValidationError: ['Enter a valid domain name.']
+    6.0.8        ValidationError: ['Enter a valid domain name.']
+    6.1.1        ValidationError: ['Enter a valid domain name.']
+    this commit  ValidationError: ['Enter a valid domain name.']
+
+Client().get("/entries/%1B[2J"): the message "django.request" logs for the 404
+    5.2.17       'Not Found: /entries/\\x1b[2J'
+    6.0.8        'Not Found: /entries/\\x1b[2J'
+    6.1.1        'Not Found: /entries/\\x1b[2J'
+    this commit  'Not Found: /entries/\\x1b[2J'
+
+runserver's log of the request line "GET /entries/\x1b[2J HTTP/1.1", answered 404
+    5.2.17       '"GET /entries/\x1b[2J HTTP/1.1" 404 179'
+    6.0.8        '"GET /entries/\\x1b[2J HTTP/1.1" 404 179'
+    6.1.1        '"GET /entries/\\x1b[2J HTTP/1.1" 404 179'
+    this commit  '"GET /entries/\\x1b[2J HTTP/1.1" 404 179'
+
+authenticate(username="ada", password="guess"), ada's password unusable: the hasher's runs
+    5.2.17       1 run of the default hasher
+    6.0.8        1 run of the default hasher
+    6.1.1        1 run of the default hasher
+    this commit  1 run of the default hasher
+
+modwsgi.check_password({}, "nobody", "guess"): the hasher's runs for a name with no account
+    5.2.17       1 run of the default hasher
+    6.0.8        1 run of the default hasher
+    6.1.1        1 run of the default hasher
+    this commit  1 run of the default hasher
+
+PasswordResetForm({"email": "ada@journal.example"}).save(), the mail failing to send
+    5.2.17       returns; "django.contrib.auth" logs 'Failed to send password reset email to 1'
+    6.0.8        returns; "django.contrib.auth" logs 'Failed to send password reset email to 1'
+    6.1.1        returns; "django.contrib.auth" logs 'Failed to send password reset email to 1'
+    this commit  returns; "django.contrib.auth" logs 'Failed to send password reset email to 1'
+
+Storage.save("/journal.txt", ContentFile(b"entry")), the storage's _save writing any name it is given: what it writes
+    5.2.17       nothing: SuspiciousFileOperation: Detected path traversal attempt in '/journal.txt'
+    6.0.8        nothing: SuspiciousFileOperation: Detected path traversal attempt in '/journal.txt'
+    6.1.1        nothing: SuspiciousFileOperation: Detected path traversal attempt in '/journal.txt'
+    this commit  nothing: SuspiciousFileOperation: Detected path traversal attempt in '/journal.txt'
+
+extract("template.zip", "journal"): an archive with a member "../journal-evil/settings.py"
+    5.2.17       SuspiciousOperation: Archive contains invalid path: '../journal-evil/settings.py'
+    6.0.8        SuspiciousOperation: Archive contains invalid path: '../journal-evil/settings.py'
+    6.1.1        SuspiciousOperation: Archive contains invalid path: '../journal-evil/settings.py'
+    this commit  SuspiciousOperation: Archive contains invalid path: '../journal-evil/settings.py'
+
+FileSystemStorage(location, directory_permissions_mode=0o750).save("2026/notes.txt", ...): the calls of os.umask
+    5.2.17       0 calls
+    6.0.8        0 calls
+    6.1.1        0 calls
+    this commit  0 calls
+
+A generic inline's formset, a forged new row from a user who may change but not add: the rows it saves
+    5.2.17       0 rows saved
+    6.0.8        0 rows saved
+    6.1.1        0 rows saved
+    this commit  0 rows saved
+
+ModelAdmin.changelist_view with list_editable: a POST that forges a new row, from a user who may change entries but not add them
+    5.2.17       BadRequest: list_editable does not allow adding.
+    6.0.8        BadRequest: list_editable does not allow adding.
+    6.1.1        BadRequest: list_editable does not allow adding.
+    this commit  BadRequest: list_editable does not allow adding.
+
+display_for_field("javascript:alert(1)", models.URLField(), "-")
+    5.2.17       'javascript:alert(1)'
+    6.0.8        'javascript:alert(1)'
+    6.1.1        'javascript:alert(1)'
+    this commit  'javascript:alert(1)'
+
+EmailBackend(use_tls=True, fail_silently=True).send_messages, twice, STARTTLS failing: the messages handed to the server
+    5.2.17       0 messages handed to the server
+    6.0.8        0 messages handed to the server
+    6.1.1        0 messages handed to the server
+    this commit  0 messages handed to the server
+
+strip_tags("<" * 51 + "a>" * 51): a tag inside a tag, 51 deep
+    5.2.17       SuspiciousOperation
+    6.0.8        SuspiciousOperation
+    6.1.1        SuspiciousOperation
+    this commit  SuspiciousOperation
+
+strip_tags("<a" * 50 + "x" * 950): fifty opening tags that never close
+    5.2.17       SuspiciousOperation
+    6.0.8        SuspiciousOperation
+    6.1.1        SuspiciousOperation
+    this commit  SuspiciousOperation
+
+Truncator("<b><i>Monday</b> Tuesday").words(1, html=True): an end tag that does not close the last tag opened
+    5.2.17       '<b><i>Monday</b>…</i></b>'
+    6.0.8        '<b><i>Monday</b>…</i></b>'
+    6.1.1        '<b><i>Monday</b>…</i></b>'
+    this commit  '<b><i>Monday</b>…</i></b>'
+
+intcomma(10 ** 200): its first and last ten characters, and its length
+    5.2.17       100,000,00…00,000,000 (267 characters)
+    6.0.8        1.00000000…00000e+200 (207 characters)
+    6.1.1        1.00000000…00000e+200 (207 characters)
+    this commit  1.00000000…00000e+200 (207 characters)
+
+floatformat("1e200"): a digit and an exponent of 200
+    5.2.17       '1e200'
+    6.0.8        '1e200'
+    6.1.1        '1e200'
+    this commit  '1e200'
+
+len(floatformat("1e199")): a digit and an exponent of 199
+    5.2.17       200
+    6.0.8        200
+    6.1.1        200
+    this commit  200
+
+urlize("https://journal.example.com/" + "a" * 2021): a word of 2,049 characters
+    5.2.17       left as text
+    6.0.8        left as text
+    6.1.1        left as text
+    this commit  left as text
+
+AdminURLFieldWidget().get_context("url", "https://journal.example.com/" + "a" * 2021, {})["url_valid"]: a URL of 2,049 characters
+    5.2.17       False
+    6.0.8        False
+    6.1.1        False
+    this commit  False
+
+url_has_allowed_host_and_scheme("/entries/" + "x" * 2040, allowed_hosts=None): a path of 2,049 characters
+    5.2.17       False
+    6.0.8        False
+    6.1.1        False
+    this commit  False
+
+HttpResponseRedirect("/entries/" + "x" * 16384).status_code: a target past MAX_URL_REDIRECT_LENGTH
+    5.2.17       DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+    6.0.8        DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+    6.1.1        DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+    this commit  DisallowedRedirect: Unsafe redirect exceeding 16384 characters
+
+forms.URLField(assume_scheme="https").clean("https://journal.example.com/20\n26/"): a newline inside
+    5.2.17       ValidationError: ['Enter a valid URL.']
+    6.0.8        ValidationError: ['Enter a valid URL.']
+    6.1.1        ValidationError: ['Enter a valid URL.']
+    this commit  ValidationError: ['Enter a valid URL.']
+
+is_valid_ipv6_address("0000:0000:0000:0000:0000:ffff:192.168.100.200"): written in full, 45 characters
+    5.2.17       False
+    6.0.8        False
+    6.1.1        False
+    this commit  False
+
+get_supported_language_variant("en-" + "x" * 600): a code past LANGUAGE_CODE_MAX_LENGTH
+    5.2.17       'en'
+    6.0.8        'en'
+    6.1.1        'en'
+    this commit  'en'
+
+get_supported_language_variant("en-" + "x" * 600, strict=True): the class of what it raises
+    5.2.17       LookupError
+    6.0.8        LookupError
+    6.1.1        LookupError
+    this commit  LookupError
+
+check_for_language("x" * 501): the codes translation_catalog_exists holds after it, its cache emptied first
+    5.2.17       0 codes
+    6.0.8        0 codes
+    6.1.1        0 codes
+    this commit  0 codes
+
+request.META["HTTP_ACCEPT"] under ASGI: three "accept" headers, text/html, application/json and */*
+    5.2.17       'text/html,application/json,*/*'
+    6.0.8        'text/html,application/json,*/*'
+    6.1.1        'text/html,application/json,*/*'
+    this commit  'text/html,application/json,*/*'
+
+request.body under ASGI: 3,000,000 bytes sent with "content-length" 10
+    5.2.17       RequestDataTooBig: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+    6.0.8        RequestDataTooBig: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+    6.1.1        RequestDataTooBig: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+    this commit  RequestDataTooBig: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+
+type(request.FILES["notes"]).__name__ under ASGI: a file of 3,000,000 bytes sent with "content-length" 10
+    5.2.17       TemporaryUploadedFile
+    6.0.8        TemporaryUploadedFile
+    6.1.1        TemporaryUploadedFile
+    this commit  TemporaryUploadedFile
+
+Entry.objects.annotate(**{"total\x01": Count("remarks")}): a control character in an alias
+    5.2.17       ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.0.8        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.1.1        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    this commit  ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+
+Entry.objects.annotate(**{"total#": Count("remarks")}): a hash in an alias
+    5.2.17       ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.0.8        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.1.1        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    this commit  ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+
+Remark.objects.values('data__mood" FROM journal_remark --'): a crafted JSON key named in values
+    5.2.17       ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.0.8        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.1.1        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    this commit  ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+
+Remark.objects.values("data__first name"): a JSON key with a space named in values
+    5.2.17       ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.0.8        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.1.1        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    this commit  ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+
+Entry.objects.annotate(**{'on" ON 1=1 --': FilteredRelation("remarks")}): a crafted name for a filtered relation
+    5.2.17       ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.0.8        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    6.1.1        ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+    this commit  ValueError: Column aliases cannot contain whitespace characters, hashes, control characters, quotation marks, semicolons, or SQL comments.
+
+Entry.objects.annotate(**{"remarks.title": FilteredRelation("remarks")}): a period in the name of a filtered relation
+    5.2.17       ValueError: FilteredRelation doesn't support aliases with periods (got 'remarks.title').
+    6.0.8        ValueError: FilteredRelation doesn't support aliases with periods (got 'remarks.title').
+    6.1.1        ValueError: FilteredRelation doesn't support aliases with periods (got 'remarks.title').
+    this commit  ValueError: FilteredRelation doesn't support aliases with periods (got 'remarks.title').
+
+Entry.objects.annotate(**{"remark$": FilteredRelation("remarks")}).values("remark$__title"), compiled for PostgreSQL: a dollar sign in the name of a filtered relation
+    5.2.17       ValueError: Dollar signs are not permitted in column aliases on PostgreSQL.
+    6.0.8        ValueError: Dollar signs are not permitted in column aliases on PostgreSQL.
+    6.1.1        SELECT "remark$"."title" AS "remark$__title" FROM "journal_entry" LEFT OUTER JOIN "journal_remark" "remark$" ON ("journal_entry"."id" = "remark$"."entry_id")
+    this commit  SELECT "remark$"."title" AS "remark$__title" FROM "journal_entry" LEFT OUTER JOIN "journal_remark" "remark$" ON ("journal_entry"."id" = "remark$"."entry_id")
+
+Entry.objects.filter(**{"title": "Dawn", "_connector": "OR"})
+    5.2.17       TypeError: The following kwargs are invalid: '_connector'
+    6.0.8        TypeError: The following kwargs are invalid: '_connector'
+    6.1.1        TypeError: The following kwargs are invalid: '_connector'
+    this commit  TypeError: The following kwargs are invalid: '_connector'
+
+Q(**{"title": "Dawn", "_connector": "OR 1=1 OR"})
+    5.2.17       ValueError: _connector must be one of 'AND', 'OR', 'XOR', or None.
+    6.0.8        ValueError: _connector must be one of 'AND', 'OR', 'XOR', or None.
+    6.1.1        ValueError: connector must be one of 'AND', 'OR', 'XOR', or None.
+    this commit  ValueError: connector must be one of 'AND', 'OR', 'XOR', or None.
+
+Entry.objects.filter(Q.create([("title", "Dawn"), ("title", "Noon")], connector="OR 1=1 OR")), by the undocumented Q.create: the WHERE clause
+    5.2.17       ("journal_entry"."title" = %s OR 1=1 OR "journal_entry"."title" = %s)
+    6.0.8        ("journal_entry"."title" = %s OR 1=1 OR "journal_entry"."title" = %s)
+    6.1.1        ValueError: connector must be one of 'AND', 'OR', 'XOR', or None.
+    this commit  ValueError: connector must be one of 'AND', 'OR', 'XOR', or None.
+
+Case(When(**{"title": "Dawn", "_negated": True}, then=Value(1)), default=Value(0)): the entries given 1
+    5.2.17       ['Dusk', 'Noon']
+    6.0.8        ['Dusk', 'Noon']
+    6.1.1        TypeError: The following kwargs are invalid: '_negated'
+    this commit  TypeError: The following kwargs are invalid: '_negated'
+
+Remark.objects.filter(HasKey(Value("') OR 1=1 --", JSONField()), "mood")), compiled for Oracle: the WHERE clause and its parameter, a left-hand side given directly
+    5.2.17       JSON_EXISTS(%s, q'<U+FFFF>$."mood"<U+FFFF>'), the parameter "') OR 1=1 --"
+    6.0.8        JSON_EXISTS(%s, q'<U+FFFF>$."mood"<U+FFFF>'), the parameter "') OR 1=1 --"
+    6.1.1        JSON_EXISTS(%s, q'<U+FFFF>$."mood"<U+FFFF>'), the parameter "') OR 1=1 --"
+    this commit  JSON_EXISTS(%s, q'<U+FFFF>$."mood"<U+FFFF>'), the parameter "') OR 1=1 --"
+
+Remark.objects.filter(data__has_key="mood\uffff') OR 1=1 --"), compiled for Oracle: the WHERE clause, U+FFFF written <U+FFFF>
+    5.2.17       JSON_EXISTS("JOURNAL_REMARK"."DATA", q'<U+FFFF>$."mood\uffff') OR 1=1 --"<U+FFFF>')
+    6.0.8        JSON_EXISTS("JOURNAL_REMARK"."DATA", q'<U+FFFF>$."mood\uffff') OR 1=1 --"<U+FFFF>')
+    6.1.1        JSON_EXISTS("JOURNAL_REMARK"."DATA", q'<U+FFFF>$."mood\uffff') OR 1=1 --"<U+FFFF>')
+    this commit  JSON_EXISTS("JOURNAL_REMARK"."DATA", q'<U+FFFF>$."mood\uffff') OR 1=1 --"<U+FFFF>')
+
+MIDDLEWARE = [ContentSecurityPolicyMiddleware], SECURE_CSP with CSP.NONCE, no "csp" processor in TEMPLATES: the messages of check --tag security, without --deploy
+    5.2.17       ModuleNotFoundError: No module named 'django.utils.csp'
+    6.0.8        no message
+    6.1.1        security.W027
+    this commit  security.W027
+
+csrf_failure(request) through ContentSecurityPolicyMiddleware, SECURE_CSP with CSP.NONCE: the page's <style>
+    5.2.17       ModuleNotFoundError: No module named 'django.middleware.csp'
+    6.0.8        <style>
+    6.1.1        <style nonce="…">
+    this commit  <style nonce="…">
+
+settings.SIGNED_COOKIE_LEGACY_SALT_FALLBACK, when the settings do not set it
+    5.2.17       True
+    6.0.8        True
+    6.1.1        False
+    this commit  False
+
+request.get_signed_cookie("draft", default=None, salt="s"): the value set_signed_cookie("drafts", "4") wrote before 5.2.15 and 6.0.6
+    5.2.17       '4'
+    6.0.8        '4'
+    6.1.1        None
+    this commit  None
+
+request.get_signed_cookie("draft", default=None, salt="s"): the value set_signed_cookie("drafts", "4") wrote before 5.2.15 and 6.0.6, SIGNED_COOKIE_LEGACY_SALT_FALLBACK = True
+    5.2.17       '4'
+    6.0.8        '4'
+    6.1.1        '4'
+    this commit  '4'
+
+request.get_signed_cookie("draft", default=None, salt="s"): the value set_signed_cookie("drafts", "4") writes, SIGNED_COOKIE_LEGACY_SALT_FALLBACK = True
+    5.2.17       None
+    6.0.8        None
+    6.1.1        None
+    this commit  None
+
+SIGNED_COOKIE_LEGACY_SALT_FALLBACK = True in a project's settings module
+    5.2.17       True
+    6.0.8        True
+    6.1.1        True, warns RemovedInDjango70Warning
+    this commit  True, warns RemovedInDjango2028Warning
+
+base64_hmac("journal", "entry", "journal-key")
+    5.2.17       'ez2HCB9z1EbDkafRqb-DJT_zO8w'
+    6.0.8        'ez2HCB9z1EbDkafRqb-DJT_zO8w'
+    6.1.1        'ez2HCB9z1EbDkafRqb-DJT_zO8w', warns RemovedInDjango70Warning
+    this commit  'ez2HCB9z1EbDkafRqb-DJT_zO8w', warns RemovedInDjango2028Warning
+
+Signer(key="journal-key").sign("entry")
+    5.2.17       'entry:2zsReoyjUxjh5-pL9xt5VpoDsV-JGNmKaqe0JQsXC6Y'
+    6.0.8        'entry:2zsReoyjUxjh5-pL9xt5VpoDsV-JGNmKaqe0JQsXC6Y'
+    6.1.1        'entry:2zsReoyjUxjh5-pL9xt5VpoDsV-JGNmKaqe0JQsXC6Y'
+    this commit  'entry:2zsReoyjUxjh5-pL9xt5VpoDsV-JGNmKaqe0JQsXC6Y'
+
+Signer("journal-key")
+    5.2.17       TypeError: Signer.__init__() takes 1 positional argument but 2 were given
+    6.0.8        TypeError: Signer.__init__() takes 1 positional argument but 2 were given
+    6.1.1        TypeError: Signer.__init__() takes 1 positional argument but 2 were given
+    this commit  TypeError: Signer.__init__() takes 1 positional argument but 2 were given
+
+CSRF_COOKIE_MASKED = True: the length of the cookie CsrfViewMiddleware sets
+    5.2.17       32
+    6.0.8        32
+    6.1.1        32
+    this commit  32
+
 Lower(Value("Dawn")).as_sql(compiler, connection)
     5.2.17       ('LOWER(%s)', ['Dawn'])
     6.0.8        ('LOWER(%s)', ('Dawn',))
@@ -1149,4 +2314,86 @@ urlize("journal.example.com") under the setting URLIZE_ASSUME_HTTPS = True
     6.0.8        <a href="https://journal.example.com">journal.example.com</a>
     6.1.1        <a href="https://journal.example.com">journal.example.com</a>
     this commit  <a href="https://journal.example.com">journal.example.com</a>
+
+RequestFactory(query_params={"year": "2026"}).get("/entries/").GET
+    5.2.17       <QueryDict: {}>
+    6.0.8        <QueryDict: {}>
+    6.1.1        <QueryDict: {}>
+    this commit  <QueryDict: {}>
+
+AsyncRequestFactory(query_params={"year": "2026"}).get("/entries/").GET
+    5.2.17       <QueryDict: {'year': ['2026']}>
+    6.0.8        <QueryDict: {'year': ['2026']}>
+    6.1.1        <QueryDict: {'year': ['2026']}>
+    this commit  <QueryDict: {'year': ['2026']}>
+
+await AsyncClient().get("/entries/", follow=True): a redirect to the relative "2026/"
+    5.2.17       KeyError: 'PATH_INFO'
+    6.0.8        KeyError: 'PATH_INFO'
+    6.1.1        KeyError: 'PATH_INFO'
+    this commit  KeyError: 'PATH_INFO'
+
+await AsyncClient().get("/entries/latest/", follow=True): a 307 redirect to "/entries/2026/"
+    5.2.17       KeyError: 'REQUEST_METHOD'
+    6.0.8        KeyError: 'REQUEST_METHOD'
+    6.1.1        KeyError: 'REQUEST_METHOD'
+    this commit  KeyError: 'REQUEST_METHOD'
+
+client.force_login(ada): the backend the session records, a permission-only backend listed first
+    5.2.17       journal_permissions.PermissionsOnly
+    6.0.8        journal_permissions.PermissionsOnly
+    6.1.1        journal_permissions.PermissionsOnly
+    this commit  django.contrib.auth.backends.ModelBackend
+
+client.force_login(ada), then client.get("/whoami/").content: a permission-only backend listed first
+    5.2.17       b'AnonymousUser'
+    6.0.8        b'AnonymousUser'
+    6.1.1        b'AnonymousUser'
+    this commit  b'ada'
+
+Entry.objects.count() in a thread that a SimpleTestCase's test starts
+    5.2.17       DatabaseOperationForbidden: Database threaded connections to 'default' are not allowed in SimpleTestCase subclasses.
+    6.0.8        DatabaseOperationForbidden: Database threaded connections to 'default' are not allowed in SimpleTestCase subclasses.
+    6.1.1        DatabaseOperationForbidden: Database threaded connections to 'default' are not allowed in SimpleTestCase subclasses.
+    this commit  DatabaseOperationForbidden: Database threaded connections to 'default' are not allowed in SimpleTestCase subclasses.
+
+assertContains(response, "a year"), called twice on StreamingHttpResponse([b"2026: ", b"a year"])
+    5.2.17
+        AssertionError: False is not true : Couldn't find 'a year' in the following response
+        b''
+    6.0.8
+        AssertionError: False is not true : Couldn't find 'a year' in the following response
+        b''
+    6.1.1        the test passes
+    this commit  the test passes
+
+DiscoverRunner(verbosity=0).build_suite(["journal_suite"], extra_tests=[extra]): the tests in the suite
+    5.2.17       journal_suite.Listed.test_listed
+    6.0.8        journal_suite.Listed.test_listed
+    6.1.1        journal_suite.Listed.test_listed
+    this commit  journal_suite.Listed.test_listed
+
+get_max_test_processes() with DJANGO_TEST_PROCESSES=4, multiprocessing.get_start_method() answering "forkserver"
+    5.2.17       1
+    6.0.8        4
+    6.1.1        4
+    this commit  4
+
+from django.test.selenium import SeleniumTestCase
+    5.2.17       django.test.selenium
+    6.0.8        django.test.selenium
+    6.1.1        django.test.selenium
+    this commit  ModuleNotFoundError: No module named 'django.test.selenium'
+
+connection.creation.create_test_db(verbosity=0): the rows kept for serialized_rollback
+    5.2.17       the rows serialized
+    6.0.8        nothing serialized
+    6.1.1        nothing serialized
+    this commit  nothing serialized
+
+connection.creation.create_test_db(verbosity=0, serialize=True): the rows kept for serialized_rollback
+    5.2.17       the rows serialized
+    6.0.8        the rows serialized, warns RemovedInDjango70Warning
+    6.1.1        the rows serialized, warns RemovedInDjango70Warning
+    this commit  the rows serialized, warns RemovedInDjango2028Warning
 

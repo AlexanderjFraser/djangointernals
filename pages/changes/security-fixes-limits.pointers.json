@@ -8,23 +8,37 @@
  "document": "security-fixes-limits.md",
  "pointers": [
   {
-   "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 9,
-   "sentence": "A refusal uses an exception Django already has: `SuspiciousOperation`, a 400 when a view lets it escape (`django/core/handlers/exception.py:response_for_exception`), `ValidationError`, `LookupError`, `ValueError`, or a false answer from a check.",
+   "pointer": "docs/releases/6.1.txt",
+   "line": 11,
+   "sentence": "6.1 came out the next day, on 5 August 2026 (`docs/releases/6.1.txt`), with a patch for each, the security archive says (`docs/releases/security.txt`), and 6.1.1 lists no security fix.",
    "tree": "django",
-   "path": "django/core/handlers/exception.py",
-   "symbol": "response_for_exception",
-   "kind": "function",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    64,
-    160
+    1,
+    760
    ],
-   "fingerprint": "a7418f0de8e640e0"
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "docs/releases/security.txt",
+   "line": 11,
+   "sentence": "6.1 came out the next day, on 5 August 2026 (`docs/releases/6.1.txt`), with a patch for each, the security archive says (`docs/releases/security.txt`), and 6.1.1 lists no security fix.",
+   "tree": "django",
+   "path": "docs/releases/security.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2076
+   ],
+   "fingerprint": "7e2a7a8564c8b22e"
   },
   {
    "pointer": "django/utils/html.py:strip_tags",
-   "line": 13,
-   "sentence": "`strip_tags` feeds the text to an HTML parser, `MLStripper`, and repeats while a pass still removes a tag (`django/utils/html.py:strip_tags`).",
+   "line": 15,
+   "sentence": "`strip_tags` parses the text and repeats while a pass still removes a tag; the `striptags` filter calls it (`django/utils/html.py:strip_tags`).",
    "tree": "django",
    "path": "django/utils/html.py",
    "symbol": "strip_tags",
@@ -38,8 +52,8 @@
   },
   {
    "pointer": "django/utils/text.py:TruncateHTMLParser.handle_endtag",
-   "line": 15,
-   "sentence": "An end tag now pops the stack of open tags only when it closes the tag opened last; the comment there says this avoids a linear scan for each unmatched one (`django/utils/text.py:TruncateHTMLParser.handle_endtag`).",
+   "line": 17,
+   "sentence": "An end tag now pops the stack of open tags only when it closes the tag opened last (`django/utils/text.py:TruncateHTMLParser.handle_endtag`).",
    "tree": "django",
    "path": "django/utils/text.py",
    "symbol": "TruncateHTMLParser.handle_endtag",
@@ -52,8 +66,8 @@
   },
   {
    "pointer": "django/utils/text.py:wrap",
-   "line": 17,
-   "sentence": "At this commit it hands each line to `textwrap.TextWrapper` (`django/utils/text.py:wrap`; [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md)).",
+   "line": 19,
+   "sentence": "`wrap`, behind `wordwrap`, was open to very long strings (CVE-2025-26699, 5.0.13 and 5.1.7); at this commit it hands each line to `textwrap.TextWrapper` (`django/utils/text.py:wrap`; [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md)).",
    "tree": "django",
    "path": "django/utils/text.py",
    "symbol": "wrap",
@@ -67,8 +81,8 @@
   },
   {
    "pointer": "django/utils/text.py",
-   "line": 17,
-   "sentence": "At this commit it hands each line to `textwrap.TextWrapper` (`django/utils/text.py:wrap`; [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md)).",
+   "line": 19,
+   "sentence": "`wrap`, behind `wordwrap`, was open to very long strings (CVE-2025-26699, 5.0.13 and 5.1.7); at this commit it hands each line to `textwrap.TextWrapper` (`django/utils/text.py:wrap`; [Text helpers: `Truncator` and `django/utils/text.py`](../utils/text.md)).",
    "tree": "django",
    "path": "django/utils/text.py",
    "symbol": null,
@@ -80,24 +94,9 @@
    "fingerprint": "72cb2344fb0d8ee0"
   },
   {
-   "pointer": "django/contrib/humanize/templatetags/humanize.py:intcomma",
-   "line": 21,
-   "sentence": "With its use_l10n argument true, the default, a value that can be made a decimal goes to `number_format`; otherwise the leading digits of its text are grouped by one substitution over them reversed, linear in their length (`django/contrib/humanize/templatetags/humanize.py:intcomma`; [Humanize: `naturaltime`, `intcomma` and the other filters](../contrib/humanize.md)).",
-   "tree": "django",
-   "path": "django/contrib/humanize/templatetags/humanize.py",
-   "symbol": "intcomma",
-   "kind": "function",
-   "lines": [
-    72,
-    95
-   ],
-   "at": 73,
-   "fingerprint": "57e3254a72d98355"
-  },
-  {
    "pointer": "django/template/defaultfilters.py:floatformat",
    "line": 23,
-   "sentence": "It now returns its input as given when the decimal's digits and the absolute value of its exponent come to more than 200: `\"1e200\"` comes back as `\"1e200\"`, and `\"1e199\"` is written out in its 200 digits (`django/template/defaultfilters.py:floatformat`; [The built-in filters](../templates/filters.md)).",
+   "sentence": "It now returns its input as given when the decimal's digits and its exponent's absolute value come to more than 200: `\"1e199\"` is written out in 200 digits, `\"1e200\"` left alone (`django/template/defaultfilters.py:floatformat`; [The built-in filters](../templates/filters.md#numbers)).",
    "tree": "django",
    "path": "django/template/defaultfilters.py",
    "symbol": "floatformat",
@@ -110,9 +109,52 @@
    "fingerprint": "aef53957bd84d194"
   },
   {
+   "pointer": "django/utils/numberformat.py:format",
+   "line": 23,
+   "sentence": "The number formatter writes a decimal past the same cutoff in scientific notation (`django/utils/numberformat.py:format`).",
+   "tree": "django",
+   "path": "django/utils/numberformat.py",
+   "symbol": "format",
+   "kind": "function",
+   "lines": [
+    7,
+    108
+   ],
+   "fingerprint": "1d08030996f2633c"
+  },
+  {
+   "pointer": "django/contrib/humanize/templatetags/humanize.py:intcomma",
+   "line": 25,
+   "sentence": "6.0.8 hands it a `decimal.Decimal`, so that a string holding a float, which `int` cannot read, gets the locale's format too, as the docstring now says (`django/contrib/humanize/templatetags/humanize.py:intcomma`; [Humanize: `naturaltime`, `intcomma` and the other filters](../contrib/humanize.md#the-numbers)).",
+   "tree": "django",
+   "path": "django/contrib/humanize/templatetags/humanize.py",
+   "symbol": "intcomma",
+   "kind": "function",
+   "lines": [
+    72,
+    95
+   ],
+   "at": 73,
+   "fingerprint": "57e3254a72d98355"
+  },
+  {
+   "pointer": "docs/releases/5.2.12.txt",
+   "line": 39,
+   "sentence": "Python's NFKC normalization, which `urllib.parse.urlsplit` can perform, is slow on Windows (`docs/releases/5.2.12.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.12.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    52
+   ],
+   "fingerprint": "e047640b5d4c8edb"
+  },
+  {
    "pointer": "django/utils/http.py",
-   "line": 27,
-   "sentence": "Several guards here stop a long URL before it is split, at one bound: `MAX_URL_LENGTH`, 2,048 characters (`django/utils/http.py`).",
+   "line": 39,
+   "sentence": "The guards here stop a long URL before it is split, at `MAX_URL_LENGTH`, 2,048 characters (`django/utils/http.py`).",
    "tree": "django",
    "path": "django/utils/http.py",
    "symbol": null,
@@ -124,23 +166,9 @@
    "fingerprint": "aca6086ffea6bad3"
   },
   {
-   "pointer": "django/utils/html.py:Urlizer",
-   "line": 29,
-   "sentence": "The URL linker, `django.utils.html.urlize` and the `urlize` and `urlizetrunc` filters (`django/utils/html.py:Urlizer`), had fixes in 2024: for input with very many brackets (CVE-2024-38875, 5.0.7), very large input with a particular sequence of characters (CVE-2024-41990, 5.0.8; CVE-2024-45230, 5.0.9 and 5.1.1), and input with very many Unicode characters, which reached the admin's URL widget too (CVE-2024-41991, 5.0.8).",
-   "tree": "django",
-   "path": "django/utils/html.py",
-   "symbol": "Urlizer",
-   "kind": "class",
-   "lines": [
-    289,
-    495
-   ],
-   "fingerprint": "e0c508ceb1b014f2"
-  },
-  {
    "pointer": "django/utils/html.py:Urlizer.handle_word",
-   "line": 29,
-   "sentence": "At this commit a word whose text, once its punctuation is trimmed, is longer than `MAX_URL_LENGTH` is not tried as a URL (`django/utils/html.py:Urlizer.handle_word`), and trimming a word's punctuation is linear: each kind of bracket is counted once, in a `CountsDict`, the trimmed pieces are joined once, and only the text from the last \"&\" is unescaped to judge a trailing \";\" (`django/utils/html.py:Urlizer.trim_punctuation`).",
+   "line": 41,
+   "sentence": "At this commit a word longer than `MAX_URL_LENGTH` once its punctuation is trimmed is left as text, and the trimming counts a word's brackets once (`django/utils/html.py:Urlizer.handle_word`, `django/utils/html.py:Urlizer.trim_punctuation`).",
    "tree": "django",
    "path": "django/utils/html.py",
    "symbol": "Urlizer.handle_word",
@@ -153,8 +181,8 @@
   },
   {
    "pointer": "django/utils/html.py:Urlizer.trim_punctuation",
-   "line": 29,
-   "sentence": "At this commit a word whose text, once its punctuation is trimmed, is longer than `MAX_URL_LENGTH` is not tried as a URL (`django/utils/html.py:Urlizer.handle_word`), and trimming a word's punctuation is linear: each kind of bracket is counted once, in a `CountsDict`, the trimmed pieces are joined once, and only the text from the last \"&\" is unescaped to judge a trailing \";\" (`django/utils/html.py:Urlizer.trim_punctuation`).",
+   "line": 41,
+   "sentence": "At this commit a word longer than `MAX_URL_LENGTH` once its punctuation is trimmed is left as text, and the trimming counts a word's brackets once (`django/utils/html.py:Urlizer.handle_word`, `django/utils/html.py:Urlizer.trim_punctuation`).",
    "tree": "django",
    "path": "django/utils/html.py",
    "symbol": "Urlizer.trim_punctuation",
@@ -167,8 +195,8 @@
   },
   {
    "pointer": "django/contrib/admin/widgets.py:AdminURLFieldWidget.get_context",
-   "line": 29,
-   "sentence": "`AdminURLFieldWidget` links its value only when its validator, by default `URLValidator`, accepts it, and the validator refuses a URL over `URLValidator.max_length`, `MAX_URL_LENGTH`, before it splits it (`django/contrib/admin/widgets.py:AdminURLFieldWidget.get_context`).",
+   "line": 41,
+   "sentence": "The widget links only a value `URLValidator` accepts, which refuses one over the bound before splitting it (`django/contrib/admin/widgets.py:AdminURLFieldWidget.get_context`).",
    "tree": "django",
    "path": "django/contrib/admin/widgets.py",
    "symbol": "AdminURLFieldWidget.get_context",
@@ -181,8 +209,8 @@
   },
   {
    "pointer": "django/utils/http.py:_url_has_allowed_host_and_scheme",
-   "line": 31,
-   "sentence": "Each judges the URL it is to redirect to with `url_has_allowed_host_and_scheme`, which refuses one over `MAX_URL_LENGTH` before splitting it (`django/utils/http.py:_url_has_allowed_host_and_scheme`; [The helpers in `django/utils/http.py`](../http/helpers.md#urls-that-came-from-a-client)).",
+   "line": 43,
+   "sentence": "Each judges its redirect with `url_has_allowed_host_and_scheme`, which refuses a URL over `MAX_URL_LENGTH`, a relative path too, before splitting it; the two auth views then take their default target, and `set_language` the `\"Referer\"` or `\"/\"` (`django/utils/http.py:_url_has_allowed_host_and_scheme`, `django/views/i18n.py:set_language`; [The helpers in `django/utils/http.py`](../http/helpers.md#urls-that-came-from-a-client)).",
    "tree": "django",
    "path": "django/utils/http.py",
    "symbol": "_url_has_allowed_host_and_scheme",
@@ -194,9 +222,23 @@
    "fingerprint": "4e0c2a89670e1b4c"
   },
   {
+   "pointer": "django/views/i18n.py:set_language",
+   "line": 43,
+   "sentence": "Each judges its redirect with `url_has_allowed_host_and_scheme`, which refuses a URL over `MAX_URL_LENGTH`, a relative path too, before splitting it; the two auth views then take their default target, and `set_language` the `\"Referer\"` or `\"/\"` (`django/utils/http.py:_url_has_allowed_host_and_scheme`, `django/views/i18n.py:set_language`; [The helpers in `django/utils/http.py`](../http/helpers.md#urls-that-came-from-a-client)).",
+   "tree": "django",
+   "path": "django/views/i18n.py",
+   "symbol": "set_language",
+   "kind": "function",
+   "lines": [
+    30,
+    74
+   ],
+   "fingerprint": "a1fa1bf6fa459b3d"
+  },
+  {
    "pointer": "django/utils/http.py",
-   "line": 31,
-   "sentence": "Each judges the URL it is to redirect to with `url_has_allowed_host_and_scheme`, which refuses one over `MAX_URL_LENGTH` before splitting it (`django/utils/http.py:_url_has_allowed_host_and_scheme`; [The helpers in `django/utils/http.py`](../http/helpers.md#urls-that-came-from-a-client)).",
+   "line": 43,
+   "sentence": "Each judges its redirect with `url_has_allowed_host_and_scheme`, which refuses a URL over `MAX_URL_LENGTH`, a relative path too, before splitting it; the two auth views then take their default target, and `set_language` the `\"Referer\"` or `\"/\"` (`django/utils/http.py:_url_has_allowed_host_and_scheme`, `django/views/i18n.py:set_language`; [The helpers in `django/utils/http.py`](../http/helpers.md#urls-that-came-from-a-client)).",
    "tree": "django",
    "path": "django/utils/http.py",
    "symbol": null,
@@ -208,23 +250,9 @@
    "fingerprint": "aca6086ffea6bad3"
   },
   {
-   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
-   "line": 31,
-   "sentence": "The redirects followed (CVE-2025-64458, 5.1.14 and 5.2.8): `HttpResponseRedirectBase.__init__`, and so `redirect`, raises `DisallowedRedirect` for a `\"Location\"` longer than `MAX_URL_REDIRECT_LENGTH`, 16,384 characters, before it splits the target (`django/http/response.py:HttpResponseRedirectBase.__init__`; [The response object](../http/response.md#redirects)).",
-   "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "HttpResponseRedirectBase.__init__",
-   "kind": "function",
-   "lines": [
-    642,
-    662
-   ],
-   "fingerprint": "d24c129d406f5945"
-  },
-  {
    "pointer": "django/forms/fields.py:URLField.to_python",
-   "line": 33,
-   "sentence": "It now looks only at what precedes the first colon, and never calls `urllib.parse.urlsplit` (`django/forms/fields.py:URLField.to_python`).",
+   "line": 45,
+   "sentence": "The form field's `URLField.to_python` split the value to decide whether to put a scheme in front (CVE-2026-25673, 5.2.12 and 6.0.3); it now looks only at what precedes the first colon (`django/forms/fields.py:URLField.to_python`).",
    "tree": "django",
    "path": "django/forms/fields.py",
    "symbol": "URLField.to_python",
@@ -236,9 +264,23 @@
    "fingerprint": "3479f08369e289c1"
   },
   {
+   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
+   "line": 49,
+   "sentence": "`HttpResponseRedirectBase.__init__` raises `DisallowedRedirect` past `MAX_URL_REDIRECT_LENGTH`, 16,384 characters, before splitting the target (`django/http/response.py:HttpResponseRedirectBase.__init__`; [The response object](../http/response.md#redirects)).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseRedirectBase.__init__",
+   "kind": "function",
+   "lines": [
+    642,
+    662
+   ],
+   "fingerprint": "d24c129d406f5945"
+  },
+  {
    "pointer": "django/utils/ipv6.py:_ipv6_address_from_str",
-   "line": 37,
-   "sentence": "`is_valid_ipv6_address` now refuses text longer than `MAX_IPV6_ADDRESS_LENGTH`, 39 characters, eight groups of four and their colons, before `ipaddress` parses it, and `clean_ipv6_address` text longer than its max_length, by default the same (`django/utils/ipv6.py:_ipv6_address_from_str`).",
+   "line": 63,
+   "sentence": "`is_valid_ipv6_address` and `clean_ipv6_address` now refuse text longer than `MAX_IPV6_ADDRESS_LENGTH`, 39 characters, before `ipaddress` parses it, and `django.forms.GenericIPAddressField` passes on 39 unless given another max_length (`django/utils/ipv6.py:_ipv6_address_from_str`; [Dates, durations and addresses: `parse_datetime`, `parse_duration` and `clean_ipv6_address`](../utils/parsing.md#ipv6-addresses-clean_ipv6_address)).",
    "tree": "django",
    "path": "django/utils/ipv6.py",
    "symbol": "_ipv6_address_from_str",
@@ -250,23 +292,9 @@
    "fingerprint": "9727a45599099963"
   },
   {
-   "pointer": "django/forms/fields.py:GenericIPAddressField",
-   "line": 37,
-   "sentence": "`django.forms.GenericIPAddressField` takes 39 as its max_length unless given another, and passes it to `clean_ipv6_address` (`django/forms/fields.py:GenericIPAddressField`).",
-   "tree": "django",
-   "path": "django/forms/fields.py",
-   "symbol": "GenericIPAddressField",
-   "kind": "class",
-   "lines": [
-    1286,
-    1303
-   ],
-   "fingerprint": "b04705a5e470a028"
-  },
-  {
    "pointer": "django/utils/translation/trans_real.py:get_supported_language_variant",
-   "line": 39,
-   "sentence": "It now cuts a code longer than `LANGUAGE_CODE_MAX_LENGTH`, 500 characters, at its last hyphen within the limit, and refuses it with `LookupError` if it has none there or strict is true (`django/utils/translation/trans_real.py:get_supported_language_variant`).",
+   "line": 65,
+   "sentence": "It now cuts a code longer than `LANGUAGE_CODE_MAX_LENGTH`, 500 characters, at its last hyphen within the limit, and refuses one with no hyphen there, or any when `strict=True` (`django/utils/translation/trans_real.py:get_supported_language_variant`).",
    "tree": "django",
    "path": "django/utils/translation/trans_real.py",
    "symbol": "get_supported_language_variant",
@@ -280,8 +308,8 @@
   },
   {
    "pointer": "django/utils/translation/trans_real.py:check_for_language",
-   "line": 39,
-   "sentence": "At this commit it is not cached: it refuses a code over the limit, and asks the cached `translation_catalog_exists`, which holds 1,000 codes, about the rest (`django/utils/translation/trans_real.py:check_for_language`; [Choosing a language: `LocaleMiddleware`](../i18n/choosing.md#supported-codes)).",
+   "line": 67,
+   "sentence": "At this commit it refuses a code over the limit, and asks the cached `translation_catalog_exists`, which holds up to 1,000 codes, about the rest (`django/utils/translation/trans_real.py:check_for_language`; [Choosing a language: `LocaleMiddleware`](../i18n/choosing.md#whether-a-catalogue-exists)).",
    "tree": "django",
    "path": "django/utils/translation/trans_real.py",
    "symbol": "check_for_language",
@@ -294,8 +322,8 @@
   },
   {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
-   "line": 43,
-   "sentence": "`ASGIRequest.__init__` now gathers each header's values in a list and joins them once, with commas, or for `\"cookie\"` with a semicolon and a space (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).",
+   "line": 71,
+   "sentence": "`ASGIRequest.__init__` now gathers each header's values in a list and joins them once (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest.__init__",
@@ -308,8 +336,8 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.body",
-   "line": 45,
-   "sentence": "`body` refuses a declared length over the limit before reading, and then, when the stream can seek, as an ASGI request's can, measures it and raises `RequestDataTooBig` if it is over (`django/http/request.py:HttpRequest.body`; [The body: `body`, `POST` and `FILES`](../http/body.md#under-asgi)).",
+   "line": 73,
+   "sentence": "`body` checks the declared length, then measures a stream that can seek, as an ASGI request's can (`django/http/request.py:HttpRequest.body`; [The body: `body`, `POST` and `FILES`](../http/body.md#under-asgi)).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.body",
@@ -323,8 +351,8 @@
   },
   {
    "pointer": "django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input",
-   "line": 45,
-   "sentence": "`MemoryFileUploadHandler.handle_raw_input` decides whether files stay in memory by the size of a stream that can seek; a WSGI request's `LimitedStream` cannot, and there the header, which it enforces, still decides (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`; [Multipart parsing and upload handlers](../http/uploads.md#memory-or-disk)).",
+   "line": 75,
+   "sentence": "`MemoryFileUploadHandler.handle_raw_input` judges by the same measure, so the same bytes sent as a file go to disk; a WSGI request's `LimitedStream` cannot seek, and there the header, which it enforces, decides (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`; [Multipart parsing and upload handlers](../http/uploads.md#memory-or-disk)).",
    "tree": "django",
    "path": "django/core/files/uploadhandler.py",
    "symbol": "MemoryFileUploadHandler.handle_raw_input",
@@ -337,8 +365,8 @@
   },
   {
    "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
-   "line": 47,
-   "sentence": "At this commit the parser strips a chunk's white space, reads further chunks whole until the stripped length is a multiple of four, and joins the pieces once before decoding (`django/http/multipartparser.py:MultiPartParser._parse`).",
+   "line": 77,
+   "sentence": "At this commit the parser strips white space from each chunk, reads on while the stripped length is not a multiple of four, and joins the pieces once before decoding (`django/http/multipartparser.py:MultiPartParser._parse`).",
    "tree": "django",
    "path": "django/http/multipartparser.py",
    "symbol": "MultiPartParser._parse",
@@ -351,8 +379,8 @@
   },
   {
    "pointer": "django/core/serializers/xml_serializer.py:check_element_type",
-   "line": 51,
-   "sentence": "Since 6.1 it reads only a node's own text, and `check_element_type` raises `SuspiciousOperation` for a child element with content of its own, so a nested element with content is refused, not walked (`django/core/serializers/xml_serializer.py:check_element_type`; [What changed in caching, files, signals, serialization and pagination](caching-files-signals.md)).",
+   "line": 81,
+   "sentence": "Under 6.0.8 the text of an element nested in a field still went into the value; since 6.1 `check_element_type` refuses a child element with content of its own with `SuspiciousOperation` (`django/core/serializers/xml_serializer.py:check_element_type`; [What changed in caching, files, signals, serialization and pagination](caching-files-signals.md)).",
    "tree": "django",
    "path": "django/core/serializers/xml_serializer.py",
    "symbol": "check_element_type",
@@ -365,8 +393,8 @@
   },
   {
    "pointer": "django/contrib/gis/geos/prototypes/io.py:_WKTReader.limit",
-   "line": 55,
-   "sentence": "Past the limit, by default `MAX_GEOM_COLLECTIONS`, 198, the reader raises `ValueError` (`django/contrib/gis/geos/prototypes/io.py:_WKTReader.limit`, `django/contrib/gis/geos/prototypes/io.py:_WKBReader`; [Geometries in Python: GEOS and GDAL](../contrib/geometries.md#geosgeometry)).",
+   "line": 85,
+   "sentence": "Past 198, the constant `MAX_GEOM_COLLECTIONS` that max_geom_collections defaults to, the reader raises `ValueError` (`django/contrib/gis/geos/prototypes/io.py:_WKTReader.limit`, `django/contrib/gis/geos/prototypes/io.py:_WKBReader`; [Geometries in Python: GEOS and GDAL](../contrib/geometries.md#geosgeometry)).",
    "tree": "django",
    "path": "django/contrib/gis/geos/prototypes/io.py",
    "symbol": "_WKTReader.limit",
@@ -379,8 +407,8 @@
   },
   {
    "pointer": "django/contrib/gis/geos/prototypes/io.py:_WKBReader",
-   "line": 55,
-   "sentence": "Past the limit, by default `MAX_GEOM_COLLECTIONS`, 198, the reader raises `ValueError` (`django/contrib/gis/geos/prototypes/io.py:_WKTReader.limit`, `django/contrib/gis/geos/prototypes/io.py:_WKBReader`; [Geometries in Python: GEOS and GDAL](../contrib/geometries.md#geosgeometry)).",
+   "line": 85,
+   "sentence": "Past 198, the constant `MAX_GEOM_COLLECTIONS` that max_geom_collections defaults to, the reader raises `ValueError` (`django/contrib/gis/geos/prototypes/io.py:_WKTReader.limit`, `django/contrib/gis/geos/prototypes/io.py:_WKBReader`; [Geometries in Python: GEOS and GDAL](../contrib/geometries.md#geosgeometry)).",
    "tree": "django",
    "path": "django/contrib/gis/geos/prototypes/io.py",
    "symbol": "_WKBReader",
@@ -393,8 +421,8 @@
   },
   {
    "pointer": "django/contrib/gis/gdal/geometries.py:OGRGeometry._geos_ptr",
-   "line": 55,
-   "sentence": "GeoJSON is parsed by GDAL, and GDAL's WKB of it is counted at the default limit, whatever max_geom_collections says (`django/contrib/gis/gdal/geometries.py:OGRGeometry._geos_ptr`); geometries read back from the database are read with no limit ([Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).",
+   "line": 85,
+   "sentence": "The notes say GeoJSON is not limited; at this commit its WKB, from GDAL, is counted at the default, whatever max_geom_collections says (`django/contrib/gis/gdal/geometries.py:OGRGeometry._geos_ptr`).",
    "tree": "django",
    "path": "django/contrib/gis/gdal/geometries.py",
    "symbol": "OGRGeometry._geos_ptr",
@@ -407,8 +435,8 @@
   },
   {
    "pointer": "django/contrib/gis/forms/fields.py:GeometryField.__init__",
-   "line": 57,
-   "sentence": "The form field takes it too, and there `None` keeps the default, so a model field given `None` still makes a form field that refuses past 198 (`django/contrib/gis/forms/fields.py:GeometryField.__init__`).",
+   "line": 87,
+   "sentence": "In the form field `None` keeps the default, so a model field given `None` still makes a form field that refuses past 198 (`django/contrib/gis/forms/fields.py:GeometryField.__init__`).",
    "tree": "django",
    "path": "django/contrib/gis/forms/fields.py",
    "symbol": "GeometryField.__init__",

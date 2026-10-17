@@ -23,8 +23,8 @@
   },
   {
    "pointer": "docs/releases/6.0.txt",
-   "line": 13,
-   "sentence": "The value has the old classes' API but is no instance of them; the modern API is \"a cleaner and Unicode-friendly interface\", the release notes say (`docs/releases/6.0.txt`).",
+   "line": 23,
+   "sentence": "The new value has the old classes' API but is no instance of them, the 6.0 notes say (`docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -36,23 +36,9 @@
    "fingerprint": "0ea24de54cb358c8"
   },
   {
-   "pointer": "django/core/mail/__init__.py:__getattr__",
-   "line": 15,
-   "sentence": "`SafeMIMEText` and `SafeMIMEMultipart` are still handed out by the package's `__getattr__`, with a warning (`django/core/mail/__init__.py:__getattr__`); `forbid_multi_line_headers` and `sanitize_address` warn when called; and `EmailMessage.attach` warns when given a legacy `email.mime.base.MIMEBase`, and since 6.0 takes an `email.message.MIMEPart`.",
-   "tree": "django",
-   "path": "django/core/mail/__init__.py",
-   "symbol": "__getattr__",
-   "kind": "function",
-   "lines": [
-    390,
-    400
-   ],
-   "fingerprint": "be2d84b55cc7e5d0"
-  },
-  {
    "pointer": "django/core/mail/message.py:BadHeaderError",
-   "line": 15,
-   "sentence": "`BadHeaderError`, deprecated too, is now `ValueError` itself, so that code catching it catches what the policy raises (`django/core/mail/message.py:BadHeaderError`).",
+   "line": 23,
+   "sentence": "A newline in the subject raised Django's `BadHeaderError` under 5.2.17, and raises the policy's `ValueError` since 6.0; `BadHeaderError`, deprecated, is now `ValueError` itself, so that code catching it catches the policy's error (`django/core/mail/message.py:BadHeaderError`).",
    "tree": "django",
    "path": "django/core/mail/message.py",
    "symbol": "BadHeaderError",
@@ -64,37 +50,37 @@
    "fingerprint": "07bcbf3b069d3423"
   },
   {
-   "pointer": "django/core/mail/message.py:EmailMultiAlternatives._add_bodies",
-   "line": 17,
-   "sentence": "Alternatives are read by field name as the message is built, so one appended as a plain tuple fails then, with `AttributeError`; the release notes support adding one only by `EmailMultiAlternatives.attach_alternative` (`django/core/mail/message.py:EmailMultiAlternatives._add_bodies`).",
+   "pointer": "django/core/mail/__init__.py:__getattr__",
+   "line": 23,
+   "sentence": "Importing `BadHeaderError`, `SafeMIMEText` or `SafeMIMEMultipart` from `django.core.mail` warns (`django/core/mail/__init__.py:__getattr__`).",
    "tree": "django",
-   "path": "django/core/mail/message.py",
-   "symbol": "EmailMultiAlternatives._add_bodies",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "__getattr__",
    "kind": "function",
    "lines": [
-    663,
-    685
+    390,
+    400
    ],
-   "fingerprint": "dbd928857e3552ef"
+   "fingerprint": "be2d84b55cc7e5d0"
   },
   {
-   "pointer": "django/core/mail/message.py:EmailMessage.message",
-   "line": 17,
-   "sentence": "Since 6.1 a `\"Bcc\"` among the extra headers raises `ValueError` when the message is built: blind copies go in the bcc argument (`django/core/mail/message.py:EmailMessage.message`).",
+   "pointer": "django/core/mail/message.py:EmailMessage.attach",
+   "line": 25,
+   "sentence": "`EmailMessage.attach` takes an `email.message.MIMEPart` since 6.0, which 5.2.17 refused, and attaches a legacy `email.mime.base.MIMEBase` with a warning (`django/core/mail/message.py:EmailMessage.attach`).",
    "tree": "django",
    "path": "django/core/mail/message.py",
-   "symbol": "EmailMessage.message",
+   "symbol": "EmailMessage.attach",
    "kind": "function",
    "lines": [
-    339,
-    373
+    422,
+    472
    ],
-   "fingerprint": "2bc8ceed4fe90df3"
+   "fingerprint": "712d68db882a62da"
   },
   {
    "pointer": "django/utils/deprecation.py:deprecate_posargs",
-   "line": 21,
-   "sentence": "A positional use still works and warns (`django/utils/deprecation.py:deprecate_posargs`).",
+   "line": 29,
+   "sentence": "A positional use still works, and warns (`django/utils/deprecation.py:deprecate_posargs`).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
    "symbol": "deprecate_posargs",
@@ -107,8 +93,8 @@
   },
   {
    "pointer": "django/core/mail/__init__.py:_send_server_message",
-   "line": 23,
-   "sentence": "As `mail_admins` or `mail_managers` sends, a list of (name, address) pairs warns and is reduced to its addresses, and a value that is not a list or tuple of strings is `ImproperlyConfigured` (`django/core/mail/__init__.py:_send_server_message`).",
+   "line": 31,
+   "sentence": "Django never used the names, the 6.0 notes say, and since 6.0 both are lists of address strings: as `mail_admins` or `mail_managers` sends, a list of pairs is reduced to its addresses with a warning, and a value that is neither empty nor a list or tuple of strings is `ImproperlyConfigured` (`django/core/mail/__init__.py:_send_server_message`).",
    "tree": "django",
    "path": "django/core/mail/__init__.py",
    "symbol": "_send_server_message",
@@ -121,8 +107,8 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 27,
-   "sentence": "Since 6.1 `MAILERS` names backends by alias, as `CACHES`, `DATABASES`, `STORAGES` and `TASKS` do, for \"configuring multiple email backends with different options\" (`docs/releases/6.1.txt`).",
+   "line": 35,
+   "sentence": "Since 6.1 `MAILERS` names backends by alias, for \"configuring multiple email backends with different options\" (`docs/releases/6.1.txt`), and its handler, `django.core.mail.mailers`, makes at each lookup a new backend from an entry's `\"BACKEND\"` and `\"OPTIONS\"` (`django/core/mail/handler.py:MailersHandler.create_connection`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -135,8 +121,8 @@
   },
   {
    "pointer": "django/core/mail/handler.py:MailersHandler.create_connection",
-   "line": 27,
-   "sentence": "Its handler, `django.core.mail.mailers`, makes at each lookup a new instance of the class an entry's `\"BACKEND\"` names, the SMTP backend when it names none, with the entry's `\"OPTIONS\"` as keyword arguments and the alias beside them (`django/core/mail/handler.py:MailersHandler.create_connection`).",
+   "line": 35,
+   "sentence": "Since 6.1 `MAILERS` names backends by alias, for \"configuring multiple email backends with different options\" (`docs/releases/6.1.txt`), and its handler, `django.core.mail.mailers`, makes at each lookup a new backend from an entry's `\"BACKEND\"` and `\"OPTIONS\"` (`django/core/mail/handler.py:MailersHandler.create_connection`).",
    "tree": "django",
    "path": "django/core/mail/handler.py",
    "symbol": "MailersHandler.create_connection",
@@ -148,37 +134,24 @@
    "fingerprint": "7066895b5458f351"
   },
   {
-   "pointer": "django/core/mail/handler.py:MailersHandler",
-   "line": 53,
-   "sentence": "In a project that does not define it, `mailers` answers `\"default\"` with `get_connection`, which makes the backend `EMAIL_BACKEND` names, with no alias, so that the SMTP backend reads the old settings; any other alias is `MailerDoesNotExist` (`django/core/mail/handler.py:MailersHandler`).",
+   "pointer": "django/core/mail/__init__.py:send_mail",
+   "line": 61,
+   "sentence": "`send_mail` builds an `EmailMultiAlternatives`, and given neither `using=` nor `connection=` hands it the backend `get_connection` makes (`django/core/mail/__init__.py:send_mail`).",
    "tree": "django",
-   "path": "django/core/mail/handler.py",
-   "symbol": "MailersHandler",
-   "kind": "class",
-   "lines": [
-    11,
-    78
-   ],
-   "fingerprint": "d6b0b7b76cb78bdd"
-  },
-  {
-   "pointer": "django/core/mail/deprecation.py:warn_about_default_mailers_if_needed",
-   "line": 53,
-   "sentence": "Unless an old email setting is defined, which warned as the settings loaded, the lookup warns that a mailer will be required (`django/core/mail/deprecation.py:warn_about_default_mailers_if_needed`):",
-   "tree": "django",
-   "path": "django/core/mail/deprecation.py",
-   "symbol": "warn_about_default_mailers_if_needed",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "send_mail",
    "kind": "function",
    "lines": [
-    43,
-    56
+    103,
+    183
    ],
-   "fingerprint": "06c2e3af6a9358c6"
+   "at": 113,
+   "fingerprint": "261f02cfbd0738a6"
   },
   {
    "pointer": "django/core/mail/__init__.py:get_connection",
-   "line": 66,
-   "sentence": "Where `MAILERS` is defined it returns a new instance of the default mailer, its keyword arguments added to the entry's options, and refuses a backend's path with `RuntimeError` (`django/core/mail/__init__.py:get_connection`).",
+   "line": 61,
+   "sentence": "An alias `MAILERS` lacks, or any but `\"default\"` without it, raises the exception `MailerDoesNotExist`; beside `MAILERS`, `get_connection` makes the `\"default\"` mailer, its keyword arguments added to the entry's `\"OPTIONS\"`, unknown ones ignored, and refuses a backend's path with `RuntimeError` (`django/core/mail/__init__.py:get_connection`).",
    "tree": "django",
    "path": "django/core/mail/__init__.py",
    "symbol": "get_connection",
@@ -191,9 +164,66 @@
    "fingerprint": "6fa2ace550b2f42c"
   },
   {
+   "pointer": "django/core/mail/deprecation.py:warn_about_default_mailers_if_needed",
+   "line": 61,
+   "sentence": "Without `MAILERS`, `get_connection` makes the backend whose path it is given, or else the class `EMAIL_BACKEND` names, and `mailers` answers `\"default\"` with it; it warns \"Django 2028 will not have a default mailer. …\" unless an old email setting is defined, since such a setting warns of its own (`django/core/mail/deprecation.py:warn_about_default_mailers_if_needed`, `django/conf/__init__.py:Settings.__init__`).",
+   "tree": "django",
+   "path": "django/core/mail/deprecation.py",
+   "symbol": "warn_about_default_mailers_if_needed",
+   "kind": "function",
+   "lines": [
+    43,
+    56
+   ],
+   "fingerprint": "06c2e3af6a9358c6"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 61,
+   "sentence": "Without `MAILERS`, `get_connection` makes the backend whose path it is given, or else the class `EMAIL_BACKEND` names, and `mailers` answers `\"default\"` with it; it warns \"Django 2028 will not have a default mailer. …\" unless an old email setting is defined, since such a setting warns of its own (`django/core/mail/deprecation.py:warn_about_default_mailers_if_needed`, `django/conf/__init__.py:Settings.__init__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
+   "pointer": "django/core/mail/__init__.py:get_connection",
+   "line": 75,
+   "sentence": "`get_connection` is deprecated (6.1); 5.2.17 and 6.0.8, which knew no `MAILERS`, made the backend of `EMAIL_BACKEND` whatever `MAILERS` held (`django/core/mail/__init__.py:get_connection`).",
+   "tree": "django",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "get_connection",
+   "kind": "function",
+   "lines": [
+    72,
+    100
+   ],
+   "at": 73,
+   "fingerprint": "6fa2ace550b2f42c"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:warn_about_external_use",
+   "line": 75,
+   "sentence": "Deprecated with it, and warning only when called from outside Django: connection= and `EmailMessage.connection`, fail_silently=, auth_user= and auth_password= (`django/utils/deprecation.py:warn_about_external_use`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "warn_about_external_use",
+   "kind": "function",
+   "lines": [
+    50,
+    126
+   ],
+   "fingerprint": "6b8d6bf8462df763"
+  },
+  {
    "pointer": "docs/topics/email.txt",
-   "line": 68,
-   "sentence": "Some old combinations now raise (6.1). fail_silently=True, auth_user= or auth_password= beside connection= is a `TypeError`, where older versions ignored them, the documentation says (`docs/topics/email.txt`); so is any of them, or connection=, beside `using=` (`django/core/mail/deprecation.py:report_using_incompatibility`).",
+   "line": 77,
+   "sentence": "Here `send_mail` is given a backend as connection= and fail_silently=True; older versions ignored fail_silently= beside a connection, the documentation says (`docs/topics/email.txt`):",
    "tree": "django",
    "path": "docs/topics/email.txt",
    "symbol": null,
@@ -205,23 +235,24 @@
    "fingerprint": "ee910841bad6ca97"
   },
   {
-   "pointer": "django/core/mail/deprecation.py:report_using_incompatibility",
-   "line": 68,
-   "sentence": "Some old combinations now raise (6.1). fail_silently=True, auth_user= or auth_password= beside connection= is a `TypeError`, where older versions ignored them, the documentation says (`docs/topics/email.txt`); so is any of them, or connection=, beside `using=` (`django/core/mail/deprecation.py:report_using_incompatibility`).",
+   "pointer": "django/core/mail/__init__.py:send_mail",
+   "line": 87,
+   "sentence": "Since 6.1 the call is refused before a message is made, after two warnings, of fail_silently= and connection=, whose one class the line names once (`django/core/mail/__init__.py:send_mail`); credentials beside a connection are refused alike.",
    "tree": "django",
-   "path": "django/core/mail/deprecation.py",
-   "symbol": "report_using_incompatibility",
+   "path": "django/core/mail/__init__.py",
+   "symbol": "send_mail",
    "kind": "function",
    "lines": [
-    28,
-    40
+    103,
+    183
    ],
-   "fingerprint": "ae7316c9ae583587"
+   "at": 113,
+   "fingerprint": "261f02cfbd0738a6"
   },
   {
    "pointer": "django/core/mail/message.py:EmailMessage.send",
-   "line": 68,
-   "sentence": "`EmailMessage.send` no longer stores on the message the backend it used, though it uses one set there, and raises `AttributeError` for a subclass that defines a method get_connection, which it used to call (`django/core/mail/message.py:EmailMessage.send`).",
+   "line": 89,
+   "sentence": "A subclass that defines a method get_connection, which `send` called before 6.1, now makes `send` raise `AttributeError` (`django/core/mail/message.py:EmailMessage.send`).",
    "tree": "django",
    "path": "django/core/mail/message.py",
    "symbol": "EmailMessage.send",
@@ -234,8 +265,8 @@
   },
   {
    "pointer": "django/core/mail/backends/base.py:BaseEmailBackend.__init__",
-   "line": 70,
-   "sentence": "The base's support for fail_silently is deprecated: a backend that offers it keeps its own attribute, as the SMTP, console and file backends do (`django/core/mail/backends/base.py:BaseEmailBackend.__init__`).",
+   "line": 91,
+   "sentence": "A backend made directly, by calling its class, has the alias `None` and still ignores the argument, with a warning (`django/core/mail/backends/base.py:BaseEmailBackend.__init__`).",
    "tree": "django",
    "path": "django/core/mail/backends/base.py",
    "symbol": "BaseEmailBackend.__init__",
@@ -248,8 +279,8 @@
   },
   {
    "pointer": "django/core/mail/backends/smtp.py:EmailBackend.__init__",
-   "line": 70,
-   "sentence": "Making the SMTP backend directly is deprecated too; such an instance reads the old settings for what it is not given, and where `MAILERS` is defined, one made in a run with only a host raised `AttributeError` as it read EMAIL_PORT (`django/core/mail/backends/smtp.py:EmailBackend.__init__`).",
+   "line": 91,
+   "sentence": "An SMTP backend made directly, deprecated too, reads the old settings for what it is not given (`django/core/mail/backends/smtp.py:EmailBackend.__init__`).",
    "tree": "django",
    "path": "django/core/mail/backends/smtp.py",
    "symbol": "EmailBackend.__init__",
@@ -261,23 +292,23 @@
    "fingerprint": "3ae1b50b548debae"
   },
   {
-   "pointer": "django/core/checks/mail.py",
-   "line": 72,
-   "sentence": "Two checks came with it (6.1): `\"mail.W001\"` warns when `MAILERS` lacks a `\"default\"` entry, and the deployment check `\"mail.E001\"` is an error when that entry names the console, file, local-memory or dummy backend (`django/core/checks/mail.py`).",
+   "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
+   "line": 91,
+   "sentence": "Where `MAILERS` is defined none can be read, even one left at its default, so given only a host the backend raises `AttributeError` as it reads `EMAIL_PORT`, where 5.2.17 and 6.0.8 read port 25 (`django/conf/__init__.py:LazySettings.__getattr__`).",
    "tree": "django",
-   "path": "django/core/checks/mail.py",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__getattr__",
+   "kind": "function",
    "lines": [
-    1,
-    63
+    119,
+    146
    ],
-   "fingerprint": "bf6e236d0bdf135f"
+   "fingerprint": "fd7eca125afabf3c"
   },
   {
    "pointer": "django/utils/log.py:AdminEmailHandler.__init__",
-   "line": 76,
-   "sentence": "Its email_backend argument is deprecated, and refused with `ImproperlyConfigured` beside `using=` or where `MAILERS` is defined; its undocumented connection method is gone, and a subclass that defines one raises `AttributeError` as it is made (`django/utils/log.py:AdminEmailHandler.__init__`).",
+   "line": 95,
+   "sentence": "Its undocumented connection method is no longer called, the 6.1 notes say, and since 6.1 a subclass that defines one raises `AttributeError` as it is made (`django/utils/log.py:AdminEmailHandler.__init__`; [Logging](../startup/logging.md)).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "AdminEmailHandler.__init__",
@@ -290,8 +321,8 @@
   },
   {
    "pointer": "django/middleware/common.py:BrokenLinkEmailsMiddleware.send_mail",
-   "line": 76,
-   "sentence": "`BrokenLinkEmailsMiddleware` takes its alias from its class attribute `BrokenLinkEmailsMiddleware.using` (`django/middleware/common.py:BrokenLinkEmailsMiddleware.send_mail`).",
+   "line": 95,
+   "sentence": "`BrokenLinkEmailsMiddleware` takes its alias from `BrokenLinkEmailsMiddleware.using` (`django/middleware/common.py:BrokenLinkEmailsMiddleware.send_mail`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "BrokenLinkEmailsMiddleware.send_mail",
@@ -304,8 +335,8 @@
   },
   {
    "pointer": "django/utils/log.py:AdminEmailHandler.send_mail",
-   "line": 76,
-   "sentence": "Without `MAILERS`, both send with fail_silently=True, as before, and leave the alias aside; with it, they send to the alias, pass no fail_silently and catch only `MailerDoesNotExist`, so an error in sending is not swallowed: in a run whose default mailer's SMTP host could not be reached, `AdminEmailHandler.emit` raised `TimeoutError` (`django/utils/log.py:AdminEmailHandler.send_mail`).",
+   "line": 97,
+   "sentence": "Without it, the handler and the middleware send with fail_silently=True, so the SMTP backend passes over a server it cannot reach; with it, they catch only `MailerDoesNotExist`, and unless the mailer's `\"OPTIONS\"` set `\"fail_silently\"`, an error in sending is raised from `AdminEmailHandler.emit` to the code that logged the record, since logging does not catch what a handler raises (`django/utils/log.py:AdminEmailHandler.send_mail`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "AdminEmailHandler.send_mail",
@@ -318,8 +349,8 @@
   },
   {
    "pointer": "django/tasks/base.py:Task.enqueue",
-   "line": 80,
-   "sentence": "The `task` decorator turns a module-level function into a `Task`, checked against its backend as it is made; `Task.enqueue` hands it and its arguments to the task's backend of `TASKS`, which returns a `TaskResult`, the record of what became of it (`django/tasks/base.py:Task.enqueue`).",
+   "line": 101,
+   "sentence": "Since 6.0 the `task` decorator turns a module-level function into a `Task`, and `Task.enqueue` hands it and its arguments to its backend of `TASKS`, which returns a `TaskResult` (`django/tasks/base.py:Task.enqueue`).",
    "tree": "django",
    "path": "django/tasks/base.py",
    "symbol": "Task.enqueue",
@@ -331,23 +362,9 @@
    "fingerprint": "da3f6ae9f79cbb35"
   },
   {
-   "pointer": "django/conf/global_settings.py",
-   "line": 80,
-   "sentence": "`TASKS` defaults to `ImmediateBackend`, which runs the task inside `enqueue` (`django/conf/global_settings.py`); `DummyBackend` keeps results and runs nothing.",
-   "tree": "django",
-   "path": "django/conf/global_settings.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    692
-   ],
-   "fingerprint": "3c82ce45a0f468df"
-  },
-  {
    "pointer": "docs/releases/6.0.txt",
-   "line": 80,
-   "sentence": "Both are \"primarily intended for development and testing\", and Django \"does not provide a worker mechanism to run tasks\", the release notes say (`docs/releases/6.0.txt`).",
+   "line": 101,
+   "sentence": "Django \"does not provide a worker mechanism to run tasks\", the 6.0 notes say (`docs/releases/6.0.txt`; [Background tasks: `Task`, `TaskResult` and the task backends](../services/tasks.md)).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -360,8 +377,8 @@
   },
   {
    "pointer": "django/tasks/base.py:task",
-   "line": 82,
-   "sentence": "Since 6.1 the decorator passes a keyword argument it does not take, all but run_after, which it refuses, to the backend's `BaseTaskBackend.task_class`: a task class that declares such a field takes it, and the built-in `Task` refuses it with a `TypeError` (`django/tasks/base.py:task`).",
+   "line": 103,
+   "sentence": "Since 6.1 the decorator passes a keyword argument it does not name, run_after apart, to the backend's `BaseTaskBackend.task_class`, where 6.0.8's decorator refused it; the default class, `Task`, takes only its own fields (`django/tasks/base.py:task`).",
    "tree": "django",
    "path": "django/tasks/base.py",
    "symbol": "task",
@@ -374,8 +391,8 @@
   },
   {
    "pointer": "django/tasks/base.py:Task.__reduce__",
-   "line": 82,
-   "sentence": "And since 6.1 a `Task` and a `TaskResult` can be pickled: a task pickles as its fields, its function replaced by the function's dotted path, and is made again with those fields and the function of the task the decorator bound at that path (`django/tasks/base.py:Task.__reduce__`).",
+   "line": 113,
+   "sentence": "Since 6.1 `Task.__reduce__` pickles the function's dotted path, and `Task._reconstruct` takes the function from the task bound there (`django/tasks/base.py:Task.__reduce__`).",
    "tree": "django",
    "path": "django/tasks/base.py",
    "symbol": "Task.__reduce__",
@@ -385,6 +402,76 @@
     73
    ],
    "fingerprint": "7a3eb7a99d42b5a9"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage._add_attachments",
+   "line": 121,
+   "sentence": "| mixed_subtype, alternative_subtype | undocumented; set, they make building a message with attachments, or alternatives, raise `AttributeError`; 5.2.17 used them as subtypes, and nothing warned; 5.2.17's _create_ methods, _create_message among them, are gone, and an override of one is not called | 6.0 | `django/core/mail/message.py:EmailMessage._add_attachments` |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage._add_attachments",
+   "kind": "function",
+   "lines": [
+    498,
+    514
+   ],
+   "fingerprint": "ae416809fab21c58"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMessage._add_bodies",
+   "line": 122,
+   "sentence": "| `EmailMessage.encoding` | undocumented; an `email.charset.Charset` there raises `TypeError` as the message is built | 6.0 | `django/core/mail/message.py:EmailMessage._add_bodies` |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMessage._add_bodies",
+   "kind": "function",
+   "lines": [
+    490,
+    496
+   ],
+   "fingerprint": "5096773ce4e64d57"
+  },
+  {
+   "pointer": "docs/releases/5.2.txt",
+   "line": 123,
+   "sentence": "| `EmailMultiAlternatives.alternatives` | `EmailAlternative` named tuples, as attachments are `EmailAttachment`; a plain tuple appended raises `AttributeError` as the message is built (`docs/releases/5.2.txt`) | 5.2 | `django/core/mail/message.py:EmailMultiAlternatives._add_bodies` |",
+   "tree": "django",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "56a4c82a284e4c7a"
+  },
+  {
+   "pointer": "django/core/mail/message.py:EmailMultiAlternatives._add_bodies",
+   "line": 123,
+   "sentence": "| `EmailMultiAlternatives.alternatives` | `EmailAlternative` named tuples, as attachments are `EmailAttachment`; a plain tuple appended raises `AttributeError` as the message is built (`docs/releases/5.2.txt`) | 5.2 | `django/core/mail/message.py:EmailMultiAlternatives._add_bodies` |",
+   "tree": "django",
+   "path": "django/core/mail/message.py",
+   "symbol": "EmailMultiAlternatives._add_bodies",
+   "kind": "function",
+   "lines": [
+    663,
+    685
+   ],
+   "fingerprint": "dbd928857e3552ef"
+  },
+  {
+   "pointer": "django/core/checks/mail.py",
+   "line": 124,
+   "sentence": "| `\"mail.W001\"`, `\"mail.E001\"` | checks: `MAILERS` without `\"default\"`; in deployment, a development backend there | 6.1 | `django/core/checks/mail.py` |",
+   "tree": "django",
+   "path": "django/core/checks/mail.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "bf6e236d0bdf135f"
   }
  ]
 }

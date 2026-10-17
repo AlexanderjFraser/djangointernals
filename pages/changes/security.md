@@ -4,52 +4,64 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in security: Content Security Policy and signing
 
-Since 6.0 Django writes a Content Security Policy itself, from the settings `SECURE_CSP` and `SECURE_CSP_REPORT_ONLY`, with `ContentSecurityPolicyMiddleware` and a nonce for each request, and 6.1 added `{% csp_nonce_attr %}` and the check `"security.W027"`. In signing, a signed cookie's salt is made a new way since 5.2.15 and 6.0.6, `salted_hmac` and `base64_hmac` warn when given no algorithm (6.1), and `Signer` takes keyword arguments only (5.1); the CSRF cookie's setting CSRF_COOKIE_MASKED is gone (5.0).
+The changes from Django 5.0 to this commit in Content Security Policy and signing: the settings `SECURE_CSP` and `SECURE_CSP_REPORT_ONLY`, `ContentSecurityPolicyMiddleware`, the tag `{% csp_nonce_attr %}` and the check `"security.W027"`; a signed cookie's salt and the setting `SIGNED_COOKIE_LEGACY_SALT_FALLBACK`; the default algorithm of `salted_hmac` and `base64_hmac`; `Signer`'s positional arguments and the setting CSRF_COOKIE_MASKED.
+
+Two things moved. Django took on a defence it had not offered: since 6.0 a project names a Content Security Policy in its settings and a middleware writes the header, and 6.1 made the admin's pages carry its nonce. And signing became stricter in steps that leave the old form usable for a time. The new cookie salt of 5.2.15 and 6.0.6 still read cookies signed with the old one, until 6.1 turned that off by default; a call to `salted_hmac` that names no algorithm, and so gets SHA-1, warns since 6.1. Both allowances end in Django 2028 ([What still warns: the deprecations and the releases that end them](deprecations.md)).
 
 ## Content Security Policy (6.0)
 
-Until 6.0 Django wrote no Content-Security-Policy header of its own. The release notes give the reason for adding one: a policy tells the browser which scripts, styles and images a page may load, a defence against content injection such as cross-site scripting (`docs/releases/6.0.txt`).
+A Content Security Policy tells the browser which scripts, styles and images a page may load; the 6.0 notes give it as a defence against content injection such as cross-site scripting (`docs/releases/6.0.txt`). The policy is two settings, `SECURE_CSP`, which the browser enforces, and `SECURE_CSP_REPORT_ONLY`, whose breaches it only reports. Each maps a directive to its sources and is empty by default, which writes no header (`django/conf/global_settings.py`). The enumeration `CSP` names the two headers, the specification's quoted keywords such as `CSP.SELF`, and one placeholder of Django's own, `CSP.NONCE`, which stands in a policy for the request's nonce (`django/utils/csp.py:CSP`).
 
-The policy is two settings: `SECURE_CSP`, which the browser enforces, and `SECURE_CSP_REPORT_ONLY`, whose breaches it only reports. Each is a dictionary from a directive to its sources, and each is empty by default, which writes no header (`django/conf/global_settings.py`). `CSP`, in `django.utils.csp`, is a string enumeration of the two headers' names, of some of the specification's quoted keywords, such as `CSP.SELF`, and of one placeholder of Django's own, `CSP.NONCE`, which stands in a directive for the request's nonce (`django/utils/csp.py:CSP`).
+`ContentSecurityPolicyMiddleware` gives each request a `LazyNonce`, made only when first read, on the way in, and on the way out writes each header whose policy is not empty and which the response lacks (`django/middleware/csp.py:ContentSecurityPolicyMiddleware`). The context processor `django.template.context_processors.csp` gives a template the nonce as `"csp_nonce"` (`django/template/context_processors.py:csp`). The function `build_policy` puts the nonce in place of the placeholder if something read it, and otherwise drops the placeholder (`django/utils/csp.py:build_policy`). The decorators `csp_override` and `csp_report_only_override` give one view a policy that replaces the setting's entirely; an empty one leaves that header off (`django/views/decorators/csp.py:_make_csp_decorator`). A new project has no policy: the settings startproject writes name neither the middleware nor the processor (`django/conf/project_template/project_name/settings.py-tpl`). [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md) tells the mechanism.
 
-`ContentSecurityPolicyMiddleware` gives each request a `LazyNonce` on the way in, and on the way out writes, with `build_policy`, each header whose policy is not empty and which the response lacks. `build_policy` puts the nonce in place of the placeholder only if something in the request read it, and otherwise drops it (`django/middleware/csp.py:ContentSecurityPolicyMiddleware`, `django/utils/csp.py:build_policy`). The context processor `django.template.context_processors.csp` puts the nonce in a template's context as `"csp_nonce"` (`django/template/context_processors.py:csp`). `csp_override` and `csp_report_only_override` give one view's response a policy that replaces the setting's whole, and an empty dictionary leaves that header off (`django/views/decorators/csp.py:_make_csp_decorator`). A project has no policy until it asks for one: the settings module startproject writes lists neither the middleware nor the processor (`django/conf/project_template/project_name/settings.py-tpl`). [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md) tells the mechanism.
+## What 6.1 added: the tag, Django's own templates and W027
 
-## What 6.1 added to it
+Without an argument, `{% csp_nonce_attr %}` writes `nonce="…"` from the context's `"csp_nonce"`, or nothing when the context has none; given a form's media, it writes the media's tags, with the nonce if any (`django/utils/csp.py:nonce_attr`; [The built-in tags](../templates/tags.md)). Since 6.1 the admin's templates, admindocs' and the CSRF failure page carry it on their `<script>`, `<style>` and `<link>` elements (`docs/releases/6.1.txt`). The notes make this depend on the `csp` processor. Django's own failure page does not: when the project has no `"403_csrf.html"`, the view `csrf_failure` renders the built-in `"csrf_403.html"` with an `Engine` of its own, and adds the nonce itself (`django/views/csrf.py:csrf_failure`). Here Django's own failure page, with no template engine configured, is answered under a policy that names the nonce for styles; look at its `<style>`, whose nonce is new for every request and written as an ellipsis:
 
-`{% csp_nonce_attr %}` writes `nonce="…"` from the context's `"csp_nonce"`, and given a `Media` renders it with that attribute on each `MediaAsset` in it; with no nonce in the context it writes none (`django/utils/csp.py:nonce_attr`) ([The built-in tags](../templates/tags.md)). The tag reads the nonce and so makes it, though `LazyNonce`'s docstring says otherwise.
+```text recording=changes
+csrf_failure(request) through ContentSecurityPolicyMiddleware, SECURE_CSP with CSP.NONCE: the page's <style>
+    5.2.17       ModuleNotFoundError: No module named 'django.middleware.csp'
+    6.0.8        <style>
+    6.1.1        <style nonce="…">
+    this commit  <style nonce="…">
+```
 
-Django's own templates write it too since 6.1: the `<script>`, `<style>` and `<link>` elements of the admin's templates, the documentation generator's and the CSRF failure page carry the tag, and `csrf_failure`, which renders that page with an engine of its own, adds the processor's dictionary to its context (`django/views/csrf.py:csrf_failure`).
+Under 6.0.8 the page's inline style had no nonce, so a browser would refuse it (`docs/ref/csp.txt`). A project's own `"403_csrf.html"` is rendered with the request alone, so its context holds the nonce only through its engine's context processors.
 
-`"security.W027"` warns when `ContentSecurityPolicyMiddleware` is in `MIDDLEWARE`, either policy holds `CSP.NONCE`, and no engine in `TEMPLATES` lists the `csp` processor. It is not a deployment check, so it runs on every check (`django/core/checks/security/base.py:check_csp_nonce_context_processor`) ([The security checks](../security/checks.md)).
+`"security.W027"` warns when `ContentSecurityPolicyMiddleware` is in `MIDDLEWARE`, a policy holds `CSP.NONCE`, and no engine in `TEMPLATES` lists the `csp` processor, which gives a template the nonce. It is registered without `deploy=True`, so check reports it without --deploy (`django/core/checks/security/base.py:check_csp_nonce_context_processor`; [The security checks](../security/checks.md)). Here such settings are checked; 6.0.8 passes them:
+
+```text recording=changes
+MIDDLEWARE = [ContentSecurityPolicyMiddleware], SECURE_CSP with CSP.NONCE, no "csp" processor in TEMPLATES: the messages of check --tag security, without --deploy
+    5.2.17       ModuleNotFoundError: No module named 'django.utils.csp'
+    6.0.8        no message
+    6.1.1        security.W027
+    this commit  security.W027
+```
 
 ## The salt of a signed cookie (5.2.15, 6.0.6, 6.1)
 
-A signed cookie is signed with a salt that names the cookie, so that a value signed for one cookie is refused under another. `HttpResponseBase.set_signed_cookie` signs with the signer of `get_cookie_signer`, given a salt that `_cookie_signer_salt` makes from the cookie's name and the caller's salt (`django/http/response.py:HttpResponseBase.set_signed_cookie`). Until 5.2.15 and 6.0.6 that salt was the name followed by the caller's salt, so that two pairs could make one string and a cookie be accepted where it had not been signed (`docs/releases/6.0.6.txt`). At this commit the salt is `"django.http.cookies.v2:"`, the length of the caller's salt, a colon, that salt and the name; the comment says the length is there so that the pairs cannot collide (`django/core/signing.py:_cookie_signer_salt`). The fix was CVE-2026-6873 ([Security fixes: disclosure, spoofing and privilege](security-fixes-exposure.md)).
+A signed cookie is signed with a salt that names the cookie, so that a value signed for one cookie is refused under another ([Cookies](../http/cookies.md#signed-cookies)). Until 5.2.15 and 6.0.6 that salt was the cookie's name followed by the caller's salt, so the cookie "draft" with the salt "s" and the cookie "drafts" with none made the same one, and a value signed for either was accepted for the other (CVE-2026-6873, `docs/releases/5.2.15.txt`; [Security fixes: disclosure, spoofing and privilege](security-fixes-exposure.md)). `HttpResponseBase.set_signed_cookie` has since signed with a salt of a fixed prefix, the length of the caller's salt, that salt and the name, so that no two pairs make one string (`django/core/signing.py:_cookie_signer_salt`).
 
-`HttpRequest.get_signed_cookie` reads through `_unsign_cookie`, which checks the signature under the new salt (`django/core/signing.py:_unsign_cookie`). Only if that fails for a reason other than age, and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true, does it check again under the old salt, which `_cookie_signer_legacy_salt` still makes. The fallback only reads: every cookie `set_signed_cookie` signs is signed under the new salt. In 5.2.15 and 6.0.6 it was on by default, so that cookies signed before the fix stayed good (`docs/ref/settings.txt`); since 6.1 its default is false, and the setting is deprecated, to go with the old salt in Django 2028, and warns when a project sets it ([What changed in settings, startup and the commands](startup-and-commands.md)).
+For the cookies signed before, the function `_unsign_cookie` tries the old salt when the new one fails for any reason but age, if `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true (`django/core/signing.py:_unsign_cookie`). The setting was true by default in 5.2.15 and 6.0.6, and is false since 6.1. The 6.1 notes list "Signed cookies now use an unambiguous salt derivation by default" among its features (`docs/releases/6.1.txt`), but 5.2.17 and 6.0.8 already sign with the new salt: what 6.1 changed is what is read. Here a value that `set_signed_cookie("drafts", "4")` wrote before the fix is read, at the defaults, as the cookie "draft" with the salt "s"; `'4'` is that old cookie still read, the collision left open, and `None` its refusal:
 
-```text
-# salts.py at this commit: the cookie "berth" with the salt "s", and the cookie "berths" with none;
-# each value below was signed for ("berth", "s")
-salt of ("berth", "s")    'django.http.cookies.v2:1:sberth'
-salt of ("berths", "")    'django.http.cookies.v2:0:berths'
-old salt of either        'berths'
-
-get_signed_cookie of a value signed            fallback false   fallback true
-under the old salt, read as ("berth", "s")     BadSignature     '4'
-under the old salt, read as ("berths", "")     BadSignature     '4'
-at this commit, read as ("berth", "s")         '4'              '4'
-at this commit, read as ("berths", "")         BadSignature     BadSignature
+```text recording=changes
+request.get_signed_cookie("draft", default=None, salt="s"): the value set_signed_cookie("drafts", "4") wrote before 5.2.15 and 6.0.6
+    5.2.17       '4'
+    6.0.8        '4'
+    6.1.1        None
+    this commit  None
 ```
 
-With the fallback on, a value signed under the old salt is good under every pair that makes that salt: the fallback reopens the collision for old cookies, which is why the patch releases' notes told affected projects to turn it off ([Cookies](../http/cookies.md)). The messages' `CookieStorage` passes a salt of its own to `get_cookie_signer` directly, and the fallback has no part in it (`django/contrib/messages/storage/cookie.py:CookieStorage.__init__`).
+Since 6.1, at the default, a project's own cookies signed before the fix are refused too, under every name and salt: what `set_signed_cookie("draft", "4", salt="s")` wrote then was signed with the same old salt, "drafts" (`django/core/signing.py:_cookie_signer_legacy_salt`). With the fallback set true, all four releases read the old value as "4". A cookie signed now is safe from the collision, fallback or not: no release accepts as "draft" with "s" a value that `set_signed_cookie("drafts", "4")` writes now. 6.1.1 and this commit warn when a project sets the fallback, to either value (`django/conf/__init__.py:Settings.__init__`).
+
+> **Trap.** Nothing warns when an old cookie is refused: from 6.1, at the default, `HttpRequest.get_signed_cookie` raises `BadSignature` for it, or returns the default it was given, as for a forged one (`django/http/request.py:HttpRequest.get_signed_cookie`).
 
 ## The algorithm of `salted_hmac` and `base64_hmac` (6.1)
 
-`salted_hmac` and `base64_hmac` given no algorithm use SHA-1, as before, and since 6.1 warn with `RemovedInDjango2028Warning`; in Django 2028 the default becomes SHA-256 (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:base64_hmac`). Django's own callers pass an algorithm, so a `Signer`, the password-reset tokens and the session's hash of the password never meet the warning ([Secret keys and `django.utils.crypto`](../security/keys.md), [Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](../security/signing.md)).
+6.1 deprecated SHA-1 as the default algorithm of `salted_hmac`, the keyed hash under Django's signing ([What changed](../changes.md#an-old-habit-release-by-release)), and of `base64_hmac`, with which `Signer` signs: under 5.2.17 and 6.0.8 `base64_hmac("journal", "entry", "journal-key")` returns its digest without a word, and 6.1.1 and this commit return the same digest and warn (`django/core/signing.py:base64_hmac`). Django's own callers name the algorithm, `Signer` the one it was made with, SHA-256 by default, so signing never meets the warning (`django/core/signing.py:Signer.signature`; [Secret keys and `django.utils.crypto`](../security/keys.md), [Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](../security/signing.md)).
 
 ## What was removed
 
-`Signer.__init__` takes keyword arguments only: positional ones, deprecated in 4.2, were removed in 5.1, and `TimestampSigner` has the same `__init__` (`django/core/signing.py:Signer.__init__`). In a run, `Signer("harbour-key")` raised `TypeError`, "Signer.__init__() takes 1 positional argument but 2 were given".
+`Signer` takes keyword arguments only: positional ones, deprecated in 4.2, were removed in 5.1 (`docs/releases/5.1.txt`), and `TimestampSigner` inherits the same `__init__` (`django/core/signing.py:Signer.__init__`). Under 5.2.17 and every later release `Signer("journal-key")` raises `TypeError`, "Signer.__init__() takes 1 positional argument but 2 were given".
 
-The transitional setting CSRF_COOKIE_MASKED went in 5.0. It came in 4.1, when `CsrfViewMiddleware` stopped masking the secret in its cookie, to keep the cookie masked while a project's instances were upgraded (`docs/releases/4.1.txt`). Nothing at this commit reads it. The cookie holds the secret itself, 32 characters (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`), and a cookie of 64, a masked secret, is still accepted and unmasked as it is read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`) ([The CSRF secret and its token](../security/csrf-token.md)).
+The transitional setting CSRF_COOKIE_MASKED went in 5.0. It came in 4.1, when `CsrfViewMiddleware` stopped masking the secret in its cookie, to keep it masked while a project's instances were upgraded (`docs/releases/4.1.txt`). Nothing at this commit reads it: under 5.2.17 and every later release a project that sets it true gets, without a warning, a cookie of 32 characters, the secret itself (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`). A cookie of 64, a masked secret, is still accepted, and unmasked as it is read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`; [The CSRF secret and its token](../security/csrf-token.md)).
