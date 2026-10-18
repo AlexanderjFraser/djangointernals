@@ -1,6 +1,6 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
-part: Infrastructure
+part: Templates, forms and services
 contents: signals, builtin-signals, cache-api, cache-backends, page-cache, http-caching, files, storage, email-messages, mailers, tasks, serializers, fixtures, pagination
 ---
 

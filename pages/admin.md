@@ -1,6 +1,6 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
-part: Users and the admin
+part: Applications and tools
 contents: registration, site-urls, site-views, admin-permissions, change-form, admin-forms, widgets, inlines, change-list, list-display, filters, actions, deleting, log, templates, checks, admindocs
 ---
 

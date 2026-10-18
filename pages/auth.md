@@ -1,6 +1,6 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
-part: Users and the admin
+part: Applications and tools
 contents: sessions, session-middleware, session-backends, user-model, hashers, password-validation, authenticating, login, permissions, creating-permissions, requiring-login, user-forms, login-views, password-reset, createsuperuser, messages, message-storage
 ---
 
