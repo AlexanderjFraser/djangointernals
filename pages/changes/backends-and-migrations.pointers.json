@@ -68,7 +68,7 @@
   {
    "pointer": "django/db/backends/oracle/base.py",
    "line": 21,
-   "sentence": "At this commit the backend imports oracledb alone (`django/db/backends/oracle/base.py`; [Oracle](../backends/oracle.md#the-driver-and-the-processs-environment)).",
+   "sentence": "5.0 added oracledb to Oracle's backend and deprecated cx_Oracle, which 6.0 removed (`django/db/backends/oracle/base.py`; [Oracle](../backends/oracle.md#the-driver-and-the-processs-environment)).",
    "tree": "django",
    "path": "django/db/backends/oracle/base.py",
    "symbol": null,
@@ -166,9 +166,23 @@
    "fingerprint": "b4801ac1be714433"
   },
   {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns",
+   "line": 49,
+   "sentence": "A method under an old name is no longer called (`django/db/backends/base/operations.py:BaseDatabaseOperations.returning_columns`; [Inserts: returned keys, conflicts and batch sizes](../backends/inserts.md#what-comes-back-returning_columns-fetch_returned_rows-and-last_insert_id)).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.returning_columns",
+   "kind": "function",
+   "lines": [
+    380,
+    397
+   ],
+   "fingerprint": "ea8ba58ddc4cb141"
+  },
+  {
    "pointer": "django/db/models/fields/__init__.py:Field._check_db_default",
    "line": 55,
-   "sentence": "| `BaseDatabaseFeatures.supports_expression_defaults` | New in 5.0: true by default; where false, `\"fields.E011\"` refuses an expression as a `db_default` | `django/db/models/fields/__init__.py:Field._check_db_default` |",
+   "sentence": "| `BaseDatabaseFeatures.supports_expression_defaults` | New in 5.0: true by default; where false, `\"fields.E011\"` refuses any expression but a `Value` as a `db_default` | `django/db/models/fields/__init__.py:Field._check_db_default` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field._check_db_default",
@@ -182,7 +196,7 @@
   {
    "pointer": "django/db/models/expressions.py:DatabaseDefault.as_sql",
    "line": 56,
-   "sentence": "| `BaseDatabaseFeatures.supports_default_keyword_in_insert` | New in 5.0, as is `BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert` for a bulk insert: true by default; where false, an insert writes a `db_default`'s expression for `\"DEFAULT\"` | `django/db/models/expressions.py:DatabaseDefault.as_sql` |",
+   "sentence": "| `BaseDatabaseFeatures.supports_default_keyword_in_insert` | New in 5.0, as is `BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert`: true by default; where false, an insert writes a `db_default`'s expression for `\"DEFAULT\"` | `django/db/models/expressions.py:DatabaseDefault.as_sql` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "DatabaseDefault.as_sql",
@@ -224,7 +238,7 @@
   {
    "pointer": "django/db/backends/base/introspection.py",
    "line": 59,
-   "sentence": "| `BaseDatabaseIntrospection.get_relations` | Since 6.1, a third member in each value, the key's delete rule, which inspectdb writes as its `on_delete` | `django/db/backends/base/introspection.py` |",
+   "sentence": "| `BaseDatabaseIntrospection.get_relations` | Since 6.1, a third member in each value, the key's delete rule, which inspectdb reads for its `on_delete` | `django/db/backends/base/introspection.py` |",
    "tree": "django",
    "path": "django/db/backends/base/introspection.py",
    "symbol": null,
@@ -371,7 +385,7 @@
   {
    "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes",
    "line": 79,
-   "sentence": "At this commit the autodetector compares the model as it does any other, and writes an `AddField` (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`).",
+   "sentence": "The autodetector no longer keeps such models apart: a field added to one got no operation under 5.2.17, 6.0.8 and 6.1.1, and now gets an `AddField` (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`).",
    "tree": "django",
    "path": "django/db/migrations/autodetector.py",
    "symbol": "MigrationAutodetector._detect_changes",
@@ -397,18 +411,18 @@
    "fingerprint": "6d23b8aa4e2c47a2"
   },
   {
-   "pointer": "django/db/migrations/loader.py:MigrationLoader.replace_migration",
+   "pointer": "django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys",
    "line": 83,
-   "sentence": "The loader follows such a chain down to the migrations that replace nothing (`django/db/migrations/loader.py:MigrationLoader.replace_migration`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).",
+   "sentence": "The loader follows such a chain down to the migrations that replace nothing (`django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).",
    "tree": "django",
    "path": "django/db/migrations/loader.py",
-   "symbol": "MigrationLoader.replace_migration",
+   "symbol": "MigrationLoader._resolve_replaced_migration_keys",
    "kind": "function",
    "lines": [
-    235,
-    272
+    224,
+    233
    ],
-   "fingerprint": "af5a61256ac2515f"
+   "fingerprint": "f03c09968c1fc163"
   }
  ]
 }

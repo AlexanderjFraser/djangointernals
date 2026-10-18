@@ -96,7 +96,7 @@
   {
    "pointer": "django/db/models/base.py:Model._assign_returned_values",
    "line": 31,
-   "sentence": "On MySQL, and on MariaDB after an update, the backend cannot return the columns, so the field is removed from the instance and deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).",
+   "sentence": "On MySQL, and on MariaDB after an update, the backend cannot return the columns, so the field is ordinarily deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._assign_returned_values",
@@ -108,9 +108,23 @@
    "fingerprint": "fd8cf507b6e68fda"
   },
   {
+   "pointer": "django/db/models/base.py:Model._save_table",
+   "line": 33,
+   "sentence": "Since 6.0 a save's insert, unless raw, calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._save_table",
+   "kind": "function",
+   "lines": [
+    1075,
+    1212
+   ],
+   "fingerprint": "52c8d3bbd3d1cbaf"
+  },
+  {
    "pointer": "django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val",
    "line": 33,
-   "sentence": "Since 6.0 the insert of a save that is not raw calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).",
+   "sentence": "Since 6.0 a save's insert, unless raw, calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLInsertCompiler.pre_save_val",
@@ -208,7 +222,7 @@
   {
    "pointer": "django/db/models/deletion.py:Collector.delete",
    "line": 62,
-   "sentence": "`Collector.delete` sends `post_delete` only for the rows it collected, and counts only those (`django/db/models/deletion.py:Collector.delete`).",
+   "sentence": "`Collector.delete` sends `post_delete` only for the rows it collected, and counts only what it deletes (`django/db/models/deletion.py:Collector.delete`).",
    "tree": "django",
    "path": "django/db/models/deletion.py",
    "symbol": "Collector.delete",
@@ -370,7 +384,7 @@
   {
    "pointer": "django/db/models/base.py:Model._check_constraints",
    "line": 82,
-   "sentence": "Since 6.0 `BaseConstraint.check` is the method that gives `Model._check_constraints` the system check's messages; under 5.2.17 `check` was the condition, with a warning (`django/db/models/base.py:Model._check_constraints`).",
+   "sentence": "Since 6.0 the method `BaseConstraint.check` gives `Model._check_constraints` the system check's messages; under 5.2.17 `check` was a `CheckConstraint`'s condition, with a warning (`django/db/models/base.py:Model._check_constraints`).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._check_constraints",
@@ -412,7 +426,7 @@
   },
   {
    "pointer": "django/db/models/base.py:ModelBase.__new__",
-   "line": 94,
+   "line": 92,
    "sentence": "| `Model.NotUpdated` | New in 6.0: what a forced update raises when no row matches, a subclass of `DatabaseError` | `django/db/models/base.py:ModelBase.__new__` |",
    "tree": "django",
    "path": "django/db/models/base.py",
@@ -426,7 +440,7 @@
   },
   {
    "pointer": "django/db/models/base.py:Model.save",
-   "line": 95,
+   "line": 93,
    "sentence": "| `Model.save`, `Model.asave` | Gone in 6.0, deprecated in 5.1: arguments by position raise `TypeError` | `django/db/models/base.py:Model.save` |",
    "tree": "django",
    "path": "django/db/models/base.py",
@@ -440,7 +454,7 @@
   },
   {
    "pointer": "django/db/migrations/operations/models.py:AlterIndexTogether",
-   "line": 96,
+   "line": 94,
    "sentence": "| The option index_together | Gone in 5.1: refused as a class is made; `AlterIndexTogether` stays for old migrations | `django/db/migrations/operations/models.py:AlterIndexTogether` |",
    "tree": "django",
    "path": "django/db/migrations/operations/models.py",
@@ -454,7 +468,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:DecimalField._check_decimal_places",
-   "line": 97,
+   "line": 95,
    "sentence": "| `DecimalField` | Since 6.1, both `max_digits` and `decimal_places` may be left out on SQLite, PostgreSQL and Oracle | `django/db/models/fields/__init__.py:DecimalField._check_decimal_places` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -468,7 +482,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:CharField._check_max_length_attribute",
-   "line": 98,
+   "line": 96,
    "sentence": "| `CharField` | Since 5.2, `max_length=` may be left out on SQLite | `django/db/models/fields/__init__.py:CharField._check_max_length_attribute` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -481,22 +495,22 @@
    "fingerprint": "09d72018413c975b"
   },
   {
-   "pointer": "django/db/models/fields/__init__.py:GenericIPAddressField.to_python",
-   "line": 99,
-   "sentence": "| `GenericIPAddressField` | Since 6.2, a save or a filter refuses a bad IPv6 address with `ValidationError`, and strips spaces round it | `django/db/models/fields/__init__.py:GenericIPAddressField.to_python` |",
+   "pointer": "django/db/models/fields/__init__.py:GenericIPAddressField.get_prep_value",
+   "line": 97,
+   "sentence": "| `GenericIPAddressField` | Since 6.2, a save or a filter refuses a bad IPv6 address with `ValidationError`, and strips surrounding spaces | `django/db/models/fields/__init__.py:GenericIPAddressField.get_prep_value` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
-   "symbol": "GenericIPAddressField.to_python",
+   "symbol": "GenericIPAddressField.get_prep_value",
    "kind": "function",
    "lines": [
-    2350,
-    2360
+    2367,
+    2369
    ],
-   "fingerprint": "dc8d549586fad996"
+   "fingerprint": "499adfa2ee0e1a02"
   },
   {
    "pointer": "django/db/models/fields/__init__.py:BinaryField.to_python",
-   "line": 100,
+   "line": 98,
    "sentence": "| `BinaryField` | Since 6.1, Base64 that is not strict raises `ValidationError` | `django/db/models/fields/__init__.py:BinaryField.to_python` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -510,7 +524,7 @@
   },
   {
    "pointer": "django/db/models/fields/files.py:FileField.pre_save",
-   "line": 101,
+   "line": 99,
    "sentence": "| `FileField` | Since 5.1, saving a file with no name raises `FieldError` | `django/db/models/fields/files.py:FileField.pre_save` |",
    "tree": "django",
    "path": "django/db/models/fields/files.py",
@@ -524,7 +538,7 @@
   },
   {
    "pointer": "django/db/models/fields/files.py:ImageField.contribute_to_class",
-   "line": 102,
+   "line": 100,
    "sentence": "| `ImageField` | Since 5.0, measured on `post_init` only with a width or height field; since 5.1, not again after a save | `django/db/models/fields/files.py:ImageField.contribute_to_class` |",
    "tree": "django",
    "path": "django/db/models/fields/files.py",
@@ -538,7 +552,7 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:Field.__init_subclass__",
-   "line": 104,
+   "line": 102,
    "sentence": "| get_placeholder of a field | Deprecated in 6.1 for `get_placeholder_sql`; a field class that defines it without `get_placeholder_sql` warns when made | `django/db/models/fields/__init__.py:Field.__init_subclass__` |",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
@@ -552,7 +566,7 @@
   },
   {
    "pointer": "django/db/models/fields/mixins.py:FieldCacheMixin",
-   "line": 105,
+   "line": 103,
    "sentence": "| get_cache_name of `FieldCacheMixin` | Gone in 6.0, deprecated in 5.1 for `FieldCacheMixin.cache_name`, which no longer calls it | `django/db/models/fields/mixins.py:FieldCacheMixin` |",
    "tree": "django",
    "path": "django/db/models/fields/mixins.py",

@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `GenericForeignKeyDescriptor` and `GenericPrefetch`; the static files' `find`, collectstatic and manifest; feed stylesheets; sitemaps; and the PostgreSQL aggregates that became Django's own, and the check for `django.contrib.postgres`.
 
-Much of what changed here follows Django's core. 6.0 and 6.1 moved the PostgreSQL application's ordering of an aggregate, its string aggregate and its bit aggregates into `django.db.models`. The application's mixin for the ordering and its classes for the string and bit aggregates now warn. Its keyword `ordering=` went in 6.1, and is now ignored without a word. In 6.1 the generic foreign key took a descriptor of its own. A project's static files finder whose `find` still takes `all=`, the argument 5.2 renamed, raises `TypeError` under all four releases, unwarned.
+6.0 and 6.1 moved the PostgreSQL application's ordering of an aggregate, its string aggregate and its bit aggregates into `django.db.models`. The application's mixin for the ordering and its classes for the string and bit aggregates now warn. Its keyword `ordering=` went in 6.1, and is now ignored without a word. In 6.1 the generic foreign key took a descriptor of its own. A project's static files finder whose `find` still takes `all=`, the argument 5.2 renamed, raises `TypeError` under all four releases, unwarned.
 
 Authentication, sessions and messages, the admin and GeoDjango have sections of their own: [What changed in authentication, sessions and messages](auth.md), [What changed in the admin](admin.md) and [What changed in GeoDjango](geodjango.md).
 
@@ -22,7 +22,7 @@ Note.content_object.ct_field: the generic foreign key read on its model's class
     this commit  AttributeError: 'GenericForeignKeyDescriptor' object has no attribute 'ct_field'
 ```
 
-`GenericForeignKeyDescriptor.__get__` hands an object not yet loaded to the instance's fetch mode, as other relations do since 6.1 (`django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__`; [What changed in querysets](querysets.md)). A fetch mode is 6.1's choice of what reading an unloaded field or relation does: fetch it for that instance, for the instances loaded with it, or raise ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).
+`GenericForeignKeyDescriptor.__get__` hands the fetching of an object not yet loaded to the instance's fetch mode, as a foreign key's descriptor does since 6.1 (`django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__`; [What changed in querysets](querysets.md)). A **fetch mode** is 6.1's choice of what reading an unloaded field or relation does: fetch it for that instance, for the instances loaded with it, or raise ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).
 
 Since 5.0 `GenericPrefetch` gives `prefetch_related` a queryset for each model a generic key reaches, where a `Prefetch` holds one (`django/contrib/contenttypes/prefetch.py:GenericPrefetch`; [Generic foreign keys: `GenericForeignKey`](../contrib/generic-foreign-key.md)).
 
@@ -30,7 +30,7 @@ Since 5.0 `GenericPrefetch` gives `prefetch_related` a queryset for each model a
 
 Since 6.1 the function `find` raises `TypeError` when given `all=`, the argument 5.2 renamed `find_all=`. `find` asks each finder of `STATICFILES_FINDERS` for a path, and `find_all=` asks for every match. Under 5.2.17 and 6.0.8 `find("entry.css", all=True)` still returned every match, and warned. The deprecation covered `find` and Django's own finders, not a project's. Under all four releases `find` hands each finder `find_all=` by keyword, so a finder whose own `find` still declares `all=` raises `TypeError`, unwarned (`django/contrib/staticfiles/finders.py:find`; [Finding static files: the finders](../contrib/static-finders.md)).
 
-collectstatic copies the first file it meets at each destination path, and skips the others. Since 6.0 it names the files it skips, and those `--clear` deletes, only from verbosity 2; at verbosity 1 its summary counts them. 5.2.17 named each skipped file at verbosity 1, "Found another file with the destination path …", and counted none (`django/contrib/staticfiles/management/commands/collectstatic.py`; [Collecting static files: the collectstatic command](../contrib/collectstatic.md)).
+collectstatic collects the first file it meets at each destination path, and skips the others. Since 6.0 it names the files it skips, and those `--clear` deletes, only from verbosity 2; at verbosity 1 its summary counts them. 5.2.17 named each skipped file at verbosity 1, "Found another file with the destination path …", and counted none (`django/contrib/staticfiles/management/commands/collectstatic.py`; [Collecting static files: the collectstatic command](../contrib/collectstatic.md)).
 
 Since 6.0 `ManifestFilesMixin.save_manifest` sorts the paths of staticfiles.json, for reproducible manifests, the notes say. 5.2.17 wrote them in the order it held them (`django/contrib/staticfiles/storage.py:ManifestFilesMixin.save_manifest`, `docs/releases/6.0.txt`).
 
@@ -40,7 +40,7 @@ Since 5.2 a feed generator takes `stylesheets=`. The notes say every `Syndicatio
 
 ## PostgreSQL: the aggregates become Django's own
 
-Since 6.1 `ArrayAgg`, `JSONBAgg` and the PostgreSQL `StringAgg` are ordered by `order_by=` alone. 6.1 removed their own keyword, `ordering=`, which until 6.0 came from `OrderableAggMixin`. 5.2 had deprecated it for `order_by=`, and 6.0 gave `order_by=` to `Aggregate` itself (`django/db/models/aggregates.py:Aggregate.__init__`; [What changed in expressions, lookups and the compiler](sql.md)). Look for the ORDER BY when `ArrayAgg` is given `ordering=` and compiled for PostgreSQL:
+Since 6.1 `ArrayAgg`, `JSONBAgg` and the PostgreSQL `StringAgg` are ordered by `order_by=` alone. 6.1 removed their own keyword, `ordering=`, which under 5.2 came from `OrderableAggMixin`. 5.2 had deprecated it for `order_by=`, and 6.0 gave `order_by=` to `Aggregate` itself (`django/db/models/aggregates.py:Aggregate.__init__`; [What changed in expressions, lookups and the compiler](sql.md)). Look for the ORDER BY when `ArrayAgg` is given `ordering=` and compiled for PostgreSQL:
 
 ```text recording=changes
 ArrayAgg("title", ordering="-title"), compiled for PostgreSQL
@@ -52,13 +52,13 @@ ArrayAgg("title", ordering="-title"), compiled for PostgreSQL
 
 > **Trap.** Since 6.1 `ordering=` is neither refused nor warned of. `Aggregate.__init__` passes a keyword it does not know on to `Func.__init__`, which keeps it as context for a template that never reads it (`django/db/models/expressions.py:Func.__init__`).
 
-`StringAgg` moved into `django.db.models` in 6.0, and `BitAnd`, `BitOr` and `BitXor` in 6.1. The PostgreSQL classes of those names remain, as subclasses of the general ones. Each warns when made: the PostgreSQL `StringAgg` since 6.0, with a second warning for a string `delimiter=`, and the bit aggregates since 6.1. `OrderableAggMixin` warns since 6.0 when a class is made from it. All go in Django 2028 (`django/contrib/postgres/aggregates/general.py`; [The PostgreSQL application: `PostgresConfig`, operations and aggregates](../contrib/postgres.md#functions-and-aggregates)).
+`StringAgg` moved into `django.db.models` in 6.0, and `BitAnd`, `BitOr` and `BitXor` in 6.1. The PostgreSQL classes of those names remain, as subclasses of the general ones. Each warns when made: the PostgreSQL `StringAgg` since 6.0, with a second warning for a string `delimiter=`, and the bit aggregates since 6.1. `OrderableAggMixin` warns since 6.0 when a class is made from it. All go in Django 2028 (`django/contrib/postgres/aggregates/`; [The PostgreSQL application: `PostgresConfig`, operations and aggregates](../contrib/postgres.md#functions-and-aggregates)).
 
 > **Trap.** A project that moves its import of `StringAgg` to `django.db.models` and keeps `delimiter=", "` meets `FieldError` as the query is built. The general `StringAgg` reads a string `delimiter=` as a field's name: `StringAgg.__init__` wraps it in a `StringAggDelimiter`, a `Func`, which makes a string an `F`. The PostgreSQL class sent the string as a parameter, and warned (`django/db/models/aggregates.py:StringAgg.__init__`).
 
 ## PostgreSQL: the application checked for
 
-Since 6.0 the application's fields, indexes and `ExclusionConstraint` check that `django.contrib.postgres` is in `INSTALLED_APPS`. When it is not, `CheckPostgresInstalledMixin.check` adds the error `"postgres.E005"` (`django/contrib/postgres/utils.py:CheckPostgresInstalledMixin`). An error stops runserver and migrate. An `ArrayField` without the application passed its checks under 5.2.17, and fails them since 6.0.
+Since 6.0 the application's fields, indexes and `ExclusionConstraint` check that `django.contrib.postgres` is in `INSTALLED_APPS`. When it is not, `CheckPostgresInstalledMixin.check` adds the error `"postgres.E005"` (`django/contrib/postgres/utils.py:CheckPostgresInstalledMixin`). An error stops migrate and keeps runserver from serving. An `ArrayField` without the application passed its checks under 5.2.17, and fails them since 6.0.
 
 ## The smaller changes
 

@@ -6,13 +6,13 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 Forms drawn in divisions, with a template for each field and attributes for screen readers; the URL field's `"https"`; the blank choice's label; and `EmailValidator` split into methods a subclass can replace.
 
-In 6.0 two deprecations ended: the transitional renderers went, and the URL field's assumed scheme became `"https"`. 6.1 replaced the blank choice's dashes with a label "more accessible and translatable" (`docs/releases/6.1.txt`). 6.2 split `EmailValidator` into methods a subclass can replace. 5.0 made the division layout the default, which the 4.1 notes had recommended as "easier for screen reader users to navigate" (`docs/releases/4.1.txt`). 5.0 also gave each field a template of its own. And 5.0 tied an input to its help text for screen readers, a tie that 5.1 carried to the fieldset and 5.2 to the errors.
+In 6.0 two deprecations ended: the transitional renderers went, and the URL field's assumed scheme became `"https"`. 6.1 replaced the blank choice's dashes with a label "more accessible and translatable" (`docs/releases/6.1.txt`). 6.2 split `EmailValidator` into methods a subclass can replace. 5.0 made the division layout the default, which the 4.1 notes had recommended as "easier for screen reader users to navigate" (`docs/releases/4.1.txt`). 5.0 also gave each field a template. And 5.0 tied an input to its help text for screen readers, a tie that 5.1 carried to the fieldset and 5.2 to the errors.
 
 ## How a form is drawn: divisions, and a template for each field
 
 Since 5.0 a form rendered as a string uses `BaseRenderer.form_template_name`, `"django/forms/div.html"` (`django/forms/forms.py:BaseForm.template_name`). 5.0 removed the former default, django/forms/default.html, a proxy for the table layout, and its formset twin. It also removed BaseForm's _html_output, which drew the layouts in Python before 4.0 (`docs/releases/4.0.txt`, `docs/releases/5.0.txt`).
 
-The division template prints each field's `RenderableFieldMixin.as_field_group` (5.0), which draws label, help text, errors and widget from the field's template, by default `"django/forms/field.html"` (`django/forms/boundfield.py:BoundField.template_name`; [Rendering a form: renderers and templates](../forms/rendering.md#the-built-in-templates)).
+The division template prints each visible field's `RenderableFieldMixin.as_field_group` (5.0), which draws label, help text, errors and widget from the field's template, by default `"django/forms/field.html"` (`django/forms/boundfield.py:BoundField.template_name`; [Rendering a form: renderers and templates](../forms/rendering.md#the-built-in-templates)).
 
 From 4.1 a transitional renderer named in `FORM_RENDERER` gave the division layout early. 5.0 deprecated DjangoDivFormRenderer and Jinja2DivFormRenderer, and 6.0 removed them. A project whose setting still names one gets it, with a warning, under 5.2.17; since 6.0 the import fails (`django/forms/renderers.py:get_default_renderer`):
 
@@ -28,7 +28,7 @@ FORM_RENDERER = "django.forms.renderers.DjangoDivFormRenderer": the class of a f
 
 Since 5.2 the attribute `"aria-describedby"` names a field's help text and errors, on its input or on the fieldset its widget asks for. 5.0 put it on the input, naming the help text, and marked an input with errors `"aria-invalid"`. 5.1 put it on the `<fieldset>` drawn around a widget whose `Widget.use_fieldset` is true (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`, `docs/releases/5.2.txt`).
 
-At this commit `BoundField.aria_describedby` (5.2) gives the ids of the help text and errors the field has (`django/forms/boundfield.py:BoundField.aria_describedby`). `BoundField.build_widget_attrs` puts them on the input unless the widget has its own or asks for a fieldset. The error list takes its id from `ErrorList.field_id` (5.2), which `BaseForm.add_error` sets (`django/forms/forms.py:BaseForm.add_error`; [`BoundField`: a field in a form](../forms/bound-fields.md#the-attributes-a-bound-field-adds)).
+At this commit `BoundField.aria_describedby` (5.2) gives the ids of the help text and errors the field has (`django/forms/boundfield.py:BoundField.aria_describedby`). `BoundField.build_widget_attrs` puts them on the input unless the attribute is given or the widget asks for a fieldset (`django/forms/boundfield.py:BoundField.build_widget_attrs`). The error list takes its id from `ErrorList.field_id` (5.2), which `BaseForm.add_error` sets (`django/forms/forms.py:BaseForm.add_error`; [`BoundField`: a field in a form](../forms/bound-fields.md#the-attributes-a-bound-field-adds)).
 
 A required field with help text, submitted empty, drew the same under all four; in this commit's lines the input names both ids and is marked invalid:
 
@@ -60,7 +60,7 @@ Nothing in Django passes the argument, so the form field of a model's URL field 
 
 ## The blank choice's label
 
-Since 6.1 a blank choice, the empty option at the head of a `ModelChoiceField`'s choices or a model field's, is labelled `"- Select an option -"` where it had dashes ([What changed in models and fields](models.md)). `get_blank_choice_label` gives it: `BLANK_CHOICE_LABEL`, translated, or the dashes of `BLANK_CHOICE_DASH` while `USE_BLANK_CHOICE_DASH` is true (`django/db/models/utils.py:get_blank_choice_label`). Nothing warns of the change: for a field made without `empty_label=`, the dashes of 5.2.17 and 6.0.8 are the old label:
+Since 6.1 a blank choice, the empty option at the head of choices such as a `ModelChoiceField`'s or a model field's, is labelled `"- Select an option -"` where it had dashes ([What changed in models and fields](models.md)). `get_blank_choice_label` gives it: `BLANK_CHOICE_LABEL`, translated, or the dashes of `BLANK_CHOICE_DASH` while `USE_BLANK_CHOICE_DASH` is true (`django/db/models/utils.py:get_blank_choice_label`). Nothing warns of the change: for a field made without `empty_label=`, the dashes of 5.2.17 and 6.0.8 are the old label:
 
 ```text recording=changes
 forms.ModelChoiceField(Entry.objects.all()).empty_label
@@ -70,7 +70,7 @@ forms.ModelChoiceField(Entry.objects.all()).empty_label
     this commit  '- Select an option -'
 ```
 
-The setting and the constant are deprecated, to go in Django 2028 ([What still warns: the deprecations and the releases that end them](deprecations.md)). Since 6.1, setting `USE_BLANK_CHOICE_DASH` warns (`django/conf/__init__.py:Settings.__init__`). Reading `BLANK_CHOICE_DASH`, a plain constant, warned under no release (`django/db/models/fields/__init__.py:BLANK_CHOICE_DASH`; [Choices: `ChoiceField`, `ModelChoiceField` and the choice widgets](../forms/choices.md#the-blank-choices-label)).
+The setting and the constant are deprecated, to go in Django 2028 ([What still warns: the deprecations and the releases that end them](deprecations.md)). Since 6.1, setting `USE_BLANK_CHOICE_DASH` warns (`django/conf/__init__.py`). Reading `BLANK_CHOICE_DASH`, a plain constant, warned under no release (`django/db/models/fields/__init__.py:BLANK_CHOICE_DASH`; [Choices: `ChoiceField`, `ModelChoiceField` and the choice widgets](../forms/choices.md#the-blank-choices-label)).
 
 > **Trap.** Since 6.1, `ModelChoiceField.__init__` defaults `empty_label=` to `""` and replaces `""` with the blank choice's label (`django/forms/models.py:ModelChoiceField.__init__`). An `empty_label=""` stayed empty under 5.2.17 and 6.0.8, and is `"- Select an option -"` under 6.1.1 and this commit. The notes speak only of the default. Only the constructor does this: an `empty_label` set to `""` after the field is made is drawn as it is (`django/forms/models.py:ModelChoiceIterator.__iter__`).
 

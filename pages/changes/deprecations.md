@@ -10,7 +10,7 @@ The deprecation timeline, `docs/internals/deprecation.txt`, lists what each comi
 
 A reader who knew 6.1 meets these warnings louder. Under 6.1.1 what 6.0 and 6.1 deprecated warned with RemovedInDjango70Warning, a `PendingDeprecationWarning`, which Python's default filters never show. At this commit it warns with `RemovedInDjango2028Warning`, a `DeprecationWarning`, which they show when its line is in the script Python runs (`django/utils/deprecation.py:RemovedInDjango2028Warning`). The old name RemovedInDjango70Warning gives `RemovedInDjango2028Warning`, with a `UserWarning`, which Python shows wherever it is named. RemovedInDjango71Warning, which no release had, fails to import (`django/utils/deprecation.py:__getattr__`).
 
-The figure sets each feature release from 5.0 beside the release that removes what it deprecated (`docs/internals/release-process.txt`). The bars that end after this commit are what the code still carries.
+The figure sets each feature release from 5.0 beside the release that removes what it deprecated (`docs/internals/deprecation.txt`). The bars that end after this commit are what the code still carries.
 
 ```text figure=deprecation-spans
 What each feature release from 5.0 deprecated, from that release to the one that removes it.
@@ -33,7 +33,7 @@ Where what a release deprecated is removed:
                  the readings of django.VERSION it deprecated in Django 2028
 ```
 
-*Each bar runs from the release that deprecated a feature to the one that removes it, over an axis of the feature releases from 5.0 to Django 2029. The upright line is this commit; the axis is dashed after it, over the releases still expected. A bar's label is the class its deprecations warn with at this commit, but the short bar from 6.2 is the readings of `django.VERSION`, which end in Django 2028.*
+*Each bar runs from the release that deprecated a feature to the one that removes it. The upright line is this commit; the axis is dashed after it, over the releases still expected. A bar's label is the class its deprecations warn with at this commit, but the short bar from 6.2 is the readings of `django.VERSION`, which end in Django 2028.*
 
 ## Removed in Django 2029
 
@@ -72,14 +72,14 @@ What 6.0 and 6.1 deprecated ends in Django 2028, and so do the readings of `djan
 | neither `MAILERS` nor an email setting, as the default mailer is made | `django/core/mail/deprecation.py:warn_about_default_mailers_if_needed` | no default mailer; sending fails without `MAILERS` |
 | fail_silently and later arguments of `send_mail`, `send_mass_mail`, `mail_admins`, `mail_managers` and `django.core.mail.get_connection`, and all but the first four of `EmailMessage` and `EmailMultiAlternatives`, by position | `django/utils/deprecation.py:deprecate_posargs` | `TypeError`; keyword arguments |
 | `django.core.mail.get_connection` called from outside Django | `django/core/mail/__init__.py:get_connection` | removed; backends come from `mailers` |
-| `connection=`, `fail_silently=`, `auth_user=` and `auth_password=`, where the sending functions take them | `django/core/mail/__init__.py:send_mail` | removed; `using=` names a `MAILERS` alias, and username and password are its `"OPTIONS"` |
-| `connection=` of `EmailMessage`, `fail_silently=` of `EmailMessage.send`, and `EmailMessage.connection` | `django/core/mail/message.py:EmailMessage` | removed; `using=` names a `MAILERS` alias |
+| `connection=`, `fail_silently=`, `auth_user=` and `auth_password=`, where the sending functions take them; none warns at its default | `django/core/mail/__init__.py:send_mail` | removed; `using=` names a `MAILERS` alias, and username and password are its `"OPTIONS"` |
+| `connection=` of `EmailMessage`, `fail_silently=` of `EmailMessage.send`, neither warning at its default, and `EmailMessage.connection` | `django/core/mail/message.py:EmailMessage` | removed; `using=` names a `MAILERS` alias |
 | the SMTP `EmailBackend` made outside `mailers` | `django/core/mail/backends/smtp.py:EmailBackend.__init__` | unsupported; `mailers` makes it |
 | `fail_silently=`, or a keyword it does not take, passed to `BaseEmailBackend.__init__` outside `mailers`; the attribute fail_silently read where a backend sets none | `django/core/mail/backends/base.py:BaseEmailBackend` | `TypeError` for an unknown keyword; fail_silently a backend's own attribute |
 | `AdminEmailHandler` given `email_backend=` | `django/utils/log.py:AdminEmailHandler.__init__` | removed; `using=` names the mailer |
 | `ADMINS` or `MANAGERS` as (name, address) pairs, when mail goes to them | `django/core/mail/__init__.py:_send_server_message` | `ImproperlyConfigured`; a list of addresses |
 | an `email.mime.base.MIMEBase` attached | `django/core/mail/message.py:EmailMessage.attach` | removed; an `email.message.MIMEPart` |
-| `BadHeaderError`, `SafeMIMEText` and `SafeMIMEMultipart` from `django.core.mail`; from `django.core.mail.message`, no warning | `django/core/mail/__init__.py:__getattr__` | removed; `BadHeaderError` is `ValueError` already |
+| `BadHeaderError`, `SafeMIMEText` and `SafeMIMEMultipart` from `django.core.mail` | `django/core/mail/__init__.py:__getattr__` | removed; `BadHeaderError` is `ValueError` already |
 | `forbid_multi_line_headers` and `sanitize_address` | `django/core/mail/message.py` | removed; Python's email API |
 
 ### Models, querysets and SQL
@@ -107,7 +107,7 @@ Told in [What changed in templates](templates.md), [What changed in security: Co
 | deprecated | warns at | in Django 2028 |
 |---|---|---|
 | `urlize` and `urlizetrunc` linking a bare domain, `URLIZE_ASSUME_HTTPS` false | `django/utils/html.py:Urlizer.handle_word` | `"https://"` assumed |
-| two dots in a row in a variable, `{{ port..name }}` | `django/template/base.py:Parser.parse` | `TemplateSyntaxError` |
+| two dots in a row in a variable tag's variable, `{{ port..name }}` | `django/template/base.py:Parser.parse` | `TemplateSyntaxError` |
 | `salted_hmac` with no `algorithm=`, which takes `"sha1"` | `django/utils/crypto.py:salted_hmac` | `"sha256"` the default |
 | `base64_hmac` with no `algorithm=` | `django/core/signing.py:base64_hmac` | the same |
 | a `Paginator` or `AsyncPaginator` whose orphans are not fewer than its page size | `django/core/paginator.py:BasePaginator.__init__` | `ValueError` |

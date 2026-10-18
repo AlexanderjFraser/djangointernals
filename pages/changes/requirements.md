@@ -4,9 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # The versions Django needs: Python, databases and libraries
 
-The oldest Python, database server, driver and library that each release from 5.0 to this commit supports, and which of these floors Django's code enforces rather than only states.
+The oldest Python, database, driver and library that each release from 5.0 to this commit supports, and which of these floors Django's code enforces rather than only states.
 
-6.0 dropped Python 3.10 and 3.11, and with them the releases of Django's optional libraries older than the first to support 3.12, the database drivers among them (`docs/releases/6.0.txt`). 6.1 raised MySQL from 8.0.11 to 8.4 and MariaDB to 10.11. 6.1's notes give two reasons for dropping a server: its upstream support ends, or it is a release they call short-term (`docs/releases/6.1.txt`). 6.2 takes PostgreSQL to 16 and asgiref to 3.12.1. The code enforces the floors of the servers, of the PostgreSQL and MySQL drivers and of SpatiaLite. The rest are stated, in the notes or the package's metadata.
+6.0 dropped Python 3.10 and 3.11, and with them the releases of Django's optional libraries older than the first to support 3.12, the database drivers among them (`docs/releases/6.0.txt`). 6.1 raised MySQL from 8.0.11 to 8.4 and MariaDB to 10.11. 6.1's notes give two reasons for dropping a server: its upstream support ends, or it is a release they call short-term (`docs/releases/6.1.txt`). 6.2 takes PostgreSQL to 16 and asgiref to 3.12.1. The code enforces the floors of the databases, of the PostgreSQL and MySQL drivers and of SpatiaLite. The rest are stated, in the notes or the package's metadata.
 
 ## Python
 
@@ -19,11 +19,11 @@ Since 6.0 Django needs Python 3.12 or later, and nothing in Django refuses an ol
 | 5.2 | 3.10 to 3.14, 3.14 from 5.2.8 |
 | 6.0, 6.1, 6.2 | 3.12, 3.13, 3.14 |
 
-The package's metadata, which an installer reads, asks for `">=3.10"` under 5.2.17 and `">=3.12"` under 6.0.8 and later (`django:pyproject.toml`). Under Python 3.11 `import django` succeeds. `django.setup` then raises `ValueError`, from an `ImportError` for `inspect.markcoroutinefunction`, which Python added in 3.12 (`django/views/generic/base.py`).
+The package's metadata, which an installer reads, asks for `">=3.10"` under 5.2.17 and `">=3.12"` under 6.0.8 and later (`django:pyproject.toml`). Under Python 3.11 `import django` succeeds. `django.setup` then raises `ValueError` as it configures logging, from an `ImportError` for `inspect.markcoroutinefunction`, which Python added in 3.12 (`django/utils/log.py:configure_logging`, `django/views/generic/base.py`).
 
-## Database servers
+## Databases
 
-6.1 raised the floor of every server but Oracle Database. A project on a server below its release's floor is refused only as a connection opens. From the notes, and from 5.2 on also the backends' `BaseDatabaseFeatures.minimum_database_version` under 5.2.17, 6.0.8, 6.1.1 and this commit:
+6.1 raised the floor of every database but Oracle Database. A database below its backend's floor is refused only as a connection opens. From the notes, and from 5.2 on also the backends' `BaseDatabaseFeatures.minimum_database_version` under 5.2.17, 6.0.8, 6.1.1 and this commit:
 
 | release | PostgreSQL | MySQL | MariaDB | SQLite |
 |---|---|---|---|---|
@@ -36,7 +36,7 @@ The package's metadata, which an installer reads, asks for `">=3.10"` under 5.2.
 
 *Oracle Database is 19 in every row, as it has been since 4.0 (`docs/releases/4.0.txt`).*
 
-`BaseDatabaseWrapper.check_database_version_supported` compares the server's version with the backend's floor and raises `NotSupportedError` for an older one (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`; [What a database can do: `BaseDatabaseFeatures`](../backends/features.md)). `BaseDatabaseWrapper.init_connection_state` calls it as a connection opens, until it has passed once for that alias in the process (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`). MySQL's floor depends on whether the server is MariaDB (`django/db/backends/mysql/features.py:DatabaseFeatures.minimum_database_version`).
+`BaseDatabaseWrapper.check_database_version_supported` compares the database's version with the backend's floor and raises `NotSupportedError` for an older one (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`; [What a database can do: `BaseDatabaseFeatures`](../backends/features.md)). `BaseDatabaseWrapper.init_connection_state` calls it as a connection opens, until it has passed once for that alias in the process (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`). MySQL's floor depends on whether the server is MariaDB (`django/db/backends/mysql/features.py:DatabaseFeatures.minimum_database_version`).
 
 A stand-in for the driver makes the server answer as MySQL 8.0.36: the old floor, 8.0.11, lets the connection open, and 6.1's refuses it:
 
@@ -64,9 +64,9 @@ Since 6.0 the PostgreSQL and MySQL backends will not import with a driver older 
 
 *gettext's 0.15 is named only by the 5.2 notes.*
 
-With tzdata on Windows, asgiref and sqlparse are the dependencies of `pyproject.toml`. From 5.2 on, their rows are also what the package's metadata asks for under 5.2.17, 6.0.8, 6.1.1 and this commit. Under 5.0 to 5.2, cx_Oracle 8.3 would also serve in oracledb's place. Deprecated in 5.0, it was removed in 6.0 (`docs/releases/6.0.txt`).
+With tzdata on Windows, asgiref and sqlparse are the dependencies of `pyproject.toml`. From 5.2 on, their rows are also what the package's metadata asks for under 5.2.17 and later. Under 5.0 to 5.2, cx_Oracle 8.3 would also serve in oracledb's place. Deprecated in 5.0, it was removed in 6.0 (`docs/releases/6.0.txt`).
 
-gettext's floor is only a message. When makemessages or compilemessages cannot find one of gettext's programs, it asks for GNU gettext 0.19 or newer; neither reads the version of a program it finds (`django/core/management/commands/makemessages.py:check_programs`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).
+gettext's floor is only a message. When makemessages or compilemessages cannot find one of gettext's programs, it asks for GNU gettext 0.19 or newer; neither checks the version of a program it finds (`django/core/management/commands/makemessages.py:check_programs`, `django/core/management/commands/compilemessages.py:Command.handle`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).
 
 The PostgreSQL backend raises `ImproperlyConfigured` for a psycopg2 older than 2.9.9 or a psycopg older than 3.1.12 (`django/db/backends/postgresql/base.py`). Under 5.2.17 it imported with psycopg 3.1.10, which 6.0.8 refuses. MySQL's backend is meant to refuse a mysqlclient older than 2.2.1 in the same way. Its check compares `MySQLdb.version_info`, but writes its message from `MySQLdb.__version__`, which mysqlclient 2.0.0 to 2.2.0 do not define (`django/db/backends/mysql/base.py`).
 
@@ -80,7 +80,7 @@ import django.db.backends.mysql.base, MySQLdb as mysqlclient 2.1.1 has it: versi
     this commit  AttributeError: module 'MySQLdb' has no attribute '__version__'
 ```
 
-> **Trap.** Since 6.0 a project on mysqlclient 2.1 is stopped by an `AttributeError` that does not name the floor. `load_backend` catches only an `ImportError`, and passes this one on (`django/db/utils.py:load_backend`).
+> **Trap.** Since 6.0 a project on mysqlclient 2.1 is stopped by an `AttributeError` that does not name the floor.
 
 ## The optional libraries
 

@@ -10,9 +10,9 @@ Three changes reach code outside Django through the SQL and the parameters that 
 
 ## Parameters as a tuple
 
-Since 6.0 an `as_sql`, `Lookup.process_lhs` or `Lookup.process_rhs` is to return its parameters as a tuple; until then a list would do. The 6.0 notes give the reason, "the interoperability problems that resulted" (`docs/releases/6.0.txt`). `Func.as_sql` and `Col.as_sql` now return tuples. `BuiltinLookup.as_sql` unpacks both halves into one, so a half of either kind still joins (`django/db/models/expressions.py:Func.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`).
+Since 6.0 an `as_sql`, `Lookup.process_lhs` or `Lookup.process_rhs` is to return its parameters as a tuple; until then a list would do. The 6.0 notes give the reason, the problems of interoperability that allowing either caused (`docs/releases/6.0.txt`). `Func.as_sql` and `Col.as_sql` now return tuples. `BuiltinLookup.as_sql` unpacks both halves into one, so a half of either kind still joins (`django/db/models/expressions.py:Func.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`).
 
-Nothing checks the type, but code that adds a list to what Django hands it fails ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md)). The custom lookup below adds `list(self.rhs)` to its left half's parameters. Under 5.2.17 the query runs; from 6.0 the left half is a tuple, and the `+` raises:
+Nothing checks the type, but code that adds a list to a tuple Django hands it fails ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md)). The custom lookup below adds `list(self.rhs)` to its left half's parameters. Under 5.2.17 the query runs; from 6.0 the left half is a tuple, and the `+` raises:
 
 ```text recording=changes
 Entry.objects.filter(title__within=("Dawn", "Dusk")): a custom lookup whose as_sql returns lhs_params + list(self.rhs)
@@ -35,15 +35,15 @@ str(Entry.objects.annotate(Calm=FilteredRelation("notes", condition=Q(notes__tit
     6.1.1        SELECT "Calm"."title" AS "Calm__title" FROM "journal_entry" LEFT OUTER JOIN "journal_note" "Calm" ON ("journal_entry"."id" = "Calm"."entry_id" AND ("Calm"."title" = mood calm))
 ```
 
-`SQLCompiler.quote_name_unless_alias` is deprecated since 6.1. It now quotes whatever it is given: a join's alias, `'T3'` until 6.0.8, comes back `'"T3"'` on SQLite (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`; [The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).
+`SQLCompiler.quote_name_unless_alias` is deprecated since 6.1. It now quotes whatever it is given: a join's alias, `'T3'` under 6.0.8, comes back `'"T3"'` on SQLite (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`; [The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).
 
 ## Aggregates: the classes that moved, ordering and the filter
 
-Aggregates came into `django.db.models` in two releases. 6.0 brought `StringAgg`, from the PostgreSQL application, and `AnyValue`, which no earlier release had; 6.1, the bit aggregates `BitAnd`, `BitOr` and `BitXor`, from it too (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:BitAggregate`). The PostgreSQL classes are deprecated ([What changed in the other contrib apps](contrib.md)). On SQLite, since 6.1, `StringAgg` takes `distinct=True` with the delimiter `Value(",")` only (`django/db/models/aggregates.py:StringAgg.as_sqlite`).
+New aggregates came into `django.db.models` in two releases. 6.0 brought `StringAgg`, from the PostgreSQL application, and `AnyValue`, which no earlier release had; 6.1, the bit aggregates `BitAnd`, `BitOr` and `BitXor`, from it too (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:BitAggregate`). The PostgreSQL classes are deprecated ([What changed in the other contrib apps](contrib.md)). On SQLite, since 6.1, `StringAgg` takes `distinct=True` with the delimiter `Value(",")` only (`django/db/models/aggregates.py:StringAgg.as_sqlite`).
 
 Since 6.0 `Aggregate.__init__` takes `order_by=`, and refuses it with `TypeError` unless the class sets `Aggregate.allow_order_by` (`django/db/models/aggregates.py:Aggregate.__init__`). Under 5.2.17 `Max("title", order_by="published")` ignored the argument and gave the greatest title.
 
-The ordering and the filter are slots of `Aggregate.template` since 6.0, `"%(order_by)s"` and `"%(filter)s"`, which `Aggregate.as_sql` fills. 5.2's filter_template, which wrapped any template in `" FILTER (WHERE ...)"`, is gone, and the 6.0 notes do not say so (`django/db/models/aggregates.py:Aggregate.as_sql`). An aggregate of one's own whose template lacks the slot loses its filter where `BaseDatabaseFeatures.supports_aggregate_filter_clause` is on, as on SQLite and PostgreSQL. Elsewhere the filter goes into a `Case`, as before.
+The ordering and the filter are slots of `Aggregate.template` since 6.0, `"%(order_by)s"` and `"%(filter)s"`, which `Aggregate.as_sql` fills. 5.2's filter_template, which set `" FILTER (WHERE ...)"` after any template, is gone, and the 6.0 notes do not say so (`django/db/models/aggregates.py:Aggregate.as_sql`). An aggregate of one's own whose template lacks the slot loses its filter where `BaseDatabaseFeatures.supports_aggregate_filter_clause` is on, as on SQLite and PostgreSQL. Elsewhere the filter goes into a `Case`, as before.
 
 Total, below, is such an aggregate, its function `"COUNT"`, given on SQLite a filter no entry passes. The right count is 0, as under 5.2.17; from 6.0 the filter, having no parameter, is dropped without a word, and every entry counted:
 
@@ -76,7 +76,6 @@ A negative index in a key's path counts from the end of an array. SQLite has it 
 | An integer out of range | Since 5.0, an equality, or a bound no value passes, matches nothing, without the database | `django/db/models/lookups.py:IntegerFieldOverflow` |
 | `nulls_first=False`, `nulls_last=False` | Gone in 5.0: `OrderBy` refuses either with `ValueError` | `django/db/models/expressions.py:OrderBy.__init__` |
 | get_joining_columns | Deprecated in 5.0, gone in 6.0: `Join` asks only `get_joining_fields` | `django/db/models/sql/datastructures.py:Join.__init__` |
-| A string given to a `JSONField` | Gone in 5.1: a string taken as JSON already encoded | `django/db/models/fields/json.py:JSONField.get_db_prep_value` |
 | `RowRange` | Since 5.1, its bounds may pass the current row | `django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end` |
 | `WindowFrameExclusion` | New in 5.1: the `exclusion=` of `RowRange` and `ValueRange`, the rows a frame leaves out | `django/db/models/expressions.py:WindowFrame` |
 | `QuerySet.order_by` | Since 5.1, takes an annotation's name followed by transforms | `django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs` |
@@ -85,7 +84,7 @@ A negative index in a key's path counts from the end of an array. SQLite has it 
 | `BaseExpression.set_returning` | New in 5.2: where true, an aggregation over it runs on a subquery | `django/db/models/sql/query.py:Query.get_aggregation` |
 | `BaseExpression.allows_composite_expressions` | New in 5.2: unless set, a composite key is refused as a source | `django/db/models/expressions.py:BaseExpression.resolve_expression` |
 | `Func.arity` | Since 5.2, `Avg`, `Max`, `Min` and `Sum` refuse any number of arguments but one, with `TypeError` | `django/db/models/expressions.py:Func.__init__` |
-| `Count` with two arguments | Since 6.0, a field's name as the second is taken as its filter; under 5.2.17, `AttributeError` | `django/db/models/aggregates.py:Count.__init__` |
+| `Count` with two arguments | Since 6.0, a field's name as the second is taken as its filter; under 5.2.17, `AttributeError` | `django/db/models/aggregates.py:Aggregate.__init__` |
 | A composite key and a subquery | Since 6.0, on SQLite, compared by gt and the like, which 5.2.17 could not write; exact already was | [Lookups on relations and composite keys: `RelatedIn` and the tuple lookups](../sql/related-lookups.md) |
 | A percent sign in an alias | Deprecated in 6.0: `Query.check_alias` warns of one, and accepts it | `django/db/models/sql/query.py:Query.check_alias` |
 | `Extract`, `Trunc` without tzinfo | Deprecated in 6.2: they warn when deconstructed while `USE_TZ` is true | `django/db/models/functions/datetime.py:TimezoneMixin.deconstruct` |

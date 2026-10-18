@@ -22,7 +22,7 @@ make_template_fragment_key("sidebar", ["a:b", "c"]) == make_template_fragment_ke
     this commit  False
 ```
 
-Under 5.2.17 and 6.0.8 a page that varies on Accept-Encoding and Cookie had one key for a request sending only Accept-Encoding "EU" and one sending only Cookie "EU". Since 6.1 it has two ([The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md#two-keys-for-one-url)).
+Under 5.2.17 and 6.0.8 a page that varies on Accept-Encoding and `"Cookie"` had one key for a request sending only Accept-Encoding `"EU"` and one sending only `"Cookie"` `"EU"`. Since 6.1 it has two ([The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md#two-keys-for-one-url)).
 
 ## `DatabaseCache`: strict Base64, and culling on a share of writes
 
@@ -38,7 +38,7 @@ Since 6.1 `File.__bool__` returns `True` (`django/core/files/base.py:File.__bool
 
 ## Overwriting a stored file
 
-Since 5.1 `FileSystemStorage` takes `allow_overwrite=`. Set true, it keeps a taken name, and `FileSystemStorage._save` opens the file with `os.O_TRUNC` in place of `os.O_EXCL`, so the save replaces the file (`django/core/files/storage/filesystem.py:FileSystemStorage._save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)). It replaced the undocumented attribute OS_OPEN_FLAGS, which 5.1 deprecated and 6.0 removed (`docs/releases/5.1.txt`).
+Since 5.1 `FileSystemStorage` takes `allow_overwrite=`. Set true, it keeps a taken name, and `FileSystemStorage._save` opens the file with `os.O_TRUNC` in place of `os.O_EXCL`, or moves a temporary file onto it, so the save replaces the file (`django/core/files/storage/filesystem.py:FileSystemStorage._save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)). It replaced the undocumented attribute OS_OPEN_FLAGS, which 5.1 deprecated and 6.0 removed (`docs/releases/5.1.txt`).
 
 A storage written to overwrite before 5.1 could set that attribute without `os.O_EXCL`, and override `Storage.get_available_name` to return the name unchanged. 5.2.17's line is the overwrite such a storage was written for; 6.0.8 and 6.1.1 gave this commit's line, and are left out:
 
@@ -49,7 +49,7 @@ OS_OPEN_FLAGS without os.O_EXCL and get_available_name returning the name, on a 
     this commit  save() does not return: os.open refuses notes.txt, get_available_name gives the same name again (stopped at the tenth asking)
 ```
 
-> **Trap.** Since 6.0 such a storage's save over an existing file never returns, and nothing warns. `_save` opens the file with `os.O_EXCL` whatever the subclass sets, and at each refusal asks `get_available_name` again, which gives the same name. An upload kept in a temporary file, a `TemporaryUploadedFile`, is moved into place rather than opened, and its save looped under 5.2.17 too.
+> **Trap.** Since 6.0 such a storage's save over an existing file never returns, and nothing warns. `_save` opens the file with `os.O_EXCL` whatever its OS_OPEN_FLAGS, and at each refusal asks `get_available_name` again, which gives the same name. A `TemporaryUploadedFile` is moved rather than opened, and its save looped under 5.2.17 too.
 
 ## A signal's coroutine receivers, in a task group
 
@@ -65,7 +65,7 @@ signal.send(None), two coroutine receivers raising ValueError: what reaches the 
     this commit  ExceptionGroup: unhandled errors in a TaskGroup (2 sub-exceptions)
 ```
 
-A lone failure is still raised as itself: `_run_parallel` unwraps a group of one. The group also cancels the receivers still running when one fails. Under 6.0.8 a waiting receiver of `asend` was still waiting when the sender had its error; at this commit it has been cancelled. `Signal.send_robust` and `asend_robust` catch any `Exception` a receiver raises, so the group sees none fail.
+A lone failure is still raised as itself: `_run_parallel` unwraps a group of one. The group also cancels the receivers still running when one fails. Under 6.0.8 a waiting receiver of `asend` was still waiting when the sender had its error; at this commit it has been cancelled. `Signal.send_robust` and `asend_robust` catch any `Exception` a receiver raises, so none reaches the group.
 
 With the group, the coroutine receivers also share one copy of the sender's context, and what they set in it is set in the sender's when they finish (`django/dispatch/dispatcher.py:_restore_context`). Two receivers of `asend` each adding 1 to a `contextvars.ContextVar` the sender set to 1 leave it at 1 under 6.0.8, and at 3 at this commit.
 
@@ -77,7 +77,7 @@ Since 6.2 `DjangoJSONEncoder` writes a datetime or a time to the millisecond onl
 
 Since 6.0 the JSON serializer's text ends in a newline even when it is not indented: `serialize("json", [])` is `"[]"` under 5.2.17 and `"[]\n"` under 6.0.8 and later (`django/core/serializers/json.py:Serializer.end_serialization`).
 
-Since 6.1 a `natural_key` that returns an empty tuple counts as none. Dumped with natural primary keys, such an object keeps its primary key, which 6.0.8 left out. Dumped with natural foreign keys, a relation to it is written as that key, not as the empty tuple 6.0.8 wrote (`django/core/serializers/python.py:Serializer.get_dump_object`, `django/core/serializers/python.py:Serializer.handle_fk_field`). The notes give it as a subclass's opt-out from its model's natural key ([Serialization: `serialize`, `deserialize` and `DeserializedObject`](../services/serializers.md#natural-keys)).
+Since 6.1 a dump counts a `natural_key` that returns an empty tuple as none. With natural primary keys, such an object keeps its primary key, which 6.0.8 left out. With natural foreign keys, a relation to it is written as that key, not as the empty tuple 6.0.8 wrote (`django/core/serializers/python.py:Serializer.get_dump_object`, `django/core/serializers/python.py:Serializer.handle_fk_field`). The notes give it as a subclass's opt-out from its model's natural key ([Serialization: `serialize`, `deserialize` and `DeserializedObject`](../services/serializers.md#natural-keys)).
 
 Since 6.1 the XML deserializer raises `SuspiciousOperation` when a field's text holds an element with content of its own (`django/core/serializers/xml_serializer.py:check_element_type`). A title written `"<b>Valletta</b>"` read as `"Valletta"` under 6.0.8, and is refused at this commit.
 
@@ -93,5 +93,5 @@ The rest:
 | DEFAULT_FILE_STORAGE, STATICFILES_STORAGE | Gone in 5.1, with the function get_storage_class; nothing reads them | `django/core/files/storage/handler.py:StorageHandler.backends` |
 | a format's `Deserializer` | Since 5.2, a class, where it was a function, in the Python, JSON, JSON Lines and YAML formats | `django/core/serializers/python.py:Deserializer` |
 | a paginator's `error_messages=` | New in 5.0: merged by key over `BasePaginator.default_error_messages` | `django/core/paginator.py:BasePaginator.__init__` |
-| `AsyncPaginator`, `AsyncPage` | New in 6.0: over a queryset not yet fetched, an `AsyncPage`'s length and indexes raise `TypeError` until `AsyncPage.aget_object_list` has been awaited | [Pagination: `Paginator` and `Page`](../services/pagination.md#asyncpaginator-and-asyncpage) |
+| `AsyncPaginator`, `AsyncPage` | New in 6.0: unless its objects are a list, an `AsyncPage`'s length and indexes raise `TypeError` until `AsyncPage.aget_object_list` has been awaited | [Pagination: `Paginator` and `Page`](../services/pagination.md#asyncpaginator-and-asyncpage) |
 | a paginator's `orphans=` | Deprecated in 6.0: a value of the page's size or more warns, the pages counted as before; to raise `ValueError` in Django 2028 | [What still warns: the deprecations and the releases that end them](deprecations.md) |

@@ -24,9 +24,9 @@ Since 6.0 `ADMINS` and `MANAGERS` are lists of address strings. Under 5.2.17 the
 
 ## `MAILERS` and `mailers`
 
-Since 6.1 a project names its email backends by alias in `MAILERS`, where it named one in `EMAIL_BACKEND`. The handler `django.core.mail.mailers` makes a new backend at each lookup, of the class an entry's `"BACKEND"` names, with its `"OPTIONS"` (`django/core/mail/handler.py:MailersHandler.create_connection`). The sending functions and `EmailMessage.send` take `using=`, an alias, and sendtestemail takes --using ([Sending email: `mailers` and the email backends](../services/mailers.md)).
+Since 6.1 a project names its email backends by alias in `MAILERS`, where it named one in `EMAIL_BACKEND`. The handler `django.core.mail.mailers` makes a new backend at each lookup, of the class an entry's `"BACKEND"` names (by default the SMTP backend), with its `"OPTIONS"` (`django/core/mail/handler.py:MailersHandler.create_connection`). The sending functions and `EmailMessage.send` take `using=`, an alias, and sendtestemail takes --using ([Sending email: `mailers` and the email backends](../services/mailers.md)).
 
-`EmailMessage.send`, which `send_mail` calls, takes the mailer `using=` names. Without `using=`, it takes a backend the message holds, given as `connection=`, or else what the deprecated `get_connection` makes (`django/core/mail/message.py:EmailMessage.send`). An alias `MAILERS` lacks raises `MailerDoesNotExist`. Without `MAILERS`, so does every alias but `"default"`, and that one is what `get_connection` makes. Given no backend's path, `get_connection` makes the `"default"` mailer where `MAILERS` is defined, and otherwise the class `EMAIL_BACKEND` names, with no alias (`django/core/mail/__init__.py:get_connection`). The figure follows `send` to a message's backend:
+`EmailMessage.send`, which `send_mail` calls, takes the mailer `using=` names. Without `using=`, it takes a backend the message holds, given as `connection=`, or else what the deprecated `get_connection` makes (`django/core/mail/message.py:EmailMessage.send`). An alias `MAILERS` lacks raises `MailerDoesNotExist`. Without `MAILERS`, so does every alias but `"default"`, and that one is what `get_connection` makes. Given no backend's path, `get_connection` makes the `"default"` mailer where `MAILERS` is defined, and otherwise the class `EMAIL_BACKEND` names, with no alias (`django/core/mail/__init__.py:get_connection`). The figure follows `send` to its backend:
 
 ```text figure=finding-a-mailer
 EmailMessage.send(), which send_mail calls
@@ -41,7 +41,7 @@ EmailMessage.send(), which send_mail calls
      no, the alias "default"   get_connection(): step 3
      no, another alias         MailerDoesNotExist
 3  get_connection(): MAILERS defined?
-     yes, with "default"       a new backend of the "default" entry
+     yes                       as at step 2, for the alias "default"
      no                        a new backend of the class
                                EMAIL_BACKEND names
 ```
@@ -76,7 +76,7 @@ send_mail("Monday", "Published.", None, ["ada@example.com"], fail_silently=True,
 
 Since 6.1 `EmailMessage.send` no longer leaves the backend it used in `EmailMessage.connection`, as 5.2.17 and 6.0.8 did for a message that held none. A subclass that defines a method get_connection, which `send` called before 6.1, now makes `send` raise `AttributeError` (`django/core/mail/message.py:EmailMessage.send`).
 
-Since 6.1 a keyword argument a backend does not take raises the exception `InvalidMailer` among an entry's `"OPTIONS"`. A backend made directly, by calling its class, ignores it, as all did before 6.1, and warns (`django/core/mail/backends/base.py:BaseEmailBackend.__init__`). An SMTP backend made directly, deprecated too, reads the old settings for what it is not given (`django/core/mail/backends/smtp.py:EmailBackend.__init__`). Where `MAILERS` is defined none of the old settings can be read. So given only a host, it raises `AttributeError` at `EMAIL_PORT`, where 5.2.17 and 6.0.8 read port 25 (`django/conf/__init__.py:LazySettings.__getattr__`).
+Since 6.1 a keyword argument a backend does not take raises `InvalidMailer` among an entry's `"OPTIONS"`. A backend made directly ignores it, as all did before 6.1, and warns (`django/core/mail/backends/base.py:BaseEmailBackend.__init__`). An SMTP backend made directly, deprecated too, reads the old settings for what it is not given (`django/core/mail/backends/smtp.py:EmailBackend.__init__`). Where `MAILERS` is defined none of the old settings can be read. So given only a host, it raises `AttributeError` at `EMAIL_PORT`, where 5.2.17 and 6.0.8 read port 25 (`django/conf/__init__.py:LazySettings.__getattr__`).
 
 ## Error reports by email
 
@@ -100,7 +100,7 @@ The rest, by name:
 |---|---|---|
 | `EmailMessage.attach` | Since 6.0, takes an `email.message.MIMEPart`, which 5.2.17 refused; a legacy `email.mime.base.MIMEBase` is attached with a warning | `django/core/mail/message.py:EmailMessage.attach` |
 | `EmailMultiAlternatives.alternatives` | Since 5.2, holds `EmailAlternative` named tuples; a plain tuple appended raises `AttributeError` as the message is built | `django/core/mail/message.py:EmailMultiAlternatives._add_bodies` |
-| `EmailMessage.encoding` | Since 6.0, an `email.charset.Charset` there raises `TypeError` as the message is built | `django/core/mail/message.py:EmailMessage._add_bodies` |
+| `EmailMessage.encoding` | Since 6.0, an `email.charset.Charset` there raises `TypeError` as the body is built | `django/core/mail/message.py:EmailMessage._add_bodies` |
 | mixed_subtype, alternative_subtype | Gone in 6.0, unwarned: the undocumented subtypes of a message with attachments, or alternatives; set, they make building it raise `AttributeError` | `django/core/mail/message.py` |
 | 5.2's _create_ methods | Gone in 6.0: undocumented, _create_message among them; an override of one is not called | `django/core/mail/message.py:EmailMessage.message` |
 | the checks of `MAILERS` | New in 6.1: `"mail.W001"` warns of no `"default"`; `"mail.E001"`, in deployment, fails on a development backend there | `django/core/checks/mail.py` |

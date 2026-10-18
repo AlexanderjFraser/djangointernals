@@ -4,7 +4,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # What changed in models and fields
 
-A model leaves more to its database: `db_default`, `GeneratedField`, `CompositePrimaryKey` and `DB_CASCADE`. Also changed: what a save reads back, unsaved instances' equality, `Model.NotUpdated`, choices, constraints and the field classes.
+A model leaves more to its database: `db_default`, `GeneratedField` and `DB_CASCADE`. Also changed: `CompositePrimaryKey`, what a save reads back, unsaved instances' equality, `Model.NotUpdated`, choices, constraints and the field classes.
 
 Since 6.0 a save reads back what an expression became, and after an update a generated column, where the backend can.
 
@@ -18,7 +18,7 @@ Since 6.0 a save reads back what an expression became, and after an update a gen
 
 Since 6.0 `Model._save_table` reads back a field assigned an expression, and after an update the generated fields that depend on a field it writes (`django/db/models/base.py:Model._save_table`). Before, a save read back only after an insert, and only `Options.db_returning_fields`: the automatic key, and a database default or a generated column where the backend can return them.
 
-On SQLite, 5.2.17 leaves the expression on the instance; the later releases hold the value the statement's `"RETURNING"` clause gave back:
+On SQLite, 5.2.17 leaves the expression on the instance; the later releases hold what the statement's `"RETURNING"` clause gave back:
 
 ```text recording=changes
 tally.count = F("count") + 1; tally.save(); tally.count: a field assigned an expression, after the save
@@ -28,9 +28,9 @@ tally.count = F("count") + 1; tally.save(); tally.count: a field assigned an exp
     this commit  1
 ```
 
-On MySQL, and on MariaDB after an update, the backend cannot return the columns, so the field is removed from the instance and deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).
+On MySQL, and on MariaDB after an update, the backend cannot return the columns, so the field is ordinarily deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).
 
-Since 6.0 the insert of a save that is not raw calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).
+Since 6.0 a save's insert, unless raw, calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).
 
 ## A delete left to the database: `DB_CASCADE`, `DB_SET_NULL` and `DB_SET_DEFAULT`
 
@@ -59,7 +59,7 @@ DB_CASCADE, since 6.1: the database deletes the mooring
 
 The 6.1 notes give the saved fetch as the reason, and the unsent signals as its consequence (`docs/releases/6.1.txt`; [Deleting: the `Collector`](../models/deleting.md)). The checks refuse a chain of keys that mixes the database's actions with the collector's (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).
 
-> **Trap.** `Collector.delete` sends `post_delete` only for the rows it collected, and counts only those (`django/db/models/deletion.py:Collector.delete`). Under `DB_CASCADE` the harbour's delete sends its own `"DELETE"` alone, calls no receiver and returns `(1, {'journal.Harbour': 1})`, with the mooring gone too.
+> **Trap.** `Collector.delete` sends `post_delete` only for the rows it collected, and counts only what it deletes (`django/db/models/deletion.py:Collector.delete`). Under `DB_CASCADE` the harbour's delete calls no receiver and returns `(1, {'journal.Harbour': 1})`, with the mooring gone too.
 
 ## Keys: several columns, a database default, and the automatic key
 
@@ -79,15 +79,13 @@ Since 6.1 the blank choice that `Field.get_choices` puts first is `"- Select an 
 
 ## Constraints
 
-Since 6.0 a `CheckConstraint` given `check=` raises a `TypeError`: 5.1 had deprecated it for `condition=` (`django/db/models/constraints.py:CheckConstraint.__init__`). A name or message given to `BaseConstraint` by position, deprecated in 5.0, raises one too. Since 6.0 `BaseConstraint.check` is the method that gives `Model._check_constraints` the system check's messages; under 5.2.17 `check` was the condition, with a warning (`django/db/models/base.py:Model._check_constraints`).
+Since 6.0 a `CheckConstraint` given `check=` raises a `TypeError`: 5.1 had deprecated it for `condition=` (`django/db/models/constraints.py:CheckConstraint.__init__`). A name or message given to `BaseConstraint` by position, deprecated in 5.0, raises one too. Since 6.0 the method `BaseConstraint.check` gives `Model._check_constraints` the system check's messages; under 5.2.17 `check` was a `CheckConstraint`'s condition, with a warning (`django/db/models/base.py:Model._check_constraints`).
 
 `BaseConstraint.violation_error_code` (5.0) sets the code of a failed validation's error, and `UniqueConstraint.nulls_distinct` (5.0) how PostgreSQL treats nulls. Until 5.2 a `UniqueConstraint` over fields and without a condition raised the error of a unique field or `Options.unique_together`, whatever it was given. Since 5.2 it uses a message given, with the code given (`django/db/models/constraints.py:UniqueConstraint.validate`).
 
 > **Trap.** The 5.2 notes say the code and the message "are now always used when provided" (`docs/releases/5.2.txt`). Over fields and without a condition, a code given without a message is not: given only `violation_error_code="taken"`, a constraint over one field raises the code `"unique"` under all four releases.
 
 ## The smaller changes
-
-The rest:
 
 | what | change | where |
 |---|---|---|
@@ -96,7 +94,7 @@ The rest:
 | The option index_together | Gone in 5.1: refused as a class is made; `AlterIndexTogether` stays for old migrations | `django/db/migrations/operations/models.py:AlterIndexTogether` |
 | `DecimalField` | Since 6.1, both `max_digits` and `decimal_places` may be left out on SQLite, PostgreSQL and Oracle | `django/db/models/fields/__init__.py:DecimalField._check_decimal_places` |
 | `CharField` | Since 5.2, `max_length=` may be left out on SQLite | `django/db/models/fields/__init__.py:CharField._check_max_length_attribute` |
-| `GenericIPAddressField` | Since 6.2, a save or a filter refuses a bad IPv6 address with `ValidationError`, and strips spaces round it | `django/db/models/fields/__init__.py:GenericIPAddressField.to_python` |
+| `GenericIPAddressField` | Since 6.2, a save or a filter refuses a bad IPv6 address with `ValidationError`, and strips surrounding spaces | `django/db/models/fields/__init__.py:GenericIPAddressField.get_prep_value` |
 | `BinaryField` | Since 6.1, Base64 that is not strict raises `ValidationError` | `django/db/models/fields/__init__.py:BinaryField.to_python` |
 | `FileField` | Since 5.1, saving a file with no name raises `FieldError` | `django/db/models/fields/files.py:FileField.pre_save` |
 | `ImageField` | Since 5.0, measured on `post_init` only with a width or height field; since 5.1, not again after a save | `django/db/models/fields/files.py:ImageField.contribute_to_class` |

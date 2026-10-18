@@ -6,15 +6,15 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The email settings that `MAILERS` replaces, warned of and refused beside it; the system checks and the databases; a settings module that fails to load, and `BaseCommand.requires_settings`; what startproject, startapp and the shell give a project.
 
-In 6.1 the settings object began to enforce a deprecation. The email settings that `MAILERS` replaces warn when read as well as when set, and are refused beside it. In 6.1 too the system checks began to be given every database when their caller names none, so a check may connect to one. Since 6.2 a command that needs settings is refused in one line when none are named, or when the module named is the one missing. It used to start, and fail with a traceback. An `ImportError` of any other kind now stops every command.
+In 6.1 the settings object began to enforce a deprecation. The email settings that `MAILERS` replaces warn when read as well as when set, and are refused beside it. In 6.1 too the system checks began to be given every database when their caller names none, so a check may connect to one. Since 6.2 Django's own commands that need settings are refused in one line when none are named, or when the module named is the one missing. They used to start, and fail with a traceback if they read a setting. An `ImportError` of any other kind now stops every command.
 
 ## The deprecated email settings and `MAILERS`
 
-Since 6.1 a project names its mail backends by alias in `MAILERS` ([What changed in mail and tasks](mail-and-tasks.md)). The email settings it replaces warn, and beside it they are refused ([What still warns: the deprecations and the releases that end them](deprecations.md)). The settings object knows them as `DEPRECATED_EMAIL_SETTINGS`: `EMAIL_BACKEND`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `EMAIL_USE_SSL`, `EMAIL_TIMEOUT`, `EMAIL_SSL_CERTFILE`, `EMAIL_SSL_KEYFILE` and EMAIL_FILE_PATH. A project that defines them and no `MAILERS` still sends mail through them (`django/core/mail/__init__.py:get_connection`).
+Since 6.1 a project names its mail backends by alias in `MAILERS` ([What changed in mail and tasks](mail-and-tasks.md)). The email settings it replaces warn ([What still warns: the deprecations and the releases that end them](deprecations.md)), and beside it they are refused. `django.conf` lists them in `DEPRECATED_EMAIL_SETTINGS`: `EMAIL_BACKEND`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `EMAIL_USE_SSL`, `EMAIL_TIMEOUT`, `EMAIL_SSL_CERTFILE`, `EMAIL_SSL_KEYFILE` and EMAIL_FILE_PATH. A project that defines them and no `MAILERS` still sends mail through them (`django/core/mail/__init__.py:get_connection`).
 
 An email setting that the settings module defines warns as the module loads (`django/conf/__init__.py:Settings.__init__`). One set by `LazySettings.configure`, `override_settings` or an assignment warns as it is set. The first read warns too. The settings object then keeps the value, and later reads do not warn while it is kept. Setting and reading warn only from code outside Django, so a value that Django's own code read first warns no later reader (`django/conf/__init__.py:_show_settings_deprecation_warning`). The transitional settings `USE_BLANK_CHOICE_DASH` and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` warn in the same places when defined or set.
 
-A settings module that defines an email setting beside `MAILERS` is refused with `ImproperlyConfigured`, and so is one call of `LazySettings.configure` given both (`django/conf/__init__.py:_check_email_settings_conflicts`). Under 5.2.17 and 6.0.8 such a module loads. Where `MAILERS` is defined, an email setting cannot be read, even one left at its default (`django/conf/__init__.py:LazySettings.__getattr__`). Asked for `EMAIL_BACKEND`, settings that define only `MAILERS` used to hand back a default the project never chose; the error is the refusal:
+A settings module that defines an email setting beside `MAILERS` is refused with `ImproperlyConfigured`, and so is one call of `LazySettings.configure` given both (`django/conf/__init__.py:_check_email_settings_conflicts`). Under 5.2.17 and 6.0.8 such a module loads. Where `MAILERS` is defined, an email setting cannot be read, even one left at its default (`django/conf/__init__.py:LazySettings.__getattr__`). Asked for `EMAIL_BACKEND`, settings that define only `MAILERS` used to hand back a default the project never chose:
 
 ```text recording=changes
 settings.EMAIL_BACKEND, when the settings module defines MAILERS and not EMAIL_BACKEND
@@ -46,9 +46,9 @@ Since 5.2 `BaseCommand.execute` takes its arguments for `BaseCommand.check` from
 
 ## A settings module that cannot be loaded: `BaseCommand.requires_settings`
 
-Since 6.2 a command that needs settings is refused in one line when none are named, or when the settings module named is the one missing ([Finding the command](../commands/finding.md)). `Settings.__init__` turns an `ImportError` that names the settings module itself into `ImproperlyConfigured` (`django/conf/__init__.py:Settings.__init__`), which `ManagementUtility.execute` keeps. `ManagementUtility.fetch_command` then refuses a command whose `BaseCommand.requires_settings` is true, with the exception's message (`django/core/management/__init__.py:ManagementUtility.fetch_command`). The attribute is true by default, and startproject, startapp, shell and makemessages set it false.
+Since 6.2 Django's own commands that need settings are refused in one line when none are named, or when the module named is the one missing ([Finding the command](../commands/finding.md)). `Settings.__init__` turns an `ImportError` that names the settings module itself into `ImproperlyConfigured` (`django/conf/__init__.py:Settings.__init__`), which `ManagementUtility.execute` keeps. `ManagementUtility.fetch_command` then refuses a command whose `BaseCommand.requires_settings` is true, with the exception's message (`django/core/management/__init__.py:ManagementUtility.fetch_command`). The attribute is true by default, and startproject, startapp, shell and makemessages set it false.
 
-Until 6.2 `execute` kept an `ImportError` too and ran the command, which failed with a traceback if it read a setting (`django/core/management/__init__.py:ManagementUtility.execute`). When `"DJANGO_SETTINGS_MODULE"` names a missing module, the check command's traceback is the old behaviour and its one line the new; each line is the exit status and the standard error:
+Until 6.2 `execute` kept an `ImportError` too and ran the command, which failed with a traceback if it read a setting (`django/core/management/__init__.py:ManagementUtility.execute`). When `"DJANGO_SETTINGS_MODULE"` names a missing module, the check command's traceback is the old behaviour and its one line the new; each line is the exit status and standard error:
 
 ```text recording=changes
 python -m django check, DJANGO_SETTINGS_MODULE naming a module that does not exist
@@ -68,7 +68,7 @@ python -m django startproject almanac, the settings module importing a package t
     this commit  exit 1, a traceback ending ModuleNotFoundError: No module named 'almanac_missing_package'
 ```
 
-The 6.2 notes say `BaseCommand.requires_settings` makes configurable "whether to suppress an ImportError escaping from a settings module" (`docs/releases/6.2.txt`). At this commit it decides only where loading the settings raises `ImproperlyConfigured`.
+The 6.2 notes say `requires_settings` makes configurable "whether to suppress an ImportError escaping from a settings module" (`docs/releases/6.2.txt`). At this commit it decides only where loading the settings raises `ImproperlyConfigured`.
 
 ## What startproject, startapp and the shell give a new project
 

@@ -12,7 +12,7 @@ Since 6.1, reading a deferred field, or a related object an instance has not cac
 
 `QuerySet.fetch_mode` sets a mode on a clone. The clone hands the mode to each instance it makes from a row, through the argument `fetch_mode=` that 6.1 added to `Model.from_db` (`django/db/models/query.py:QuerySet.fetch_mode`, `django/db/models/base.py:Model.from_db`; [Deferred fields and fetch modes in a queryset](../querysets/deferred.md)). No setting or model option chooses a mode for many querysets at once. A manager that overrides `BaseManager.get_queryset` to return such a clone gives its mode to every queryset made from the manager (`django/db/models/manager.py:BaseManager.get_queryset`).
 
-Four reporters, two to each of two papers, have their papers read in a loop. With no fetch mode chosen, 5.2.17, 6.0.8, 6.1.1 and this commit each run five statements: one for the reporters and one for each read. Under `FETCH_PEERS`, 6.1.1 and this commit run two: the first read fetches the papers of all four in one statement (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.fetch_many`). The figure sets the three modes one above another: look for how many reads become a statement.
+Four reporters, two to each of two papers, have their papers read in a loop. With no fetch mode chosen, 5.2.17, 6.0.8, 6.1.1 and this commit each run five statements: one for the reporters and one for each read. Under `FETCH_PEERS`, 6.1.1 and this commit run two: the first read fetches the papers of all four in one statement (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.fetch_many`). In the figure, look for how many reads become a statement under each mode.
 
 ```text figure=fetch-modes
 One statement has loaded four reporters, two to each of two papers, without their papers.
@@ -46,7 +46,7 @@ A model whose own `from_db` takes no fetch mode works again since 6.1.1, and war
 
 6.1 deprecated two calls that name no field: `QuerySet.select_related` with no arguments, and `QuerySet.values_list` with `flat=True` and no field name. Both are to raise `TypeError` in Django 2028 (`docs/internals/deprecation.txt`; [What still warns: the deprecations and the releases that end them](deprecations.md)).
 
-With no arguments, `select_related` leaves the relations to the compiler, which follows those that cannot be null (`django/db/models/query_utils.py:select_related_descend`). The notes say to name the relations to fetch instead, or to use `FETCH_PEERS`. The call warns only where it comes from outside Django (`django/db/models/query.py:QuerySet.select_related`, `django/utils/deprecation.py:warn_about_external_use`).
+With no arguments, `select_related` leaves the relations to the compiler, which follows only those that cannot be null (`django/db/models/query_utils.py:select_related_descend`). The notes say to name the relations to fetch instead, or to use `FETCH_PEERS`. The call warns only where it comes from outside Django (`django/db/models/query.py:QuerySet.select_related`, `django/utils/deprecation.py:warn_about_external_use`).
 
 `values_list(flat=True)` with no field changed its statement in 6.0, a release before its warning came. 5.2.17's line is the old statement: it selects every column, and each row's first value is kept. 6.0.8's selects the first concrete field's column alone, with no warning (`django/db/models/query.py:QuerySet.values_list`):
 
@@ -62,9 +62,9 @@ Entry's values, its keys `[1, 2]`, are the same under all four releases; no note
 
 ## Orderings
 
-Since 6.1, `QuerySet.first` and `QuerySet.last` leave unordered a queryset whose ordering was cleared on purpose, by `QuerySet.order_by` with no arguments. Until 6.1 they ordered it by primary key, as they still order a queryset that has no ordering. They read the mark that `order_by()` leaves, `Query.default_ordering` turned off (`django/db/models/query.py:QuerySet.first`; [`get`, `first`, `count` and the other methods that run a query at once](../querysets/results.md#an-ordering-cleared-on-purpose)).
+Since 6.1, `QuerySet.first` and `QuerySet.last` leave unordered a queryset whose ordering was cleared on purpose, by `QuerySet.order_by` with no arguments. Until 6.1 they ordered it by primary key, as they still order a queryset that has no ordering, unless it is grouped without its key. They read the mark that `order_by()` leaves, `Query.default_ordering` turned off (`django/db/models/query.py:QuerySet.first`; [`get`, `first`, `count` and the other methods that run a query at once](../querysets/results.md#an-ordering-cleared-on-purpose)).
 
-Entry has no ordering, so the `ORDER BY` of 6.0.8's statement is `first`'s own: look for it, gone from 6.1.1's. 5.2.17 ran 6.0.8's statement, and this commit 6.1.1's; those two lines:
+Entry has no ordering, so the `ORDER BY` of 6.0.8's statement is `first`'s own: look for it, gone from 6.1.1's. 5.2.17 ran 6.0.8's statement, and this commit 6.1.1's:
 
 ```text recording=changes
 Entry.objects.order_by().first(): the statement it runs
@@ -75,9 +75,9 @@ Entry.objects.order_by().first(): the statement it runs
 
 > **Trap.** Nothing warns, and since 6.1, which row `first` returns after `order_by()` is the database's choice.
 
-Since 6.1, a queryset made by `QuerySet.union`, `QuerySet.intersection` or `QuerySet.difference` has its model's default ordering, and nothing warns. `QuerySet._combinator_query` still clears the combined query's ordering, the default with it, and then switches the default back on (`django/db/models/query.py:QuerySet._combinator_query`). The 6.1 notes give the consequence. A combined queryset raises `DatabaseError` where `values` or `values_list` has not selected a field of the ordering (`docs/releases/6.1.txt`).
+Since 6.1, a queryset made by `QuerySet.union`, `QuerySet.intersection` or `QuerySet.difference` has its model's default ordering, and nothing warns. `QuerySet._combinator_query` still clears the combined query's ordering, the default with it, then switches the default back on (`django/db/models/query.py:QuerySet._combinator_query`). A combined queryset therefore raises `DatabaseError` where `values` or `values_list` has not selected a field of the ordering (`docs/releases/6.1.txt`).
 
-Letter is ordered by title. The queryset in the block selects only the field pages, outside that ordering. Its union with itself gives its rows under 5.2.17 and 6.0.8, and the error under 6.1.1 and this commit:
+Letter is ordered by title. The block's queryset selects only the field pages. Its union with itself gives its rows under 5.2.17 and 6.0.8, and the error under 6.1.1 and this commit:
 
 ```text recording=changes
 list(pages.union(pages)), with pages = Letter.objects.order_by().values("pages") and Letter ordered by title
@@ -100,7 +100,7 @@ The error is Django's, so every backend raises it. `SQLCompiler.get_order_by` ca
 | `QuerySet.totally_ordered` | New in 6.1: beside `QuerySet.ordered`, true only where the ordering includes a unique field, or set of fields, not nullable | `django/db/models/query.py:QuerySet.totally_ordered` |
 | `QuerySet.iterator` | Since 5.0, with prefetch lookups and no `chunk_size=`, it raises `ValueError` | `django/db/models/query.py:QuerySet.iterator` |
 | `QuerySet.aiterator` | Since 5.0, it follows prefetch lookups a chunk at a time, through `aprefetch_related_objects`. Deprecated in 6.2: with them and no `chunk_size=`, it warns with `RemovedInDjango2029Warning` and takes chunks of 2,000 | [The asynchronous methods of a queryset](../querysets/async.md#with-prefetch-lookups) |
-| get_prefetch_queryset and get_current_queryset | Gone in 6.0, deprecated in 5.0: `get_prefetcher` looks for `get_prefetch_querysets` alone, and a descriptor with only the old method gets `ValueError` | `django/db/models/query.py:get_prefetcher` |
+| get_prefetch_queryset and get_current_queryset | Gone in 6.0, deprecated in 5.0: `get_prefetcher` looks for `get_prefetch_querysets` alone, and a lookup ending at a descriptor with only the old method raises `ValueError` | `django/db/models/query.py:get_prefetcher` |
 | `QuerySet.raw` | Since 6.0, it serves a model with a `CompositePrimaryKey`, every field of the key among the columns; 5.2.17 raised `FieldDoesNotExist` | [Raw querysets](../querysets/raw.md#a-composite-primary-key) |
 | `QuerySet.explain` | New in 5.1, on PostgreSQL: `generic_plan=`; new in 5.2, `memory=` and `serialize=`. The notes ask PostgreSQL 16 and 17; the code checks no version | `django/db/backends/postgresql/operations.py:DatabaseOperations.explain_query_prefix` |
-| a related filter given an instance | Since 5.0, refused with `ValueError` where `Model._is_pk_set` is false. The 5.0 notes say "unsaved", but an instance given a key and never saved is accepted | `django/db/models/fields/related_lookups.py:get_normalized_value` |
+| a related filter given an instance | Since 5.0, refused with `ValueError`, at this commit where `Model._is_pk_set` is false. The 5.0 notes say "unsaved", but an instance given a key and never saved is accepted | `django/db/models/fields/related_lookups.py:get_normalized_value` |

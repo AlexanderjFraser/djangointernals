@@ -45,7 +45,7 @@ This commit: 5 calls
 
 *Time runs down; each arrow is a call handed from the event loop to the request's thread. At this commit the accented box is the chain's one call, its hooks running inside it, and its centre on the event loop hands over two calls.*
 
-A project's own class built directly on the mixin keeps the flag true unless it sets it. It therefore takes the mode of the layer inside it, the next in `MIDDLEWARE`. Listed after all of Django's synchronous ones, it runs in async mode as before; directly before one, it now runs synchronously, in their one call (`django/middleware/__init__.py:MiddlewareMixin.async_capable`, `django/core/handlers/base.py:BaseHandler.load_middleware`; [Sync and async in one chain](../handlers/async.md)).
+A project's own class built directly on the mixin keeps the flag true unless it sets it. It therefore takes the mode of the layer inside it. Listed last, it runs in async mode as before; directly before one of Django's synchronous ones, it now runs synchronously, in their one call (`django/middleware/__init__.py:MiddlewareMixin.async_capable`, `django/core/handlers/base.py:BaseHandler.load_middleware`; [Sync and async in one chain](../handlers/async.md)).
 
 `MiddlewareMixin` moved in 6.2, from `django.utils.deprecation` to `django.middleware`. The old import still works, and warns with `RemovedInDjango2029Warning` (`django/utils/deprecation.py:__getattr__`; [What changed](../changes.md#an-old-habit-release-by-release)).
 
@@ -78,7 +78,7 @@ JsonResponse([1, 2]).content
     this commit  b'[1, 2]'
 ```
 
-Passing `safe=` at all now warns, since the argument goes in Django 2029 ([What still warns: the deprecations and the releases that end them](deprecations.md)). So `safe=False`, a 5.x project's habit, gives the same bytes as before and warns. `safe=True` warns and still refuses a list.
+Passing `safe=` any value but `None` now warns, since the argument goes in Django 2029 ([What still warns: the deprecations and the releases that end them](deprecations.md)). So `safe=False`, a 5.x project's habit, gives the same bytes as before and warns. `safe=True` warns and still refuses a list.
 
 ## The multipart parser's Base64
 
@@ -94,7 +94,7 @@ request.FILES["notes"].read(): a file sent as base64, "TW9u!ZGF5"
     this commit  MultiPartParserError: Could not decode base64 data.
 ```
 
-The handler answers `MultiPartParserError` with a 400. The notes say invalid data now raises that error, but that holds for a file alone. A field that fails is kept as sent: "TW9u!ZGF5", where 5.2.17 and 6.0.8 gave "Monday".
+The handler answers `MultiPartParserError` with a 400 (`django/core/handlers/exception.py:response_for_exception`). The notes say invalid data now raises that error, but that holds for a file alone. A field that fails is kept as sent: "TW9u!ZGF5", where 5.2.17 and 6.0.8 gave "Monday".
 
 The file's branch and the field's also differ over white space: the file's removes it before decoding, the field's does not. In a field whose Base64 is broken into lines, 6.1.1 and this commit give the data undecoded:
 
@@ -125,7 +125,7 @@ The rest, by name:
 | `preserve_request=` of a redirect | New in 5.2: 307 for 302 and 308 for 301, in `HttpResponseRedirect`, `HttpResponsePermanentRedirect` and `redirect` | [The response object](../http/response.md#redirects) |
 | `RedirectView.preserve_request` | New in 6.1: given to the response the view makes | `django/views/generic/base.py:RedirectView.get` |
 | `max_length=` of a redirect | New in 6.1, keyword-only: `MAX_URL_REDIRECT_LENGTH` unless given, `None` for no limit; `redirect` takes it too | `django/http/response.py:HttpResponseRedirectBase.__init__` |
-| a redirect's limit | Since 6.1, measured on the escaped `"Location"`; a security fix brought it | [Security fixes: limits against denial of service](security-fixes-limits.md) |
+| a redirect's limit | Since 6.1, measured on the escaped `"Location"`; a security fix brought the limit | [Security fixes: limits against denial of service](security-fixes-limits.md) |
 | `reverse` | New in 5.2: keyword-only `query=` and `fragment=`, taken by `reverse_lazy` too | [Reversing a name](../urls/reversing.md#the-query-string-and-the-fragment) |
 | `register_converter` | Since 6.0, `ValueError` for a name already registered, a default's included; deprecated in 5.1, it warns and replaces under 5.2.17 | [Routes, regular expressions and converters](../urls/patterns.md#converters) |
 | get_converter | Gone in 5.1; the registry is read through `get_converters` | `django/urls/converters.py:get_converters` |

@@ -36,7 +36,7 @@ The old function's module, `django/conf/urls/__init__.py`, now holds `include`, 
 
 ## Widgets and forms drawn by templates
 
-Widgets wrote their HTML in Python until 1.11 moved their rendering to the template system "to ease customizing widgets" (`docs/releases/1.11.txt`). 4.0 did the same for forms, formsets and error lists. 4.1 added a layout in `<div>` elements, which became the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `docs/releases/5.0.txt`). `RenderableFormMixin.as_table` and the three methods beside it each render a template (`django/forms/utils.py:RenderableFormMixin`; [Rendering a form: renderers and templates](../forms/rendering.md)).
+Widgets wrote their HTML in Python until 1.11 moved their rendering to the template system "to ease customizing widgets" (`docs/releases/1.11.txt`). 4.0 did the same for forms, formsets and error lists. 4.1 added a layout in `<div>` elements, which became the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `docs/releases/5.0.txt`). `RenderableFormMixin.as_div`, `as_p`, `as_table` and `as_ul` each render a template (`django/forms/utils.py:RenderableFormMixin`; [Rendering a form: renderers and templates](../forms/rendering.md)).
 
 ## Asynchronous Django
 
@@ -46,7 +46,7 @@ DEP 9, written by Andrew Godwin in 2019, proposed to make every part of Django t
 
 4.0 gave the cache asynchronous methods. 4.1 gave the queryset "an asynchronous interface for all data access operations", though "the underlying database operations remain synchronous" (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`). At this commit they still do: `QuerySet.aget` runs `QuerySet.get` through `sync_to_async`, "sync-native, with an async wrapper" in DEP 9's words (`django/db/models/query.py:QuerySet.aget`; [The asynchronous methods of a queryset](../querysets/async.md)). The proposal is still filed as accepted, not final.
 
-> **Why.** Python cannot give one name both a synchronous and an asynchronous body, so DEP 9 proposed a suffix, get_async beside get, as the easiest to check in review (`deps:accepted/0009-async.rst`). When such twins shipped, on the cache in 4.0, they took a prefix instead, `BaseCache.aget`, and the notes said this prefix "will be used for async variants of methods generally" (`docs/releases/4.0.txt`, `django/core/cache/backends/base.py:BaseCache.aget`).
+> **Why.** Python cannot give one name both a synchronous and an asynchronous body, so DEP 9 proposed a suffix, get_async beside get, as the easiest to check in review (`deps:accepted/0009-async.rst`). When the cache's twins shipped in 4.0, they took a prefix instead, `BaseCache.aget`, and the notes said this prefix "will be used for async variants of methods generally" (`docs/releases/4.0.txt`, `django/core/cache/backends/base.py:BaseCache.aget`).
 
 ## Time zones from the standard library
 
@@ -64,7 +64,7 @@ Since 3.2 Django finds an application's configuration itself, if its apps.py def
 
 ## New projects ahead of the defaults
 
-1.9 added password validation, off by default and on in the settings startproject writes (`docs/releases/1.9.txt`). 3.2 likewise wrote `BigAutoField` into new projects, while `DEFAULT_AUTO_FIELD` kept `AutoField` (`docs/releases/3.2.txt`). That default caught up in 6.0. The default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)). The validators have not: `django/conf/global_settings.py` leaves `AUTH_PASSWORD_VALIDATORS` empty, and `django/conf/project_template/project_name/settings.py-tpl` fills it ([Password validation: `validate_password` and the validators](../auth/password-validation.md)).
+1.9 added password validation, off by default and on in the settings startproject writes (`docs/releases/1.9.txt`). 3.2 likewise wrote `BigAutoField` into new projects, while `DEFAULT_AUTO_FIELD` kept `AutoField` (`docs/releases/3.2.txt`). That default caught up in 6.0 (`docs/releases/6.0.txt`; [What changed in models and fields](models.md)). The default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/5.0.txt`, `docs/releases/4.0.txt`). The validators have not: `django/conf/global_settings.py` leaves `AUTH_PASSWORD_VALIDATORS` empty, and `django/conf/project_template/project_name/settings.py-tpl` fills it ([Password validation: `validate_password` and the validators](../auth/password-validation.md)).
 
 ## Where 5.0 hands on
 

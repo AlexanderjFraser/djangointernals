@@ -148,7 +148,7 @@
   {
    "pointer": "django/db/models/fetch_modes.py",
    "line": 65,
-   "sentence": "Since 6.1, reading a field or a related object a queryset did not load follows a **fetch mode**: a fetch for that instance, as before (`FETCH_ONE`); one for it and its peers, the other instances of its model that the same run of the queryset made (`FETCH_PEERS`); or a refusal (`FETCH_RAISE`) (`django/db/models/fetch_modes.py`; [What changed in querysets](changes/querysets.md)).",
+   "sentence": "Since 6.1, reading a field or a related object a queryset did not load follows a **fetch mode**: a fetch for that instance, as before (`FETCH_ONE`); one for it and its peers, other instances of its model the same run of the queryset made (`FETCH_PEERS`); or a refusal (`FETCH_RAISE`) (`django/db/models/fetch_modes.py`; [What changed in querysets](changes/querysets.md)).",
    "tree": "django",
    "path": "django/db/models/fetch_modes.py",
    "symbol": null,
@@ -160,9 +160,51 @@
    "fingerprint": "f9db293407877ac3"
   },
   {
+   "pointer": "django/tasks/__init__.py:TaskBackendHandler",
+   "line": 66,
+   "sentence": "**Services are configured by alias**: `TASKS` (6.0) and `MAILERS` (6.1) name their backends as `CACHES`, `DATABASES` and `STORAGES` already did, and the email settings `MAILERS` replaces are deprecated (`django/tasks/__init__.py:TaskBackendHandler`, `django/core/mail/handler.py:MailersHandler`; [What changed in mail and tasks](changes/mail-and-tasks.md)).",
+   "tree": "django",
+   "path": "django/tasks/__init__.py",
+   "symbol": "TaskBackendHandler",
+   "kind": "class",
+   "lines": [
+    29,
+    40
+   ],
+   "fingerprint": "f6f67545acb5f78b"
+  },
+  {
+   "pointer": "django/core/mail/handler.py:MailersHandler",
+   "line": 66,
+   "sentence": "**Services are configured by alias**: `TASKS` (6.0) and `MAILERS` (6.1) name their backends as `CACHES`, `DATABASES` and `STORAGES` already did, and the email settings `MAILERS` replaces are deprecated (`django/tasks/__init__.py:TaskBackendHandler`, `django/core/mail/handler.py:MailersHandler`; [What changed in mail and tasks](changes/mail-and-tasks.md)).",
+   "tree": "django",
+   "path": "django/core/mail/handler.py",
+   "symbol": "MailersHandler",
+   "kind": "class",
+   "lines": [
+    11,
+    78
+   ],
+   "fingerprint": "d6b0b7b76cb78bdd"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 67,
+   "sentence": "Release after release added coroutine twins, such as `aauthenticate` and `Signal.asend` (5.0); then 6.2 made most of Django's own middleware synchronous only (`async_capable = False`), so that under ASGI a chain of it runs in a thread as one call around its centre, which stays on the event loop, instead of crossing into a thread and back for each hook (`django/core/handlers/base.py:BaseHandler.load_middleware`; [Sync and async in one chain](handlers/async.md)).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
    "pointer": "django/contrib/auth/hashers.py:PBKDF2PasswordHasher",
    "line": 68,
-   "sentence": "**Safer defaults**: aware datetimes (5.0), 64-bit automatic keys (6.0), `\"https\"` as the scheme a form's URL field assumes (6.0), and more iterations of the PBKDF2 password hasher in every feature release (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher`).",
+   "sentence": "**Safer defaults**: time zone support (5.0), 64-bit automatic keys (6.0), `\"https\"` as the scheme a form's URL field assumes (6.0), and more iterations of the PBKDF2 password hasher in every feature release (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "PBKDF2PasswordHasher",
@@ -190,7 +232,7 @@
   {
    "pointer": "django/utils/deprecation.py:warn_about_external_use",
    "line": 80,
-   "sentence": "The old behaviour stays for at least two feature releases and ordinarily warns, some of its warnings only when the use comes from outside Django's own code (`django/utils/deprecation.py:warn_about_external_use`).",
+   "sentence": "The old behaviour ordinarily stays for at least two feature releases and warns, some of its warnings only when the use comes from outside Django's own code (`django/utils/deprecation.py:warn_about_external_use`).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
    "symbol": "warn_about_external_use",
@@ -218,7 +260,7 @@
   {
    "pointer": "django/conf/global_settings.py",
    "line": 84,
-   "sentence": "Some deprecations come with a **transitional setting**, which lets a project take the new behaviour early or keep the old one for a time: at this commit `URLIZE_ASSUME_HTTPS`, `USE_BLANK_CHOICE_DASH` and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` (`django/conf/global_settings.py`; [What changed in settings, startup and the commands](changes/startup-and-commands.md)).",
+   "sentence": "Some deprecations come with a **transitional setting**, which lets a project take the new behaviour early or keep the old one for a time: at this commit `URLIZE_ASSUME_HTTPS`, `USE_BLANK_CHOICE_DASH` and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` (`django/conf/global_settings.py`; [What still warns: the deprecations and the releases that end them](changes/deprecations.md#settings)).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
    "symbol": null,
@@ -246,7 +288,7 @@
   {
    "pointer": "django/conf/global_settings.py",
    "line": 94,
-   "sentence": "6.0 changed the setting's default from `AutoField` to `BigAutoField`, and nothing warns (`django/conf/global_settings.py`):",
+   "sentence": "6.0 changed the setting's default from `AutoField` to `BigAutoField`, and since then nothing warns (`django/conf/global_settings.py`):",
    "tree": "django",
    "path": "django/conf/global_settings.py",
    "symbol": null,
@@ -260,7 +302,7 @@
   {
    "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields",
    "line": 104,
-   "sentence": "A project upgraded to 6.0 that never named the class finds the key of each such model now a `BigAutoField`, and makemigrations writes an `AlterField` for each (`django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields`).",
+   "sentence": "A project upgraded to 6.0 that never named the class finds each such model's key a `BigAutoField`, and makemigrations writes an `AlterField` for each (`django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields`).",
    "tree": "django",
    "path": "django/db/migrations/autodetector.py",
    "symbol": "MigrationAutodetector.generate_altered_fields",

@@ -10,7 +10,7 @@
   {
    "pointer": "docs/releases/6.0.txt",
    "line": 13,
-   "sentence": "The 6.0 notes give the reason, \"the interoperability problems that resulted\" (`docs/releases/6.0.txt`).",
+   "sentence": "The 6.0 notes give the reason, the problems of interoperability that allowing either caused (`docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -94,7 +94,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias",
    "line": 38,
-   "sentence": "It now quotes whatever it is given: a join's alias, `'T3'` until 6.0.8, comes back `'\"T3\"'` on SQLite (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`; [The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).",
+   "sentence": "It now quotes whatever it is given: a join's alias, `'T3'` under 6.0.8, comes back `'\"T3\"'` on SQLite (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`; [The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.quote_name_unless_alias",
@@ -164,7 +164,7 @@
   {
    "pointer": "django/db/models/aggregates.py:Aggregate.as_sql",
    "line": 46,
-   "sentence": "5.2's filter_template, which wrapped any template in `\" FILTER (WHERE ...)\"`, is gone, and the 6.0 notes do not say so (`django/db/models/aggregates.py:Aggregate.as_sql`).",
+   "sentence": "5.2's filter_template, which set `\" FILTER (WHERE ...)\"` after any template, is gone, and the 6.0 notes do not say so (`django/db/models/aggregates.py:Aggregate.as_sql`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "Aggregate.as_sql",
@@ -345,22 +345,8 @@
    "fingerprint": "eb64428776327822"
   },
   {
-   "pointer": "django/db/models/fields/json.py:JSONField.get_db_prep_value",
-   "line": 79,
-   "sentence": "| A string given to a `JSONField` | Gone in 5.1: a string taken as JSON already encoded | `django/db/models/fields/json.py:JSONField.get_db_prep_value` |",
-   "tree": "django",
-   "path": "django/db/models/fields/json.py",
-   "symbol": "JSONField.get_db_prep_value",
-   "kind": "function",
-   "lines": [
-    102,
-    105
-   ],
-   "fingerprint": "768ab6fd9aa60e9b"
-  },
-  {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end",
-   "line": 80,
+   "line": 79,
    "sentence": "| `RowRange` | Since 5.1, its bounds may pass the current row | `django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end` |",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
@@ -374,7 +360,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:WindowFrame",
-   "line": 81,
+   "line": 80,
    "sentence": "| `WindowFrameExclusion` | New in 5.1: the `exclusion=` of `RowRange` and `ValueRange`, the rows a frame leaves out | `django/db/models/expressions.py:WindowFrame` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -388,7 +374,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
-   "line": 82,
+   "line": 81,
    "sentence": "| `QuerySet.order_by` | Since 5.1, takes an annotation's name followed by transforms | `django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs` |",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -402,7 +388,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Sliced",
-   "line": 83,
+   "line": 82,
    "sentence": "| Slicing an `F` | New in 5.1: a `Sliced`, which the output field writes | `django/db/models/expressions.py:Sliced` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -416,7 +402,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.get_expression_for_validation",
-   "line": 84,
+   "line": 83,
    "sentence": "| `BaseExpression.constraint_validation_compatible` | New in 5.1: where false, validation uses the expression's source | `django/db/models/expressions.py:BaseExpression.get_expression_for_validation` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -430,7 +416,7 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
-   "line": 85,
+   "line": 84,
    "sentence": "| `BaseExpression.set_returning` | New in 5.2: where true, an aggregation over it runs on a subquery | `django/db/models/sql/query.py:Query.get_aggregation` |",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -444,7 +430,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.resolve_expression",
-   "line": 86,
+   "line": 85,
    "sentence": "| `BaseExpression.allows_composite_expressions` | New in 5.2: unless set, a composite key is refused as a source | `django/db/models/expressions.py:BaseExpression.resolve_expression` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -458,7 +444,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Func.__init__",
-   "line": 87,
+   "line": 86,
    "sentence": "| `Func.arity` | Since 5.2, `Avg`, `Max`, `Min` and `Sum` refuse any number of arguments but one, with `TypeError` | `django/db/models/expressions.py:Func.__init__` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -471,22 +457,22 @@
    "fingerprint": "27f2b594d772c75d"
   },
   {
-   "pointer": "django/db/models/aggregates.py:Count.__init__",
-   "line": 88,
-   "sentence": "| `Count` with two arguments | Since 6.0, a field's name as the second is taken as its filter; under 5.2.17, `AttributeError` | `django/db/models/aggregates.py:Count.__init__` |",
+   "pointer": "django/db/models/aggregates.py:Aggregate.__init__",
+   "line": 87,
+   "sentence": "| `Count` with two arguments | Since 6.0, a field's name as the second is taken as its filter; under 5.2.17, `AttributeError` | `django/db/models/aggregates.py:Aggregate.__init__` |",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
-   "symbol": "Count.__init__",
+   "symbol": "Aggregate.__init__",
    "kind": "function",
    "lines": [
-    304,
-    309
+    84,
+    106
    ],
-   "fingerprint": "3e6ec350f1a0b5ae"
+   "fingerprint": "c577c84f985307d6"
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.check_alias",
-   "line": 90,
+   "line": 89,
    "sentence": "| A percent sign in an alias | Deprecated in 6.0: `Query.check_alias` warns of one, and accepts it | `django/db/models/sql/query.py:Query.check_alias` |",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
@@ -500,7 +486,7 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py:TimezoneMixin.deconstruct",
-   "line": 91,
+   "line": 90,
    "sentence": "| `Extract`, `Trunc` without tzinfo | Deprecated in 6.2: they warn when deconstructed while `USE_TZ` is true | `django/db/models/functions/datetime.py:TimezoneMixin.deconstruct` |",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
