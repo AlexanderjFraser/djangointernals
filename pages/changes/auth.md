@@ -84,7 +84,7 @@ bool(SessionStore()): a new session, with no key and no data
     this commit  False
 ```
 
-> **Trap.** `if request.session:`, always true before 6.1, is now false for a request with no valid key and nothing stored, and nothing warns.
+> **Trap.** `if request.session:` is now false for a request with no valid key and nothing stored, and nothing warns.
 
 ## The smaller changes
 

@@ -7,19 +7,19 @@
 {% if front %}<header class="head title-page flow">
 <h1>{{ page.title_html|safe }}</h1>
 <p class="lede">{{ page.lede_html|safe }}</p>
-<p class="edition">Django {{ edition }}</p>
+{{ page.lede_sources_html|safe }}<p class="edition">Django {{ edition }}</p>
 </header>
 {% elif page.is_chapter %}<header class="head opener flow">
 <p class="kicker">{% if page.part_label %}{{ page.part_label }}{% else %}Chapter{% endif %}</p>
 <p class="numeral" aria-hidden="true">{{ page.number }}</p>
 <h1><span class="spoken">Chapter {{ page.number }}: </span>{{ page.title_html|safe }}</h1>
 <p class="lede">{{ page.lede_html|safe }}</p>
-</header>
+{{ page.lede_sources_html|safe }}</header>
 {% else %}<header class="head flow">
 <p class="kicker"><a href="{{ page.chapter.url }}">Chapter {{ page.chapter.number }} · {{ page.chapter.title_text }}</a></p>
 <h1><span class="no">{{ page.number }}</span> {{ page.title_html|safe }}</h1>
 <p class="lede">{{ page.lede_html|safe }}</p>
-</header>
+{{ page.lede_sources_html|safe }}</header>
 {% endif %}
 {% if page.brief_html %}<div class="brief flow">
 {{ page.brief_html|safe }}

@@ -8,8 +8,6 @@ Under ASGI, most of Django's own middleware now runs on the request's thread in 
 
 Both ASGI changes came in 6.2 and concern the one thread each request has, on which Django runs the synchronous code it calls with `thread_sensitive=True` (`django/core/handlers/asgi.py:ASGIHandler.__call__`). The notes give two reasons: the cost of switching to that thread and back for each hook, and the database connections an error view uses (`docs/releases/6.2.txt`).
 
-Two guards changed too: `JsonResponse` stopped refusing a list (6.2), and the multipart parser became strict about Base64 (6.1).
-
 ## Django's middleware under ASGI
 
 Since 6.2 a chain of Django's own middleware under ASGI is one call into the request's thread (`django/core/handlers/base.py:BaseHandler.load_middleware`). Each class Django builds on `MiddlewareMixin` with a `process_request` or a `process_response` now sets `async_capable = False`, the flag that says whether a middleware can run on the event loop, where it took the mixin's `True` (`django/middleware/common.py:CommonMiddleware.async_capable`). Such a chain used to run in the mixin's async mode, on the event loop, sending each hook to the thread and back. Its centre, where the handler resolves the view and calls it, is now one call back to the loop.

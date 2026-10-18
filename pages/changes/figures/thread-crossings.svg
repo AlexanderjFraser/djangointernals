@@ -1,108 +1,115 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 506">
-  <!-- time runs down; each row is a call or a hook, the same rows for both releases -->
-  <!-- 6.1.1: event loop at x 280, thread at 386; this commit: event loop at 486, thread at 592 -->
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 540">
+  <!-- time runs down; each row is a call or a hook, the same rows for both releases, named once between them -->
+  <!-- 6.1.1: event loop at x 32, thread at 118; the rows' names centred on 209; this commit: event loop at 305, thread at 391 -->
 
   <!-- the two panels' titles and their lanes -->
-  <text x="333" y="16" text-anchor="middle"><tspan class="strong">6.1.1</tspan>: 16 calls</text>
-  <text x="539" y="16" text-anchor="middle"><tspan class="strong">this commit</tspan>: 5 calls</text>
-  <text class="quiet" x="280" y="40" text-anchor="middle">event loop</text>
-  <text class="quiet" x="386" y="40" text-anchor="middle">request's thread</text>
-  <text class="quiet" x="486" y="40" text-anchor="middle">event loop</text>
-  <text class="quiet" x="592" y="40" text-anchor="middle">request's thread</text>
-  <path class="line" d="M280 50 V500"/>
-  <path class="line dashed" d="M386 50 V500"/>
-  <path class="line" d="M486 50 V500"/>
-  <path class="line dashed" d="M592 50 V500"/>
+  <text x="75" y="16" text-anchor="middle"><tspan class="strong">6.1.1</tspan>: 16 calls</text>
+  <text x="348" y="16" text-anchor="middle"><tspan class="strong">this commit</tspan>: 5 calls</text>
+  <text class="quiet" x="32" y="58" text-anchor="middle">event loop</text>
+  <text class="quiet" x="118" y="40" text-anchor="middle">request's</text>
+  <text class="quiet" x="118" y="58" text-anchor="middle">thread</text>
+  <text class="quiet" x="305" y="58" text-anchor="middle">event loop</text>
+  <text class="quiet" x="391" y="40" text-anchor="middle">request's</text>
+  <text class="quiet" x="391" y="58" text-anchor="middle">thread</text>
+  <path class="line" d="M32 68 V538"/>
+  <path class="line dashed" d="M118 68 V538"/>
+  <path class="line" d="M305 68 V538"/>
+  <path class="line dashed" d="M391 68 V538"/>
 
-  <!-- the rows, named once for both -->
-  <text x="244" y="81" text-anchor="end"><tspan class="name">request_started</tspan>'s receivers</text>
-  <text x="244" y="190" text-anchor="end">each <tspan class="name">process_request</tspan></text>
-  <path class="line" d="M255 123.5 H250.5 V247.5 H255"/>
-  <text class="name" x="244" y="295" text-anchor="end">CsrfViewMiddleware.process_view</text>
-  <text x="244" y="317" text-anchor="end">the view</text>
-  <text x="244" y="400" text-anchor="end">each <tspan class="name">process_response</tspan></text>
-  <path class="line" d="M255 333.5 H250.5 V457.5 H255"/>
-  <text x="244" y="493" text-anchor="end">closing the response</text>
+  <!-- the rows, named once for both, between the two panels -->
+  <text x="209" y="88" text-anchor="middle"><tspan class="name">request_started</tspan>'s</text>
+  <text x="209" y="106" text-anchor="middle">receivers</text>
+  <text x="209" y="197" text-anchor="middle">each</text>
+  <text class="name" x="209" y="215" text-anchor="middle">process_request</text>
+  <path class="line" d="M134 139.5 H139.5 V263.5 H134 M284 139.5 H278.5 V263.5 H284"/>
+  <text class="name" x="209" y="308" text-anchor="middle">CsrfViewMiddleware</text>
+  <text class="name" x="209" y="326" text-anchor="middle">.process_view</text>
+  <text x="209" y="351" text-anchor="middle">the view</text>
+  <text x="209" y="429" text-anchor="middle">each</text>
+  <text class="name" x="209" y="447" text-anchor="middle">process_response</text>
+  <path class="line" d="M134 371.5 H139.5 V495.5 H134 M284 371.5 H278.5 V495.5 H284"/>
+  <text x="209" y="531" text-anchor="middle">closing the response</text>
 
   <!-- 6.1.1: the chain on the event loop, every hook a call to the thread -->
-  <rect class="box" x="264.5" y="94.5" width="32" height="374" rx="4"/>
-  <text x="304" y="113">the chain</text>
+  <rect class="box" x="108.5" y="85.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M32 92.5 H98"/>
+  <polygon class="head" points="108,92.5 98,87.5 98,97.5"/>
 
-  <rect class="box" x="376.5" y="69.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M280 76.5 H366"/>
-  <polygon class="head" points="376,76.5 366,71.5 366,81.5"/>
+  <rect class="box" x="16.5" y="110.5" width="32" height="396" rx="4"/>
+  <text x="56" y="129">the chain</text>
 
-  <rect class="box" x="376.5" y="123.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="145.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="167.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="189.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="211.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="233.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M296.5 130.5 H366 M296.5 152.5 H366 M296.5 174.5 H366 M296.5 196.5 H366 M296.5 218.5 H366 M296.5 240.5 H366"/>
-  <polygon class="head" points="376,130.5 366,125.5 366,135.5"/>
-  <polygon class="head" points="376,152.5 366,147.5 366,157.5"/>
-  <polygon class="head" points="376,174.5 366,169.5 366,179.5"/>
-  <polygon class="head" points="376,196.5 366,191.5 366,201.5"/>
-  <polygon class="head" points="376,218.5 366,213.5 366,223.5"/>
-  <polygon class="head" points="376,240.5 366,235.5 366,245.5"/>
+  <rect class="box" x="108.5" y="139.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="161.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="183.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="205.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="227.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="249.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M48.5 146.5 H98 M48.5 168.5 H98 M48.5 190.5 H98 M48.5 212.5 H98 M48.5 234.5 H98 M48.5 256.5 H98"/>
+  <polygon class="head" points="108,146.5 98,141.5 98,151.5"/>
+  <polygon class="head" points="108,168.5 98,163.5 98,173.5"/>
+  <polygon class="head" points="108,190.5 98,185.5 98,195.5"/>
+  <polygon class="head" points="108,212.5 98,207.5 98,217.5"/>
+  <polygon class="head" points="108,234.5 98,229.5 98,239.5"/>
+  <polygon class="head" points="108,256.5 98,251.5 98,261.5"/>
 
-  <rect class="box" x="376.5" y="283.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="305.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M296.5 290.5 H366 M296.5 312.5 H366"/>
-  <polygon class="head" points="376,290.5 366,285.5 366,295.5"/>
-  <polygon class="head" points="376,312.5 366,307.5 366,317.5"/>
+  <rect class="box" x="108.5" y="305.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="339.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M48.5 312.5 H98 M48.5 346.5 H98"/>
+  <polygon class="head" points="108,312.5 98,307.5 98,317.5"/>
+  <polygon class="head" points="108,346.5 98,341.5 98,351.5"/>
 
-  <rect class="box" x="376.5" y="333.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="355.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="377.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="399.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="421.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="376.5" y="443.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M296.5 340.5 H366 M296.5 362.5 H366 M296.5 384.5 H366 M296.5 406.5 H366 M296.5 428.5 H366 M296.5 450.5 H366"/>
-  <polygon class="head" points="376,340.5 366,335.5 366,345.5"/>
-  <polygon class="head" points="376,362.5 366,357.5 366,367.5"/>
-  <polygon class="head" points="376,384.5 366,379.5 366,389.5"/>
-  <polygon class="head" points="376,406.5 366,401.5 366,411.5"/>
-  <polygon class="head" points="376,428.5 366,423.5 366,433.5"/>
-  <polygon class="head" points="376,450.5 366,445.5 366,455.5"/>
+  <rect class="box" x="108.5" y="371.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="393.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="415.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="437.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="459.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="108.5" y="481.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M48.5 378.5 H98 M48.5 400.5 H98 M48.5 422.5 H98 M48.5 444.5 H98 M48.5 466.5 H98 M48.5 488.5 H98"/>
+  <polygon class="head" points="108,378.5 98,373.5 98,383.5"/>
+  <polygon class="head" points="108,400.5 98,395.5 98,405.5"/>
+  <polygon class="head" points="108,422.5 98,417.5 98,427.5"/>
+  <polygon class="head" points="108,444.5 98,439.5 98,449.5"/>
+  <polygon class="head" points="108,466.5 98,461.5 98,471.5"/>
+  <polygon class="head" points="108,488.5 98,483.5 98,493.5"/>
 
-  <rect class="box" x="376.5" y="481.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M280 488.5 H366"/>
-  <polygon class="head" points="376,488.5 366,483.5 366,493.5"/>
+  <rect class="box" x="108.5" y="519.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M32 526.5 H98"/>
+  <polygon class="head" points="108,526.5 98,521.5 98,531.5"/>
 
   <!-- this commit: the chain is one call, and stays on the thread; only its centre is on the event loop -->
-  <rect class="box" x="582.5" y="69.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M486 76.5 H572"/>
-  <polygon class="head" points="582,76.5 572,71.5 572,81.5"/>
+  <rect class="box" x="381.5" y="85.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M305 92.5 H371"/>
+  <polygon class="head" points="381,92.5 371,87.5 371,97.5"/>
 
-  <rect class="mark-box" x="576.5" y="94.5" width="32" height="374" rx="4"/>
-  <path class="line" d="M486 108.5 H566"/>
-  <polygon class="head" points="576,108.5 566,103.5 566,113.5"/>
-  <text class="strong mark" x="566" y="134" text-anchor="end">the chain</text>
+  <rect class="mark-box" x="375.5" y="110.5" width="32" height="396" rx="4"/>
+  <path class="line" d="M305 124.5 H365"/>
+  <polygon class="head" points="375,124.5 365,119.5 365,129.5"/>
+  <text class="strong mark" x="368" y="151" text-anchor="end">the chain</text>
 
-  <rect class="box" x="582.5" y="123.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="145.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="167.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="189.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="211.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="233.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="139.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="161.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="183.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="205.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="227.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="249.5" width="20" height="14" rx="4"/>
 
-  <rect class="box" x="470.5" y="258.5" width="32" height="66" rx="4"/>
-  <text x="510" y="275">its centre</text>
-  <rect class="box" x="582.5" y="283.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="305.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M502.5 290.5 H572 M502.5 312.5 H572"/>
-  <polygon class="head" points="582,290.5 572,285.5 572,295.5"/>
-  <polygon class="head" points="582,312.5 572,307.5 572,317.5"/>
+  <!-- its centre, on the event loop, hands over process_view and the view -->
+  <text x="311" y="290">its centre</text>
+  <rect class="box" x="289.5" y="296.5" width="32" height="66" rx="4"/>
+  <rect class="box" x="381.5" y="305.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="339.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M321.5 312.5 H371 M321.5 346.5 H371"/>
+  <polygon class="head" points="381,312.5 371,307.5 371,317.5"/>
+  <polygon class="head" points="381,346.5 371,341.5 371,351.5"/>
 
-  <rect class="box" x="582.5" y="333.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="355.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="377.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="399.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="421.5" width="20" height="14" rx="4"/>
-  <rect class="box" x="582.5" y="443.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="371.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="393.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="415.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="437.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="459.5" width="20" height="14" rx="4"/>
+  <rect class="box" x="381.5" y="481.5" width="20" height="14" rx="4"/>
 
-  <rect class="box" x="582.5" y="481.5" width="20" height="14" rx="4"/>
-  <path class="line" d="M486 488.5 H572"/>
-  <polygon class="head" points="582,488.5 572,483.5 572,493.5"/>
+  <rect class="box" x="381.5" y="519.5" width="20" height="14" rx="4"/>
+  <path class="line" d="M305 526.5 H371"/>
+  <polygon class="head" points="381,526.5 371,521.5 371,531.5"/>
 </svg>

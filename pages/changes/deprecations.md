@@ -16,13 +16,13 @@ The figure sets each feature release from 5.0 beside the release that removes wh
 What each feature release from 5.0 deprecated, from that release to the one that removes it.
 LTS: a long-term support release.
 
-   4 December 2023    5.0
-   7 August 2024      5.1
-   2 April 2025       5.2 LTS
-   3 December 2025    6.0
-   5 August 2026      6.1
+   Dec 2023           5.0
+   Aug 2024           5.1
+   Apr 2025           5.2 LTS
+   Dec 2025           6.0
+   Aug 2026           6.1
   26 September 2026   this commit: main, a pre-alpha of 6.2, django.VERSION (6, 2, 0, "alpha", 0)
-   April 2027         6.2 LTS, expected
+   Apr 2027           6.2 LTS, expected
                       Django 2028, then Django 2029: calendar versions, under DEP 20
 
 Where what a release deprecated is removed:

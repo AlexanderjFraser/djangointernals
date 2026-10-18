@@ -12,11 +12,11 @@ Fixes from 5.0 on that keep a response from the wrong reader, a header or log li
 
 The fixes of 2026 fell most on the page cache, which keeps a response under a key made from its URL and the request headers its `"Vary"` names. They narrowed what it stores, and widened the key ([The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md)).
 
-With `SESSION_SAVE_EVERY_REQUEST` true, `SessionMiddleware` set the session cookie even when nothing in it changed. It then varied on `"Cookie"` only if the session was read, so a page that never read it could be stored with one visitor's cookie and served to the next (CVE-2026-35192; 5.2.14, 6.0.5). `SessionMiddleware.process_response` now adds `"Cookie"` to `"Vary"` whenever it sets or deletes the cookie, and when the session was read (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`; [`SessionMiddleware`: the cookie and the save](../auth/session-middleware.md)). Since 5.2.16 and 6.0.7 a response setting the session cookie is not stored (CVE-2026-48588).
+With `SESSION_SAVE_EVERY_REQUEST` true, `SessionMiddleware` set the session cookie even when nothing in it changed. It then varied on `"Cookie"` only if the session was read, so a page that never read it could be stored with one visitor's cookie and served to the next (CVE-2026-35192; 5.2.14, 6.0.5). `SessionMiddleware.process_response` now adds `"Cookie"` to `"Vary"` whenever it sets or deletes the cookie, and when the session was read (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`; [`SessionMiddleware`: the cookie and the save](../auth/session-middleware.md)).
 
 The rest are `UpdateCacheMiddleware`'s. A response that sets a cookie while varying on `"Cookie"` is refused whatever the request carried, where an unrelated cookie in the request used to let one be stored (CVE-2026-48588; 5.2.16, 6.0.7). Cache-Control's `"private"`, `"no-cache"` and `"no-store"` are found whatever their case, where `"Private"` was not (CVE-2026-8404; 5.2.15, 6.0.6). A `"Vary"` of `"*"` used to be stored (CVE-2026-6907; 5.2.14, 6.0.5), as did a star with white space around it (CVE-2026-48587; 5.2.15, 6.0.6); `has_vary_header` now compares stripped names (`django/utils/cache.py:has_vary_header`). A response to a request bearing `"Authorization"` was stored under a key that ignored the credential (CVE-2026-35193; 5.2.15, 6.0.6). It now varies on Authorization unless its Cache-Control has `"public"`.
 
-`UpdateCacheMiddleware.process_response`, which `cache_page` runs too, returns a response unstored at the first check that holds (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`). The figure gives the checks in order: look for where each fix stands.
+`UpdateCacheMiddleware.process_response`, which `cache_page` runs too, returns a response unstored at the first check that holds (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`). Three checks no fix changed: a request `FetchFromCacheMiddleware` did not flag on the way in, as it flags a `"GET"` or `"HEAD"` it could not answer from the cache; a response that streams, or whose status is neither 200 nor 304; and, with no page timeout, a max-age of 0. What passes is stored if its status is 200 and its timeout not 0. The figure gives the checks in order.
 
 ```text figure=what-is-stored
 With SessionMiddleware inside UpdateCacheMiddleware, on the way out:
@@ -37,8 +37,7 @@ UpdateCacheMiddleware.process_response: the first that holds returns it unstored
 Then, for a response that passed:
   the request has Authorization and Cache-Control lacks public
     -> "Authorization" added to Vary           CVE-2026-35193
-  a timeout other than 0 and a status of 200:
-    learn_cache_key stores the names in Vary, and the response is stored;
+  a status of 200 and a timeout other than 0: the response is stored;
     otherwise it is returned unstored
 ```
 
@@ -46,11 +45,11 @@ Then, for a response that passed:
 
 ## Header names, domain names and log lines
 
-`ASGIRequest` drops every header with an underscore in its name (CVE-2026-3902; 5.2.13, 6.0.4). It writes a header into `HttpRequest.META` as WSGI does, its hyphens as underscores. So a header named x_forwarded_for landed on X-Forwarded-For's key, past a proxy that strips X-Forwarded-For (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).
+`ASGIRequest` drops every header with an underscore in its name (CVE-2026-3902; 5.2.13, 6.0.4). Since it writes a header into `HttpRequest.META` as WSGI does, its hyphens as underscores, a header named x_forwarded_for landed on X-Forwarded-For's key, past a proxy that strips X-Forwarded-For (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).
 
 `DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7). Its pattern ends at `"\Z"`, where `"$"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)). A newline let through could inject a header into a response, though `HttpResponse` refuses one in a header (`django/http/response.py:ResponseHeaders._convert_to_charset`).
 
-A control character logged raw can forge a line or drive a terminal. Since 5.2.2 and 5.1.10 `log_response` escapes every string argument with the `"unicode_escape"` codec, and 5.2.3 and 5.1.11 moved more response logging to it (CVE-2025-48432). At this commit `log_response` leaves the escaping to `log_message` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).
+A control character logged raw can forge a line or drive a terminal. Since 5.2.2 and 5.1.10 `log_response` escapes every string argument with the `"unicode_escape"` codec (CVE-2025-48432). At this commit `log_response` leaves the escaping to `log_message` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).
 
 The development server's own line went unescaped until 6.0. Since then `WSGIRequestHandler.log_message` hands its arguments to `log_message`, and no 6.0 note says so (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`; [The development server](../commands/runserver.md)). For a request line holding the escape character, 5.2.17's `"\x1b"` is the character itself, which a terminal obeys, and the later releases' `"\\x1b"` four characters:
 
@@ -92,6 +91,6 @@ With `EMAIL_USE_TLS` and `fail_silently=True`, a failed STARTTLS handshake left 
 
 ## GeoDjango's rasters
 
-Spatial lookups took a dictionary or a string as a raster (CVE-2026-15307; 5.2.17, 6.0.8). GDAL could then, by its driver, write to disk or fetch over the network as the server's process. `GDALRaster.check_raster_lookup_value` refuses a dictionary, a string or a path with `DisallowedRasterLookup`, a `SuspiciousOperation` (`django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value`). `BaseSpatialField.get_prep_value` raises it for a dictionary at once, for a string only if it fails as a `GEOSGeometry` and begins "/vsi" or looks like JSON, and never for a `GDALRaster` (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)). The notes call it backward incompatible, and say assignments to a field are unaffected.
+Spatial lookups took a dictionary or a string as a raster (CVE-2026-15307; 5.2.17, 6.0.8). GDAL could then, by its driver, write to disk or fetch over the network. `GDALRaster.check_raster_lookup_value` refuses a dictionary, a string or a path with `DisallowedRasterLookup`, a `SuspiciousOperation` (`django/contrib/gis/gdal/raster/source.py:GDALRaster.check_raster_lookup_value`). `BaseSpatialField.get_prep_value` raises it for a dictionary at once, for a string only if it fails as a `GEOSGeometry` and begins "/vsi" or looks like JSON, and never for a `GDALRaster` (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).
 
 A `GDALRaster` made from bytes gives its in-memory file exactly their length (`django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__`). `GDALRaster.vsi_buffer`, which reads the file back, used to read some 32 bytes past the buffer (CVE-2026-53877; 5.2.16, 6.0.7).

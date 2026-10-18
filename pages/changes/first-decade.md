@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The decisions of Django's first decade and the marks each left in the code at this commit: the magic-removal, newforms, databases by alias, class-based views, the swappable user model, `atomic`, the app registry, migrations and template engines.
 
-Django was built in a newspaper's newsroom in Lawrence, Kansas, and open-sourced in the summer of 2005 (`docs/faq/general.txt`). A mark its first decade left may be a setting's shape, an argument that makes sense only against what came before, or a comment about what is gone.
+Django was built in a newspaper's newsroom in Lawrence, Kansas, and open-sourced in the summer of 2005 (`docs/faq/general.txt`).
 
 ## The magic removed
 

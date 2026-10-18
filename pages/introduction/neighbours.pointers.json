@@ -39,34 +39,6 @@
    "fingerprint": "46807d2758fb3e86"
   },
   {
-   "pointer": "django/core/wsgi.py:get_wsgi_application",
-   "line": 31,
-   "sentence": "A server is pointed at the object a project's `wsgi.py` or `asgi.py` makes with `get_wsgi_application` or `get_asgi_application`, each of which runs `django.setup` and makes a handler (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
-   "tree": "django",
-   "path": "django/core/wsgi.py",
-   "symbol": "get_wsgi_application",
-   "kind": "function",
-   "lines": [
-    5,
-    13
-   ],
-   "fingerprint": "db32b08cd1f96afc"
-  },
-  {
-   "pointer": "django/core/asgi.py:get_asgi_application",
-   "line": 31,
-   "sentence": "A server is pointed at the object a project's `wsgi.py` or `asgi.py` makes with `get_wsgi_application` or `get_asgi_application`, each of which runs `django.setup` and makes a handler (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
-   "tree": "django",
-   "path": "django/core/asgi.py",
-   "symbol": "get_asgi_application",
-   "kind": "function",
-   "lines": [
-    5,
-    13
-   ],
-   "fingerprint": "03951811c2123fc0"
-  },
-  {
    "pointer": "django/core/servers/basehttp.py",
    "line": 33,
    "sentence": "Django's own tree holds one server, the one runserver starts: WSGI only, built on the standard library's `wsgiref.simple_server`, and by its docstring not for production (`django/core/servers/basehttp.py`).",
@@ -125,7 +97,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.adapt_method_mode",
    "line": 41,
-   "sentence": "`BaseHandler.adapt_method_mode` fits each layer of the middleware chain to its caller: a synchronous layer called by an asynchronous one is wrapped in `sync_to_async`, which runs it on a thread, and the reverse in `async_to_sync`; the centre of the chain fits the view so, and `Signal.send` its asynchronous receivers (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`, `django/dispatch/dispatcher.py:Signal.send`).",
+   "sentence": "`BaseHandler.adapt_method_mode` fits each layer of the middleware chain to its caller: a synchronous layer called by an asynchronous one is wrapped in `sync_to_async`, which runs it on a thread, and the reverse in `async_to_sync` (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.adapt_method_mode",
@@ -139,7 +111,7 @@
   {
    "pointer": "django/dispatch/dispatcher.py:Signal.send",
    "line": 41,
-   "sentence": "`BaseHandler.adapt_method_mode` fits each layer of the middleware chain to its caller: a synchronous layer called by an asynchronous one is wrapped in `sync_to_async`, which runs it on a thread, and the reverse in `async_to_sync`; the centre of the chain fits the view so, and `Signal.send` its asynchronous receivers (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`, `django/dispatch/dispatcher.py:Signal.send`).",
+   "sentence": "The centre of the chain fits the view to the chain in the same way, and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": "Signal.send",
@@ -195,7 +167,7 @@
   {
    "pointer": "deps:accepted/0009-async.rst",
    "line": 45,
-   "sentence": "DEP 9, Andrew Godwin's proposal for an async-capable Django, made asgiref an install-time dependency: `sync_to_async`, `async_to_sync` and `Local` were already written there, in an official Django project (`deps:accepted/0009-async.rst`).",
+   "sentence": "DEP 9, Andrew Godwin's Django Enhancement Proposal for an async-capable Django, made asgiref an install-time dependency: `sync_to_async`, `async_to_sync` and `Local` were already written there, in an official Django project (`deps:accepted/0009-async.rst`).",
    "tree": "deps",
    "path": "accepted/0009-async.rst",
    "symbol": null,
@@ -222,8 +194,8 @@
   },
   {
    "pointer": "django/db/migrations/operations/special.py:RunSQL._run_sql",
-   "line": 47,
-   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits a script into statements for a `RunSQL` operation, a migration's step of raw SQL, given one string; on PostgreSQL it is executed whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
+   "line": 49,
+   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits that string into statements, except on PostgreSQL, which executes it whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
    "tree": "django",
    "path": "django/db/migrations/operations/special.py",
    "symbol": "RunSQL._run_sql",
@@ -236,8 +208,8 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script",
-   "line": 47,
-   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits a script into statements for a `RunSQL` operation, a migration's step of raw SQL, given one string; on PostgreSQL it is executed whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
+   "line": 49,
+   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits that string into statements, except on PostgreSQL, which executes it whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
    "symbol": "BaseDatabaseOperations.prepare_sql_script",
@@ -250,8 +222,8 @@
   },
   {
    "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script",
-   "line": 47,
-   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits a script into statements for a `RunSQL` operation, a migration's step of raw SQL, given one string; on PostgreSQL it is executed whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
+   "line": 49,
+   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits that string into statements, except on PostgreSQL, which executes it whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
    "tree": "django",
    "path": "django/db/backends/postgresql/operations.py",
    "symbol": "DatabaseOperations.prepare_sql_script",
@@ -264,8 +236,8 @@
   },
   {
    "pointer": "sqlparse:sqlparse/__init__.py:split",
-   "line": 47,
-   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits a script into statements for a `RunSQL` operation, a migration's step of raw SQL, given one string; on PostgreSQL it is executed whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
+   "line": 49,
+   "sentence": "`BaseDatabaseOperations.prepare_sql_script` splits that string into statements, except on PostgreSQL, which executes it whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).",
    "tree": "sqlparse",
    "path": "sqlparse/__init__.py",
    "symbol": "split",
@@ -278,8 +250,8 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints",
-   "line": 47,
-   "sentence": "And the introspection of SQLite and of MySQL parses SQL the database gives back, such as a table's `\"CREATE TABLE\"` statement or a check constraint's clause, to find constraints, their columns and, on SQLite, each column's collation (`django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints`, `django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns`).",
+   "line": 51,
+   "sentence": "The introspection of SQLite and of MySQL parses SQL the database gives back, such as a table's `\"CREATE TABLE\"` statement or a check constraint's clause, to find constraints, their columns and, on SQLite, each column's collation (`django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints`, `django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/introspection.py",
    "symbol": "DatabaseIntrospection._parse_table_constraints",
@@ -292,8 +264,8 @@
   },
   {
    "pointer": "django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns",
-   "line": 47,
-   "sentence": "And the introspection of SQLite and of MySQL parses SQL the database gives back, such as a table's `\"CREATE TABLE\"` statement or a check constraint's clause, to find constraints, their columns and, on SQLite, each column's collation (`django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints`, `django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns`).",
+   "line": 51,
+   "sentence": "The introspection of SQLite and of MySQL parses SQL the database gives back, such as a table's `\"CREATE TABLE\"` statement or a check constraint's clause, to find constraints, their columns and, on SQLite, each column's collation (`django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints`, `django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns`).",
    "tree": "django",
    "path": "django/db/backends/mysql/introspection.py",
    "symbol": "DatabaseIntrospection._parse_constraint_columns",
@@ -306,7 +278,7 @@
   },
   {
    "pointer": "django/utils/timezone.py:get_default_timezone",
-   "line": 49,
+   "line": 53,
    "sentence": "Its time zones are the standard library's `zoneinfo` (`django/utils/timezone.py:get_default_timezone`), which reads the system's database of time zones and, where there is none, as on Windows, the tzdata package's.",
    "tree": "django",
    "path": "django/utils/timezone.py",
@@ -321,7 +293,7 @@
   },
   {
    "pointer": "django/db/utils.py:ConnectionHandler.create_connection",
-   "line": 53,
+   "line": 57,
    "sentence": "The module is imported when the connection of its alias is first asked for (`django/db/utils.py:ConnectionHandler.create_connection`), so a missing driver raises `ImproperlyConfigured` then, naming the driver, in the backends for PostgreSQL, MySQL and Oracle.",
    "tree": "django",
    "path": "django/db/utils.py",
@@ -335,7 +307,7 @@
   },
   {
    "pointer": "django/db/backends/postgresql/base.py:Database",
-   "line": 55,
+   "line": 59,
    "sentence": "PostgreSQL: `psycopg`, or `psycopg2` where it is absent (`django/db/backends/postgresql/base.py:Database`).",
    "tree": "django",
    "path": "django/db/backends/postgresql/base.py",
@@ -355,7 +327,7 @@
   },
   {
    "pointer": "django/db/backends/mysql/base.py:Database",
-   "line": 56,
+   "line": 60,
    "sentence": "MySQL and MariaDB: `MySQLdb`, from the mysqlclient package (`django/db/backends/mysql/base.py:Database`).",
    "tree": "django",
    "path": "django/db/backends/mysql/base.py",
@@ -369,7 +341,7 @@
   },
   {
    "pointer": "django/db/backends/oracle/base.py:Database",
-   "line": 57,
+   "line": 61,
    "sentence": "Oracle: `oracledb` (`django/db/backends/oracle/base.py:Database`).",
    "tree": "django",
    "path": "django/db/backends/oracle/base.py",
@@ -383,7 +355,7 @@
   },
   {
    "pointer": "django/db/backends/sqlite3/base.py:Database",
-   "line": 58,
+   "line": 62,
    "sentence": "SQLite: the standard library's `sqlite3` (`django/db/backends/sqlite3/base.py:Database`), so a new project, whose settings name SQLite, needs no driver installed.",
    "tree": "django",
    "path": "django/db/backends/sqlite3/base.py",
@@ -397,7 +369,7 @@
   },
   {
    "pointer": "django/db/utils.py:DatabaseErrorWrapper.__exit__",
-   "line": 60,
+   "line": 64,
    "sentence": "`DatabaseErrorWrapper` raises each error again as Django's class of the same name, so that code above the backend catches one `IntegrityError` whatever the driver (`django/db/utils.py:DatabaseErrorWrapper.__exit__`).",
    "tree": "django",
    "path": "django/db/utils.py",
@@ -410,52 +382,9 @@
    "fingerprint": "e9acaa10060a41fa"
   },
   {
-   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher._load_library",
-   "line": 64,
-   "sentence": "Inside a function, it shows when the function runs, as with the cache clients and the hashers' libraries (`django/contrib/auth/hashers.py:BasePasswordHasher._load_library`).",
-   "tree": "django",
-   "path": "django/contrib/auth/hashers.py",
-   "symbol": "BasePasswordHasher._load_library",
-   "kind": "function",
-   "lines": [
-    223,
-    239
-   ],
-   "fingerprint": "a5e66a5dde053e29"
-  },
-  {
-   "pointer": "django/core/serializers/__init__.py:register_serializer",
-   "line": 64,
-   "sentence": "At the top of a module Django imports on demand, it shows then, as Jinja2's does when an engine of `TEMPLATES` uses its backend; PyYAML's is caught when the serializers are first registered, and becomes a stand-in that raises when called (`django/core/serializers/__init__.py:register_serializer`).",
-   "tree": "django",
-   "path": "django/core/serializers/__init__.py",
-   "symbol": "register_serializer",
-   "kind": "function",
-   "lines": [
-    55,
-    88
-   ],
-   "fingerprint": "30e71cc8d38fc8a4"
-  },
-  {
-   "pointer": "django/contrib/admindocs/views.py:BaseAdminDocsView.dispatch",
-   "line": 64,
-   "sentence": "In a `try` at a module's top, it can set a flag: without docutils, the admin's documentation pages say so (`django/contrib/admindocs/views.py:BaseAdminDocsView.dispatch`).",
-   "tree": "django",
-   "path": "django/contrib/admindocs/views.py",
-   "symbol": "BaseAdminDocsView.dispatch",
-   "kind": "function",
-   "lines": [
-    43,
-    49
-   ],
-   "at": 44,
-   "fingerprint": "cfcebcc2f509f2ae"
-  },
-  {
    "pointer": "django/db/models/fields/files.py:ImageField._check_image_library_installed",
    "line": 68,
-   "sentence": "| Pillow, as `PIL` | `ImageField`, model and form; image sizes; image extensions | at the call | `django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions` |",
+   "sentence": "Inside a function, it shows when the function runs, as with Pillow, the cache clients and the hashers' libraries (`django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions`, `django/contrib/auth/hashers.py:BasePasswordHasher._load_library`).",
    "tree": "django",
    "path": "django/db/models/fields/files.py",
    "symbol": "ImageField._check_image_library_installed",
@@ -469,7 +398,7 @@
   {
    "pointer": "django/forms/fields.py:ImageField.to_python",
    "line": 68,
-   "sentence": "| Pillow, as `PIL` | `ImageField`, model and form; image sizes; image extensions | at the call | `django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions` |",
+   "sentence": "Inside a function, it shows when the function runs, as with Pillow, the cache clients and the hashers' libraries (`django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions`, `django/contrib/auth/hashers.py:BasePasswordHasher._load_library`).",
    "tree": "django",
    "path": "django/forms/fields.py",
    "symbol": "ImageField.to_python",
@@ -483,7 +412,7 @@
   {
    "pointer": "django/core/files/images.py:get_image_dimensions",
    "line": 68,
-   "sentence": "| Pillow, as `PIL` | `ImageField`, model and form; image sizes; image extensions | at the call | `django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions` |",
+   "sentence": "Inside a function, it shows when the function runs, as with Pillow, the cache clients and the hashers' libraries (`django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions`, `django/contrib/auth/hashers.py:BasePasswordHasher._load_library`).",
    "tree": "django",
    "path": "django/core/files/images.py",
    "symbol": "get_image_dimensions",
@@ -497,7 +426,7 @@
   {
    "pointer": "django/core/validators.py:get_available_image_extensions",
    "line": 68,
-   "sentence": "| Pillow, as `PIL` | `ImageField`, model and form; image sizes; image extensions | at the call | `django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions` |",
+   "sentence": "Inside a function, it shows when the function runs, as with Pillow, the cache clients and the hashers' libraries (`django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions`, `django/contrib/auth/hashers.py:BasePasswordHasher._load_library`).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": "get_available_image_extensions",
@@ -509,8 +438,51 @@
    "fingerprint": "a9d1db6e860f1a31"
   },
   {
+   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher._load_library",
+   "line": 68,
+   "sentence": "Inside a function, it shows when the function runs, as with Pillow, the cache clients and the hashers' libraries (`django/db/models/fields/files.py:ImageField._check_image_library_installed`, `django/forms/fields.py:ImageField.to_python`, `django/core/files/images.py:get_image_dimensions`, `django/core/validators.py:get_available_image_extensions`, `django/contrib/auth/hashers.py:BasePasswordHasher._load_library`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "BasePasswordHasher._load_library",
+   "kind": "function",
+   "lines": [
+    223,
+    239
+   ],
+   "fingerprint": "a5e66a5dde053e29"
+  },
+  {
+   "pointer": "django/core/serializers/__init__.py:register_serializer",
+   "line": 68,
+   "sentence": "PyYAML's absence is caught when the serializers are first registered, and the YAML serializer becomes a stand-in that raises when called (`django/core/serializers/__init__.py:register_serializer`).",
+   "tree": "django",
+   "path": "django/core/serializers/__init__.py",
+   "symbol": "register_serializer",
+   "kind": "function",
+   "lines": [
+    55,
+    88
+   ],
+   "fingerprint": "30e71cc8d38fc8a4"
+  },
+  {
+   "pointer": "django/contrib/admindocs/views.py:BaseAdminDocsView.dispatch",
+   "line": 68,
+   "sentence": "In a `try` at a module's top, the import can set a flag: without docutils, the admin's documentation pages say so (`django/contrib/admindocs/views.py:BaseAdminDocsView.dispatch`).",
+   "tree": "django",
+   "path": "django/contrib/admindocs/views.py",
+   "symbol": "BaseAdminDocsView.dispatch",
+   "kind": "function",
+   "lines": [
+    43,
+    49
+   ],
+   "at": 44,
+   "fingerprint": "cfcebcc2f509f2ae"
+  },
+  {
    "pointer": "django/contrib/auth/hashers.py:Argon2PasswordHasher.library",
-   "line": 69,
+   "line": 73,
    "sentence": "| argon2-cffi | `Argon2PasswordHasher` | at the call | `django/contrib/auth/hashers.py:Argon2PasswordHasher.library` |",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
@@ -524,7 +496,7 @@
   },
   {
    "pointer": "django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.library",
-   "line": 70,
+   "line": 74,
    "sentence": "| bcrypt | `BCryptSHA256PasswordHasher`, `BCryptPasswordHasher` | at the call | `django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.library` |",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
@@ -538,7 +510,7 @@
   },
   {
    "pointer": "django/core/cache/backends/redis.py:RedisCacheClient.__init__",
-   "line": 71,
+   "line": 75,
    "sentence": "| redis | `RedisCache` | at the call | `django/core/cache/backends/redis.py:RedisCacheClient.__init__` |",
    "tree": "django",
    "path": "django/core/cache/backends/redis.py",
@@ -552,7 +524,7 @@
   },
   {
    "pointer": "django/core/cache/backends/memcached.py:PyMemcacheCache.__init__",
-   "line": 72,
+   "line": 76,
    "sentence": "| pymemcache | `PyMemcacheCache` | at the call | `django/core/cache/backends/memcached.py:PyMemcacheCache.__init__` |",
    "tree": "django",
    "path": "django/core/cache/backends/memcached.py",
@@ -566,7 +538,7 @@
   },
   {
    "pointer": "django/core/cache/backends/memcached.py:PyLibMCCache.__init__",
-   "line": 73,
+   "line": 77,
    "sentence": "| pylibmc | `PyLibMCCache` | at the call | `django/core/cache/backends/memcached.py:PyLibMCCache.__init__` |",
    "tree": "django",
    "path": "django/core/cache/backends/memcached.py",
@@ -580,8 +552,8 @@
   },
   {
    "pointer": "django/template/backends/jinja2.py:jinja2",
-   "line": 74,
-   "sentence": "| Jinja2, as `jinja2` | the Jinja2 template backend; `require_jinja2` | as the module loads; for `require_jinja2`, as a flag | `django/template/backends/jinja2.py:jinja2`, `django/test/utils.py:jinja2` |",
+   "line": 78,
+   "sentence": "| Jinja2, as `jinja2` | the Jinja2 template backend | as the module loads | `django/template/backends/jinja2.py:jinja2` |",
    "tree": "django",
    "path": "django/template/backends/jinja2.py",
    "symbol": "jinja2",
@@ -593,28 +565,8 @@
    "fingerprint": "634002e1107bf0f9"
   },
   {
-   "pointer": "django/test/utils.py:jinja2",
-   "line": 74,
-   "sentence": "| Jinja2, as `jinja2` | the Jinja2 template backend; `require_jinja2` | as the module loads; for `require_jinja2`, as a flag | `django/template/backends/jinja2.py:jinja2`, `django/test/utils.py:jinja2` |",
-   "tree": "django",
-   "path": "django/test/utils.py",
-   "symbol": "jinja2",
-   "kind": "import",
-   "lines": [
-    33,
-    33
-   ],
-   "more": [
-    [
-     35,
-     35
-    ]
-   ],
-   "fingerprint": "329049cf62146491"
-  },
-  {
    "pointer": "django/core/serializers/pyyaml.py:yaml",
-   "line": 75,
+   "line": 79,
    "sentence": "| PyYAML, as `yaml` | the YAML serializer | at the call, by a stand-in | `django/core/serializers/pyyaml.py:yaml` |",
    "tree": "django",
    "path": "django/core/serializers/pyyaml.py",
@@ -628,7 +580,7 @@
   },
   {
    "pointer": "django/contrib/admindocs/utils.py:docutils_is_available",
-   "line": 76,
+   "line": 80,
    "sentence": "| docutils | `django.contrib.admindocs` | as a flag | `django/contrib/admindocs/utils.py:docutils_is_available` |",
    "tree": "django",
    "path": "django/contrib/admindocs/utils.py",
@@ -648,7 +600,7 @@
   },
   {
    "pointer": "django/contrib/gis/geoip2.py:geoip2",
-   "line": 77,
+   "line": 81,
    "sentence": "| geoip2 | `GeoIP2` | at the call | `django/contrib/gis/geoip2.py:geoip2` |",
    "tree": "django",
    "path": "django/contrib/gis/geoip2.py",
@@ -662,7 +614,7 @@
   },
   {
    "pointer": "django/contrib/gis/gdal/libgdal.py:lgdal",
-   "line": 78,
+   "line": 82,
    "sentence": "| GDAL, a C library, through `ctypes.CDLL` | GeoDjango's spatial references, rasters and vector data | as the module loads | `django/contrib/gis/gdal/libgdal.py:lgdal` |",
    "tree": "django",
    "path": "django/contrib/gis/gdal/libgdal.py",
@@ -676,7 +628,7 @@
   },
   {
    "pointer": "django/contrib/gis/geos/libgeos.py:load_geos",
-   "line": 79,
+   "line": 83,
    "sentence": "| GEOS, a C library, through `ctypes.CDLL` | GeoDjango's geometries | as the module loads | `django/contrib/gis/geos/libgeos.py:load_geos` |",
    "tree": "django",
    "path": "django/contrib/gis/geos/libgeos.py",

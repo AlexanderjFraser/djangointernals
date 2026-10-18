@@ -184,7 +184,7 @@ class Command(BaseCommand):
                       "```runtime-names\nModel._meta  django/db/models/options.py:Options.contribute_to_class\n```\n",
             "b.md": head + "# B\n\nLede of B.\n",
             "p.md": headed(part="Second", contents='"Its one: c"') + "# P\n\nLede of P.\n\n## Only\n\nText.\n",
-            "p/c.md": head + "# C\n\nLede of C.\n\n## What `django/core/handlers/base.py:BaseHandler.get_response` does, and [A](../a.md)?\n\nText.\n",
+            "p/c.md": head + "# C\n\nLede of C (`django/core/handlers/wsgi.py:WSGIHandler`).\n\n## What `django/core/handlers/base.py:BaseHandler.get_response` does, and [A](../a.md)?\n\nText.\n",
             "_redirects": "# addresses that have moved\n/old /a 301\n/old.md /a.md 301\n/old/* /p/c 301\n/first / 301\n",
         }
         figure = good["a.md"] + "\n```text figure=one\nx\n```\n\n*A caption.*\n"
@@ -354,6 +354,12 @@ class Command(BaseCommand):
             lands = f'href="https://github.com/django/django/blob/{commit}/django/core/handlers/base.py#L{lines[0]}-L{lines[1]}"'
             if lands not in beside_text or "<code>BaseHandler<wbr>.load_middleware</code>" not in beside_text or "django/<wbr>core/<wbr>handlers/<wbr>base<wbr>.py" not in beside_text:
                 fail("a pointer in parentheses is not set beside its paragraph, shown by its symbol and its file, linked to its lines at the pin")
+            # and so does a lede's, so that the contents show the lede without it
+            head_html = section_page.split('<p class="lede">', 1)[-1].split("</header>", 1)[0]
+            outline = (written / "p.html").read_text(encoding="utf-8")
+            if (not head_html.startswith("Lede of C.</p>") or '<aside class="sources"' not in head_html or "WSGIHandler" not in head_html
+                    or '<span class="about">Lede of C.</span>' not in outline):
+                fail("a pointer in parentheses in a lede is left in it, on its page or in the contents that show it")
             if "is built (" in page or "is built." not in page:
                 fail("a parenthesis that held only a pointer was left in the sentence")
             if f'href="https://github.com/django/django/tree/{commit}/django/core/handlers"' not in page:
@@ -423,7 +429,7 @@ class Command(BaseCommand):
                      f"{sorted(set(PALETTE.findall(stylesheet)))}; or the reader's system is not among the choices")
             llms = (written / "llms.txt").read_text(encoding="utf-8")
             if (f"- [A]({settings.SITE_URL}/a.md): Lede." not in llms or "\n## 1. A\n" not in llms or "b.md" in llms or "\n## 3. P\n" not in llms
-                    or f"- [C]({settings.SITE_URL}/p/c.md): Lede of C." not in llms or f"> Its lede, which links [A]({settings.SITE_URL}/a.md)." not in llms):
+                    or f"- [C]({settings.SITE_URL}/p/c.md): Lede of C (`django/core/handlers/wsgi.py:WSGIHandler`)." not in llms or f"> Its lede, which links [A]({settings.SITE_URL}/a.md)." not in llms):
                 fail("llms.txt does not list the written pages' twins with their ledes under their chapters, links made absolute")
             if not 0 < llms.find(f"Read first if what you know of Django is an earlier release: [P]({settings.SITE_URL}/p.md): Lede of P.") < llms.find("\n## 1. A\n"):
                 fail("llms.txt does not send an agent to the chapter of what an older Django's reader must update, before the contents")
@@ -545,7 +551,7 @@ class Command(BaseCommand):
                           f"does not exist and a name bound only in another section among them; a bake writes the pages, their twins (the "
                           f"files themselves), llms.txt, index.json and names.json as the head says; a planned page gets a line in the "
                           f"contents and no file; a chapter's contents in groups stand on its opening page, each under its label; "
-                          f"a pointer in parentheses stands beside its paragraph and every pointer links to the pin; "
+                          f"a pointer in parentheses stands beside its paragraph, a lede's too, and every pointer links to the pin; "
                           f"chapters, sections, parts, figures and captioned tables carry their numbers; a quote of a recording is "
                           f"labelled with the versions of Django that ran it; no page prints a section sign or "
                           f"a block about itself; the book's contents stand beside every page (the page shown marked, its chapter open) "

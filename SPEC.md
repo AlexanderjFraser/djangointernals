@@ -285,7 +285,10 @@ request  ->  A  ->  B  ->  C  ->  the view
   its own in `pages/<chapter>/figures/figures.css`.
 - **It is legible where it stands.** One unit of the `viewBox` is one CSS
   pixel. The text column is 646 pixels wide; a wider figure runs into the
-  margin, up to about 940. Type in a figure is 14 pixels, names 13.
+  margin, up to about 940. Type in a figure is 14 pixels, names 13. On a
+  phone a figure keeps three quarters of its width and scrolls past it, so
+  one whose point lies across its width (two things side by side, a column
+  at its right) is drawn at most about 460 wide.
 - **It is looked at rendered**, in a light palette and a dark one, at a
   desktop's width and a phone's, before its page is published.
 
@@ -293,7 +296,10 @@ request  ->  A  ->  B  ->  C  ->  the view
 
 A table is ruled above and below and may run into the margin. An italic
 paragraph directly under a table is its caption, and gives it a number. A
-pointer in a table cell is shown with its file under it.
+pointer in a table cell is shown with its file under it, so a cell holds at
+most one, and not inside parentheses or ahead of the words of its cell: a
+row that needs more places names them in words, and their pointers stand in
+the prose beside the table.
 
 A narrow screen has no room for a table of three columns or more, and sets
 it row by row: a row's first cell stands alone as the row's name, and each

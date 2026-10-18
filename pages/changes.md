@@ -10,9 +10,9 @@ How Django became what it is, from the framework released out of a newsroom in 2
 
 ## The releases
 
-Since 1.0 a release numbered A.B has been a **feature release**, and one numbered A.B.C a **patch release** of its series. A fix for a security issue or for the loss of data goes to main, to the last two feature releases and to any **long-term support release** still supported, a feature release given such fixes for at least three years: 1.4 the first, then 1.8 and 1.11 (`docs/internals/release-process.txt`, `docs/releases/1.8.txt`, `docs/releases/1.11.txt`).
+Since 1.0 a release numbered A.B has been a **feature release**, and one numbered A.B.C a **patch release** of its series. A fix for a security issue or for the loss of data goes to main, to the last two feature releases and to any **long-term support release** still supported, a feature release given such fixes for at least three years, of which 1.4 was the first (`docs/internals/release-process.txt`, `docs/releases/1.8.txt`).
 
-How often Django releases has twice been set by a **Django Enhancement Proposal**, a DEP, the document in which the project decides a major change ([Where Django came from, and who makes it](introduction/origins.md#django-enhancement-proposals)). DEP 4, written in 2015, set a feature release every eight months, the rhythm since 1.8, and, from 2.0, series of three, X.0, X.1 and X.2, the last its long-term release (`deps:final/0004-release-schedule.rst`). DEP 20, accepted in 2026, ends that rhythm after 6.2: from 2028, one feature release each January, numbered by its year, each given for three years the support only a long-term release had, so that the distinction between the two is retired. The releases that were to be 7.0 and 7.1 are Django 2028 and Django 2029 (`deps:accepted/0020-annual-release-cycle.rst`, `docs/releases/6.2.txt`; [Django's version: `VersionTuple` and `get_version`](utils/version.md)).
+How often Django releases has twice been set by a **Django Enhancement Proposal**, a DEP, the document in which the project decides a major change ([Where Django came from, and who makes it](introduction/origins.md#django-enhancement-proposals)). DEP 4, written in 2015, set a feature release every eight months, the rhythm since 1.8, and, from 2.0, series of three, X.0, X.1 and X.2, the last its long-term release (`deps:final/0004-release-schedule.rst`). DEP 20, accepted in 2026, ends that rhythm after 6.2: from 2028, one feature release each January, numbered by its year and supported for three years, as only a long-term release was. The releases that were to be 7.0 and 7.1 are Django 2028 and Django 2029 (`deps:accepted/0020-annual-release-cycle.rst`, `docs/releases/6.2.txt`).
 
 This commit is main on 26 September 2026, a pre-alpha of 6.2 (`django/utils/version.py:get_version`); 6.1.1 is the newest release, and 6.2 is expected in April 2027. The figure sets the releases in their years, from the release notes (`docs/releases/`) and, for [0.90](https://www.djangoproject.com/weblog/2005/nov/16/firstrelease/), [0.96](https://www.djangoproject.com/weblog/2007/mar/23/096/) and [1.0](https://www.djangoproject.com/weblog/2008/sep/03/1/), the project's announcements: look for the long-term releases, the two changes of rhythm, and where this commit stands.
 
@@ -62,9 +62,9 @@ Beside the years, a bracket for each span this chapter tells:
 The larger movements since 5.0:
 
 - **The database does more of the work**: a default it supplies, `Field.db_default`, and a column it generates, `GeneratedField` (5.0; `django/db/models/fields/__init__.py:Field`, `django/db/models/fields/generated.py:GeneratedField`); and an `on_delete` that leaves the related rows to the database's own `ON DELETE` clause (6.1; `django/db/models/deletion.py:DatabaseOnDelete`; [What changed in models and fields](changes/models.md)).
-- **Fetching on demand is a choice.** Since 6.1, reading a field or a related object a queryset did not load follows a **fetch mode**: `FETCH_ONE`, the old way, a query for that instance; `FETCH_PEERS`, which fetches it at once for that instance and its peers, other instances of its model that the same run of the queryset made; or `FETCH_RAISE`, which refuses (`django/db/models/fetch_modes.py`; [What changed in querysets](changes/querysets.md)).
+- **Fetching on demand is a choice.** Since 6.1, reading a field or a related object a queryset did not load follows a **fetch mode**: a fetch for that instance, as before (`FETCH_ONE`); one for it and its peers, the other instances of its model that the same run of the queryset made (`FETCH_PEERS`); or a refusal (`FETCH_RAISE`) (`django/db/models/fetch_modes.py`; [What changed in querysets](changes/querysets.md)).
 - **Services are configured by alias**: `TASKS` (6.0) and `MAILERS` (6.1) name their backends as `CACHES`, `DATABASES` and `STORAGES` already did, and the email settings `MAILERS` replaces are deprecated ([What changed in mail and tasks](changes/mail-and-tasks.md)).
-- **Asynchronous code, and a step back.** Release after release added coroutine twins, such as `aauthenticate` and `Signal.asend` (5.0); then 6.2 set `async_capable = False`, the flag that says whether a middleware can run on the event loop, on most of Django's own middleware, so that under ASGI a chain of it runs on one thread around the chain's centre, where the view is called, which stays on the event loop, instead of crossing into a thread and back for each hook ([Sync and async in one chain](handlers/async.md)).
+- **Asynchronous code, and a step back.** Release after release added coroutine twins, such as `aauthenticate` and `Signal.asend` (5.0); then 6.2 made most of Django's own middleware synchronous only (`async_capable = False`), so that under ASGI a chain of it runs in a thread as one call around its centre, which stays on the event loop, instead of crossing into a thread and back for each hook ([Sync and async in one chain](handlers/async.md)).
 - **Safer defaults**: aware datetimes (5.0), 64-bit automatic keys (6.0), `"https"` as the scheme a form's URL field assumes (6.0), and more iterations of the PBKDF2 password hasher in every feature release (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher`).
 
 ## How a change is carried
@@ -81,7 +81,7 @@ A deprecation is the ordinary path. The old behaviour stays for at least two fea
 
 Under DEP 4, what X.0 or X.1 deprecated goes in the next series' Y.0, and what the long-term X.2 deprecated in Y.1; under DEP 20, what one year's release deprecates goes two releases later. So what 6.0 and 6.1 deprecated ends in the next series' first release, 7.0, which is Django 2028; most of what 6.2 deprecated ends in its second, Django 2029.
 
-Some deprecations come with a **transitional setting**, which lets a project take the new behaviour early or keep the old one for a time: at this commit `URLIZE_ASSUME_HTTPS`, for `"https"` as the scheme `django.utils.html.urlize` assumes; `USE_BLANK_CHOICE_DASH`, for the old label of a form's blank choice; and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK`, for a signed cookie's old salt (`django/conf/global_settings.py`; [What changed in settings, startup and the commands](changes/startup-and-commands.md)).
+Some deprecations come with a **transitional setting**, which lets a project take the new behaviour early or keep the old one for a time: at this commit `URLIZE_ASSUME_HTTPS`, `USE_BLANK_CHOICE_DASH` and `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` (`django/conf/global_settings.py`; [What changed in settings, startup and the commands](changes/startup-and-commands.md)).
 
 ### A removal
 
@@ -91,7 +91,7 @@ A removal ends a deprecation, and is ordinarily an error, though not always: an 
 
 A **habit** here is a few lines written as an older release taught. The habits below show the three ways, each run under 5.2.17, 6.0.8 and 6.1.1, the newest release of each series still supported on this commit's date, and under this commit, with the application journal of [A request, end to end](overview.md) and every setting but the applications, the database, the secret key and the URLconf at the release's default. A line gives what the habit returned or the exception it raised, and then the class of each warning it raised, named once however many times it was raised.
 
-A model that declares no primary key and has no parent, such as journal's Entry, is given one, of the class that `DEFAULT_AUTO_FIELD` names unless its application names another (`django/db/models/options.py:Options._get_default_pk_class`). 6.0 changed the setting's default from `AutoField` to `BigAutoField`, and nothing warns; the line for 5.2.17 is the old key (`django/conf/global_settings.py`):
+A model that declares no primary key and has no parent, such as journal's Entry, is given one, of the class that `DEFAULT_AUTO_FIELD` names unless its application names another (`django/db/models/options.py:Options._get_default_pk_class`). 6.0 changed the setting's default from `AutoField` to `BigAutoField`, and nothing warns (`django/conf/global_settings.py`):
 
 ```text recording=changes
 Entry._meta.pk: the key of a model that declares none, in an application that names no default
@@ -101,9 +101,9 @@ Entry._meta.pk: the key of a model that declares none, in an application that na
     this commit  <django.db.models.fields.BigAutoField: id>
 ```
 
-A project upgraded to 6.0 that never named the class finds the key of each such model now a `BigAutoField`, and makemigrations writes an `AlterField` for each (`django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields`). Since 3.2 the system check models.W042 had warned of each such model in a project that did not set `DEFAULT_AUTO_FIELD`; 6.0 removed it (`docs/releases/6.0.txt`, `docs/ref/checks.txt`).
+A project upgraded to 6.0 that never named the class finds the key of each such model now a `BigAutoField`, and makemigrations writes an `AlterField` for each (`django/db/migrations/autodetector.py:MigrationAutodetector.generate_altered_fields`).
 
-`salted_hmac`, the keyed hash under Django's signing, uses SHA-1 when it is given no algorithm; 6.1 deprecated that default, which becomes SHA-256 in Django 2028. Django's own calls name their algorithm, so only calls from outside Django warn (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.signature`). The value stays; the warning's class names the release that will remove the old default, 7.0 when 6.1 was made, and Django 2028 since 6.2 renamed it:
+`salted_hmac`, the keyed hash under Django's signing, uses SHA-1 when it is given no algorithm; 6.1 deprecated that default, which becomes SHA-256 in Django 2028. Django's own calls name their algorithm, so only calls from outside Django warn (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.signature`). The warning's class names the release that will remove the old default, 7.0 when 6.1 was made, and Django 2028 since 6.2 renamed it:
 
 ```text recording=changes
 salted_hmac("journal", "entry").name: the algorithm when none is named
@@ -113,7 +113,7 @@ salted_hmac("journal", "entry").name: the algorithm when none is named
     this commit  'hmac-sha1', warns RemovedInDjango2028Warning
 ```
 
-A name that moves is answered at its old address for the length of a deprecation. At this commit `MiddlewareMixin`, the base class of nearly all Django's own middleware, lives in `django.middleware`, and its old module's `__getattr__` hands the class to an old import with a warning (`django/utils/deprecation.py:__getattr__`). The line gives the module the class is defined in; only this commit's differs:
+A name that moves is answered at its old address for the length of a deprecation. At this commit `MiddlewareMixin`, the base class of nearly all Django's own middleware, lives in `django.middleware`, and its old module's `__getattr__` hands the class to an old import with a warning (`django/utils/deprecation.py:__getattr__`). The line gives the module the class is defined in:
 
 ```text recording=changes
 from django.utils.deprecation import MiddlewareMixin
@@ -123,7 +123,7 @@ from django.utils.deprecation import MiddlewareMixin
     this commit  django.middleware, warns RemovedInDjango2029Warning
 ```
 
-A removal is final. 5.2 deprecated `login` given no user, which then logged in the request's user, and 6.1, the Y.1 that ends what the long-term 5.2 deprecated, removed the fallback (`docs/releases/5.2.txt`, `django/contrib/auth/__init__.py:login`). The habit's request already has a user, piet: 5.2.17 and 6.0.8 still log piet in and warn, and from 6.1 the call fails, asking `None` for its session hash, in an error that says nothing of the old way:
+A removal is final. 5.2 deprecated `login` given no user, which then logged in the request's user, and 6.1 removed the fallback (`docs/releases/5.2.txt`, `django/contrib/auth/__init__.py:login`). The habit's request already has a user, piet; from 6.1 the call fails, in an error that says nothing of the old way:
 
 ```text recording=changes
 login(request, None), request.user being piet: the user the session is given

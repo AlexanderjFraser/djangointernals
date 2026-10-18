@@ -12,7 +12,7 @@
   {
    "pointer": "django/conf/global_settings.py",
    "line": 9,
-   "sentence": "The settings module is imported when a setting is first read, and a module it imported may read the settings in turn: `django.conf.global_settings`, Django's default settings, cannot import the translation module, which \"depends on the settings\" (`django/conf/global_settings.py`).",
+   "sentence": "The settings module is imported when a setting is first read, and a module it imported may read the settings in turn: Django's defaults, `django.conf.global_settings`, cannot import the translation module, which \"depends on the settings\" (`django/conf/global_settings.py`).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
    "symbol": null,
@@ -68,7 +68,7 @@
   {
    "pointer": "django/test/signals.py:clear_cache_handlers",
    "line": 39,
-   "sentence": "`override_settings` reaches `CACHES` because a receiver of `setting_changed` discards the caches (`django/test/signals.py:clear_cache_handlers`), but not `DEFAULT_EXCEPTION_REPORTER_FILTER` once its filter is made (`django/views/debug.py:get_default_exception_reporter_filter`).",
+   "sentence": "`override_settings`, which changes settings for a test, reaches `CACHES` because a receiver of `setting_changed` discards the caches (`django/test/signals.py:clear_cache_handlers`), but not `DEFAULT_EXCEPTION_REPORTER_FILTER` once its filter is made (`django/views/debug.py:get_default_exception_reporter_filter`).",
    "tree": "django",
    "path": "django/test/signals.py",
    "symbol": "clear_cache_handlers",
@@ -83,7 +83,7 @@
   {
    "pointer": "django/views/debug.py:get_default_exception_reporter_filter",
    "line": 39,
-   "sentence": "`override_settings` reaches `CACHES` because a receiver of `setting_changed` discards the caches (`django/test/signals.py:clear_cache_handlers`), but not `DEFAULT_EXCEPTION_REPORTER_FILTER` once its filter is made (`django/views/debug.py:get_default_exception_reporter_filter`).",
+   "sentence": "`override_settings`, which changes settings for a test, reaches `CACHES` because a receiver of `setting_changed` discards the caches (`django/test/signals.py:clear_cache_handlers`), but not `DEFAULT_EXCEPTION_REPORTER_FILTER` once its filter is made (`django/views/debug.py:get_default_exception_reporter_filter`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "get_default_exception_reporter_filter",
@@ -142,7 +142,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
    "line": 49,
-   "sentence": "Each entry of `MIDDLEWARE` is the dotted path of a **factory**: `BaseHandler.load_middleware` imports it and calls it once with the layer inside it, and what it returns is the middleware, called for each request (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "sentence": "Each entry of `MIDDLEWARE` is the dotted path of a **factory**, most often the middleware's class: `BaseHandler.load_middleware` imports it and calls it once with the layer inside it, and what it returns is the middleware, called for each request (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.load_middleware",
@@ -168,9 +168,24 @@
    "fingerprint": "e7df143e13b0a5b2"
   },
   {
+   "pointer": "django/template/utils.py:EngineHandler.templates",
+   "line": 55,
+   "sentence": "The setting maps each alias to a dictionary whose `\"ENGINE\"` (in `DATABASES`) or `\"BACKEND\"` (in `CACHES`, `STORAGES`, `TASKS` and `MAILERS`) names the backend; `TEMPLATES` lists such dictionaries, and an engine's alias is its `\"NAME\"` or else the next-to-last name of its path, `\"django\"` for `DjangoTemplates` (`django/template/utils.py:EngineHandler.templates`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.templates",
+   "kind": "function",
+   "lines": [
+    25,
+    65
+   ],
+   "at": 26,
+   "fingerprint": "3a28f74f3d2b5f7d"
+  },
+  {
    "pointer": "django/utils/connection.py:BaseConnectionHandler.__getitem__",
-   "line": 57,
-   "sentence": "`caches`, `task_backends` and `connections` are each a `BaseConnectionHandler`, which keeps backends in a `Local`, one for each thread or asynchronous context (`django/utils/connection.py:BaseConnectionHandler.__getitem__`); `ConnectionHandler`'s is never shared between threads, for the reason [Django's neighbours](neighbours.md) gives (`django/db/utils.py:ConnectionHandler`).",
+   "line": 59,
+   "sentence": "`caches`, `task_backends` and `connections`, each a `BaseConnectionHandler`, keep one for each alias in each thread or asynchronous context, in a `Local` (`django/utils/connection.py:BaseConnectionHandler.__getitem__`).",
    "tree": "django",
    "path": "django/utils/connection.py",
    "symbol": "BaseConnectionHandler.__getitem__",
@@ -182,23 +197,9 @@
    "fingerprint": "85dcb79d857fcb0e"
   },
   {
-   "pointer": "django/db/utils.py:ConnectionHandler",
-   "line": 57,
-   "sentence": "`caches`, `task_backends` and `connections` are each a `BaseConnectionHandler`, which keeps backends in a `Local`, one for each thread or asynchronous context (`django/utils/connection.py:BaseConnectionHandler.__getitem__`); `ConnectionHandler`'s is never shared between threads, for the reason [Django's neighbours](neighbours.md) gives (`django/db/utils.py:ConnectionHandler`).",
-   "tree": "django",
-   "path": "django/db/utils.py",
-   "symbol": "ConnectionHandler",
-   "kind": "class",
-   "lines": [
-    141,
-    197
-   ],
-   "fingerprint": "1b274d9d800d59c2"
-  },
-  {
    "pointer": "django/core/files/storage/handler.py:StorageHandler",
-   "line": 57,
-   "sentence": "`storages` and `engines` keep one for each alias in a dictionary all threads share (`django/core/files/storage/handler.py:StorageHandler`).",
+   "line": 60,
+   "sentence": "`storages` and `engines` keep one for each alias for the process, made when first asked for, in a dictionary all threads share; the system checks and `get_template`, by default, ask for every engine (`django/core/files/storage/handler.py:StorageHandler`, `django/template/utils.py:EngineHandler`, `django/template/loader.py:get_template`).",
    "tree": "django",
    "path": "django/core/files/storage/handler.py",
    "symbol": "StorageHandler",
@@ -211,8 +212,8 @@
   },
   {
    "pointer": "django/template/utils.py:EngineHandler",
-   "line": 57,
-   "sentence": "`TEMPLATES` is a list, and a backend's alias is its `\"NAME\"` or else the next-to-last name of its path, `\"django\"` for `DjangoTemplates`; `engines` makes the backend the first time its alias is asked for, as the system checks and `get_template` do for every engine, and keeps it for the process (`django/template/utils.py:EngineHandler`, `django/template/loader.py:get_template`).",
+   "line": 60,
+   "sentence": "`storages` and `engines` keep one for each alias for the process, made when first asked for, in a dictionary all threads share; the system checks and `get_template`, by default, ask for every engine (`django/core/files/storage/handler.py:StorageHandler`, `django/template/utils.py:EngineHandler`, `django/template/loader.py:get_template`).",
    "tree": "django",
    "path": "django/template/utils.py",
    "symbol": "EngineHandler",
@@ -225,8 +226,8 @@
   },
   {
    "pointer": "django/template/loader.py:get_template",
-   "line": 57,
-   "sentence": "`TEMPLATES` is a list, and a backend's alias is its `\"NAME\"` or else the next-to-last name of its path, `\"django\"` for `DjangoTemplates`; `engines` makes the backend the first time its alias is asked for, as the system checks and `get_template` do for every engine, and keeps it for the process (`django/template/utils.py:EngineHandler`, `django/template/loader.py:get_template`).",
+   "line": 60,
+   "sentence": "`storages` and `engines` keep one for each alias for the process, made when first asked for, in a dictionary all threads share; the system checks and `get_template`, by default, ask for every engine (`django/core/files/storage/handler.py:StorageHandler`, `django/template/utils.py:EngineHandler`, `django/template/loader.py:get_template`).",
    "tree": "django",
    "path": "django/template/loader.py",
    "symbol": "get_template",
@@ -239,7 +240,7 @@
   },
   {
    "pointer": "django/core/mail/handler.py:MailersHandler.create_connection",
-   "line": 57,
+   "line": 61,
    "sentence": "`mailers` makes a new backend at each access, because mail backends had always been made for one sending, DEP 18 says (`django/core/mail/handler.py:MailersHandler.create_connection`, `deps:accepted/0018-mailers.md`).",
    "tree": "django",
    "path": "django/core/mail/handler.py",
@@ -253,7 +254,7 @@
   },
   {
    "pointer": "deps:accepted/0018-mailers.md",
-   "line": 57,
+   "line": 61,
    "sentence": "`mailers` makes a new backend at each access, because mail backends had always been made for one sending, DEP 18 says (`django/core/mail/handler.py:MailersHandler.create_connection`, `deps:accepted/0018-mailers.md`).",
    "tree": "deps",
    "path": "accepted/0018-mailers.md",
@@ -267,7 +268,7 @@
   },
   {
    "pointer": "django/db/utils.py:load_backend",
-   "line": 59,
+   "line": 63,
    "sentence": "A database's `\"ENGINE\"` names a package, not a class: Django imports its base module and takes the class called DatabaseWrapper from it (`django/db/utils.py:load_backend`, `django/db/utils.py:ConnectionHandler.create_connection`).",
    "tree": "django",
    "path": "django/db/utils.py",
@@ -281,7 +282,7 @@
   },
   {
    "pointer": "django/db/utils.py:ConnectionHandler.create_connection",
-   "line": 59,
+   "line": 63,
    "sentence": "A database's `\"ENGINE\"` names a package, not a class: Django imports its base module and takes the class called DatabaseWrapper from it (`django/db/utils.py:load_backend`, `django/db/utils.py:ConnectionHandler.create_connection`).",
    "tree": "django",
    "path": "django/db/utils.py",
@@ -295,8 +296,8 @@
   },
   {
    "pointer": "django/contrib/auth/password_validation.py:get_password_validators",
-   "line": 67,
-   "sentence": "| `AUTH_PASSWORD_VALIDATORS`: dictionaries, a class in each `\"NAME\"` ([Authentication, sessions and messages](../auth.md)) | `django/contrib/auth/password_validation.py:get_password_validators` | once a process |",
+   "line": 71,
+   "sentence": "| `AUTH_PASSWORD_VALIDATORS`: dictionaries, a class in each `\"NAME\"` ([Authentication, sessions and messages](../auth.md)) | once a process | `django/contrib/auth/password_validation.py:get_password_validators` |",
    "tree": "django",
    "path": "django/contrib/auth/password_validation.py",
    "symbol": "get_password_validators",
@@ -309,8 +310,8 @@
   },
   {
    "pointer": "django/contrib/auth/__init__.py:load_backend",
-   "line": 68,
-   "sentence": "| `AUTHENTICATION_BACKENDS`: each a `BaseBackend` ([Authentication, sessions and messages](../auth.md)) | `django/contrib/auth/__init__.py:load_backend` | once a use |",
+   "line": 72,
+   "sentence": "| `AUTHENTICATION_BACKENDS`: each a `BaseBackend` ([Authentication, sessions and messages](../auth.md)) | at each use | `django/contrib/auth/__init__.py:load_backend` |",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
    "symbol": "load_backend",
@@ -323,8 +324,8 @@
   },
   {
    "pointer": "django/middleware/csrf.py:_get_failure_view",
-   "line": 69,
-   "sentence": "| `CSRF_FAILURE_VIEW`: a view ([Security](../security.md)) | by `get_callable`: `django/middleware/csrf.py:_get_failure_view` | once a process |",
+   "line": 73,
+   "sentence": "| `CSRF_FAILURE_VIEW`: a view ([Security](../security.md)) | once a process | by `get_callable`: `django/middleware/csrf.py:_get_failure_view` |",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "_get_failure_view",
@@ -337,8 +338,8 @@
   },
   {
    "pointer": "django/db/utils.py:ConnectionRouter.routers",
-   "line": 70,
-   "sentence": "| `DATABASE_ROUTERS`: paths of router classes, or routers; no base class ([Database backends](../backends.md)) | `django/db/utils.py:ConnectionRouter.routers` | once a process |",
+   "line": 74,
+   "sentence": "| `DATABASE_ROUTERS`: paths of router classes, or routers; no base class ([Database backends](../backends.md)) | once a process | `django/db/utils.py:ConnectionRouter.routers` |",
    "tree": "django",
    "path": "django/db/utils.py",
    "symbol": "ConnectionRouter.routers",
@@ -352,8 +353,8 @@
   },
   {
    "pointer": "django/db/models/options.py:Options._get_default_pk_class",
-   "line": 71,
-   "sentence": "| `DEFAULT_AUTO_FIELD`: a subclass of `AutoField`, tested ([Models and fields](../models.md)) | `django/db/models/options.py:Options._get_default_pk_class` | once a model without its own primary key |",
+   "line": 75,
+   "sentence": "| `DEFAULT_AUTO_FIELD`: a subclass of `AutoField`, tested ([Models and fields](../models.md)) | once a model without its own primary key | `django/db/models/options.py:Options._get_default_pk_class` |",
    "tree": "django",
    "path": "django/db/models/options.py",
    "symbol": "Options._get_default_pk_class",
@@ -366,8 +367,8 @@
   },
   {
    "pointer": "django/views/debug.py:get_exception_reporter_class",
-   "line": 72,
-   "sentence": "| `DEFAULT_EXCEPTION_REPORTER`: an `ExceptionReporter` ([Views](../views.md)) | `django/views/debug.py:get_exception_reporter_class` | once a use |",
+   "line": 76,
+   "sentence": "| `DEFAULT_EXCEPTION_REPORTER`: an `ExceptionReporter` ([Views](../views.md)) | at each use | `django/views/debug.py:get_exception_reporter_class` |",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "get_exception_reporter_class",
@@ -380,8 +381,8 @@
   },
   {
    "pointer": "django/views/debug.py:get_default_exception_reporter_filter",
-   "line": 73,
-   "sentence": "| `DEFAULT_EXCEPTION_REPORTER_FILTER`: a `SafeExceptionReporterFilter` ([Views](../views.md)) | `django/views/debug.py:get_default_exception_reporter_filter` | once a process |",
+   "line": 77,
+   "sentence": "| `DEFAULT_EXCEPTION_REPORTER_FILTER`: a `SafeExceptionReporterFilter` ([Views](../views.md)) | once a process | `django/views/debug.py:get_default_exception_reporter_filter` |",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "get_default_exception_reporter_filter",
@@ -395,8 +396,8 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest._initialize_handlers",
-   "line": 74,
-   "sentence": "| `FILE_UPLOAD_HANDLERS`: each a `FileUploadHandler` ([Requests and responses](../http.md)) | `django/http/request.py:HttpRequest._initialize_handlers` | once a request |",
+   "line": 78,
+   "sentence": "| `FILE_UPLOAD_HANDLERS`: each a `FileUploadHandler` ([Requests and responses](../http.md)) | once a request | `django/http/request.py:HttpRequest._initialize_handlers` |",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._initialize_handlers",
@@ -409,8 +410,8 @@
   },
   {
    "pointer": "django/forms/renderers.py:get_default_renderer",
-   "line": 75,
-   "sentence": "| `FORM_RENDERER`: a `BaseRenderer` ([Forms](../forms.md)) | `django/forms/renderers.py:get_default_renderer` | once a process |",
+   "line": 79,
+   "sentence": "| `FORM_RENDERER`: a `BaseRenderer` ([Forms](../forms.md)) | once a process | `django/forms/renderers.py:get_default_renderer` |",
    "tree": "django",
    "path": "django/forms/renderers.py",
    "symbol": "get_default_renderer",
@@ -424,8 +425,8 @@
   },
   {
    "pointer": "django/utils/formats.py:iter_format_modules",
-   "line": 76,
-   "sentence": "| `FORMAT_MODULE_PATH`: packages of format modules by locale ([Internationalization and time zones](../i18n.md)) | by module: `django/utils/formats.py:iter_format_modules` | once a language |",
+   "line": 80,
+   "sentence": "| `FORMAT_MODULE_PATH`: packages of format modules by locale ([Internationalization and time zones](../i18n.md)) | once a language | by module: `django/utils/formats.py:iter_format_modules` |",
    "tree": "django",
    "path": "django/utils/formats.py",
    "symbol": "iter_format_modules",
@@ -438,8 +439,8 @@
   },
   {
    "pointer": "django/utils/log.py:configure_logging",
-   "line": 77,
-   "sentence": "| `LOGGING_CONFIG`: a function, given `LOGGING` ([Settings, apps and startup](../startup.md)) | `django/utils/log.py:configure_logging` | once, by `django.setup`; called only if `LOGGING` is not empty |",
+   "line": 81,
+   "sentence": "| `LOGGING_CONFIG`: a function, given `LOGGING` ([Settings, apps and startup](../startup.md)) | once, by `django.setup`; called only if `LOGGING` is not empty | `django/utils/log.py:configure_logging` |",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "configure_logging",
@@ -452,8 +453,8 @@
   },
   {
    "pointer": "django/contrib/messages/storage/__init__.py:default_storage",
-   "line": 78,
-   "sentence": "| `MESSAGE_STORAGE`: a `BaseStorage` ([Authentication, sessions and messages](../auth.md)) | `django/contrib/messages/storage/__init__.py:default_storage` | once a request |",
+   "line": 82,
+   "sentence": "| `MESSAGE_STORAGE`: a `BaseStorage` ([Authentication, sessions and messages](../auth.md)) | once a request | `django/contrib/messages/storage/__init__.py:default_storage` |",
    "tree": "django",
    "path": "django/contrib/messages/storage/__init__.py",
    "symbol": "default_storage",
@@ -466,8 +467,8 @@
   },
   {
    "pointer": "django/db/migrations/loader.py:MigrationLoader.load_disk",
-   "line": 79,
-   "sentence": "| `MIGRATION_MODULES`: an application's migrations package ([Migrations](../migrations.md)) | by module: `django/db/migrations/loader.py:MigrationLoader.load_disk` | once a loader |",
+   "line": 83,
+   "sentence": "| `MIGRATION_MODULES`: an application's migrations package ([Migrations](../migrations.md)) | once a loader | by module: `django/db/migrations/loader.py:MigrationLoader.load_disk` |",
    "tree": "django",
    "path": "django/db/migrations/loader.py",
    "symbol": "MigrationLoader.load_disk",
@@ -480,8 +481,8 @@
   },
   {
    "pointer": "django/contrib/auth/hashers.py:get_hashers",
-   "line": 80,
-   "sentence": "| `PASSWORD_HASHERS`: each a `BasePasswordHasher` ([Authentication, sessions and messages](../auth.md)) | `django/contrib/auth/hashers.py:get_hashers` | once a process |",
+   "line": 84,
+   "sentence": "| `PASSWORD_HASHERS`: each a `BasePasswordHasher` ([Authentication, sessions and messages](../auth.md)) | once a process | `django/contrib/auth/hashers.py:get_hashers` |",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "get_hashers",
@@ -495,8 +496,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.urlconf_module",
-   "line": 81,
-   "sentence": "| `ROOT_URLCONF`, no default: the root URLconf ([URL routing](../urls.md)) | by module: `django/urls/resolvers.py:URLResolver.urlconf_module` | once a process |",
+   "line": 85,
+   "sentence": "| `ROOT_URLCONF`, no default: the root URLconf ([URL routing](../urls.md)) | once a process | by module: `django/urls/resolvers.py:URLResolver.urlconf_module` |",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver.urlconf_module",
@@ -510,8 +511,8 @@
   },
   {
    "pointer": "django/core/serializers/__init__.py:_load_serializers",
-   "line": 82,
-   "sentence": "| `SERIALIZATION_MODULES`, no default: a module for each format ([Caching, files, mail, signals and tasks](../services.md)) | by module: `django/core/serializers/__init__.py:_load_serializers` | once a process |",
+   "line": 86,
+   "sentence": "| `SERIALIZATION_MODULES`, no default: a module for each format ([Caching, files, mail, signals and tasks](../services.md)) | once a process | by module: `django/core/serializers/__init__.py:_load_serializers` |",
    "tree": "django",
    "path": "django/core/serializers/__init__.py",
    "symbol": "_load_serializers",
@@ -524,8 +525,8 @@
   },
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.__init__",
-   "line": 83,
-   "sentence": "| `SESSION_ENGINE`: a module with a `SessionBase` store ([Authentication, sessions and messages](../auth.md)) | by module: `django/contrib/sessions/middleware.py:SessionMiddleware.__init__` | the module once a process; a store once a request |",
+   "line": 87,
+   "sentence": "| `SESSION_ENGINE`: a module with a `SessionBase` store ([Authentication, sessions and messages](../auth.md)) | the module once a process; a store once a request | by module: `django/contrib/sessions/middleware.py:SessionMiddleware.__init__` |",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
    "symbol": "SessionMiddleware.__init__",
@@ -538,8 +539,8 @@
   },
   {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase.__init__",
-   "line": 84,
-   "sentence": "| `SESSION_SERIALIZER`: a class like `django.core.signing.JSONSerializer` ([Authentication, sessions and messages](../auth.md)) | `django/contrib/sessions/backends/base.py:SessionBase.__init__` | once a session store |",
+   "line": 88,
+   "sentence": "| `SESSION_SERIALIZER`: a class like `django.core.signing.JSONSerializer` ([Authentication, sessions and messages](../auth.md)) | once a session store | `django/contrib/sessions/backends/base.py:SessionBase.__init__` |",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
    "symbol": "SessionBase.__init__",
@@ -552,8 +553,8 @@
   },
   {
    "pointer": "django/core/signing.py:get_cookie_signer",
-   "line": 85,
-   "sentence": "| `SIGNING_BACKEND`: a `Signer` ([Security](../security.md)) | `django/core/signing.py:get_cookie_signer` | once a use |",
+   "line": 89,
+   "sentence": "| `SIGNING_BACKEND`: a `Signer` ([Security](../security.md)) | at each use | `django/core/signing.py:get_cookie_signer` |",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "get_cookie_signer",
@@ -566,8 +567,8 @@
   },
   {
    "pointer": "django/contrib/staticfiles/finders.py:get_finder",
-   "line": 86,
-   "sentence": "| `STATICFILES_FINDERS`: each a `BaseFinder`, tested ([Content types, static files and the other contrib apps](../contrib.md)) | `django/contrib/staticfiles/finders.py:get_finder` | once a process |",
+   "line": 90,
+   "sentence": "| `STATICFILES_FINDERS`: each a `BaseFinder`, tested ([Content types, static files and the other contrib apps](../contrib.md)) | once a process | `django/contrib/staticfiles/finders.py:get_finder` |",
    "tree": "django",
    "path": "django/contrib/staticfiles/finders.py",
    "symbol": "get_finder",
@@ -581,8 +582,8 @@
   },
   {
    "pointer": "django/template/engine.py:Engine",
-   "line": 87,
-   "sentence": "| `TEMPLATES`' `\"OPTIONS\"`: loaders, each a `django.template.loaders.base.Loader`; context processors; tag modules ([Templates](../templates.md)) | tag modules by module: `django/template/engine.py:Engine` | once an engine |",
+   "line": 91,
+   "sentence": "| `TEMPLATES`' `\"OPTIONS\"`: loaders, each a `django.template.loaders.base.Loader`; context processors; tag modules ([Templates](../templates.md)) | once an engine | tag modules by module: `django/template/engine.py:Engine` |",
    "tree": "django",
    "path": "django/template/engine.py",
    "symbol": "Engine",
@@ -595,8 +596,8 @@
   },
   {
    "pointer": "django/test/utils.py:get_runner",
-   "line": 88,
-   "sentence": "| `TEST_RUNNER`: a `DiscoverRunner` ([The test framework](../testing.md)) | by `__import__`: `django/test/utils.py:get_runner` | once a test run |",
+   "line": 92,
+   "sentence": "| `TEST_RUNNER`: a `DiscoverRunner` ([The test framework](../testing.md)) | once a test run | by `__import__`: `django/test/utils.py:get_runner` |",
    "tree": "django",
    "path": "django/test/utils.py",
    "symbol": "get_runner",
@@ -609,8 +610,8 @@
   },
   {
    "pointer": "django/core/servers/basehttp.py:get_internal_wsgi_application",
-   "line": 89,
-   "sentence": "| `WSGI_APPLICATION`: the application itself ([Management commands](../commands.md)) | `django/core/servers/basehttp.py:get_internal_wsgi_application` | once, by runserver |",
+   "line": 93,
+   "sentence": "| `WSGI_APPLICATION`: the application itself ([Management commands](../commands.md)) | once, by runserver | `django/core/servers/basehttp.py:get_internal_wsgi_application` |",
    "tree": "django",
    "path": "django/core/servers/basehttp.py",
    "symbol": "get_internal_wsgi_application",
@@ -623,7 +624,7 @@
   },
   {
    "pointer": "django/conf/global_settings.py",
-   "line": 91,
+   "line": 95,
    "sentence": "*\"Tested\": the class is checked against its base. \"No default\": not in `django/conf/global_settings.py`.*",
    "tree": "django",
    "path": "django/conf/global_settings.py",
@@ -638,7 +639,7 @@
   {
    "pointer": "django/template/backends/django.py:get_template_tag_modules",
    "line": 99,
-   "sentence": "| template tag libraries: modules with a `Library` | each application's templatetags package (`django/template/backends/django.py:get_template_tag_modules`) | once an engine | [Templates](../templates.md) |",
+   "sentence": "Some extension points are not settings: an object handed to a registry, or a module Django finds by name (`django/template/backends/django.py:get_template_tag_modules`, `django/core/management/__init__.py:get_commands`).",
    "tree": "django",
    "path": "django/template/backends/django.py",
    "symbol": "get_template_tag_modules",
@@ -650,9 +651,24 @@
    "fingerprint": "8d66c6ae591d1d93"
   },
   {
+   "pointer": "django/core/management/__init__.py:get_commands",
+   "line": 99,
+   "sentence": "Some extension points are not settings: an object handed to a registry, or a module Django finds by name (`django/template/backends/django.py:get_template_tag_modules`, `django/core/management/__init__.py:get_commands`).",
+   "tree": "django",
+   "path": "django/core/management/__init__.py",
+   "symbol": "get_commands",
+   "kind": "function",
+   "lines": [
+    52,
+    80
+   ],
+   "at": 53,
+   "fingerprint": "5a4cd26784bdab31"
+  },
+  {
    "pointer": "django/db/models/query_utils.py:RegisterLookupMixin.register_class_lookup",
-   "line": 100,
-   "sentence": "| lookups and transforms: `Lookup` and `Transform` classes, tested on use | `django/db/models/query_utils.py:RegisterLookupMixin.register_class_lookup` | held by the class, or the field, it is registered on; an instance for each filter | [QuerySets](../querysets.md) |",
+   "line": 104,
+   "sentence": "| lookups and transforms, what follows the fields in a filter: `Lookup` and `Transform` classes, tested on use | `django/db/models/query_utils.py:RegisterLookupMixin.register_class_lookup` | held by the class, or the field, it is registered on; an instance for each filter | [QuerySets](../querysets.md) |",
    "tree": "django",
    "path": "django/db/models/query_utils.py",
    "symbol": "RegisterLookupMixin.register_class_lookup",
@@ -671,8 +687,8 @@
   },
   {
    "pointer": "django/core/checks/registry.py:CheckRegistry.register",
-   "line": 101,
-   "sentence": "| system checks: functions that return messages | `django/core/checks/registry.py:CheckRegistry.register` | held for the process; called at each run of the checks | [Management commands](../commands.md) |",
+   "line": 105,
+   "sentence": "| system checks: functions that return messages | `django/core/checks/registry.py:CheckRegistry.register` | held for the process; called at each run of the checks | [The system checks](../commands/checks.md) |",
    "tree": "django",
    "path": "django/core/checks/registry.py",
    "symbol": "CheckRegistry.register",
@@ -684,38 +700,23 @@
    "fingerprint": "b4e5e63ff45813e6"
   },
   {
-   "pointer": "django/contrib/admin/sites.py:DefaultAdminSite._setup",
-   "line": 102,
-   "sentence": "| the admin: its site, a class `SimpleAdminConfig.default_site` names; a `ModelAdmin` for each model | `django/contrib/admin/sites.py:DefaultAdminSite._setup`; `AdminSite.register`, called from each application's admin module | once a process | [The admin](../admin.md) |",
+   "pointer": "django/contrib/admin/sites.py:AdminSite.register",
+   "line": 106,
+   "sentence": "| the admin: a `ModelAdmin` for each model, on the site whose class `SimpleAdminConfig.default_site` names | each application's admin module, which calls `django/contrib/admin/sites.py:AdminSite.register` | once a process | [The admin](../admin.md) |",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
-   "symbol": "DefaultAdminSite._setup",
+   "symbol": "AdminSite.register",
    "kind": "function",
    "lines": [
-    623,
-    625
+    95,
+    149
    ],
-   "fingerprint": "30396f200f95297c"
-  },
-  {
-   "pointer": "django/core/management/__init__.py:get_commands",
-   "line": 103,
-   "sentence": "| management commands: each a `BaseCommand` | each application's management/commands directory (`django/core/management/__init__.py:get_commands`) | the list once a process; a command once a use | [Management commands](../commands.md) |",
-   "tree": "django",
-   "path": "django/core/management/__init__.py",
-   "symbol": "get_commands",
-   "kind": "function",
-   "lines": [
-    52,
-    80
-   ],
-   "at": 53,
-   "fingerprint": "5a4cd26784bdab31"
+   "fingerprint": "a8d60473e8031f29"
   },
   {
    "pointer": "django/dispatch/dispatcher.py:Signal.send",
-   "line": 107,
-   "sentence": "The project's code connects a function, a **receiver**, to a `Signal` that Django made, and Django calls the receivers when it sends the signal, as a request starts and finishes or a model is saved (`django/dispatch/dispatcher.py:Signal.send`).",
+   "line": 111,
+   "sentence": "A **signal** is Django announcing an event, as a request starts and finishes or a model is saved, by calling the **receivers**, the functions connected to the `Signal` Django made for it (`django/dispatch/dispatcher.py:Signal.send`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": "Signal.send",

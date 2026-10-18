@@ -26,7 +26,9 @@ What is changed on the way to HTML and nowhere else:
   nothing but pointers, `(…)` after the words they support, is taken out of
   the paragraph and set beside it as its sources: in the margin where there
   is one, under the paragraph where there is not. The markdown keeps them
-  where they were written, which is where an agent wants them.
+  where they were written, which is where an agent wants them. So are
+  the lede's, so that the contents, which show a page by its lede, show it
+  without them; `llms.txt` quotes the lede's markdown, pointers and all.
 - A quotation that opens with a phrase in bold is a note with that phrase
   as its label (`> **Why.** …`).
 - A quote of a recording is labelled with what ran it, from the recording's
@@ -536,7 +538,7 @@ def render(page, book, problems: list[str]) -> None:
     spans = blocks(tokens)
     kinds = [(tokens[a].type, tokens[a].tag) for a, _ in spans]
     page.title_html = page.title_html_unlinked = page.title_text = page.title_md = page.brief_html = ""
-    page.lede_html = page.lede_text = page.lede_md = ""
+    page.lede_html = page.lede_text = page.lede_md = page.lede_sources_html = ""
     page.sections, page.anchors, page.figures, page.fragments, page.tables = [], anchors, env["figures"], env["fragments"], 0
     if not kinds or kinds[0] != ("heading_open", "h1"):
         problems.append(f"{page.where}:{page.line + 1}: a page opens with its title, the one # heading")
@@ -552,7 +554,9 @@ def render(page, book, problems: list[str]) -> None:
         return
     lede = tokens[spans[1][0] + 1]
     env["line"] = page.line + lede.map[0] + 1
-    page.lede_html, page.lede_text, page.lede_md = inline(lede, env), plain(lede), " ".join(lede.content.split())
+    page.lede_md = " ".join(lede.content.split())  # the markdown keeps its pointers, for llms.txt
+    found = sources([lede], env["gates"])  # on the site they stand beside the lede, as beside any paragraph
+    page.lede_html, page.lede_text, page.lede_sources_html = inline(lede, env), plain(lede), beside(found, env["gates"])
 
     starts = [i for i, kind in enumerate(kinds) if kind == ("heading_open", "h2")]
     page.brief_html = body(page, tokens, spans[2:starts[0] if starts else len(spans)], env)

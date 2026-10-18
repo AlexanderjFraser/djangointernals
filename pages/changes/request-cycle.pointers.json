@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 15,
+   "line": 13,
    "sentence": "Since 6.2 a chain of Django's own middleware under ASGI is one call into the request's thread (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -51,7 +51,7 @@
   },
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.async_capable",
-   "line": 15,
+   "line": 13,
    "sentence": "Each class Django builds on `MiddlewareMixin` with a `process_request` or a `process_response` now sets `async_capable = False`, the flag that says whether a middleware can run on the event loop, where it took the mixin's `True` (`django/middleware/common.py:CommonMiddleware.async_capable`).",
    "tree": "django",
    "path": "django/middleware/common.py",
@@ -65,7 +65,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler._get_response_async",
-   "line": 27,
+   "line": 25,
    "sentence": "At this commit the middleware's are two: the chain, and `CsrfViewMiddleware.process_view`, still handed over on its own, as the view is (`django/core/handlers/base.py:BaseHandler._get_response_async`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -79,7 +79,7 @@
   },
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.async_capable",
-   "line": 50,
+   "line": 48,
    "sentence": "Listed after all of Django's synchronous ones, it runs in async mode as before; directly before one, it now runs synchronously, in their one call (`django/middleware/__init__.py:MiddlewareMixin.async_capable`, `django/core/handlers/base.py:BaseHandler.load_middleware`; [Sync and async in one chain](../handlers/async.md)).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
@@ -93,7 +93,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 50,
+   "line": 48,
    "sentence": "Listed after all of Django's synchronous ones, it runs in async mode as before; directly before one, it now runs synchronously, in their one call (`django/middleware/__init__.py:MiddlewareMixin.async_capable`, `django/core/handlers/base.py:BaseHandler.load_middleware`; [Sync and async in one chain](../handlers/async.md)).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -107,7 +107,7 @@
   },
   {
    "pointer": "django/utils/deprecation.py:__getattr__",
-   "line": 52,
+   "line": 50,
    "sentence": "The old import still works, and warns with `RemovedInDjango2029Warning` (`django/utils/deprecation.py:__getattr__`; [What changed](../changes.md#an-old-habit-release-by-release)).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
@@ -121,7 +121,7 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:convert_exception_to_response",
-   "line": 56,
+   "line": 54,
    "sentence": "That call now passes `thread_sensitive=True` (`django/core/handlers/exception.py:convert_exception_to_response`; [How an exception becomes a response](../handlers/exceptions.md)).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
@@ -135,7 +135,7 @@
   },
   {
    "pointer": "django/db/utils.py:ConnectionHandler.thread_critical",
-   "line": 68,
+   "line": 66,
    "sentence": "A connection belongs to the thread that opened it (`django/db/utils.py:ConnectionHandler.thread_critical`).",
    "tree": "django",
    "path": "django/db/utils.py",
@@ -149,7 +149,7 @@
   },
   {
    "pointer": "django/db/__init__.py:close_old_connections",
-   "line": 68,
+   "line": 66,
    "sentence": "`close_old_connections`, which closes one broken or past its age, runs on the request's thread as the request starts and ends (`django/db/__init__.py:close_old_connections`).",
    "tree": "django",
    "path": "django/db/__init__.py",
@@ -163,7 +163,7 @@
   },
   {
    "pointer": "docs/releases/6.2.txt",
-   "line": 72,
+   "line": 70,
    "sentence": "It guarded against an attack on a JSON array through JavaScript's array prototype, which ECMAScript 5 closed, the 6.2 notes say (`docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
@@ -177,7 +177,7 @@
   },
   {
    "pointer": "django/http/response.py:JsonResponse.__init__",
-   "line": 72,
+   "line": 70,
    "sentence": "The default of `safe=` is now `None`, read as false (`django/http/response.py:JsonResponse.__init__`).",
    "tree": "django",
    "path": "django/http/response.py",
@@ -191,7 +191,7 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 87,
+   "line": 85,
    "sentence": "Before 6.1 it decoded such a part leniently: invalid data \"could be silently ignored or result in empty values\", the 6.1 notes say (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
@@ -205,7 +205,7 @@
   },
   {
    "pointer": "django/http/multipartparser.py:MultiPartParser.parse",
-   "line": 87,
+   "line": 85,
    "sentence": "`MultiPartParser.parse` now decodes with `validate=True`, which refuses any character outside the Base64 alphabet (`django/http/multipartparser.py:MultiPartParser.parse`; [Multipart parsing and upload handlers](../http/uploads.md)).",
    "tree": "django",
    "path": "django/http/multipartparser.py",
@@ -219,7 +219,7 @@
   },
   {
    "pointer": "django/http/multipartparser.py:MultiPartParser.parse",
-   "line": 111,
+   "line": 109,
    "sentence": "Since 6.1 a field whose Base64 is written in lines, as MIME writes it, arrives undecoded, while the same data in a file still decodes (`django/http/multipartparser.py:MultiPartParser.parse`).",
    "tree": "django",
    "path": "django/http/multipartparser.py",
@@ -233,7 +233,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
-   "line": 121,
+   "line": 119,
    "sentence": "| a form not in UTF-8 | Since 5.0, a urlencoded body declared in another charset raises `BadRequest`, a 400 | `django/http/request.py:HttpRequest._load_post_and_files` |",
    "tree": "django",
    "path": "django/http/request.py",
@@ -247,7 +247,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.get_preferred_type",
-   "line": 123,
+   "line": 121,
    "sentence": "| `HttpRequest.get_preferred_type` | New in 5.2: of the types given, the one the client prefers | `django/http/request.py:HttpRequest.get_preferred_type` |",
    "tree": "django",
    "path": "django/http/request.py",
@@ -261,7 +261,7 @@
   },
   {
    "pointer": "django/utils/decorators.py:_multi_decorate",
-   "line": 126,
+   "line": 124,
    "sentence": "| `method_decorator` | Since 5.2, marks its replacement a coroutine function when the method is one | `django/utils/decorators.py:_multi_decorate` |",
    "tree": "django",
    "path": "django/utils/decorators.py",
@@ -275,7 +275,7 @@
   },
   {
    "pointer": "django/views/generic/base.py:RedirectView.get",
-   "line": 128,
+   "line": 126,
    "sentence": "| `RedirectView.preserve_request` | New in 6.1: given to the response the view makes | `django/views/generic/base.py:RedirectView.get` |",
    "tree": "django",
    "path": "django/views/generic/base.py",
@@ -289,7 +289,7 @@
   },
   {
    "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
-   "line": 129,
+   "line": 127,
    "sentence": "| `max_length=` of a redirect | New in 6.1, keyword-only: `MAX_URL_REDIRECT_LENGTH` unless given, `None` for no limit; `redirect` takes it too | `django/http/response.py:HttpResponseRedirectBase.__init__` |",
    "tree": "django",
    "path": "django/http/response.py",
@@ -303,7 +303,7 @@
   },
   {
    "pointer": "django/urls/converters.py:get_converters",
-   "line": 133,
+   "line": 131,
    "sentence": "| get_converter | Gone in 5.1; the registry is read through `get_converters` | `django/urls/converters.py:get_converters` |",
    "tree": "django",
    "path": "django/urls/converters.py",
