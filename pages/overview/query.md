@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 How the view's queryset, the entries whose date falls in a year, ordered by date, is built without touching the database, and what happens when the template's loop finally evaluates it: a `Query` is compiled to one `"SELECT"` by a `SQLCompiler`, a connection is opened, the rows are fetched, and each becomes a model instance.
 
-The ORM's first rule is that building a queryset and running it are two different moments. In the figure no call of the first moment reaches the database; every call that does comes in the second, inside the template's loop.
+Building a queryset and running it are two different moments. In the figure no call of the first moment reaches the database; every call that does comes in the second, inside the template's loop.
 
 ```text figure=two-moments
 two panels, the view's above the template's, time running down; on the right, beyond a line, the database
@@ -40,11 +40,11 @@ A new `QuerySet` holds a new `Query` for its model and the class that will turn 
 
 The keyword arguments become a `Q`, an object holding conditions, which `&` and `|` combine (`django/db/models/query_utils.py:Q`). `Query.add_q` adds it to the where clause. The work is in `Query.build_filter`, which turns one `"published__year"` with its value into a condition (`django/db/models/sql/query.py:Query.build_filter`):
 
-1. `Query.solve_lookup_type` splits the name at the double underscores: `"published"` is a field of the model, a `DateField`; `"year"` is not, and is left over (`django/db/models/sql/query.py:Query.solve_lookup_type`).
-2. `Query.setup_joins` finds no join to make for a field of the model itself, and `build_filter` asks the field for its column, a `Col` (`django/db/models/sql/query.py:Query.setup_joins`, `django/db/models/fields/__init__.py:Field.get_col`).
+1. `Query.solve_lookup_type` splits the name at the double underscores: `"published"` is a field of the model, a `DateField`, not a relation, so `"year"` is left over (`django/db/models/sql/query.py:Query.solve_lookup_type`, `django/db/models/sql/query.py:Query.names_to_path`).
+2. `Query.setup_joins` makes no join for `"published"`, and `build_filter` asks the field for its column, a `Col` (`django/db/models/sql/query.py:Query.setup_joins`, `django/db/models/fields/__init__.py:Field.get_col`).
 3. `Query.build_lookup` turns the leftover name into the condition. A **transform** makes an expression out of another, as the year of a date; a **lookup** compares an expression with a value. The date field has no lookup named `"year"`, so `Query.try_transform` wraps the field's transform of that name, `ExtractYear`, around the column. The transform's `"exact"` lookup is `YearExact`, a `YearLookup`, and it is made with the transform on its left and `2026` on its right (`django/db/models/lookups.py:YearExact`). The rule is that the last name is a lookup if what it applies to has one so named, and otherwise a transform, with `"exact"` as the lookup (`django/db/models/sql/query.py:Query.build_lookup`).
 
-`QuerySet.order_by` clones and clears the ordering, and `Query.add_ordering` checks that each name is a field and stores the names themselves (`django/db/models/sql/query.py:Query.add_ordering`). They become columns only when the statement is compiled (`django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name`).
+`QuerySet.order_by` clones and clears the ordering, and `Query.add_ordering` checks that `"published"` names a field and stores the name itself (`django/db/models/sql/query.py:Query.add_ordering`). It becomes a column only when the statement is compiled (`django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name`).
 
 In both requests the view's calls record the same lines: `QuerySet._clone` and `Query.clone` first under each, and the three steps above in their order; nothing reaches a compiler or a connection:
 
@@ -71,7 +71,7 @@ At the end of the view the queryset holds a `Query` with one base table, one con
 
 ## The template runs it
 
-Nothing evaluates a queryset but a request for its contents: iterating it, indexing it, taking its length, testing it for truth. Each goes through `QuerySet._fetch_all`, which fills the result cache, if there is none yet, with the list its iterable class, `ModelIterable`, yields (`django/db/models/query.py:QuerySet._fetch_all`). The `for` tag takes the length first, since the `"forloop"` variables `"revcounter"` and `"last"` need the total before the first iteration ([The template is rendered](template.md)). `ModelIterable.__iter__` then does the whole of one query: it asks the router which database to read from, asks the `Query` for a compiler for that database's backend, runs it, and turns each row into an instance (`django/db/models/query.py:ModelIterable.__iter__`).
+Nothing evaluates a queryset but a request for its contents: iterating it, taking its length, testing it for truth. Each goes through `QuerySet._fetch_all`, which fills the result cache, if there is none yet, with the list its iterable class, `ModelIterable`, yields (`django/db/models/query.py:QuerySet._fetch_all`). The `for` tag takes the length first, which decides whether the `"empty"` part renders and gives `"forloop"` its `"revcounter"` and `"last"` ([The template is rendered](template.md)). `ModelIterable.__iter__` then does the whole of one query: it asks the router which database to read from, asks the `Query` for a compiler for that database's backend, runs it, and turns each row into an instance (`django/db/models/query.py:ModelIterable.__iter__`).
 
 Both requests record these lines alike. The compile, the connect and the execute stand under `SQLCompiler.execute_sql`, and the rows become instances after it. Other lines are left out; the loop's own `QuerySet.__iter__`, last, has nothing under its `QuerySet._fetch_all`:
 

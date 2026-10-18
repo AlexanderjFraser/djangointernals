@@ -45,7 +45,7 @@
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
    "line": 50,
-   "sentence": "Each layer's `process_response` is given the response the layer inside it returned, and returns the response the layer outside it will see, which may be a different object (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
+   "sentence": "Here each layer's `process_response` is given what the layer inside it returned, and returns the response the layer outside it will see, which may be a different object (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin.__call__",
@@ -59,7 +59,7 @@
   {
    "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response",
    "line": 52,
-   "sentence": "**`XFrameOptionsMiddleware`** sets X-Frame-Options to the value of `settings.X_FRAME_OPTIONS`, `\"DENY\"` by default, unless the header is already there or the response was marked exempt by `xframe_options_exempt` (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).",
+   "sentence": "**`XFrameOptionsMiddleware`** sets X-Frame-Options to `settings.X_FRAME_OPTIONS` in capitals, `\"DENY\"` by default, unless the header is already there or the response was marked exempt by `xframe_options_exempt` (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`, `django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value`).",
    "tree": "django",
    "path": "django/middleware/clickjacking.py",
    "symbol": "XFrameOptionsMiddleware.process_response",
@@ -69,6 +69,20 @@
     40
    ],
    "fingerprint": "89028bc106485437"
+  },
+  {
+   "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value",
+   "line": 52,
+   "sentence": "**`XFrameOptionsMiddleware`** sets X-Frame-Options to `settings.X_FRAME_OPTIONS` in capitals, `\"DENY\"` by default, unless the header is already there or the response was marked exempt by `xframe_options_exempt` (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`, `django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value`).",
+   "tree": "django",
+   "path": "django/middleware/clickjacking.py",
+   "symbol": "XFrameOptionsMiddleware.get_xframe_options_value",
+   "kind": "function",
+   "lines": [
+    42,
+    50
+   ],
+   "fingerprint": "d53105ddc8d755e9"
   },
   {
    "pointer": "django/contrib/messages/middleware.py:MessageMiddleware.process_response",
@@ -227,7 +241,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
    "line": 70,
-   "sentence": "It passes both to the function the server gave it, start_response, and returns the response object itself (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "sentence": "It passes both to the function the server gave it, start_response, and returns this response object itself (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIHandler.__call__",
@@ -269,7 +283,7 @@
   {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
    "line": 96,
-   "sentence": "A positive age keeps it for the next request on the same thread, as [Opening and closing a connection](../backends/lifecycle.md) tells (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "sentence": "A positive age keeps it for later requests on the same thread until it is that many seconds old, as [Opening and closing a connection](../backends/lifecycle.md) tells (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
    "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
@@ -283,7 +297,7 @@
   {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
    "line": 96,
-   "sentence": "A positive age keeps it for the next request on the same thread, as [Opening and closing a connection](../backends/lifecycle.md) tells (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "sentence": "A positive age keeps it for later requests on the same thread until it is that many seconds old, as [Opening and closing a connection](../backends/lifecycle.md) tells (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
    "symbol": "BaseDatabaseWrapper.connect",
@@ -298,7 +312,7 @@
   {
    "pointer": "django/core/cache/__init__.py:close_caches",
    "line": 97,
-   "sentence": "`close_caches` calls `close` on every cache that has been made, which for most backends does nothing (`django/core/cache/__init__.py:close_caches`).",
+   "sentence": "`close_caches` calls `close` on every cache this thread has made, which for most backends does nothing (`django/core/cache/__init__.py:close_caches`).",
    "tree": "django",
    "path": "django/core/cache/__init__.py",
    "symbol": "close_caches",

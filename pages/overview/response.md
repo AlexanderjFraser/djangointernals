@@ -4,9 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # The response returns to the server
 
-What an `HttpResponse` is, what each of the seven default middleware does to it on the way out, how `WSGIHandler.__call__` hands it to the server, and who ends the request.
+What an `HttpResponse` is, what each of the seven middleware of a new project does to it on the way out, how `WSGIHandler.__call__` hands it to the server, and who ends the request.
 
-The view returned an `HttpResponse`, and the request is over in all but name. The response goes back out through the middleware in the reverse of the order they were entered, and what ends the request is not the handler but the server, when it closes the response.
+The view returned an `HttpResponse`. The response goes back out through the middleware in the reverse of the order they were entered, and what ends the request is not the handler but the server, when it closes the response.
 
 In the figure, look for where each header comes from, one from the constructor and five from three of the seven layers, and for the line across where the handler has returned, with the request's end below it.
 
@@ -47,9 +47,9 @@ The `HttpResponse.content` setter encodes a string with the response's charset (
 
 ## The way out
 
-Each layer's `process_response` is given the response the layer inside it returned, and returns the response the layer outside it will see, which may be a different object (`django/middleware/__init__.py:MiddlewareMixin.__call__`). Six of the seven have one, and they run in the reverse of their order in `settings.MIDDLEWARE`; `AuthenticationMiddleware` has none:
+Here each layer's `process_response` is given what the layer inside it returned, and returns the response the layer outside it will see, which may be a different object (`django/middleware/__init__.py:MiddlewareMixin.__call__`). Six of the seven have one, and they run in the reverse of their order in `settings.MIDDLEWARE`; `AuthenticationMiddleware` has none:
 
-**`XFrameOptionsMiddleware`** sets X-Frame-Options to the value of `settings.X_FRAME_OPTIONS`, `"DENY"` by default, unless the header is already there or the response was marked exempt by `xframe_options_exempt` (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).
+**`XFrameOptionsMiddleware`** sets X-Frame-Options to `settings.X_FRAME_OPTIONS` in capitals, `"DENY"` by default, unless the header is already there or the response was marked exempt by `xframe_options_exempt` (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`, `django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value`).
 
 **`MessageMiddleware`** asks the request's message storage to store what has not been read, into a cookie or the session, as [Messages: `add_message`, `Message` and `MessageMiddleware`](../auth/messages.md) tells; here there is nothing to store (`django/contrib/messages/middleware.py:MessageMiddleware.process_response`, `django/contrib/messages/storage/base.py:BaseStorage.update`).
 
@@ -67,7 +67,7 @@ The outermost layer's return is what the chain returns. `BaseHandler.get_respons
 
 ## Handing it to the server
 
-Back in `WSGIHandler.__call__`, the handler records its class on the response, so that `request_finished` can name the handler's class as its sender. It then builds the two things the WSGI interface wants: the status line, from the status code and its reason phrase, and the list of headers, which is the response's headers followed by one Set-Cookie for each cookie. It passes both to the function the server gave it, start_response, and returns the response object itself (`django/core/handlers/wsgi.py:WSGIHandler.__call__`). An `HttpResponse` is iterable, and iterating this one yields its body in one piece, which is all WSGI asks of a body (`django/http/response.py:HttpResponse.__iter__`).
+Back in `WSGIHandler.__call__`, the handler records its class on the response, so that `request_finished` can name the handler's class as its sender. It then builds the two things the WSGI interface wants: the status line, from the status code and its reason phrase, and the list of headers, which is the response's headers followed by one Set-Cookie for each cookie. It passes both to the function the server gave it, start_response, and returns this response object itself (`django/core/handlers/wsgi.py:WSGIHandler.__call__`). An `HttpResponse` is iterable, and iterating this one yields its body in one piece, which is all WSGI asks of a body (`django/http/response.py:HttpResponse.__iter__`).
 
 ## Who ends the request
 
@@ -93,8 +93,8 @@ HttpResponseBase.close
 
 The three receivers, in the order the recording shows them:
 
-- `close_old_connections` ran at `request_started` too, and now has a connection to consider. It closes a connection whose autocommit state was not restored, one on which an error occurred and which no longer works, or one past its age. The age comes from the database's `"CONN_MAX_AGE"`, and the default is zero: the connection's `close_at` was set to the moment it was opened, so at the end of every request it is past its age and is closed. A positive age keeps it for the next request on the same thread, as [Opening and closing a connection](../backends/lifecycle.md) tells (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).
-- `close_caches` calls `close` on every cache that has been made, which for most backends does nothing (`django/core/cache/__init__.py:close_caches`).
+- `close_old_connections` ran at `request_started` too, and now has a connection to consider. It closes a connection whose autocommit state was not restored, one on which an error occurred and which no longer works, or one past its age. The age comes from the database's `"CONN_MAX_AGE"`, and the default is zero: the connection's `close_at` was set to the moment it was opened, so at the end of every request it is past its age and is closed. A positive age keeps it for later requests on the same thread until it is that many seconds old, as [Opening and closing a connection](../backends/lifecycle.md) tells (`django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`, `django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).
+- `close_caches` calls `close` on every cache this thread has made, which for most backends does nothing (`django/core/cache/__init__.py:close_caches`).
 - `reset_urlconf` clears the URLconf set for the thread at the start of the request (`django/core/handlers/base.py:reset_urlconf`).
 
-The request has now left no trace in the process but what it was meant to leave: whatever the view wrote to the database. The settings, the app registry, the handler and its middleware chain, the resolver with its imported URLconf, and the template engine with its compiled template are all as the next request will find them. The recording's second request is that next request: the same path, with every first-use step gone.
+The settings, the app registry, the handler and its middleware chain, the resolver with its imported URLconf, and the template engine with its compiled template are all as the next request will find them. The recording's second request is that next request: the same path, with every first-use step gone.

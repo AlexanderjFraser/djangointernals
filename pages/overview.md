@@ -40,11 +40,11 @@ A running Django served that request twice, and the chapter quotes the recording
 
 ## The shape of it
 
-A request passes through Django in a fixed order, each stage in one part of the framework. The figure follows this one across the parts.
+A request passes through Django in stages, each in one part of the framework. The figure follows this one across the parts.
 
 ```text figure=the-path
 across the top, once, before the first request: the settings, the app registry, the handler and its middleware chain
-below, time running down: the server on the left, outside Django; a column for each part of Django it crosses; a box a station
+below, time running down: the server on the left, outside Django; an indent for each part of Django it crosses, each further in than the last; a box a station
 
 the server calls the handler ->
   the handler and the middleware   WSGIHandler.__call__: request_started; a WSGIRequest
@@ -52,7 +52,7 @@ the server calls the handler ->
   the resolver and the view        URLResolver.resolve: a route matches
   the resolver and the view        by_year(year=2026): the view is called
   the ORM                          QuerySet.filter, order_by: a Query is built; no SQL yet
-  the template engine              get_template: the engine, its loaders, the compile, once a process
+  the template engine              get_template: the engine, its loaders, the compile, then kept
   the template engine              Template.render: the context processors, then the nodes
   the ORM, accented                QuerySet.__len__ from {% for %}: SQLCompiler; connect; SELECT; rows become instances
   the template engine              VariableNode.render: the loop's values escaped
@@ -63,17 +63,17 @@ the server calls the handler ->
   the handler and the middleware   HttpResponseBase.close: request_finished; the connection is closed
 ```
 
-*The band at the top is the work of startup, done once; below it, time running down, each column is one part of the framework, each box a station of the request, and an arrow the request passing from one station to the next. The accented box is the moment the query runs: in the template's loop, not where the view built it.*
+*The band at the top is the work of startup, done once; below it, time running down, each indent is one part of the framework, each box a station of the request, and an arrow the request passing from one station to the next. The accented box is the moment the query runs: in the template's loop, not where the view built it.*
 
-**The process is prepared once.** A server imports the project's `wsgi.py`, which calls `get_wsgi_application`: the settings are loaded, every installed application is imported and its models are registered in the app registry, and the handler is made, which builds the middleware chain from `settings.MIDDLEWARE` (`django/core/wsgi.py:get_wsgi_application`). None of it runs again: [Before the first request](overview/startup.md).
+**The process is prepared once.** A production WSGI server imports the project's `wsgi.py`, which calls `get_wsgi_application`: the settings are loaded, every installed application is imported and its models are registered in the app registry, and the handler is made, which builds the middleware chain from `settings.MIDDLEWARE` (`django/core/wsgi.py:get_wsgi_application`). None of it runs again: [Before the first request](overview/startup.md).
 
 **The request goes in through the middleware.** The server calls `WSGIHandler.__call__`, which sends the `request_started` signal, wraps the server's dictionary in a `WSGIRequest` that parses the query string, the cookies and the body only when they are read, and calls the chain (`django/core/handlers/wsgi.py:WSGIHandler.__call__`). Of the seven middleware, `SessionMiddleware` leaves on the request a session that has not been loaded, `AuthenticationMiddleware` a user that has not been looked up and `MessageMiddleware` a place for messages, and `CommonMiddleware` checks the `"Host"` header: [From the server's call to the view](overview/arrival.md).
 
-**The path is resolved and the view called.** At the centre of the chain `BaseHandler._get_response` asks the resolver, one object kept for the life of the process, to match the path. The route converts `2026` to an `int`; the CSRF middleware, offered the view before it is called, lets a `"GET"` through; and the view is called with `year=2026` (`django/core/handlers/base.py:BaseHandler._get_response`): [The URL is resolved and the view is called](overview/view.md).
+**The path is resolved and the view called.** At the centre of the chain `BaseHandler._get_response` asks the resolver of the URLconf, which the process keeps, to match the path. The route converts `2026` to an `int`; the CSRF middleware, offered the view before it is called, lets a `"GET"` through; and the view is called with `year=2026` (`django/core/handlers/base.py:BaseHandler._get_response`): [The URL is resolved and the view is called](overview/view.md).
 
 **The view builds a queryset, and the template runs it.** `QuerySet.filter` and `QuerySet.order_by` each return a new `QuerySet` around a `Query` that records the condition and the ordering, and nothing touches the database. The query runs when the template's loop asks how many rows there are: the `Query` is compiled to one `"SELECT"` by a `SQLCompiler`, a connection is opened, and each row becomes an instance of the model (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`, `django/db/models/base.py:Model.from_db`): [A queryset becomes SQL](overview/query.md).
 
-**The template is found, compiled once and rendered.** `render` looks the template up through the template engine, which the first request makes from `settings.TEMPLATES`; the engine's loaders find the file and compile it into nodes, and the second request takes the compiled template from the cached loader. Rendering runs the context processors and then each node, escaping each value as its `VariableNode` renders it, and `render` makes an `HttpResponse` of the string (`django/shortcuts.py:render`): [The template is rendered](overview/template.md).
+**The template is found, compiled once and rendered.** `render` looks the template up through the template engine, which is made on first use from `settings.TEMPLATES`; the engine's loaders find the file and compile it into nodes, and the second request takes the compiled template from the cached loader. Rendering runs the context processors and then each node, escaping each value in the loop as its `VariableNode` renders it, and `render` makes an `HttpResponse` of the string (`django/shortcuts.py:render`): [The template is rendered](overview/template.md).
 
 **The response goes back out.** It passes through the middleware in the reverse order, three of the seven adding five headers between them, and `WSGIHandler.__call__` hands the status, the headers and the body to the server. When the server has sent the body it closes the response, which sends `request_finished`, and a receiver of that closes the database connection: with the default settings a connection lives for one request (`django/http/response.py:HttpResponseBase.close`, `django/db/__init__.py:close_old_connections`): [The response returns to the server](overview/response.md).
 
@@ -118,6 +118,6 @@ HttpResponseBase.close
 
 ## Where this request did not go
 
-The request touched most of Django and left some of it alone. It was a `"GET"` with no body and no cookie, so no form was bound and no user looked up; a `"POST"` would have had its token checked by the CSRF middleware before the view ran, and its data ready for a form ([Forms](forms.md), [The user of a request: `login`, `logout` and `AuthenticationMiddleware`](auth/login.md)). It used no cache and sent no mail. Other handlers build a chain of the same middleware: an `ASGIHandler` awaits its chain as a coroutine, with an adapter wherever a layer and its neighbour disagree ([Sync and async in one chain](handlers/async.md)), and the test client has a handler of its own and needs no server ([The test framework](testing.md)).
+The request left parts of Django alone. It was a `"GET"` with no body and no cookie, and nothing in it bound a form or looked up a user; a `"POST"` would have had its token checked by the CSRF middleware before the view ran, and its data ready for a form ([Forms](forms.md), [The user of a request: `login`, `logout` and `AuthenticationMiddleware`](auth/login.md)). It sent no mail. Other handlers build a chain of the same middleware: an `ASGIHandler` awaits its chain as a coroutine, with an adapter wherever a layer and its neighbour disagree ([Sync and async in one chain](handlers/async.md)), and the test client has a handler of its own and needs no server ([The test framework](testing.md)).
 
 Every part of Django, what it leans on and the chapter that explains it is in [The parts of Django, and what each leans on](introduction/parts.md); the places where a project puts its own code into this path, its applications, its middleware and its backends, are [How Django is extended](introduction/extension-points.md).

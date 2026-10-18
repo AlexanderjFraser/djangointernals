@@ -55,7 +55,7 @@
   {
    "pointer": "django/core/servers/basehttp.py:get_internal_wsgi_application",
    "line": 33,
-   "sentence": "If the setting is `None`, it serves what `get_wsgi_application` returns (`django/core/servers/basehttp.py:get_internal_wsgi_application`).",
+   "sentence": "If the setting is `None`, it uses what `get_wsgi_application` returns (`django/core/servers/basehttp.py:get_internal_wsgi_application`).",
    "tree": "django",
    "path": "django/core/servers/basehttp.py",
    "symbol": "get_internal_wsgi_application",
@@ -83,7 +83,7 @@
   {
    "pointer": "django/dispatch/dispatcher.py",
    "line": 37,
-   "sentence": "The first two are imported at the top of the modules that use them: asgiref before `django.setup` runs, since the module a server or manage.py starts from imports the signals, whose dispatcher imports asgiref (`django/dispatch/dispatcher.py`), and sqlparse with a database backend's operations, when the backend is loaded.",
+   "sentence": "The first two are imported at the top of the modules that use them: asgiref before `django.setup` runs, since the module a server or manage.py starts from imports the signals, whose dispatcher imports asgiref (`django/dispatch/dispatcher.py`), and sqlparse when a database backend is loaded.",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": null,
@@ -109,9 +109,37 @@
    "fingerprint": "b1aec20f44aafc2d"
   },
   {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 41,
+   "sentence": "The centre of the chain fits the view to the chain in the same way (`django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/base.py:BaseHandler._get_response_async`), and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
+   "lines": [
+    176,
+    228
+   ],
+   "fingerprint": "8a7faacfec18a9da"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response_async",
+   "line": 41,
+   "sentence": "The centre of the chain fits the view to the chain in the same way (`django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/base.py:BaseHandler._get_response_async`), and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response_async",
+   "kind": "function",
+   "lines": [
+    230,
+    300
+   ],
+   "fingerprint": "145fd5675456f50d"
+  },
+  {
    "pointer": "django/dispatch/dispatcher.py:Signal.send",
    "line": 41,
-   "sentence": "The centre of the chain fits the view to the chain in the same way, and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`).",
+   "sentence": "The centre of the chain fits the view to the chain in the same way (`django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/base.py:BaseHandler._get_response_async`), and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": "Signal.send",
@@ -249,6 +277,20 @@
    "fingerprint": "23fc453f696fcc7d"
   },
   {
+   "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.format_debug_sql",
+   "line": 50,
+   "sentence": "`BaseDatabaseOperations.format_debug_sql` lays one out for the test runner's --debug-sql (`django/db/backends/base/operations.py:BaseDatabaseOperations.format_debug_sql`).",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": "BaseDatabaseOperations.format_debug_sql",
+   "kind": "function",
+   "lines": [
+    875,
+    881
+   ],
+   "fingerprint": "4e179ad8c755468e"
+  },
+  {
    "pointer": "django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints",
    "line": 51,
    "sentence": "The introspection of SQLite and of MySQL parses SQL the database gives back, such as a table's `\"CREATE TABLE\"` statement or a check constraint's clause, to find constraints, their columns and, on SQLite, each column's collation (`django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints`, `django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns`).",
@@ -370,7 +412,7 @@
   {
    "pointer": "django/db/utils.py:DatabaseErrorWrapper.__exit__",
    "line": 64,
-   "sentence": "`DatabaseErrorWrapper` raises each error again as Django's class of the same name, so that code above the backend catches one `IntegrityError` whatever the driver (`django/db/utils.py:DatabaseErrorWrapper.__exit__`).",
+   "sentence": "`DatabaseErrorWrapper` raises each error again as Django's class of that name, so that code above the backend catches one `IntegrityError` whatever the driver (`django/db/utils.py:DatabaseErrorWrapper.__exit__`).",
    "tree": "django",
    "path": "django/db/utils.py",
    "symbol": "DatabaseErrorWrapper.__exit__",
@@ -481,32 +523,32 @@
    "fingerprint": "cfcebcc2f509f2ae"
   },
   {
-   "pointer": "django/contrib/auth/hashers.py:Argon2PasswordHasher.library",
+   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher._load_library",
    "line": 73,
-   "sentence": "| argon2-cffi | `Argon2PasswordHasher` | at the call | `django/contrib/auth/hashers.py:Argon2PasswordHasher.library` |",
+   "sentence": "| argon2-cffi | `Argon2PasswordHasher` | at the call | `django/contrib/auth/hashers.py:BasePasswordHasher._load_library` |",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
-   "symbol": "Argon2PasswordHasher.library",
-   "kind": "assignment",
+   "symbol": "BasePasswordHasher._load_library",
+   "kind": "function",
    "lines": [
-    395,
-    395
+    223,
+    239
    ],
-   "fingerprint": "48d14d3fe8aa6344"
+   "fingerprint": "a5e66a5dde053e29"
   },
   {
-   "pointer": "django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.library",
+   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher._load_library",
    "line": 74,
-   "sentence": "| bcrypt | `BCryptSHA256PasswordHasher`, `BCryptPasswordHasher` | at the call | `django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.library` |",
+   "sentence": "| bcrypt | `BCryptSHA256PasswordHasher`, `BCryptPasswordHasher` | at the call | `django/contrib/auth/hashers.py:BasePasswordHasher._load_library` |",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
-   "symbol": "BCryptSHA256PasswordHasher.library",
-   "kind": "assignment",
+   "symbol": "BasePasswordHasher._load_library",
+   "kind": "function",
    "lines": [
-    499,
-    499
+    223,
+    239
    ],
-   "fingerprint": "449d57787bdfb8a1"
+   "fingerprint": "a5e66a5dde053e29"
   },
   {
    "pointer": "django/core/cache/backends/redis.py:RedisCacheClient.__init__",

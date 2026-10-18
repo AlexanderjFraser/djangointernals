@@ -286,9 +286,12 @@ request  ->  A  ->  B  ->  C  ->  the view
 - **It is legible where it stands.** One unit of the `viewBox` is one CSS
   pixel. The text column is 646 pixels wide; a wider figure runs into the
   margin, up to about 940. Type in a figure is 14 pixels, names 13. On a
-  phone a figure keeps three quarters of its width and scrolls past it, so
-  one whose point lies across its width (two things side by side, a column
-  at its right) is drawn at most about 460 wide.
+  phone a figure keeps three quarters of its width and scrolls past it,
+  and what scrolls out of sight is lost, from a map as much as from a
+  comparison: so a figure is drawn at most about 460 wide, narrow and
+  tall, with what would stand side by side set one above the other, a
+  column of notes under what it notes, a row of columns turned into
+  steps.
 - **It is looked at rendered**, in a light palette and a dark one, at a
   desktop's width and a phone's, before its page is published.
 

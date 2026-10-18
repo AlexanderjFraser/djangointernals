@@ -1,104 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 857 1019">
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 1193">
   <!-- the band: what is done once, before the first request -->
-  <rect class="box" x="88.5" y="0.5" width="768" height="40" rx="4"/>
-  <text x="100" y="25"><tspan class="strong">once, before the first request:</tspan> the settings, the app registry, the handler and its middleware chain</text>
+  <rect class="box" x="40.5" y="0.5" width="379" height="54" rx="4"/>
+  <text x="52" y="23"><tspan class="strong">once, before the first request:</tspan> the settings,</text>
+  <text x="52" y="43">the app registry, the handler and its middleware chain</text>
 
-  <!-- a column for each part of Django the request crosses; time runs down -->
-  <path class="line" d="M88.5 74 H284.5"/>
-  <path class="line" d="M292.5 74 H465.5"/>
-  <path class="line" d="M473.5 74 H675.5"/>
-  <path class="line" d="M683.5 74 H856.5"/>
-  <text class="strong" x="186.5" y="64" text-anchor="middle">the handler and the middleware</text>
-  <text class="strong" x="379" y="64" text-anchor="middle">the resolver and the view</text>
-  <text class="strong" x="574.5" y="64" text-anchor="middle">the ORM</text>
-  <text class="strong" x="770" y="64" text-anchor="middle">the template engine</text>
+  <!-- below, time runs down; each part of Django is a step further in than the last, its boxes in line under its name: the handler at 40, the resolver and the view at 80, the ORM at 120, the template engine at 160 -->
+  <!-- an arrow runs down a part's line, 20 in from its boxes' edge; it turns right into a part further in, and left onto the line of a part further out -->
 
-  <!-- the server, outside Django, on the left: it calls the handler, and later closes the response -->
-  <text class="strong" x="0" y="64">the server</text>
-  <text class="quiet small" x="0" y="80">outside Django</text>
-  <text class="quiet small" x="0" y="109">calls</text>
-  <path class="line" d="M0 117 H78"/>
-  <polygon class="head" points="88,117 78,112 78,122"/>
-  <path class="line" d="M88 899 H10"/>
-  <polygon class="head" points="0,899 10,894 10,904"/>
-  <text class="quiet small" x="0" y="923">the server</text>
-  <text class="quiet small" x="0" y="939">sends the body,</text>
-  <text class="quiet small" x="0" y="955">then closes</text>
-  <text class="quiet small" x="0" y="971">the response</text>
-  <path class="line" d="M0 987 H78"/>
-  <polygon class="head" points="88,987 78,982 78,992"/>
+  <!-- the server, outside Django, on the left: it calls the handler -->
+  <text x="0" y="88"><tspan class="strong">the server</tspan><tspan class="quiet">, outside Django, calls</tspan></text>
+  <path class="line" d="M20.5 96 V145.5 H30.5"/>
+  <polygon class="head" points="40.5,145.5 30.5,140.5 30.5,150.5"/>
 
-  <!-- the request's path, station to station, in the accent -->
-  <path class="mark-line" d="M186.5 149 V158"/>
-  <polygon class="head mark" points="186.5,168 181.5,158 191.5,158"/>
-  <path class="mark-line" d="M285 199 H379 V232"/>
-  <polygon class="head mark" points="379,242 374,232 384,232"/>
-  <path class="mark-line" d="M379 289 V298"/>
-  <polygon class="head mark" points="379,308 374,298 384,298"/>
-  <path class="mark-line" d="M466 331 H574.5 V356"/>
-  <polygon class="head mark" points="574.5,366 569.5,356 579.5,356"/>
-  <path class="mark-line" d="M676 397 H770 V430"/>
-  <polygon class="head mark" points="770,440 765,430 775,430"/>
-  <path class="mark-line" d="M770 503 V512"/>
-  <polygon class="head mark" points="770,522 765,512 775,512"/>
-  <path class="mark-line" d="M683 553 H574.5 V586"/>
-  <polygon class="head mark" points="574.5,596 569.5,586 579.5,586"/>
-  <path class="mark-line" d="M676 635 H770 V676"/>
-  <polygon class="head mark" points="770,686 765,676 775,676"/>
-  <path class="mark-line" d="M683 709 H379 V734"/>
-  <polygon class="head mark" points="379,744 374,734 384,734"/>
-  <path class="mark-line" d="M292 767 H186.5 V792"/>
-  <polygon class="head mark" points="186.5,802 181.5,792 191.5,792"/>
-  <path class="mark-line" d="M186.5 849 V858"/>
-  <polygon class="head mark" points="186.5,868 181.5,858 191.5,858"/>
+  <!-- the handler and the middleware: the way in -->
+  <text class="strong" x="40" y="121">the handler and the middleware</text>
+  <rect class="box" x="40.5" y="130.5" width="259" height="48" rx="4"/>
+  <text class="name" x="52" y="149">WSGIHandler.__call__</text>
+  <text class="quiet" x="52" y="167"><tspan class="name">request_started</tspan>; a <tspan class="name">WSGIRequest</tspan></text>
+  <path class="mark-line" d="M60.5 179 V188.5"/>
+  <polygon class="head mark" points="60.5,198.5 55.5,188.5 65.5,188.5"/>
+  <rect class="box" x="40.5" y="198.5" width="259" height="66" rx="4"/>
+  <text class="name" x="52" y="217">process_request</text>
+  <text class="quiet" x="52" y="235">the way in: session, host,</text>
+  <text class="quiet" x="52" y="253">user, messages</text>
+  <path class="mark-line" d="M60.5 265 V311.5 H70.5"/>
+  <polygon class="head mark" points="80.5,311.5 70.5,306.5 70.5,316.5"/>
 
-  <!-- the stations, each in its part's column; the query's is accented -->
-  <rect class="box" x="88.5" y="86.5" width="196" height="62" rx="4"/>
-  <text class="name" x="100" y="105">WSGIHandler.__call__</text>
-  <text class="quiet small" x="100" y="122"><tspan class="name">request_started</tspan>;</text>
-  <text class="quiet small" x="100" y="138">a <tspan class="name">WSGIRequest</tspan></text>
-  <rect class="box" x="88.5" y="168.5" width="196" height="62" rx="4"/>
-  <text class="name" x="100" y="187">process_request</text>
-  <text class="quiet small" x="100" y="204">the way in: session, host,</text>
-  <text class="quiet small" x="100" y="220">user, messages</text>
-  <rect class="box" x="292.5" y="242.5" width="173" height="46" rx="4"/>
-  <text class="name" x="304" y="261">URLResolver.resolve</text>
-  <text class="quiet small" x="304" y="278">a route matches</text>
-  <rect class="box" x="292.5" y="308.5" width="173" height="46" rx="4"/>
-  <text class="name" x="304" y="327">by_year(year=2026)</text>
-  <text class="quiet small" x="304" y="344">the view is called</text>
-  <rect class="box" x="473.5" y="366.5" width="202" height="62" rx="4"/>
-  <text class="name" x="485" y="385">QuerySet.filter</text>
-  <text class="name" x="485" y="402">QuerySet.order_by</text>
-  <text class="quiet small" x="485" y="418">a <tspan class="name">Query</tspan> is built; no SQL yet</text>
-  <rect class="box" x="683.5" y="440.5" width="173" height="62" rx="4"/>
-  <text class="name" x="695" y="459">get_template</text>
-  <text class="quiet small" x="695" y="476">the engine, its loaders,</text>
-  <text class="quiet small" x="695" y="492">the compile, once a process</text>
-  <rect class="box" x="683.5" y="522.5" width="173" height="62" rx="4"/>
-  <text class="name" x="695" y="541">Template.render</text>
-  <text class="quiet small" x="695" y="558">the context processors,</text>
-  <text class="quiet small" x="695" y="574">then the nodes</text>
-  <rect class="mark-box" x="473.5" y="596.5" width="202" height="78" rx="4"/>
-  <text class="name" x="485" y="615">QuerySet.__len__</text>
-  <text class="quiet small" x="485" y="632">from <tspan class="name">{% for %}</tspan>:</text>
-  <text class="quiet small" x="485" y="648"><tspan class="name">SQLCompiler</tspan>; connect; SELECT;</text>
-  <text class="quiet small" x="485" y="664">rows become instances</text>
-  <rect class="box" x="683.5" y="686.5" width="173" height="46" rx="4"/>
-  <text class="name" x="695" y="705">VariableNode.render</text>
-  <text class="quiet small" x="695" y="722">the loop's values escaped</text>
-  <rect class="box" x="292.5" y="744.5" width="173" height="46" rx="4"/>
-  <text class="name" x="304" y="763">HttpResponse</text>
-  <text class="quiet small" x="304" y="780">the view returns it</text>
-  <rect class="box" x="88.5" y="802.5" width="196" height="46" rx="4"/>
-  <text class="name" x="100" y="821">process_response</text>
-  <text class="quiet small" x="100" y="838">the way out: five headers added</text>
-  <rect class="box" x="88.5" y="868.5" width="196" height="62" rx="4"/>
-  <text class="name" x="100" y="887">start_response</text>
-  <text class="quiet small" x="100" y="904">the status and the headers;</text>
-  <text class="quiet small" x="100" y="920">the response is returned</text>
-  <rect class="box" x="88.5" y="956.5" width="196" height="62" rx="4"/>
-  <text class="name" x="100" y="975">HttpResponseBase.close</text>
-  <text class="quiet small" x="100" y="992"><tspan class="name">request_finished</tspan>;</text>
-  <text class="quiet small" x="100" y="1008">the connection is closed</text>
+  <!-- the resolver and the view -->
+  <text class="strong" x="80" y="287">the resolver and the view</text>
+  <rect class="box" x="80.5" y="296.5" width="259" height="48" rx="4"/>
+  <text class="name" x="92" y="315">URLResolver.resolve</text>
+  <text class="quiet" x="92" y="333">a route matches</text>
+  <path class="mark-line" d="M100.5 345 V354.5"/>
+  <polygon class="head mark" points="100.5,364.5 95.5,354.5 105.5,354.5"/>
+  <rect class="box" x="80.5" y="364.5" width="259" height="48" rx="4"/>
+  <text class="name" x="92" y="383">by_year(year=2026)</text>
+  <text class="quiet" x="92" y="401">the view is called</text>
+  <path class="mark-line" d="M100.5 413 V459.5 H110.5"/>
+  <polygon class="head mark" points="120.5,459.5 110.5,454.5 110.5,464.5"/>
+
+  <!-- the ORM: the view builds the queryset -->
+  <text class="strong" x="120" y="435">the ORM</text>
+  <rect class="box" x="120.5" y="444.5" width="259" height="66" rx="4"/>
+  <text class="name" x="132" y="463">QuerySet.filter</text>
+  <text class="name" x="132" y="481">QuerySet.order_by</text>
+  <text class="quiet" x="132" y="499">a <tspan class="name">Query</tspan> is built; no SQL yet</text>
+  <path class="mark-line" d="M140.5 511 V557.5 H150.5"/>
+  <polygon class="head mark" points="160.5,557.5 150.5,552.5 150.5,562.5"/>
+
+  <!-- the template engine -->
+  <text class="strong" x="160" y="533">the template engine</text>
+  <rect class="box" x="160.5" y="542.5" width="259" height="66" rx="4"/>
+  <text class="name" x="172" y="561">get_template</text>
+  <text class="quiet" x="172" y="579">the engine, its loaders,</text>
+  <text class="quiet" x="172" y="597">the compile, then kept</text>
+  <path class="mark-line" d="M180.5 609 V618.5"/>
+  <polygon class="head mark" points="180.5,628.5 175.5,618.5 185.5,618.5"/>
+  <rect class="box" x="160.5" y="628.5" width="259" height="48" rx="4"/>
+  <text class="name" x="172" y="647">Template.render</text>
+  <text class="quiet" x="172" y="665">the context processors, then the nodes</text>
+  <path class="mark-line" d="M160 662.5 H140.5 V686.5"/>
+  <polygon class="head mark" points="140.5,696.5 135.5,686.5 145.5,686.5"/>
+
+  <!-- back in the ORM, from the template's loop: the query runs; accented -->
+  <rect class="mark-box" x="120.5" y="696.5" width="259" height="84" rx="4"/>
+  <text class="name" x="132" y="715">QuerySet.__len__</text>
+  <text class="quiet" x="132" y="733">from <tspan class="name">{% for %}</tspan>:</text>
+  <text class="quiet" x="132" y="751"><tspan class="name">SQLCompiler</tspan>; connect; SELECT;</text>
+  <text class="quiet" x="132" y="769">rows become instances</text>
+  <path class="mark-line" d="M140.5 781 V815.5 H150.5"/>
+  <polygon class="head mark" points="160.5,815.5 150.5,810.5 150.5,820.5"/>
+
+  <!-- back in the template engine -->
+  <rect class="box" x="160.5" y="800.5" width="259" height="48" rx="4"/>
+  <text class="name" x="172" y="819">VariableNode.render</text>
+  <text class="quiet" x="172" y="837">the loop's values escaped</text>
+  <path class="mark-line" d="M160 834.5 H100.5 V858.5"/>
+  <polygon class="head mark" points="100.5,868.5 95.5,858.5 105.5,858.5"/>
+
+  <!-- back in the view -->
+  <rect class="box" x="80.5" y="868.5" width="259" height="48" rx="4"/>
+  <text class="name" x="92" y="887">HttpResponse</text>
+  <text class="quiet" x="92" y="905">the view returns it</text>
+  <path class="mark-line" d="M80 902.5 H60.5 V926.5"/>
+  <polygon class="head mark" points="60.5,936.5 55.5,926.5 65.5,926.5"/>
+
+  <!-- back in the handler and the middleware: the way out -->
+  <rect class="box" x="40.5" y="936.5" width="259" height="48" rx="4"/>
+  <text class="name" x="52" y="955">process_response</text>
+  <text class="quiet" x="52" y="973">the way out: five headers added</text>
+  <path class="mark-line" d="M60.5 985 V994.5"/>
+  <polygon class="head mark" points="60.5,1004.5 55.5,994.5 65.5,994.5"/>
+  <rect class="box" x="40.5" y="1004.5" width="259" height="66" rx="4"/>
+  <text class="name" x="52" y="1023">start_response</text>
+  <text class="quiet" x="52" y="1041">the status and the headers;</text>
+  <text class="quiet" x="52" y="1059">the response is returned</text>
+
+  <!-- back to the server, which sends the body and then closes the response -->
+  <path class="line" d="M40 1056.5 H20.5 V1079"/>
+  <polygon class="head" points="20.5,1089 15.5,1079 25.5,1079"/>
+  <text x="0" y="1106"><tspan class="strong">the server</tspan><tspan class="quiet"> sends the body, then closes the response</tspan></text>
+  <path class="line" d="M20.5 1114 V1141.5 H30.5"/>
+  <polygon class="head" points="40.5,1141.5 30.5,1136.5 30.5,1146.5"/>
+  <rect class="box" x="40.5" y="1126.5" width="259" height="66" rx="4"/>
+  <text class="name" x="52" y="1145">HttpResponseBase.close</text>
+  <text class="quiet" x="52" y="1163"><tspan class="name">request_finished</tspan>;</text>
+  <text class="quiet" x="52" y="1181">the connection is closed</text>
 </svg>

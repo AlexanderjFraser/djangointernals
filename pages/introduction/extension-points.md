@@ -4,9 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # How Django is extended
 
-Django is extended at its **extension points**: places where it calls code that is not its own, named in a setting, handed to a registry or found by a convention. Most are a dotted path in a setting, which `import_string` turns into a class; Django makes an object of it and keeps it for a process, a request, a thread or an asynchronous context, or makes one at each use. Three matter most: the applications a project is made of, the middleware every request passes through, and the backends behind its database, cache, files and mail.
+Django is extended at its **extension points**: places where it calls code that need not be its own, named in a setting, handed to a registry or found by a convention. Most are a dotted path in a setting, which `import_string` turns into a class; Django makes an object of it and keeps it for a process, a request, a thread or an asynchronous context, or makes one at each use. Three matter most: the applications a project is made of, the middleware every request passes through, and the backends behind its database, cache, files and mail.
 
-A setting holds a name, not the object, which puts the import off until the object is first wanted. The settings module is imported when a setting is first read, and a module it imported may read the settings in turn: Django's defaults, `django.conf.global_settings`, cannot import the translation module, which "depends on the settings" (`django/conf/global_settings.py`). [What Django is](../introduction.md#a-project-names-its-parts) shows a new project's names.
+A setting holds a name, not the object, which puts the import off until the object is first wanted. The settings module is imported when a setting is first read, and a module it imported may read the settings in turn: the translation functions read them, so Django's defaults, `django.conf.global_settings`, define a do-nothing one (`django/utils/translation/__init__.py:Trans.__getattr__`, `django/conf/global_settings.py:gettext_noop`). [What Django is](../introduction.md#a-project-names-its-parts) shows a new project's names.
 
 ## The pattern
 
@@ -21,7 +21,10 @@ CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"
 CacheHandler.create_connection("default")
     |  the string under "BACKEND"
     v
-import_string(the string)  ->  the class LocMemCache  - - subclasses, unchecked - ->  BaseCache
+import_string(the string)
+    |
+    v
+the class LocMemCache  - - subclasses, unchecked - ->  BaseCache
     |  called with "LOCATION" and the rest of the alias's dictionary
     v
 the instance, kept by caches in a Local under "default":
@@ -58,7 +61,7 @@ They differ in how long a backend lives:
 
 - `caches`, `task_backends` and `connections`, each a `BaseConnectionHandler`, keep one for each alias in each thread or asynchronous context, in a `Local` (`django/utils/connection.py:BaseConnectionHandler.__getitem__`).
 - `storages` and `engines` keep one for each alias for the process, made when first asked for, in a dictionary all threads share; the system checks and `get_template`, by default, ask for every engine (`django/core/files/storage/handler.py:StorageHandler`, `django/template/utils.py:EngineHandler`, `django/template/loader.py:get_template`).
-- `mailers` makes a new backend at each access, because mail backends had always been made for one sending, DEP 18 says (`django/core/mail/handler.py:MailersHandler.create_connection`, `deps:accepted/0018-mailers.md`).
+- `mailers` makes a new backend at each access, because Django's sending functions had made each backend for one sending, DEP 18 says (`django/core/mail/handler.py:MailersHandler.create_connection`, `deps:accepted/0018-mailers.md`).
 
 A database's `"ENGINE"` names a package, not a class: Django imports its base module and takes the class called DatabaseWrapper from it (`django/db/utils.py:load_backend`, `django/db/utils.py:ConnectionHandler.create_connection`).
 
@@ -101,7 +104,7 @@ Some extension points are not settings: an object handed to a registry, or a mod
 | registry: what it holds | registered by, or found in | lifetime | chapter |
 |---|---|---|---|
 | template tag libraries: modules with a `Library` | each application's templatetags package | once an engine | [Templates](../templates.md) |
-| lookups and transforms, what follows the fields in a filter: `Lookup` and `Transform` classes, tested on use | `django/db/models/query_utils.py:RegisterLookupMixin.register_class_lookup` | held by the class, or the field, it is registered on; an instance for each filter | [QuerySets](../querysets.md) |
+| lookups and transforms, what follows the fields in a filter: `Lookup` and `Transform` classes, tested on use | `django/db/models/query_utils.py:RegisterLookupMixin.register_lookup` | held by the class, or the field, it is registered on; an instance for each filter | [QuerySets](../querysets.md) |
 | system checks: functions that return messages | `django/core/checks/registry.py:CheckRegistry.register` | held for the process; called at each run of the checks | [The system checks](../commands/checks.md) |
 | the admin: a `ModelAdmin` for each model, on the site whose class `SimpleAdminConfig.default_site` names | each application's admin module, which calls `django/contrib/admin/sites.py:AdminSite.register` | once a process | [The admin](../admin.md) |
 | management commands: each a `BaseCommand` | each application's management/commands directory | the list once a process; a command at each use | [Management commands](../commands.md) |

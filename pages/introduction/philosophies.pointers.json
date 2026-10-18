@@ -52,7 +52,7 @@
   {
    "pointer": "django/http/",
    "line": 17,
-   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`).",
+   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`), as does the `querystring` tag (`django/template/defaulttags.py:querystring`).",
    "tree": "django",
    "path": "django/http/",
    "symbol": null,
@@ -62,7 +62,7 @@
   {
    "pointer": "django/template/response.py:SimpleTemplateResponse",
    "line": 17,
-   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`).",
+   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`), as does the `querystring` tag (`django/template/defaulttags.py:querystring`).",
    "tree": "django",
    "path": "django/template/response.py",
    "symbol": "SimpleTemplateResponse",
@@ -72,6 +72,21 @@
     144
    ],
    "fingerprint": "2cc51481d854ce65"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:querystring",
+   "line": 17,
+   "sentence": "The engine, the lexer, the parser and the context import nothing from `django/http/`; the bridge does, `SimpleTemplateResponse`, an `HttpResponse` that renders a template (`django/template/response.py:SimpleTemplateResponse`), as does the `querystring` tag (`django/template/defaulttags.py:querystring`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "querystring",
+   "kind": "function",
+   "lines": [
+    1286,
+    1349
+   ],
+   "at": 1287,
+   "fingerprint": "c124c7a8cbce92fd"
   },
   {
    "pointer": "django/template/context.py:RequestContext",
@@ -124,7 +139,7 @@
   {
    "pointer": "django/template/loader.py:get_template",
    "line": 21,
-   "sentence": "The `render` shortcut and `TemplateResponse` ask each engine in `TEMPLATES` in turn, so a view works the same over a Jinja2 backend (`django/template/loader.py:get_template`).",
+   "sentence": "The `render` shortcut and `TemplateResponse` ask each engine in `TEMPLATES` in turn unless given one, so a view works the same over a Jinja2 backend (`django/template/loader.py:get_template`).",
    "tree": "django",
    "path": "django/template/loader.py",
    "symbol": "get_template",
@@ -136,23 +151,9 @@
    "fingerprint": "b33402ea8c09d58e"
   },
   {
-   "pointer": "django/template/engine.py:Engine",
-   "line": 21,
-   "sentence": "Some of Django's own pages are the exception, among them the debug pages and the fallback when no `\"404.html\"` is found: each is rendered by an `Engine` (`django/template/engine.py:Engine`) made in the code, in the Django template language whatever `TEMPLATES` names (`django/views/debug.py:DEBUG_ENGINE`).",
-   "tree": "django",
-   "path": "django/template/engine.py",
-   "symbol": "Engine",
-   "kind": "class",
-   "lines": [
-    13,
-    234
-   ],
-   "fingerprint": "f1ba0c186599665f"
-  },
-  {
    "pointer": "django/views/debug.py:DEBUG_ENGINE",
    "line": 21,
-   "sentence": "Some of Django's own pages are the exception, among them the debug pages and the fallback when no `\"404.html\"` is found: each is rendered by an `Engine` (`django/template/engine.py:Engine`) made in the code, in the Django template language whatever `TEMPLATES` names (`django/views/debug.py:DEBUG_ENGINE`).",
+   "sentence": "Some of Django's own pages are the exception, among them the debug pages and the fallback when no `\"404.html\"` is found: each is rendered by an `Engine` made in the code, in the Django template language whatever `TEMPLATES` names (`django/views/debug.py:DEBUG_ENGINE`, `django/views/defaults.py:page_not_found`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "DEBUG_ENGINE",
@@ -162,6 +163,21 @@
     31
    ],
    "fingerprint": "c64095f71cbe722f"
+  },
+  {
+   "pointer": "django/views/defaults.py:page_not_found",
+   "line": 21,
+   "sentence": "Some of Django's own pages are the exception, among them the debug pages and the fallback when no `\"404.html\"` is found: each is rendered by an `Engine` made in the code, in the Django template language whatever `TEMPLATES` names (`django/views/debug.py:DEBUG_ENGINE`, `django/views/defaults.py:page_not_found`).",
+   "tree": "django",
+   "path": "django/views/defaults.py",
+   "symbol": "page_not_found",
+   "kind": "function",
+   "lines": [
+    34,
+    79
+   ],
+   "at": 35,
+   "fingerprint": "ca702cab079a2acb"
   },
   {
    "pointer": "django/db/models/base.py:ModelBase.__new__",
@@ -180,7 +196,7 @@
   {
    "pointer": "django/forms/models.py:fields_for_model",
    "line": 27,
-   "sentence": "A `ModelForm` gets its fields by asking each model field for its form field (`django/forms/models.py:fields_for_model`), and the admin does the same through a hook of its own (`django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield`): a registered model has an editing interface without a line of form code, which is \"quick development\" at its plainest.",
+   "sentence": "A `ModelForm` gets its fields by asking each model field it takes for its form field (`django/forms/models.py:fields_for_model`), and the admin does the same through a hook of its own (`django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield`): a registered model has an editing interface without a line of form code, which is \"quick development\".",
    "tree": "django",
    "path": "django/forms/models.py",
    "symbol": "fields_for_model",
@@ -194,7 +210,7 @@
   {
    "pointer": "django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield",
    "line": 27,
-   "sentence": "A `ModelForm` gets its fields by asking each model field for its form field (`django/forms/models.py:fields_for_model`), and the admin does the same through a hook of its own (`django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield`): a registered model has an editing interface without a line of form code, which is \"quick development\" at its plainest.",
+   "sentence": "A `ModelForm` gets its fields by asking each model field it takes for its form field (`django/forms/models.py:fields_for_model`), and the admin does the same through a hook of its own (`django/contrib/admin/options.py:BaseModelAdmin.formfield_for_dbfield`): a registered model has an editing interface without a line of form code, which is \"quick development\".",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "BaseModelAdmin.formfield_for_dbfield",
@@ -348,7 +364,7 @@
   {
    "pointer": "docs/releases/0.95.txt",
    "line": 41,
-   "sentence": "With 0.95, an application's models stayed in the module that defined them, where before they were \"magically transferred\" into one namespace of Django's, and a model overrode `save` and `delete` where before it hooked into methods called pre_save and post_save (`docs/releases/0.95.txt`).",
+   "sentence": "With 0.95, an application's models stayed in the module that defined them, where before they were \"magically transferred\" into one namespace of Django's, and a model overrode `Model.save` and `Model.delete` where before it hooked into methods called pre_save and post_save (`docs/releases/0.95.txt`).",
    "tree": "django",
    "path": "docs/releases/0.95.txt",
    "symbol": null,
@@ -461,7 +477,7 @@
   {
    "pointer": "django/urls/base.py:reverse",
    "line": 55,
-   "sentence": "A URLconf maps a route to a callable, and code that needs a URL asks for it by the pattern's name: `reverse` walks the resolver back from the name to a path (`django/urls/base.py:reverse`; [URL routing](../urls.md)).",
+   "sentence": "A URLconf maps a route to a callable, and code that needs a URL can ask for it by the pattern's name: `reverse` walks the resolver back from the name to a path (`django/urls/base.py:reverse`; [URL routing](../urls.md)).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "reverse",
@@ -475,7 +491,7 @@
   {
    "pointer": "django/urls/conf.py:_path",
    "line": 55,
-   "sentence": "`include` mounts an application's patterns under any prefix (`django/urls/conf.py:_path`).",
+   "sentence": "`include` lets a pattern mount an application's patterns under any prefix (`django/urls/conf.py:_path`).",
    "tree": "django",
    "path": "django/urls/conf.py",
    "symbol": "_path",
@@ -531,7 +547,7 @@
   {
    "pointer": "django/db/models/utils.py:AltersData",
    "line": 63,
-   "sentence": "The database layer sets the flag on its own writes, `Model.save`, `QuerySet.delete`, `QuerySet.update` and the related managers', and the mixin `AltersData` carries it onto a subclass's override (`django/db/models/utils.py:AltersData`).",
+   "sentence": "The database layer sets the flag on its own writes, among them `Model.save`, `QuerySet.delete`, `QuerySet.update` and the related managers', and the mixin `AltersData` carries it onto a subclass's override (`django/db/models/utils.py:AltersData`).",
    "tree": "django",
    "path": "django/db/models/utils.py",
    "symbol": "AltersData",
@@ -630,7 +646,7 @@
   {
    "pointer": "django/urls/base.py:set_urlconf",
    "line": 69,
-   "sentence": "What Django derives from the request is another matter: the active language, the URLconf and the **script prefix**, the path at which the project is mounted, are kept in state local to the thread or task serving it, set by the handler and the middleware, and read by `gettext` and `reverse` without the request (`django/urls/base.py:set_urlconf`, `django/utils/translation/trans_real.py:activate`).",
+   "sentence": "What Django sets for each request is another matter: the active language if `MIDDLEWARE` has `LocaleMiddleware`, the URLconf and the **script prefix**, the path at which the project is mounted, are kept in state local to the thread or task serving it and read by `gettext` and `reverse` without the request (`django/urls/base.py:set_urlconf`, `django/utils/translation/trans_real.py:activate`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "set_urlconf",
@@ -644,7 +660,7 @@
   {
    "pointer": "django/utils/translation/trans_real.py:activate",
    "line": 69,
-   "sentence": "What Django derives from the request is another matter: the active language, the URLconf and the **script prefix**, the path at which the project is mounted, are kept in state local to the thread or task serving it, set by the handler and the middleware, and read by `gettext` and `reverse` without the request (`django/urls/base.py:set_urlconf`, `django/utils/translation/trans_real.py:activate`).",
+   "sentence": "What Django sets for each request is another matter: the active language if `MIDDLEWARE` has `LocaleMiddleware`, the URLconf and the **script prefix**, the path at which the project is mounted, are kept in state local to the thread or task serving it and read by `gettext` and `reverse` without the request (`django/urls/base.py:set_urlconf`, `django/utils/translation/trans_real.py:activate`).",
    "tree": "django",
    "path": "django/utils/translation/trans_real.py",
    "symbol": "activate",

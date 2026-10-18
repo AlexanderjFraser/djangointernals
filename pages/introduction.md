@@ -13,7 +13,7 @@ It began at World Online, the web department of a newspaper in Lawrence, Kansas,
 
 ## A project names its parts
 
-What a developer writes with Django is a **project**: a settings module; a root URLconf, the module whose list of patterns maps a path to a view; and **applications**, each a Python package that keeps its models, views and templates together. Much of Django's own work arrives the same way. The admin, authentication and sessions are applications in `django.contrib`, listed in the settings beside the project's own.
+What a developer writes with Django is a **project**: a settings module; a root URLconf, the module whose list of patterns maps a path to a view; and **applications**, each a Python package that can keep its models, views and templates together. Much of Django's own work arrives the same way. The admin, authentication and sessions are applications in `django.contrib`, listed in the settings beside the project's own.
 
 The settings are where a project says what it is made of, and they say much of it with dotted paths, each naming a module, a class or another object that Django will import. This is part of the settings module that `django-admin startproject` writes for a new project:
 
@@ -69,7 +69,7 @@ On **the presentation side**, **the template engine**, an `Engine`, finds a temp
 
 ## The parts, in one picture
 
-The objects that carry Django belong to a few departments of its source, and the figure places them, each department leaning on those beneath it: the request side, with the view at its centre; beneath the view, the presentation side and the data side, which the view uses; beneath those, the services, which any part may call on, the system checks among them by what imports them, not their purpose; and on the floor, the settings, the registry, the utilities and the core exceptions, which every part imports. The applications of `django.contrib` and the developer's tools are built on top of all of it.
+The objects that carry Django belong to a few departments of its source, and the figure places them, each department leaning on those beneath it. The request side has the view at its centre. Beneath the view, which uses them, are the data side, and the presentation side with the templates and forms. Beneath those are the services, which any part may call on: signals, files, cache, mail, tasks and serialization, with the system checks among them by what imports them, not their purpose. On the floor are the settings, the registry, the utilities and the core exceptions, which nearly every part imports. The applications of `django.contrib` and the developer's tools are built on top of all of it.
 
 ```text figure=the-whole
 the server, outside Django: a WSGI or an ASGI server
@@ -80,17 +80,17 @@ on top, built on the rest:
         staticfiles and the others, each an application like the project's own
     the developer's tools: the management commands, the test framework
 
-the request side, left to right:
+the request side, in down the left and out up the right:
     handler -> middleware, the way in -> resolver -> view -> middleware, the way out -> response
 
 beneath the view, which uses them:
-    the presentation side: templates, forms
     the data side: models, querysets, SQL, backends, migrations
+    the presentation side: templates, forms
 
 beneath those, the services any part may call on:
     signals, files, cache, mail, tasks, serialization, the system checks
 
-the floor, which every part imports: the settings, the app registry, the utilities, the core exceptions
+the floor, which nearly every part imports: the settings, the app registry, the utilities, the core exceptions
 ------------------------------------------------------------------------------------------------ Django
 the database, outside Django, reached through its driver
 ```
@@ -101,7 +101,7 @@ The picture is a map, not a set of walls: the parts do import one another, and w
 
 ## One request, in brief
 
-The server calls the handler. The request goes in through the middleware, the first in the setting first; each may answer at once and send the request no further. At the centre the resolver matches the path and the view is called. A view that shows data builds a queryset, which sends no query yet, and renders a template, and it may be the template's loop that first reads the rows and so sends the `"SELECT"`. The view returns a response, which goes back out through the middleware in the reverse order and on to the server, and when the response has been sent it is closed, which sends `request_finished`, one of the **signals** by which a part of Django tells any receiver that something has happened (`django/http/response.py:HttpResponseBase.close`). [A request, end to end](overview.md) follows one request through all of this, recorded from a running Django; in that request it is the loop that sends the query.
+The server calls the handler. The request goes in through the middleware, the first in the setting first; each may answer at once and send the request no further. At the centre the resolver matches the path and the view is called. A view that shows data builds a queryset, which sends no query yet, and renders a template, and it may be the template's loop that first reads the rows and so sends the `"SELECT"`. The view returns a response, which goes back out through the middleware in the reverse order and on to the server, and when the response has been sent it is closed, which sends `request_finished`, one of the **signals** by which a part of Django tells any receiver that something has happened (`django/http/response.py:HttpResponseBase.close`). [A request, end to end](overview.md) follows one request through all of this, recorded from a running Django.
 
 ## Where Django stops
 

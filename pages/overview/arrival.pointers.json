@@ -81,7 +81,7 @@
   {
    "pointer": "django/db/__init__.py:close_old_connections",
    "line": 13,
-   "sentence": "The two receivers of `request_started` belong to the database layer: `reset_queries` empties each connection's log of queries, and `close_old_connections` closes any connection that is unusable or past its configured age (`django/db/__init__.py:close_old_connections`).",
+   "sentence": "The two receivers of `request_started` belong to the database layer: `reset_queries` empties the query logs of the thread's connections; `close_old_connections` closes those past their configured age or unusable after an error (`django/db/__init__.py:close_old_connections`).",
    "tree": "django",
    "path": "django/db/__init__.py",
    "symbol": "close_old_connections",
@@ -153,7 +153,7 @@
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
    "line": 36,
-   "sentence": "Each is built on `MiddlewareMixin`, so each layer's call is `MiddlewareMixin.__call__`: it runs the class's `process_request` if it has one, calls the layer inside unless that returned a response, and runs the class's `process_response` on what comes back (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
+   "sentence": "Each is built on `MiddlewareMixin`, so each layer's call is `MiddlewareMixin.__call__`: it runs the class's `process_request` if it has one, calls the layer inside unless that returned a response, and runs the class's `process_response`, if any, on what comes back (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin.__call__",
@@ -194,8 +194,8 @@
   },
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
-   "line": 71,
-   "sentence": "**`SecurityMiddleware`** would answer a request that is not secure with a permanent redirect to HTTPS, but only when `settings.SECURE_SSL_REDIRECT` is true, which by default it is not; its work is on the way out (`django/middleware/security.py:SecurityMiddleware.process_request`).",
+   "line": 78,
+   "sentence": "**`SecurityMiddleware`** would answer this request, which is not secure, with a permanent redirect to HTTPS if `settings.SECURE_SSL_REDIRECT` were true, which by default it is not; its work is on the way out (`django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/security.py",
    "symbol": "SecurityMiddleware.process_request",
@@ -208,7 +208,7 @@
   },
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_request",
-   "line": 73,
+   "line": 80,
    "sentence": "It sets `HttpRequest.session` to a new session store for that key (`django/contrib/sessions/middleware.py:SessionMiddleware.process_request`).",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
@@ -222,7 +222,7 @@
   },
   {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase.__init__",
-   "line": 73,
+   "line": 80,
    "sentence": "The store does not touch the database: it keeps the key, and the session's data is loaded the first time anything reads it (`django/contrib/sessions/backends/base.py:SessionBase.__init__`, `django/contrib/sessions/backends/base.py:SessionBase._get_session`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
@@ -236,7 +236,7 @@
   },
   {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase._get_session",
-   "line": 73,
+   "line": 80,
    "sentence": "The store does not touch the database: it keeps the key, and the session's data is loaded the first time anything reads it (`django/contrib/sessions/backends/base.py:SessionBase.__init__`, `django/contrib/sessions/backends/base.py:SessionBase._get_session`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
@@ -250,7 +250,7 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 75,
+   "line": 82,
    "sentence": "A host that is not allowed raises `DisallowedHost`, a `SuspiciousOperation`, which the `convert_exception_to_response` wrapper around this layer turns into a 400 response (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
@@ -264,8 +264,8 @@
   },
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.process_request",
-   "line": 75,
-   "sentence": "When `settings.PREPEND_WWW` is set, it redirects a host without `www.` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/http/request.py:HttpRequest.get_host`).",
+   "line": 82,
+   "sentence": "When `settings.PREPEND_WWW` is set, it redirects a host without `\"www.\"` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/http/request.py:HttpRequest.get_host`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.process_request",
@@ -278,8 +278,8 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.get_host",
-   "line": 75,
-   "sentence": "When `settings.PREPEND_WWW` is set, it redirects a host without `www.` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/http/request.py:HttpRequest.get_host`).",
+   "line": 82,
+   "sentence": "When `settings.PREPEND_WWW` is set, it redirects a host without `\"www.\"` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/http/request.py:HttpRequest.get_host`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.get_host",
@@ -292,7 +292,7 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_request",
-   "line": 77,
+   "line": 84,
    "sentence": "**`CsrfViewMiddleware`** reads the CSRF cookie, if the request carries one, and puts the secret it holds into `HttpRequest.META` under `\"CSRF_COOKIE\"` for the rest of the request to use (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._get_secret`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
@@ -306,7 +306,7 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._get_secret",
-   "line": 77,
+   "line": 84,
    "sentence": "**`CsrfViewMiddleware`** reads the CSRF cookie, if the request carries one, and puts the secret it holds into `HttpRequest.META` under `\"CSRF_COOKIE\"` for the rest of the request to use (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._get_secret`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
@@ -320,7 +320,7 @@
   },
   {
    "pointer": "django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request",
-   "line": 79,
+   "line": 86,
    "sentence": "It sets `HttpRequest.user` to a `SimpleLazyObject` around a function that will find the user, and `HttpRequest.auser` to its asynchronous twin (`django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request`).",
    "tree": "django",
    "path": "django/contrib/auth/middleware.py",
@@ -334,8 +334,8 @@
   },
   {
    "pointer": "django/contrib/auth/__init__.py:get_user",
-   "line": 79,
-   "sentence": "Nothing is looked up until the lazy object is first used: then `get_user` takes the user's id and backend from the session and asks that backend for the user, which is a query (`django/contrib/auth/__init__.py:get_user`).",
+   "line": 86,
+   "sentence": "Nothing is looked up until the lazy object is first used: then `django.contrib.auth.get_user` takes the user's id and backend from the session and asks that backend for the user, which is a query (`django/contrib/auth/__init__.py:get_user`).",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
    "symbol": "get_user",
@@ -348,7 +348,7 @@
   },
   {
    "pointer": "django/contrib/messages/middleware.py:MessageMiddleware.process_request",
-   "line": 81,
+   "line": 88,
    "sentence": "The default is `FallbackStorage`, which keeps messages in a cookie and falls back to the session for what does not fit, as [Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md) tells (`django/contrib/messages/middleware.py:MessageMiddleware.process_request`, `django/contrib/messages/storage/fallback.py:FallbackStorage`).",
    "tree": "django",
    "path": "django/contrib/messages/middleware.py",
@@ -362,7 +362,7 @@
   },
   {
    "pointer": "django/contrib/messages/storage/fallback.py:FallbackStorage",
-   "line": 81,
+   "line": 88,
    "sentence": "The default is `FallbackStorage`, which keeps messages in a cookie and falls back to the session for what does not fit, as [Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md) tells (`django/contrib/messages/middleware.py:MessageMiddleware.process_request`, `django/contrib/messages/storage/fallback.py:FallbackStorage`).",
    "tree": "django",
    "path": "django/contrib/messages/storage/fallback.py",

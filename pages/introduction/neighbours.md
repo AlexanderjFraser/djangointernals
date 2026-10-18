@@ -22,23 +22,23 @@ required: asgiref (sync_to_async, async_to_sync, Local) and sqlparse;
 below the line, outside Django: the driver the backend imports -> the database
 ```
 
-*Where Django stops. Between the two rules, Django's code and the libraries it requires; above, the server, which calls the handler; below, the driver and the database, which the backend calls. An arrow is a call.*
+*Where Django stops. Between the two rules, Django's code and the libraries it requires; above, the server, which calls the handler; below, the driver the backend calls, and the database. An arrow is a call.*
 
 ## The server
 
-A web server owns the socket: it accepts connections, reads HTTP, and calls one Python object it was given when it started. Under WSGI it calls that object with the request's environ and a function that starts the response; under ASGI it awaits it with a scope and two awaitable callables for messages. The object is Django's handler (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.__call__`), and what it does with the call is [The two entry points](../handlers/entry.md).
+A web server owns the socket: it accepts connections, reads HTTP, and calls one Python object it was given when it started. Under WSGI it calls that object with the request's environ and a function that starts the response, start_response; under ASGI it awaits it with a scope and two awaitable callables for messages, receive and send. The object is Django's handler (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.__call__`), and what it does with the call is [The two entry points](../handlers/entry.md).
 
 The WSGI servers [Gunicorn](https://gunicorn.org/), [uWSGI](https://uwsgi-docs.readthedocs.io/), [mod_wsgi](https://modwsgi.readthedocs.io/) and [Waitress](https://github.com/Pylons/waitress) are pointed at the handler a project's `wsgi.py` makes, and the ASGI servers [Daphne](https://github.com/django/daphne), [Uvicorn](https://www.uvicorn.dev/) and [Hypercorn](https://hypercorn.readthedocs.io/) at the one its `asgi.py` makes, as [What Django is](../introduction.md) tells. The ASGI handler serves HTTP only: any other scope, a WebSocket's included, it refuses with `ValueError`.
 
-Django's own tree holds one server, the one runserver starts: WSGI only, built on the standard library's `wsgiref.simple_server`, and by its docstring not for production (`django/core/servers/basehttp.py`). It serves the object `WSGI_APPLICATION` names, which in a new project is the one a production WSGI server is given. If the setting is `None`, it serves what `get_wsgi_application` returns (`django/core/servers/basehttp.py:get_internal_wsgi_application`). [The development server](../commands/runserver.md) takes it apart.
+Django's own tree holds one server, the one runserver starts: WSGI only, built on the standard library's `wsgiref.simple_server`, and by its docstring not for production (`django/core/servers/basehttp.py`). It loads the object `WSGI_APPLICATION` names, which in a new project is the one a production WSGI server is given. If the setting is `None`, it uses what `get_wsgi_application` returns (`django/core/servers/basehttp.py:get_internal_wsgi_application`). [The development server](../commands/runserver.md) takes it apart.
 
 ## What Django requires
 
-Django's `pyproject.toml` names three dependencies beside Python 3.12 or newer: asgiref 3.12.1 or newer, sqlparse 0.5.0 or newer, and tzdata on Windows only (`django:pyproject.toml`). The first two are imported at the top of the modules that use them: asgiref before `django.setup` runs, since the module a server or manage.py starts from imports the signals, whose dispatcher imports asgiref (`django/dispatch/dispatcher.py`), and sqlparse with a database backend's operations, when the backend is loaded.
+Django's `pyproject.toml` names three dependencies beside Python 3.12 or newer: asgiref 3.12.1 or newer, sqlparse 0.5.0 or newer, and tzdata on Windows only (`django:pyproject.toml`). The first two are imported at the top of the modules that use them: asgiref before `django.setup` runs, since the module a server or manage.py starts from imports the signals, whose dispatcher imports asgiref (`django/dispatch/dispatcher.py`), and sqlparse when a database backend is loaded.
 
 **asgiref** is the bridge between synchronous and asynchronous code, and Django's uses of it fall into three groups.
 
-- **Calling code of either kind.** Where Django calls code of the other kind, or code that may be either, it fits it to the caller. `BaseHandler.adapt_method_mode` fits each layer of the middleware chain to its caller: a synchronous layer called by an asynchronous one is wrapped in `sync_to_async`, which runs it on a thread, and the reverse in `async_to_sync` (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`). The centre of the chain fits the view to the chain in the same way, and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`). [Sync and async in one chain](../handlers/async.md) explains the handler's part.
+- **Calling code of either kind.** Where Django calls code of the other kind, or code that may be either, it fits it to the caller. `BaseHandler.adapt_method_mode` fits each layer of the middleware chain to its caller: a synchronous layer called by an asynchronous one is wrapped in `sync_to_async`, which runs it on a thread, and the reverse in `async_to_sync` (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`). The centre of the chain fits the view to the chain in the same way (`django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/base.py:BaseHandler._get_response_async`), and `Signal.send` calls its asynchronous receivers through `async_to_sync` (`django/dispatch/dispatcher.py:Signal.send`). [Sync and async in one chain](../handlers/async.md) explains the handler's part.
 - **The asynchronous methods.** `QuerySet.aget` is `QuerySet.get` run by `sync_to_async`, and `Model.asave` and `BaseCache.aget` are made the same way (`django/db/models/query.py:QuerySet.aget`).
 - **State that belongs to a request.** asgiref's `Local` follows a request whether it runs on a thread or as a coroutine. It holds the active language, the active time zone, the current URLconf and each connection handler's connections, though the databases' stay in their thread (`asgiref:asgiref/local.py:Local`, `django/utils/connection.py:BaseConnectionHandler.__init__`).
 
@@ -47,7 +47,7 @@ Django's `pyproject.toml` names three dependencies beside Python 3.12 or newer: 
 **sqlparse** serves the database backends, in three ways.
 
 - **Splitting a script.** A `RunSQL` operation, a migration's step of raw SQL, may be given its SQL as one string. `BaseDatabaseOperations.prepare_sql_script` splits that string into statements, except on PostgreSQL, which executes it whole (`django/db/migrations/operations/special.py:RunSQL._run_sql`, `django/db/backends/base/operations.py:BaseDatabaseOperations.prepare_sql_script`, `django/db/backends/postgresql/operations.py:DatabaseOperations.prepare_sql_script`, `sqlparse:sqlparse/__init__.py:split`).
-- **Laying out a query.** `BaseDatabaseOperations.format_debug_sql` lays out a query for the test runner's --debug-sql.
+- **Laying out a query.** `BaseDatabaseOperations.format_debug_sql` lays one out for the test runner's --debug-sql (`django/db/backends/base/operations.py:BaseDatabaseOperations.format_debug_sql`).
 - **Parsing the database's SQL.** The introspection of SQLite and of MySQL parses SQL the database gives back, such as a table's `"CREATE TABLE"` statement or a check constraint's clause, to find constraints, their columns and, on SQLite, each column's collation (`django/db/backends/sqlite3/introspection.py:DatabaseIntrospection._parse_table_constraints`, `django/db/backends/mysql/introspection.py:DatabaseIntrospection._parse_constraint_columns`).
 
 **tzdata** Django never imports. Its time zones are the standard library's `zoneinfo` (`django/utils/timezone.py:get_default_timezone`), which reads the system's database of time zones and, where there is none, as on Windows, the tzdata package's.
@@ -61,7 +61,7 @@ A database backend's base module imports its driver, the library that talks to t
 - Oracle: `oracledb` (`django/db/backends/oracle/base.py:Database`).
 - SQLite: the standard library's `sqlite3` (`django/db/backends/sqlite3/base.py:Database`), so a new project, whose settings name SQLite, needs no driver installed.
 
-Each driver raises its own exceptions, under the names PEP 249 gives them. `DatabaseErrorWrapper` raises each error again as Django's class of the same name, so that code above the backend catches one `IntegrityError` whatever the driver (`django/db/utils.py:DatabaseErrorWrapper.__exit__`). The rest is [Database backends](../backends.md).
+Each driver raises its own exceptions, instances of the classes PEP 249 names. `DatabaseErrorWrapper` raises each error again as Django's class of that name, so that code above the backend catches one `IntegrityError` whatever the driver (`django/db/utils.py:DatabaseErrorWrapper.__exit__`). The rest is [Database backends](../backends.md).
 
 ## The libraries a feature imports
 
@@ -70,8 +70,8 @@ Beyond its requirements, Django imports a library only where a feature needs it,
 | library | used by | absence shows | import |
 |---|---|---|---|
 | Pillow, as `PIL` | `ImageField`, model and form; an image's width and height; the file extensions accepted for an image | at the call | inside each function that uses it |
-| argon2-cffi | `Argon2PasswordHasher` | at the call | `django/contrib/auth/hashers.py:Argon2PasswordHasher.library` |
-| bcrypt | `BCryptSHA256PasswordHasher`, `BCryptPasswordHasher` | at the call | `django/contrib/auth/hashers.py:BCryptSHA256PasswordHasher.library` |
+| argon2-cffi | `Argon2PasswordHasher` | at the call | `django/contrib/auth/hashers.py:BasePasswordHasher._load_library` |
+| bcrypt | `BCryptSHA256PasswordHasher`, `BCryptPasswordHasher` | at the call | `django/contrib/auth/hashers.py:BasePasswordHasher._load_library` |
 | redis | `RedisCache` | at the call | `django/core/cache/backends/redis.py:RedisCacheClient.__init__` |
 | pymemcache | `PyMemcacheCache` | at the call | `django/core/cache/backends/memcached.py:PyMemcacheCache.__init__` |
 | pylibmc | `PyLibMCCache` | at the call | `django/core/cache/backends/memcached.py:PyLibMCCache.__init__` |
@@ -103,7 +103,7 @@ A package built on Django attaches where Django leaves a point open: where it im
 | [django-storages](https://django-storages.readthedocs.io/) | `STORAGES` |
 | [django-redis](https://github.com/jazzband/django-redis) | `CACHES` |
 | [django-filter](https://django-filter.readthedocs.io/) | forms, which it builds ([Forms](../forms.md)) |
-| [crispy-forms](https://django-crispy-forms.readthedocs.io/) | forms, which it renders through a template tag library of its own |
+| [django-crispy-forms](https://django-crispy-forms.readthedocs.io/) | forms, which it renders through a template tag library of its own |
 | [pytest-django](https://pytest-django.readthedocs.io/) | the test runner's place: pytest runs the tests ([The test framework](../testing.md)) |
 | [django-environ](https://django-environ.readthedocs.io/) | the settings module, which calls it ([The settings object](../startup/settings.md)) |
 | [Celery](https://docs.celeryq.dev/) | a process of its own, a worker that reads the settings and uses the ORM |

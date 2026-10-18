@@ -11,20 +11,24 @@ The view's second line is `render`, which calls `render_to_string` with the temp
 In the figure, the second request finds the compiled template at the cached loader and goes straight on to the context.
 
 ```text figure=name-to-string
-time runs down; on the left, every request's steps; on the right, dashed, the first request's alone, each beside the step that does it
+time runs down; every request's steps down the left, one path; set in to the right, dashed, the first request's alone, each at the point where it does it
 
 "journal/entries.html", from render
-  -> get_template asks the engine | EngineHandler makes DjangoTemplates and its Engine from settings.TEMPLATES, kept for the process
-  -> the cached loader looks the name up | the loaders made; not found: the app-directories loader tries admin/templates, auth/templates, then reads journal's file;
-       | Lexer.tokenize and Parser.parse make a Template of nodes, which the cached loader stores
+  -> get_template asks the engine
+       | EngineHandler makes DjangoTemplates and its Engine from settings.TEMPLATES, kept for the process
+       | the loaders made
+  -> the cached loader looks the name up
      the second request finds the Template here
+       | not found: the app-directories loader tries admin/templates, auth/templates, then reads journal's file
+       | Lexer.tokenize and Parser.parse make a Template of nodes, which the cached loader stores
   -> a RequestContext, the view's dictionary on top
-  -> the context processors called: csrf, request, auth, messages | they are imported
-  -> the nodes rendered, each value escaped; {% for %} takes the queryset's len, which sends the query
+       | the context processors imported
+  -> the context processors called: csrf, request, auth, messages
+  -> the nodes rendered, the loop's values escaped; {% for %} takes the queryset's len, which sends the query
   -> a SafeString, which render makes an HttpResponse of
 ```
 
-*From a template's name to the string of the response. Every request takes the steps on the left; a dashed box on the right is work the first request alone does, beside the step that does it.*
+*From a template's name to the string of the response. Every request takes the steps down the left; a dashed box, set in to the right, is work the first request alone does, at the point where it does it.*
 
 The first request's recording shows that work where it happens: the engine made inside the first `get_template`, the cached loader made, two directories raising `TemplateDoesNotExist` before journal's has the file, the compile, and the context processors imported. Last is the loop's `QuerySet.__len__`, which sends the query that [A queryset becomes SQL](query.md) follows. Other lines are left out.
 
@@ -57,23 +61,23 @@ Two classes in it are called `Template`: the engine's is the compiled template, 
 
 `get_template` asks each configured engine in turn for the template, and returns the first that has it (`django/template/loader.py:get_template`). The engines are held by `EngineHandler`, one object made when `django.template` is imported, which reads `settings.TEMPLATES` at its first use. `EngineHandler.__getitem__` makes an engine the first time its alias, here `"django"`, is asked for: it imports the backend class, calls it with the rest of the entry, and keeps the instance for the life of the process (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).
 
-`DjangoTemplates.__init__` fills in the options a project left out, autoescaping on among them, collects the template tag libraries, and makes the `Engine`, which holds the directories, the loaders and the libraries (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/engine.py:Engine.__init__`).
+`DjangoTemplates.__init__` fills in three options a project left out, autoescaping on among them, collects the template tag libraries, and makes the `Engine`, which holds the directories, the loaders and the libraries (`django/template/backends/django.py:DjangoTemplates.__init__`, `django/template/engine.py:Engine.__init__`).
 
-> **Trap.** To collect the tag libraries, making the engine imports every module of Django's own `django/templatetags/` and of each installed application's package named `"templatetags"`, whether or not a template loads it. A module whose import raises `ImportError` makes `get_package_libraries` raise `InvalidTemplateLibrary`, and making the engine fails with it: a page that loads no library fails all the same (`django/template/backends/django.py:get_installed_libraries`, `django/template/backends/django.py:get_package_libraries`).
+> **Trap.** To collect the tag libraries, making the engine imports every module of Django's own `django/templatetags/` and of each installed application's package named `"templatetags"`, whether or not a template loads it. A module whose import raises `ImportError` makes `get_package_libraries` raise `InvalidTemplateLibrary`, and making the engine fails with it: a page that loads no library fails all the same (`django/template/backends/django.py:get_template_tag_modules`, `django/template/backends/django.py:get_package_libraries`).
 
 `Engine.__init__` also decides the loaders. With none configured and `"APP_DIRS"` true, as here, a project gets the filesystem loader and the application-directories loader, both wrapped in the cached loader ([Template engines: `TEMPLATES` and the backends](../templates/engines.md)).
 
 ## Finding the file
 
-`Engine.find_template` tries each loader until one returns a template, and here there is one, the cached loader, wrapping the other two. The loaders are made at its first call and kept, by the property `Engine.template_loaders` (`django/template/engine.py:Engine.find_template`, `django/template/engine.py:Engine.template_loaders`). The cached loader keeps a dictionary from a template's name to the compiled template, and remembers a name no loader has as a miss (`django/template/loaders/cached.py:Loader.get_template`). A name it has not seen it looks up with the method it inherits from the base loader, which walks the origins the child loaders offer and opens each until one exists (`django/template/loaders/base.py:Loader.get_template`).
+`Engine.find_template` tries each loader until one returns a template, and here there is one, the cached loader, wrapping the other two. The loaders are made at its first call and kept, by the property `Engine.template_loaders` (`django/template/engine.py:Engine.find_template`, `django/template/engine.py:Engine.template_loaders`). The cached loader keeps a dictionary from a template's name to the compiled template, and remembers a name no loader has as a miss (`django/template/loaders/cached.py:Loader.get_template`). A name it has not seen it passes to the base loader's method, which walks the origins the child loaders offer and opens each until one exists (`django/template/loaders/base.py:Loader.get_template`).
 
-The filesystem loader offers none here, `"DIRS"` being empty. The application-directories loader offers one per installed application with a `templates` directory, in the order of `settings.INSTALLED_APPS`: the admin's, the auth application's, then journal's. That is why the recording tries three files and raises `TemplateDoesNotExist` twice before it reads one (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`). That order is also the order of precedence: journal, listed last here, would lose to a template of the same name in the admin's or the auth application's directory, which is why an application that overrides another's template is listed before it ([Finding a template: `Engine` and the loaders](../templates/loaders.md)).
+The filesystem loader offers none here, `"DIRS"` being empty. The application-directories loader offers one per installed application with a `templates` directory, in the order of `settings.INSTALLED_APPS`: the admin's, the auth application's, then journal's. That is why the recording tries three files and reads the last (`django/template/loaders/app_directories.py:Loader.get_dirs`, `django/template/utils.py:get_app_template_dirs`, `django/template/loaders/filesystem.py:Loader.get_contents`). That order is also the order of precedence: journal, listed last here, would lose to a template of the same name in the admin's or the auth application's directory, which is why an application that overrides another's template is listed before it ([Finding a template: `Engine` and the loaders](../templates/loaders.md)).
 
 ## Compiled once
 
 With the file's text in hand, the base loader makes a `Template` of `django/template/base.py`, whose constructor compiles it at once (`django/template/base.py:Template.__init__`). `Lexer.tokenize` splits the source into tokens, and `Parser.parse` turns them into nodes, handing each tag to the compile function registered for it (`django/template/base.py:Lexer.tokenize`, `django/template/base.py:Parser.parse`). The function for `"for"`, `do_for`, calls the parser again to collect the body up to `"endfor"` or `"empty"`, and returns a `ForNode` holding the loop variables, the sequence and the body (`django/template/defaulttags.py:do_for`). [From text to nodes: the lexer and the parser](../templates/compiling.md) has the compiling in full.
 
-The cached loader stores the compiled template, and that is what the second request finds: its `get_template` reaches the cached loader and stops. The cache lasts as long as the process, unless the development server clears it when a template file changes (`django/template/autoreload.py:reset_loaders`).
+The cached loader stores the compiled template, and that is what the second request finds: its `get_template` reaches the cached loader and stops. The cache lasts as long as the process, unless the development server clears it when a file changes in a template directory outside Django's own (`django/template/autoreload.py:reset_loaders`).
 
 ## The context and its processors
 
@@ -89,8 +93,8 @@ The engine's `Template.render` binds the template to the context, and binding ru
 
 Resolving looks each dotted part up in turn: `"year"` is found in the view's dictionary, and `"entry.published"` is an attribute of a model instance (`django/template/base.py:Variable._resolve_lookup`). The filters are then applied in order, `date` formatting the date by its argument (`django/template/defaultfilters.py:date`). [Variables and filters: `FilterExpression` and `Variable`](../templates/variables.md) has the lookup in full.
 
-Formatting is `render_value_in_context` (`django/template/base.py:render_value_in_context`). Autoescaping is on, so it passes the value through `conditional_escape`, which escapes anything but a value that declares itself safe with an `__html__` method, as a `SafeString` does (`django/utils/html.py:conditional_escape`). Autoescaping is that test at each variable, not a pass over the output ([Autoescaping and safe strings](../templates/autoescape.md)).
+Formatting is `render_value_in_context` (`django/template/base.py:render_value_in_context`). Autoescaping is on, so it passes the value as a string to `conditional_escape`, which escapes anything but a string that declares itself safe with an `__html__` method, as a `SafeString` does (`django/utils/html.py:conditional_escape`). Autoescaping is that test at each variable, not a pass over the output ([Autoescaping and safe strings](../templates/autoescape.md)).
 
-`ForNode.render` is where the queryset meets the database. It resolves the sequence to the queryset and takes its length first, because the `"forloop"` variables include `"revcounter"` and `"last"`, which need the total before the first iteration. That `len` is what sends the query (`django/template/defaulttags.py:ForNode.render`). For each item the node then sets the loop variable and renders the body, and iterating the queryset finds the results already fetched.
+`ForNode.render` is where the queryset meets the database. It resolves the sequence to the queryset and takes its length first, which decides whether the `"empty"` part renders instead and gives `"forloop"` its `"length"`, `"revcounter"` and `"last"`. That `len` is what sends the query (`django/template/defaulttags.py:ForNode.render`). For each item the node then sets the loop variable and renders the body, and iterating the queryset finds the results already fetched.
 
 What comes out of `NodeList.render` is a `SafeString`, and `render_to_string` returns it to `render`, which makes the `HttpResponse` of it with no content type given, so the response takes the default: [The response returns to the server](response.md).

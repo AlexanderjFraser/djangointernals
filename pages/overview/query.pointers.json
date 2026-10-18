@@ -123,7 +123,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.solve_lookup_type",
    "line": 43,
-   "sentence": "`Query.solve_lookup_type` splits the name at the double underscores: `\"published\"` is a field of the model, a `DateField`; `\"year\"` is not, and is left over (`django/db/models/sql/query.py:Query.solve_lookup_type`).",
+   "sentence": "`Query.solve_lookup_type` splits the name at the double underscores: `\"published\"` is a field of the model, a `DateField`, not a relation, so `\"year\"` is left over (`django/db/models/sql/query.py:Query.solve_lookup_type`, `django/db/models/sql/query.py:Query.names_to_path`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.solve_lookup_type",
@@ -135,9 +135,23 @@
    "fingerprint": "d777af36bdfedc4d"
   },
   {
+   "pointer": "django/db/models/sql/query.py:Query.names_to_path",
+   "line": 43,
+   "sentence": "`Query.solve_lookup_type` splits the name at the double underscores: `\"published\"` is a field of the model, a `DateField`, not a relation, so `\"year\"` is left over (`django/db/models/sql/query.py:Query.solve_lookup_type`, `django/db/models/sql/query.py:Query.names_to_path`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.names_to_path",
+   "kind": "function",
+   "lines": [
+    1782,
+    1896
+   ],
+   "fingerprint": "20120f413f7ae99f"
+  },
+  {
    "pointer": "django/db/models/sql/query.py:Query.setup_joins",
    "line": 44,
-   "sentence": "`Query.setup_joins` finds no join to make for a field of the model itself, and `build_filter` asks the field for its column, a `Col` (`django/db/models/sql/query.py:Query.setup_joins`, `django/db/models/fields/__init__.py:Field.get_col`).",
+   "sentence": "`Query.setup_joins` makes no join for `\"published\"`, and `build_filter` asks the field for its column, a `Col` (`django/db/models/sql/query.py:Query.setup_joins`, `django/db/models/fields/__init__.py:Field.get_col`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.setup_joins",
@@ -151,7 +165,7 @@
   {
    "pointer": "django/db/models/fields/__init__.py:Field.get_col",
    "line": 44,
-   "sentence": "`Query.setup_joins` finds no join to make for a field of the model itself, and `build_filter` asks the field for its column, a `Col` (`django/db/models/sql/query.py:Query.setup_joins`, `django/db/models/fields/__init__.py:Field.get_col`).",
+   "sentence": "`Query.setup_joins` makes no join for `\"published\"`, and `build_filter` asks the field for its column, a `Col` (`django/db/models/sql/query.py:Query.setup_joins`, `django/db/models/fields/__init__.py:Field.get_col`).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field.get_col",
@@ -193,7 +207,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.add_ordering",
    "line": 47,
-   "sentence": "`QuerySet.order_by` clones and clears the ordering, and `Query.add_ordering` checks that each name is a field and stores the names themselves (`django/db/models/sql/query.py:Query.add_ordering`).",
+   "sentence": "`QuerySet.order_by` clones and clears the ordering, and `Query.add_ordering` checks that `\"published\"` names a field and stores the name itself (`django/db/models/sql/query.py:Query.add_ordering`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.add_ordering",
@@ -207,7 +221,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name",
    "line": 47,
-   "sentence": "They become columns only when the statement is compiled (`django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name`).",
+   "sentence": "It becomes a column only when the statement is compiled (`django/db/models/sql/compiler.py:SQLCompiler.find_ordering_name`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.find_ordering_name",

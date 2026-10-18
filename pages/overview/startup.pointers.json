@@ -52,7 +52,7 @@
   {
    "pointer": "django/conf/__init__.py:settings",
    "line": 41,
-   "sentence": "`django.conf.settings` is a `LazySettings`, made when `django.conf` is imported and empty until something reads an attribute of it (`django/conf/__init__.py:settings`).",
+   "sentence": "`django.conf.settings` is a `LazySettings`, made when `django.conf` is imported and empty until its first use (`django/conf/__init__.py:settings`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "settings",
@@ -108,7 +108,7 @@
   {
    "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
    "line": 41,
-   "sentence": "Every value read through the proxy is then kept on the proxy itself, so a setting is looked up once per process (`django/conf/__init__.py:LazySettings.__getattr__`).",
+   "sentence": "Every value read through the proxy is then kept on the proxy itself (`django/conf/__init__.py:LazySettings.__getattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings.__getattr__",
@@ -164,7 +164,7 @@
   {
    "pointer": "django/apps/config.py:AppConfig.create",
    "line": 70,
-   "sentence": "`AppConfig.create` imports the entry's module and looks for an `apps` submodule with one `AppConfig` subclass in it; a dotted path to a configuration class is accepted too (`django/apps/config.py:AppConfig.create`).",
+   "sentence": "`AppConfig.create` imports the entry's module and looks in its `apps` submodule, if it has one, for the `AppConfig` subclass to use; a dotted path to a configuration class is accepted too (`django/apps/config.py:AppConfig.create`).",
    "tree": "django",
    "path": "django/apps/config.py",
    "symbol": "AppConfig.create",
@@ -263,7 +263,7 @@
   {
    "pointer": "django/contrib/admin/apps.py:AdminConfig.ready",
    "line": 72,
-   "sentence": "The admin's is the one with a visible effect: `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
+   "sentence": "In the admin, `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
    "tree": "django",
    "path": "django/contrib/admin/apps.py",
    "symbol": "AdminConfig.ready",
@@ -277,7 +277,7 @@
   {
    "pointer": "django/utils/module_loading.py:autodiscover_modules",
    "line": 72,
-   "sentence": "The admin's is the one with a visible effect: `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
+   "sentence": "In the admin, `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
    "tree": "django",
    "path": "django/utils/module_loading.py",
    "symbol": "autodiscover_modules",
@@ -333,7 +333,7 @@
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
    "line": 80,
-   "sentence": "`SecurityMiddleware` reads nine settings into attributes when it is made and never again, and `SessionMiddleware` imports the session engine that `settings.SESSION_ENGINE` names and keeps its session store class (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
+   "sentence": "`SecurityMiddleware` reads settings into attributes when it is made and never reads them again, and `SessionMiddleware` imports the session engine that `settings.SESSION_ENGINE` names and keeps its session store class (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
    "tree": "django",
    "path": "django/middleware/security.py",
    "symbol": "SecurityMiddleware.__init__",
@@ -347,7 +347,7 @@
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.__init__",
    "line": 80,
-   "sentence": "`SecurityMiddleware` reads nine settings into attributes when it is made and never again, and `SessionMiddleware` imports the session engine that `settings.SESSION_ENGINE` names and keeps its session store class (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
+   "sentence": "`SecurityMiddleware` reads settings into attributes when it is made and never reads them again, and `SessionMiddleware` imports the session engine that `settings.SESSION_ENGINE` names and keeps its session store class (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
    "symbol": "SessionMiddleware.__init__",
@@ -476,7 +476,7 @@
   {
    "pointer": "django/template/loaders/cached.py:Loader.get_template",
    "line": 97,
-   "sentence": "| every compiled template, in the cached loader | by the first request that needs it | `django/template/loaders/cached.py:Loader.get_template` |",
+   "sentence": "| each template the cached loader finds, compiled | by the first request that needs it | `django/template/loaders/cached.py:Loader.get_template` |",
    "tree": "django",
    "path": "django/template/loaders/cached.py",
    "symbol": "Loader.get_template",

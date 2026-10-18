@@ -10,7 +10,7 @@ An import at the top of a module is a dependency from the moment the module load
 
 > **Why.** Comments beside some of those imports give the reason. The database session store imports its model inside a method, which "avoids a circular import" (`django/contrib/sessions/backends/db.py:SessionStore.get_model_class`). Making a test database imports the management package inside the method, so as not to import it "if it isn't needed" (`django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db`).
 
-The figure places the packages in their layers. At the bottom is the **floor**, the utilities, the settings and the app registry, and with them `django/core/exceptions.py`; every other package imports from it. The data side is the **ORM**, the object-relational mapper in `django/db/`; [What Django is](../introduction.md) draws it beside the presentation side, beneath the view, but their imports put the presentation side above it. An accented arrow runs against the layers.
+The figure places the packages in their layers. At the bottom is the **floor**, the utilities, the settings and the app registry, and with them `django/core/exceptions.py`; all the others but `django/core/signals.py` import from these. The data side is the **ORM**, the object-relational mapper in `django/db/`; [What Django is](../introduction.md) draws it beside the presentation side, beneath the view, but their imports put the presentation side above it. An accented arrow runs against the layers.
 
 ```text figure=layers
 django/, in layers from the top
@@ -32,11 +32,11 @@ the services: core/checks/  core/signals.py  core/files/  core/cache/  core/seri
     against the layers: core/checks -> db;  core/cache -> db;  core/serializers -> db;  tasks -> db
 the floor: conf/  apps/  core/exceptions.py
     beneath them: utils/
-    every package -> the floor;  conf -> utils
+    every package but core/signals.py -> the floor;  conf -> utils
     against the layers: utils -> conf, core/cache, core/mail, http
 ```
 
-*The packages in layers. An arrow runs from a package to one it imports at module level; an accented arrow runs against the layers. The arrows are a selection, not all there are: the floor's by every package, and every layer's by `django/contrib/`, are one arrow each, and the accented ones are the crossings the text tells.*
+*The packages in layers. An arrow runs from a package to one it imports at module level; an accented arrow runs against the layers. The arrows are a selection: the floor's by the other packages, and every layer's by `django/contrib/`, are one arrow each, and the accented ones are the crossings the text tells.*
 
 ## The parts, one by one
 
@@ -74,21 +74,21 @@ Counted inside functions too, the imports say who uses a part. Nothing outside t
 
 Beyond the tools and `django/contrib/`, the views are imported only by the handler, the resolver and the URLconf helpers, and the handler only by the modules that make the WSGI and ASGI applications and the development server (`django/core/servers/basehttp.py`). The test framework is imported only by the test command and the static files app's test case; `django/contrib/` by nothing as it loads, and inside functions only by the static tag library, the test client and the test framework's receivers of `setting_changed`.
 
-What follows are the imports that run against the layers, from the floor up.
+What follows are imports that run against the layers, from the floor up.
 
 ## The floor
 
 The utilities import the settings: `django/utils/timezone.py` reads `TIME_ZONE` and `USE_TZ`, and `BaseConnectionHandler` the setting its subclass names (`django/utils/connection.py:BaseConnectionHandler.configure_settings`). That makes no cycle. The utility modules that `django/conf/__init__.py` loads import nothing of `django.conf`, and `settings` reads the settings module only the first time the settings are needed (`django/conf/__init__.py:LazySettings._setup`), so a utility can import it as it loads and read it later.
 
-Some modules of `django/utils/` belong by subject to another part and import upward: `django/utils/log.py` imports the mail package for `AdminEmailHandler`, and `django/utils/cache.py` the cache and `django.http` ([The utility layer](../utils.md#where-the-other-modules-of-djangoutils-are-told)).
+Some modules of `django/utils/` belong by subject to another part and import upward; among them, `django/utils/log.py` imports the mail package for `AdminEmailHandler`, and `django/utils/cache.py` the cache and `django.http` ([The utility layer](../utils.md#where-the-other-modules-of-djangoutils-are-told)).
 
 ## The services
 
-`django/core/signals.py` defines a request's signals, `request_started`, `request_finished` and `got_request_exception`, with `setting_changed`, and imports only `django.dispatch`. Through it a lower part hears of a request without importing the handler: `django/db/__init__.py` connects `close_old_connections` to the first two (`django/db/__init__.py:close_old_connections`), and the cache closes its connections on `request_finished` (`django/core/cache/__init__.py:close_caches`).
+`django/core/signals.py` defines a request's signals, `request_started`, `request_finished` and `got_request_exception`, with `setting_changed`, and imports only `django.dispatch`. Through it a lower part hears of a request without importing the handler: `django/db/__init__.py` connects `close_old_connections` to the first two, and the cache closes its connections on `request_finished` (`django/core/cache/__init__.py:close_caches`).
 
 The cache's database backend imports the ORM, but the cache loads it only when `CACHES` names it (`django/core/cache/__init__.py:CacheHandler.create_connection`). The serializers stand among the services but lean on the ORM: `django/core/serializers/` writes model instances, and imports `django.db.models` and the app registry as it loads.
 
-The system checks are a tool by purpose, but their imports put them among the services: the models, the fields, the URL resolver and the template backend import `django/core/checks/` as they load. The checks import the database connections, the caches and the mail package as they load, and the URLconf and the template engines, among others, only inside functions. Of the mail package they take only `DEFAULT_MAILER_ALIAS`, the key they look up in `MAILERS` (`django/core/checks/mail.py`).
+The system checks are a tool by purpose, but their imports put them among the services: the models, the fields, the URL resolver and the template backend import `django/core/checks/` as they load. The checks import the database connections, the caches and the mail package as they load, and the resolver and the template engines, among others, only inside functions. Of the mail package they take only `DEFAULT_MAILER_ALIAS`, the key they look up in `MAILERS` (`django/core/checks/mail.py`).
 
 ## The data side
 
