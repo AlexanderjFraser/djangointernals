@@ -429,6 +429,9 @@ class Command(BaseCommand):
                 fail("llms.txt does not send an agent to the chapter of what an older Django's reader must update, before the contents")
             if "immutable" not in (written / "_headers").read_text(encoding="utf-8").split("/static/fonts/*", 1)[-1].split("\n\n")[0]:
                 fail("the headers do not let a browser keep the fonts")
+            for asset in ("site.css", "site.js"):
+                if "max-age=0, must-revalidate" not in (written / "_headers").read_text(encoding="utf-8").split(f"/static/{asset}\n", 1)[-1].split("\n\n")[0]:
+                    fail(f"the headers let a browser keep {asset} past a deploy, so a new page could be shown with the old one")
             data = json.loads((written / "index.json").read_text(encoding="utf-8"))
             by_id = {entry["id"]: entry for entry in data["pages"]}
             if ([entry["id"] for entry in data["pages"]] != ["", "a", "b", "p", "p/c"] or by_id["b"]["url"] is not None

@@ -15,7 +15,8 @@
     /sitemap.xml     every written page's address (only when the book is indexable)
 
 And two files for the host, Cloudflare Pages: `_headers` (the twins' media type; the fonts
-kept by a browser for a year; `noindex` while the book is not indexable) and `_redirects` (the addresses that have moved, which the
+kept by a browser for a year, the stylesheet and the script asked for again on every load;
+`noindex` while the book is not indexable) and `_redirects` (the addresses that have moved, which the
 book lists in a file of that name at its root).
 
 One fact, one home: the title, the lede, the sections and the numbers are
@@ -224,9 +225,14 @@ def sitemap(book) -> str:
 def headers(indexable: bool) -> str:
     """Cloudflare Pages's `_headers`: the twins as markdown; the fonts kept by a browser for a
     year without asking again, since they never change under their names (a font that did
-    would get a new one); and nothing indexed when the book is not."""
+    would get a new one); the stylesheet and the script asked for again on every load, as a
+    page is, so that a new page is never shown in an old stylesheet (Pages keeps a static
+    file for four hours otherwise, and a link added to the running head once vanished that
+    way); and nothing indexed when the book is not."""
     out = ("/*.md\n  Content-Type: text/markdown; charset=utf-8\n"
-           "\n/static/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n")
+           "\n/static/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n"
+           "\n/static/site.css\n  Cache-Control: public, max-age=0, must-revalidate\n"
+           "\n/static/site.js\n  Cache-Control: public, max-age=0, must-revalidate\n")
     if not indexable:
         out += "\n/*\n  X-Robots-Tag: noindex\n"
     return out
