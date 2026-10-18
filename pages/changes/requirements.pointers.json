@@ -24,7 +24,7 @@
   {
    "pointer": "docs/releases/6.1.txt",
    "line": 9,
-   "sentence": "6.1 raised MySQL from 8.0.11 to 8.4 and MariaDB to 10.11, passing over releases the notes call short-term; where they give a reason for dropping any other server, it is the end of its upstream support (`docs/releases/6.1.txt`).",
+   "sentence": "6.1's notes give two reasons for dropping a server: its upstream support ends, or it is a release they call short-term (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -38,7 +38,7 @@
   {
    "pointer": "django:pyproject.toml",
    "line": 22,
-   "sentence": "At this commit `pyproject.toml` gives `\"requires-python\"` as `\">= 3.12\"`; 5.2.17's metadata gives `\">=3.10\"`, and 6.0.8's and 6.1.1's `\">=3.12\"` (`django:pyproject.toml`).",
+   "sentence": "The package's metadata, which an installer reads, asks for `\">=3.10\"` under 5.2.17 and `\">=3.12\"` under 6.0.8 and later (`django:pyproject.toml`).",
    "tree": "django",
    "path": "pyproject.toml",
    "symbol": null,
@@ -52,7 +52,7 @@
   {
    "pointer": "django/views/generic/base.py",
    "line": 22,
-   "sentence": "Nothing in Django refuses an older interpreter: under Python 3.11 `import django` succeeds, and `django.setup` raises `ValueError`, from an `ImportError` for `inspect.markcoroutinefunction`, which Python added in 3.12 (`django/views/generic/base.py`).",
+   "sentence": "`django.setup` then raises `ValueError`, from an `ImportError` for `inspect.markcoroutinefunction`, which Python added in 3.12 (`django/views/generic/base.py`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": null,
@@ -80,7 +80,7 @@
   {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported",
    "line": 39,
-   "sentence": "`BaseDatabaseWrapper.check_database_version_supported` compares the server's version with the backend's floor and raises `NotSupportedError` for an older one (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`); `BaseDatabaseWrapper.init_connection_state` calls it as a connection opens, for each alias until it passes once in a process (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
+   "sentence": "`BaseDatabaseWrapper.check_database_version_supported` compares the server's version with the backend's floor and raises `NotSupportedError` for an older one (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`; [What a database can do: `BaseDatabaseFeatures`](../backends/features.md)).",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
    "symbol": "BaseDatabaseWrapper.check_database_version_supported",
@@ -94,7 +94,7 @@
   {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state",
    "line": 39,
-   "sentence": "`BaseDatabaseWrapper.check_database_version_supported` compares the server's version with the backend's floor and raises `NotSupportedError` for an older one (`django/db/backends/base/base.py:BaseDatabaseWrapper.check_database_version_supported`); `BaseDatabaseWrapper.init_connection_state` calls it as a connection opens, for each alias until it passes once in a process (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
+   "sentence": "`BaseDatabaseWrapper.init_connection_state` calls it as a connection opens, until it has passed once for that alias in the process (`django/db/backends/base/base.py:BaseDatabaseWrapper.init_connection_state`).",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
    "symbol": "BaseDatabaseWrapper.init_connection_state",
@@ -122,8 +122,8 @@
   },
   {
    "pointer": "django/db/backends/oracle/base.py",
-   "line": 67,
-   "sentence": "Nothing in Django checks the version of either, nor the Oracle backend that of oracledb (`django/db/backends/oracle/base.py`). gettext's floor is a message: makemessages and compilemessages, finding one of its programs missing, ask for GNU gettext 0.19 or newer, and read the version of none they find (`django/core/management/commands/makemessages.py:check_programs`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).",
+   "line": 53,
+   "sentence": "Nothing in Django checks the version of any other library here, oracledb among them (`django/db/backends/oracle/base.py`).",
    "tree": "django",
    "path": "django/db/backends/oracle/base.py",
    "symbol": null,
@@ -135,23 +135,9 @@
    "fingerprint": "fea2aed7e2fa2103"
   },
   {
-   "pointer": "django/core/management/commands/makemessages.py:check_programs",
-   "line": 67,
-   "sentence": "Nothing in Django checks the version of either, nor the Oracle backend that of oracledb (`django/db/backends/oracle/base.py`). gettext's floor is a message: makemessages and compilemessages, finding one of its programs missing, ask for GNU gettext 0.19 or newer, and read the version of none they find (`django/core/management/commands/makemessages.py:check_programs`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).",
-   "tree": "django",
-   "path": "django/core/management/commands/makemessages.py",
-   "symbol": "check_programs",
-   "kind": "function",
-   "lines": [
-    33,
-    39
-   ],
-   "fingerprint": "094e32355f9ff674"
-  },
-  {
    "pointer": "docs/releases/6.0.txt",
-   "line": 69,
-   "sentence": "6.0 named, for each library of the table that follows, the first release to support Python 3.12 (`docs/releases/6.0.txt`); all but sqlparse are optional, and the code checks only the drivers:",
+   "line": 67,
+   "sentence": "Deprecated in 5.0, it was removed in 6.0 (`docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -163,9 +149,23 @@
    "fingerprint": "0ea24de54cb358c8"
   },
   {
+   "pointer": "django/core/management/commands/makemessages.py:check_programs",
+   "line": 69,
+   "sentence": "When makemessages or compilemessages cannot find one of gettext's programs, it asks for GNU gettext 0.19 or newer; neither reads the version of a program it finds (`django/core/management/commands/makemessages.py:check_programs`; [Making catalogues: makemessages and compilemessages](../i18n/commands.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/makemessages.py",
+   "symbol": "check_programs",
+   "kind": "function",
+   "lines": [
+    33,
+    39
+   ],
+   "fingerprint": "094e32355f9ff674"
+  },
+  {
    "pointer": "django/db/backends/postgresql/base.py",
-   "line": 91,
-   "sentence": "6.0 raised the drivers' checks to the releases both tables give for it: `ImproperlyConfigured` refuses a psycopg2 older than 2.9.9 or a psycopg older than 3.1.12 (`django/db/backends/postgresql/base.py`), and is meant to refuse a mysqlclient older than 2.2.1.",
+   "line": 71,
+   "sentence": "The PostgreSQL backend raises `ImproperlyConfigured` for a psycopg2 older than 2.9.9 or a psycopg older than 3.1.12 (`django/db/backends/postgresql/base.py`).",
    "tree": "django",
    "path": "django/db/backends/postgresql/base.py",
    "symbol": null,
@@ -178,8 +178,8 @@
   },
   {
    "pointer": "django/db/backends/mysql/base.py",
-   "line": 93,
-   "sentence": "MySQL's check compares `MySQLdb.version_info` and writes its message from `MySQLdb.__version__` (`django/db/backends/mysql/base.py`), which mysqlclient 2.0.0 to 2.2.0 do not define.",
+   "line": 71,
+   "sentence": "Its check compares `MySQLdb.version_info`, but writes its message from `MySQLdb.__version__`, which mysqlclient 2.0.0 to 2.2.0 do not define (`django/db/backends/mysql/base.py`).",
    "tree": "django",
    "path": "django/db/backends/mysql/base.py",
    "symbol": null,
@@ -192,8 +192,8 @@
   },
   {
    "pointer": "django/db/utils.py:load_backend",
-   "line": 103,
-   "sentence": "Since 6.0 a project on mysqlclient 2.1 is stopped by an `AttributeError` that does not name the floor, where 5.2.17 imported the backend; `load_backend`, which catches only an `ImportError`, passes it on (`django/db/utils.py:load_backend`).",
+   "line": 83,
+   "sentence": "`load_backend` catches only an `ImportError`, and passes this one on (`django/db/utils.py:load_backend`).",
    "tree": "django",
    "path": "django/db/utils.py",
    "symbol": "load_backend",
@@ -205,9 +205,51 @@
    "fingerprint": "c5d7dd7e87c7dce4"
   },
   {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 87,
+   "sentence": "Since 6.0 an optional library is supported only from its first release for Python 3.12; the 6.0 notes name these (`docs/releases/6.0.txt`):",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "docs/releases/5.0.txt",
+   "line": 106,
+   "sentence": "5.0 had raised selenium to 4.8.0, colorama to 0.4.6 and docutils to 0.19 (`docs/releases/5.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "f78c0112c823f44f"
+  },
+  {
+   "pointer": "django:pyproject.toml",
+   "line": 106,
+   "sentence": "The package's extras ask for these argon2-cffi and bcrypt releases under 6.0.8 and later; 5.2.17's asked for argon2-cffi 19.1.0 and any bcrypt (`django:pyproject.toml`).",
+   "tree": "django",
+   "path": "pyproject.toml",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    69
+   ],
+   "fingerprint": "b468d899a777504f"
+  },
+  {
    "pointer": "docs/ref/contrib/gis/install/geolibs.txt",
-   "line": 118,
-   "sentence": "*The oldest of each, inferred from the versions the notes remove; the 6.2 row is also this commit's list of supported versions (`docs/ref/contrib/gis/install/geolibs.txt`).*",
+   "line": 121,
+   "sentence": "*Inferred from the versions the notes remove; the 6.2 row is also this commit's list of supported versions (`docs/ref/contrib/gis/install/geolibs.txt`).*",
    "tree": "django",
    "path": "docs/ref/contrib/gis/install/geolibs.txt",
    "symbol": null,
@@ -220,8 +262,8 @@
   },
   {
    "pointer": "django/contrib/gis/db/backends/spatialite/operations.py:SpatiaLiteOperations.spatial_version",
-   "line": 120,
-   "sentence": "SpatiaLite's is: `SpatiaLiteOperations.spatial_version` raises `ImproperlyConfigured` below 4.3.0 (`django/contrib/gis/db/backends/spatialite/operations.py:SpatiaLiteOperations.spatial_version`).",
+   "line": 123,
+   "sentence": "SpatiaLite's floor is checked: `SpatiaLiteOperations.spatial_version` raises `ImproperlyConfigured` below 4.3.0 (`django/contrib/gis/db/backends/spatialite/operations.py:SpatiaLiteOperations.spatial_version`).",
    "tree": "django",
    "path": "django/contrib/gis/db/backends/spatialite/operations.py",
    "symbol": "SpatiaLiteOperations.spatial_version",

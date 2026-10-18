@@ -37,23 +37,9 @@
    "fingerprint": "f78c0112c823f44f"
   },
   {
-   "pointer": "deps:final/0005-improved-middleware.rst",
-   "line": 13,
-   "sentence": "Before 1.10 a middleware was a class listed in MIDDLEWARE_CLASSES, whose hooks the handler called in turn, and the layers were not strict: a response that one middleware's `process_request` returned still passed through the `process_response` of every middleware, those that never saw the request among them (`deps:final/0005-improved-middleware.rst`).",
-   "tree": "deps",
-   "path": "final/0005-improved-middleware.rst",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    451
-   ],
-   "fingerprint": "e7df143e13b0a5b2"
-  },
-  {
    "pointer": "docs/releases/1.10.txt",
    "line": 13,
-   "sentence": "1.10 shipped the new style \"to solve the lack of strict request/response layering\" (`docs/releases/1.10.txt`), and 2.0 removed the old setting (`docs/releases/2.0.txt`).",
+   "sentence": "1.10 rebuilt middleware as an onion, \"to solve the lack of strict request/response layering\" (`docs/releases/1.10.txt`).",
    "tree": "django",
    "path": "docs/releases/1.10.txt",
    "symbol": null,
@@ -65,9 +51,23 @@
    "fingerprint": "d491274bfc61d8d9"
   },
   {
-   "pointer": "docs/releases/2.0.txt",
+   "pointer": "deps:final/0005-improved-middleware.rst",
    "line": 13,
-   "sentence": "1.10 shipped the new style \"to solve the lack of strict request/response layering\" (`docs/releases/1.10.txt`), and 2.0 removed the old setting (`docs/releases/2.0.txt`).",
+   "sentence": "A response that one middleware's `process_request` returned still passed through the `process_response` of every middleware, those that never saw the request among them (`deps:final/0005-improved-middleware.rst`).",
+   "tree": "deps",
+   "path": "final/0005-improved-middleware.rst",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "e7df143e13b0a5b2"
+  },
+  {
+   "pointer": "docs/releases/2.0.txt",
+   "line": 15,
+   "sentence": "2.0 removed the old setting (`docs/releases/2.0.txt`).",
    "tree": "django",
    "path": "docs/releases/2.0.txt",
    "symbol": null,
@@ -80,8 +80,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 13,
-   "sentence": "`BaseHandler.load_middleware` builds the nest once, as the WSGI or the ASGI handler is made (`django/core/handlers/base.py:BaseHandler.load_middleware`; [Building the middleware chain](../handlers/chain.md)).",
+   "line": 15,
+   "sentence": "`BaseHandler.load_middleware` builds the nest once (`django/core/handlers/base.py:BaseHandler.load_middleware`; [Building the middleware chain](../handlers/chain.md)).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.load_middleware",
@@ -94,8 +94,8 @@
   },
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin",
-   "line": 15,
-   "sentence": "It lived in `django.utils.deprecation`, the module of the deprecation warnings, from 1.10 ([Django 1.10's documentation](https://docs.djangoproject.com/en/1.10/topics/http/middleware/)) until 6.2 moved it to `django.middleware`, and importing it from the old module warns (`django/middleware/__init__.py:MiddlewareMixin`, `django/utils/deprecation.py:__getattr__`).",
+   "line": 17,
+   "sentence": "At this commit it is the base of all Django's middleware but `RemoteUserMiddleware` and its subclass `PersistentRemoteUserMiddleware` (`django/middleware/__init__.py:MiddlewareMixin`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin",
@@ -108,8 +108,8 @@
   },
   {
    "pointer": "django/utils/deprecation.py:__getattr__",
-   "line": 15,
-   "sentence": "It lived in `django.utils.deprecation`, the module of the deprecation warnings, from 1.10 ([Django 1.10's documentation](https://docs.djangoproject.com/en/1.10/topics/http/middleware/)) until 6.2 moved it to `django.middleware`, and importing it from the old module warns (`django/middleware/__init__.py:MiddlewareMixin`, `django/utils/deprecation.py:__getattr__`).",
+   "line": 17,
+   "sentence": "It lived in `django.utils.deprecation`, the module of the deprecation warnings, until 6.2 moved it to `django.middleware` (`django/utils/deprecation.py:__getattr__`).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
    "symbol": "__getattr__",
@@ -122,7 +122,7 @@
   },
   {
    "pointer": "deps:final/0005-improved-middleware.rst",
-   "line": 17,
+   "line": 19,
    "sentence": "Instead exceptions are converted to responses \"before and after every middleware\", so that a layer may raise `Http404` and count on a response from the layer inside (`deps:final/0005-improved-middleware.rst`).",
    "tree": "deps",
    "path": "final/0005-improved-middleware.rst",
@@ -136,7 +136,7 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:convert_exception_to_response",
-   "line": 17,
+   "line": 19,
    "sentence": "The conversion is `convert_exception_to_response`, wrapped around each layer as the chain is built (`django/core/handlers/exception.py:convert_exception_to_response`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
@@ -150,7 +150,7 @@
   },
   {
    "pointer": "docs/releases/1.11.txt",
-   "line": 21,
+   "line": 23,
    "sentence": "1.11, in 2017, was the last release to support Python 2 (`docs/releases/1.11.txt`).",
    "tree": "django",
    "path": "docs/releases/1.11.txt",
@@ -164,8 +164,8 @@
   },
   {
    "pointer": "docs/releases/2.0.txt",
-   "line": 21,
-   "sentence": "2.0 supports Python 3.4 to 3.7, and its leading 2 marked no break of its own but the start of \"a loose form of semantic versioning\" (`docs/releases/2.0.txt`; [What changed](../changes.md#the-releases)).",
+   "line": 23,
+   "sentence": "Its leading 2 marked no break of its own, but the start of \"a loose form of semantic versioning\" (`docs/releases/2.0.txt`).",
    "tree": "django",
    "path": "docs/releases/2.0.txt",
    "symbol": null,
@@ -179,7 +179,7 @@
   {
    "pointer": "docs/releases/3.0.txt",
    "line": 23,
-   "sentence": "3.0 removed the private helpers kept for Python 2, the vendored six among them, and 4.0 the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
+   "sentence": "4.0 removed the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
    "tree": "django",
    "path": "docs/releases/3.0.txt",
    "symbol": null,
@@ -193,7 +193,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 23,
-   "sentence": "3.0 removed the private helpers kept for Python 2, the vendored six among them, and 4.0 the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
+   "sentence": "4.0 removed the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -207,7 +207,7 @@
   {
    "pointer": "django/utils/encoding.py:force_str",
    "line": 23,
-   "sentence": "3.0 removed the private helpers kept for Python 2, the vendored six among them, and 4.0 the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
+   "sentence": "4.0 removed the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
    "tree": "django",
    "path": "django/utils/encoding.py",
    "symbol": "force_str",
@@ -221,7 +221,7 @@
   {
    "pointer": "django/utils/encoding.py",
    "line": 23,
-   "sentence": "3.0 removed the private helpers kept for Python 2, the vendored six among them, and 4.0 the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
+   "sentence": "4.0 removed the aliases force_text and smart_text, leaving `force_str` and `smart_str` (`docs/releases/3.0.txt`, `docs/releases/4.0.txt`, `django/utils/encoding.py:force_str`; [Text and bytes: `django/utils/encoding.py`](../utils/encoding.md)).",
    "tree": "django",
    "path": "django/utils/encoding.py",
    "symbol": null,
@@ -235,7 +235,7 @@
   {
    "pointer": "deps:final/0201-simplified-routing-syntax.rst",
    "line": 27,
-   "sentence": "DEP 201, by Tom Christie, Sjoerd Job Postmus and Aymeric Augustin, found the expressions \"unnecessarily verbose and complex for the vast majority of use-cases\" and proposed a syntax after Flask's, in which each parameter of a route has a converter that both matches and converts it (`deps:final/0201-simplified-routing-syntax.rst`).",
+   "sentence": "It proposed a syntax after Flask's (`deps:final/0201-simplified-routing-syntax.rst`).",
    "tree": "deps",
    "path": "final/0201-simplified-routing-syntax.rst",
    "symbol": null,
@@ -249,7 +249,7 @@
   {
    "pointer": "docs/releases/2.0.txt",
    "line": 27,
-   "sentence": "2.0 shipped it as `django.urls.path`, and the old function as `django.urls.re_path`, keeping url as an alias until 4.0 (`docs/releases/2.0.txt`, `docs/releases/4.0.txt`).",
+   "sentence": "2.0 made the old function available as `django.urls.re_path`, and kept url as an alias until 4.0 (`docs/releases/2.0.txt`, `docs/releases/4.0.txt`).",
    "tree": "django",
    "path": "docs/releases/2.0.txt",
    "symbol": null,
@@ -263,7 +263,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 27,
-   "sentence": "2.0 shipped it as `django.urls.path`, and the old function as `django.urls.re_path`, keeping url as an alias until 4.0 (`docs/releases/2.0.txt`, `docs/releases/4.0.txt`).",
+   "sentence": "2.0 made the old function available as `django.urls.re_path`, and kept url as an alias until 4.0 (`docs/releases/2.0.txt`, `docs/releases/4.0.txt`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -276,7 +276,7 @@
   },
   {
    "pointer": "django/conf/urls/__init__.py",
-   "line": 27,
+   "line": 29,
    "sentence": "The old function's module, `django/conf/urls/__init__.py`, now holds `include`, which it imports from `django.urls`, and the default error views a resolver falls back on (`django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
    "tree": "django",
    "path": "django/conf/urls/__init__.py",
@@ -290,7 +290,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve_error_handler",
-   "line": 27,
+   "line": 29,
    "sentence": "The old function's module, `django/conf/urls/__init__.py`, now holds `include`, which it imports from `django.urls`, and the default error views a resolver falls back on (`django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -305,7 +305,7 @@
   {
    "pointer": "django/urls/resolvers.py:_route_to_regex",
    "line": 29,
-   "sentence": "As the DEP planned, a route is still expanded into a regular expression: a `RoutePattern` calls `_route_to_regex` as it is made, and `RoutePattern.match` uses the expression for a route with converters and compares the text of one without (`django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`; [Routes, regular expressions and converters](../urls/patterns.md)).",
+   "sentence": "As the DEP planned, a route is still expanded into a regular expression, as its `RoutePattern` is made (`django/urls/resolvers.py:_route_to_regex`; [Routes, regular expressions and converters](../urls/patterns.md)).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "_route_to_regex",
@@ -318,37 +318,9 @@
    "fingerprint": "80dd04506d4cb5aa"
   },
   {
-   "pointer": "django/urls/resolvers.py:RoutePattern.match",
-   "line": 29,
-   "sentence": "As the DEP planned, a route is still expanded into a regular expression: a `RoutePattern` calls `_route_to_regex` as it is made, and `RoutePattern.match` uses the expression for a route with converters and compares the text of one without (`django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`; [Routes, regular expressions and converters](../urls/patterns.md)).",
-   "tree": "django",
-   "path": "django/urls/resolvers.py",
-   "symbol": "RoutePattern.match",
-   "kind": "function",
-   "lines": [
-    325,
-    347
-   ],
-   "fingerprint": "abbdc3f145f19e6d"
-  },
-  {
-   "pointer": "django/db/models/options.py:Options",
-   "line": 33,
-   "sentence": "Before 1.11 a model asked for an index over several columns with the option index_together of its `Meta`, and for a rule over them with `Options.unique_together` alone (`django/db/models/options.py:Options`).",
-   "tree": "django",
-   "path": "django/db/models/options.py",
-   "symbol": "Options",
-   "kind": "class",
-   "lines": [
-    90,
-    1052
-   ],
-   "fingerprint": "53c718b2cb5253fa"
-  },
-  {
    "pointer": "docs/releases/1.11.txt",
    "line": 33,
-   "sentence": "1.11 made an index an object, `Index`, which \"can be subclassed to support different index types\", and 2.2 did the same for rules with `CheckConstraint` and `UniqueConstraint` (`docs/releases/1.11.txt`, `docs/releases/2.2.txt`).",
+   "sentence": "1.11 made an index an object, `Index`, which \"can be subclassed to support different index types\" (`docs/releases/1.11.txt`).",
    "tree": "django",
    "path": "docs/releases/1.11.txt",
    "symbol": null,
@@ -360,9 +332,23 @@
    "fingerprint": "eed0fd9b1127a89c"
   },
   {
+   "pointer": "django/db/models/options.py:Options",
+   "line": 33,
+   "sentence": "Before, a model asked for an index over several columns with the option index_together of its `Meta`, and for a rule over them with `Options.unique_together` alone (`django/db/models/options.py:Options`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options",
+   "kind": "class",
+   "lines": [
+    90,
+    1052
+   ],
+   "fingerprint": "53c718b2cb5253fa"
+  },
+  {
    "pointer": "docs/releases/2.2.txt",
    "line": 33,
-   "sentence": "1.11 made an index an object, `Index`, which \"can be subclassed to support different index types\", and 2.2 did the same for rules with `CheckConstraint` and `UniqueConstraint` (`docs/releases/1.11.txt`, `docs/releases/2.2.txt`).",
+   "sentence": "2.2 made rules objects too, `CheckConstraint` and `UniqueConstraint` (`docs/releases/2.2.txt`).",
    "tree": "django",
    "path": "docs/releases/2.2.txt",
    "symbol": null,
@@ -376,7 +362,7 @@
   {
    "pointer": "docs/releases/3.2.txt",
    "line": 33,
-   "sentence": "3.2 let an index, and 4.0 a unique constraint, be made on expressions, and 4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
+   "sentence": "4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
    "tree": "django",
    "path": "docs/releases/3.2.txt",
    "symbol": null,
@@ -390,7 +376,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 33,
-   "sentence": "3.2 let an index, and 4.0 a unique constraint, be made on expressions, and 4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
+   "sentence": "4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -404,7 +390,7 @@
   {
    "pointer": "docs/releases/4.1.txt",
    "line": 33,
-   "sentence": "3.2 let an index, and 4.0 a unique constraint, be made on expressions, and 4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
+   "sentence": "4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
    "tree": "django",
    "path": "docs/releases/4.1.txt",
    "symbol": null,
@@ -418,7 +404,7 @@
   {
    "pointer": "django/db/models/base.py:Model.validate_constraints",
    "line": 33,
-   "sentence": "3.2 let an index, and 4.0 a unique constraint, be made on expressions, and 4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
+   "sentence": "4.1 made model validation check the constraints (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `django/db/models/base.py:Model.validate_constraints`; [Constraints and indexes](../models/constraints.md)).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model.validate_constraints",
@@ -432,7 +418,7 @@
   {
    "pointer": "docs/releases/4.2.txt",
    "line": 35,
-   "sentence": "4.2 deprecated index_together and 5.1 removed it, but not from migrations: `AlterIndexTogether` remains, supported only for migration files from before 4.2, with \"no plan to deprecate or remove it\" (`docs/releases/4.2.txt`, `docs/releases/5.1.txt`, `django/db/migrations/operations/models.py:AlterIndexTogether`; [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](../migrations/model-operations.md)).",
+   "sentence": "`AlterIndexTogether` remains, supported only for migration files from before 4.2, with \"no plan to deprecate or remove it\" (`docs/releases/4.2.txt`, `docs/releases/5.1.txt`, `django/db/migrations/operations/models.py:AlterIndexTogether`; [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](../migrations/model-operations.md)).",
    "tree": "django",
    "path": "docs/releases/4.2.txt",
    "symbol": null,
@@ -446,7 +432,7 @@
   {
    "pointer": "docs/releases/5.1.txt",
    "line": 35,
-   "sentence": "4.2 deprecated index_together and 5.1 removed it, but not from migrations: `AlterIndexTogether` remains, supported only for migration files from before 4.2, with \"no plan to deprecate or remove it\" (`docs/releases/4.2.txt`, `docs/releases/5.1.txt`, `django/db/migrations/operations/models.py:AlterIndexTogether`; [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](../migrations/model-operations.md)).",
+   "sentence": "`AlterIndexTogether` remains, supported only for migration files from before 4.2, with \"no plan to deprecate or remove it\" (`docs/releases/4.2.txt`, `docs/releases/5.1.txt`, `django/db/migrations/operations/models.py:AlterIndexTogether`; [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](../migrations/model-operations.md)).",
    "tree": "django",
    "path": "docs/releases/5.1.txt",
    "symbol": null,
@@ -460,7 +446,7 @@
   {
    "pointer": "django/db/migrations/operations/models.py:AlterIndexTogether",
    "line": 35,
-   "sentence": "4.2 deprecated index_together and 5.1 removed it, but not from migrations: `AlterIndexTogether` remains, supported only for migration files from before 4.2, with \"no plan to deprecate or remove it\" (`docs/releases/4.2.txt`, `docs/releases/5.1.txt`, `django/db/migrations/operations/models.py:AlterIndexTogether`; [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](../migrations/model-operations.md)).",
+   "sentence": "`AlterIndexTogether` remains, supported only for migration files from before 4.2, with \"no plan to deprecate or remove it\" (`docs/releases/4.2.txt`, `docs/releases/5.1.txt`, `django/db/migrations/operations/models.py:AlterIndexTogether`; [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](../migrations/model-operations.md)).",
    "tree": "django",
    "path": "django/db/migrations/operations/models.py",
    "symbol": "AlterIndexTogether",
@@ -474,7 +460,7 @@
   {
    "pointer": "docs/ref/models/options.txt",
    "line": 35,
-   "sentence": "`Options.unique_together` was never deprecated: the documentation recommends a `UniqueConstraint` and says the option \"may be deprecated in the future\" (`docs/ref/models/options.txt`).",
+   "sentence": "The documentation recommends a `UniqueConstraint`, and says the option \"may be deprecated in the future\" (`docs/ref/models/options.txt`).",
    "tree": "django",
    "path": "docs/ref/models/options.txt",
    "symbol": null,
@@ -502,7 +488,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 39,
-   "sentence": "4.0 did the same for forms, formsets and error lists, and 4.1 added a layout in `<div>` elements, to become the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`).",
+   "sentence": "4.1 added a layout in `<div>` elements, which became the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `docs/releases/5.0.txt`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -516,7 +502,7 @@
   {
    "pointer": "docs/releases/4.1.txt",
    "line": 39,
-   "sentence": "4.0 did the same for forms, formsets and error lists, and 4.1 added a layout in `<div>` elements, to become the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`).",
+   "sentence": "4.1 added a layout in `<div>` elements, which became the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `docs/releases/5.0.txt`).",
    "tree": "django",
    "path": "docs/releases/4.1.txt",
    "symbol": null,
@@ -528,9 +514,23 @@
    "fingerprint": "9740cd5b06b1247b"
   },
   {
+   "pointer": "docs/releases/5.0.txt",
+   "line": 39,
+   "sentence": "4.1 added a layout in `<div>` elements, which became the default in 5.0 (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`, `docs/releases/5.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "f78c0112c823f44f"
+  },
+  {
    "pointer": "django/forms/utils.py:RenderableFormMixin",
    "line": 39,
-   "sentence": "`RenderableFormMixin.as_table` and the three methods beside it each render a template (`django/forms/utils.py:RenderableFormMixin`), and the default renderer makes a template engine of its own, apart from `TEMPLATES` (`django/forms/renderers.py:EngineMixin.engine`; [Rendering a form: renderers and templates](../forms/rendering.md)).",
+   "sentence": "`RenderableFormMixin.as_table` and the three methods beside it each render a template (`django/forms/utils.py:RenderableFormMixin`; [Rendering a form: renderers and templates](../forms/rendering.md)).",
    "tree": "django",
    "path": "django/forms/utils.py",
    "symbol": "RenderableFormMixin",
@@ -542,24 +542,9 @@
    "fingerprint": "777a833dc6f3e78d"
   },
   {
-   "pointer": "django/forms/renderers.py:EngineMixin.engine",
-   "line": 39,
-   "sentence": "`RenderableFormMixin.as_table` and the three methods beside it each render a template (`django/forms/utils.py:RenderableFormMixin`), and the default renderer makes a template engine of its own, apart from `TEMPLATES` (`django/forms/renderers.py:EngineMixin.engine`; [Rendering a form: renderers and templates](../forms/rendering.md)).",
-   "tree": "django",
-   "path": "django/forms/renderers.py",
-   "symbol": "EngineMixin.engine",
-   "kind": "function",
-   "lines": [
-    36,
-    45
-   ],
-   "at": 37,
-   "fingerprint": "6647eb6e8ad7d254"
-  },
-  {
    "pointer": "deps:accepted/0009-async.rst",
    "line": 43,
-   "sentence": "DEP 9, written by Andrew Godwin in 2019, proposed to make every part of Django that could block asynchronous while keeping every synchronous interface, each part passing through stages: first its synchronous code behind an asynchronous wrapper that runs it in a thread, later asynchronous code behind a synchronous wrapper (`deps:accepted/0009-async.rst`).",
+   "sentence": "Each part was to pass through stages: first its synchronous code behind an asynchronous wrapper that runs it in a thread, later asynchronous code behind a synchronous wrapper (`deps:accepted/0009-async.rst`).",
    "tree": "deps",
    "path": "accepted/0009-async.rst",
    "symbol": null,
@@ -573,7 +558,7 @@
   {
    "pointer": "docs/releases/3.0.txt",
    "line": 43,
-   "sentence": "3.0 began at the outermost layer: Django could be served as an ASGI application, though \"internally everything remains synchronous\", and code marked as unsafe, such as the ORM's, refused to run where an event loop was running (`docs/releases/3.0.txt`).",
+   "sentence": "Code marked as unsafe, such as the ORM's, refused to run where an event loop was running (`docs/releases/3.0.txt`).",
    "tree": "django",
    "path": "docs/releases/3.0.txt",
    "symbol": null,
@@ -615,7 +600,7 @@
   {
    "pointer": "docs/releases/3.1.txt",
    "line": 45,
-   "sentence": "3.1 let views and middleware be asynchronous, under ASGI or WSGI, and the handler puts an adapter wherever a layer and the one inside it differ in mode (`docs/releases/3.1.txt`, `django/core/handlers/base.py:BaseHandler.adapt_method_mode`; [Sync and async in one chain](../handlers/async.md)).",
+   "sentence": "The handler puts an adapter wherever a layer and the one inside it differ in mode (`docs/releases/3.1.txt`, `django/core/handlers/base.py:BaseHandler.adapt_method_mode`; [Sync and async in one chain](../handlers/async.md)).",
    "tree": "django",
    "path": "docs/releases/3.1.txt",
    "symbol": null,
@@ -629,7 +614,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.adapt_method_mode",
    "line": 45,
-   "sentence": "3.1 let views and middleware be asynchronous, under ASGI or WSGI, and the handler puts an adapter wherever a layer and the one inside it differ in mode (`docs/releases/3.1.txt`, `django/core/handlers/base.py:BaseHandler.adapt_method_mode`; [Sync and async in one chain](../handlers/async.md)).",
+   "sentence": "The handler puts an adapter wherever a layer and the one inside it differ in mode (`docs/releases/3.1.txt`, `django/core/handlers/base.py:BaseHandler.adapt_method_mode`; [Sync and async in one chain](../handlers/async.md)).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.adapt_method_mode",
@@ -643,7 +628,7 @@
   {
    "pointer": "docs/topics/async.txt",
    "line": 45,
-   "sentence": "The DEP had meant the core to become asynchronous, with WSGI running it in an event loop; instead it has two forms, `BaseHandler._get_response` and `BaseHandler._get_response_async`, and a WSGI handler builds a synchronous chain, running an asynchronous view in a one-off event loop (`docs/topics/async.txt`).",
+   "sentence": "A WSGI handler builds a synchronous chain, in which an asynchronous view runs in a one-off event loop (`docs/topics/async.txt`).",
    "tree": "django",
    "path": "docs/topics/async.txt",
    "symbol": null,
@@ -657,7 +642,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 47,
-   "sentence": "4.0 gave the cache asynchronous methods, and 4.1 gave the queryset \"an asynchronous interface for all data access operations\", noting that \"the underlying database operations remain synchronous\" (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`).",
+   "sentence": "4.1 gave the queryset \"an asynchronous interface for all data access operations\", though \"the underlying database operations remain synchronous\" (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -671,7 +656,7 @@
   {
    "pointer": "docs/releases/4.1.txt",
    "line": 47,
-   "sentence": "4.0 gave the cache asynchronous methods, and 4.1 gave the queryset \"an asynchronous interface for all data access operations\", noting that \"the underlying database operations remain synchronous\" (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`).",
+   "sentence": "4.1 gave the queryset \"an asynchronous interface for all data access operations\", though \"the underlying database operations remain synchronous\" (`docs/releases/4.0.txt`, `docs/releases/4.1.txt`).",
    "tree": "django",
    "path": "docs/releases/4.1.txt",
    "symbol": null,
@@ -685,7 +670,7 @@
   {
    "pointer": "django/db/models/query.py:QuerySet.aget",
    "line": 47,
-   "sentence": "At this commit they still do: `QuerySet.aget` runs `QuerySet.get` through `sync_to_async`, \"sync-native, with an async wrapper\" in DEP 9's words; the proposal is still filed as accepted, not final (`django/db/models/query.py:QuerySet.aget`; [The asynchronous methods of a queryset](../querysets/async.md)).",
+   "sentence": "At this commit they still do: `QuerySet.aget` runs `QuerySet.get` through `sync_to_async`, \"sync-native, with an async wrapper\" in DEP 9's words (`django/db/models/query.py:QuerySet.aget`; [The asynchronous methods of a queryset](../querysets/async.md)).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.aget",
@@ -755,7 +740,7 @@
   {
    "pointer": "docs/releases/3.2.txt",
    "line": 53,
-   "sentence": "3.2 accepted zones that were not pytz's, such as those of `zoneinfo`, in the standard library from Python 3.9; 4.0 made `zoneinfo` the default and deprecated pytz, kept through 4.x by USE_DEPRECATED_PYTZ; and 5.0 removed both (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
+   "sentence": "5.0 removed both (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
    "tree": "django",
    "path": "docs/releases/3.2.txt",
    "symbol": null,
@@ -769,7 +754,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 53,
-   "sentence": "3.2 accepted zones that were not pytz's, such as those of `zoneinfo`, in the standard library from Python 3.9; 4.0 made `zoneinfo` the default and deprecated pytz, kept through 4.x by USE_DEPRECATED_PYTZ; and 5.0 removed both (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
+   "sentence": "5.0 removed both (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -783,7 +768,7 @@
   {
    "pointer": "docs/releases/5.0.txt",
    "line": 53,
-   "sentence": "3.2 accepted zones that were not pytz's, such as those of `zoneinfo`, in the standard library from Python 3.9; 4.0 made `zoneinfo` the default and deprecated pytz, kept through 4.x by USE_DEPRECATED_PYTZ; and 5.0 removed both (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
+   "sentence": "5.0 removed both (`docs/releases/3.2.txt`, `docs/releases/4.0.txt`, `docs/releases/5.0.txt`).",
    "tree": "django",
    "path": "docs/releases/5.0.txt",
    "symbol": null,
@@ -868,7 +853,7 @@
   {
    "pointer": "django/contrib/postgres/fields/jsonb.py",
    "line": 57,
-   "sentence": "At this commit `django/contrib/postgres/fields/jsonb.py` defines it as a subclass of the new field whose `Field.system_check_removed_details` makes a model that uses it fail the checks; `NullBooleanField`, deprecated in 3.1, ended the same way (`django/db/models/fields/__init__.py:Field._check_deprecation_details`; [The model checks](../models/checks.md)).",
+   "sentence": "At this commit the stub, in `django/contrib/postgres/fields/jsonb.py`, is a subclass of the new field.",
    "tree": "django",
    "path": "django/contrib/postgres/fields/jsonb.py",
    "symbol": null,
@@ -882,7 +867,7 @@
   {
    "pointer": "django/db/models/fields/__init__.py:Field._check_deprecation_details",
    "line": 57,
-   "sentence": "At this commit `django/contrib/postgres/fields/jsonb.py` defines it as a subclass of the new field whose `Field.system_check_removed_details` makes a model that uses it fail the checks; `NullBooleanField`, deprecated in 3.1, ended the same way (`django/db/models/fields/__init__.py:Field._check_deprecation_details`; [The model checks](../models/checks.md)).",
+   "sentence": "`NullBooleanField`, deprecated in 3.1, ended the same way (`django/db/models/fields/__init__.py:Field._check_deprecation_details`; [The model checks](../models/checks.md)).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "Field._check_deprecation_details",
@@ -896,7 +881,7 @@
   {
    "pointer": "docs/releases/4.2.txt",
    "line": 59,
-   "sentence": "4.2 added psycopg 3 beside psycopg2 under the same `\"ENGINE\"`, and said psycopg2 was \"likely to be deprecated and removed at some point in the future\" (`docs/releases/4.2.txt`).",
+   "sentence": "Its notes said psycopg2 was \"likely to be deprecated and removed at some point in the future\" (`docs/releases/4.2.txt`).",
    "tree": "django",
    "path": "docs/releases/4.2.txt",
    "symbol": null,
@@ -910,7 +895,7 @@
   {
    "pointer": "django/db/backends/postgresql/psycopg_any.py",
    "line": 59,
-   "sentence": "At this commit it is neither: `django/db/backends/postgresql/psycopg_any.py` imports psycopg where it can and psycopg2 otherwise, and sets `is_psycopg3`, which the backend asks where the two differ ([PostgreSQL](../backends/postgresql.md)).",
+   "sentence": "`django/db/backends/postgresql/psycopg_any.py` imports psycopg where it can and psycopg2 otherwise, and sets `is_psycopg3`, which the backend asks where the two differ ([PostgreSQL](../backends/postgresql.md)).",
    "tree": "django",
    "path": "django/db/backends/postgresql/psycopg_any.py",
    "symbol": null,
@@ -922,23 +907,9 @@
    "fingerprint": "283547d637c2c40f"
   },
   {
-   "pointer": "docs/releases/1.7.txt",
-   "line": 63,
-   "sentence": "A package could name its `AppConfig`, the configuration an application has had since 1.7, in a variable, default_app_config, so that `INSTALLED_APPS` could list just the package (`docs/releases/1.7.txt`).",
-   "tree": "django",
-   "path": "docs/releases/1.7.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1868
-   ],
-   "fingerprint": "50fd00872b76d036"
-  },
-  {
    "pointer": "docs/releases/3.2.txt",
    "line": 63,
-   "sentence": "3.2's notes say the variable was introduced \"with the intent to switch the ecosystem\" to naming the class, \"but the switch didn't happen\"; 3.2 had Django find the class itself, the one `AppConfig` subclass in the package's apps.py, and deprecated the variable, which 4.1 removed (`docs/releases/3.2.txt`, `docs/releases/4.1.txt`).",
+   "sentence": "3.2 deprecated it, and 4.1 removed it (`docs/releases/3.2.txt`, `docs/releases/4.1.txt`).",
    "tree": "django",
    "path": "docs/releases/3.2.txt",
    "symbol": null,
@@ -952,7 +923,7 @@
   {
    "pointer": "docs/releases/4.1.txt",
    "line": 63,
-   "sentence": "3.2's notes say the variable was introduced \"with the intent to switch the ecosystem\" to naming the class, \"but the switch didn't happen\"; 3.2 had Django find the class itself, the one `AppConfig` subclass in the package's apps.py, and deprecated the variable, which 4.1 removed (`docs/releases/3.2.txt`, `docs/releases/4.1.txt`).",
+   "sentence": "3.2 deprecated it, and 4.1 removed it (`docs/releases/3.2.txt`, `docs/releases/4.1.txt`).",
    "tree": "django",
    "path": "docs/releases/4.1.txt",
    "symbol": null,
@@ -966,7 +937,7 @@
   {
    "pointer": "django/apps/config.py:AppConfig.create",
    "line": 63,
-   "sentence": "`AppConfig.create` takes an entry first as a module, looking in its apps.py for a single subclass or the one marked as the default, and then as the path of a class (`django/apps/config.py:AppConfig.create`; [Populating the app registry](../startup/populate.md)).",
+   "sentence": "`AppConfig.create` takes an entry first as a module, and then as the path of a class (`django/apps/config.py:AppConfig.create`; [Populating the app registry](../startup/populate.md)).",
    "tree": "django",
    "path": "django/apps/config.py",
    "symbol": "AppConfig.create",
@@ -995,7 +966,7 @@
   {
    "pointer": "docs/releases/3.2.txt",
    "line": 67,
-   "sentence": "3.2 likewise wrote `BigAutoField` into new projects while `DEFAULT_AUTO_FIELD` kept `AutoField` (`docs/releases/3.2.txt`).",
+   "sentence": "3.2 likewise wrote `BigAutoField` into new projects, while `DEFAULT_AUTO_FIELD` kept `AutoField` (`docs/releases/3.2.txt`).",
    "tree": "django",
    "path": "docs/releases/3.2.txt",
    "symbol": null,
@@ -1009,7 +980,7 @@
   {
    "pointer": "docs/releases/6.0.txt",
    "line": 67,
-   "sentence": "That default caught up in 6.0, and the default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)).",
+   "sentence": "The default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -1023,7 +994,7 @@
   {
    "pointer": "docs/releases/5.0.txt",
    "line": 67,
-   "sentence": "That default caught up in 6.0, and the default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)).",
+   "sentence": "The default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)).",
    "tree": "django",
    "path": "docs/releases/5.0.txt",
    "symbol": null,
@@ -1037,7 +1008,7 @@
   {
    "pointer": "docs/releases/4.0.txt",
    "line": 67,
-   "sentence": "That default caught up in 6.0, and the default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)).",
+   "sentence": "The default of `USE_TZ`, which startproject has set since 1.4, had caught up in 5.0 (`docs/releases/6.0.txt`, `docs/releases/5.0.txt`, `docs/releases/4.0.txt`; [What changed in models and fields](models.md)).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,

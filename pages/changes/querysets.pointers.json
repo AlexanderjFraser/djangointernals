@@ -8,9 +8,23 @@
  "document": "querysets.md",
  "pointers": [
   {
+   "pointer": "django/db/models/query.py:ModelIterable.__iter__",
+   "line": 11,
+   "sentence": "The list of peers holds weak references, so an instance that Python has collected is passed over (`django/db/models/query.py:ModelIterable.__iter__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "ModelIterable.__iter__",
+   "kind": "function",
+   "lines": [
+    134,
+    209
+   ],
+   "fingerprint": "638fc3056680909a"
+  },
+  {
    "pointer": "django/db/models/fetch_modes.py",
-   "line": 15,
-   "sentence": "`FETCH_ONE`, the default, fetches the value for the one instance, as before; `FETCH_PEERS` fetches it for the instance's **peers**, the instances of its model that the same run of the queryset made from the same columns and that are still alive, weakly referenced by the list they share, `ModelState.peers`; `FETCH_RAISE` raises `FieldFetchBlocked`, a `FieldError` (`django/db/models/fetch_modes.py`).",
+   "line": 11,
+   "sentence": "`FETCH_RAISE` refuses the read with `FieldFetchBlocked`, a `FieldError` (`django/db/models/fetch_modes.py`).",
    "tree": "django",
    "path": "django/db/models/fetch_modes.py",
    "symbol": null,
@@ -23,8 +37,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.fetch_mode",
-   "line": 15,
-   "sentence": "`QuerySet.fetch_mode` sets a mode on a clone, which hands it to the instances it makes from rows through a keyword 6.1 added to `Model.from_db`, `fetch_mode=None` (`django/db/models/query.py:QuerySet.fetch_mode`, `django/db/models/base.py:Model.from_db`).",
+   "line": 13,
+   "sentence": "The clone hands the mode to each instance it makes from a row, through the argument `fetch_mode=` that 6.1 added to `Model.from_db` (`django/db/models/query.py:QuerySet.fetch_mode`, `django/db/models/base.py:Model.from_db`; [Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.fetch_mode",
@@ -37,8 +51,8 @@
   },
   {
    "pointer": "django/db/models/base.py:Model.from_db",
-   "line": 15,
-   "sentence": "`QuerySet.fetch_mode` sets a mode on a clone, which hands it to the instances it makes from rows through a keyword 6.1 added to `Model.from_db`, `fetch_mode=None` (`django/db/models/query.py:QuerySet.fetch_mode`, `django/db/models/base.py:Model.from_db`).",
+   "line": 13,
+   "sentence": "The clone hands the mode to each instance it makes from a row, through the argument `fetch_mode=` that 6.1 added to `Model.from_db` (`django/db/models/query.py:QuerySet.fetch_mode`, `django/db/models/base.py:Model.from_db`; [Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model.from_db",
@@ -51,9 +65,23 @@
    "fingerprint": "10b19b1dcf6af41d"
   },
   {
+   "pointer": "django/db/models/manager.py:BaseManager.get_queryset",
+   "line": 13,
+   "sentence": "A manager that overrides `BaseManager.get_queryset` to return such a clone gives its mode to every queryset made from the manager (`django/db/models/manager.py:BaseManager.get_queryset`).",
+   "tree": "django",
+   "path": "django/db/models/manager.py",
+   "symbol": "BaseManager.get_queryset",
+   "kind": "function",
+   "lines": [
+    150,
+    155
+   ],
+   "fingerprint": "c57644bee65968d2"
+  },
+  {
    "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.fetch_many",
-   "line": 27,
-   "sentence": "Under the mode, the first read fetched all four reporters' papers in one statement (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.fetch_many`).",
+   "line": 15,
+   "sentence": "Under `FETCH_PEERS`, 6.1.1 and this commit run two: the first read fetches the papers of all four in one statement (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.fetch_many`).",
    "tree": "django",
    "path": "django/db/models/fields/related_descriptors.py",
    "symbol": "ForwardManyToOneDescriptor.fetch_many",
@@ -66,7 +94,7 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 29,
+   "line": 37,
    "sentence": "The notes liken `FETCH_PEERS` to \"an on-demand `prefetch_related()`\" that needs no list of fields, and mean `FETCH_RAISE` to prevent \"unintentional queries\" (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
@@ -80,7 +108,7 @@
   },
   {
    "pointer": "docs/releases/6.1.2.txt",
-   "line": 31,
+   "line": 39,
    "sentence": "The notes of 6.1.2, not yet released at this commit, list as fixed a bug of 6.1: `FETCH_PEERS` did not batch the instances `select_related` loaded (`docs/releases/6.1.2.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.2.txt",
@@ -94,8 +122,8 @@
   },
   {
    "pointer": "django/db/models/query.py:RelatedPopulator",
-   "line": 31,
-   "sentence": "At this commit each `RelatedPopulator`, which makes the instances of one joined relation, keeps its own list of peers (`django/db/models/query.py:RelatedPopulator`).",
+   "line": 39,
+   "sentence": "At this commit each `RelatedPopulator`, which makes them, keeps a list of its own (`django/db/models/query.py:RelatedPopulator`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "RelatedPopulator",
@@ -108,8 +136,8 @@
   },
   {
    "pointer": "docs/releases/6.1.1.txt",
-   "line": 35,
-   "sentence": "The 6.1.1 notes say that a model whose own `from_db` takes no fetch mode crashed in 6.1 when its queryset was iterated, and that 6.1.1 made it work again, though deprecated (`docs/releases/6.1.1.txt`).",
+   "line": 43,
+   "sentence": "The 6.1.1 notes say that such a model crashed in 6.1 when its queryset was iterated (`docs/releases/6.1.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.1.txt",
    "symbol": null,
@@ -122,8 +150,8 @@
   },
   {
    "pointer": "django/db/models/query.py:_get_from_db",
-   "line": 35,
-   "sentence": "At this commit `_get_from_db` inspects the override before the loop and, where it takes neither the keyword fetch_mode nor arbitrary keywords, warns and has it called without the mode, so its instances keep the default mode (`django/db/models/query.py:_get_from_db`).",
+   "line": 43,
+   "sentence": "Its instances keep the default mode (`django/db/models/query.py:_get_from_db`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "_get_from_db",
@@ -135,9 +163,23 @@
    "fingerprint": "a753ca5550f70311"
   },
   {
-   "pointer": "django/db/models/query_utils.py:select_related_descend",
+   "pointer": "docs/internals/deprecation.txt",
    "line": 47,
-   "sentence": "`QuerySet.select_related` with no arguments leaves the relations to the compiler, which follows those that cannot be null (`django/db/models/query_utils.py:select_related_descend`).",
+   "sentence": "Both are to raise `TypeError` in Django 2028 (`docs/internals/deprecation.txt`; [What still warns: the deprecations and the releases that end them](deprecations.md)).",
+   "tree": "django",
+   "path": "docs/internals/deprecation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1585
+   ],
+   "fingerprint": "f80d8f829f2033b6"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:select_related_descend",
+   "line": 49,
+   "sentence": "With no arguments, `select_related` leaves the relations to the compiler, which follows those that cannot be null (`django/db/models/query_utils.py:select_related_descend`).",
    "tree": "django",
    "path": "django/db/models/query_utils.py",
    "symbol": "select_related_descend",
@@ -150,8 +192,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.select_related",
-   "line": 47,
-   "sentence": "It warns through `warn_about_external_use`, so not for Django's own calls (`django/db/models/query.py:QuerySet.select_related`, `django/utils/deprecation.py:warn_about_external_use`).",
+   "line": 49,
+   "sentence": "The call warns only where it comes from outside Django (`django/db/models/query.py:QuerySet.select_related`, `django/utils/deprecation.py:warn_about_external_use`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.select_related",
@@ -164,8 +206,8 @@
   },
   {
    "pointer": "django/utils/deprecation.py:warn_about_external_use",
-   "line": 47,
-   "sentence": "It warns through `warn_about_external_use`, so not for Django's own calls (`django/db/models/query.py:QuerySet.select_related`, `django/utils/deprecation.py:warn_about_external_use`).",
+   "line": 49,
+   "sentence": "The call warns only where it comes from outside Django (`django/db/models/query.py:QuerySet.select_related`, `django/utils/deprecation.py:warn_about_external_use`).",
    "tree": "django",
    "path": "django/utils/deprecation.py",
    "symbol": "warn_about_external_use",
@@ -178,8 +220,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.values_list",
-   "line": 59,
-   "sentence": "6.1 added the warning (`django/db/models/query.py:QuerySet.values_list`).",
+   "line": 51,
+   "sentence": "6.0.8's selects the first concrete field's column alone, with no warning (`django/db/models/query.py:QuerySet.values_list`):",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.values_list",
@@ -191,23 +233,9 @@
    "fingerprint": "9adddb839591ff81"
   },
   {
-   "pointer": "docs/internals/deprecation.txt",
-   "line": 59,
-   "sentence": "Both calls are to raise `TypeError` in Django 2028 (`docs/internals/deprecation.txt`; [What still warns: the deprecations and the releases that end them](deprecations.md)).",
-   "tree": "django",
-   "path": "docs/internals/deprecation.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1585
-   ],
-   "fingerprint": "f80d8f829f2033b6"
-  },
-  {
    "pointer": "django/db/models/query.py:QuerySet.first",
-   "line": 63,
-   "sentence": "Since 6.1 they read the mark that call leaves, `Query.default_ordering` turned off, and take the queryset as it stands (`django/db/models/query.py:QuerySet.first`; [`get`, `first`, `count` and the other methods that run a query at once](../querysets/results.md#an-ordering-cleared-on-purpose)).",
+   "line": 65,
+   "sentence": "They read the mark that `order_by()` leaves, `Query.default_ordering` turned off (`django/db/models/query.py:QuerySet.first`; [`get`, `first`, `count` and the other methods that run a query at once](../querysets/results.md#an-ordering-cleared-on-purpose)).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.first",
@@ -220,8 +248,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet._combinator_query",
-   "line": 74,
-   "sentence": "Since 6.1 it has its model's default: `QuerySet._combinator_query` switches the combined query's default back on (`django/db/models/query.py:QuerySet._combinator_query`).",
+   "line": 78,
+   "sentence": "`QuerySet._combinator_query` still clears the combined query's ordering, the default with it, and then switches the default back on (`django/db/models/query.py:QuerySet._combinator_query`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet._combinator_query",
@@ -234,8 +262,8 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 74,
-   "sentence": "The 6.1 notes give the consequence: where `values` or `values_list` has not selected a field of the ordering, the combined queryset raises `DatabaseError` (`docs/releases/6.1.txt`):",
+   "line": 78,
+   "sentence": "A combined queryset raises `DatabaseError` where `values` or `values_list` has not selected a field of the ordering (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -248,8 +276,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_order_by",
-   "line": 84,
-   "sentence": "The error is Django's, so every backend raises it: `SQLCompiler.get_order_by` cannot add the ordering's column to parts whose columns `values` fixed (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
+   "line": 90,
+   "sentence": "`SQLCompiler.get_order_by` cannot add the ordering's column to parts whose columns `values` fixed (`django/db/models/sql/compiler.py:SQLCompiler.get_order_by`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.get_order_by",
@@ -261,65 +289,9 @@
    "fingerprint": "c479119e478ae75f"
   },
   {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql",
-   "line": 84,
-   "sentence": "The parts were cleared first because on SQLite the compiler refuses a part that keeps an ordering, its model's default included (`django/db/models/sql/compiler.py:SQLCompiler.get_combinator_sql`; [Combining querysets: the operators and `union`](../querysets/combining.md#what-the-compiler-asks-of-the-backend)).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.get_combinator_sql",
-   "kind": "function",
-   "lines": [
-    601,
-    652
-   ],
-   "fingerprint": "d7fe2adcd1279e2f"
-  },
-  {
-   "pointer": "docs/releases/5.2.txt",
-   "line": 86,
-   "sentence": "Since 5.2 the columns of `QuerySet.values` and `values_list` stand in the order the names were given, where the 5.2 notes say \"a set of counterintuitive rules\" had made combining such querysets unpredictable (`docs/releases/5.2.txt`).",
-   "tree": "django",
-   "path": "docs/releases/5.2.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    495
-   ],
-   "fingerprint": "56a4c82a284e4c7a"
-  },
-  {
-   "pointer": "django/db/models/sql/query.py:Query.set_values",
-   "line": 86,
-   "sentence": "`Query.set_values` records the names in `Query.selected`, from which `SQLCompiler.get_select` writes the select list (`django/db/models/sql/query.py:Query.set_values`, `django/db/models/sql/compiler.py:SQLCompiler.get_select`).",
-   "tree": "django",
-   "path": "django/db/models/sql/query.py",
-   "symbol": "Query.set_values",
-   "kind": "function",
-   "lines": [
-    2597,
-    2670
-   ],
-   "fingerprint": "9e40cfce72b34b7f"
-  },
-  {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select",
-   "line": 86,
-   "sentence": "`Query.set_values` records the names in `Query.selected`, from which `SQLCompiler.get_select` writes the select list (`django/db/models/sql/query.py:Query.set_values`, `django/db/models/sql/compiler.py:SQLCompiler.get_select`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.get_select",
-   "kind": "function",
-   "lines": [
-    241,
-    337
-   ],
-   "fingerprint": "ade92c6fb31c93cb"
-  },
-  {
    "pointer": "django/db/models/query.py:QuerySet.update_or_create",
-   "line": 94,
-   "sentence": "| `QuerySet.update_or_create` | takes create_defaults, the values for a row it makes, defaults serving for both where it is `None`; so does `QuerySet.aupdate_or_create`. A field named create_defaults is matched only as `\"create_defaults__exact\"` | 5.0 | `django/db/models/query.py:QuerySet.update_or_create` |",
+   "line": 96,
+   "sentence": "| `QuerySet.update_or_create` | New in 5.0: `create_defaults=`, the values for a row it makes; left `None`, `defaults=` serves for both. A field named create_defaults is matched only as `\"create_defaults__exact\"` | `django/db/models/query.py:QuerySet.update_or_create` |",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.update_or_create",
@@ -332,8 +304,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet._batched_insert",
-   "line": 95,
-   "sentence": "| `QuerySet.bulk_create` | with update_conflicts, sets each instance's key from the rows returned, where the backend returns rows from a bulk insert | 5.0 | `django/db/models/query.py:QuerySet._batched_insert` |",
+   "line": 97,
+   "sentence": "| `QuerySet.bulk_create` | Since 5.0, with `update_conflicts=True`, it sets each instance's key from the rows returned, where the backend returns rows from a bulk insert | `django/db/models/query.py:QuerySet._batched_insert` |",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet._batched_insert",
@@ -346,8 +318,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.in_bulk",
-   "line": 96,
-   "sentence": "| `QuerySet.in_bulk` | can follow `values` and `values_list`; refused them with `TypeError` before | 6.1 | `django/db/models/query.py:QuerySet.in_bulk` |",
+   "line": 98,
+   "sentence": "| `QuerySet.in_bulk` | Since 6.1, it can follow `values` and `values_list`, which it refused before with `TypeError` | `django/db/models/query.py:QuerySet.in_bulk` |",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.in_bulk",
@@ -359,9 +331,23 @@
    "fingerprint": "a12a52b1b14b0be4"
   },
   {
+   "pointer": "django/db/models/sql/query.py:Query.set_values",
+   "line": 99,
+   "sentence": "| `QuerySet.values` | Since 5.2, its columns and those of `values_list` stand in the order the names were given; the 5.2 notes say that before, \"a set of counterintuitive rules\" made combining such querysets unpredictable | `django/db/models/sql/query.py:Query.set_values` |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_values",
+   "kind": "function",
+   "lines": [
+    2597,
+    2670
+   ],
+   "fingerprint": "9e40cfce72b34b7f"
+  },
+  {
    "pointer": "django/db/models/query.py:QuerySet.totally_ordered",
-   "line": 97,
-   "sentence": "| `QuerySet.totally_ordered` | new beside `QuerySet.ordered`: true only where the ordering includes a unique field, or set of fields, not nullable | 6.1 | `django/db/models/query.py:QuerySet.totally_ordered` |",
+   "line": 100,
+   "sentence": "| `QuerySet.totally_ordered` | New in 6.1: beside `QuerySet.ordered`, true only where the ordering includes a unique field, or set of fields, not nullable | `django/db/models/query.py:QuerySet.totally_ordered` |",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.totally_ordered",
@@ -375,8 +361,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.iterator",
-   "line": 98,
-   "sentence": "| `QuerySet.iterator` | with prefetch lookups and no chunk_size, raises `ValueError` | 5.0 | `django/db/models/query.py:QuerySet.iterator` |",
+   "line": 101,
+   "sentence": "| `QuerySet.iterator` | Since 5.0, with prefetch lookups and no `chunk_size=`, it raises `ValueError` | `django/db/models/query.py:QuerySet.iterator` |",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet.iterator",
@@ -389,8 +375,8 @@
   },
   {
    "pointer": "django/db/models/query.py:get_prefetcher",
-   "line": 100,
-   "sentence": "| `Prefetch`, related managers and descriptors | get_current_queryset and get_prefetch_queryset, deprecated in 5.0, are gone; `get_prefetcher` looks for `get_prefetch_querysets` alone, and a descriptor with only the old method gets `ValueError`: the lookup \"does not resolve to an item that supports prefetching\" | 6.0 | `django/db/models/query.py:get_prefetcher` |",
+   "line": 103,
+   "sentence": "| get_prefetch_queryset and get_current_queryset | Gone in 6.0, deprecated in 5.0: `get_prefetcher` looks for `get_prefetch_querysets` alone, and a descriptor with only the old method gets `ValueError` | `django/db/models/query.py:get_prefetcher` |",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "get_prefetcher",
@@ -403,8 +389,8 @@
   },
   {
    "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.explain_query_prefix",
-   "line": 102,
-   "sentence": "| `QuerySet.explain` | on PostgreSQL, passes on generic_plan (5.1), memory and serialize (5.2); the notes ask PostgreSQL 16 and 17, the code checks no version | 5.1, 5.2 | `django/db/backends/postgresql/operations.py:DatabaseOperations.explain_query_prefix` |",
+   "line": 105,
+   "sentence": "| `QuerySet.explain` | New in 5.1, on PostgreSQL: `generic_plan=`; new in 5.2, `memory=` and `serialize=`. The notes ask PostgreSQL 16 and 17; the code checks no version | `django/db/backends/postgresql/operations.py:DatabaseOperations.explain_query_prefix` |",
    "tree": "django",
    "path": "django/db/backends/postgresql/operations.py",
    "symbol": "DatabaseOperations.explain_query_prefix",
@@ -417,8 +403,8 @@
   },
   {
    "pointer": "django/db/models/fields/related_lookups.py:get_normalized_value",
-   "line": 103,
-   "sentence": "| a related filter given an instance | refused with `ValueError` where `Model._is_pk_set` is false; the 5.0 notes say \"unsaved\", and an instance given a key and never saved is accepted | 5.0 | `django/db/models/fields/related_lookups.py:get_normalized_value` |",
+   "line": 106,
+   "sentence": "| a related filter given an instance | Since 5.0, refused with `ValueError` where `Model._is_pk_set` is false. The 5.0 notes say \"unsaved\", but an instance given a key and never saved is accepted | `django/db/models/fields/related_lookups.py:get_normalized_value` |",
    "tree": "django",
    "path": "django/db/models/fields/related_lookups.py",
    "symbol": "get_normalized_value",

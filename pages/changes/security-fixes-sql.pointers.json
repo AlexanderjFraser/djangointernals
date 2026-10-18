@@ -10,7 +10,7 @@
   {
    "pointer": "django/db/backends/postgresql/operations.py:DatabaseOperations.quote_name",
    "line": 9,
-   "sentence": "A backend quotes a name by wrapping it and escapes no quotation mark inside it (`django/db/backends/postgresql/operations.py:DatabaseOperations.quote_name`), so a quotation mark would end the name early: the defence is to refuse such a name before it is written.",
+   "sentence": "A backend quotes a name by wrapping it, and escapes no quotation mark inside it, so a quotation mark would end the name early (`django/db/backends/postgresql/operations.py:DatabaseOperations.quote_name`).",
    "tree": "django",
    "path": "django/db/backends/postgresql/operations.py",
    "symbol": "DatabaseOperations.quote_name",
@@ -52,7 +52,7 @@
   {
    "pointer": "docs/releases/6.1.txt",
    "line": 11,
-   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), and 6.1.1 lists no security fix (`docs/releases/6.1.1.txt`).",
+   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -66,7 +66,7 @@
   {
    "pointer": "docs/releases/6.1.1.txt",
    "line": 11,
-   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), and 6.1.1 lists no security fix (`docs/releases/6.1.1.txt`).",
+   "sentence": "6.1.1 lists no security fix (`docs/releases/6.1.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.1.txt",
    "symbol": null,
@@ -80,7 +80,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query.check_alias",
    "line": 15,
-   "sentence": "It raises `ValueError` where `FORBIDDEN_ALIAS_PATTERN` finds a quotation mark (SQLite's square brackets among them), whitespace, a control character, a semicolon, a hash or a comment marker (`django/db/models/sql/query.py:Query.check_alias`; [The SELECT clause: `get_select`, the select mask and `klass_info`](../sql/select.md#annotations-and-extras-the-masks)).",
+   "sentence": "It refuses a name where `FORBIDDEN_ALIAS_PATTERN` finds a quotation mark, whitespace, a control character, a semicolon, a hash or a comment marker; the quotation marks include SQLite's square brackets (`django/db/models/sql/query.py:Query.check_alias`; [The SELECT clause: `get_select`, the select mask and `klass_info`](../sql/select.md#annotations-and-extras-the-masks)).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.check_alias",
@@ -93,8 +93,8 @@
   },
   {
    "pointer": "django/db/models/sql/datastructures.py:Join.as_sql",
-   "line": 33,
-   "sentence": "The name of a `FilteredRelation` is the alias of the table its join brings in, which `Join.as_sql` writes after the table (`django/db/models/sql/datastructures.py:Join.as_sql`; [`filter`, `exclude` and `Q` objects](../querysets/filters.md#filteredrelation-a-condition-in-the-join)).",
+   "line": 35,
+   "sentence": "`Join.as_sql` writes that alias after the table (`django/db/models/sql/datastructures.py:Join.as_sql`; [`filter`, `exclude` and `Q` objects](../querysets/filters.md#filteredrelation-a-condition-in-the-join)).",
    "tree": "django",
    "path": "django/db/models/sql/datastructures.py",
    "symbol": "Join.as_sql",
@@ -106,23 +106,9 @@
    "fingerprint": "e5695c5129142fd0"
   },
   {
-   "pointer": "docs/releases/5.2.11.txt",
-   "line": 33,
-   "sentence": "The period's refusal came with CVE-2026-1312 (5.2.11, 6.0.2), whose notes say `QuerySet.order_by` \"was subject to SQL injection in column aliases containing periods\" when a `FilteredRelation` used the same alias (`docs/releases/5.2.11.txt`).",
-   "tree": "django",
-   "path": "docs/releases/5.2.11.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    78
-   ],
-   "fingerprint": "8c400daf3b0323c4"
-  },
-  {
    "pointer": "django/db/models/sql/query.py:Query.add_filtered_relation",
-   "line": 33,
-   "sentence": "At this commit it does so only for one that did (`django/db/models/sql/query.py:Query.add_filtered_relation`, `django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
+   "line": 35,
+   "sentence": "`Query.add_filtered_relation` hands the name to the check, after refusing a name with a period (`django/db/models/sql/query.py:Query.add_filtered_relation`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.add_filtered_relation",
@@ -134,9 +120,23 @@
    "fingerprint": "98b2ab16cad91263"
   },
   {
+   "pointer": "docs/releases/5.2.11.txt",
+   "line": 37,
+   "sentence": "Its notes say `QuerySet.order_by` \"was subject to SQL injection in column aliases containing periods\" when a `FilteredRelation` used the same alias (`docs/releases/5.2.11.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.11.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    78
+   ],
+   "fingerprint": "8c400daf3b0323c4"
+  },
+  {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
-   "line": 33,
-   "sentence": "At this commit it does so only for one that did (`django/db/models/sql/query.py:Query.add_filtered_relation`, `django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
+   "line": 37,
+   "sentence": "At this commit it does so only for one that was (`django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler._order_by_pairs",
@@ -149,7 +149,7 @@
   },
   {
    "pointer": "django/db/backends/postgresql/compiler.py",
-   "line": 35,
+   "line": 39,
    "sentence": "6.1 quotes the alias of every table and join with `SQLCompiler.quote_name`, and PostgreSQL's backend lost its own compiler for a SELECT (`django/db/backends/postgresql/compiler.py`; [What changed in expressions, lookups and the compiler](sql.md)).",
    "tree": "django",
    "path": "django/db/backends/postgresql/compiler.py",
@@ -163,8 +163,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
-   "line": 47,
-   "sentence": "`Q.__init__` takes two keyword arguments of its own, `\"_connector\"` and `\"_negated\"`, and the connector is the word `WhereNode.as_sql` writes between the conditions it joins (`django/db/models/sql/where.py:WhereNode.as_sql`).",
+   "line": 51,
+   "sentence": "The connector is the word `WhereNode.as_sql` writes between the conditions it joins (`django/db/models/sql/where.py:WhereNode.as_sql`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.as_sql",
@@ -177,8 +177,8 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet._filter_or_exclude_inplace",
-   "line": 47,
-   "sentence": "The fix guards twice: `QuerySet._filter_or_exclude_inplace` refuses both keywords with `TypeError`, by `PROHIBITED_FILTER_KWARGS`, and `Q` refuses with `ValueError` any connector but `Q.AND`, `Q.OR`, `Q.XOR` and `None` (`django/db/models/query.py:QuerySet._filter_or_exclude_inplace`; [`filter`, `exclude` and `Q` objects](../querysets/filters.md#the-two-keyword-arguments-that-are-refused)).",
+   "line": 51,
+   "sentence": "`QuerySet._filter_or_exclude_inplace` refuses both keywords with `TypeError`, by `PROHIBITED_FILTER_KWARGS` (`django/db/models/query.py:QuerySet._filter_or_exclude_inplace`).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet._filter_or_exclude_inplace",
@@ -191,8 +191,8 @@
   },
   {
    "pointer": "django/db/models/query_utils.py:Q._check_connector",
-   "line": 49,
-   "sentence": "6.1 carried the guard further, which no note lists: `Q._check_connector` also checks the connector given to `Q.create`, a class method by which Django builds `Q` objects of its own, with `Q.AND`, `Q.OR`, `Q.XOR`, the connector of a `Q` it copies, or none (`django/db/models/query_utils.py:Q._check_connector`).",
+   "line": 53,
+   "sentence": "`Q._check_connector` also checks the connector given to `Q.create`, a class method by which Django builds `Q` objects of its own (`django/db/models/query_utils.py:Q._check_connector`).",
    "tree": "django",
    "path": "django/db/models/query_utils.py",
    "symbol": "Q._check_connector",
@@ -206,8 +206,8 @@
   },
   {
    "pointer": "django/db/models/expressions.py:When.__init__",
-   "line": 59,
-   "sentence": "5.2.17 and 6.0.8 handed them to its `Q`, so `When` could be given `\"_negated\"`: `When(title=\"Dawn\", _negated=True, then=Value(1))` there marked every entry but Dawn (`django/db/models/expressions.py:When.__init__`).",
+   "line": 63,
+   "sentence": "Since 6.1 `When.__init__` also refuses the two keywords with `TypeError` (`django/db/models/expressions.py:When.__init__`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "When.__init__",
@@ -220,8 +220,8 @@
   },
   {
    "pointer": "docs/releases/5.0.10.txt",
-   "line": 63,
-   "sentence": "Before 5.0.10 and 5.1.4 a `HasKey` made directly on Oracle \"was subject to SQL injection if untrusted data was used as a lhs value\"; `\"has_key\"` through the double-underscore syntax was not, the notes say (CVE-2024-53908; `docs/releases/5.0.10.txt`).",
+   "line": 67,
+   "sentence": "Before 5.0.10 and 5.1.4 a `HasKey` made directly on Oracle \"was subject to SQL injection if untrusted data was used as a lhs value\" (CVE-2024-53908; `docs/releases/5.0.10.txt`).",
    "tree": "django",
    "path": "docs/releases/5.0.10.txt",
    "symbol": null,
@@ -234,7 +234,7 @@
   },
   {
    "pointer": "django/db/models/fields/json.py:HasKeyLookup.as_oracle",
-   "line": 63,
+   "line": 67,
    "sentence": "`HasKeyLookup.compile_json_path_final_key` writes the key through `json.dumps`, which escapes U+FFFF, so a key cannot close the literal (`django/db/models/fields/json.py:HasKeyLookup.as_oracle`, `django/db/models/fields/json.py:HasKeyLookup.compile_json_path_final_key`).",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
@@ -248,7 +248,7 @@
   },
   {
    "pointer": "django/db/models/fields/json.py:HasKeyLookup.compile_json_path_final_key",
-   "line": 63,
+   "line": 67,
    "sentence": "`HasKeyLookup.compile_json_path_final_key` writes the key through `json.dumps`, which escapes U+FFFF, so a key cannot close the literal (`django/db/models/fields/json.py:HasKeyLookup.as_oracle`, `django/db/models/fields/json.py:HasKeyLookup.compile_json_path_final_key`).",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
@@ -262,8 +262,8 @@
   },
   {
    "pointer": "django/contrib/gis/db/models/lookups.py:GISLookup.process_band_indices",
-   "line": 65,
-   "sentence": "A raster lookup on PostGIS may carry a band index in its value (`django/contrib/gis/db/models/lookups.py:GISLookup.process_band_indices`), and `PostGISOperator.check_raster` writes the index into the SQL.",
+   "line": 69,
+   "sentence": "A raster lookup on PostGIS may carry the index in its value, and `check_raster` writes it into the SQL (`django/contrib/gis/db/models/lookups.py:GISLookup.process_band_indices`, `django/contrib/gis/db/backends/postgis/operations.py:PostGISOperator.check_raster`; [Spatial lookups, functions and distances](../contrib/spatial-queries.md)).",
    "tree": "django",
    "path": "django/contrib/gis/db/models/lookups.py",
    "symbol": "GISLookup.process_band_indices",
@@ -276,8 +276,8 @@
   },
   {
    "pointer": "django/contrib/gis/db/backends/postgis/operations.py:PostGISOperator.check_raster",
-   "line": 65,
-   "sentence": "Since 5.2.11 and 6.0.2 (CVE-2026-1207) it raises `TypeError` for an index that is not an integer (`django/contrib/gis/db/backends/postgis/operations.py:PostGISOperator.check_raster`; [Spatial lookups, functions and distances](../contrib/spatial-queries.md)).",
+   "line": 69,
+   "sentence": "A raster lookup on PostGIS may carry the index in its value, and `check_raster` writes it into the SQL (`django/contrib/gis/db/models/lookups.py:GISLookup.process_band_indices`, `django/contrib/gis/db/backends/postgis/operations.py:PostGISOperator.check_raster`; [Spatial lookups, functions and distances](../contrib/spatial-queries.md)).",
    "tree": "django",
    "path": "django/contrib/gis/db/backends/postgis/operations.py",
    "symbol": "PostGISOperator.check_raster",

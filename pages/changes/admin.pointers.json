@@ -8,23 +8,9 @@
  "document": "admin.md",
  "pointers": [
   {
-   "pointer": "docs/releases/6.1.txt",
-   "line": 9,
-   "sentence": "Two changes of 6.1 alter how the admin works: an action is an `Action` whose locations can offer it on a change form as well as on the change list; and a change list joins the foreign keys its columns name, not every non-null one, a gain, the notes say, for models with many foreign keys (`docs/releases/6.1.txt`).",
-   "tree": "django",
-   "path": "docs/releases/6.1.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    760
-   ],
-   "fingerprint": "283b7ce3a441f06c"
-  },
-  {
    "pointer": "django/contrib/admin/options.py:Action",
    "line": 13,
-   "sentence": "Since 6.1 each value is an `Action`, which adds a plural description and the **locations**, members of `ActionLocation`: `ActionLocation.CHANGE_LIST`, the default, and `ActionLocation.CHANGE_FORM`, a change page's one object (`django/contrib/admin/options.py:Action`).",
+   "sentence": "An `Action` adds a plural description and the **locations**, members of `ActionLocation`: `ActionLocation.CHANGE_LIST`, the default, and `ActionLocation.CHANGE_FORM` (`django/contrib/admin/options.py:Action`).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "Action",
@@ -39,7 +25,7 @@
   {
    "pointer": "django/contrib/admin/decorators.py:action",
    "line": 13,
-   "sentence": "The decorator `django.contrib.admin.action` takes `location=`, one location or a list, and `description_plural=`, the change list's text in place of `description=` (`django/contrib/admin/decorators.py:action`; [Actions: `response_action` and `delete_selected`](../admin/actions.md)).",
+   "sentence": "The decorator `django.contrib.admin.action` sets them with `location=` and `description_plural=` (`django/contrib/admin/decorators.py:action`; [Actions: `response_action` and `delete_selected`](../admin/actions.md)).",
    "tree": "django",
    "path": "django/contrib/admin/decorators.py",
    "symbol": "action",
@@ -53,7 +39,7 @@
   {
    "pointer": "django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location",
    "line": 15,
-   "sentence": "The old shapes warn since 6.1, and work until Django 2028: an `Action` unpacked or indexed gives the tuple's members (`Action.__iter__`), and an override of `get_actions` or `ModelAdmin.get_action_choices` without `action_location=` is found by its signature and called without it on the change list (`django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location`).",
+   "sentence": "An override of `get_actions` without it is found by its signature, and called without it on the change list (`django/contrib/admin/options.py:ModelAdmin._get_actions_with_action_location`).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "ModelAdmin._get_actions_with_action_location",
@@ -65,37 +51,9 @@
    "fingerprint": "a494b5328df3ed26"
   },
   {
-   "pointer": "django/db/models/query_utils.py:select_related_descend",
-   "line": 27,
-   "sentence": "With `ModelAdmin.list_select_related` false, the default, a change list showing a foreign key used to call `select_related()` with no fields, which follows every foreign key that cannot be null (`django/db/models/query_utils.py:select_related_descend`): \"all foreign key fields\", the 6.1 notes say (`docs/releases/6.1.txt`).",
-   "tree": "django",
-   "path": "django/db/models/query_utils.py",
-   "symbol": "select_related_descend",
-   "kind": "function",
-   "lines": [
-    431,
-    466
-   ],
-   "fingerprint": "5558eed7ff66ae8d"
-  },
-  {
-   "pointer": "docs/releases/6.1.txt",
-   "line": 27,
-   "sentence": "With `ModelAdmin.list_select_related` false, the default, a change list showing a foreign key used to call `select_related()` with no fields, which follows every foreign key that cannot be null (`django/db/models/query_utils.py:select_related_descend`): \"all foreign key fields\", the 6.1 notes say (`docs/releases/6.1.txt`).",
-   "tree": "django",
-   "path": "docs/releases/6.1.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    760
-   ],
-   "fingerprint": "283b7ce3a441f06c"
-  },
-  {
    "pointer": "django/contrib/admin/views/main.py:ChangeList.get_select_related_fields",
-   "line": 27,
-   "sentence": "Since 6.1 only the keys that columns name are joined, as `ChangeList.get_select_related_fields`, which replaced has_related_field_in_list_display, collects them (`django/contrib/admin/views/main.py:ChangeList.get_select_related_fields`; [The change list: `changelist_view` and `ChangeList`](../admin/change-list.md)).",
+   "line": 29,
+   "sentence": "Since 6.1, with `ModelAdmin.list_select_related` false, the default, a change list joins only the foreign keys that are columns, which `ChangeList.get_select_related_fields` collects (`django/contrib/admin/views/main.py:ChangeList.get_select_related_fields`; [The change list: `changelist_view` and `ChangeList`](../admin/change-list.md)).",
    "tree": "django",
    "path": "django/contrib/admin/views/main.py",
    "symbol": "ChangeList.get_select_related_fields",
@@ -107,23 +65,23 @@
    "fingerprint": "d93f819b16936f76"
   },
   {
-   "pointer": "django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__get__",
-   "line": 37,
-   "sentence": "None of the four releases joins a key for a column passing through it, as \"author__name\" passes through author: unless something else joins it, each row's author is fetched by a query of its own, under the default fetch mode since 6.1, the choice of what such a read does (`django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.__get__`; [Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).",
+   "pointer": "django/db/models/query_utils.py:select_related_descend",
+   "line": 29,
+   "sentence": "A change list showing a foreign key used to call `select_related()` with no fields, which follows every foreign key that cannot be null (`django/db/models/query_utils.py:select_related_descend`).",
    "tree": "django",
-   "path": "django/db/models/fields/related_descriptors.py",
-   "symbol": "ForwardManyToOneDescriptor.__get__",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "select_related_descend",
    "kind": "function",
    "lines": [
-    234,
-    277
+    431,
+    466
    ],
-   "fingerprint": "f9bf8f5d72628ab6"
+   "fingerprint": "5558eed7ff66ae8d"
   },
   {
    "pointer": "django/contrib/admin/options.py:ModelAdmin.__init_subclass__",
-   "line": 39,
-   "sentence": "A class that sets it warns as it is defined, asking for `False` or the fields to fetch (`django/contrib/admin/options.py:ModelAdmin.__init_subclass__`).",
+   "line": 41,
+   "sentence": "A class that sets `True` warns as it is defined, asking for `False` or the fields to fetch; in Django 2028 it is to raise `ValueError` instead (`django/contrib/admin/options.py:ModelAdmin.__init_subclass__`).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "ModelAdmin.__init_subclass__",
@@ -136,8 +94,8 @@
   },
   {
    "pointer": "django/contrib/admin/views/main.py:ChangeList.get_filters",
-   "line": 43,
-   "sentence": "5.0 gave it the request as a third argument, which `ChangeList.get_filters` passes by position (`django/contrib/admin/views/main.py:ChangeList.get_filters`); 5.0 deprecated overrides without it, and 6.0 dropped the fallback that called them with two.",
+   "line": 45,
+   "sentence": "5.0 gave it the request as a third argument, which `ChangeList.get_filters` passes by position, and deprecated overrides without it (`django/contrib/admin/views/main.py:ChangeList.get_filters`).",
    "tree": "django",
    "path": "django/contrib/admin/views/main.py",
    "symbol": "ChangeList.get_filters",
@@ -149,23 +107,9 @@
    "fingerprint": "f82403a0777cc8d4"
   },
   {
-   "pointer": "django/contrib/admin/templatetags/admin_list.py:items_for_result",
-   "line": 57,
-   "sentence": "Since 6.1 a column of `ModelAdmin.list_display` that crosses a relation and ends at a boolean field, such as \"author__active\", is drawn as the boolean icon (`django/contrib/admin/templatetags/admin_list.py:items_for_result`).",
-   "tree": "django",
-   "path": "django/contrib/admin/templatetags/admin_list.py",
-   "symbol": "items_for_result",
-   "kind": "function",
-   "lines": [
-    205,
-    318
-   ],
-   "fingerprint": "c93842ca7d2db0a7"
-  },
-  {
    "pointer": "django/contrib/admin/models.py:LogEntryManager.log_actions",
-   "line": 61,
-   "sentence": "At this commit every log method of `ModelAdmin` writes through `log_actions`, which saves a single entry with `Model.save` and several with one `QuerySet.bulk_create` (`django/contrib/admin/models.py:LogEntryManager.log_actions`; [The log and the history: `LogEntry` and `history_view`](../admin/log.md)).",
+   "line": 59,
+   "sentence": "The delete page's single entry is saved with `Model.save`, and sends one (`django/contrib/admin/models.py:LogEntryManager.log_actions`; [The log and the history: `LogEntry` and `history_view`](../admin/log.md)).",
    "tree": "django",
    "path": "django/contrib/admin/models.py",
    "symbol": "LogEntryManager.log_actions",
@@ -178,7 +122,7 @@
   },
   {
    "pointer": "django/contrib/admin/options.py:ModelAdmin.log_deletions",
-   "line": 71,
+   "line": 61,
    "sentence": "Since 6.0 an override of log_deletion, or of a manager's log_action, is not called, and nothing warns; `log_actions` writes the entries without it (`django/contrib/admin/options.py:ModelAdmin.log_deletions`).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
@@ -192,8 +136,8 @@
   },
   {
    "pointer": "django/contrib/admin/options.py:ModelAdmin.history_view",
-   "line": 75,
-   "sentence": "`ModelAdmin.history_view` loads the object first, and since 6.2 refuses a user without the view or change permission, with `PermissionDenied`, a 403, before it answers that the object is missing (`django/contrib/admin/options.py:ModelAdmin.history_view`).",
+   "line": 65,
+   "sentence": "Since 6.2 `ModelAdmin.history_view` raises `PermissionDenied` for such a user before it answers that the object is missing (`django/contrib/admin/options.py:ModelAdmin.history_view`).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "ModelAdmin.history_view",
@@ -206,8 +150,8 @@
   },
   {
    "pointer": "django/contrib/admin/sites.py:AdminSite.shortcut_view",
-   "line": 87,
-   "sentence": "\"View on site\" has been the site's own view since 6.2, `AdminSite.shortcut_view`, which raises `PermissionDenied` when the model is registered and its model admin's `BaseModelAdmin.has_view_permission` is false (`django/contrib/admin/sites.py:AdminSite.shortcut_view`; [The site's own pages: the index, the login and `AdminSite.each_context`](../admin/site-views.md)).",
+   "line": 67,
+   "sentence": "It raises `PermissionDenied` when the model is registered and its model admin's `BaseModelAdmin.has_view_permission` is false (`django/contrib/admin/sites.py:AdminSite.shortcut_view`; [The site's own pages: the index, the login and `AdminSite.each_context`](../admin/site-views.md)).",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
    "symbol": "AdminSite.shortcut_view",
@@ -220,8 +164,8 @@
   },
   {
    "pointer": "django/contrib/admin/sites.py:AdminSite.get_model_admin",
-   "line": 95,
-   "sentence": "| `AdminSite.get_model_admin`, `AdminSite.get_log_entries` | new: a model's model admin, or `NotRegistered`; the log's queryset | 5.0 | `django/contrib/admin/sites.py:AdminSite.get_model_admin` |",
+   "line": 75,
+   "sentence": "| `AdminSite.get_model_admin` | New in 5.0: a model's model admin, or `NotRegistered` | `django/contrib/admin/sites.py:AdminSite.get_model_admin` |",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
    "symbol": "AdminSite.get_model_admin",
@@ -233,9 +177,23 @@
    "fingerprint": "a3732f404377a5c0"
   },
   {
+   "pointer": "django/contrib/admin/sites.py:AdminSite.get_log_entries",
+   "line": 76,
+   "sentence": "| `AdminSite.get_log_entries` | New in 5.0: the queryset of the log entries the site lists | `django/contrib/admin/sites.py:AdminSite.get_log_entries` |",
+   "tree": "django",
+   "path": "django/contrib/admin/sites.py",
+   "symbol": "AdminSite.get_log_entries",
+   "kind": "function",
+   "lines": [
+    616,
+    619
+   ],
+   "fingerprint": "7ef4d29d0f817f35"
+  },
+  {
    "pointer": "django/contrib/admin/exceptions.py",
-   "line": 96,
-   "sentence": "| `NotRegistered`, `AlreadyRegistered` | moved to `django.contrib.admin.exceptions`; the old import gives the same classes, silently | 5.0 | `django/contrib/admin/exceptions.py` |",
+   "line": 77,
+   "sentence": "| `NotRegistered`, `AlreadyRegistered` | Since 5.0, moved to `django.contrib.admin.exceptions`; the old import still works, unwarned | `django/contrib/admin/exceptions.py` |",
    "tree": "django",
    "path": "django/contrib/admin/exceptions.py",
    "symbol": null,
@@ -248,8 +206,8 @@
   },
   {
    "pointer": "django/contrib/admin/sites.py:AdminSite.password_change",
-   "line": 97,
-   "sentence": "| `AdminSite.password_change_form` | new: the password change's form | 6.0 | `django/contrib/admin/sites.py:AdminSite.password_change` |",
+   "line": 78,
+   "sentence": "| `AdminSite.password_change_form` | New in 6.0: the password change's form | `django/contrib/admin/sites.py:AdminSite.password_change` |",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
    "symbol": "AdminSite.password_change",
@@ -262,8 +220,8 @@
   },
   {
    "pointer": "django/contrib/admin/sites.py:AdminSite.login",
-   "line": 98,
-   "sentence": "| `AdminSite.login` | a user already let in goes to `\"next\"` if safe; under 6.0.8, to the index | 6.1 | `django/contrib/admin/sites.py:AdminSite.login` |",
+   "line": 79,
+   "sentence": "| `AdminSite.login` | Since 6.1, a user already let in goes to `\"next\"` if it is safe; under 6.0.8, to the index | `django/contrib/admin/sites.py:AdminSite.login` |",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
    "symbol": "AdminSite.login",
@@ -277,8 +235,8 @@
   },
   {
    "pointer": "django/contrib/admin/views/main.py:ChangeList.__init__",
-   "line": 99,
-   "sentence": "| `ModelAdmin.show_facets` | new: beside each filter's choices, how many rows each would leave, by default when the query string has `\"_facets\"` | 5.0 | `django/contrib/admin/views/main.py:ChangeList.__init__` |",
+   "line": 80,
+   "sentence": "| `ModelAdmin.show_facets` | New in 5.0: beside each filter's choices, how many rows each would leave; by default only with `\"_facets\"` in the query string | `django/contrib/admin/views/main.py:ChangeList.__init__` |",
    "tree": "django",
    "path": "django/contrib/admin/views/main.py",
    "symbol": "ChangeList.__init__",
@@ -290,9 +248,65 @@
    "fingerprint": "decd5fe11c11c092"
   },
   {
+   "pointer": "django/contrib/admin/filters.py:FieldListFilter.queryset",
+   "line": 81,
+   "sentence": "| a list filter of values, choices or relations | Since 5.0, takes several values, joined with OR: `AllValuesFieldListFilter`, `ChoicesFieldListFilter`, `RelatedFieldListFilter` and `RelatedOnlyFieldListFilter` | `django/contrib/admin/filters.py:FieldListFilter.queryset` |",
+   "tree": "django",
+   "path": "django/contrib/admin/filters.py",
+   "symbol": "FieldListFilter.queryset",
+   "kind": "function",
+   "lines": [
+    191,
+    198
+   ],
+   "fingerprint": "2f7dea71eafc672b"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_list.py:items_for_result",
+   "line": 83,
+   "sentence": "| a boolean field at a path's end | Since 6.1, drawn as the boolean icon, not the text True, as for \"author__active\" | `django/contrib/admin/templatetags/admin_list.py:items_for_result` |",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_list.py",
+   "symbol": "items_for_result",
+   "kind": "function",
+   "lines": [
+    205,
+    318
+   ],
+   "fingerprint": "c93842ca7d2db0a7"
+  },
+  {
+   "pointer": "django/contrib/admin/templatetags/admin_list.py:items_for_result",
+   "line": 84,
+   "sentence": "| a property in a column | Since 5.0, drawn as the boolean icon when its getter is marked boolean, as by `display(boolean=True)` | `django/contrib/admin/templatetags/admin_list.py:items_for_result` |",
+   "tree": "django",
+   "path": "django/contrib/admin/templatetags/admin_list.py",
+   "symbol": "items_for_result",
+   "kind": "function",
+   "lines": [
+    205,
+    318
+   ],
+   "fingerprint": "c93842ca7d2db0a7"
+  },
+  {
+   "pointer": "django/contrib/admin/utils.py:display_for_field",
+   "line": 85,
+   "sentence": "| a model's URL field | Since 5.2, a link in a read-only field, and in the change list unless its column is the link to the change form; text when `URLValidator` refuses the value, since 5.2.17 and 6.0.8 fixed CVE-2026-15920 | `django/contrib/admin/utils.py:display_for_field` |",
+   "tree": "django",
+   "path": "django/contrib/admin/utils.py",
+   "symbol": "display_for_field",
+   "kind": "function",
+   "lines": [
+    433,
+    482
+   ],
+   "fingerprint": "ce75aafb4359e493"
+  },
+  {
    "pointer": "django/contrib/admin/templates/admin/includes/fieldset.html",
-   "line": 103,
-   "sentence": "| the change form | a field's input below its label, its help text and then its errors between; a checkbox still beside its label; the class `\"wide\"` gone; `{% block object-tools %}` outside `{% block content %}` | 6.1 | `django/contrib/admin/templates/admin/includes/fieldset.html` |",
+   "line": 87,
+   "sentence": "| a change form's field | Since 6.1, its label, help text, errors and input stand one below the other, in that order; a checkbox stays beside its label; the class `\"wide\"` is gone | `django/contrib/admin/templates/admin/includes/fieldset.html` |",
    "tree": "django",
    "path": "django/contrib/admin/templates/admin/includes/fieldset.html",
    "symbol": null,
@@ -304,9 +318,23 @@
    "fingerprint": "cdcfa96ca6b4672d"
   },
   {
+   "pointer": "django/contrib/admin/templates/admin/change_form.html",
+   "line": 88,
+   "sentence": "| `{% block object-tools %}` | Since 6.1, outside `{% block content %}` in the change form | `django/contrib/admin/templates/admin/change_form.html` |",
+   "tree": "django",
+   "path": "django/contrib/admin/templates/admin/change_form.html",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    93
+   ],
+   "fingerprint": "147994eac4053c3a"
+  },
+  {
    "pointer": "django/contrib/admin/helpers.py:Fieldset.is_collapsible",
-   "line": 104,
-   "sentence": "| a fieldset of the class `\"collapse\"` | if named, a details element, closed until opened; an open fieldset while one of its fields has an error; collapse.js gone | 5.1 | `django/contrib/admin/helpers.py:Fieldset.is_collapsible` |",
+   "line": 89,
+   "sentence": "| a fieldset of the class `\"collapse\"` | Since 5.1, one with a name, shown as its heading, is a details element, closed until opened, unless one of its fields has an error; collapse.js is gone | `django/contrib/admin/helpers.py:Fieldset.is_collapsible` |",
    "tree": "django",
    "path": "django/contrib/admin/helpers.py",
    "symbol": "Fieldset.is_collapsible",
@@ -320,8 +348,8 @@
   },
   {
    "pointer": "django/contrib/admin/templates/admin/base.html",
-   "line": 105,
-   "sentence": "| `{% block extrabody %}` | new, before the end of the body | 5.2 | `django/contrib/admin/templates/admin/base.html` |",
+   "line": 90,
+   "sentence": "| `{% block extrabody %}` | New in 5.2: before the end of the body | `django/contrib/admin/templates/admin/base.html` |",
    "tree": "django",
    "path": "django/contrib/admin/templates/admin/base.html",
    "symbol": null,
@@ -333,37 +361,19 @@
    "fingerprint": "3e14f9e1f9cba381"
   },
   {
-   "pointer": "django/contrib/admin/static/admin/js/SelectBox.js",
-   "line": 106,
-   "sentence": "| `FilteredSelectMultiple` | its script keeps named groups of choices | 6.1 | `django/contrib/admin/static/admin/js/SelectBox.js` |",
+   "pointer": "django/contrib/admindocs/",
+   "line": 91,
+   "sentence": "| admindocs | Since 5.2, a model's page only for a user who may view or change the model; a docstring's link may carry its own text | `django/contrib/admindocs/` |",
    "tree": "django",
-   "path": "django/contrib/admin/static/admin/js/SelectBox.js",
+   "path": "django/contrib/admindocs/",
    "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    177
-   ],
-   "fingerprint": "9c1e1e8519ea0f1b"
-  },
-  {
-   "pointer": "django/contrib/admindocs/views.py:user_has_model_view_permission",
-   "line": 107,
-   "sentence": "| admindocs | a model's page only for a user who may view or change it; a docstring's link may carry its own text | 5.2 | `django/contrib/admindocs/views.py:user_has_model_view_permission` |",
-   "tree": "django",
-   "path": "django/contrib/admindocs/views.py",
-   "symbol": "user_has_model_view_permission",
-   "kind": "function",
-   "lines": [
-    204,
-    210
-   ],
-   "fingerprint": "a8afd7206ce8d5b5"
+   "kind": "directory",
+   "fingerprint": "7bb548b48bf43b6d"
   },
   {
    "pointer": "django/contrib/admin/templatetags/base.py:InclusionAdminNode.__init__",
-   "line": 108,
-   "sentence": "| the undocumented | helpers.checkbox gone (5.0); `InclusionAdminNode.__init__` takes the tag's name first (6.1); django.contrib.admin.tests, which held AdminSeleniumTestCase, gone with django.test.selenium, its base (6.2; [What changed in the test framework](testing.md)) | 5.0 to 6.2 | `django/contrib/admin/templatetags/base.py:InclusionAdminNode.__init__` |",
+   "line": 92,
+   "sentence": "| `InclusionAdminNode.__init__` | Since 6.1, takes the tag's name first | `django/contrib/admin/templatetags/base.py:InclusionAdminNode.__init__` |",
    "tree": "django",
    "path": "django/contrib/admin/templatetags/base.py",
    "symbol": "InclusionAdminNode.__init__",

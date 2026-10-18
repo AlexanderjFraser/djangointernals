@@ -8,51 +8,9 @@
  "document": "testing.md",
  "pointers": [
   {
-   "pointer": "django/test/client.py:RequestFactory.generic",
-   "line": 13,
-   "sentence": "Since 5.1 the request methods of `RequestFactory`, `AsyncRequestFactory`, `Client` and `AsyncClient` take `query_params=`, a mapping made the query string (`django/test/client.py:RequestFactory.generic`).",
-   "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "RequestFactory.generic",
-   "kind": "function",
-   "lines": [
-    636,
-    674
-   ],
-   "fingerprint": "2d7072d44cb0e84d"
-  },
-  {
-   "pointer": "django/test/client.py:ClientMixin.alogin",
-   "line": 15,
-   "sentence": "`ClientMixin.asession`, `ClientMixin.alogin`, `ClientMixin.aforce_login` and `ClientMixin.alogout` (5.0) are coroutine twins of the session and the login and logout methods (`django/test/client.py:ClientMixin.alogin`; [Sessions and logins in the test client: `ClientMixin.login` and `force_login`](../testing/client-login.md#the-asynchronous-methods)).",
-   "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "ClientMixin.alogin",
-   "kind": "function",
-   "lines": [
-    847,
-    855
-   ],
-   "fingerprint": "a737ceccc234955f"
-  },
-  {
-   "pointer": "django/test/client.py:ClientMixin._follow_redirect",
-   "line": 17,
-   "sentence": "`AsyncClient`'s methods have taken `follow=True` since 5.0, but `ClientMixin._follow_redirect`, which it shares with `Client`, reads two keys of a WSGI environ its requests lack: under all four releases a relative `\"Location\"` raises `KeyError: 'PATH_INFO'`, and otherwise a 307 or 308 `KeyError: 'REQUEST_METHOD'` (`django/test/client.py:ClientMixin._follow_redirect`).",
-   "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "ClientMixin._follow_redirect",
-   "kind": "function",
-   "lines": [
-    966,
-    1022
-   ],
-   "fingerprint": "8b6819e47bf38d4e"
-  },
-  {
    "pointer": "django/test/client.py:ClientMixin._get_backend",
-   "line": 19,
-   "sentence": "Before 6.2 that was the first entry of `AUTHENTICATION_BACKENDS` with a get_user method, which `BaseBackend` gives every subclass, returning `None`; since 6.2 it is the first whose class overrides `BaseBackend.get_user` or `BaseBackend.aget_user`, so that \"permission-only backends\", the notes say, are passed over (`django/test/client.py:ClientMixin._get_backend`, `docs/releases/6.2.txt`).",
+   "line": 13,
+   "sentence": "Since 6.2 it is the first whose class overrides `BaseBackend.get_user` or `BaseBackend.aget_user` (`django/test/client.py:ClientMixin._get_backend`, `docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "django/test/client.py",
    "symbol": "ClientMixin._get_backend",
@@ -65,8 +23,8 @@
   },
   {
    "pointer": "docs/releases/6.2.txt",
-   "line": 19,
-   "sentence": "Before 6.2 that was the first entry of `AUTHENTICATION_BACKENDS` with a get_user method, which `BaseBackend` gives every subclass, returning `None`; since 6.2 it is the first whose class overrides `BaseBackend.get_user` or `BaseBackend.aget_user`, so that \"permission-only backends\", the notes say, are passed over (`django/test/client.py:ClientMixin._get_backend`, `docs/releases/6.2.txt`).",
+   "line": 13,
+   "sentence": "Since 6.2 it is the first whose class overrides `BaseBackend.get_user` or `BaseBackend.aget_user` (`django/test/client.py:ClientMixin._get_backend`, `docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
    "symbol": null,
@@ -78,9 +36,37 @@
    "fingerprint": "e1d5d9202432f6d1"
   },
   {
+   "pointer": "django/test/client.py:RequestFactory.generic",
+   "line": 25,
+   "sentence": "Since 5.1 the request methods of `RequestFactory`, `AsyncRequestFactory`, `Client` and `AsyncClient` take `query_params=`, a mapping made the query string (`django/test/client.py:RequestFactory.generic`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "RequestFactory.generic",
+   "kind": "function",
+   "lines": [
+    636,
+    674
+   ],
+   "fingerprint": "2d7072d44cb0e84d"
+  },
+  {
+   "pointer": "django/test/client.py:ClientMixin._follow_redirect",
+   "line": 27,
+   "sentence": "Under all four releases a relative `\"Location\"` raises `KeyError: 'PATH_INFO'`, and any other 307 or 308 raises `KeyError: 'REQUEST_METHOD'` (`django/test/client.py:ClientMixin._follow_redirect`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "ClientMixin._follow_redirect",
+   "kind": "function",
+   "lines": [
+    966,
+    1022
+   ],
+   "fingerprint": "8b6819e47bf38d4e"
+  },
+  {
    "pointer": "django/test/testcases.py:SimpleTestCase._assert_contains",
    "line": 31,
-   "sentence": "Since 6.1 `SimpleTestCase._assert_contains`, which `SimpleTestCase.assertContains` and `SimpleTestCase.assertNotContains` share, sets `StreamingHttpResponse.streaming_content` again from the bytes it read (`django/test/testcases.py:SimpleTestCase._assert_contains`).",
+   "sentence": "The two share `SimpleTestCase._assert_contains`, which now sets `StreamingHttpResponse.streaming_content` again from the bytes it read (`django/test/testcases.py:SimpleTestCase._assert_contains`; [Assertions on a response: `assertContains`, `assertRedirects` and `assertTemplateUsed`](../testing/response-assertions.md)).",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "SimpleTestCase._assert_contains",
@@ -93,8 +79,8 @@
   },
   {
    "pointer": "docs/releases/5.1.txt",
-   "line": 47,
-   "sentence": "Since 5.1, \"to enforce test isolation\" (`docs/releases/5.1.txt`), it also replaces `BaseDatabaseWrapper.ensure_connection` while the class runs: under all four releases a query in a thread a test started raises `DatabaseOperationForbidden` for \"threaded connections\" (`django/test/testcases.py:SimpleTestCase.ensure_connection_patch_method`; [Which databases a test uses: `databases`](../testing/test-databases.md)).",
+   "line": 45,
+   "sentence": "Since 5.1 it also replaces `BaseDatabaseWrapper.ensure_connection` while the class runs, \"to enforce test isolation\", the notes say (`docs/releases/5.1.txt`).",
    "tree": "django",
    "path": "docs/releases/5.1.txt",
    "symbol": null,
@@ -107,8 +93,8 @@
   },
   {
    "pointer": "django/test/testcases.py:SimpleTestCase.ensure_connection_patch_method",
-   "line": 47,
-   "sentence": "Since 5.1, \"to enforce test isolation\" (`docs/releases/5.1.txt`), it also replaces `BaseDatabaseWrapper.ensure_connection` while the class runs: under all four releases a query in a thread a test started raises `DatabaseOperationForbidden` for \"threaded connections\" (`django/test/testcases.py:SimpleTestCase.ensure_connection_patch_method`; [Which databases a test uses: `databases`](../testing/test-databases.md)).",
+   "line": 45,
+   "sentence": "Under all four releases a query in a thread a test started raises `DatabaseOperationForbidden` for \"threaded connections\" (`django/test/testcases.py:SimpleTestCase.ensure_connection_patch_method`; [Which databases a test uses: `databases`](../testing/test-databases.md)).",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "SimpleTestCase.ensure_connection_patch_method",
@@ -121,37 +107,9 @@
    "fingerprint": "9329c5c585d97c3f"
   },
   {
-   "pointer": "django/test/testcases.py",
-   "line": 49,
-   "sentence": "`django/test/testcases.py` sets `__unittest = True`, by which `unittest` cuts the module's frames from a failure's traceback, so a failing assertion of Django's is reported at the test's line and, the notes add, `--pdb` enters the test (`django/test/testcases.py:__unittest`).",
-   "tree": "django",
-   "path": "django/test/testcases.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1897
-   ],
-   "fingerprint": "1b360268bc91f725"
-  },
-  {
-   "pointer": "django/test/testcases.py:__unittest",
-   "line": 49,
-   "sentence": "`django/test/testcases.py` sets `__unittest = True`, by which `unittest` cuts the module's frames from a failure's traceback, so a failing assertion of Django's is reported at the test's line and, the notes add, `--pdb` enters the test (`django/test/testcases.py:__unittest`).",
-   "tree": "django",
-   "path": "django/test/testcases.py",
-   "symbol": "__unittest",
-   "kind": "assignment",
-   "lines": [
-    72,
-    72
-   ],
-   "fingerprint": "e2e6c2c6c7e5056d"
-  },
-  {
    "pointer": "django/test/testcases.py:TransactionTestCase.setUpClass",
-   "line": 49,
-   "sentence": "`TransactionTestCase.setUpClass` runs `TransactionTestCase._pre_setup` for the first test, and marks `SimpleTestCase._pre_setup_ran_eagerly` so that the test does not run it again (`django/test/testcases.py:TransactionTestCase.setUpClass`; [Emptying the tables after each test: `TransactionTestCase`](../testing/transaction-test-case.md)).",
+   "line": 47,
+   "sentence": "Since 5.2 the fixtures and serialized rows of a `TransactionTestCase` that is not a `TestCase` are there in its own `setUpClass`, once it has called the parent's (`django/test/testcases.py:TransactionTestCase.setUpClass`; [Emptying the tables after each test: `TransactionTestCase`](../testing/transaction-test-case.md)).",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "TransactionTestCase.setUpClass",
@@ -165,8 +123,8 @@
   },
   {
    "pointer": "django/test/runner.py:_init_worker",
-   "line": 53,
-   "sentence": "Since 6.0 it does the same under forkserver, and `get_max_test_processes`, which `--parallel auto` asks, no longer answers 1 for it (`django/test/runner.py:_init_worker`, `django/test/runner.py:get_max_test_processes`; [Running in parallel: `ParallelTestSuite`](../testing/parallel.md)).",
+   "line": 51,
+   "sentence": "Under forkserver it now does the same (`django/test/runner.py:_init_worker`; [Running in parallel: `ParallelTestSuite`](../testing/parallel.md)).",
    "tree": "django",
    "path": "django/test/runner.py",
    "symbol": "_init_worker",
@@ -179,8 +137,8 @@
   },
   {
    "pointer": "django/test/runner.py:get_max_test_processes",
-   "line": 53,
-   "sentence": "Since 6.0 it does the same under forkserver, and `get_max_test_processes`, which `--parallel auto` asks, no longer answers 1 for it (`django/test/runner.py:_init_worker`, `django/test/runner.py:get_max_test_processes`; [Running in parallel: `ParallelTestSuite`](../testing/parallel.md)).",
+   "line": 51,
+   "sentence": "Before 6.0 `get_max_test_processes`, which `--parallel auto` asks, answered 1 under forkserver (`django/test/runner.py:get_max_test_processes`).",
    "tree": "django",
    "path": "django/test/runner.py",
    "symbol": "get_max_test_processes",
@@ -193,8 +151,8 @@
   },
   {
    "pointer": "django/test/runner.py:DiscoverRunner.build_suite",
-   "line": 55,
-   "sentence": "The argument `extra_tests=` of `DiscoverRunner.build_suite` and `DiscoverRunner.run_tests`, removed in 5.0, is taken by their `**kwargs` and ignored: under all four releases a test given in it is left out of the suite without a word (`django/test/runner.py:DiscoverRunner.build_suite`).",
+   "line": 53,
+   "sentence": "Under all four releases a test given in it is left out of the suite without a word (`django/test/runner.py:DiscoverRunner.build_suite`).",
    "tree": "django",
    "path": "django/test/runner.py",
    "symbol": "DiscoverRunner.build_suite",
@@ -207,8 +165,8 @@
   },
   {
    "pointer": "django/test/utils.py:setup_test_environment",
-   "line": 57,
-   "sentence": "Since 6.1 a project may name its email backends by alias in the setting `MAILERS`; `setup_test_environment` gives each alias the local-memory backend, and sets `EMAIL_BACKEND` only without `MAILERS` (`django/test/utils.py:setup_test_environment`; [What changed in mail and tasks](mail-and-tasks.md)).",
+   "line": 55,
+   "sentence": "`setup_test_environment` gives each alias the local-memory backend, and sets `EMAIL_BACKEND` only where `MAILERS` is not defined (`django/test/utils.py:setup_test_environment`; [What changed in mail and tasks](mail-and-tasks.md)).",
    "tree": "django",
    "path": "django/test/utils.py",
    "symbol": "setup_test_environment",
@@ -221,8 +179,8 @@
   },
   {
    "pointer": "django/test/utils.py:setup_databases",
-   "line": 60,
-   "sentence": "A `TransactionTestCase` with `TransactionTestCase.serialized_rollback` gets back before each test the rows migrations wrote, which the runner's `setup_databases` serializes once every test database is made (`django/test/utils.py:setup_databases`; [Test databases: `BaseDatabaseCreation`](../backends/creation.md)).",
+   "line": 59,
+   "sentence": "The runner's `setup_databases` serializes them once every test database is made (`django/test/utils.py:setup_databases`; [Test databases: `BaseDatabaseCreation`](../backends/creation.md)).",
    "tree": "django",
    "path": "django/test/utils.py",
    "symbol": "setup_databases",
@@ -235,8 +193,8 @@
   },
   {
    "pointer": "django/test/testcases.py:TransactionTestCase._fixture_setup",
-   "line": 70,
-   "sentence": "Nothing warns of the new default: a project's runner that relies on it serializes nothing, and `TransactionTestCase._fixture_setup` restores no rows (`django/test/testcases.py:TransactionTestCase._fixture_setup`).",
+   "line": 69,
+   "sentence": "A project's own runner that relied on the old one now serializes nothing, and `TransactionTestCase._fixture_setup` restores no rows (`django/test/testcases.py:TransactionTestCase._fixture_setup`).",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "TransactionTestCase._fixture_setup",
@@ -250,8 +208,8 @@
   },
   {
    "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db",
-   "line": 72,
-   "sentence": "The warning's message points to DatabaseCreation.serialize_test_db, which no class defines; the notes name `BaseDatabaseCreation.serialize_db_to_string` (`django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db`; [What still warns: the deprecations and the releases that end them](deprecations.md)).",
+   "line": 71,
+   "sentence": "The notes name `BaseDatabaseCreation.serialize_db_to_string` (`django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db`; [What still warns: the deprecations and the releases that end them](deprecations.md)).",
    "tree": "django",
    "path": "django/db/backends/base/creation.py",
    "symbol": "BaseDatabaseCreation.create_test_db",
@@ -263,9 +221,23 @@
    "fingerprint": "dc7cb1465332c24b"
   },
   {
+   "pointer": "django/test/client.py:ClientMixin.alogin",
+   "line": 79,
+   "sentence": "| the clients' coroutine methods | New in 5.0: `ClientMixin.asession`, `ClientMixin.alogin`, `ClientMixin.aforce_login` and `ClientMixin.alogout` | `django/test/client.py:ClientMixin.alogin` |",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "ClientMixin.alogin",
+   "kind": "function",
+   "lines": [
+    847,
+    855
+   ],
+   "fingerprint": "a737ceccc234955f"
+  },
+  {
    "pointer": "django/test/testcases.py:SimpleTestCase.assertContains",
    "line": 80,
-   "sentence": "| `SimpleTestCase.assertContains`, `SimpleTestCase.assertNotContains` | the message ends with the body, as bytes | 5.1 | `django/test/testcases.py:SimpleTestCase.assertContains` |",
+   "sentence": "| `SimpleTestCase.assertContains`, `SimpleTestCase.assertNotContains` | Since 5.1, a failure on the text ends its message with the body, as bytes | `django/test/testcases.py:SimpleTestCase.assertContains` |",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "SimpleTestCase.assertContains",
@@ -279,7 +251,7 @@
   {
    "pointer": "django/test/testcases.py:SimpleTestCase.assertInHTML",
    "line": 81,
-   "sentence": "| `SimpleTestCase.assertInHTML`, `SimpleTestCase.assertURLEqual` | `\": \"` follows a `msg_prefix=`; the first's message ends with the haystack | 5.1 | `django/test/testcases.py:SimpleTestCase.assertInHTML` |",
+   "sentence": "| `SimpleTestCase.assertInHTML` | Since 5.1, a failed search's message ends with the HTML searched, and `\": \"` follows a `msg_prefix=` | `django/test/testcases.py:SimpleTestCase.assertInHTML` |",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "SimpleTestCase.assertInHTML",
@@ -291,9 +263,23 @@
    "fingerprint": "5193603a4d2a4373"
   },
   {
-   "pointer": "django/test/testcases.py:SimpleTestCase.assertNotInHTML",
+   "pointer": "django/test/testcases.py:SimpleTestCase.assertURLEqual",
    "line": 82,
-   "sentence": "| `SimpleTestCase.assertNotInHTML` | new: `assertInHTML` with `count=0` | 5.1 | `django/test/testcases.py:SimpleTestCase.assertNotInHTML` |",
+   "sentence": "| `SimpleTestCase.assertURLEqual` | Since 5.1, `\": \"` follows a `msg_prefix=` | `django/test/testcases.py:SimpleTestCase.assertURLEqual` |",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "SimpleTestCase.assertURLEqual",
+   "kind": "function",
+   "lines": [
+    527,
+    549
+   ],
+   "fingerprint": "2fed186765700a4b"
+  },
+  {
+   "pointer": "django/test/testcases.py:SimpleTestCase.assertNotInHTML",
+   "line": 83,
+   "sentence": "| `SimpleTestCase.assertNotInHTML` | New in 5.1: `assertInHTML` with `count=0` | `django/test/testcases.py:SimpleTestCase.assertNotInHTML` |",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "SimpleTestCase.assertNotInHTML",
@@ -306,8 +292,8 @@
   },
   {
    "pointer": "django/test/testcases.py:SimpleTestCase._assert_form_error",
-   "line": 83,
-   "sentence": "| `SimpleTestCase.assertFormError`, `SimpleTestCase.assertFormSetError` | a form or a formset, not a response and a name; `errors=None`, which before 5.0 meant no errors, is the one error `None`; no errors is `errors=[]` | 5.0 | `django/test/testcases.py:SimpleTestCase._assert_form_error` |",
+   "line": 84,
+   "sentence": "| `SimpleTestCase.assertFormError`, `SimpleTestCase.assertFormSetError` | Gone in 5.0: a response and a form's name, given in place of the form or the formset | `django/test/testcases.py:SimpleTestCase._assert_form_error` |",
    "tree": "django",
    "path": "django/test/testcases.py",
    "symbol": "SimpleTestCase._assert_form_error",
@@ -319,23 +305,51 @@
    "fingerprint": "abccc65f6838a839"
   },
   {
-   "pointer": "django/test/testcases.py:TransactionTestCase.assertQuerySetEqual",
-   "line": 84,
-   "sentence": "| assertFormsetError, assertQuerysetEqual | removed for `assertFormSetError` and `TransactionTestCase.assertQuerySetEqual` | 5.1 | `django/test/testcases.py:TransactionTestCase.assertQuerySetEqual` |",
+   "pointer": "django/test/testcases.py:to_list",
+   "line": 85,
+   "sentence": "| `errors=None` in a form assertion | Since 5.0, the one error `None`, no longer no errors; no errors is `errors=[]` | `django/test/testcases.py:to_list` |",
    "tree": "django",
    "path": "django/test/testcases.py",
-   "symbol": "TransactionTestCase.assertQuerySetEqual",
+   "symbol": "to_list",
    "kind": "function",
    "lines": [
-    1288,
-    1302
+    75,
+    79
    ],
-   "fingerprint": "831d818a68bbeb05"
+   "fingerprint": "c9d78744eb092fa7"
+  },
+  {
+   "pointer": "django/test/testcases.py",
+   "line": 86,
+   "sentence": "| assertFormsetError, assertQuerysetEqual | Gone in 5.1: the old names of `assertFormSetError` and `TransactionTestCase.assertQuerySetEqual` | `django/test/testcases.py` |",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1897
+   ],
+   "fingerprint": "1b360268bc91f725"
+  },
+  {
+   "pointer": "django/test/testcases.py:__unittest",
+   "line": 87,
+   "sentence": "| a failure's traceback | Since 5.2, without the frames of `django.test.testcases`, which sets `__unittest = True`: a failing assertion of Django's is reported at the test's line and, the notes say, `--pdb` enters the test | `django/test/testcases.py:__unittest` |",
+   "tree": "django",
+   "path": "django/test/testcases.py",
+   "symbol": "__unittest",
+   "kind": "assignment",
+   "lines": [
+    72,
+    72
+   ],
+   "fingerprint": "e2e6c2c6c7e5056d"
   },
   {
    "pointer": "django/test/runner.py:DiscoverRunner.get_test_runner_kwargs",
-   "line": 85,
-   "sentence": "| the option `--durations` | new: the slowest tests, reported by `unittest.TextTestRunner` | 5.0 | `django/test/runner.py:DiscoverRunner.get_test_runner_kwargs` |",
+   "line": 88,
+   "sentence": "| the option `--durations` | New in 5.0: the slowest tests, reported by `unittest.TextTestRunner` | `django/test/runner.py:DiscoverRunner.get_test_runner_kwargs` |",
    "tree": "django",
    "path": "django/test/runner.py",
    "symbol": "DiscoverRunner.get_test_runner_kwargs",
@@ -348,8 +362,8 @@
   },
   {
    "pointer": "django/test/",
-   "line": 86,
-   "sentence": "| django.test.selenium | the undocumented module, still in 6.1.1, removed | 6.2 | `django/test/` |",
+   "line": 89,
+   "sentence": "| django.test.selenium | Gone in 6.2: the undocumented module | `django/test/` |",
    "tree": "django",
    "path": "django/test/",
    "symbol": null,

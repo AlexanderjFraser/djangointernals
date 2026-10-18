@@ -10,7 +10,7 @@
   {
    "pointer": "django/db/backends/postgresql/base.py:DatabaseWrapper.pool",
    "line": 13,
-   "sentence": "With `\"pool\"` in an alias's `\"OPTIONS\"`, the `pool` property makes one pool for the alias (Oracle's, for the alias and its `\"USER\"`), and `get_new_connection` takes each connection from it (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "sentence": "Since 5.1 PostgreSQL's backend, and since 5.2 Oracle's, can take connections from a pool, made by the `pool` property when an alias's `\"OPTIONS\"` hold `\"pool\"` (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
    "tree": "django",
    "path": "django/db/backends/postgresql/base.py",
    "symbol": "DatabaseWrapper.pool",
@@ -25,7 +25,7 @@
   {
    "pointer": "django/db/backends/oracle/base.py:DatabaseWrapper.pool",
    "line": 13,
-   "sentence": "With `\"pool\"` in an alias's `\"OPTIONS\"`, the `pool` property makes one pool for the alias (Oracle's, for the alias and its `\"USER\"`), and `get_new_connection` takes each connection from it (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
+   "sentence": "Since 5.1 PostgreSQL's backend, and since 5.2 Oracle's, can take connections from a pool, made by the `pool` property when an alias's `\"OPTIONS\"` hold `\"pool\"` (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`).",
    "tree": "django",
    "path": "django/db/backends/oracle/base.py",
    "symbol": "DatabaseWrapper.pool",
@@ -38,23 +38,9 @@
    "fingerprint": "ce0c7c3290369faf"
   },
   {
-   "pointer": "docs/releases/5.1.txt",
-   "line": 13,
-   "sentence": "The 5.1 notes' reason: opening a connection can take relatively long, and keeping connections open can reduce latency (`docs/releases/5.1.txt`; [Opening and closing a connection](../backends/lifecycle.md#connection-pools-postgresql-and-oracle)).",
-   "tree": "django",
-   "path": "docs/releases/5.1.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    495
-   ],
-   "fingerprint": "3a1b214427111cf2"
-  },
-  {
    "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params",
    "line": 17,
-   "sentence": "Since 5.1 SQLite's backend takes two keys out of `\"OPTIONS\"` (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`).",
+   "sentence": "Since 5.1 SQLite's backend takes two keys out of `\"OPTIONS\"`: `\"init_command\"`, commands run on every new connection, and `\"transaction_mode\"`, the mode written after the `\"BEGIN\"` of an outermost atomic block (`django/db/backends/sqlite3/base.py:DatabaseWrapper.get_connection_params`; [SQLite](../backends/sqlite.md#opening-a-connection-get_connection_params-and-get_new_connection)).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/base.py",
    "symbol": "DatabaseWrapper.get_connection_params",
@@ -68,7 +54,7 @@
   {
    "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.get_connection_params",
    "line": 19,
-   "sentence": "Since 5.2 MySQL's backend asks for the character set `\"utf8mb4\"`, where it asked for `\"utf8\"`, which the notes call an alias of the deprecated `\"utf8mb3\"`; a `\"charset\"` in `\"OPTIONS\"` still replaces it (`django/db/backends/mysql/base.py:DatabaseWrapper.get_connection_params`; [MySQL and MariaDB](../backends/mysql.md#the-driver-mysqldb-and-opening-a-connection)).",
+   "sentence": "A `\"charset\"` in `\"OPTIONS\"` still replaces it (`django/db/backends/mysql/base.py:DatabaseWrapper.get_connection_params`; [MySQL and MariaDB](../backends/mysql.md#the-driver-mysqldb-and-opening-a-connection)).",
    "tree": "django",
    "path": "django/db/backends/mysql/base.py",
    "symbol": "DatabaseWrapper.get_connection_params",
@@ -82,7 +68,7 @@
   {
    "pointer": "django/db/backends/oracle/base.py",
    "line": 21,
-   "sentence": "5.0 added oracledb to Oracle's backend and deprecated cx_Oracle, which 6.0 removed: at this commit the backend imports oracledb alone (`django/db/backends/oracle/base.py`; [Oracle](../backends/oracle.md#the-driver-and-the-processs-environment)).",
+   "sentence": "At this commit the backend imports oracledb alone (`django/db/backends/oracle/base.py`; [Oracle](../backends/oracle.md#the-driver-and-the-processs-environment)).",
    "tree": "django",
    "path": "django/db/backends/oracle/base.py",
    "symbol": null,
@@ -96,7 +82,7 @@
   {
    "pointer": "django/db/backends/mysql/base.py:DatabaseWrapper.data_types",
    "line": 25,
-   "sentence": "Since 5.0 a `django.db.models.UUIDField` on MariaDB is a column of the type `\"uuid\"`, where it was `\"char(32)\"`, as MySQL's still is; the 5.0 notes ask that a field made before then be replaced by a subclass backed by `\"char(32)\"` (`django/db/backends/mysql/base.py:DatabaseWrapper.data_types`).",
+   "sentence": "Since 5.0 a `django.db.models.UUIDField` on MariaDB is a `\"uuid\"` column, where it was `\"char(32)\"` (`django/db/backends/mysql/base.py:DatabaseWrapper.data_types`).",
    "tree": "django",
    "path": "django/db/backends/mysql/base.py",
    "symbol": "DatabaseWrapper.data_types",
@@ -111,7 +97,7 @@
   {
    "pointer": "django/db/backends/mysql/features.py:DatabaseFeatures.has_native_uuid_field",
    "line": 25,
-   "sentence": "The 5.0 notes say MariaDB 10.7 and later; at this commit the flag asks only whether the server is MariaDB (`django/db/backends/mysql/features.py:DatabaseFeatures.has_native_uuid_field`; [Column types: from a field to a column](../backends/column-types.md#mysqls-two-properties)).",
+   "sentence": "They say MariaDB 10.7 and later; at this commit MySQL's `DatabaseFeatures.has_native_uuid_field` asks only whether the server is MariaDB (`django/db/backends/mysql/features.py:DatabaseFeatures.has_native_uuid_field`; [Column types: from a field to a column](../backends/column-types.md#mysqls-two-properties)).",
    "tree": "django",
    "path": "django/db/backends/mysql/features.py",
    "symbol": "DatabaseFeatures.has_native_uuid_field",
@@ -126,7 +112,7 @@
   {
    "pointer": "django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range",
    "line": 27,
-   "sentence": "Since 5.0 SQLite's operations give every integer field a 64-bit range, \"to match the behavior of sqlite3\", the notes say, and the validators of an integer field read it, so on SQLite a `SmallIntegerField` is validated up to 9223372036854775807 (`django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range`; [The field classes](../models/field-types.md#integers)).",
+   "sentence": "Since 5.0 integer fields on SQLite are validated as 64-bit integers, \"to match the behavior of sqlite3\", the notes say (`django/db/backends/sqlite3/operations.py:DatabaseOperations.integer_field_range`; [The field classes](../models/field-types.md#integers)).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/operations.py",
    "symbol": "DatabaseOperations.integer_field_range",
@@ -140,7 +126,7 @@
   {
    "pointer": "django/db/transaction.py:savepoint",
    "line": 31,
-   "sentence": "6.1 added `django.db.transaction.savepoint_create` and deprecated `savepoint`, which now warns and calls it (`django/db/transaction.py:savepoint`; [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#savepoints); [What still warns: the deprecations and the releases that end them](deprecations.md)).",
+   "sentence": "The old function now warns and calls the new one (`django/db/transaction.py:savepoint`; [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#savepoints)).",
    "tree": "django",
    "path": "django/db/transaction.py",
    "symbol": "savepoint",
@@ -154,7 +140,7 @@
   {
    "pointer": "django/db/models/lookups.py:BuiltinLookup.process_lhs",
    "line": 37,
-   "sentence": "5.0 deprecated the operations' method field_cast_sql for `BaseDatabaseOperations.lookup_cast`, and 6.0 removed it: at this commit `BuiltinLookup.process_lhs` asks `lookup_cast` alone (`django/db/models/lookups.py:BuiltinLookup.process_lhs`).",
+   "sentence": "`BuiltinLookup.process_lhs` now asks `lookup_cast` alone (`django/db/models/lookups.py:BuiltinLookup.process_lhs`; [Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md#builtinlookup-the-operator-from-the-backends-table)).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "BuiltinLookup.process_lhs",
@@ -167,8 +153,8 @@
   },
   {
    "pointer": "django/db/models/fields/__init__.py:DurationField.get_db_prep_value",
-   "line": 49,
-   "sentence": "Since 6.1 `DurationField.get_db_prep_value` hands a duration to `BaseDatabaseOperations.adapt_durationfield_value`, whose base gives an integer of microseconds and which PostgreSQL's and Oracle's operations override to pass it through (`django/db/models/fields/__init__.py:DurationField.get_db_prep_value`).",
+   "line": 47,
+   "sentence": "Since 6.1 `DurationField.get_db_prep_value` hands a duration to `BaseDatabaseOperations.adapt_durationfield_value`, whose base gives an integer of microseconds (`django/db/models/fields/__init__.py:DurationField.get_db_prep_value`; [Values in and out: adapters, converters and time zones](../backends/values.md#the-operations-objects-adapters)).",
    "tree": "django",
    "path": "django/db/models/fields/__init__.py",
    "symbol": "DurationField.get_db_prep_value",
@@ -180,9 +166,150 @@
    "fingerprint": "b4801ac1be714433"
   },
   {
+   "pointer": "django/db/models/fields/__init__.py:Field._check_db_default",
+   "line": 55,
+   "sentence": "| `BaseDatabaseFeatures.supports_expression_defaults` | New in 5.0: true by default; where false, `\"fields.E011\"` refuses an expression as a `db_default` | `django/db/models/fields/__init__.py:Field._check_db_default` |",
+   "tree": "django",
+   "path": "django/db/models/fields/__init__.py",
+   "symbol": "Field._check_db_default",
+   "kind": "function",
+   "lines": [
+    426,
+    460
+   ],
+   "fingerprint": "7466ad50c747a3de"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:DatabaseDefault.as_sql",
+   "line": 56,
+   "sentence": "| `BaseDatabaseFeatures.supports_default_keyword_in_insert` | New in 5.0, as is `BaseDatabaseFeatures.supports_default_keyword_in_bulk_insert` for a bulk insert: true by default; where false, an insert writes a `db_default`'s expression for `\"DEFAULT\"` | `django/db/models/expressions.py:DatabaseDefault.as_sql` |",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "DatabaseDefault.as_sql",
+   "kind": "function",
+   "lines": [
+    1345,
+    1348
+   ],
+   "fingerprint": "6a0edbd50ab30821"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py",
+   "line": 57,
+   "sentence": "| `BaseDatabaseSchemaEditor.sql_delete_column` | Since 6.0, no `\"CASCADE\"`, which PostgreSQL's editor inherited until then | `django/db/backends/base/schema.py` |",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2136
+   ],
+   "fingerprint": "0a1229be23bbf215"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql",
+   "line": 58,
+   "sentence": "| `BaseDatabaseFeatures.can_return_rows_from_update` | New in 6.0: false by default; where false, an update asked for columns back goes without `\"RETURNING\"` | `django/db/models/sql/compiler.py:SQLUpdateCompiler.execute_returning_sql` |",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLUpdateCompiler.execute_returning_sql",
+   "kind": "function",
+   "lines": [
+    2159,
+    2189
+   ],
+   "fingerprint": "fbd6b41eb0089497"
+  },
+  {
+   "pointer": "django/db/backends/base/introspection.py",
+   "line": 59,
+   "sentence": "| `BaseDatabaseIntrospection.get_relations` | Since 6.1, a third member in each value, the key's delete rule, which inspectdb writes as its `on_delete` | `django/db/backends/base/introspection.py` |",
+   "tree": "django",
+   "path": "django/db/backends/base/introspection.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    228
+   ],
+   "fingerprint": "152051c2016b0080"
+  },
+  {
+   "pointer": "django/core/management/commands/inspectdb.py:Command.handle",
+   "line": 60,
+   "sentence": "| `BaseDatabaseFeatures.supports_inspectdb` | New in 6.1: true by default; where false, inspectdb raises `CommandError` | `django/core/management/commands/inspectdb.py:Command.handle` |",
+   "tree": "django",
+   "path": "django/core/management/commands/inspectdb.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    46,
+    54
+   ],
+   "fingerprint": "dfdb3ed7c00947e2"
+  },
+  {
+   "pointer": "django/db/backends/base/operations.py",
+   "line": 61,
+   "sentence": "| `BaseDatabaseOperations.binary_placeholder_sql` | Since 6.1, given the compiler, and returns SQL and parameters | `django/db/backends/base/operations.py` |",
+   "tree": "django",
+   "path": "django/db/backends/base/operations.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    910
+   ],
+   "fingerprint": "1fe091964e3633c6"
+  },
+  {
+   "pointer": "django/contrib/gis/db/backends/base/operations.py",
+   "line": 62,
+   "sentence": "| `BaseSpatialOperations.get_geom_placeholder_sql` | Since 6.1, the name of get_geom_placeholder, and returns SQL and parameters | `django/contrib/gis/db/backends/base/operations.py` |",
+   "tree": "django",
+   "path": "django/contrib/gis/db/backends/base/operations.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    215
+   ],
+   "fingerprint": "c2676f0df0f5fd51"
+  },
+  {
+   "pointer": "django/db/models/aggregates.py:BitAggregate.as_sql",
+   "line": 63,
+   "sentence": "| `BaseDatabaseFeatures.supports_bit_aggregations` | New in 6.1: true by default; where false, a bit aggregate raises `NotSupportedError` | `django/db/models/aggregates.py:BitAggregate.as_sql` |",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "BitAggregate.as_sql",
+   "kind": "function",
+   "lines": [
+    256,
+    269
+   ],
+   "fingerprint": "dd3fd46aed94b566"
+  },
+  {
+   "pointer": "django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed",
+   "line": 67,
+   "sentence": "Since 6.0 too, a keyword argument of a deconstructed call whose name is not an identifier goes into a dictionary after `**` (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed`).",
+   "tree": "django",
+   "path": "django/db/migrations/serializer.py",
+   "symbol": "DeconstructibleSerializer.serialize_deconstructed",
+   "kind": "function",
+   "lines": [
+    105,
+    127
+   ],
+   "at": 106,
+   "fingerprint": "aad915e3bf69edb8"
+  },
+  {
    "pointer": "django/db/migrations/serializer.py:FUNCTION_TYPES",
-   "line": 78,
-   "sentence": "Since 5.0 the serializer writes a function under `functools.cache` or `functools.lru_cache` by its name, its CPython class being among `FUNCTION_TYPES` (`django/db/migrations/serializer.py:FUNCTION_TYPES`; [Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md#the-registry-in-its-order)).",
+   "line": 67,
+   "sentence": "Since 5.0 a function under `functools.cache` or `functools.lru_cache` is written by its name (`django/db/migrations/serializer.py:FUNCTION_TYPES`; [Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md#the-registry-in-its-order)).",
    "tree": "django",
    "path": "django/db/migrations/serializer.py",
    "symbol": "FUNCTION_TYPES",
@@ -200,37 +327,8 @@
    "fingerprint": "3ce89d0a08829bab"
   },
   {
-   "pointer": "django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed",
-   "line": 78,
-   "sentence": "Since 6.0 `ZoneInfoSerializer` writes a `zoneinfo.ZoneInfo`, which 5.2.17 refuses, and a keyword argument of a deconstructed call whose name is not an identifier goes into a dictionary after `**` (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed`).",
-   "tree": "django",
-   "path": "django/db/migrations/serializer.py",
-   "symbol": "DeconstructibleSerializer.serialize_deconstructed",
-   "kind": "function",
-   "lines": [
-    105,
-    127
-   ],
-   "at": 106,
-   "fingerprint": "aad915e3bf69edb8"
-  },
-  {
-   "pointer": "django/db/migrations/serializer.py:FunctoolsPartialSerializer",
-   "line": 80,
-   "sentence": "Since 6.0 a `functools.partial` is written as a deconstructed call, `functools.partial(int, base=2)` where 5.2.17 wrote `functools.partial(int, *(), **{'base': 2})` (`django/db/migrations/serializer.py:FunctoolsPartialSerializer`), and `DeconstructibleSerializer` is the name of what was DeconstructableSerializer, with no alias left.",
-   "tree": "django",
-   "path": "django/db/migrations/serializer.py",
-   "symbol": "FunctoolsPartialSerializer",
-   "kind": "class",
-   "lines": [
-    217,
-    224
-   ],
-   "fingerprint": "85d5ae7077365ecc"
-  },
-  {
    "pointer": "django/db/migrations/serializer.py:GenericAliasSerializer",
-   "line": 80,
+   "line": 69,
    "sentence": "Since 6.1 `GenericAliasSerializer` writes a generic alias such as `list[int]` (`django/db/migrations/serializer.py:GenericAliasSerializer`).",
    "tree": "django",
    "path": "django/db/migrations/serializer.py",
@@ -244,8 +342,8 @@
   },
   {
    "pointer": "django/db/migrations/operations/base.py:Operation.formatted_description",
-   "line": 84,
-   "sentence": "Since 5.1 an operation has a category, `Operation.category`, a member of `OperationCategory` whose values are signs: `\"+\"` an addition, `\"-\"` a removal, `\"~\"` an alteration, `\"p\"` Python, `\"s\"` SQL, `\"?\"` a mix. makemigrations prints each operation's sign before its description, `\"?\"` for the base class's `None` (`django/db/migrations/operations/base.py:Operation.formatted_description`; [Operations: the base class and its two halves](../migrations/operations.md#category-describe-and-the-name-fragment)).",
+   "line": 73,
+   "sentence": "Since 5.1 an operation may have a category, `Operation.category`, a member of `OperationCategory`. makemigrations prints a sign before each operation's description, such as `\"+\"` for an addition (`django/db/migrations/operations/base.py:Operation.formatted_description`; [Operations: the base class and its two halves](../migrations/operations.md#category-describe-and-the-name-fragment)).",
    "tree": "django",
    "path": "django/db/migrations/operations/base.py",
    "symbol": "Operation.formatted_description",
@@ -257,22 +355,8 @@
    "fingerprint": "3cba99e37e85f7c6"
   },
   {
-   "pointer": "django/core/management/commands/makemigrations.py:Command.autodetector",
-   "line": 84,
-   "sentence": "Since 5.2 makemigrations and migrate make their autodetector from a class attribute, which a subclass of the command may replace (`django/core/management/commands/makemigrations.py:Command.autodetector`).",
-   "tree": "django",
-   "path": "django/core/management/commands/makemigrations.py",
-   "symbol": "Command.autodetector",
-   "kind": "assignment",
-   "lines": [
-    27,
-    27
-   ],
-   "fingerprint": "40bb7c5a5ac7897f"
-  },
-  {
    "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._constraint_should_be_dropped_and_recreated",
-   "line": 88,
+   "line": 77,
    "sentence": "Since 5.2 a constraint changed only in what `BaseConstraint.non_db_attrs` names, `\"violation_error_code\"` and `\"violation_error_message\"`, becomes an `AlterConstraint`, which changes the state and nothing in the database (`django/db/migrations/autodetector.py:MigrationAutodetector._constraint_should_be_dropped_and_recreated`; [The autodetector: fields, indexes and constraints](../migrations/autodetector-fields.md#constraints-create_altered_constraints)).",
    "tree": "django",
    "path": "django/db/migrations/autodetector.py",
@@ -286,8 +370,8 @@
   },
   {
    "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes",
-   "line": 90,
-   "sentence": "Until 6.2 the autodetector kept such a model apart, and wrote for it only its creation, its deletion, and changes to its table's name or comment and to some options; at this commit it compares the model as it does any other (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`).",
+   "line": 79,
+   "sentence": "At this commit the autodetector compares the model as it does any other, and writes an `AddField` (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`).",
    "tree": "django",
    "path": "django/db/migrations/autodetector.py",
    "symbol": "MigrationAutodetector._detect_changes",
@@ -300,8 +384,8 @@
   },
   {
    "pointer": "django/db/migrations/operations/base.py:Operation.allow_migrate_model",
-   "line": 100,
-   "sentence": "Such an operation changes the state and no table, since `Operation.allow_migrate_model` refuses a model that cannot be migrated: a schema editor collecting its SQL collects none, under every release (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`; [The autodetector: comparing two project states](../migrations/autodetector.md#detect_changes-the-models-sorted-then-the-generators-in-order)).",
+   "line": 79,
+   "sentence": "Such an operation changes the state and no table, since `Operation.allow_migrate_model` refuses an unmanaged model (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`; [The autodetector: comparing two project states](../migrations/autodetector.md#detect_changes-the-models-sorted-then-the-generators-in-order)).",
    "tree": "django",
    "path": "django/db/migrations/operations/base.py",
    "symbol": "Operation.allow_migrate_model",
@@ -314,8 +398,8 @@
   },
   {
    "pointer": "django/db/migrations/loader.py:MigrationLoader.replace_migration",
-   "line": 104,
-   "sentence": "The loader follows such a chain down to the migrations that replace nothing, whose rows decide whether it counts as applied, and refuses a cycle (`django/db/migrations/loader.py:MigrationLoader.replace_migration`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).",
+   "line": 83,
+   "sentence": "The loader follows such a chain down to the migrations that replace nothing (`django/db/migrations/loader.py:MigrationLoader.replace_migration`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).",
    "tree": "django",
    "path": "django/db/migrations/loader.py",
    "symbol": "MigrationLoader.replace_migration",

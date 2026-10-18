@@ -9,8 +9,8 @@
  "pointers": [
   {
    "pointer": "django/contrib/contenttypes/fields.py:GenericForeignKey.contribute_to_class",
-   "line": 13,
-   "sentence": "At this commit `GenericForeignKey.contribute_to_class` sets a `GenericForeignKeyDescriptor` on the model class under the field's name, so code that takes the field from the class gets the descriptor, which is not the field but holds it as `GenericForeignKeyDescriptor.field` (`django/contrib/contenttypes/fields.py:GenericForeignKey.contribute_to_class`).",
+   "line": 15,
+   "sentence": "`GenericForeignKey.contribute_to_class` sets the descriptor on the class under the field's name (`django/contrib/contenttypes/fields.py:GenericForeignKey.contribute_to_class`).",
    "tree": "django",
    "path": "django/contrib/contenttypes/fields.py",
    "symbol": "GenericForeignKey.contribute_to_class",
@@ -23,8 +23,8 @@
   },
   {
    "pointer": "django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__",
-   "line": 23,
-   "sentence": "The descriptor's `GenericForeignKeyDescriptor.__get__` hands an object not yet loaded to the instance's fetch mode (`django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__`; [What changed in querysets](querysets.md)).",
+   "line": 25,
+   "sentence": "`GenericForeignKeyDescriptor.__get__` hands an object not yet loaded to the instance's fetch mode, as other relations do since 6.1 (`django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__`; [What changed in querysets](querysets.md)).",
    "tree": "django",
    "path": "django/contrib/contenttypes/fields.py",
    "symbol": "GenericForeignKeyDescriptor.__get__",
@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/contrib/contenttypes/prefetch.py:GenericPrefetch",
-   "line": 23,
+   "line": 27,
    "sentence": "Since 5.0 `GenericPrefetch` gives `prefetch_related` a queryset for each model a generic key reaches, where a `Prefetch` holds one (`django/contrib/contenttypes/prefetch.py:GenericPrefetch`; [Generic foreign keys: `GenericForeignKey`](../contrib/generic-foreign-key.md)).",
    "tree": "django",
    "path": "django/contrib/contenttypes/prefetch.py",
@@ -51,22 +51,8 @@
   },
   {
    "pointer": "django/contrib/staticfiles/finders.py:find",
-   "line": 27,
-   "sentence": "Under 5.2.17 and 6.0.8 `find(\"entry.css\", all=True)` still returned every match and warned, and since 6.1 it raises `TypeError` (`django/contrib/staticfiles/finders.py:find`; [Finding static files: the finders](../contrib/static-finders.md)).",
-   "tree": "django",
-   "path": "django/contrib/staticfiles/finders.py",
-   "symbol": "find",
-   "kind": "function",
-   "lines": [
-    288,
-    307
-   ],
-   "fingerprint": "ba1ba3d67c9a5e89"
-  },
-  {
-   "pointer": "django/contrib/staticfiles/finders.py:find",
-   "line": 29,
-   "sentence": "The deprecation covered `find` and Django's own finders, not a project's: under all four releases `find` hands each finder `find_all=` by keyword, so a finder whose own `find` still declares `all=` raises `TypeError`, unwarned (`django/contrib/staticfiles/finders.py:find`).",
+   "line": 31,
+   "sentence": "Under all four releases `find` hands each finder `find_all=` by keyword, so a finder whose own `find` still declares `all=` raises `TypeError`, unwarned (`django/contrib/staticfiles/finders.py:find`; [Finding static files: the finders](../contrib/static-finders.md)).",
    "tree": "django",
    "path": "django/contrib/staticfiles/finders.py",
    "symbol": "find",
@@ -79,8 +65,8 @@
   },
   {
    "pointer": "django/contrib/staticfiles/management/commands/collectstatic.py",
-   "line": 31,
-   "sentence": "At verbosity 1, 5.2.17 named each file it skipped, \"Found another file with the destination path …\", and counted none; since 6.0 it names them, and the files `--clear` deletes, at verbosity 2 only, and its summary counts the skipped and the deleted files (`django/contrib/staticfiles/management/commands/collectstatic.py`; [Collecting static files: the collectstatic command](../contrib/collectstatic.md)).",
+   "line": 33,
+   "sentence": "5.2.17 named each skipped file at verbosity 1, \"Found another file with the destination path …\", and counted none (`django/contrib/staticfiles/management/commands/collectstatic.py`; [Collecting static files: the collectstatic command](../contrib/collectstatic.md)).",
    "tree": "django",
    "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
    "symbol": null,
@@ -93,8 +79,8 @@
   },
   {
    "pointer": "django/contrib/staticfiles/storage.py:ManifestFilesMixin.save_manifest",
-   "line": 31,
-   "sentence": "Since 6.0 `ManifestFilesMixin.save_manifest` sorts the paths of staticfiles.json, which 5.2.17 wrote in the order it held them, for reproducible manifests, the notes say (`django/contrib/staticfiles/storage.py:ManifestFilesMixin.save_manifest`, `docs/releases/6.0.txt`).",
+   "line": 35,
+   "sentence": "5.2.17 wrote them in the order it held them (`django/contrib/staticfiles/storage.py:ManifestFilesMixin.save_manifest`, `docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "django/contrib/staticfiles/storage.py",
    "symbol": "ManifestFilesMixin.save_manifest",
@@ -107,8 +93,8 @@
   },
   {
    "pointer": "docs/releases/6.0.txt",
-   "line": 31,
-   "sentence": "Since 6.0 `ManifestFilesMixin.save_manifest` sorts the paths of staticfiles.json, which 5.2.17 wrote in the order it held them, for reproducible manifests, the notes say (`django/contrib/staticfiles/storage.py:ManifestFilesMixin.save_manifest`, `docs/releases/6.0.txt`).",
+   "line": 35,
+   "sentence": "5.2.17 wrote them in the order it held them (`django/contrib/staticfiles/storage.py:ManifestFilesMixin.save_manifest`, `docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -121,8 +107,8 @@
   },
   {
    "pointer": "docs/releases/5.2.txt",
-   "line": 35,
-   "sentence": "A feed generator takes `stylesheets=` since 5.2, which the 5.2 notes say every `SyndicationFeed` class writes (`docs/releases/5.2.txt`).",
+   "line": 39,
+   "sentence": "The notes say every `SyndicationFeed` class writes them (`docs/releases/5.2.txt`), but only `RssFeed` and its subclasses do, through `RssFeed.add_stylesheets`.",
    "tree": "django",
    "path": "docs/releases/5.2.txt",
    "symbol": null,
@@ -135,8 +121,8 @@
   },
   {
    "pointer": "django/utils/feedgenerator.py:Atom1Feed.write",
-   "line": 35,
-   "sentence": "Only `RssFeed` and its subclasses do, through `RssFeed.add_stylesheets`; `Atom1Feed.write` never calls that hook, so under all four releases an `Atom1Feed` given a stylesheet writes none (`django/utils/feedgenerator.py:Atom1Feed.write`; [Feeds: `django.contrib.syndication` and the feed generator](../contrib/feeds.md#stylesheets)).",
+   "line": 39,
+   "sentence": "`Atom1Feed.write` never calls that hook, so under all four releases an `Atom1Feed` given a stylesheet writes none (`django/utils/feedgenerator.py:Atom1Feed.write`; [Feeds: `django.contrib.syndication` and the feed generator](../contrib/feeds.md#stylesheets)).",
    "tree": "django",
    "path": "django/utils/feedgenerator.py",
    "symbol": "Atom1Feed.write",
@@ -149,8 +135,8 @@
   },
   {
    "pointer": "django/db/models/aggregates.py:Aggregate.__init__",
-   "line": 39,
-   "sentence": "5.2 deprecated it for `order_by=`; 6.0 gave `order_by=` to `Aggregate` itself, allowed where `Aggregate.allow_order_by` is true, as on `ArrayAgg` and `JSONBAgg` (`django/db/models/aggregates.py:Aggregate.__init__`, `django/contrib/postgres/aggregates/general.py:ArrayAgg`; [What changed in expressions, lookups and the compiler](sql.md)); and 6.1 removed `ordering=`.",
+   "line": 43,
+   "sentence": "5.2 had deprecated it for `order_by=`, and 6.0 gave `order_by=` to `Aggregate` itself (`django/db/models/aggregates.py:Aggregate.__init__`; [What changed in expressions, lookups and the compiler](sql.md)).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "Aggregate.__init__",
@@ -162,23 +148,9 @@
    "fingerprint": "c577c84f985307d6"
   },
   {
-   "pointer": "django/contrib/postgres/aggregates/general.py:ArrayAgg",
-   "line": 39,
-   "sentence": "5.2 deprecated it for `order_by=`; 6.0 gave `order_by=` to `Aggregate` itself, allowed where `Aggregate.allow_order_by` is true, as on `ArrayAgg` and `JSONBAgg` (`django/db/models/aggregates.py:Aggregate.__init__`, `django/contrib/postgres/aggregates/general.py:ArrayAgg`; [What changed in expressions, lookups and the compiler](sql.md)); and 6.1 removed `ordering=`.",
-   "tree": "django",
-   "path": "django/contrib/postgres/aggregates/general.py",
-   "symbol": "ArrayAgg",
-   "kind": "class",
-   "lines": [
-    25,
-    32
-   ],
-   "fingerprint": "4d216c82f93325cd"
-  },
-  {
    "pointer": "django/db/models/expressions.py:Func.__init__",
-   "line": 49,
-   "sentence": "`Aggregate.__init__` passes a keyword it does not know on to `Func.__init__`, which keeps it as context for a template that never reads it, and the aggregate is written unordered (`django/db/models/expressions.py:Func.__init__`).",
+   "line": 53,
+   "sentence": "`Aggregate.__init__` passes a keyword it does not know on to `Func.__init__`, which keeps it as context for a template that never reads it (`django/db/models/expressions.py:Func.__init__`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "Func.__init__",
@@ -190,36 +162,8 @@
    "fingerprint": "27f2b594d772c75d"
   },
   {
-   "pointer": "docs/releases/5.0.txt",
-   "line": 51,
-   "sentence": "Since 5.0 `ArrayAgg`, `JSONBAgg` and the PostgreSQL `StringAgg` give `None` over no rows unless given `default=`, where they gave an empty list or string, the 5.0 notes say (`docs/releases/5.0.txt`, `django/db/models/aggregates.py:Aggregate`).",
-   "tree": "django",
-   "path": "docs/releases/5.0.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    759
-   ],
-   "fingerprint": "f78c0112c823f44f"
-  },
-  {
-   "pointer": "django/db/models/aggregates.py:Aggregate",
-   "line": 51,
-   "sentence": "Since 5.0 `ArrayAgg`, `JSONBAgg` and the PostgreSQL `StringAgg` give `None` over no rows unless given `default=`, where they gave an empty list or string, the 5.0 notes say (`docs/releases/5.0.txt`, `django/db/models/aggregates.py:Aggregate`).",
-   "tree": "django",
-   "path": "django/db/models/aggregates.py",
-   "symbol": "Aggregate",
-   "kind": "class",
-   "lines": [
-    75,
-    223
-   ],
-   "fingerprint": "14143de20ffad2b4"
-  },
-  {
    "pointer": "django/contrib/postgres/aggregates/general.py",
-   "line": 53,
+   "line": 55,
    "sentence": "All go in Django 2028 (`django/contrib/postgres/aggregates/general.py`; [The PostgreSQL application: `PostgresConfig`, operations and aggregates](../contrib/postgres.md#functions-and-aggregates)).",
    "tree": "django",
    "path": "django/contrib/postgres/aggregates/general.py",
@@ -233,8 +177,8 @@
   },
   {
    "pointer": "django/db/models/aggregates.py:StringAgg.__init__",
-   "line": 55,
-   "sentence": "So a project that moves its import to `django.db.models` and keeps `delimiter=\", \"` meets `FieldError` as the query is built, where the PostgreSQL class sent the string as a parameter and warned (`django/db/models/aggregates.py:StringAgg.__init__`).",
+   "line": 57,
+   "sentence": "The PostgreSQL class sent the string as a parameter, and warned (`django/db/models/aggregates.py:StringAgg.__init__`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "StringAgg.__init__",
@@ -247,8 +191,8 @@
   },
   {
    "pointer": "django/contrib/postgres/utils.py:CheckPostgresInstalledMixin",
-   "line": 59,
-   "sentence": "Since 6.0 the application's fields, indexes and `ExclusionConstraint` check that `django.contrib.postgres` is in `INSTALLED_APPS`: `CheckPostgresInstalledMixin.check` adds the error `\"postgres.E005\"` when it is not (`django/contrib/postgres/utils.py:CheckPostgresInstalledMixin`).",
+   "line": 61,
+   "sentence": "When it is not, `CheckPostgresInstalledMixin.check` adds the error `\"postgres.E005\"` (`django/contrib/postgres/utils.py:CheckPostgresInstalledMixin`).",
    "tree": "django",
    "path": "django/contrib/postgres/utils.py",
    "symbol": "CheckPostgresInstalledMixin",
@@ -261,8 +205,8 @@
   },
   {
    "pointer": "docs/releases/5.0.txt",
-   "line": 67,
-   "sentence": "| ping_google, the function and the command | removed with the exception SitemapNotFound, Google's ping endpoint being due to close in January 2024, the 5.0 notes say | 5.0 | `docs/releases/5.0.txt` |",
+   "line": 69,
+   "sentence": "| ping_google | Gone in 5.0: the function, the command and the exception SitemapNotFound, since Google's ping endpoint was to close in January 2024 | `docs/releases/5.0.txt` |",
    "tree": "django",
    "path": "docs/releases/5.0.txt",
    "symbol": null,
@@ -275,8 +219,8 @@
   },
   {
    "pointer": "django/contrib/sitemaps/__init__.py:Sitemap.get_protocol",
-   "line": 68,
-   "sentence": "| `Sitemap.get_protocol` | `\"https\"` when neither `Sitemap.protocol` nor a request gives one, where it was `\"http\"` | 5.0 | `django/contrib/sitemaps/__init__.py:Sitemap.get_protocol` |",
+   "line": 70,
+   "sentence": "| `Sitemap.get_protocol` | Since 5.0, `\"https\"` when neither `Sitemap.protocol` nor a request gives one, where it was `\"http\"` | `django/contrib/sitemaps/__init__.py:Sitemap.get_protocol` |",
    "tree": "django",
    "path": "django/contrib/sitemaps/__init__.py",
    "symbol": "Sitemap.get_protocol",
@@ -288,9 +232,23 @@
    "fingerprint": "aef8fda463ce04bc"
   },
   {
+   "pointer": "django/db/models/aggregates.py:Aggregate",
+   "line": 71,
+   "sentence": "| the PostgreSQL aggregates over no rows | Since 5.0, `ArrayAgg`, `JSONBAgg` and `StringAgg` give `None` unless given `default=`, where they gave an empty list or string | `django/db/models/aggregates.py:Aggregate` |",
+   "tree": "django",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Aggregate",
+   "kind": "class",
+   "lines": [
+    75,
+    223
+   ],
+   "fingerprint": "14143de20ffad2b4"
+  },
+  {
    "pointer": "django/contrib/postgres/fields/array.py:ArrayField.get_db_prep_save",
-   "line": 69,
-   "sentence": "| `ArrayField` of `django.db.models.JSONField` | an item `None` saved as SQL NULL, where 5.2.17 and 6.0.8 saved JSON null; rows last saved before 6.1 keep their JSON null beside the newer rows' NULL | 6.1 | `django/contrib/postgres/fields/array.py:ArrayField.get_db_prep_save` |",
+   "line": 72,
+   "sentence": "| `ArrayField` of `django.db.models.JSONField` | Since 6.1, an item `None` is saved as SQL NULL, where it was JSON null; rows last saved before 6.1 keep their JSON null | `django/contrib/postgres/fields/array.py:ArrayField.get_db_prep_save` |",
    "tree": "django",
    "path": "django/contrib/postgres/fields/array.py",
    "symbol": "ArrayField.get_db_prep_save",
@@ -303,8 +261,8 @@
   },
   {
    "pointer": "django/contrib/postgres/fields/citext.py",
-   "line": 70,
-   "sentence": "| `CICharField`, `CIEmailField`, `CITextField` | kept for old migrations, failing the checks `\"fields.E905\"` to `\"fields.E907\"`; the mixin CIText gone | 5.1 | `django/contrib/postgres/fields/citext.py` |",
+   "line": 73,
+   "sentence": "| the case-insensitive fields | Gone in 5.1, but kept for old migrations: `CICharField`, `CIEmailField` and `CITextField` fail the checks `\"fields.E905\"` to `\"fields.E907\"`; the mixin CIText is gone | `django/contrib/postgres/fields/citext.py` |",
    "tree": "django",
    "path": "django/contrib/postgres/fields/citext.py",
    "symbol": null,
@@ -317,8 +275,8 @@
   },
   {
    "pointer": "django/contrib/postgres/constraints.py:ExclusionConstraint",
-   "line": 71,
-   "sentence": "| `ExclusionConstraint` | `opclasses=` gone, and `violation_error_code` new (5.0); the index type `\"hash\"`, for one expression with `RangeOperators.EQUAL` (6.1) | 5.0, 6.1 | `django/contrib/postgres/constraints.py:ExclusionConstraint` |",
+   "line": 74,
+   "sentence": "| `ExclusionConstraint` | Since 5.0, takes `violation_error_code=`, and `opclasses=` is gone | `django/contrib/postgres/constraints.py:ExclusionConstraint` |",
    "tree": "django",
    "path": "django/contrib/postgres/constraints.py",
    "symbol": "ExclusionConstraint",
@@ -330,9 +288,23 @@
    "fingerprint": "df00bd6f672f5052"
   },
   {
+   "pointer": "django/contrib/postgres/constraints.py:ExclusionConstraint.__init__",
+   "line": 75,
+   "sentence": "| `ExclusionConstraint.index_type` | New in 6.1: `\"hash\"`, for one expression with `RangeOperators.EQUAL` and no `include=` | `django/contrib/postgres/constraints.py:ExclusionConstraint.__init__` |",
+   "tree": "django",
+   "path": "django/contrib/postgres/constraints.py",
+   "symbol": "ExclusionConstraint.__init__",
+   "kind": "function",
+   "lines": [
+    28,
+    88
+   ],
+   "fingerprint": "acb8343a155a4c69"
+  },
+  {
    "pointer": "django/contrib/postgres/indexes.py:BTreeIndex",
-   "line": 72,
-   "sentence": "| `BTreeIndex` | takes `deduplicate_items=` | 5.1 | `django/contrib/postgres/indexes.py:BTreeIndex` |",
+   "line": 76,
+   "sentence": "| `BTreeIndex` | New in 5.1: `deduplicate_items=` | `django/contrib/postgres/indexes.py:BTreeIndex` |",
    "tree": "django",
    "path": "django/contrib/postgres/indexes.py",
    "symbol": "BTreeIndex",
@@ -345,8 +317,8 @@
   },
   {
    "pointer": "django/contrib/postgres/search.py:Lexeme",
-   "line": 73,
-   "sentence": "| `Lexeme` | new: a search term escaped into one parameter | 6.0 | `django/contrib/postgres/search.py:Lexeme` |",
+   "line": 77,
+   "sentence": "| `Lexeme` | New in 6.0: a search term escaped into one parameter | `django/contrib/postgres/search.py:Lexeme` |",
    "tree": "django",
    "path": "django/contrib/postgres/search.py",
    "symbol": "Lexeme",
@@ -359,8 +331,8 @@
   },
   {
    "pointer": "django/contrib/postgres/operations.py:CreateExtension",
-   "line": 74,
-   "sentence": "| `CreateExtension` and its subclasses | take `hints=`, for the router | 6.0 | `django/contrib/postgres/operations.py:CreateExtension` |",
+   "line": 78,
+   "sentence": "| `CreateExtension` and its subclasses | New in 6.0: `hints=`, for the router | `django/contrib/postgres/operations.py:CreateExtension` |",
    "tree": "django",
    "path": "django/contrib/postgres/operations.py",
    "symbol": "CreateExtension",
@@ -373,8 +345,8 @@
   },
   {
    "pointer": "django/db/backends/postgresql/introspection.py:DatabaseIntrospection.get_table_description",
-   "line": 75,
-   "sentence": "| inspectdb | hstore found by the type's name, with psycopg 3.2 and the application | 6.1 | `django/db/backends/postgresql/introspection.py:DatabaseIntrospection.get_table_description` |",
+   "line": 79,
+   "sentence": "| inspectdb | Since 6.1, writes an hstore column as a `django.contrib.postgres.fields.HStoreField`, given psycopg 3.2 or later and `django.contrib.postgres` in `INSTALLED_APPS` | `django/db/backends/postgresql/introspection.py:DatabaseIntrospection.get_table_description` |",
    "tree": "django",
    "path": "django/db/backends/postgresql/introspection.py",
    "symbol": "DatabaseIntrospection.get_table_description",

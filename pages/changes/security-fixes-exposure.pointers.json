@@ -10,7 +10,7 @@
   {
    "pointer": "docs/releases/6.1.txt",
    "line": 9,
-   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), with a patch for each fix of that day, the security archive says (`docs/releases/security.txt`), and 6.1.1 lists no security fix.",
+   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), with a patch of its own for each fix of that day (`docs/releases/security.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -24,7 +24,7 @@
   {
    "pointer": "docs/releases/security.txt",
    "line": 9,
-   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), with a patch for each fix of that day, the security archive says (`docs/releases/security.txt`), and 6.1.1 lists no security fix.",
+   "sentence": "6.1 came out on 5 August 2026, the day after 5.2.17 and 6.0.8 (`docs/releases/6.1.txt`), with a patch of its own for each fix of that day (`docs/releases/security.txt`).",
    "tree": "django",
    "path": "docs/releases/security.txt",
    "symbol": null,
@@ -34,20 +34,6 @@
     2076
    ],
    "fingerprint": "7e2a7a8564c8b22e"
-  },
-  {
-   "pointer": "django/middleware/cache.py:UpdateCacheMiddleware.process_response",
-   "line": 13,
-   "sentence": "`UpdateCacheMiddleware.process_response`, which `cache_page` runs too, returns a response unstored at the first check that holds (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`).",
-   "tree": "django",
-   "path": "django/middleware/cache.py",
-   "symbol": "UpdateCacheMiddleware.process_response",
-   "kind": "function",
-   "lines": [
-    90,
-    146
-   ],
-   "fingerprint": "86dea3d2d0472ba4"
   },
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
@@ -64,20 +50,6 @@
    "fingerprint": "e54a21ed4b7c52be"
   },
   {
-   "pointer": "django/utils/http.py:split_directive_names",
-   "line": 17,
-   "sentence": "Cache-Control's `\"private\"`, `\"no-cache\"` and `\"no-store\"` are found whatever their case, where only a lower-case private used to be (CVE-2026-8404; 5.2.15, 6.0.6), and with a value, as `private=\"Set-Cookie\"` (`django/utils/http.py:split_directive_names`).",
-   "tree": "django",
-   "path": "django/utils/http.py",
-   "symbol": "split_directive_names",
-   "kind": "function",
-   "lines": [
-    212,
-    223
-   ],
-   "fingerprint": "d974bb37106cef05"
-  },
-  {
    "pointer": "django/utils/cache.py:has_vary_header",
    "line": 17,
    "sentence": "A `\"Vary\"` of `\"*\"` used to be stored (CVE-2026-6907; 5.2.14, 6.0.5), as did a star with white space around it (CVE-2026-48587; 5.2.15, 6.0.6); `has_vary_header` now compares stripped names (`django/utils/cache.py:has_vary_header`).",
@@ -92,9 +64,23 @@
    "fingerprint": "99370d72b2d0c7ba"
   },
   {
+   "pointer": "django/middleware/cache.py:UpdateCacheMiddleware.process_response",
+   "line": 19,
+   "sentence": "`UpdateCacheMiddleware.process_response`, which `cache_page` runs too, returns a response unstored at the first check that holds (`django/middleware/cache.py:UpdateCacheMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/cache.py",
+   "symbol": "UpdateCacheMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    90,
+    146
+   ],
+   "fingerprint": "86dea3d2d0472ba4"
+  },
+  {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
    "line": 49,
-   "sentence": "It writes a header into `HttpRequest.META` as WSGI does, its hyphens as underscores, so a header sent as x_forwarded_for, which a proxy stripping X-Forwarded-For let through, landed on X-Forwarded-For's key (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).",
+   "sentence": "So a header named x_forwarded_for landed on X-Forwarded-For's key, past a proxy that strips X-Forwarded-For (`django/core/handlers/asgi.py:ASGIRequest.__init__`; [Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md#from-an-asgi-scope)).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest.__init__",
@@ -108,7 +94,7 @@
   {
    "pointer": "django/core/validators.py:DomainNameValidator.__init__",
    "line": 51,
-   "sentence": "`DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7): its pattern ends at `\"\\Z\"`, where `\"$\"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
+   "sentence": "Its pattern ends at `\"\\Z\"`, where `\"$\"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": "DomainNameValidator.__init__",
@@ -122,7 +108,7 @@
   {
    "pointer": "django/core/validators.py",
    "line": 51,
-   "sentence": "`DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7): its pattern ends at `\"\\Z\"`, where `\"$\"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
+   "sentence": "Its pattern ends at `\"\\Z\"`, where `\"$\"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)).",
    "tree": "django",
    "path": "django/core/validators.py",
    "symbol": null,
@@ -150,7 +136,7 @@
   {
    "pointer": "django/utils/log.py:log_message",
    "line": 53,
-   "sentence": "At this commit `log_message` does it for `log_response` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).",
+   "sentence": "At this commit `log_response` leaves the escaping to `log_message` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_message",
@@ -163,8 +149,8 @@
   },
   {
    "pointer": "django/core/servers/basehttp.py:WSGIRequestHandler.log_message",
-   "line": 63,
-   "sentence": "Since 6.0 `WSGIRequestHandler.log_message` hands its arguments to `log_message` (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`; [The development server](../commands/runserver.md)); no 6.0 note lists the change.",
+   "line": 55,
+   "sentence": "Since then `WSGIRequestHandler.log_message` hands its arguments to `log_message`, and no 6.0 note says so (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`; [The development server](../commands/runserver.md)).",
    "tree": "django",
    "path": "django/core/servers/basehttp.py",
    "symbol": "WSGIRequestHandler.log_message",
@@ -176,23 +162,9 @@
    "fingerprint": "253ff422c0dcbe5f"
   },
   {
-   "pointer": "django/contrib/auth/__init__.py:check_password_with_timing_attack_mitigation",
-   "line": 67,
-   "sentence": "`ModelBackend.authenticate` hands the user, or `None`, to `check_password_with_timing_attack_mitigation`, which hashes for nothing when there is none (`django/contrib/auth/__init__.py:check_password_with_timing_attack_mitigation`; [Authenticating: `authenticate` and the backends](../auth/authenticating.md)).",
-   "tree": "django",
-   "path": "django/contrib/auth/__init__.py",
-   "symbol": "check_password_with_timing_attack_mitigation",
-   "kind": "function",
-   "lines": [
-    391,
-    399
-   ],
-   "fingerprint": "34ffd6909854cfaf"
-  },
-  {
    "pointer": "django/contrib/auth/hashers.py:verify_password",
    "line": 67,
-   "sentence": "An unusable password ran no hasher, and so told its user apart (CVE-2024-39329; 5.0.7); `verify_password` now hashes random characters when the stored password is unusable or its hasher unknown, or the password given is `None` (`django/contrib/auth/hashers.py:verify_password`).",
+   "sentence": "`verify_password` now hashes random characters when the stored password is unusable or its hasher unknown, or the password given is `None` (`django/contrib/auth/hashers.py:verify_password`; [Authenticating: `authenticate` and the backends](../auth/authenticating.md)).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "verify_password",
@@ -206,7 +178,7 @@
   {
    "pointer": "django/contrib/auth/handlers/modwsgi.py:check_password",
    "line": 67,
-   "sentence": "The mod_wsgi handler hashed nothing for a name with no account (CVE-2025-13473; 5.2.11, 6.0.2), and at this commit calls the same function (`django/contrib/auth/handlers/modwsgi.py:check_password`).",
+   "sentence": "At this commit it calls `check_password_with_timing_attack_mitigation`, which hashes for nothing when there is no user (`django/contrib/auth/handlers/modwsgi.py:check_password`).",
    "tree": "django",
    "path": "django/contrib/auth/handlers/modwsgi.py",
    "symbol": "check_password",
@@ -220,7 +192,7 @@
   {
    "pointer": "django/contrib/auth/forms.py:PasswordResetForm.send_mail",
    "line": 69,
-   "sentence": "A password reset whose mail failed raised, and so showed whether an address had an account (CVE-2024-45231; 5.0.9, 5.1.1); `PasswordResetForm.send_mail` now logs the failure to `\"django.contrib.auth\"` (`django/contrib/auth/forms.py:PasswordResetForm.send_mail`; [Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md)).",
+   "sentence": "`PasswordResetForm.send_mail` now logs the failure to `\"django.contrib.auth\"` (`django/contrib/auth/forms.py:PasswordResetForm.send_mail`; [Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md)).",
    "tree": "django",
    "path": "django/contrib/auth/forms.py",
    "symbol": "PasswordResetForm.send_mail",
@@ -234,7 +206,7 @@
   {
    "pointer": "django/core/files/storage/base.py:Storage.save",
    "line": 73,
-   "sentence": "`Storage.save` checks a name with `validate_file_name` as it arrives, after `Storage.get_available_name` and after `_save`, refusing an absolute name or one with `\"..\"` among its parts (`django/core/files/storage/base.py:Storage.save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
+   "sentence": "It refuses an absolute name or one with `\"..\"` among its parts (`django/core/files/storage/base.py:Storage.save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
    "tree": "django",
    "path": "django/core/files/storage/base.py",
    "symbol": "Storage.save",
@@ -248,7 +220,7 @@
   {
    "pointer": "django/utils/archive.py:BaseArchive.target_filename",
    "line": 75,
-   "sentence": "`extract`, which startproject and startapp use for a template archive, refuses a member unless `os.path.commonpath` of its path and the target is the target (`django/utils/archive.py:BaseArchive.target_filename`; [Paths and archives: `safe_join`, `safe_makedirs` and `extract`](../utils/paths.md)); a member bound for a sibling whose name begins with the target's used to pass (CVE-2025-59682; 5.1.13, 5.2.7).",
+   "sentence": "`extract`, which startproject and startapp use for a template archive, refuses a member unless `os.path.commonpath` of its path and the target is the target (`django/utils/archive.py:BaseArchive.target_filename`; [Paths and archives: `safe_join`, `safe_makedirs` and `extract`](../utils/paths.md)).",
    "tree": "django",
    "path": "django/utils/archive.py",
    "symbol": "BaseArchive.target_filename",
@@ -262,7 +234,7 @@
   {
    "pointer": "django/utils/_os.py:makedirs",
    "line": 77,
-   "sentence": "`FileSystemStorage`, given a mode for directories, and `FileBasedCache` make them through `safe_makedirs` and so `makedirs`, which sets each mode with `os.chmod` after `os.mkdir` (`django/utils/_os.py:makedirs`).",
+   "sentence": "`FileSystemStorage`, given a mode for directories, and `FileBasedCache` make their directories through `safe_makedirs` and so `makedirs`, which sets each mode with `os.chmod` after `os.mkdir` (`django/utils/_os.py:makedirs`).",
    "tree": "django",
    "path": "django/utils/_os.py",
    "symbol": "makedirs",
@@ -276,7 +248,7 @@
   {
    "pointer": "django/contrib/contenttypes/admin.py:GenericInlineModelAdmin.get_formset",
    "line": 81,
-   "sentence": "`GenericInlineModelAdmin.get_formset` gives its forms a `BaseForm.has_changed` that answers false for a new row the user may not add and for an existing one they may not change, as `InlineModelAdmin.get_formset` does (CVE-2026-4277; 5.2.13, 6.0.4) (`django/contrib/contenttypes/admin.py:GenericInlineModelAdmin.get_formset`; [Inlines: `InlineModelAdmin` and its formsets](../admin/inlines.md)).",
+   "sentence": "`GenericInlineModelAdmin.get_formset` gives its forms a `BaseForm.has_changed` that answers false for a new row the user may not add, or an existing one they may not change, as `InlineModelAdmin.get_formset` does (CVE-2026-4277; 5.2.13, 6.0.4; `django/contrib/contenttypes/admin.py:GenericInlineModelAdmin.get_formset`; [Inlines: `InlineModelAdmin` and its formsets](../admin/inlines.md)).",
    "tree": "django",
    "path": "django/contrib/contenttypes/admin.py",
    "symbol": "GenericInlineModelAdmin.get_formset",
@@ -290,7 +262,7 @@
   {
    "pointer": "django/contrib/admin/options.py:ModelAdmin._save_formset",
    "line": 81,
-   "sentence": "`ModelAdmin.list_editable`'s formset could create rows; `ModelAdmin._save_formset` raises `BadRequest` for a changed form whose object is new (CVE-2026-4292; 5.2.13, 6.0.4) (`django/contrib/admin/options.py:ModelAdmin._save_formset`; [The change list's columns: `list_display` and `list_editable`](../admin/list-display.md)).",
+   "sentence": "`ModelAdmin._save_formset` raises `BadRequest` for a changed form whose object is new (`django/contrib/admin/options.py:ModelAdmin._save_formset`; [The change list's columns: `list_display` and `list_editable`](../admin/list-display.md)).",
    "tree": "django",
    "path": "django/contrib/admin/options.py",
    "symbol": "ModelAdmin._save_formset",
@@ -304,7 +276,7 @@
   {
    "pointer": "django/contrib/admin/utils.py:display_for_field",
    "line": 83,
-   "sentence": "`display_for_field` makes a model's URL field a link only if `URLValidator` accepts the value, whatever the field's own validators allow (`django/contrib/admin/utils.py:display_for_field`); a value with a dangerous scheme was a link (CVE-2026-15920; 5.2.17, 6.0.8).",
+   "sentence": "`display_for_field` makes a model's URL field a link only if `URLValidator` accepts the value, whatever the field's own validators allow (`django/contrib/admin/utils.py:display_for_field`).",
    "tree": "django",
    "path": "django/contrib/admin/utils.py",
    "symbol": "display_for_field",
@@ -332,7 +304,7 @@
   {
    "pointer": "django/core/signing.py:_unsign_cookie",
    "line": 87,
-   "sentence": "A cookie signed with the old salt is still read while the setting `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true, its default until 6.1 (`django/core/signing.py:_unsign_cookie`; [What changed in security: Content Security Policy and signing](security.md)).",
+   "sentence": "The old salt is still read while the setting `SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true, its default before 6.1 (`django/core/signing.py:_unsign_cookie`; [What changed in security: Content Security Policy and signing](security.md)).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "_unsign_cookie",
@@ -375,7 +347,7 @@
   {
    "pointer": "django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value",
    "line": 95,
-   "sentence": "A `GDALRaster` passes (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).",
+   "sentence": "`BaseSpatialField.get_prep_value` raises it for a dictionary at once, for a string only if it fails as a `GEOSGeometry` and begins \"/vsi\" or looks like JSON, and never for a `GDALRaster` (`django/contrib/gis/db/models/fields.py:BaseSpatialField.get_prep_value`; [Spatial fields: the geometry fields and `RasterField`](../contrib/spatial-fields.md)).",
    "tree": "django",
    "path": "django/contrib/gis/db/models/fields.py",
    "symbol": "BaseSpatialField.get_prep_value",
@@ -389,7 +361,7 @@
   {
    "pointer": "django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__",
    "line": 97,
-   "sentence": "A `GDALRaster` made from bytes gives its in-memory file exactly their length, which `GDALRaster.vsi_buffer` reads back; it read some 32 bytes past the buffer (CVE-2026-53877; 5.2.16, 6.0.7) (`django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__`).",
+   "sentence": "A `GDALRaster` made from bytes gives its in-memory file exactly their length (`django/contrib/gis/gdal/raster/source.py:GDALRaster.__init__`).",
    "tree": "django",
    "path": "django/contrib/gis/gdal/raster/source.py",
    "symbol": "GDALRaster.__init__",

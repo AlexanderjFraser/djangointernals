@@ -79,10 +79,17 @@ The introduction, down to the first heading.
 |---|---|---|
 | `django` | required | which Django the page describes: the release in words, and the pinned commit of `pin.json` spelt out. A page that points into a pinned library names its release too (`; asgiref 3.12.1`) |
 | `part` | on a chapter | the part of the book the chapter is in. Chapters that follow one another with the same part are shown under it |
-| `contents` | on a page with children | their names, in reading order |
+| `contents` | on a page with children | their names, in reading order; on a long chapter, in groups |
 
 A value is plain text, written in double quotes when it begins with
 anything but a letter or a digit, or holds a colon followed by a space.
+
+A chapter whose sections a reader looks among rather than reads in order
+may group them, each group a label and its names, the groups parted by
+semicolons:
+`contents: "The history: first-decade, second-decade; For looking up: requirements, deprecations"`.
+The opening page shows each group under its label; the numbers run on
+through the groups, and everywhere else the sections are one list.
 
 **The title** is the page's one `#` heading. It names the subject. It is
 also the text of every link to the page, so it holds no name that several
@@ -315,7 +322,8 @@ proves each refusal.
 - *The front matter*: none; a line that is not `key: value`; a key that is
   not one of the three, or given twice; a value that needs quotes and has
   none; no `django`, or one without the pinned commit; `part` on a page
-  that is not a chapter.
+  that is not a chapter; a group of `contents` with no label or naming no
+  page, a label given twice, groups on the front page.
 - *The tree*: no front page, or one with nothing on it; a child with no
   file, named twice, or with a name that is not lower-case words (or is
   `index`, `404`, or at the top `static`); a file no `contents` names; a

@@ -26,11 +26,12 @@
 </div>{% endif %}
 {% if page.is_chapter and page.children %}<nav class="outline flow" aria-labelledby="_outline">
 <h2 id="_outline">In this chapter</h2>
-<ol>{% for child in page.children %}
+{% for group in page.groups %}{% if group.label %}<h3 class="group">{{ group.label }}</h3>
+{% endif %}<ol>{% for child in group.children %}
 <li>{% if child.published %}<a href="{{ child.url }}"><span class="no">{{ child.number }}</span> <span class="title">{{ child.title_html_unlinked|safe }}</span></a>{% else %}<span class="planned"><span class="no">{{ child.number }}</span> <span class="title">{{ child.title_html_unlinked|safe }}</span></span>{% endif %}
 <span class="about">{{ child.lede_html|safe }}</span></li>{% endfor %}
 </ol>
-</nav>{% endif %}
+{% endfor %}</nav>{% endif %}
 {% for section in page.sections %}
 <section class="section flow" aria-labelledby="{{ section.id }}">
 <h2 id="{{ section.id }}">{{ section.title_html|safe }}</h2>

@@ -183,7 +183,7 @@ class Command(BaseCommand):
                       f"a member by itself, `load_middleware`.\n\n"
                       "```runtime-names\nModel._meta  django/db/models/options.py:Options.contribute_to_class\n```\n",
             "b.md": head + "# B\n\nLede of B.\n",
-            "p.md": headed(part="Second", contents="c") + "# P\n\nLede of P.\n\n## Only\n\nText.\n",
+            "p.md": headed(part="Second", contents='"Its one: c"') + "# P\n\nLede of P.\n\n## Only\n\nText.\n",
             "p/c.md": head + "# C\n\nLede of C.\n\n## What `django/core/handlers/base.py:BaseHandler.get_response` does, and [A](../a.md)?\n\nText.\n",
             "_redirects": "# addresses that have moved\n/old /a 301\n/old.md /a.md 301\n/old/* /p/c 301\n/first / 301\n",
         }
@@ -249,8 +249,14 @@ class Command(BaseCommand):
             ("a quoted value that does not close", {"a.md": good["a.md"].replace("part: First", 'part: "First')}, "from end to end"),
             ("a child's name in capitals", {"index.md": good["index.md"].replace("contents: a, b", "contents: a, b, C")}, "lower-case words"),
             ("a child named for the site's own paths", {"index.md": good["index.md"].replace("contents: a, b", "contents: a, b, static")}, "not static"),
-            ("a child named index, in a chapter", {"p.md": good["p.md"].replace("contents: c", "contents: c, index")}, "never 404 or index"),
-            ("a child named 404, in a chapter", {"p.md": good["p.md"].replace("contents: c", "contents: c, 404")}, "never 404 or index"),
+            ("a child named index, in a chapter", {"p.md": good["p.md"].replace(": c\"", ": c, index\"")}, "never 404 or index"),
+            ("a child named 404, in a chapter", {"p.md": good["p.md"].replace(": c\"", ": c, 404\"")}, "never 404 or index"),
+            ("a group of the contents with no label", {"p.md": good["p.md"].replace(": c\"", ": c; d\"")}, "begins with its label"),
+            ("a group of the contents that names no page", {"p.md": good["p.md"].replace(": c\"", ": c; Two: \"")}, "names no page"),
+            ("one label for two groups", {"p.md": good["p.md"].replace(": c\"", ": c; Its one: d\""), "p/d.md": head + written_page},
+             "to two groups"),
+            ("the front page's contents in groups", {"index.md": good["index.md"].replace("contents: a, b, p", 'contents: "All: a, b, p"')},
+             "grouped only on a chapter's"),
             ("a child named twice", {"index.md": good["index.md"].replace("contents: a, b", "contents: a, b, a")}, "twice"),
             ("a front page with nothing on it", {"index.md": headed(contents="a, b") + "# A book\n\nIts lede.\n", "a.md": head + "# A\n\nLede.\n",
                                                  "p.md": None, "p/c.md": None}, "nothing to publish"),
@@ -370,6 +376,9 @@ class Command(BaseCommand):
                 fail("a chapter's opening page does not carry its number, or a section's title its own")
             if "Part I · First" not in index_html or "Part II · Second" not in index_html or "Part I · First" not in page:
                 fail("the parts are not numbered in the contents, or a chapter's opening page does not say which part it is in")
+            outline = (written / "p.html").read_text(encoding="utf-8").split('<nav class="outline', 1)[-1].split("</nav>", 1)[0]
+            if not re.search(r'<h3 class="group">Its one</h3>\s*<ol>\s*<li><a href="/p/c"><span class="no">3\.1</span>', outline):
+                fail("a chapter's grouped contents are not shown on its opening page with each group under its label")
             for name in ("index.html", "a.html", "p.html", "p/c.html", "404.html"):
                 if SECTION_SIGN in (written / name).read_text(encoding="utf-8"):
                     fail(f"{name} prints a section sign")
@@ -532,7 +541,8 @@ class Command(BaseCommand):
                           f"are each refused for it and for nothing else, with the page's path, a pointer that does not resolve, a name that "
                           f"does not exist and a name bound only in another section among them; a bake writes the pages, their twins (the "
                           f"files themselves), llms.txt, index.json and names.json as the head says; a planned page gets a line in the "
-                          f"contents and no file; a pointer in parentheses stands beside its paragraph and every pointer links to the pin; "
+                          f"contents and no file; a chapter's contents in groups stand on its opening page, each under its label; "
+                          f"a pointer in parentheses stands beside its paragraph and every pointer links to the pin; "
                           f"chapters, sections, parts, figures and captioned tables carry their numbers; a quote of a recording is "
                           f"labelled with the versions of Django that ran it; no page prints a section sign or "
                           f"a block about itself; the book's contents stand beside every page (the page shown marked, its chapter open) "

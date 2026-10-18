@@ -10,7 +10,7 @@
   {
    "pointer": "django/utils/cache.py:_generate_cache_key",
    "line": 13,
-   "sentence": "Since 6.1 each goes in as a netstring: its length in bytes, a colon, the bytes and a comma (`django/utils/cache.py:_generate_cache_key`, `django/core/cache/utils.py:make_template_fragment_key`).",
+   "sentence": "Since 6.1 the key of a cached page or fragment hashes each value it varies on as a netstring: its length in bytes, a colon, the bytes and a comma (`django/utils/cache.py:_generate_cache_key`, `django/core/cache/utils.py:make_template_fragment_key`).",
    "tree": "django",
    "path": "django/utils/cache.py",
    "symbol": "_generate_cache_key",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/core/cache/utils.py:make_template_fragment_key",
    "line": 13,
-   "sentence": "Since 6.1 each goes in as a netstring: its length in bytes, a colon, the bytes and a comma (`django/utils/cache.py:_generate_cache_key`, `django/core/cache/utils.py:make_template_fragment_key`).",
+   "sentence": "Since 6.1 the key of a cached page or fragment hashes each value it varies on as a netstring: its length in bytes, a colon, the bytes and a comma (`django/utils/cache.py:_generate_cache_key`, `django/core/cache/utils.py:make_template_fragment_key`).",
    "tree": "django",
    "path": "django/core/cache/utils.py",
    "symbol": "make_template_fragment_key",
@@ -37,7 +37,7 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 23,
+   "line": 13,
    "sentence": "The cost, the notes say: the first request for a varying page or fragment cached before the upgrade misses (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
@@ -50,9 +50,23 @@
    "fingerprint": "283b7ce3a441f06c"
   },
   {
+   "pointer": "django/utils/cache.py:learn_cache_key",
+   "line": 15,
+   "sentence": "A page varies on the request headers its response's `\"Vary\"` names, bar Accept-Language while `USE_I18N` is true (`django/utils/cache.py:learn_cache_key`); a fragment of the `{% cache %}` tag, keyed by `make_template_fragment_key`, on the values it is given.",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": "learn_cache_key",
+   "kind": "function",
+   "lines": [
+    406,
+    444
+   ],
+   "fingerprint": "c9f633019a4a9860"
+  },
+  {
    "pointer": "django/core/cache/backends/db.py:DatabaseCache.get_many",
-   "line": 27,
-   "sentence": "Since 6.1 `DatabaseCache.get_many`, through which `DatabaseCache.get` reads, decodes it strictly, refusing any character outside the alphabet (`django/core/cache/backends/db.py:DatabaseCache.get_many`).",
+   "line": 29,
+   "sentence": "Since 6.1 `DatabaseCache.get_many` decodes a row's Base64 strictly, refusing any character outside the alphabet; `DatabaseCache.get` reads through it (`django/core/cache/backends/db.py:DatabaseCache.get_many`).",
    "tree": "django",
    "path": "django/core/cache/backends/db.py",
    "symbol": "DatabaseCache.get_many",
@@ -65,7 +79,7 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 27,
+   "line": 29,
    "sentence": "Values Django writes are unaffected, the notes say; a corrupted or non-standard entry may no longer read (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
@@ -79,8 +93,8 @@
   },
   {
    "pointer": "docs/releases/6.2.txt",
-   "line": 29,
-   "sentence": "Since 6.2 a write does so only when `random.random()` is at most the alias's `\"CULL_PROBABILITY\"`, as an optimization, the notes say (`docs/releases/6.2.txt`; `django/core/cache/backends/db.py:DatabaseCache._base_set`).",
+   "line": 31,
+   "sentence": "Since 6.2 a write does so only when `random.random()` is at most the alias's `\"CULL_PROBABILITY\"`, an optimization, the notes say (`docs/releases/6.2.txt`; `django/core/cache/backends/db.py:DatabaseCache._base_set`).",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
    "symbol": null,
@@ -93,8 +107,8 @@
   },
   {
    "pointer": "django/core/cache/backends/db.py:DatabaseCache._base_set",
-   "line": 29,
-   "sentence": "Since 6.2 a write does so only when `random.random()` is at most the alias's `\"CULL_PROBABILITY\"`, as an optimization, the notes say (`docs/releases/6.2.txt`; `django/core/cache/backends/db.py:DatabaseCache._base_set`).",
+   "line": 31,
+   "sentence": "Since 6.2 a write does so only when `random.random()` is at most the alias's `\"CULL_PROBABILITY\"`, an optimization, the notes say (`docs/releases/6.2.txt`; `django/core/cache/backends/db.py:DatabaseCache._base_set`).",
    "tree": "django",
    "path": "django/core/cache/backends/db.py",
    "symbol": "DatabaseCache._base_set",
@@ -107,8 +121,8 @@
   },
   {
    "pointer": "django/core/cache/backends/db.py:BaseDatabaseCache.__init__",
-   "line": 29,
-   "sentence": "`BaseDatabaseCache.__init__` reads it from `\"OPTIONS\"`: 0.1 when absent or refused by `float`, and 0 turns culling off (`django/core/cache/backends/db.py:BaseDatabaseCache.__init__`).",
+   "line": 31,
+   "sentence": "The option is read from `\"OPTIONS\"`, 0.1 by default, and 0 turns culling off (`django/core/cache/backends/db.py:BaseDatabaseCache.__init__`; [The cache backends](../services/cache-backends.md)).",
    "tree": "django",
    "path": "django/core/cache/backends/db.py",
    "symbol": "BaseDatabaseCache.__init__",
@@ -121,7 +135,7 @@
   },
   {
    "pointer": "django/core/files/base.py:File.__bool__",
-   "line": 33,
+   "line": 35,
    "sentence": "Since 6.1 `File.__bool__` returns `True` (`django/core/files/base.py:File.__bool__`).",
    "tree": "django",
    "path": "django/core/files/base.py",
@@ -135,8 +149,8 @@
   },
   {
    "pointer": "django/db/models/fields/files.py:FieldFile.__bool__",
-   "line": 33,
-   "sentence": "`FieldFile` and `UploadedFile`, with the upload classes under it, keep the old test (`django/db/models/fields/files.py:FieldFile.__bool__`, `django/core/files/uploadedfile.py:UploadedFile.__bool__`), so a file field holding no file is still false ([What changed in models and fields](models.md), [Files: `File`, `ContentFile` and their helpers](../services/files.md)).",
+   "line": 37,
+   "sentence": "`FieldFile` and `UploadedFile`, with the upload classes under it, keep the old test, so a file field holding no file is still false (`django/db/models/fields/files.py:FieldFile.__bool__`, `django/core/files/uploadedfile.py:UploadedFile.__bool__`; [Files: `File`, `ContentFile` and their helpers](../services/files.md)).",
    "tree": "django",
    "path": "django/db/models/fields/files.py",
    "symbol": "FieldFile.__bool__",
@@ -149,8 +163,8 @@
   },
   {
    "pointer": "django/core/files/uploadedfile.py:UploadedFile.__bool__",
-   "line": 33,
-   "sentence": "`FieldFile` and `UploadedFile`, with the upload classes under it, keep the old test (`django/db/models/fields/files.py:FieldFile.__bool__`, `django/core/files/uploadedfile.py:UploadedFile.__bool__`), so a file field holding no file is still false ([What changed in models and fields](models.md), [Files: `File`, `ContentFile` and their helpers](../services/files.md)).",
+   "line": 37,
+   "sentence": "`FieldFile` and `UploadedFile`, with the upload classes under it, keep the old test, so a file field holding no file is still false (`django/db/models/fields/files.py:FieldFile.__bool__`, `django/core/files/uploadedfile.py:UploadedFile.__bool__`; [Files: `File`, `ContentFile` and their helpers](../services/files.md)).",
    "tree": "django",
    "path": "django/core/files/uploadedfile.py",
    "symbol": "UploadedFile.__bool__",
@@ -162,23 +176,9 @@
    "fingerprint": "52ec0e3c15ad7753"
   },
   {
-   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage.is_name_available",
-   "line": 37,
-   "sentence": "`FileSystemStorage` has taken allow_overwrite since 5.1: set true, it keeps a taken name, and `FileSystemStorage._save` opens the file with `os.O_TRUNC` in place of `os.O_EXCL`, so the save replaces the file (`django/core/files/storage/filesystem.py:FileSystemStorage.is_name_available`, `django/core/files/storage/filesystem.py:FileSystemStorage._save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
-   "tree": "django",
-   "path": "django/core/files/storage/filesystem.py",
-   "symbol": "FileSystemStorage.is_name_available",
-   "kind": "function",
-   "lines": [
-    171,
-    174
-   ],
-   "fingerprint": "926d300ddc974879"
-  },
-  {
    "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage._save",
-   "line": 37,
-   "sentence": "`FileSystemStorage` has taken allow_overwrite since 5.1: set true, it keeps a taken name, and `FileSystemStorage._save` opens the file with `os.O_TRUNC` in place of `os.O_EXCL`, so the save replaces the file (`django/core/files/storage/filesystem.py:FileSystemStorage.is_name_available`, `django/core/files/storage/filesystem.py:FileSystemStorage._save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
+   "line": 41,
+   "sentence": "Set true, it keeps a taken name, and `FileSystemStorage._save` opens the file with `os.O_TRUNC` in place of `os.O_EXCL`, so the save replaces the file (`django/core/files/storage/filesystem.py:FileSystemStorage._save`; [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).",
    "tree": "django",
    "path": "django/core/files/storage/filesystem.py",
    "symbol": "FileSystemStorage._save",
@@ -191,8 +191,8 @@
   },
   {
    "pointer": "docs/releases/5.1.txt",
-   "line": 37,
-   "sentence": "The 5.1 notes give it in place of the undocumented attribute OS_OPEN_FLAGS, deprecated then and removed in 6.0 (`docs/releases/5.1.txt`).",
+   "line": 41,
+   "sentence": "It replaced the undocumented attribute OS_OPEN_FLAGS, which 5.1 deprecated and 6.0 removed (`docs/releases/5.1.txt`).",
    "tree": "django",
    "path": "docs/releases/5.1.txt",
    "symbol": null,
@@ -202,39 +202,10 @@
     495
    ],
    "fingerprint": "3a1b214427111cf2"
-  },
-  {
-   "pointer": "docs/releases/5.1.txt",
-   "line": 48,
-   "sentence": "The settings DEFAULT_FILE_STORAGE and STATICFILES_STORAGE, deprecated in 4.2, were removed in 5.1 with the function get_storage_class, leaving `STORAGES` alone (`docs/releases/5.1.txt`; `django/core/files/storage/handler.py:StorageHandler.backends`).",
-   "tree": "django",
-   "path": "docs/releases/5.1.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    495
-   ],
-   "fingerprint": "3a1b214427111cf2"
-  },
-  {
-   "pointer": "django/core/files/storage/handler.py:StorageHandler.backends",
-   "line": 48,
-   "sentence": "The settings DEFAULT_FILE_STORAGE and STATICFILES_STORAGE, deprecated in 4.2, were removed in 5.1 with the function get_storage_class, leaving `STORAGES` alone (`docs/releases/5.1.txt`; `django/core/files/storage/handler.py:StorageHandler.backends`).",
-   "tree": "django",
-   "path": "django/core/files/storage/handler.py",
-   "symbol": "StorageHandler.backends",
-   "kind": "function",
-   "lines": [
-    18,
-    22
-   ],
-   "at": 19,
-   "fingerprint": "9642e454fd50d573"
   },
   {
    "pointer": "django/dispatch/dispatcher.py:_run_parallel",
-   "line": 52,
+   "line": 56,
    "sentence": "No release note lists it, only the topic guide (`django/dispatch/dispatcher.py:_run_parallel`; `docs/topics/signals.txt`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
@@ -248,7 +219,7 @@
   },
   {
    "pointer": "docs/topics/signals.txt",
-   "line": 52,
+   "line": 56,
    "sentence": "No release note lists it, only the topic guide (`django/dispatch/dispatcher.py:_run_parallel`; `docs/topics/signals.txt`).",
    "tree": "django",
    "path": "docs/topics/signals.txt",
@@ -262,8 +233,8 @@
   },
   {
    "pointer": "django/dispatch/dispatcher.py:_restore_context",
-   "line": 64,
-   "sentence": "With the group, the coroutine receivers also share one copy of the sender's context, and what they set in it is set in the sender's when they finish (`django/dispatch/dispatcher.py:_restore_context`): two receivers of `asend` each adding 1 to a `contextvars.ContextVar` the sender set to 1 leave it at 1 under 6.0.8, and at 3 at this commit.",
+   "line": 70,
+   "sentence": "With the group, the coroutine receivers also share one copy of the sender's context, and what they set in it is set in the sender's when they finish (`django/dispatch/dispatcher.py:_restore_context`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": "_restore_context",
@@ -276,8 +247,8 @@
   },
   {
    "pointer": "django/dispatch/dispatcher.py:Signal.asend",
-   "line": 64,
-   "sentence": "And `asend` now awaits its synchronous receivers before it starts the coroutine ones, which before 6.1 did not wait for them to return (`django/dispatch/dispatcher.py:Signal.asend`).",
+   "line": 72,
+   "sentence": "Since 6.1 `asend` awaits its synchronous receivers before it starts the coroutine ones; before, the coroutine ones did not wait for them to return (`django/dispatch/dispatcher.py:Signal.asend`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": "Signal.asend",
@@ -290,7 +261,7 @@
   },
   {
    "pointer": "django/core/serializers/json.py:DjangoJSONEncoder.default",
-   "line": 68,
+   "line": 76,
    "sentence": "Since 6.2 `DjangoJSONEncoder` writes a datetime or a time to the millisecond only when its milliseconds are not zero, and to the second otherwise (`django/core/serializers/json.py:DjangoJSONEncoder.default`).",
    "tree": "django",
    "path": "django/core/serializers/json.py",
@@ -305,7 +276,7 @@
   {
    "pointer": "django/core/serializers/json.py:Serializer.end_serialization",
    "line": 78,
-   "sentence": "In 6.0 the JSON serializer's text came to end in a newline even when not indented: `serialize(\"json\", [])` is `\"[]\"` under 5.2.17 and `\"[]\\n\"` since 6.0 (`django/core/serializers/json.py:Serializer.end_serialization`).",
+   "sentence": "Since 6.0 the JSON serializer's text ends in a newline even when it is not indented: `serialize(\"json\", [])` is `\"[]\"` under 5.2.17 and `\"[]\\n\"` under 6.0.8 and later (`django/core/serializers/json.py:Serializer.end_serialization`).",
    "tree": "django",
    "path": "django/core/serializers/json.py",
    "symbol": "Serializer.end_serialization",
@@ -319,7 +290,7 @@
   {
    "pointer": "django/core/serializers/python.py:Serializer.get_dump_object",
    "line": 80,
-   "sentence": "Dumped with natural primary keys, such an object is written with its primary key, which 6.0.8 left out; dumped with natural foreign keys, a relation to it is written as that key, where 6.0.8 wrote the empty tuple (`django/core/serializers/python.py:Serializer.get_dump_object`, `django/core/serializers/python.py:Serializer.handle_fk_field`).",
+   "sentence": "Dumped with natural foreign keys, a relation to it is written as that key, not as the empty tuple 6.0.8 wrote (`django/core/serializers/python.py:Serializer.get_dump_object`, `django/core/serializers/python.py:Serializer.handle_fk_field`).",
    "tree": "django",
    "path": "django/core/serializers/python.py",
    "symbol": "Serializer.get_dump_object",
@@ -333,7 +304,7 @@
   {
    "pointer": "django/core/serializers/python.py:Serializer.handle_fk_field",
    "line": 80,
-   "sentence": "Dumped with natural primary keys, such an object is written with its primary key, which 6.0.8 left out; dumped with natural foreign keys, a relation to it is written as that key, where 6.0.8 wrote the empty tuple (`django/core/serializers/python.py:Serializer.get_dump_object`, `django/core/serializers/python.py:Serializer.handle_fk_field`).",
+   "sentence": "Dumped with natural foreign keys, a relation to it is written as that key, not as the empty tuple 6.0.8 wrote (`django/core/serializers/python.py:Serializer.get_dump_object`, `django/core/serializers/python.py:Serializer.handle_fk_field`).",
    "tree": "django",
    "path": "django/core/serializers/python.py",
    "symbol": "Serializer.handle_fk_field",
@@ -347,7 +318,7 @@
   {
    "pointer": "django/core/serializers/xml_serializer.py:check_element_type",
    "line": 82,
-   "sentence": "Since 6.1 the XML deserializer raises `SuspiciousOperation` when a field's text holds an element with content of its own, and passes over an empty one (`django/core/serializers/xml_serializer.py:check_element_type`): a title written `\"<b>Valletta</b>\"` read as `\"Valletta\"` under 6.0.8, and is refused at this commit.",
+   "sentence": "Since 6.1 the XML deserializer raises `SuspiciousOperation` when a field's text holds an element with content of its own (`django/core/serializers/xml_serializer.py:check_element_type`).",
    "tree": "django",
    "path": "django/core/serializers/xml_serializer.py",
    "symbol": "check_element_type",
@@ -361,7 +332,7 @@
   {
    "pointer": "django/core/serializers/base.py:DeserializedObject.save",
    "line": 84,
-   "sentence": "Since 6.1 `DeserializedObject.save` sets each many-to-many relation with `raw=True`, so loaddata's relations send `m2m_changed` with `raw=True` (`django/core/serializers/base.py:DeserializedObject.save`; [Fixtures: dumpdata and loaddata](../services/fixtures.md)).",
+   "sentence": "Since 6.1 `DeserializedObject.save` sets each many-to-many relation with `raw=True`, so loaddata's relations send `m2m_changed` with `raw=True`, an argument new in 6.1 (`django/core/serializers/base.py:DeserializedObject.save`; [Fixtures: dumpdata and loaddata](../services/fixtures.md)).",
    "tree": "django",
    "path": "django/core/serializers/base.py",
    "symbol": "DeserializedObject.save",
@@ -375,7 +346,7 @@
   {
    "pointer": "django/core/files/base.py:File.open",
    "line": 92,
-   "sentence": "| `File.open` | passes the arguments after the mode to Python's open, reopening a closed file by its name | 5.0 | `django/core/files/base.py:File.open` |",
+   "sentence": "| `File.open` | Since 5.0, passes the arguments after the mode to Python's open when it reopens a closed file by its name | `django/core/files/base.py:File.open` |",
    "tree": "django",
    "path": "django/core/files/base.py",
    "symbol": "File.open",
@@ -387,23 +358,24 @@
    "fingerprint": "3f93f08c0411f383"
   },
   {
-   "pointer": "django/core/paginator.py:BasePaginator.__init__",
+   "pointer": "django/core/files/storage/handler.py:StorageHandler.backends",
    "line": 93,
-   "sentence": "| a paginator's error_messages | new, merged by key over `BasePaginator.default_error_messages` | 5.0 | `django/core/paginator.py:BasePaginator.__init__` |",
+   "sentence": "| DEFAULT_FILE_STORAGE, STATICFILES_STORAGE | Gone in 5.1, with the function get_storage_class; nothing reads them | `django/core/files/storage/handler.py:StorageHandler.backends` |",
    "tree": "django",
-   "path": "django/core/paginator.py",
-   "symbol": "BasePaginator.__init__",
+   "path": "django/core/files/storage/handler.py",
+   "symbol": "StorageHandler.backends",
    "kind": "function",
    "lines": [
-    40,
-    70
+    18,
+    22
    ],
-   "fingerprint": "5bcda146160f6932"
+   "at": 19,
+   "fingerprint": "9642e454fd50d573"
   },
   {
    "pointer": "django/core/serializers/python.py:Deserializer",
    "line": 94,
-   "sentence": "| the deserializers | the Python, JSON, JSON Lines and YAML formats' each a class, where it was a function | 5.2 | `django/core/serializers/python.py:Deserializer` |",
+   "sentence": "| a format's `Deserializer` | Since 5.2, a class, where it was a function, in the Python, JSON, JSON Lines and YAML formats | `django/core/serializers/python.py:Deserializer` |",
    "tree": "django",
    "path": "django/core/serializers/python.py",
    "symbol": "Deserializer",
@@ -413,6 +385,20 @@
     236
    ],
    "fingerprint": "81844a1c9459d76d"
+  },
+  {
+   "pointer": "django/core/paginator.py:BasePaginator.__init__",
+   "line": 95,
+   "sentence": "| a paginator's `error_messages=` | New in 5.0: merged by key over `BasePaginator.default_error_messages` | `django/core/paginator.py:BasePaginator.__init__` |",
+   "tree": "django",
+   "path": "django/core/paginator.py",
+   "symbol": "BasePaginator.__init__",
+   "kind": "function",
+   "lines": [
+    40,
+    70
+   ],
+   "fingerprint": "5bcda146160f6932"
   }
  ]
 }

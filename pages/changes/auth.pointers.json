@@ -10,7 +10,7 @@
   {
    "pointer": "django/contrib/auth/middleware.py:LoginRequiredMiddleware.process_view",
    "line": 15,
-   "sentence": "Without `LoginRequiredMiddleware` (5.1) a view is open unless a decorator or a mixin closes it; with it, after `AuthenticationMiddleware`, every view is closed to an anonymous request unless the decorator `login_not_required` (5.1) opens it (`django/contrib/auth/middleware.py:LoginRequiredMiddleware.process_view`).",
+   "sentence": "Since 5.1 `LoginRequiredMiddleware` closes every view to an anonymous request unless the decorator `login_not_required` opens it (`django/contrib/auth/middleware.py:LoginRequiredMiddleware.process_view`).",
    "tree": "django",
    "path": "django/contrib/auth/middleware.py",
    "symbol": "LoginRequiredMiddleware.process_view",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/contrib/auth/__init__.py",
    "line": 19,
-   "sentence": "5.0 added the functions `aauthenticate`, `aget_user`, `alogin`, `alogout` and `aupdate_session_auth_hash` (`django/contrib/auth/__init__.py`) with `HttpRequest.auser`, 5.1 the session store's coroutines, such as `SessionBase.aget` ([The session store: `SessionBase`](../auth/sessions.md#the-asynchronous-methods)), and 5.2 `UserManager.acreate_user`, `PermissionsMixin.ahas_perm` and the other permission methods' coroutines, and those of the backends.",
+   "sentence": "5.0 added the functions `aauthenticate`, `aget_user`, `alogin`, `alogout` and `aupdate_session_auth_hash` (`django/contrib/auth/__init__.py`), with `HttpRequest.auser`.",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
    "symbol": null,
@@ -38,7 +38,7 @@
   {
    "pointer": "django/contrib/auth/__init__.py:aauthenticate",
    "line": 21,
-   "sentence": "`aauthenticate` picks the backends by the signature of their synchronous `authenticate`, then awaits each one's `BaseBackend.aauthenticate` (`django/contrib/auth/__init__.py:aauthenticate`).",
+   "sentence": "`aauthenticate` awaits the backends' `BaseBackend.aauthenticate` in turn (`django/contrib/auth/__init__.py:aauthenticate`).",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
    "symbol": "aauthenticate",
@@ -53,7 +53,7 @@
   {
    "pointer": "django/contrib/auth/backends.py:ModelBackend.aauthenticate",
    "line": 21,
-   "sentence": "`BaseBackend.aauthenticate` wraps `authenticate` in `sync_to_async`, but since 5.2 `ModelBackend` and `RemoteUserBackend` have their own, on the asynchronous ORM, to \"reduce context-switching\", the 5.2 notes say (`django/contrib/auth/backends.py:ModelBackend.aauthenticate`, `docs/releases/5.2.txt`).",
+   "sentence": "Since 5.2 `ModelBackend` and `RemoteUserBackend` have their own, on the asynchronous ORM, to \"reduce context-switching\", the 5.2 notes say (`django/contrib/auth/backends.py:ModelBackend.aauthenticate`, `docs/releases/5.2.txt`).",
    "tree": "django",
    "path": "django/contrib/auth/backends.py",
    "symbol": "ModelBackend.aauthenticate",
@@ -68,7 +68,7 @@
   {
    "pointer": "docs/releases/5.2.txt",
    "line": 21,
-   "sentence": "`BaseBackend.aauthenticate` wraps `authenticate` in `sync_to_async`, but since 5.2 `ModelBackend` and `RemoteUserBackend` have their own, on the asynchronous ORM, to \"reduce context-switching\", the 5.2 notes say (`django/contrib/auth/backends.py:ModelBackend.aauthenticate`, `docs/releases/5.2.txt`).",
+   "sentence": "Since 5.2 `ModelBackend` and `RemoteUserBackend` have their own, on the asynchronous ORM, to \"reduce context-switching\", the 5.2 notes say (`django/contrib/auth/backends.py:ModelBackend.aauthenticate`, `docs/releases/5.2.txt`).",
    "tree": "django",
    "path": "docs/releases/5.2.txt",
    "symbol": null,
@@ -94,23 +94,9 @@
    "fingerprint": "123e34f8580cd09a"
   },
   {
-   "pointer": "docs/topics/auth/customizing.txt",
-   "line": 23,
-   "sentence": "The documentation asks a project extending Django's backends to change both (`docs/topics/auth/customizing.txt`).",
-   "tree": "django",
-   "path": "docs/topics/auth/customizing.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1225
-   ],
-   "fingerprint": "2d7433839d20b5b2"
-  },
-  {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 27,
-   "sentence": "`RemoteUserMiddleware`, which logs in the user a server names, is not built on `MiddlewareMixin`; it can run either way, and so takes the mode of the layer inside it, the next in `MIDDLEWARE` (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "line": 29,
+   "sentence": "The class can run either way, and so takes the mode of the layer inside it, the next in `MIDDLEWARE` (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.load_middleware",
@@ -123,8 +109,8 @@
   },
   {
    "pointer": "django/contrib/auth/middleware.py:RemoteUserMiddleware.__call__",
-   "line": 27,
-   "sentence": "In an asynchronous chain `RemoteUserMiddleware.__call__` hands the request to `RemoteUserMiddleware.aprocess_request` alone, in a synchronous one to `RemoteUserMiddleware.process_request` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.__call__`).",
+   "line": 29,
+   "sentence": "In an asynchronous chain `RemoteUserMiddleware.__call__` hands the request to `RemoteUserMiddleware.aprocess_request` alone; in a synchronous one, to `process_request` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.__call__`).",
    "tree": "django",
    "path": "django/contrib/auth/middleware.py",
    "symbol": "RemoteUserMiddleware.__call__",
@@ -136,23 +122,9 @@
    "fingerprint": "0ce071c0285443dc"
   },
   {
-   "pointer": "docs/releases/5.2.2.txt",
-   "line": 37,
-   "sentence": "5.2.0 and 5.2.1 had lost it (`docs/releases/5.2.2.txt`).",
-   "tree": "django",
-   "path": "docs/releases/5.2.2.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    63
-   ],
-   "fingerprint": "224ff1c2478d6b7a"
-  },
-  {
    "pointer": "django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username",
-   "line": 39,
-   "sentence": "Since 6.1 `RemoteUserMiddleware.get_username` serves both paths, adding the prefix only to the default header of an `ASGIRequest` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username`); a custom header the synchronous path always read as written ([Authenticating: `authenticate` and the backends](../auth/authenticating.md#the-servers-user-remoteusermiddleware-and-remoteuserbackend)).",
+   "line": 43,
+   "sentence": "Since 6.1 `RemoteUserMiddleware.get_username` adds the prefix `\"HTTP_\"` only to the default header of an `ASGIRequest` (`django/contrib/auth/middleware.py:RemoteUserMiddleware.get_username`).",
    "tree": "django",
    "path": "django/contrib/auth/middleware.py",
    "symbol": "RemoteUserMiddleware.get_username",
@@ -165,8 +137,8 @@
   },
   {
    "pointer": "django/contrib/auth/__init__.py:login",
-   "line": 43,
-   "sentence": "From 5.2 `login` and `alogin` warned when given `None`, and logged in the request's user; 6.1 removed the fallback, and both ask the user they are given for its session hash first (`django/contrib/auth/__init__.py:login`).",
+   "line": 47,
+   "sentence": "Both now ask the user they are given for its session hash first (`django/contrib/auth/__init__.py:login`).",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
    "symbol": "login",
@@ -179,7 +151,7 @@
   },
   {
    "pointer": "django/contrib/auth/__init__.py:_set_auth_user",
-   "line": 53,
+   "line": 57,
    "sentence": "Since 6.1 `login` and `logout` replace `HttpRequest.auser` as they replace `user` (`django/contrib/auth/__init__.py:_set_auth_user`).",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
@@ -193,7 +165,7 @@
   },
   {
    "pointer": "django/contrib/auth/hashers.py:PBKDF2PasswordHasher",
-   "line": 57,
+   "line": 61,
    "sentence": "`PBKDF2PasswordHasher`, first in the default `PASSWORD_HASHERS`, has had more iterations in every feature release, 720,000 in 5.0 and 870,000 in 5.1 (`django/contrib/auth/hashers.py:PBKDF2PasswordHasher`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
@@ -207,8 +179,8 @@
   },
   {
    "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser.check_password",
-   "line": 57,
-   "sentence": "A stored string carries its own count and still checks, but `PBKDF2PasswordHasher.must_update` compares the count with the class's, and a right password checked against an older string is hashed again and saved (`django/contrib/auth/base_user.py:AbstractBaseUser.check_password`; [Password hashing: `make_password` and the hashers](../auth/hashers.md#the-upgrade-at-a-login)).",
+   "line": 61,
+   "sentence": "But a right password checked against a string of an older count is hashed again and saved (`django/contrib/auth/base_user.py:AbstractBaseUser.check_password`; [Password hashing: `make_password` and the hashers](../auth/hashers.md#the-upgrade-at-a-login)).",
    "tree": "django",
    "path": "django/contrib/auth/base_user.py",
    "symbol": "AbstractBaseUser.check_password",
@@ -221,7 +193,7 @@
   },
   {
    "pointer": "docs/releases/5.0.txt",
-   "line": 69,
+   "line": 73,
    "sentence": "CryptPasswordHasher went in 5.0, and SHA1PasswordHasher, UnsaltedSHA1PasswordHasher and UnsaltedMD5PasswordHasher in 5.1 (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`).",
    "tree": "django",
    "path": "docs/releases/5.0.txt",
@@ -235,7 +207,7 @@
   },
   {
    "pointer": "docs/releases/5.1.txt",
-   "line": 69,
+   "line": 73,
    "sentence": "CryptPasswordHasher went in 5.0, and SHA1PasswordHasher, UnsaltedSHA1PasswordHasher and UnsaltedMD5PasswordHasher in 5.1 (`docs/releases/5.0.txt`, `docs/releases/5.1.txt`).",
    "tree": "django",
    "path": "docs/releases/5.1.txt",
@@ -249,8 +221,8 @@
   },
   {
    "pointer": "django/contrib/auth/hashers.py:get_hashers",
-   "line": 69,
-   "sentence": "A project still naming one in `PASSWORD_HASHERS` can neither check nor make a password, since `get_hashers` imports every class of the list: under 5.2.17 as at this commit, a check raises `ImportError` (`django/contrib/auth/hashers.py:get_hashers`).",
+   "line": 73,
+   "sentence": "`get_hashers` imports every class of the list, so under all four releases a check raises `ImportError` (`django/contrib/auth/hashers.py:get_hashers`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "get_hashers",
@@ -264,8 +236,8 @@
   },
   {
    "pointer": "django/contrib/auth/hashers.py:verify_password",
-   "line": 69,
-   "sentence": "With the name gone, the string finds no hasher, and `verify_password` answers it as a wrong password, without a warning (`django/contrib/auth/hashers.py:verify_password`).",
+   "line": 73,
+   "sentence": "With the name gone from `PASSWORD_HASHERS`, a string that hasher stored finds none, and `verify_password` answers it as a wrong password, without a warning (`django/contrib/auth/hashers.py:verify_password`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "verify_password",
@@ -278,8 +250,8 @@
   },
   {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase.__bool__",
-   "line": 73,
-   "sentence": "Since 6.1 `SessionBase.__bool__` answers the opposite of `SessionBase.is_empty`: false for a store with no key and no data, without loading (`django/contrib/sessions/backends/base.py:SessionBase.__bool__`; [The session store: `SessionBase`](../auth/sessions.md#empty-is_empty-and-__bool)).",
+   "line": 77,
+   "sentence": "It answers the opposite of `SessionBase.is_empty`: false for a store with no key and no data, without loading (`django/contrib/sessions/backends/base.py:SessionBase.__bool__`; [The session store: `SessionBase`](../auth/sessions.md#empty-is_empty-and-__bool)).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
    "symbol": "SessionBase.__bool__",
@@ -292,8 +264,8 @@
   },
   {
    "pointer": "django/contrib/auth/views.py:LogoutView",
-   "line": 91,
-   "sentence": "| logging out by `\"GET\"` | `LogoutView.http_method_names` is `\"post\"` and `\"options\"`: a `\"GET\"`, through `logout_then_login` too, gets 405 | 5.0 | `django/contrib/auth/views.py:LogoutView` |",
+   "line": 95,
+   "sentence": "| `LogoutView` | Gone in 5.0: logging out by `\"GET\"`, which gets 405, through `logout_then_login` too | `django/contrib/auth/views.py:LogoutView` |",
    "tree": "django",
    "path": "django/contrib/auth/views.py",
    "symbol": "LogoutView",
@@ -307,8 +279,8 @@
   },
   {
    "pointer": "django/contrib/auth/backends.py:RemoteUserBackend.authenticate",
-   "line": 92,
-   "sentence": "| `RemoteUserBackend.configure_user` | always given `created=`, so an override without it raises `TypeError` | 5.0 | `django/contrib/auth/backends.py:RemoteUserBackend.authenticate` |",
+   "line": 96,
+   "sentence": "| `RemoteUserBackend.configure_user` | Since 5.0, always given `created=`, so an override without it raises `TypeError` | `django/contrib/auth/backends.py:RemoteUserBackend.authenticate` |",
    "tree": "django",
    "path": "django/contrib/auth/backends.py",
    "symbol": "RemoteUserBackend.authenticate",
@@ -320,23 +292,9 @@
    "fingerprint": "ebb1fa34224b4f33"
   },
   {
-   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.__init__",
-   "line": 93,
-   "sentence": "| the sessions' PickleSerializer | removed; with `SESSION_SERIALIZER` naming it, a store raises `ImportError` as it is made | 5.0 | `django/contrib/sessions/backends/base.py:SessionBase.__init__` |",
-   "tree": "django",
-   "path": "django/contrib/sessions/backends/base.py",
-   "symbol": "SessionBase.__init__",
-   "kind": "function",
-   "lines": [
-    45,
-    49
-   ],
-   "fingerprint": "cef63cd9b1928328"
-  },
-  {
    "pointer": "django/contrib/auth/base_user.py:BaseUserManager",
-   "line": 94,
-   "sentence": "| make_random_password | removed from `BaseUserManager` | 5.1 | `django/contrib/auth/base_user.py:BaseUserManager` |",
+   "line": 97,
+   "sentence": "| make_random_password | Gone in 5.1, from `BaseUserManager` | `django/contrib/auth/base_user.py:BaseUserManager` |",
    "tree": "django",
    "path": "django/contrib/auth/base_user.py",
    "symbol": "BaseUserManager",
@@ -348,23 +306,9 @@
    "fingerprint": "9852a5777bf7769b"
   },
   {
-   "pointer": "docs/releases/5.1.txt",
-   "line": 95,
-   "sentence": "| `ScryptPasswordHasher.parallelism` | 5, where it was 1, \"to follow OWASP recommendations\" (`docs/releases/5.1.txt`) | 5.1 | `django/contrib/auth/hashers.py:ScryptPasswordHasher` |",
-   "tree": "django",
-   "path": "docs/releases/5.1.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    495
-   ],
-   "fingerprint": "3a1b214427111cf2"
-  },
-  {
    "pointer": "django/contrib/auth/hashers.py:ScryptPasswordHasher",
-   "line": 95,
-   "sentence": "| `ScryptPasswordHasher.parallelism` | 5, where it was 1, \"to follow OWASP recommendations\" (`docs/releases/5.1.txt`) | 5.1 | `django/contrib/auth/hashers.py:ScryptPasswordHasher` |",
+   "line": 98,
+   "sentence": "| `ScryptPasswordHasher.parallelism` | Since 5.1, 5 where it was 1, \"to follow OWASP recommendations\", the notes say | `django/contrib/auth/hashers.py:ScryptPasswordHasher` |",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "ScryptPasswordHasher",
@@ -377,8 +321,8 @@
   },
   {
    "pointer": "django/contrib/auth/forms.py:SetUnusablePasswordMixin",
-   "line": 96,
-   "sentence": "| `AdminUserCreationForm` | `UserAdmin.add_form`; it and `AdminPasswordChangeForm` can save an unusable password | 5.1 | `django/contrib/auth/forms.py:SetUnusablePasswordMixin` |",
+   "line": 99,
+   "sentence": "| `AdminUserCreationForm` | New in 5.1: `UserAdmin.add_form`; it and `AdminPasswordChangeForm` can save an unusable password | `django/contrib/auth/forms.py:SetUnusablePasswordMixin` |",
    "tree": "django",
    "path": "django/contrib/auth/forms.py",
    "symbol": "SetUnusablePasswordMixin",
@@ -390,23 +334,23 @@
    "fingerprint": "f51fdb78c3e97c23"
   },
   {
-   "pointer": "django/contrib/auth/password_validation.py:MinimumLengthValidator.get_error_message",
-   "line": 97,
-   "sentence": "| the validators' `get_error_message` | each of Django's raises the message it returns | 5.2 | `django/contrib/auth/password_validation.py:MinimumLengthValidator.get_error_message` |",
+   "pointer": "django/contrib/auth/password_validation.py",
+   "line": 100,
+   "sentence": "| the validators' `get_error_message` | New in 5.2: each of Django's validators raises the message it returns | `django/contrib/auth/password_validation.py` |",
    "tree": "django",
    "path": "django/contrib/auth/password_validation.py",
-   "symbol": "MinimumLengthValidator.get_error_message",
-   "kind": "function",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    122,
-    130
+    1,
+    287
    ],
-   "fingerprint": "2c70dc03fac82507"
+   "fingerprint": "526b629a481de9f9"
   },
   {
    "pointer": "django/contrib/auth/management/__init__.py:rename_permissions_after_model_rename",
-   "line": 98,
-   "sentence": "| a model renamed by a migration | its default permissions follow it; under 6.0.8 the old rows stayed beside new ones | 6.1 | `django/contrib/auth/management/__init__.py:rename_permissions_after_model_rename` |",
+   "line": 101,
+   "sentence": "| a model's default permissions | Since 6.1, follow a model renamed by a migration; under 6.0.8 the old rows stayed beside new ones | `django/contrib/auth/management/__init__.py:rename_permissions_after_model_rename` |",
    "tree": "django",
    "path": "django/contrib/auth/management/__init__.py",
    "symbol": "rename_permissions_after_model_rename",
@@ -419,8 +363,8 @@
   },
   {
    "pointer": "django/contrib/auth/models.py:Permission.user_perm_str",
-   "line": 99,
-   "sentence": "| `Permission.user_perm_str` | new: `\"journal.change_entry\"`, the string `PermissionsMixin.has_perm` takes | 6.1 | `django/contrib/auth/models.py:Permission.user_perm_str` |",
+   "line": 102,
+   "sentence": "| `Permission.user_perm_str` | New in 6.1: the string `PermissionsMixin.has_perm` takes, such as `\"journal.change_entry\"` | `django/contrib/auth/models.py:Permission.user_perm_str` |",
    "tree": "django",
    "path": "django/contrib/auth/models.py",
    "symbol": "Permission.user_perm_str",
@@ -433,9 +377,37 @@
    "fingerprint": "6cd545fd78dec65c"
   },
   {
+   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.__init__",
+   "line": 103,
+   "sentence": "| the sessions' PickleSerializer | Gone in 5.0: with `SESSION_SERIALIZER` naming it, a store raises `ImportError` as it is made | `django/contrib/sessions/backends/base.py:SessionBase.__init__` |",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/base.py",
+   "symbol": "SessionBase.__init__",
+   "kind": "function",
+   "lines": [
+    45,
+    49
+   ],
+   "fingerprint": "cef63cd9b1928328"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/cached_db.py",
+   "line": 104,
+   "sentence": "| the cached database store | Since 5.1, a failure of the cache on a save is logged to `\"django.contrib.sessions\"`, and the row's change stands; since 6.2, on a delete too | `django/contrib/sessions/backends/cached_db.py` |",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/cached_db.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    141
+   ],
+   "fingerprint": "c51d09937490b521"
+  },
+  {
    "pointer": "django/contrib/messages/test.py:MessagesTestMixin.assertMessages",
-   "line": 101,
-   "sentence": "| `MessagesTestMixin.assertMessages` | new: a test response's messages against a list | 5.0 | `django/contrib/messages/test.py:MessagesTestMixin.assertMessages` |",
+   "line": 105,
+   "sentence": "| `MessagesTestMixin.assertMessages` | New in 5.0: checks a test response's messages against a list | `django/contrib/messages/test.py:MessagesTestMixin.assertMessages` |",
    "tree": "django",
    "path": "django/contrib/messages/test.py",
    "symbol": "MessagesTestMixin.assertMessages",

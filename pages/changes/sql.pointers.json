@@ -10,7 +10,7 @@
   {
    "pointer": "docs/releases/6.0.txt",
    "line": 13,
-   "sentence": "Since 6.0 it is to be a tuple, for \"the interoperability problems that resulted\", the notes say (`docs/releases/6.0.txt`).",
+   "sentence": "The 6.0 notes give the reason, \"the interoperability problems that resulted\" (`docs/releases/6.0.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.txt",
    "symbol": null,
@@ -24,7 +24,7 @@
   {
    "pointer": "django/db/models/expressions.py:Func.as_sql",
    "line": 13,
-   "sentence": "At this commit `Func.as_sql` and `Col.as_sql` return tuples, and `BuiltinLookup.as_sql` unpacks both halves into one, so a half of either kind still joins (`django/db/models/expressions.py:Func.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`).",
+   "sentence": "`BuiltinLookup.as_sql` unpacks both halves into one, so a half of either kind still joins (`django/db/models/expressions.py:Func.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "Func.as_sql",
@@ -38,7 +38,7 @@
   {
    "pointer": "django/db/models/lookups.py:BuiltinLookup.as_sql",
    "line": 13,
-   "sentence": "At this commit `Func.as_sql` and `Col.as_sql` return tuples, and `BuiltinLookup.as_sql` unpacks both halves into one, so a half of either kind still joins (`django/db/models/expressions.py:Func.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`).",
+   "sentence": "`BuiltinLookup.as_sql` unpacks both halves into one, so a half of either kind still joins (`django/db/models/expressions.py:Func.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`).",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "BuiltinLookup.as_sql",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/db/models/sql/datastructures.py:Join.as_sql",
    "line": 27,
-   "sentence": "Until 6.1 `SQLCompiler.quote_name_unless_alias` left such an alias bare; since then `Col.as_sql`, `BaseTable.as_sql` and `Join.as_sql` write every name through `SQLCompiler.quote_name` (`django/db/models/sql/datastructures.py:Join.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.quote_name`).",
+   "sentence": "Since 6.1 the compiler quotes the aliases of tables and joins that `SQLCompiler.quote_name_unless_alias` left bare (`django/db/models/sql/datastructures.py:Join.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.quote_name`).",
    "tree": "django",
    "path": "django/db/models/sql/datastructures.py",
    "symbol": "Join.as_sql",
@@ -66,7 +66,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.quote_name",
    "line": 27,
-   "sentence": "Until 6.1 `SQLCompiler.quote_name_unless_alias` left such an alias bare; since then `Col.as_sql`, `BaseTable.as_sql` and `Join.as_sql` write every name through `SQLCompiler.quote_name` (`django/db/models/sql/datastructures.py:Join.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.quote_name`).",
+   "sentence": "Since 6.1 the compiler quotes the aliases of tables and joins that `SQLCompiler.quote_name_unless_alias` left bare (`django/db/models/sql/datastructures.py:Join.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.quote_name`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.quote_name",
@@ -80,7 +80,7 @@
   {
    "pointer": "docs/releases/6.1.txt",
    "line": 27,
-   "sentence": "The notes give the reason, collisions with special characters, and warn that a quoted alias is case-sensitive, so raw SQL naming one of mixed case may need quoting (`docs/releases/6.1.txt`).",
+   "sentence": "They warn that raw SQL naming an alias of mixed case may need quoting, a quoted alias being case-sensitive (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -92,23 +92,9 @@
    "fingerprint": "283b7ce3a441f06c"
   },
   {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
-   "line": 36,
-   "sentence": "The select list's alias, `\"Calm__title\"`, is quoted under every release: what 6.1 quoted are the aliases of tables and joins (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.as_sql",
-   "kind": "function",
-   "lines": [
-    776,
-    1001
-   ],
-   "fingerprint": "ce816411ac549927"
-  },
-  {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias",
    "line": 38,
-   "sentence": "`SQLCompiler.quote_name_unless_alias` is deprecated since 6.1; it warns with `RemovedInDjango2028Warning` and quotes whatever it is given: a join's alias, `'T3'` until 6.0.8, comes back `'\"T3\"'` on SQLite (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`; [The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).",
+   "sentence": "It now quotes whatever it is given: a join's alias, `'T3'` until 6.0.8, comes back `'\"T3\"'` on SQLite (`django/db/models/sql/compiler.py:SQLCompiler.quote_name_unless_alias`; [The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler.quote_name_unless_alias",
@@ -120,23 +106,9 @@
    "fingerprint": "ccafb3f0406ea771"
   },
   {
-   "pointer": "django/db/models/sql/query.py:Query.check_alias",
-   "line": 38,
-   "sentence": "A percent sign in an alias is deprecated since 6.0: `Query.check_alias` warns with `RemovedInDjango2028Warning` and accepts it, as 5.2.17 did without a word (`django/db/models/sql/query.py:Query.check_alias`; [The SELECT clause: `get_select`, the select mask and `klass_info`](../sql/select.md)).",
-   "tree": "django",
-   "path": "django/db/models/sql/query.py",
-   "symbol": "Query.check_alias",
-   "kind": "function",
-   "lines": [
-    1222,
-    1238
-   ],
-   "fingerprint": "ec1a78726396fa30"
-  },
-  {
    "pointer": "django/db/models/aggregates.py:StringAgg",
    "line": 42,
-   "sentence": "Aggregates came into `django.db.models` in two releases: `StringAgg` and the bit aggregates, `BitAnd`, `BitOr` and `BitXor`, from the PostgreSQL application, and `AnyValue`, which no earlier release had (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:BitAggregate`).",
+   "sentence": "6.0 brought `StringAgg`, from the PostgreSQL application, and `AnyValue`, which no earlier release had; 6.1, the bit aggregates `BitAnd`, `BitOr` and `BitXor`, from it too (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:BitAggregate`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "StringAgg",
@@ -150,7 +122,7 @@
   {
    "pointer": "django/db/models/aggregates.py:BitAggregate",
    "line": 42,
-   "sentence": "Aggregates came into `django.db.models` in two releases: `StringAgg` and the bit aggregates, `BitAnd`, `BitOr` and `BitXor`, from the PostgreSQL application, and `AnyValue`, which no earlier release had (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:BitAggregate`).",
+   "sentence": "6.0 brought `StringAgg`, from the PostgreSQL application, and `AnyValue`, which no earlier release had; 6.1, the bit aggregates `BitAnd`, `BitOr` and `BitXor`, from it too (`django/db/models/aggregates.py:StringAgg`, `django/db/models/aggregates.py:BitAggregate`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "BitAggregate",
@@ -162,23 +134,9 @@
    "fingerprint": "ed6b654826a7c990"
   },
   {
-   "pointer": "django/db/models/aggregates.py:AnyValue.as_sql",
-   "line": 42,
-   "sentence": "`AnyValue` is refused with `NotSupportedError` where `BaseDatabaseFeatures.supports_any_value` is off, as on MariaDB, and the bit aggregates where `BaseDatabaseFeatures.supports_bit_aggregations` is off, as on Oracle before 21 (`django/db/models/aggregates.py:AnyValue.as_sql`).",
-   "tree": "django",
-   "path": "django/db/models/aggregates.py",
-   "symbol": "AnyValue.as_sql",
-   "kind": "function",
-   "lines": [
-    232,
-    237
-   ],
-   "fingerprint": "1d9abb874eb66f79"
-  },
-  {
    "pointer": "django/db/models/aggregates.py:StringAgg.as_sqlite",
    "line": 42,
-   "sentence": "On SQLite 6.1 lets `StringAgg` take `distinct=True` with the delimiter `Value(\",\")` only (`django/db/models/aggregates.py:StringAgg.as_sqlite`).",
+   "sentence": "On SQLite, since 6.1, `StringAgg` takes `distinct=True` with the delimiter `Value(\",\")` only (`django/db/models/aggregates.py:StringAgg.as_sqlite`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "StringAgg.as_sqlite",
@@ -192,7 +150,7 @@
   {
    "pointer": "django/db/models/aggregates.py:Aggregate.__init__",
    "line": 44,
-   "sentence": "Since 6.0 `Aggregate.__init__` takes an order_by argument, refused with `TypeError` unless the class sets `Aggregate.allow_order_by` (`django/db/models/aggregates.py:Aggregate.__init__`).",
+   "sentence": "Since 6.0 `Aggregate.__init__` takes `order_by=`, and refuses it with `TypeError` unless the class sets `Aggregate.allow_order_by` (`django/db/models/aggregates.py:Aggregate.__init__`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "Aggregate.__init__",
@@ -206,7 +164,7 @@
   {
    "pointer": "django/db/models/aggregates.py:Aggregate.as_sql",
    "line": 46,
-   "sentence": "5.2's filter_template, which wrapped any template in `\" FILTER (WHERE ...)\"`, is gone, which the 6.0 notes do not say (`django/db/models/aggregates.py:Aggregate.as_sql`).",
+   "sentence": "5.2's filter_template, which wrapped any template in `\" FILTER (WHERE ...)\"`, is gone, and the 6.0 notes do not say so (`django/db/models/aggregates.py:Aggregate.as_sql`).",
    "tree": "django",
    "path": "django/db/models/aggregates.py",
    "symbol": "Aggregate.as_sql",
@@ -219,8 +177,8 @@
   },
   {
    "pointer": "docs/ref/models/expressions.txt",
-   "line": 58,
-   "sentence": "The reference documentation at this commit still gives `Aggregate.template` as `\"%(function)s(%(distinct)s%(expressions)s)\"`, and its example aggregate has no slot for the filter (`docs/ref/models/expressions.txt`).",
+   "line": 60,
+   "sentence": "The reference documentation still gives `Aggregate.template` as `\"%(function)s(%(distinct)s%(expressions)s)\"`, and its example aggregate has no slot for the filter (`docs/ref/models/expressions.txt`).",
    "tree": "django",
    "path": "docs/ref/models/expressions.txt",
    "symbol": null,
@@ -232,51 +190,9 @@
    "fingerprint": "062141febbb8d8d1"
   },
   {
-   "pointer": "django/db/models/expressions.py:Func.__init__",
-   "line": 60,
-   "sentence": "Since 5.2 `Func.__init__` refuses `Avg`, `Max`, `Min` and `Sum` any number of arguments but one with `TypeError`, through `Func.arity` (`django/db/models/expressions.py:Func.__init__`).",
-   "tree": "django",
-   "path": "django/db/models/expressions.py",
-   "symbol": "Func.__init__",
-   "kind": "function",
-   "lines": [
-    1062,
-    1075
-   ],
-   "fingerprint": "27f2b594d772c75d"
-  },
-  {
-   "pointer": "django/db/models/aggregates.py:Count.__init__",
-   "line": 60,
-   "sentence": "`Count`, `StdDev` and `Variance`, which the 5.2 notes name too, take a second as the filter or as sample; `Count(\"title\", \"published\")` fails under 5.2.17 with `AttributeError`, and from 6.0 takes the field published as its filter (`django/db/models/aggregates.py:Count.__init__`).",
-   "tree": "django",
-   "path": "django/db/models/aggregates.py",
-   "symbol": "Count.__init__",
-   "kind": "function",
-   "lines": [
-    304,
-    309
-   ],
-   "fingerprint": "3e6ec350f1a0b5ae"
-  },
-  {
-   "pointer": "django/db/models/fields/json.py:JSONField.get_db_prep_save",
-   "line": 64,
-   "sentence": "To a `JSONField` a `None` saved is SQL's `\"NULL\"`, and a `None` compared with the whole value is JSON's null (`django/db/models/fields/json.py:JSONField.get_db_prep_save`).",
-   "tree": "django",
-   "path": "django/db/models/fields/json.py",
-   "symbol": "JSONField.get_db_prep_save",
-   "kind": "function",
-   "lines": [
-    107,
-    121
-   ],
-   "fingerprint": "24425a1722c19100"
-  },
-  {
    "pointer": "django/db/models/expressions.py:JSONNull",
    "line": 64,
-   "sentence": "6.1 added `JSONNull`, which is JSON's null in both places, and deprecated the `None` compared with the whole value, the top-level `None`: `JSONExact.process_rhs` warns with `RemovedInDjango2028Warning` and compiles it as before (`django/db/models/expressions.py:JSONNull`, `django/db/models/fields/json.py:JSONExact.process_rhs`).",
+   "sentence": "Since 6.1 the top-level `None`, a `None` compared with a `JSONField`'s whole value, is deprecated for `JSONNull`, which is JSON's null both saved and compared (`django/db/models/expressions.py:JSONNull`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "JSONNull",
@@ -289,9 +205,23 @@
    "fingerprint": "b9cac3a71d8e9cdd"
   },
   {
+   "pointer": "django/db/models/fields/json.py:JSONField.get_db_prep_save",
+   "line": 64,
+   "sentence": "To the field a `None` has two meanings: saved, it is SQL's `\"NULL\"`; compared with the whole value, JSON's null (`django/db/models/fields/json.py:JSONField.get_db_prep_save`).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "JSONField.get_db_prep_save",
+   "kind": "function",
+   "lines": [
+    107,
+    121
+   ],
+   "fingerprint": "24425a1722c19100"
+  },
+  {
    "pointer": "django/db/models/fields/json.py:JSONExact.process_rhs",
    "line": 64,
-   "sentence": "6.1 added `JSONNull`, which is JSON's null in both places, and deprecated the `None` compared with the whole value, the top-level `None`: `JSONExact.process_rhs` warns with `RemovedInDjango2028Warning` and compiles it as before (`django/db/models/expressions.py:JSONNull`, `django/db/models/fields/json.py:JSONExact.process_rhs`).",
+   "sentence": "`JSONExact.process_rhs` warns of a top-level `None` with `RemovedInDjango2028Warning`, and compiles it as before (`django/db/models/fields/json.py:JSONExact.process_rhs`).",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
    "symbol": "JSONExact.process_rhs",
@@ -305,7 +235,7 @@
   {
    "pointer": "docs/releases/6.1.txt",
    "line": 64,
-   "sentence": "When it ends, the 6.1 notes say (`docs/releases/6.1.txt`), a top-level `None` compiles to `\"IS NULL\"` and a key's is unaffected ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](../sql/names.md)).",
+   "sentence": "When the deprecation ends, the 6.1 notes say, a top-level `None` compiles to `\"IS NULL\"`, and a key's is unaffected (`docs/releases/6.1.txt`; [From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](../sql/names.md)).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -319,7 +249,7 @@
   {
    "pointer": "django/db/models/fields/json.py:KeyTransformIExact.as_sql",
    "line": 66,
-   "sentence": "Until 6.1 `iexact=None` on a key was `isnull=True` on it; since 6.1 `KeyTransformIExact.as_sql` compiles it as `exact=None` (`django/db/models/fields/json.py:KeyTransformIExact.as_sql`).",
+   "sentence": "Until then it was `isnull=True` on the key, matching the rows without it (`django/db/models/fields/json.py:KeyTransformIExact.as_sql`).",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
    "symbol": "KeyTransformIExact.as_sql",
@@ -332,8 +262,8 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.compile_json_path",
-   "line": 78,
-   "sentence": "`BaseDatabaseOperations.compile_json_path` refuses one where `BaseDatabaseFeatures.supports_json_negative_indexing` is off, as on MySQL (`django/db/backends/base/operations.py:BaseDatabaseOperations.compile_json_path`; [The SQL a backend writes: `BaseDatabaseOperations`](../backends/operations.md)).",
+   "line": 68,
+   "sentence": "`BaseDatabaseOperations.compile_json_path`, new in 6.0, refuses one where `BaseDatabaseFeatures.supports_json_negative_indexing` is off, as on MySQL (`django/db/backends/base/operations.py:BaseDatabaseOperations.compile_json_path`; [The SQL a backend writes: `BaseDatabaseOperations`](../backends/operations.md)).",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
    "symbol": "BaseDatabaseOperations.compile_json_path",
@@ -346,8 +276,8 @@
   },
   {
    "pointer": "django/db/models/functions/datetime.py:Now.as_oracle",
-   "line": 86,
-   "sentence": "| `Now` on Oracle | `\"LOCALTIMESTAMP\"`, not `\"CURRENT_TIMESTAMP\"` | 5.0 | `django/db/models/functions/datetime.py:Now.as_oracle` |",
+   "line": 74,
+   "sentence": "| `Now` on Oracle | Since 5.0, `\"LOCALTIMESTAMP\"`, not `\"CURRENT_TIMESTAMP\"` | `django/db/models/functions/datetime.py:Now.as_oracle` |",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
    "symbol": "Now.as_oracle",
@@ -360,8 +290,8 @@
   },
   {
    "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
-   "line": 87,
-   "sentence": "| `^` of conditions | without a native `\"XOR\"`, true when an odd number are, not exactly one | 5.0 | `django/db/models/sql/where.py:WhereNode.as_sql` |",
+   "line": 75,
+   "sentence": "| `^` of conditions | Since 5.0, without a native `\"XOR\"`, true when an odd number are, not exactly one | `django/db/models/sql/where.py:WhereNode.as_sql` |",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
    "symbol": "WhereNode.as_sql",
@@ -374,8 +304,8 @@
   },
   {
    "pointer": "django/db/models/lookups.py:IntegerFieldOverflow",
-   "line": 88,
-   "sentence": "| An integer out of range | an equality, or a bound no value passes, matches nothing, without the database | 5.0 | `django/db/models/lookups.py:IntegerFieldOverflow` |",
+   "line": 76,
+   "sentence": "| An integer out of range | Since 5.0, an equality, or a bound no value passes, matches nothing, without the database | `django/db/models/lookups.py:IntegerFieldOverflow` |",
    "tree": "django",
    "path": "django/db/models/lookups.py",
    "symbol": "IntegerFieldOverflow",
@@ -387,23 +317,9 @@
    "fingerprint": "f5954675198c93e7"
   },
   {
-   "pointer": "django/db/models/sql/query.py:Query.set_annotation_mask",
-   "line": 89,
-   "sentence": "| `Query.annotation_select_mask` | an ordered list, the 5.0 notes say; a set under 5.2.17 and at this commit | 5.0 | `django/db/models/sql/query.py:Query.set_annotation_mask` |",
-   "tree": "django",
-   "path": "django/db/models/sql/query.py",
-   "symbol": "Query.set_annotation_mask",
-   "kind": "function",
-   "lines": [
-    2559,
-    2576
-   ],
-   "fingerprint": "fcc74f829ea53be7"
-  },
-  {
    "pointer": "django/db/models/expressions.py:OrderBy.__init__",
-   "line": 90,
-   "sentence": "| nulls_first=False, nulls_last=False | refused with `ValueError` | 5.0 | `django/db/models/expressions.py:OrderBy.__init__` |",
+   "line": 77,
+   "sentence": "| `nulls_first=False`, `nulls_last=False` | Gone in 5.0: `OrderBy` refuses either with `ValueError` | `django/db/models/expressions.py:OrderBy.__init__` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "OrderBy.__init__",
@@ -416,8 +332,8 @@
   },
   {
    "pointer": "django/db/models/sql/datastructures.py:Join.__init__",
-   "line": 91,
-   "sentence": "| get_joining_columns | deprecated (5.2.17 warns), then gone; `Join` asks only `get_joining_fields` | 5.0, 6.0 | `django/db/models/sql/datastructures.py:Join.__init__` |",
+   "line": 78,
+   "sentence": "| get_joining_columns | Deprecated in 5.0, gone in 6.0: `Join` asks only `get_joining_fields` | `django/db/models/sql/datastructures.py:Join.__init__` |",
    "tree": "django",
    "path": "django/db/models/sql/datastructures.py",
    "symbol": "Join.__init__",
@@ -430,8 +346,8 @@
   },
   {
    "pointer": "django/db/models/fields/json.py:JSONField.get_db_prep_value",
-   "line": 92,
-   "sentence": "| A string given to a `JSONField` | a JSON string, never taken as already encoded | 5.1 | `django/db/models/fields/json.py:JSONField.get_db_prep_value` |",
+   "line": 79,
+   "sentence": "| A string given to a `JSONField` | Gone in 5.1: a string taken as JSON already encoded | `django/db/models/fields/json.py:JSONField.get_db_prep_value` |",
    "tree": "django",
    "path": "django/db/models/fields/json.py",
    "symbol": "JSONField.get_db_prep_value",
@@ -444,8 +360,8 @@
   },
   {
    "pointer": "django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end",
-   "line": 93,
-   "sentence": "| `RowRange`, `ValueRange` | a row frame's bounds may pass the current row; both take a `WindowFrameExclusion` | 5.1 | `django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end`, `django/db/models/expressions.py:WindowFrame` |",
+   "line": 80,
+   "sentence": "| `RowRange` | Since 5.1, its bounds may pass the current row | `django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end` |",
    "tree": "django",
    "path": "django/db/backends/base/operations.py",
    "symbol": "BaseDatabaseOperations.window_frame_rows_start_end",
@@ -458,8 +374,8 @@
   },
   {
    "pointer": "django/db/models/expressions.py:WindowFrame",
-   "line": 93,
-   "sentence": "| `RowRange`, `ValueRange` | a row frame's bounds may pass the current row; both take a `WindowFrameExclusion` | 5.1 | `django/db/backends/base/operations.py:BaseDatabaseOperations.window_frame_rows_start_end`, `django/db/models/expressions.py:WindowFrame` |",
+   "line": 81,
+   "sentence": "| `WindowFrameExclusion` | New in 5.1: the `exclusion=` of `RowRange` and `ValueRange`, the rows a frame leaves out | `django/db/models/expressions.py:WindowFrame` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "WindowFrame",
@@ -472,8 +388,8 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs",
-   "line": 94,
-   "sentence": "| `QuerySet.order_by` | takes an annotation's name followed by transforms | 5.1 | `django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs` |",
+   "line": 82,
+   "sentence": "| `QuerySet.order_by` | Since 5.1, takes an annotation's name followed by transforms | `django/db/models/sql/compiler.py:SQLCompiler._order_by_pairs` |",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLCompiler._order_by_pairs",
@@ -486,8 +402,8 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Sliced",
-   "line": 95,
-   "sentence": "| Slicing an `F` | a `Sliced`, which the output field writes | 5.1 | `django/db/models/expressions.py:Sliced` |",
+   "line": 83,
+   "sentence": "| Slicing an `F` | New in 5.1: a `Sliced`, which the output field writes | `django/db/models/expressions.py:Sliced` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "Sliced",
@@ -500,8 +416,8 @@
   },
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.get_expression_for_validation",
-   "line": 96,
-   "sentence": "| `BaseExpression.constraint_validation_compatible` | where false, validation uses the expression's source | 5.1 | `django/db/models/expressions.py:BaseExpression.get_expression_for_validation` |",
+   "line": 84,
+   "sentence": "| `BaseExpression.constraint_validation_compatible` | New in 5.1: where false, validation uses the expression's source | `django/db/models/expressions.py:BaseExpression.get_expression_for_validation` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "BaseExpression.get_expression_for_validation",
@@ -514,8 +430,8 @@
   },
   {
    "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
-   "line": 97,
-   "sentence": "| `BaseExpression.set_returning` | an aggregation over it runs on a subquery | 5.2 | `django/db/models/sql/query.py:Query.get_aggregation` |",
+   "line": 85,
+   "sentence": "| `BaseExpression.set_returning` | New in 5.2: where true, an aggregation over it runs on a subquery | `django/db/models/sql/query.py:Query.get_aggregation` |",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query.get_aggregation",
@@ -528,8 +444,8 @@
   },
   {
    "pointer": "django/db/models/expressions.py:BaseExpression.resolve_expression",
-   "line": 98,
-   "sentence": "| `BaseExpression.allows_composite_expressions` | unless set, a composite key is refused as a source | 5.2 | `django/db/models/expressions.py:BaseExpression.resolve_expression` |",
+   "line": 86,
+   "sentence": "| `BaseExpression.allows_composite_expressions` | New in 5.2: unless set, a composite key is refused as a source | `django/db/models/expressions.py:BaseExpression.resolve_expression` |",
    "tree": "django",
    "path": "django/db/models/expressions.py",
    "symbol": "BaseExpression.resolve_expression",
@@ -541,37 +457,51 @@
    "fingerprint": "f0c477de56cd8d0d"
   },
   {
-   "pointer": "django/db/models/functions/json.py:JSONArray",
-   "line": 99,
-   "sentence": "| `JSONArray`, `UUID4`, `UUID7` | new functions | 5.2, 6.1 | `django/db/models/functions/json.py:JSONArray`, `django/db/models/functions/uuid.py` |",
+   "pointer": "django/db/models/expressions.py:Func.__init__",
+   "line": 87,
+   "sentence": "| `Func.arity` | Since 5.2, `Avg`, `Max`, `Min` and `Sum` refuse any number of arguments but one, with `TypeError` | `django/db/models/expressions.py:Func.__init__` |",
    "tree": "django",
-   "path": "django/db/models/functions/json.py",
-   "symbol": "JSONArray",
-   "kind": "class",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Func.__init__",
+   "kind": "function",
    "lines": [
-    8,
-    56
+    1062,
+    1075
    ],
-   "fingerprint": "4d9781d82e3290fb"
+   "fingerprint": "27f2b594d772c75d"
   },
   {
-   "pointer": "django/db/models/functions/uuid.py",
-   "line": 99,
-   "sentence": "| `JSONArray`, `UUID4`, `UUID7` | new functions | 5.2, 6.1 | `django/db/models/functions/json.py:JSONArray`, `django/db/models/functions/uuid.py` |",
+   "pointer": "django/db/models/aggregates.py:Count.__init__",
+   "line": 88,
+   "sentence": "| `Count` with two arguments | Since 6.0, a field's name as the second is taken as its filter; under 5.2.17, `AttributeError` | `django/db/models/aggregates.py:Count.__init__` |",
    "tree": "django",
-   "path": "django/db/models/functions/uuid.py",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/db/models/aggregates.py",
+   "symbol": "Count.__init__",
+   "kind": "function",
    "lines": [
-    1,
-    85
+    304,
+    309
    ],
-   "fingerprint": "96b1599b46f258b7"
+   "fingerprint": "3e6ec350f1a0b5ae"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.check_alias",
+   "line": 90,
+   "sentence": "| A percent sign in an alias | Deprecated in 6.0: `Query.check_alias` warns of one, and accepts it | `django/db/models/sql/query.py:Query.check_alias` |",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.check_alias",
+   "kind": "function",
+   "lines": [
+    1222,
+    1238
+   ],
+   "fingerprint": "ec1a78726396fa30"
   },
   {
    "pointer": "django/db/models/functions/datetime.py:TimezoneMixin.deconstruct",
-   "line": 101,
-   "sentence": "| `Extract`, `Trunc` without tzinfo | deconstructed while `USE_TZ` is true, warn with `RemovedInDjango2029Warning` | 6.2 | `django/db/models/functions/datetime.py:TimezoneMixin.deconstruct` |",
+   "line": 91,
+   "sentence": "| `Extract`, `Trunc` without tzinfo | Deprecated in 6.2: they warn when deconstructed while `USE_TZ` is true | `django/db/models/functions/datetime.py:TimezoneMixin.deconstruct` |",
    "tree": "django",
    "path": "django/db/models/functions/datetime.py",
    "symbol": "TimezoneMixin.deconstruct",

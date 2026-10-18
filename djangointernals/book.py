@@ -15,7 +15,9 @@ strict subset of YAML, one `key: value` to a line.
                 words; it must spell out the pinned commit, twelve hex digits or more
     part        optional, on a chapter: the part of the book it is in. Chapters that follow
                 one another with the same part are shown under it
-    contents    optional: the children of the page, in reading order
+    contents    optional: the children of the page, in reading order. A chapter's may be in
+                groups, "Label: a, b; Label: c", and its opening page shows each group
+                under its label (`Page.groups`)
 
 A value is plain text, or in double quotes when it begins with anything but
 a letter or a digit, or holds a colon and a space, or a space and a `#`:
@@ -37,7 +39,8 @@ which every page is rendered. Beyond what render.py refuses: front matter
 that is not as above; a `django` line without the pinned commit; `part` on a
 page that is not a chapter; a page under a section (the book is two levels
 deep); a child named in `contents` with no file, and a
-markdown file no `contents` names; a written page under one that is only
+markdown file no `contents` names; a group of `contents` with no label, or
+naming no page, a label given twice, groups on the front page; a written page under one that is only
 planned; a front page with nothing on it; a link to an anchor its target
 does not have. And what the three gates refuse (gates.py: tools/pointers.py,
 tools/names.py and tools/recordings.py, run on every page, the name gate
@@ -90,6 +93,7 @@ class Page:
     line: int  # how many lines of the file come before the body
     parent: Page | None = None
     children: list[Page] = field(default_factory=list)
+    groups: list[dict] = field(default_factory=list)  # the children as the outline shows them: [{"label", "children"}]
     stub: bool = False  # only a title and one paragraph: planned, with no page of its own
     number: str = ""  # "4" for a chapter, "4.2" for a section; none for the front page
     part_label: str = ""  # on a chapter in a part: "Part II · The request cycle"
@@ -258,17 +262,41 @@ def load(root: Path | None = None) -> Book:
             problems.append(f"{where}:1: a page under a section: the book is chapters and their sections, and nothing deeper")
         if parent is not None and page.published and not parent.published:
             problems.append(f"{where}:1: a written page under one that is only a title and a line ({parent.where})")
-        for name in [n.strip() for n in meta.get("contents", "").split(",") if n.strip()]:
-            child = f"{id}/{name}" if id else name
-            if not NAME.fullmatch(name) or name in RESERVED or (not id and name in RESERVED_AT_TOP):
-                problems.append(f"{where}:1: `contents` names `{name}`: a page's name is lower-case words joined by hyphens, "
-                                f"never {' or '.join(sorted(RESERVED))}, and at the top of a book not {', '.join(sorted(RESERVED_AT_TOP))}")
-            elif child in book.pages:
-                problems.append(f"{where}:1: `contents` names `{name}` twice")
-            elif not (root / f"{child}.md").is_file():
-                problems.append(f"{where}:1: `contents` names `{name}`, and there is no {shown(root / (child + '.md'))}")
-            else:
-                page.children.append(read(child, page))
+        value = meta.get("contents", "")
+        grouped, labels = ": " in f"{value} ", set()
+        if grouped and not id:
+            problems.append(f"{where}:1: `contents` is grouped only on a chapter's opening page: the front page's chapters "
+                            f"are grouped by their `part`")
+        for run in value.split(";") if grouped else [value]:
+            label, names = "", run
+            if grouped:
+                label, colon, names = run.partition(":")
+                label = label.strip()
+                if not colon or not label or "," in label:
+                    problems.append(f"{where}:1: `contents` in groups is \"Label: a, b; Label: c\": every group begins "
+                                    f"with its label and a colon, and `{run.strip()}` does not")
+                    continue
+                if label in labels:
+                    problems.append(f"{where}:1: `contents` gives the label `{label}` to two groups")
+                labels.add(label)
+            group = {"label": label, "children": []}
+            named = [n.strip() for n in names.split(",") if n.strip()]
+            if grouped and not named:
+                problems.append(f"{where}:1: `contents`: the group `{label}` names no page")
+            for name in named:
+                child = f"{id}/{name}" if id else name
+                if not NAME.fullmatch(name) or name in RESERVED or (not id and name in RESERVED_AT_TOP):
+                    problems.append(f"{where}:1: `contents` names `{name}`: a page's name is lower-case words joined by hyphens, "
+                                    f"never {' or '.join(sorted(RESERVED))}, and at the top of a book not {', '.join(sorted(RESERVED_AT_TOP))}")
+                elif child in book.pages:
+                    problems.append(f"{where}:1: `contents` names `{name}` twice")
+                elif not (root / f"{child}.md").is_file():
+                    problems.append(f"{where}:1: `contents` names `{name}`, and there is no {shown(root / (child + '.md'))}")
+                else:
+                    group["children"].append(read(child, page))
+            page.children += group["children"]
+            if group["children"]:
+                page.groups.append(group)
         return page
 
     def number(page: Page, prefix: str) -> None:
