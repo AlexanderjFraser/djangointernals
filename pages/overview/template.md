@@ -11,7 +11,7 @@ The view's second line is `render`, which calls `render_to_string` with the temp
 In the figure, the second request finds the compiled template at the cached loader and goes straight on to the context.
 
 ```text figure=name-to-string
-time runs down; every request's steps down the left, one path; set in to the right, dashed, the first request's alone, each at the point where it does it
+time runs down; every request's steps down the left, one path; on the right, dashed, the first request's alone, each at the point where it does it
 
 "journal/entries.html", from render
   -> get_template asks the engine
@@ -28,7 +28,7 @@ time runs down; every request's steps down the left, one path; set in to the rig
   -> a SafeString, which render makes an HttpResponse of
 ```
 
-*From a template's name to the string of the response. Every request takes the steps down the left; a dashed box, set in to the right, is work the first request alone does, at the point where it does it.*
+*From a template's name to the string of the response. Every request takes the steps down the left; a dashed box, on the right, is work the first request alone does, at the point where it does it.*
 
 The first request's recording shows that work where it happens: the engine made inside the first `get_template`, the cached loader made, two directories raising `TemplateDoesNotExist` before journal's has the file, the compile, and the context processors imported. Last is the loop's `QuerySet.__len__`, which sends the query that [A queryset becomes SQL](query.md) follows. Other lines are left out.
 

@@ -1,59 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 841">
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 752 599">
   <!-- the calls that lead to the registry -->
-  <text x="0" y="14"><tspan class="name">get_wsgi_application</tspan> calls <tspan class="name">django.setup</tspan>, which calls</text>
-  <text class="name" x="0" y="34">Apps.populate(settings.INSTALLED_APPS)</text>
+  <text x="0" y="14"><tspan class="name">get_wsgi_application</tspan> calls <tspan class="name">django.setup</tspan>, which calls <tspan class="name">Apps.populate(settings.INSTALLED_APPS)</tspan></text>
 
-  <!-- the registry's states, each a frame from the moment its flag is set to the end, nested 12 in; models_ready accented -->
-  <rect class="ground" x="0.5" y="114.5" width="419" height="726" rx="4"/>
-  <rect class="mark-box" x="12.5" y="292.5" width="395" height="536" rx="4"/>
-  <rect class="ground" x="24.5" y="470.5" width="371" height="346" rx="4"/>
+  <!-- the registry's states, each a frame from the moment its flag is set to the end, nested 12 in; models_ready accented, and ready drawn open so that the accent runs through it -->
+  <rect class="ground" x="0.5" y="92.5" width="751" height="506" rx="4"/>
+  <rect class="mark-box" x="12.5" y="214.5" width="727" height="372" rx="4"/>
+  <path class="line" d="M28.5 336.5 H723.5 A4 4 0 0 1 727.5 340.5 V570.5 A4 4 0 0 1 723.5 574.5 H28.5 A4 4 0 0 1 24.5 570.5 V340.5 A4 4 0 0 1 28.5 336.5 Z"/>
 
   <!-- phase 1, outside every flag, and its arrow to apps_ready -->
-  <rect class="box" x="0.5" y="48.5" width="347" height="54" rx="4"/>
-  <text x="12" y="71"><tspan class="strong">phase 1</tspan><tspan class="name" x="72">AppConfig.create</tspan> for each entry</text>
-  <text class="quiet" x="12" y="91">its module imported, its <tspan class="name">AppConfig</tspan> found</text>
-  <path class="line" d="M71.5 103 V124.5"/>
-  <polygon class="head" points="71.5,134.5 66.5,124.5 76.5,124.5"/>
+  <rect class="box" x="0.5" y="30.5" width="352" height="50" rx="4"/>
+  <text x="12.5" y="52"><tspan class="strong">phase 1</tspan><tspan class="name" x="72.5">AppConfig.create</tspan> for each entry</text>
+  <text class="quiet" x="12.5" y="70">its module imported, its <tspan class="name">AppConfig</tspan> found</text>
+  <path class="line" d="M71.5 81 V98.5"/>
+  <polygon class="head" points="71.5,108.5 66.5,98.5 76.5,98.5"/>
 
-  <!-- apps_ready, what the registry answers from then on, under it; then phase 2 and its arrow to models_ready -->
-  <rect class="ground" x="12.5" y="134.5" width="118" height="28" rx="4"/>
-  <text class="name" x="24" y="153">apps_ready</text>
-  <text x="24" y="182">which applications are installed;</text>
-  <text x="24" y="202"><tspan class="name">Apps.get_app_config</tspan> answers</text>
-  <rect class="box" x="12.5" y="226.5" width="347" height="54" rx="4"/>
-  <text x="24" y="249"><tspan class="strong">phase 2</tspan><tspan class="name" x="84">AppConfig.import_models</tspan> for each</text>
-  <text class="quiet" x="24" y="269">non-abstract models end in <tspan class="name">Apps.register_model</tspan></text>
-  <path class="line" d="M83.5 281 V302.5"/>
-  <polygon class="head" points="83.5,312.5 78.5,302.5 88.5,302.5"/>
+  <!-- apps_ready, and what the registry answers from then on beside it; then phase 2 and its arrow to models_ready -->
+  <rect class="ground" x="12.5" y="108.5" width="118" height="32" rx="4"/>
+  <text class="name" x="24.5" y="130">apps_ready</text>
+  <text x="146.5" y="130">which applications are installed; <tspan class="name">Apps.get_app_config</tspan> answers</text>
+  <rect class="box" x="12.5" y="152.5" width="352" height="50" rx="4"/>
+  <text x="24.5" y="174"><tspan class="strong">phase 2</tspan><tspan class="name" x="84.5">AppConfig.import_models</tspan> for each</text>
+  <text class="quiet" x="24.5" y="192">non-abstract models end in <tspan class="name">Apps.register_model</tspan></text>
+  <path class="line" d="M83.5 203 V220.5"/>
+  <polygon class="head" points="83.5,230.5 78.5,220.5 88.5,220.5"/>
 
-  <!-- models_ready, what the registry answers from then on, under it; then phase 3 and its arrow to ready -->
-  <rect class="ground" x="24.5" y="312.5" width="118" height="28" rx="4"/>
-  <text class="name" x="36" y="331">models_ready</text>
-  <text x="36" y="360"><tspan class="name">Apps.get_model</tspan> answers;</text>
-  <text x="36" y="380">before, by default: <tspan class="name">AppRegistryNotReady</tspan></text>
-  <rect class="box" x="24.5" y="404.5" width="347" height="54" rx="4"/>
-  <text x="36" y="427"><tspan class="strong">phase 3</tspan><tspan class="name" x="96">AppConfig.ready</tspan> for each</text>
-  <text class="quiet" x="36" y="447">the admin's <tspan class="name">ready</tspan> imports every app's admin module</text>
-  <path class="line" d="M95.5 459 V480.5"/>
-  <polygon class="head" points="95.5,490.5 90.5,480.5 100.5,480.5"/>
+  <!-- models_ready, and what the registry answers from then on beside it; then phase 3 and its arrow to ready -->
+  <rect class="ground" x="24.5" y="230.5" width="118" height="32" rx="4"/>
+  <text class="name" x="36.5" y="252">models_ready</text>
+  <text x="158.5" y="252"><tspan class="name">Apps.get_model</tspan> answers; before, by default: <tspan class="name">AppRegistryNotReady</tspan></text>
+  <rect class="box" x="24.5" y="274.5" width="352" height="50" rx="4"/>
+  <text x="36.5" y="296"><tspan class="strong">phase 3</tspan><tspan class="name" x="96.5">AppConfig.ready</tspan> for each</text>
+  <text class="quiet" x="36.5" y="314">the admin's <tspan class="name">ready</tspan> imports every app's admin module</text>
+  <path class="line" d="M95.5 325 V342.5"/>
+  <polygon class="head" points="95.5,352.5 90.5,342.5 100.5,342.5"/>
 
-  <!-- ready, what the registry answers from then on, under it; then the handler -->
-  <rect class="ground" x="36.5" y="490.5" width="118" height="28" rx="4"/>
-  <text class="name" x="48" y="509">ready</text>
-  <text x="48" y="538"><tspan class="name">Apps.populate</tspan>, called again, returns at once</text>
-  <rect class="box" x="36.5" y="562.5" width="347" height="94" rx="4"/>
-  <text x="48" y="585"><tspan class="name">WSGIHandler()</tspan><tspan class="quiet" x="162">made by </tspan><tspan class="quiet name">get_wsgi_application</tspan></text>
-  <text class="quiet" x="48" y="605"><tspan class="name">BaseHandler.load_middleware</tspan>:</text>
-  <text class="quiet" x="48" y="625">each class in <tspan class="name">settings.MIDDLEWARE</tspan> made,</text>
-  <text class="quiet" x="48" y="645">from the last to the first</text>
+  <!-- ready, and what the registry answers from then on beside it; then the handler -->
+  <rect class="ground" x="36.5" y="352.5" width="118" height="32" rx="4"/>
+  <text class="name" x="48.5" y="374">ready</text>
+  <text x="170.5" y="374"><tspan class="name">Apps.populate</tspan>, called again, returns at once</text>
+  <rect class="box" x="36.5" y="396.5" width="679" height="50" rx="4"/>
+  <text x="48.5" y="418"><tspan class="name">WSGIHandler()</tspan><tspan class="quiet" x="162.5">made by </tspan><tspan class="quiet name">get_wsgi_application</tspan></text>
+  <text class="quiet" x="48.5" y="436"><tspan class="name">BaseHandler.load_middleware</tspan>: each class in <tspan class="name">settings.MIDDLEWARE</tspan> made, from the last to the first</text>
 
-  <!-- the chain, outermost to the centre -->
-  <rect class="ground" x="36.5" y="668.5" width="347" height="136" rx="4"/>
-  <text x="48" y="688"><tspan class="name">SecurityMiddleware</tspan><tspan class="quiet" x="200">outermost</tspan></text>
-  <rect class="box dashed" x="48.5" y="696.5" width="323" height="100" rx="4"/>
-  <text x="60" y="716">…</text>
-  <rect class="ground" x="60.5" y="724.5" width="299" height="64" rx="4"/>
-  <text class="name" x="72" y="744">XFrameOptionsMiddleware</text>
-  <rect class="box" x="72.5" y="752.5" width="275" height="28" rx="4"/>
-  <text class="name" x="84" y="771">BaseHandler._get_response</text>
+  <!-- the chain, a nest from the outermost on the left to the centre on the right -->
+  <rect class="ground" x="36.5" y="458.5" width="679" height="104" rx="4"/>
+  <text class="quiet" x="48.5" y="498">outermost</text>
+  <text class="name" x="48.5" y="516">SecurityMiddleware</text>
+  <rect class="box dashed" x="204.5" y="470.5" width="499" height="80" rx="4"/>
+  <text x="216.5" y="516">…</text>
+  <rect class="ground" x="246.5" y="482.5" width="445" height="56" rx="4"/>
+  <text class="name" x="258.5" y="516">XFrameOptionsMiddleware</text>
+  <rect class="box" x="454.5" y="494.5" width="225" height="32" rx="4"/>
+  <text class="name" x="466.5" y="516">BaseHandler._get_response</text>
 </svg>

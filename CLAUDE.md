@@ -46,8 +46,11 @@ on the site but the book.
 8. **Recorded, not inferred.** Where the order of calls is the point, the
    page shows a recording from a running Django (`recordings/`).
 9. **Figures are drawn for the page, looked at rendered, and legible where
-   they stand.** A figure's source is in the markdown, and it carries no
-   fact the text does not.
+   they stand.** The desktop is the main reading and the phone the
+   second: a figure is composed for a desktop's screen, landscape and
+   seen whole there with its caption (`SPEC.md` gives the sizes). A
+   figure's source is in the markdown, and it carries no fact the text
+   does not.
 10. **Links resolve**, and the build refuses one that does not.
 11. **Every rule a program can check has a gate, and every gate a
     `--probe`** that proves it fails on what it should.

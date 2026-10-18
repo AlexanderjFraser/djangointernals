@@ -11,7 +11,9 @@ The view returned an `HttpResponse`. The response goes back out through the midd
 In the figure, look for where each header comes from, one from the constructor and five from three of the seven layers, and for the line across where the handler has returned, with the request's end below it.
 
 ```text figure=the-way-out
-time runs down; the response is made at the centre of the chain and leaves through each layer, the innermost first and the outermost last
+the chain on the left, each middleware a box inside the one before it in settings.MIDDLEWARE: the response is made at the centre and leaves to the right, across the edge of every layer, to the handler
+at the foot of each box, what that layer did to the response; time runs down, the innermost first and the outermost last
+the handler and the server on the right, time running down
 accented: the five headers the middleware add
 
 the chain
@@ -37,7 +39,7 @@ the server
                               reset_urlconf           clears the thread's URLconf
 ```
 
-*The response's way out, time running down. In the chain the view comes first and then each middleware, the innermost first, with what it did to this response; the accented lines are the five headers the middleware added. Under the chain are the handler's last two steps, and below the line the handler has returned and the server ends the request.*
+*The response's way out, time running down. In the chain the view comes first and then each middleware, the innermost first, with what it did to this response; the accented lines are the five headers the middleware added. Beside the chain are the handler's last two steps, and below the line the handler has returned and the server ends the request.*
 
 ## The response object
 

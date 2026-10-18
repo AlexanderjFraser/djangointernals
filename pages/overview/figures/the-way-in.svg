@@ -1,49 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 635">
-  <!-- the seven middleware, each a box inside the one listed before it in settings.MIDDLEWARE, 8 in from it at each side and below; the centre 20 in from the innermost at each side -->
-  <rect class="ground" x="56.5" y="0.5" width="363" height="634" rx="4"/>
-  <rect class="box" x="64.5" y="74.5" width="347" height="552" rx="4"/>
-  <rect class="ground" x="72.5" y="148.5" width="331" height="470" rx="4"/>
-  <rect class="box" x="80.5" y="222.5" width="315" height="388" rx="4"/>
-  <rect class="ground" x="88.5" y="296.5" width="299" height="306" rx="4"/>
-  <rect class="box" x="96.5" y="370.5" width="283" height="224" rx="4"/>
-  <rect class="ground" x="104.5" y="444.5" width="267" height="142" rx="4"/>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 741 477">
+  <!-- the seven middleware, each a box inside the one listed before it in settings.MIDDLEWARE, 12 in from it at the left, the right and the foot -->
+  <rect class="ground" x="60.5" y="0.5" width="680" height="476" rx="4"/>
+  <rect class="box" x="72.5" y="54.5" width="656" height="410" rx="4"/>
+  <rect class="ground" x="84.5" y="108.5" width="632" height="344" rx="4"/>
+  <rect class="box" x="96.5" y="162.5" width="608" height="278" rx="4"/>
+  <rect class="ground" x="108.5" y="216.5" width="584" height="212" rx="4"/>
+  <rect class="box" x="120.5" y="270.5" width="560" height="146" rx="4"/>
+  <rect class="ground" x="132.5" y="324.5" width="536" height="80" rx="4"/>
 
-  <!-- at the head of each box, its name, and under it what its process_request leaves on the request or checks -->
-  <text class="name strong" x="68" y="22">SecurityMiddleware</text>
-  <text x="68" y="42"><tspan class="quiet">checks </tspan><tspan class="name">SECURE_SSL_REDIRECT</tspan></text>
-  <text class="quiet" x="68" y="62">false by default, so no redirect to HTTPS</text>
+  <!-- the centre of the chain, accented, 12 inside the innermost middleware -->
+  <rect class="mark-box" x="144.5" y="360.5" width="512" height="32" rx="4"/>
 
-  <text class="name strong" x="76" y="96">SessionMiddleware</text>
-  <text x="76" y="116"><tspan class="quiet">leaves </tspan><tspan class="name">HttpRequest.session</tspan></text>
-  <text class="quiet" x="76" y="136">a session store, not loaded</text>
+  <!-- the names, at the head of each box, stepping in with it -->
+  <text class="name strong" x="72" y="22">SecurityMiddleware</text>
+  <text class="name strong" x="84" y="76">SessionMiddleware</text>
+  <text class="name strong" x="96" y="130">CommonMiddleware</text>
+  <text class="name strong" x="108" y="184">CsrfViewMiddleware</text>
+  <text class="name strong" x="120" y="238">AuthenticationMiddleware</text>
+  <text class="name strong" x="132" y="292">MessageMiddleware</text>
+  <text class="name strong" x="144" y="346">XFrameOptionsMiddleware</text>
+  <text class="name" x="156" y="381">BaseHandler._get_response</text>
 
-  <text class="name strong" x="84" y="170">CommonMiddleware</text>
-  <text x="84" y="190"><tspan class="quiet">checks </tspan>the user agent, and the <tspan class="name">"Host"</tspan> header</text>
-  <text class="quiet" x="84" y="210">against <tspan class="name">ALLOWED_HOSTS</tspan></text>
+  <!-- beside each name, in one column: what its process_request leaves on the request or checks, and under it what that is -->
+  <text class="quiet" x="372" y="22">checks</text>
+  <text class="name" x="422" y="22">SECURE_SSL_REDIRECT</text>
+  <text class="quiet" x="422" y="40">false by default, so no redirect to HTTPS</text>
 
-  <text class="name strong" x="92" y="244">CsrfViewMiddleware</text>
-  <text x="92" y="264"><tspan class="quiet">leaves </tspan><tspan class="name">META["CSRF_COOKIE"]</tspan></text>
-  <text class="quiet" x="92" y="284">the cookie's secret, if the request has one</text>
+  <text class="quiet" x="372" y="76">leaves</text>
+  <text class="name" x="422" y="76">HttpRequest.session</text>
+  <text class="quiet" x="422" y="94">a session store, not loaded</text>
 
-  <text class="name strong" x="100" y="318">AuthenticationMiddleware</text>
-  <text x="100" y="338"><tspan class="quiet">leaves </tspan><tspan class="name">HttpRequest.user</tspan></text>
-  <text class="quiet" x="100" y="358">a user not looked up</text>
+  <text class="quiet" x="372" y="130">checks</text>
+  <text x="422" y="130">the user agent, and the <tspan class="name">"Host"</tspan> header</text>
+  <text class="quiet" x="422" y="148">against <tspan class="name">ALLOWED_HOSTS</tspan></text>
 
-  <text class="name strong" x="108" y="392">MessageMiddleware</text>
-  <text x="108" y="412"><tspan class="quiet">leaves </tspan><tspan class="name">HttpRequest._messages</tspan></text>
-  <text class="quiet" x="108" y="432">a <tspan class="name">FallbackStorage</tspan></text>
+  <text class="quiet" x="372" y="184">leaves</text>
+  <text class="name" x="422" y="184">META["CSRF_COOKIE"]</text>
+  <text class="quiet" x="422" y="202">the cookie's secret, if the request has one</text>
 
-  <text class="name strong" x="116" y="466">XFrameOptionsMiddleware</text>
-  <text class="quiet" x="116" y="486">nothing: it has no <tspan class="name">process_request</tspan></text>
+  <text class="quiet" x="372" y="238">leaves</text>
+  <text class="name" x="422" y="238">HttpRequest.user</text>
+  <text class="quiet" x="422" y="256">a user not looked up</text>
 
-  <!-- the centre of the chain, accented -->
-  <rect class="mark-box" x="124.5" y="500.5" width="227" height="74" rx="4"/>
-  <text class="name" x="136" y="522">BaseHandler._get_response</text>
-  <text class="quiet" x="136" y="542">where the URL is resolved</text>
-  <text class="quiet" x="136" y="562">and the view called</text>
+  <text class="quiet" x="372" y="292">leaves</text>
+  <text class="name" x="422" y="292">HttpRequest._messages</text>
+  <text class="quiet" x="422" y="310">a <tspan class="name">FallbackStorage</tspan></text>
+
+  <text class="quiet" x="372" y="346">nothing: it has no <tspan class="name">process_request</tspan></text>
+
+  <text class="quiet" x="372" y="381">where the URL is resolved and the view called</text>
 
   <!-- the request, from outside, across every layer's left edge to the centre -->
-  <text x="0" y="527">request</text>
-  <path class="line" d="M0 537.5 H114.5"/>
-  <polygon class="head" points="124.5,537.5 114.5,532.5 114.5,542.5"/>
+  <text x="0" y="367">request</text>
+  <path class="line" d="M0 376.5 H134"/>
+  <polygon class="head" points="144,376.5 134,371.5 134,381.5"/>
 </svg>

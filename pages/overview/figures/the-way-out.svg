@@ -1,110 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 360 1179">
-  <!-- each station a box: its name on the first line, what it did to this response under it; time runs down -->
-
-  <!-- the chain: the view, where the response is made -->
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 829 575">
+  <!-- the chain: each middleware a box inside the one listed before it in settings.MIDDLEWARE, 12 in from it at the left, the right and the top -->
   <text class="strong" x="0" y="15">the chain</text>
-  <rect class="box" x="0.5" y="26.5" width="359" height="54" rx="4"/>
-  <text x="12" y="48">the view<tspan class="quiet" dx="10">render makes an </tspan><tspan class="name">HttpResponse</tspan></text>
-  <text x="12" y="68">Content-Type<tspan class="quiet" dx="8">from the constructor</tspan></text>
+  <rect class="ground" x="0.5" y="26.5" width="448" height="548" rx="4"/>
+  <rect class="box" x="12.5" y="38.5" width="424" height="446" rx="4"/>
+  <rect class="ground" x="24.5" y="50.5" width="400" height="380" rx="4"/>
+  <rect class="box" x="36.5" y="62.5" width="376" height="314" rx="4"/>
+  <rect class="ground" x="48.5" y="74.5" width="352" height="248" rx="4"/>
+  <rect class="box" x="60.5" y="86.5" width="328" height="182" rx="4"/>
+  <rect class="ground" x="72.5" y="98.5" width="304" height="116" rx="4"/>
 
-  <!-- the arrows down the chain, the handler and the server, at the centre -->
-  <path class="line" d="M180.5 81 V90"/>
-  <polygon class="head" points="180.5,100 175.5,90 185.5,90"/>
-  <path class="line" d="M180.5 155 V164"/>
-  <polygon class="head" points="180.5,174 175.5,164 185.5,164"/>
-  <path class="line" d="M180.5 229 V238"/>
-  <polygon class="head" points="180.5,248 175.5,238 185.5,238"/>
-  <path class="line" d="M180.5 303 V312"/>
-  <polygon class="head" points="180.5,322 175.5,312 185.5,312"/>
-  <path class="line" d="M180.5 377 V386"/>
-  <polygon class="head" points="180.5,396 175.5,386 185.5,386"/>
-  <path class="line" d="M180.5 451 V460"/>
-  <polygon class="head" points="180.5,470 175.5,460 185.5,460"/>
-  <path class="line" d="M180.5 525 V534"/>
-  <polygon class="head" points="180.5,544 175.5,534 185.5,534"/>
-  <path class="line" d="M180.5 639 V668"/>
-  <polygon class="head" points="180.5,678 175.5,668 185.5,668"/>
-  <path class="line" d="M180.5 733 V742"/>
-  <polygon class="head" points="180.5,752 175.5,742 185.5,742"/>
-  <path class="line" d="M180.5 807 V862"/>
-  <polygon class="head" points="180.5,872 175.5,862 185.5,862"/>
-  <path class="line" d="M180.5 907 V916"/>
-  <polygon class="head" points="180.5,926 175.5,916 185.5,916"/>
+  <!-- the centre, 12 inside the innermost middleware: the view, where the response is made -->
+  <rect class="box" x="84.5" y="110.5" width="280" height="50" rx="4"/>
+  <text x="96" y="132">the view<tspan class="quiet" dx="10">render makes an </tspan><tspan class="name">HttpResponse</tspan></text>
+  <text x="96" y="150">Content-Type<tspan class="quiet" dx="8">from the constructor</tspan></text>
 
-  <!-- the seven layers, the innermost first; the five headers in the accent -->
-  <rect class="box" x="0.5" y="100.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="122">XFrameOptionsMiddleware</text>
-  <text class="quiet" x="347" y="122" text-anchor="end">innermost</text>
-  <text class="mark" x="12" y="142">X-Frame-Options: DENY</text>
+  <!-- at the foot of each box, its name and what its process_response did to this response, stepping out with it: the innermost first, time running down; the five headers in the accent -->
+  <text class="name strong" x="84" y="182">XFrameOptionsMiddleware</text>
+  <text class="quiet" x="364" y="182" text-anchor="end">innermost</text>
+  <text class="mark" x="84" y="200">X-Frame-Options: DENY</text>
 
-  <rect class="box" x="0.5" y="174.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="196">MessageMiddleware</text>
-  <text class="quiet" x="12" y="216">nothing: no messages to store</text>
+  <text class="name strong" x="72" y="236">MessageMiddleware</text>
+  <text class="quiet" x="72" y="254">nothing: no messages to store</text>
 
-  <rect class="box" x="0.5" y="248.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="270">AuthenticationMiddleware</text>
-  <text class="quiet" x="12" y="290">nothing: it has no <tspan class="name">process_response</tspan></text>
+  <text class="name strong" x="60" y="290">AuthenticationMiddleware</text>
+  <text class="quiet" x="60" y="308">nothing: it has no <tspan class="name">process_response</tspan></text>
 
-  <rect class="box" x="0.5" y="322.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="344">CsrfViewMiddleware</text>
-  <text class="quiet" x="12" y="364">nothing: no token was asked for</text>
+  <text class="name strong" x="48" y="344">CsrfViewMiddleware</text>
+  <text class="quiet" x="48" y="362">nothing: no token was asked for</text>
 
-  <rect class="box" x="0.5" y="396.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="418">CommonMiddleware</text>
-  <text class="mark" x="12" y="438">Content-Length: the length of the body</text>
+  <text class="name strong" x="36" y="398">CommonMiddleware</text>
+  <text class="mark" x="36" y="416">Content-Length: the length of the body</text>
 
-  <rect class="box" x="0.5" y="470.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="492">SessionMiddleware</text>
-  <text class="quiet" x="12" y="512">nothing: the session was never touched</text>
+  <text class="name strong" x="24" y="452">SessionMiddleware</text>
+  <text class="quiet" x="24" y="470">nothing: the session was never touched</text>
 
-  <rect class="box" x="0.5" y="544.5" width="359" height="94" rx="4"/>
-  <text class="name" x="12" y="566">SecurityMiddleware</text>
-  <text class="quiet" x="347" y="566" text-anchor="end">outermost</text>
-  <text class="mark" x="12" y="586">X-Content-Type-Options: nosniff</text>
-  <text class="mark" x="12" y="606">Referrer-Policy: same-origin</text>
-  <text class="mark" x="12" y="626">Cross-Origin-Opener-Policy: same-origin</text>
+  <text class="name strong" x="12" y="506">SecurityMiddleware</text>
+  <text class="quiet" x="436" y="506" text-anchor="end">outermost</text>
+  <text class="mark" x="12" y="524">X-Content-Type-Options: nosniff</text>
+  <text class="mark" x="12" y="542">Referrer-Policy: same-origin</text>
+  <text class="mark" x="12" y="560">Cross-Origin-Opener-Policy: same-origin</text>
+
+  <!-- the response leaves the centre to the right, across the edge of every layer, to the handler -->
+  <path class="line" d="M365 135.5 H478.5"/>
+  <polygon class="head" points="488.5,135.5 478.5,130.5 478.5,140.5"/>
 
   <!-- the handler's last two steps -->
-  <text class="strong" x="0" y="668">the handler</text>
-  <rect class="box" x="0.5" y="678.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="700">BaseHandler.get_response</text>
-  <text class="quiet" x="12" y="720">the request's <tspan class="name">close</tspan> added to the response's closers</text>
+  <text class="strong" x="488" y="99">the handler</text>
+  <rect class="box" x="488.5" y="110.5" width="340" height="50" rx="4"/>
+  <text class="name" x="500" y="132">BaseHandler.get_response</text>
+  <text class="quiet" x="500" y="150">the request's <tspan class="name">close</tspan> added to the response's closers</text>
 
-  <rect class="box" x="0.5" y="752.5" width="359" height="54" rx="4"/>
-  <text class="name" x="12" y="774">WSGIHandler.__call__</text>
-  <text class="quiet" x="12" y="794"><tspan class="name">start_response</tspan>: the status line and the six headers</text>
+  <path class="line" d="M658.5 161 V170.5"/>
+  <polygon class="head" points="658.5,180.5 653.5,170.5 663.5,170.5"/>
+
+  <rect class="box" x="488.5" y="180.5" width="340" height="50" rx="4"/>
+  <text class="name" x="500" y="202">WSGIHandler.__call__</text>
+  <text class="quiet" x="500" y="220"><tspan class="name">start_response</tspan>: the status line and the six headers</text>
 
   <!-- the line across: the handler has returned -->
-  <text x="360" y="828" text-anchor="end">the handler has returned</text>
-  <path class="line dashed" d="M0 837.5 H360"/>
+  <text x="828" y="251" text-anchor="end">the handler has returned</text>
+  <path class="line dashed" d="M488 259.5 H829"/>
+
+  <path class="line" d="M658.5 231 V280.5"/>
+  <polygon class="head" points="658.5,290.5 653.5,280.5 663.5,280.5"/>
 
   <!-- the server sends the body, then closes the response -->
-  <text class="strong" x="0" y="862">the server</text>
-  <rect class="ground dashed" x="0.5" y="872.5" width="359" height="34" rx="4"/>
-  <text x="12" y="894">sends the body</text>
+  <text class="strong" x="488" y="280">the server</text>
+  <rect class="ground dashed" x="488.5" y="290.5" width="340" height="32" rx="4"/>
+  <text x="500" y="312">sends the body</text>
 
-  <rect class="box" x="0.5" y="926.5" width="359" height="74" rx="4"/>
-  <text class="name" x="12" y="948">HttpResponseBase.close</text>
-  <text class="quiet" x="12" y="968">the closers, <tspan class="name">HttpRequest.close</tspan> among them;</text>
-  <text class="quiet" x="12" y="988">then <tspan class="name">request_finished</tspan>:</text>
+  <path class="line" d="M658.5 323 V332.5"/>
+  <polygon class="head" points="658.5,342.5 653.5,332.5 663.5,332.5"/>
+
+  <rect class="box" x="488.5" y="342.5" width="340" height="68" rx="4"/>
+  <text class="name" x="500" y="364">HttpResponseBase.close</text>
+  <text class="quiet" x="500" y="382">the closers, <tspan class="name">HttpRequest.close</tspan> among them;</text>
+  <text class="quiet" x="500" y="400">then <tspan class="name">request_finished</tspan>:</text>
 
   <!-- request_finished and its three receivers, in the order they ran -->
-  <path class="line" d="M16.5 1001 V1141.5"/>
-  <path class="line" d="M16.5 1029.5 H26.5"/>
-  <polygon class="head" points="36.5,1029.5 26.5,1024.5 26.5,1034.5"/>
-  <path class="line" d="M16.5 1095.5 H26.5"/>
-  <polygon class="head" points="36.5,1095.5 26.5,1090.5 26.5,1100.5"/>
-  <path class="line" d="M16.5 1141.5 H26.5"/>
-  <polygon class="head" points="36.5,1141.5 26.5,1136.5 26.5,1146.5"/>
+  <path class="line" d="M504.5 411 V549.5"/>
+  <path class="line" d="M504.5 447.5 H514.5"/>
+  <polygon class="head" points="524.5,447.5 514.5,442.5 514.5,452.5"/>
+  <path class="line" d="M504.5 498.5 H514.5"/>
+  <polygon class="head" points="524.5,498.5 514.5,493.5 514.5,503.5"/>
+  <path class="line" d="M504.5 549.5 H514.5"/>
+  <polygon class="head" points="524.5,549.5 514.5,544.5 514.5,554.5"/>
 
-  <rect class="box" x="36.5" y="1012.5" width="323" height="54" rx="4"/>
-  <text class="name" x="48" y="1034">close_old_connections</text>
-  <text class="quiet" x="48" y="1054">closes the database connection</text>
+  <rect class="box" x="524.5" y="422.5" width="304" height="50" rx="4"/>
+  <text class="name" x="536" y="444">close_old_connections</text>
+  <text class="quiet" x="536" y="462">closes the database connection</text>
 
-  <rect class="box" x="36.5" y="1078.5" width="323" height="34" rx="4"/>
-  <text class="name" x="48" y="1100">close_caches</text>
+  <rect class="box" x="524.5" y="482.5" width="304" height="32" rx="4"/>
+  <text class="name" x="536" y="504">close_caches</text>
 
-  <rect class="box" x="36.5" y="1124.5" width="323" height="54" rx="4"/>
-  <text class="name" x="48" y="1146">reset_urlconf</text>
-  <text class="quiet" x="48" y="1166">clears the thread's URLconf</text>
+  <rect class="box" x="524.5" y="524.5" width="304" height="50" rx="4"/>
+  <text class="name" x="536" y="546">reset_urlconf</text>
+  <text class="quiet" x="536" y="564">clears the thread's URLconf</text>
 </svg>

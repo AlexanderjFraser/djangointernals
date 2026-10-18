@@ -1,80 +1,75 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 565">
-  <!-- above the line: the servers, side by side -->
-  <text class="quiet" x="0" y="14">outside Django</text>
-  <rect class="ground" x="0.5" y="24.5" width="200" height="72" rx="4"/>
-  <text x="12.5" y="46">a WSGI server</text>
-  <text class="quiet" x="12.5" y="66">Gunicorn, uWSGI,</text>
-  <text class="quiet" x="12.5" y="84">mod_wsgi, Waitress</text>
-  <rect class="ground" x="219.5" y="24.5" width="200" height="72" rx="4"/>
-  <text x="231.5" y="46">an ASGI server</text>
-  <text class="quiet" x="231.5" y="66">Daphne, Uvicorn,</text>
-  <text class="quiet" x="231.5" y="84">Hypercorn</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 831 402">
+  <!-- above the line: the two servers -->
+  <rect class="ground" x="0.5" y="0.5" width="320" height="50" rx="4"/>
+  <text x="12.5" y="22">a WSGI server</text>
+  <text class="quiet" x="12.5" y="40">Gunicorn, uWSGI, mod_wsgi, Waitress</text>
+  <rect class="ground" x="340.5" y="0.5" width="320" height="50" rx="4"/>
+  <text x="352.5" y="22">an ASGI server</text>
+  <text class="quiet" x="352.5" y="40">Daphne, Uvicorn, Hypercorn</text>
 
   <!-- the call each server makes, crossing the line into the handler -->
-  <path class="line" d="M150.5 96.5 V188.5"/>
-  <polygon class="head" points="150.5,198.5 145.5,188.5 155.5,188.5"/>
-  <text x="138.5" y="120" text-anchor="end"><tspan class="quiet">calls a </tspan><tspan class="name">WSGIHandler</tspan></text>
-  <text x="138.5" y="138" text-anchor="end"><tspan class="quiet">with the </tspan><tspan class="name">environ</tspan></text>
-  <text x="138.5" y="156" text-anchor="end"><tspan class="quiet">and </tspan><tspan class="name">start_response</tspan></text>
-  <path class="line" d="M240.5 96.5 V188.5"/>
-  <polygon class="head" points="240.5,198.5 235.5,188.5 245.5,188.5"/>
-  <text x="252.5" y="120"><tspan class="quiet">awaits an </tspan><tspan class="name">ASGIHandler</tspan></text>
-  <text x="252.5" y="138"><tspan class="quiet">with the </tspan><tspan class="name">scope</tspan><tspan class="quiet">,</tspan></text>
-  <text x="252.5" y="156"><tspan class="name">receive</tspan><tspan class="quiet"> and </tspan><tspan class="name">send</tspan></text>
+  <path class="line" d="M45.5 50.5 V152.5"/>
+  <polygon class="head" points="45.5,162.5 40.5,152.5 50.5,152.5"/>
+  <text x="57.5" y="76"><tspan class="quiet">calls a </tspan><tspan class="name">WSGIHandler</tspan></text>
+  <text x="57.5" y="94"><tspan class="quiet">with the </tspan><tspan class="name">environ</tspan><tspan class="quiet"> and </tspan><tspan class="name">start_response</tspan></text>
+  <path class="line" d="M385.5 50.5 V112.5 H105.5 V152.5"/>
+  <polygon class="head" points="105.5,162.5 100.5,152.5 110.5,152.5"/>
+  <text x="397.5" y="76"><tspan class="quiet">awaits an </tspan><tspan class="name">ASGIHandler</tspan></text>
+  <text x="397.5" y="94"><tspan class="quiet">with the </tspan><tspan class="name">scope</tspan><tspan class="quiet">, </tspan><tspan class="name">receive</tspan><tspan class="quiet"> and </tspan><tspan class="name">send</tspan></text>
 
-  <!-- the line, and where the calls cross it -->
-  <path class="mark-line" d="M0 176 H420"/>
-  <circle class="mark" cx="150.5" cy="176" r="4"/>
-  <circle class="mark" cx="240.5" cy="176" r="4"/>
-  <text class="mark strong" x="0" y="200">Django</text>
+  <!-- the upper line, its two sides named at its free end, and where the calls cross it -->
+  <path class="mark-line" d="M0 130 H831"/>
+  <circle class="mark" cx="45.5" cy="130" r="4"/>
+  <circle class="mark" cx="105.5" cy="130" r="4"/>
+  <text class="quiet" x="830" y="122" text-anchor="end">outside Django</text>
+  <text class="mark strong" x="830" y="149" text-anchor="end">Django</text>
 
-  <!-- Django's own code, the call passing down it -->
-  <rect class="box" x="117.5" y="198.5" width="156" height="30" rx="4"/>
-  <text x="195.5" y="218" text-anchor="middle">the handler</text>
-  <path class="line" d="M195.5 228.5 V238.5"/>
-  <polygon class="head" points="195.5,248.5 190.5,238.5 200.5,238.5"/>
-  <rect class="box" x="117.5" y="248.5" width="156" height="30" rx="4"/>
-  <text x="195.5" y="268" text-anchor="middle">the middleware chain</text>
-  <path class="line" d="M195.5 278.5 V288.5"/>
-  <polygon class="head" points="195.5,298.5 190.5,288.5 200.5,288.5"/>
-  <rect class="box" x="117.5" y="298.5" width="156" height="30" rx="4"/>
-  <text x="195.5" y="318" text-anchor="middle">the view</text>
-  <path class="line" d="M195.5 328.5 V338.5"/>
-  <polygon class="head" points="195.5,348.5 190.5,338.5 200.5,338.5"/>
-  <rect class="box" x="117.5" y="348.5" width="156" height="30" rx="4"/>
-  <text x="195.5" y="368" text-anchor="middle">models and querysets</text>
-  <path class="line" d="M195.5 378.5 V388.5"/>
-  <polygon class="head" points="195.5,398.5 190.5,388.5 200.5,388.5"/>
-  <rect class="box" x="117.5" y="398.5" width="156" height="30" rx="4"/>
-  <text x="195.5" y="418" text-anchor="middle">the backend</text>
+  <!-- Django's own code, the call passing along it -->
+  <rect class="box" x="0.5" y="162.5" width="150" height="32" rx="4"/>
+  <text x="75.5" y="183" text-anchor="middle">the handler</text>
+  <path class="line" d="M150.5 178.5 H160.5"/>
+  <polygon class="head" points="170.5,178.5 160.5,173.5 160.5,183.5"/>
+  <rect class="box" x="170.5" y="162.5" width="150" height="32" rx="4"/>
+  <text x="245.5" y="183" text-anchor="middle">the middleware chain</text>
+  <path class="line" d="M320.5 178.5 H330.5"/>
+  <polygon class="head" points="340.5,178.5 330.5,173.5 330.5,183.5"/>
+  <rect class="box" x="340.5" y="162.5" width="150" height="32" rx="4"/>
+  <text x="415.5" y="183" text-anchor="middle">the view</text>
+  <path class="line" d="M490.5 178.5 H500.5"/>
+  <polygon class="head" points="510.5,178.5 500.5,173.5 500.5,183.5"/>
+  <rect class="box" x="510.5" y="162.5" width="150" height="32" rx="4"/>
+  <text x="585.5" y="183" text-anchor="middle">models and querysets</text>
+  <path class="line" d="M660.5 178.5 H670.5"/>
+  <polygon class="head" points="680.5,178.5 670.5,173.5 670.5,183.5"/>
+  <rect class="box" x="680.5" y="162.5" width="150" height="32" rx="4"/>
+  <text x="755.5" y="183" text-anchor="middle">the backend</text>
 
-  <!-- the libraries Django requires, inside the line beside the code that uses them -->
-  <text class="quiet" x="285.5" y="200">required</text>
-  <rect class="ground" x="285.5" y="210.5" width="134" height="86" rx="4"/>
-  <text class="strong" x="297.5" y="231">asgiref</text>
-  <text class="name" x="297.5" y="250">sync_to_async</text>
-  <text class="name" x="297.5" y="268">async_to_sync</text>
-  <text class="name" x="297.5" y="286">Local</text>
-  <rect class="ground" x="285.5" y="306.5" width="134" height="32" rx="4"/>
-  <text class="strong" x="297.5" y="327">sqlparse</text>
-  <rect class="ground" x="285.5" y="348.5" width="134" height="80" rx="4"/>
-  <text class="strong" x="297.5" y="369">tzdata</text>
-  <text class="quiet small" x="297.5" y="386">on Windows, which</text>
-  <text class="quiet small" x="297.5" y="402">the standard library's</text>
-  <text class="quiet small" x="297.5" y="418">zoneinfo reads</text>
+  <!-- the libraries Django requires, inside the lines -->
+  <text class="quiet" x="0" y="224">required</text>
+  <rect class="ground" x="0.5" y="234.5" width="216" height="68" rx="4"/>
+  <text class="strong" x="12.5" y="256">asgiref</text>
+  <text class="name" x="12.5" y="274">sync_to_async,</text>
+  <text class="name" x="12.5" y="292">async_to_sync, Local</text>
+  <rect class="ground" x="232.5" y="234.5" width="216" height="68" rx="4"/>
+  <text class="strong" x="244.5" y="256">sqlparse</text>
+  <rect class="ground" x="464.5" y="234.5" width="216" height="68" rx="4"/>
+  <text class="strong" x="476.5" y="256">tzdata</text>
+  <text class="quiet" x="476.5" y="274">on Windows, which the standard</text>
+  <text x="476.5" y="292"><tspan class="quiet">library's </tspan><tspan class="name">zoneinfo</tspan><tspan class="quiet"> reads</tspan></text>
 
-  <!-- the line again, and the backend's call crossing it -->
-  <path class="mark-line" d="M0 450 H420"/>
-  <circle class="mark" cx="195.5" cy="450" r="4"/>
-  <path class="line" d="M195.5 428.5 V474.5"/>
-  <polygon class="head" points="195.5,484.5 190.5,474.5 200.5,474.5"/>
+  <!-- the lower line, and the backend's call crossing it -->
+  <path class="mark-line" d="M0 326 H831"/>
+  <circle class="mark" cx="755.5" cy="326" r="4"/>
+  <path class="line" d="M755.5 194.5 V341.5"/>
+  <polygon class="head" points="755.5,351.5 750.5,341.5 760.5,341.5"/>
+  <text class="quiet" x="0" y="344">outside Django</text>
 
-  <!-- below the line: the driver and the database -->
-  <text class="quiet" x="0" y="474">outside Django</text>
-  <rect class="ground" x="90.5" y="484.5" width="210" height="30" rx="4"/>
-  <text x="195.5" y="504" text-anchor="middle">the driver the backend imports</text>
-  <path class="line" d="M195.5 514.5 V524.5"/>
-  <polygon class="head" points="195.5,534.5 190.5,524.5 200.5,524.5"/>
-  <rect class="ground" x="117.5" y="534.5" width="156" height="30" rx="4"/>
-  <text x="195.5" y="554" text-anchor="middle">the database</text>
+  <!-- below the line: the driver, and the database it talks to -->
+  <rect class="ground" x="680.5" y="351.5" width="150" height="50" rx="4"/>
+  <text x="755.5" y="373" text-anchor="middle">the driver</text>
+  <text x="755.5" y="391" text-anchor="middle">the backend imports</text>
+  <path class="line" d="M680.5 376.5 H670.5"/>
+  <polygon class="head" points="660.5,376.5 670.5,371.5 670.5,381.5"/>
+  <rect class="ground" x="510.5" y="360.5" width="150" height="32" rx="4"/>
+  <text x="585.5" y="381" text-anchor="middle">the database</text>
 </svg>

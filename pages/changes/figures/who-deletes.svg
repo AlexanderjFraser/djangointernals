@@ -1,54 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 605">
-  <!-- CASCADE: two lanes, Django's and the database's; every step is in Django's -->
-  <text class="strong" x="0" y="15"><tspan class="name">CASCADE</tspan>: Django deletes the mooring</text>
-  <rect class="ground" x="0.5" y="28.5" width="203" height="230" rx="4"/>
-  <rect class="ground" x="216.5" y="28.5" width="203" height="230" rx="4"/>
-  <text class="quiet" x="12" y="50">Django</text>
-  <text class="quiet" x="228" y="50">the database</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 394">
+  <!-- a grid: the two halves side by side, columns at x 105 and 387, each 258 wide;
+       who carries out each step is the row, Django's at y 46 and the database's at y 258,
+       and what the receiver and the count learn are the two rows under them -->
 
-  <!-- its three steps, in order down -->
-  <rect class="box" x="12.5" y="62.5" width="179" height="72" rx="4"/>
-  <text x="24" y="83"><tspan class="name">SELECT</tspan> the moorings</text>
-  <text class="quiet" x="24" y="103">as a receiver</text>
-  <text class="quiet" x="24" y="123">must be called</text>
-  <path class="line" d="M101.5 135 V148.5"/>
-  <polygon class="head" points="101.5,158.5 96.5,148.5 106.5,148.5"/>
+  <!-- the halves' headings -->
+  <text class="strong" x="105" y="15"><tspan class="name">CASCADE</tspan>:</text>
+  <text class="strong" x="105" y="33">Django deletes the mooring</text>
+  <text class="strong" x="387" y="15"><tspan class="name">DB_CASCADE</tspan>, since 6.1:</text>
+  <text class="strong" x="387" y="33">the database deletes the mooring</text>
 
-  <rect class="box" x="12.5" y="158.5" width="179" height="32" rx="4"/>
-  <text x="24" y="179"><tspan class="name">DELETE</tspan> the mooring</text>
-  <path class="line" d="M101.5 191 V204.5"/>
-  <polygon class="head" points="101.5,214.5 96.5,204.5 106.5,204.5"/>
+  <!-- the rows' labels: who carries each step out, then what is learnt of the mooring -->
+  <text class="quiet" x="0" y="83">Django</text>
+  <text class="quiet" x="0" y="295">the database</text>
+  <text class="name quiet" x="0" y="368">post_delete</text>
+  <text class="quiet" x="0" y="388">counted</text>
 
-  <rect class="box" x="12.5" y="214.5" width="179" height="32" rx="4"/>
-  <text x="24" y="235"><tspan class="name">DELETE</tspan> the harbour</text>
+  <!-- the four cells -->
+  <rect class="ground" x="105.5" y="46.5" width="258" height="196" rx="4"/>
+  <rect class="ground" x="387.5" y="46.5" width="258" height="196" rx="4"/>
+  <rect class="ground" x="105.5" y="258.5" width="258" height="84" rx="4"/>
+  <rect class="ground" x="387.5" y="258.5" width="258" height="84" rx="4"/>
+
+  <!-- CASCADE: three steps, in order down, all in Django's row -->
+  <rect class="box" x="117.5" y="62.5" width="234" height="52" rx="4"/>
+  <text x="129" y="83"><tspan class="name">SELECT</tspan> the moorings</text>
+  <text class="quiet" x="129" y="103">as a receiver must be called</text>
+  <path class="line" d="M234.5 115 V128.5"/>
+  <polygon class="head" points="234.5,138.5 229.5,128.5 239.5,128.5"/>
+
+  <rect class="box" x="117.5" y="138.5" width="234" height="32" rx="4"/>
+  <text x="129" y="159"><tspan class="name">DELETE</tspan> the mooring</text>
+  <path class="line" d="M234.5 171 V184.5"/>
+  <polygon class="head" points="234.5,194.5 229.5,184.5 239.5,184.5"/>
+
+  <rect class="box" x="117.5" y="194.5" width="234" height="32" rx="4"/>
+  <text x="129" y="215"><tspan class="name">DELETE</tspan> the harbour</text>
+
+  <!-- DB_CASCADE: one step in Django's row, then one in the database's, the accent -->
+  <rect class="box" x="399.5" y="62.5" width="234" height="52" rx="4"/>
+  <text x="411" y="83"><tspan class="name">DELETE</tspan> the harbour</text>
+  <text class="quiet" x="411" y="103">the one statement sent</text>
+  <path class="line" d="M516.5 115 V264.5"/>
+  <polygon class="head" points="516.5,274.5 511.5,264.5 521.5,264.5"/>
+
+  <rect class="mark-box" x="399.5" y="274.5" width="234" height="52" rx="4"/>
+  <text x="411" y="295">deletes the mooring</text>
+  <text class="quiet" x="411" y="315">by its key's <tspan class="name">ON DELETE</tspan> clause</text>
 
   <!-- what the receiver and the count learn of the mooring -->
-  <text class="name quiet" x="0" y="282">post_delete</text>
-  <text x="104" y="282">called for the mooring</text>
-  <text class="quiet" x="0" y="302">counted</text>
-  <text x="104" y="302">the harbour and the mooring</text>
-
-  <!-- DB_CASCADE: one step in Django's lane, then one in the database's, the accent -->
-  <text class="strong" x="0" y="346"><tspan class="name">DB_CASCADE</tspan>, since 6.1: the database deletes the mooring</text>
-  <rect class="ground" x="0.5" y="359.5" width="203" height="194" rx="4"/>
-  <rect class="ground" x="216.5" y="359.5" width="203" height="194" rx="4"/>
-  <text class="quiet" x="12" y="381">Django</text>
-  <text class="quiet" x="228" y="381">the database</text>
-
-  <rect class="box" x="12.5" y="393.5" width="179" height="52" rx="4"/>
-  <text x="24" y="414"><tspan class="name">DELETE</tspan> the harbour</text>
-  <text class="quiet" x="24" y="434">the one statement sent</text>
-  <path class="line" d="M192 419.5 H317.5 V459.5"/>
-  <polygon class="head" points="317.5,469.5 312.5,459.5 322.5,459.5"/>
-
-  <rect class="mark-box" x="228.5" y="469.5" width="179" height="72" rx="4"/>
-  <text x="240" y="490">deletes the mooring</text>
-  <text class="quiet" x="240" y="510">by its key's</text>
-  <text class="quiet" x="240" y="530"><tspan class="name">ON DELETE</tspan> clause</text>
-
-  <!-- what the receiver and the count learn of the mooring -->
-  <text class="name quiet" x="0" y="577">post_delete</text>
-  <text x="104" y="577">not called for the mooring</text>
-  <text class="quiet" x="0" y="597">counted</text>
-  <text x="104" y="597">the harbour alone</text>
+  <text x="105" y="368">called for the mooring</text>
+  <text x="105" y="388">the harbour and the mooring</text>
+  <text x="387" y="368">not called for the mooring</text>
+  <text x="387" y="388">the harbour alone</text>
 </svg>

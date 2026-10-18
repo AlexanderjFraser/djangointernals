@@ -1,85 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 759">
-  <!-- the response on its way out, down the page: SessionMiddleware's step, then UpdateCacheMiddleware's checks; each check's way out joins the rail on the right, which ends in "returned unstored" -->
-  <text x="0" y="14">With <tspan class="name">SessionMiddleware</tspan> inside</text>
-  <text x="0" y="34"><tspan class="name">UpdateCacheMiddleware</tspan>, on the way out</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 787 559">
+  <!-- the response on its way out, down the page: SessionMiddleware's step, then UpdateCacheMiddleware's checks; each check's way out joins the rail on the right, which ends in "returned unstored"; a step a fix of 2026 made or changed carries its CVE in the column at the right -->
+  <text x="0" y="14">With <tspan class="name">SessionMiddleware</tspan> inside <tspan class="name">UpdateCacheMiddleware</tspan>, on the way out</text>
 
   <!-- SessionMiddleware, which the response leaves first -->
-  <rect class="box" x="0.5" y="46.5" width="395" height="82" rx="4"/>
-  <text class="name strong" x="14" y="68">SessionMiddleware.process_response</text>
-  <text x="36" y="92">sets or deletes the session cookie</text>
-  <path class="line" d="M36 107.5 H46"/>
-  <polygon class="head" points="56,107.5 46,102.5 46,112.5"/>
-  <text x="62" y="112"><tspan class="name">"Cookie"</tspan> added to Vary</text>
-  <text class="quiet" x="382" y="112" text-anchor="end">CVE-2026-35192</text>
+  <rect class="box" x="0.5" y="28.5" width="620" height="68" rx="4"/>
+  <text class="name strong" x="14" y="50">SessionMiddleware.process_response</text>
+  <text x="40" y="68">sets or deletes the session cookie</text>
+  <path class="line" d="M40 81.5 H50"/>
+  <polygon class="head" points="60,81.5 50,76.5 50,86.5"/>
+  <text x="66" y="86"><tspan class="name">"Cookie"</tspan> added to Vary</text>
+  <text class="quiet" x="608" y="86" text-anchor="end">CVE-2026-35192</text>
 
   <!-- on to UpdateCacheMiddleware -->
-  <path class="line" d="M24 129 V142"/>
-  <polygon class="head" points="24,152 19,142 29,142"/>
+  <path class="line" d="M24 97 V110.5"/>
+  <polygon class="head" points="24,120.5 19,110.5 29,110.5"/>
 
   <!-- UpdateCacheMiddleware.process_response -->
-  <rect class="box" x="0.5" y="152.5" width="395" height="558" rx="4"/>
-  <text class="name strong" x="14" y="174">UpdateCacheMiddleware.process_response</text>
-  <text class="quiet" x="14" y="194">the first that holds returns it unstored</text>
+  <rect class="box" x="0.5" y="120.5" width="620" height="438" rx="4"/>
+  <text class="name strong" x="14" y="142">UpdateCacheMiddleware.process_response</text>
+  <text class="quiet" x="14" y="160">the first that holds returns it unstored</text>
 
-  <!-- the six checks, in the order of the code; a check a fix changed carries its CVE at the right -->
-  <text class="strong" x="14" y="224">1</text>
-  <text x="36" y="224">the flag <tspan class="name">FetchFromCacheMiddleware</tspan> set on the request</text>
-  <text x="36" y="242">is missing or false</text>
+  <!-- the six checks, in the order of the code -->
+  <text class="strong" x="14" y="190">1</text>
+  <text x="40" y="190">the flag <tspan class="name">FetchFromCacheMiddleware</tspan> set on the request is missing or false</text>
 
-  <text class="strong" x="14" y="272">2</text>
-  <text x="36" y="272">the response is streaming,</text>
-  <text x="36" y="290">or its status is neither 200 nor 304</text>
+  <text class="strong" x="14" y="220">2</text>
+  <text x="40" y="220">the response is streaming, or its status is neither 200 nor 304</text>
 
-  <text class="strong" x="14" y="320">3</text>
-  <text x="36" y="320">it sets a cookie and its Vary names Cookie,</text>
-  <text x="36" y="338">whatever cookies the request had</text>
-  <text class="quiet" x="382" y="338" text-anchor="end">CVE-2026-48588</text>
+  <text class="strong" x="14" y="250">3</text>
+  <text x="40" y="250">it sets a cookie and its Vary names Cookie, whatever cookies the request had</text>
+  <text class="quiet" x="608" y="250" text-anchor="end">CVE-2026-48588</text>
 
-  <text class="strong" x="14" y="368">4</text>
-  <text x="36" y="368">its Cache-Control has <tspan class="name">private</tspan>, <tspan class="name">no-cache</tspan> or <tspan class="name">no-store</tspan>,</text>
-  <text x="36" y="386">whatever their case</text>
-  <text class="quiet" x="382" y="386" text-anchor="end">CVE-2026-8404</text>
+  <text class="strong" x="14" y="280">4</text>
+  <text x="40" y="280">its Cache-Control has <tspan class="name">private</tspan>, <tspan class="name">no-cache</tspan> or <tspan class="name">no-store</tspan>, whatever their case</text>
+  <text class="quiet" x="608" y="280" text-anchor="end">CVE-2026-8404</text>
 
-  <text class="strong" x="14" y="416">5</text>
-  <text x="36" y="416">its Vary holds <tspan class="name">*</tspan></text>
-  <text class="quiet" x="382" y="416" text-anchor="end">CVE-2026-6907</text>
-  <text x="36" y="434">each name stripped of white space first</text>
-  <text class="quiet" x="382" y="434" text-anchor="end">CVE-2026-48587</text>
+  <text class="strong" x="14" y="310">5</text>
+  <text x="40" y="310">its Vary holds <tspan class="name">*</tspan></text>
+  <text class="quiet" x="608" y="310" text-anchor="end">CVE-2026-6907</text>
+  <text x="40" y="328">each name stripped of white space first</text>
+  <text class="quiet" x="608" y="328" text-anchor="end">CVE-2026-48587</text>
 
-  <text class="strong" x="14" y="464">6</text>
-  <text x="36" y="464">no page timeout is set, and its <tspan class="name">max-age</tspan> is 0</text>
+  <text class="strong" x="14" y="358">6</text>
+  <text x="40" y="358">no page timeout is set, and its <tspan class="name">max-age</tspan> is 0</text>
 
   <!-- what follows for a response that passed them all -->
-  <path class="line" d="M14 486.5 H382"/>
-  <text class="quiet" x="14" y="512">then, for a response that passed</text>
+  <path class="line" d="M14 379.5 H608"/>
+  <text class="quiet" x="14" y="406">then, for a response that passed</text>
 
-  <text x="36" y="538">the request has Authorization</text>
-  <text x="36" y="556">and Cache-Control lacks <tspan class="name">public</tspan></text>
-  <path class="line" d="M36 571.5 H46"/>
-  <polygon class="head" points="56,571.5 46,566.5 46,576.5"/>
-  <text x="62" y="576"><tspan class="name">"Authorization"</tspan> added to Vary</text>
-  <text class="quiet" x="382" y="576" text-anchor="end">CVE-2026-35193</text>
+  <text x="40" y="436">the request has Authorization and Cache-Control lacks <tspan class="name">public</tspan></text>
+  <path class="line" d="M40 449.5 H50"/>
+  <polygon class="head" points="60,449.5 50,444.5 50,454.5"/>
+  <text x="66" y="454"><tspan class="name">"Authorization"</tspan> added to Vary</text>
+  <text class="quiet" x="608" y="454" text-anchor="end">CVE-2026-35193</text>
 
   <!-- the last test: stored below, otherwise out to the rail -->
-  <text x="36" y="606">a status of 200 and a timeout other than 0</text>
-  <path class="line" d="M48 611 V652.5"/>
-  <polygon class="head" points="48,662.5 43,652.5 53,652.5"/>
-  <text class="quiet" x="60" y="628">otherwise</text>
-  <path class="line" d="M48 634.5 H417.5"/>
+  <text x="40" y="484">a status of 200 and a timeout other than 0</text>
+  <path class="line" d="M115.5 492 V504.5"/>
+  <polygon class="head" points="115.5,514.5 110.5,504.5 120.5,504.5"/>
 
   <!-- the one way to be stored -->
-  <rect class="mark-box" x="26.5" y="662.5" width="180" height="36" rx="4"/>
-  <text x="40" y="685">the response is stored</text>
+  <rect class="mark-box" x="40.5" y="514.5" width="150" height="32" rx="4"/>
+  <text x="115.5" y="536" text-anchor="middle">the response is stored</text>
 
-  <!-- the ways out: each check that holds joins the rail, which ends in "returned unstored" -->
-  <path class="line" d="M395.5 219.5 H417.5 V740.5 H405.5"/>
-  <path class="line" d="M395.5 267.5 H417.5"/>
-  <path class="line" d="M395.5 315.5 H417.5"/>
-  <path class="line" d="M395.5 363.5 H417.5"/>
-  <path class="line" d="M395.5 411.5 H417.5"/>
-  <path class="line" d="M395.5 459.5 H417.5"/>
-  <polygon class="head" points="395.5,740.5 405.5,735.5 405.5,745.5"/>
+  <!-- the ways out: each check that holds, and a response that fails the last test, join the rail -->
+  <path class="line" d="M620.5 185.5 H711.5 V504.5"/>
+  <path class="line" d="M620.5 215.5 H711.5"/>
+  <path class="line" d="M620.5 245.5 H711.5"/>
+  <path class="line" d="M620.5 275.5 H711.5"/>
+  <path class="line" d="M620.5 305.5 H711.5"/>
+  <path class="line" d="M620.5 353.5 H711.5"/>
+  <path class="line" d="M620.5 479.5 H711.5"/>
+  <text class="quiet" x="666" y="473" text-anchor="middle">otherwise</text>
+  <polygon class="head" points="711.5,514.5 706.5,504.5 716.5,504.5"/>
 
-  <rect class="ground" x="263.5" y="722.5" width="132" height="36" rx="4"/>
-  <text x="329.5" y="745" text-anchor="middle">returned unstored</text>
+  <rect class="ground" x="636.5" y="514.5" width="150" height="32" rx="4"/>
+  <text x="711.5" y="536" text-anchor="middle">returned unstored</text>
 </svg>

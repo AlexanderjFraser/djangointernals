@@ -55,7 +55,7 @@ Beside the years, a bracket for each span this chapter tells:
   The sections by part of the book: from 5.0 to this commit
 ```
 
-*Every final release but the patch releases, a row a year with its months from January to December. The long-term support releases are boxed, this commit is the accented mark, what is still to come is dashed, and the brackets on the right show what each part of this chapter tells.*
+*Every final release but the patch releases, two years to a row, each with its months from January to December. The long-term support releases are boxed, this commit is the accented mark, what is still to come is dashed, and the brackets on the right show what each part of this chapter tells.*
 
 ## What changed, in outline
 

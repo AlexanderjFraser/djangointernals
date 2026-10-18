@@ -54,26 +54,19 @@ The thing to see in the figure is that nothing on the way in reaches the databas
 
 ```text figure=the-way-in
 the request comes in from the left, across the edge of every layer to the centre; each middleware a box inside the one before it in settings.MIDDLEWARE
-under each name, what its process_request leaves on the request or checks
+beside each name, what its process_request leaves on the request or checks
 
-SecurityMiddleware
-checks SECURE_SSL_REDIRECT: false by default, so no redirect to HTTPS
-  SessionMiddleware
-  leaves HttpRequest.session: a session store, not loaded
-    CommonMiddleware
-    checks the user agent, and the "Host" header against ALLOWED_HOSTS
-      CsrfViewMiddleware
-      leaves META["CSRF_COOKIE"]: the cookie's secret, if the request has one
-        AuthenticationMiddleware
-        leaves HttpRequest.user: a user not looked up
-          MessageMiddleware
-          leaves HttpRequest._messages: a FallbackStorage
-            XFrameOptionsMiddleware
-            nothing: it has no process_request
+SecurityMiddleware                   checks SECURE_SSL_REDIRECT: false by default, so no redirect to HTTPS
+  SessionMiddleware                  leaves HttpRequest.session: a session store, not loaded
+    CommonMiddleware                 checks the user agent, and the "Host" header against ALLOWED_HOSTS
+      CsrfViewMiddleware             leaves META["CSRF_COOKIE"]: the cookie's secret, if the request has one
+        AuthenticationMiddleware     leaves HttpRequest.user: a user not looked up
+          MessageMiddleware          leaves HttpRequest._messages: a FallbackStorage
+            XFrameOptionsMiddleware  nothing: it has no process_request
               the centre, accented: BaseHandler._get_response, where the URL is resolved and the view called
 ```
 
-*The way in for this chapter's request. Each box is a middleware, drawn inside the one listed before it in the setting, so that the request crosses them from the outside in; under each name is what its `process_request` leaves on the request or checks. The accented box is the centre of the chain.*
+*The way in for this chapter's request. Each box is a middleware, drawn inside the one listed before it in the setting, so that the request crosses them from the outside in; beside each name is what its `process_request` leaves on the request or checks. The accented box is the centre of the chain.*
 
 **`SecurityMiddleware`** would answer this request, which is not secure, with a permanent redirect to HTTPS if `settings.SECURE_SSL_REDIRECT` were true, which by default it is not; its work is on the way out (`django/middleware/security.py:SecurityMiddleware.process_request`).
 

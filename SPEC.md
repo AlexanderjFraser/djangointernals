@@ -283,17 +283,22 @@ request  ->  A  ->  B  ->  C  ->  the view
   the classes (`box`, `ground`, `mark-box`, `line`, `dashed`, `mark-line`,
   `head`, `mark`, `name`, `quiet`, `strong`, `small`); a chapter may add
   its own in `pages/<chapter>/figures/figures.css`.
-- **It is legible where it stands.** One unit of the `viewBox` is one CSS
-  pixel. The text column is 646 pixels wide; a wider figure runs into the
-  margin, up to about 940. Type in a figure is 14 pixels, names 13. On a
-  phone a figure keeps three quarters of its width and scrolls past it,
-  and what scrolls out of sight is lost, from a map as much as from a
-  comparison: so a figure is drawn at most about 460 wide, narrow and
-  tall, with what would stand side by side set one above the other, a
-  column of notes under what it notes, a row of columns turned into
-  steps.
+- **It is drawn for a desktop's screen**, where the book is mainly read; a
+  phone is served as well as that allows, and never at the desktop's
+  cost. One unit of the `viewBox` is one CSS pixel, and type in a figure
+  is 14 pixels, names 13. The text column is 646 pixels wide, and a
+  figure whose content runs across may run into the margin, to at most
+  860: in a window narrower than 1280 there is no margin, and the figure
+  is shrunk to the column, which keeps 860 at three quarters of its size.
+  It is seen whole with its caption on a laptop's screen, so it is at
+  most about 600 tall and never over 640. It is composed landscape: what
+  stands side by side stays side by side, a note stands beside what it
+  notes, and a sequence too long for the height turns a corner rather
+  than running down the page. On a phone a figure keeps three quarters of
+  its width and scrolls past it.
 - **It is looked at rendered**, in a light palette and a dark one, at a
-  desktop's width and a phone's, before its page is published.
+  desktop's width first and then a phone's, before its page is
+  published.
 
 ## Tables
 

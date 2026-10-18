@@ -1,52 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 420 627">
-  <!-- the line, and beyond it the database -->
-  <path class="line" d="M329.5 0 V627"/>
-  <text class="strong" x="341" y="14">the database</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 778 477">
+  <!-- the line, and beyond it the database; it runs past both moments -->
+  <path class="line" d="M684.5 0 V477"/>
+  <text class="strong" x="697" y="22">the database</text>
 
   <!-- the view's moment: two clones, and nothing sent -->
-  <text class="strong" x="0" y="14">the view builds the queryset</text>
-  <path class="line" d="M0.5 24 H240.5"/>
-  <rect class="box" x="0.5" y="36.5" width="240" height="46" rx="4"/>
-  <text x="12" y="56">a clone; its <tspan class="name">Query</tspan> gets the condition</text>
-  <text class="name quiet" x="12" y="73">QuerySet.filter</text>
-  <rect class="box" x="0.5" y="94.5" width="240" height="46" rx="4"/>
-  <text x="12" y="114">a clone; its <tspan class="name">Query</tspan> gets the ordering</text>
-  <text class="name quiet" x="12" y="131">QuerySet.order_by</text>
-  <text class="quiet" x="0" y="164">the queryset is handed to the template</text>
+  <rect class="ground" x="0.5" y="0.5" width="594" height="152" rx="4"/>
+  <text class="strong" x="12" y="22">the view builds the queryset</text>
+  <rect class="box" x="12.5" y="36.5" width="570" height="32" rx="4"/>
+  <text x="24" y="57">a clone; its <tspan class="name">Query</tspan> gets the condition</text>
+  <text class="name quiet" x="570" y="57" text-anchor="end">QuerySet.filter</text>
+  <rect class="box" x="12.5" y="80.5" width="570" height="32" rx="4"/>
+  <text x="24" y="101">a clone; its <tspan class="name">Query</tspan> gets the ordering</text>
+  <text class="name quiet" x="570" y="101" text-anchor="end">QuerySet.order_by</text>
+  <text class="quiet" x="12" y="136">the queryset is handed to the template</text>
 
   <!-- the template's moment: the loop asks for the rows, and the query runs -->
-  <text class="strong" x="0" y="200">the template's loop runs it</text>
-  <path class="line" d="M0.5 210 H240.5"/>
-  <rect class="box" x="0.5" y="222.5" width="240" height="63" rx="4"/>
-  <text x="12" y="242">the loop takes the queryset's length</text>
-  <text class="quiet" x="12" y="259"><tspan class="name">QuerySet.__len__</tspan> calls</text>
-  <text class="name quiet" x="12" y="276">QuerySet._fetch_all</text>
-  <rect class="box" x="0.5" y="297.5" width="240" height="63" rx="4"/>
-  <text x="12" y="317">compile: the <tspan class="name">Query</tspan> becomes</text>
-  <text x="12" y="334">one SELECT and its parameters</text>
-  <text class="name quiet" x="12" y="351">SQLCompiler.as_sql</text>
-  <rect class="box" x="0.5" y="372.5" width="240" height="46" rx="4"/>
-  <text x="12" y="392">connect</text>
-  <text class="name quiet" x="12" y="409">BaseDatabaseWrapper.connect</text>
-  <rect class="box" x="0.5" y="430.5" width="240" height="46" rx="4"/>
-  <text x="12" y="450">execute, then fetch</text>
-  <text class="name quiet" x="12" y="467">CursorWrapper.execute</text>
-  <rect class="box" x="0.5" y="488.5" width="240" height="63" rx="4"/>
-  <text x="12" y="508">rows: each row becomes an instance,</text>
-  <text x="12" y="525">kept in the cache</text>
-  <text class="name quiet" x="12" y="542">Model.from_db</text>
-  <rect class="box" x="0.5" y="563.5" width="240" height="63" rx="4"/>
-  <text x="12" y="583">the loop iterates:</text>
-  <text x="12" y="600">the cache is already filled</text>
-  <text class="name quiet" x="12" y="617">QuerySet.__iter__</text>
+  <rect class="ground" x="0.5" y="176.5" width="594" height="300" rx="4"/>
+  <text class="strong" x="12" y="198">the template's loop runs it</text>
+  <rect class="box" x="12.5" y="212.5" width="570" height="32" rx="4"/>
+  <text x="24" y="233">the loop takes the queryset's length</text>
+  <text class="quiet" x="570" y="233" text-anchor="end"><tspan class="name">QuerySet.__len__</tspan> calls <tspan class="name">QuerySet._fetch_all</tspan></text>
+  <rect class="box" x="12.5" y="256.5" width="570" height="32" rx="4"/>
+  <text x="24" y="277">compile: the <tspan class="name">Query</tspan> becomes one SELECT and its parameters</text>
+  <text class="name quiet" x="570" y="277" text-anchor="end">SQLCompiler.as_sql</text>
+  <rect class="box" x="12.5" y="300.5" width="570" height="32" rx="4"/>
+  <text x="24" y="321">connect</text>
+  <text class="name quiet" x="570" y="321" text-anchor="end">BaseDatabaseWrapper.connect</text>
+  <rect class="box" x="12.5" y="344.5" width="570" height="32" rx="4"/>
+  <text x="24" y="365">execute, then fetch</text>
+  <text class="name quiet" x="570" y="365" text-anchor="end">CursorWrapper.execute</text>
+  <rect class="box" x="12.5" y="388.5" width="570" height="32" rx="4"/>
+  <text x="24" y="409">rows: each row becomes an instance, kept in the cache</text>
+  <text class="name quiet" x="570" y="409" text-anchor="end">Model.from_db</text>
+  <rect class="box" x="12.5" y="432.5" width="570" height="32" rx="4"/>
+  <text x="24" y="453">the loop iterates: the cache is already filled</text>
+  <text class="name quiet" x="570" y="453" text-anchor="end">QuerySet.__iter__</text>
 
   <!-- the calls that reach the database, in the accent: the connect, and the execute with the rows it brings back -->
-  <path class="mark-line" d="M241 396 H365"/>
-  <polygon class="head mark" points="375,396 365,391 365,401"/>
-  <text class="quiet" x="252" y="437">the SELECT</text>
-  <path class="mark-line" d="M241 444 H365"/>
-  <polygon class="head mark" points="375,444 365,439 365,449"/>
-  <path class="mark-line" d="M375 464 H251"/>
-  <polygon class="head mark" points="241,464 251,459 251,469"/>
-  <text class="quiet" x="252" y="483">the rows</text>
+  <path class="mark-line" d="M583 316.5 H710.5"/>
+  <polygon class="head mark" points="720.5,316.5 710.5,311.5 710.5,321.5"/>
+  <text class="quiet" x="607" y="346">the SELECT</text>
+  <path class="mark-line" d="M583 354.5 H710.5"/>
+  <polygon class="head mark" points="720.5,354.5 710.5,349.5 710.5,359.5"/>
+  <path class="mark-line" d="M720.5 366.5 H593"/>
+  <polygon class="head mark" points="583,366.5 593,361.5 593,371.5"/>
+  <text class="quiet" x="607" y="384">the rows</text>
 </svg>

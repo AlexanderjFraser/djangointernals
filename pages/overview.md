@@ -44,7 +44,7 @@ A request passes through Django in stages, each in one part of the framework. Th
 
 ```text figure=the-path
 across the top, once, before the first request: the settings, the app registry, the handler and its middleware chain
-below, time running down: the server on the left, outside Django; an indent for each part of Django it crosses, each further in than the last; a box a station
+below, time running down: the server on the left, outside Django; a column for each part of Django it crosses; a box a station
 
 the server calls the handler ->
   the handler and the middleware   WSGIHandler.__call__: request_started; a WSGIRequest
@@ -63,7 +63,7 @@ the server calls the handler ->
   the handler and the middleware   HttpResponseBase.close: request_finished; the connection is closed
 ```
 
-*The band at the top is the work of startup, done once; below it, time running down, each indent is one part of the framework, each box a station of the request, and an arrow the request passing from one station to the next. The accented box is the moment the query runs: in the template's loop, not where the view built it.*
+*The band at the top is the work of startup, done once; below it, time running down, each column is one part of the framework, each box a station of the request, and an arrow the request passing from one station to the next. The accented box is the moment the query runs: in the template's loop, not where the view built it.*
 
 **The process is prepared once.** A production WSGI server imports the project's `wsgi.py`, which calls `get_wsgi_application`: the settings are loaded, every installed application is imported and its models are registered in the app registry, and the handler is made, which builds the middleware chain from `settings.MIDDLEWARE` (`django/core/wsgi.py:get_wsgi_application`). None of it runs again: [Before the first request](overview/startup.md).
 

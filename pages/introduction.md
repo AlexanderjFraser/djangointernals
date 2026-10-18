@@ -80,7 +80,7 @@ on top, built on the rest:
         staticfiles and the others, each an application like the project's own
     the developer's tools: the management commands, the test framework
 
-the request side, in down the left and out up the right:
+the request side, left to right:
     handler -> middleware, the way in -> resolver -> view -> middleware, the way out -> response
 
 beneath the view, which uses them:
