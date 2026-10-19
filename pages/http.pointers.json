@@ -10,7 +10,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest",
    "line": 38,
-   "sentence": "It makes a `WSGIRequest` or an `ASGIRequest`, a subclass that knows how to fill those attributes from what its kind of server passes (`django/http/request.py:HttpRequest`, `django/core/handlers/wsgi.py:WSGIRequest`, `django/core/handlers/asgi.py:ASGIRequest`).",
+   "sentence": "A handler never makes a plain `HttpRequest`: it makes a `WSGIRequest` or an `ASGIRequest`, a subclass that knows how to fill those attributes from what its kind of server passes (`django/http/request.py:HttpRequest`, `django/core/handlers/wsgi.py:WSGIRequest`, `django/core/handlers/asgi.py:ASGIRequest`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest",
    "line": 38,
-   "sentence": "It makes a `WSGIRequest` or an `ASGIRequest`, a subclass that knows how to fill those attributes from what its kind of server passes (`django/http/request.py:HttpRequest`, `django/core/handlers/wsgi.py:WSGIRequest`, `django/core/handlers/asgi.py:ASGIRequest`).",
+   "sentence": "A handler never makes a plain `HttpRequest`: it makes a `WSGIRequest` or an `ASGIRequest`, a subclass that knows how to fill those attributes from what its kind of server passes (`django/http/request.py:HttpRequest`, `django/core/handlers/wsgi.py:WSGIRequest`, `django/core/handlers/asgi.py:ASGIRequest`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest",
@@ -38,7 +38,7 @@
   {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest",
    "line": 38,
-   "sentence": "It makes a `WSGIRequest` or an `ASGIRequest`, a subclass that knows how to fill those attributes from what its kind of server passes (`django/http/request.py:HttpRequest`, `django/core/handlers/wsgi.py:WSGIRequest`, `django/core/handlers/asgi.py:ASGIRequest`).",
+   "sentence": "A handler never makes a plain `HttpRequest`: it makes a `WSGIRequest` or an `ASGIRequest`, a subclass that knows how to fill those attributes from what its kind of server passes (`django/http/request.py:HttpRequest`, `django/core/handlers/wsgi.py:WSGIRequest`, `django/core/handlers/asgi.py:ASGIRequest`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/http/request.py:QueryDict",
    "line": 40,
-   "sentence": "The ones a `WSGIRequest` or an `ASGIRequest` makes cannot be changed (`django/http/request.py:QueryDict`).",
+   "sentence": "The ones a `WSGIRequest` or an `ASGIRequest` makes are immutable, and refuse an assignment ([`QueryDict`](http/querydict.md)) (`django/http/request.py:QueryDict`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "QueryDict",
@@ -66,7 +66,7 @@
   {
    "pointer": "django/http/response.py:HttpResponseBase",
    "line": 42,
-   "sentence": "The redirects, `JsonResponse` and the classes named for a status code are subclasses of `HttpResponse`; `FileResponse` is a subclass of `StreamingHttpResponse` (`django/http/response.py:HttpResponseBase`, `django/http/response.py:HttpResponse`, `django/http/response.py:StreamingHttpResponse`).",
+   "sentence": "Every other response class is a subclass of one of these two: the redirects, `JsonResponse` and the classes named for a status code of `HttpResponse`, `FileResponse` of `StreamingHttpResponse` ([The response object](http/response.md)) (`django/http/response.py:HttpResponseBase`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "HttpResponseBase",
@@ -78,37 +78,38 @@
    "fingerprint": "904b6a312804a5b7"
   },
   {
-   "pointer": "django/http/response.py:HttpResponse",
-   "line": 42,
-   "sentence": "The redirects, `JsonResponse` and the classes named for a status code are subclasses of `HttpResponse`; `FileResponse` is a subclass of `StreamingHttpResponse` (`django/http/response.py:HttpResponseBase`, `django/http/response.py:HttpResponse`, `django/http/response.py:StreamingHttpResponse`).",
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.GET",
+   "line": 95,
+   "sentence": "The query string was parsed with the request's encoding, `None` here, which means the default charset, and the form with UTF-8, the one encoding an ordinary form is read in ([`QueryDict`](http/querydict.md)) (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`).",
    "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "HttpResponse",
-   "kind": "class",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.GET",
+   "kind": "function",
    "lines": [
-    377,
-    447
+    85,
+    89
    ],
-   "fingerprint": "7eac107f2af2c35d"
-  },
-  {
-   "pointer": "django/http/response.py:StreamingHttpResponse",
-   "line": 42,
-   "sentence": "The redirects, `JsonResponse` and the classes named for a status code are subclasses of `HttpResponse`; `FileResponse` is a subclass of `StreamingHttpResponse` (`django/http/response.py:HttpResponseBase`, `django/http/response.py:HttpResponse`, `django/http/response.py:StreamingHttpResponse`).",
-   "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "StreamingHttpResponse",
-   "kind": "class",
-   "lines": [
-    450,
-    554
-   ],
-   "fingerprint": "0f8fe54ef7d69f55"
+   "at": 86,
+   "fingerprint": "44516bf042f7a841"
   },
   {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
-   "line": 94,
-   "sentence": "The later reads of `FILES` and `body` found everything already there (`django/http/request.py:HttpRequest._load_post_and_files`, `django/http/request.py:HttpRequest.body`).",
+   "line": 95,
+   "sentence": "The query string was parsed with the request's encoding, `None` here, which means the default charset, and the form with UTF-8, the one encoding an ordinary form is read in ([`QueryDict`](http/querydict.md)) (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 99,
+   "sentence": "A view may read `body`, read the stream itself as a file, or read `POST` and `FILES`, and some of these can follow one another and some cannot ([The body: `body`, `POST` and `FILES`](http/body.md)) (`django/http/request.py:HttpRequest._load_post_and_files`, `django/http/request.py:HttpRequest.body`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._load_post_and_files",
@@ -121,8 +122,8 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.body",
-   "line": 94,
-   "sentence": "The later reads of `FILES` and `body` found everything already there (`django/http/request.py:HttpRequest._load_post_and_files`, `django/http/request.py:HttpRequest.body`).",
+   "line": 99,
+   "sentence": "A view may read `body`, read the stream itself as a file, or read `POST` and `FILES`, and some of these can follow one another and some cannot ([The body: `body`, `POST` and `FILES`](http/body.md)) (`django/http/request.py:HttpRequest._load_post_and_files`, `django/http/request.py:HttpRequest.body`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.body",
@@ -135,9 +136,79 @@
    "fingerprint": "a66508238fbf4544"
   },
   {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 101,
+   "sentence": "`MultiPartParser` takes the body from the stream in pieces ([Multipart parsing: `MultiPartParser`](http/multipart.md)) and hands each file's pieces to a chain of **upload handlers**, which decide where the file goes; the two installed by default keep the files of a small request in memory and write those of a large one to temporary files on disk ([Upload handlers and uploaded files](http/uploads.md)) (`django/http/multipartparser.py:MultiPartParser._parse`, `django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input",
+   "line": 101,
+   "sentence": "`MultiPartParser` takes the body from the stream in pieces ([Multipart parsing: `MultiPartParser`](http/multipart.md)) and hands each file's pieces to a chain of **upload handlers**, which decide where the file goes; the two installed by default keep the files of a small request in memory and write those of a large one to temporary files on disk ([Upload handlers and uploaded files](http/uploads.md)) (`django/http/multipartparser.py:MultiPartParser._parse`, `django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "MemoryFileUploadHandler.handle_raw_input",
+   "kind": "function",
+   "lines": [
+    199,
+    223
+   ],
+   "fingerprint": "7cc8fefef717d342"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 103,
+   "sentence": "A request over a limit raises a `SuspiciousOperation` at the moment the offending part is read, which may be deep inside a view, and raised inside the middleware chain the exception becomes a 400 response at the nearest boundary ([The body: `body`, `POST` and `FILES`](http/body.md#the-limits)) (`django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 125,
+   "sentence": "The cookie was not a header until the handler built the header list: it is kept in `HttpResponseBase.cookies`, a collection of its own ([Cookies](http/cookies.md)) (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
+   "line": 125,
+   "sentence": "Under ASGI the handler sends the response itself, as messages, and closes it itself ([The two entry points](handlers/entry.md)) (`django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.handle",
+   "kind": "function",
+   "lines": [
+    175,
+    218
+   ],
+   "fingerprint": "045a0e5289611a7b"
+  },
+  {
    "pointer": "django/http/response.py:HttpResponseBase.close",
-   "line": 144,
-   "sentence": "`HttpResponseBase.close` runs every closer registered on the response, one of which is the request's own `close`, added by the handler so that uploaded files are closed with it, and then sends the signal `request_finished` (`django/http/response.py:HttpResponseBase.close`, `django/http/request.py:HttpRequest.close`).",
+   "line": 125,
+   "sentence": "The server's `close` is the last call: `HttpResponseBase.close`, called on the `HttpResponse`, runs the closers registered on the response, among them the request's own `close`, which the handler added so that uploaded files are closed with it, and sends the signal `request_finished` ([Streaming and file responses](http/streaming.md#closing)) (`django/http/response.py:HttpResponseBase.close`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "HttpResponseBase.close",
@@ -147,20 +218,6 @@
     348
    ],
    "fingerprint": "7689c4f13ba32ef4"
-  },
-  {
-   "pointer": "django/http/request.py:HttpRequest.close",
-   "line": 144,
-   "sentence": "`HttpResponseBase.close` runs every closer registered on the response, one of which is the request's own `close`, added by the handler so that uploaded files are closed with it, and then sends the signal `request_finished` (`django/http/response.py:HttpResponseBase.close`, `django/http/request.py:HttpRequest.close`).",
-   "tree": "django",
-   "path": "django/http/request.py",
-   "symbol": "HttpRequest.close",
-   "kind": "function",
-   "lines": [
-    494,
-    497
-   ],
-   "fingerprint": "877f67cb3b5d40f9"
   }
  ]
 }

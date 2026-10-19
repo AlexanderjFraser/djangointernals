@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `File` is the type Django uses for a file, whatever holds its bytes: it wraps a Python file object and gives it a name, a size, and reading in chunks and by lines; `ContentFile` does the same for bytes or a string held in memory. Beside them in `django.core.files` stand `ImageFile` and `get_image_dimensions`, `validate_file_name`, and the helpers that lock files, move them and make temporary ones.
 
-A file reaches Django in many forms: an upload in memory or in a temporary file, a file opened from disk, bytes just made, a name in a storage. A storage or a file field needs the same of each: a name, a size, and the bytes in pieces small enough that a large file is never held whole. `File` is that common shape. The uploaded files are subclasses of it ([Multipart parsing and upload handlers](../http/uploads.md)), and so is a file field's `FieldFile` ([File fields](../models/files.md)) (`django/core/files/base.py:File`).
+A file reaches Django in many forms: an upload in memory or in a temporary file, a file opened from disk, bytes just made, a name in a storage. A storage or a file field needs the same of each: a name, a size, and the bytes in pieces small enough that a large file is never held whole. `File` is that common shape. The uploaded files are subclasses of it ([Upload handlers and uploaded files](../http/uploads.md#uploadedfile-and-its-subclasses)), and so is a file field's `FieldFile` ([File fields](../models/files.md)) (`django/core/files/base.py:File`).
 
 ## What a `File` wraps
 
@@ -67,6 +67,6 @@ The module `django.core.files.locks` gives `lock`, with `LOCK_EX` or `LOCK_SH`, 
 
 `file_move_safe` moves a file: nothing if the two paths are one file, `FileExistsError` if the destination exists and overwriting is not allowed, else a rename. When the rename fails, as it does across file systems, it copies in chunks into a destination opened exclusively, unless overwriting is allowed, and locked, then gives it the source's permissions and times and removes the source (`django/core/files/move.py:file_move_safe`). `FileSystemStorage` moves an upload's temporary file into place with it, and `FileBasedCache` each entry it sets.
 
-`NamedTemporaryFile` in `django.core.files.temp` is the standard library's everywhere but Windows, where it is a class of Django's own, made with mkstemp and deleting its file when it is closed (`django/core/files/temp.py`). An upload kept on disk is written into one, a `TemporaryUploadedFile` ([Multipart parsing and upload handlers](../http/uploads.md)).
+`NamedTemporaryFile` in `django.core.files.temp` is the standard library's everywhere but Windows, where it is a class of Django's own, made with mkstemp and deleting its file when it is closed (`django/core/files/temp.py`). An upload kept on disk is written into one, a `TemporaryUploadedFile` ([Upload handlers and uploaded files](../http/uploads.md#the-temporary-file)).
 
 > **Why.** The module's docstring: on Windows the standard library's class opens the file with the flag O_TEMPORARY, and the file cannot then be opened again by its name without the same flag; Django's can be reopened in the same process.

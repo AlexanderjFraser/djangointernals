@@ -48,7 +48,7 @@ post.setdefault("pilot", "Banks")      'Cook'
 
 `ImmutableList` is a tuple that answers an attempt to change it as a list with `AttributeError` and the message its maker passes to `ImmutableList.__new__` as the warning argument, or a default one. `ImmutableList.complain`, which raises it, is bound to the name of every method by which a list changes, those behind item assignment, deletion, `+=` and `*=` included, except `list.clear`, which fails with Python's own message (`django/utils/datastructures.py:ImmutableList`). A plain tuple refuses most of these with Python's errors, and lets `+=` and `*=` bind the name to a new tuple, where an `ImmutableList` raises.
 
-`HttpRequest.parse_file_upload` turns the request's upload handlers into one as parsing begins ([Multipart parsing and upload handlers](../http/uploads.md)). A model's options hand out the lists of fields they cache as one, with a message that names the list and says to make a copy first ([The options: what a model keeps as `_meta`](../models/options.md)) (`django/db/models/options.py:make_immutable_fields_list`).
+`HttpRequest.parse_file_upload` turns the request's upload handlers into one as parsing begins ([Upload handlers and uploaded files](../http/uploads.md#changing-the-handlers)). A model's options hand out the lists of fields they cache as one, with a message that names the list and says to make a copy first ([The options: what a model keeps as `_meta`](../models/options.md)) (`django/db/models/options.py:make_immutable_fields_list`).
 
 ## `CaseInsensitiveMapping`
 

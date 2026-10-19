@@ -8,6 +8,34 @@
  "document": "body.md",
  "pointers": [
   {
+   "pointer": "django/core/handlers/wsgi.py:LimitedStream",
+   "line": 13,
+   "sentence": "A `WSGIRequest` wraps the server's input in a `LimitedStream`, which gives out at most the number of bytes the `Content-Length` header declared, and cannot seek: it does not override `io.IOBase.seekable`, which returns `False` (`django/core/handlers/wsgi.py:LimitedStream`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "LimitedStream",
+   "kind": "class",
+   "lines": [
+    15,
+    53
+   ],
+   "fingerprint": "94b9eaf646cd39c0"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 13,
+   "sentence": "That file can seek, and no `LimitedStream` stands in front of it, so a declared length does not cut the body short ([Making the request: `WSGIRequest` and `ASGIRequest`](request.md)) (`django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
    "pointer": "django/http/request.py:HttpRequest.read",
    "line": 15,
    "sentence": "An `OSError` from the stream is raised again as `UnreadablePostError`, which is an `OSError` too, so that code which reads a form can tell a failed read from any other failure (`django/http/request.py:HttpRequest.read`, `django/http/request.py:UnreadablePostError`).",
@@ -51,8 +79,37 @@
    "fingerprint": "a66508238fbf4544"
   },
   {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest._get_post",
+   "line": 30,
+   "sentence": "Each is a property that looks for its stored value, `_post` or `_files`, and when it is missing calls `HttpRequest._load_post_and_files`, which sets both before it returns (`django/core/handlers/wsgi.py:WSGIRequest._get_post`, `django/core/handlers/wsgi.py:WSGIRequest.FILES`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest._get_post",
+   "kind": "function",
+   "lines": [
+    91,
+    94
+   ],
+   "fingerprint": "eb51ea8806268d2f"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.FILES",
+   "line": 30,
+   "sentence": "Each is a property that looks for its stored value, `_post` or `_files`, and when it is missing calls `HttpRequest._load_post_and_files`, which sets both before it returns (`django/core/handlers/wsgi.py:WSGIRequest._get_post`, `django/core/handlers/wsgi.py:WSGIRequest.FILES`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.FILES",
+   "kind": "function",
+   "lines": [
+    104,
+    108
+   ],
+   "at": 105,
+   "fingerprint": "b3e4c62120890240"
+  },
+  {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
-   "line": 31,
+   "line": 30,
    "sentence": "What that method does depends on the method and the content type, tested in this order (`django/http/request.py:HttpRequest._load_post_and_files`):",
    "tree": "django",
    "path": "django/http/request.py",
@@ -65,23 +122,37 @@
    "fingerprint": "4704737f25783bd6"
   },
   {
-   "pointer": "django/http/request.py:HttpRequest._check_data_too_big",
-   "line": 110,
-   "sentence": "Everything about a multipart form is counted by the parser as it goes, in `MultiPartParser._parse` (`django/http/request.py:HttpRequest._check_data_too_big`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 46,
+   "sentence": "A form of the ordinary kind must be UTF-8: the comment beside the check says that by RFC 1866 this content type has no charset and should always be treated as UTF-8 (`django/http/request.py:HttpRequest._load_post_and_files`).",
    "tree": "django",
    "path": "django/http/request.py",
-   "symbol": "HttpRequest._check_data_too_big",
+   "symbol": "HttpRequest._load_post_and_files",
    "kind": "function",
    "lines": [
-    436,
-    442
+    448,
+    492
    ],
-   "fingerprint": "7449cb278698c7a5"
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser.__init__",
+   "line": 48,
+   "sentence": "The parser reads the `Content-Length` header itself, and takes one that is missing, zero or not a number for an empty form, without looking at the stream (`django/http/multipartparser.py:MultiPartParser.__init__`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser.__init__",
+   "kind": "function",
+   "lines": [
+    58,
+    115
+   ],
+   "fingerprint": "51c8baa2f0bd857b"
   },
   {
    "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
-   "line": 110,
-   "sentence": "Everything about a multipart form is counted by the parser as it goes, in `MultiPartParser._parse` (`django/http/request.py:HttpRequest._check_data_too_big`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "line": 48,
+   "sentence": "The parser reads the `Content-Length` header itself, and takes one that is missing, zero or not a number for an empty form, without looking at the stream (`django/http/multipartparser.py:MultiPartParser.__init__`, `django/http/multipartparser.py:MultiPartParser._parse`).",
    "tree": "django",
    "path": "django/http/multipartparser.py",
    "symbol": "MultiPartParser._parse",
@@ -93,9 +164,121 @@
    "fingerprint": "f8b9b47b9d0bccd2"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 97,
+   "sentence": "A middleware that reads a few bytes of a request to inspect it leaves every view behind it with an empty form, and no exception says why: `_load_post_and_files` finds `_read_started` set and no kept body, and stores an empty `POST` and `FILES` (`django/http/request.py:HttpRequest._load_post_and_files`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._check_data_too_big",
+   "line": 111,
+   "sentence": "In a multipart form all three are checked by the parser as it goes, in `MultiPartParser._parse` (`django/http/request.py:HttpRequest._check_data_too_big`, `django/http/request.py:QueryDict.__init__`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._check_data_too_big",
+   "kind": "function",
+   "lines": [
+    436,
+    442
+   ],
+   "fingerprint": "7449cb278698c7a5"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict.__init__",
+   "line": 111,
+   "sentence": "In a multipart form all three are checked by the parser as it goes, in `MultiPartParser._parse` (`django/http/request.py:HttpRequest._check_data_too_big`, `django/http/request.py:QueryDict.__init__`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict.__init__",
+   "kind": "function",
+   "lines": [
+    599,
+    628
+   ],
+   "fingerprint": "e42e36748c604427"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 111,
+   "sentence": "In a multipart form all three are checked by the parser as it goes, in `MultiPartParser._parse` (`django/http/request.py:HttpRequest._check_data_too_big`, `django/http/request.py:QueryDict.__init__`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
+   "line": 113,
+   "sentence": "None of them limits the size of an uploaded file, unless the body is read through `body`: the parser refuses a field of 3,000,000 bytes with `RequestDataTooBig`, but counts no byte of a file, and nothing else in `django.http` limits how large a multipart request read through `POST` may be (`django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/multipartparser.py",
+   "symbol": "MultiPartParser._parse",
+   "kind": "function",
+   "lines": [
+    133,
+    371
+   ],
+   "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "docs/releases/1.10.txt",
+   "line": 115,
+   "sentence": "That release added the first two settings, to \"help mitigate denial-of-service attacks via large requests\", leaving file uploads out of the count, and warned that an application receiving unusually large form posts might need to tune them (`docs/releases/1.10.txt`).",
+   "tree": "django",
+   "path": "docs/releases/1.10.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1383
+   ],
+   "fingerprint": "d491274bfc61d8d9"
+  },
+  {
+   "pointer": "docs/releases/4.1.7.txt",
+   "line": 115,
+   "sentence": "The number of files followed in February 2023: certain inputs to multipart forms could exhaust open files or memory (CVE-2023-24580), and the security releases 4.1.7, 4.0.10 and 3.2.18 added `settings.DATA_UPLOAD_MAX_NUMBER_FILES` (`docs/releases/4.1.7.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.1.7.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    24
+   ],
+   "fingerprint": "9e6482f6e752619a"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_token",
+   "line": 117,
+   "sentence": "Because the limits are enforced when the data is read, the exception is raised wherever that happens: in a view, or earlier, in the CSRF middleware's look at `POST` (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._check_token",
+   "kind": "function",
+   "lines": [
+    351,
+    401
+   ],
+   "fingerprint": "b5d057f8cd09d712"
+  },
+  {
    "pointer": "django/http/request.py:HttpRequest._mark_post_parse_error",
-   "line": 143,
-   "sentence": "`response_for_exception` calls it for these three exceptions, and `_load_post_and_files` calls it itself before it lets a `MultiPartParserError` or a `TooManyFilesSent` out, which is why the last request above shows it twice (`django/http/request.py:HttpRequest._mark_post_parse_error`, `django/core/handlers/exception.py:response_for_exception`).",
+   "line": 153,
+   "sentence": "`response_for_exception` calls it for the three exceptions of the limits, and `_load_post_and_files` calls it first, itself, before it lets a `MultiPartParserError` or a `TooManyFilesSent` out (`django/http/request.py:HttpRequest._mark_post_parse_error`, `django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._mark_post_parse_error",
@@ -108,8 +291,8 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 143,
-   "sentence": "`response_for_exception` calls it for these three exceptions, and `_load_post_and_files` calls it itself before it lets a `MultiPartParserError` or a `TooManyFilesSent` out, which is why the last request above shows it twice (`django/http/request.py:HttpRequest._mark_post_parse_error`, `django/core/handlers/exception.py:response_for_exception`).",
+   "line": 153,
+   "sentence": "`response_for_exception` calls it for the three exceptions of the limits, and `_load_post_and_files` calls it first, itself, before it lets a `MultiPartParserError` or a `TooManyFilesSent` out (`django/http/request.py:HttpRequest._mark_post_parse_error`, `django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -121,60 +304,32 @@
    "fingerprint": "a7418f0de8e640e0"
   },
   {
-   "pointer": "django/core/handlers/asgi.py:ASGIHandler.read_body",
-   "line": 149,
-   "sentence": "There is no `LimitedStream`, so a declared length does not cut the body short (`django/core/handlers/asgi.py:ASGIHandler.read_body`).",
-   "tree": "django",
-   "path": "django/core/handlers/asgi.py",
-   "symbol": "ASGIHandler.read_body",
-   "kind": "function",
-   "lines": [
-    239,
-    267
-   ],
-   "fingerprint": "8c1984707322f62e"
-  },
-  {
-   "pointer": "django/http/multipartparser.py:MultiPartParser.__init__",
-   "line": 151,
-   "sentence": "The header decides one thing more, in the multipart parser, which reads it from `META` and treats a `Content-Length` that is missing, zero or not a number as an empty form, without looking at the stream (`django/http/multipartparser.py:MultiPartParser.__init__`).",
-   "tree": "django",
-   "path": "django/http/multipartparser.py",
-   "symbol": "MultiPartParser.__init__",
-   "kind": "function",
-   "lines": [
-    58,
-    115
-   ],
-   "fingerprint": "51c8baa2f0bd857b"
-  },
-  {
-   "pointer": "django/http/request.py:HttpRequest.close",
-   "line": 162,
-   "sentence": "The handler registers it on the response, and it runs when the response is closed ([Streaming and file responses](streaming.md#closing)) (`django/http/request.py:HttpRequest.close`, `django/core/handlers/asgi.py:ASGIRequest.close`).",
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 155,
+   "sentence": "The comments beside both calls give this reason (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/http/request.py",
-   "symbol": "HttpRequest.close",
+   "symbol": "HttpRequest._load_post_and_files",
    "kind": "function",
    "lines": [
-    494,
-    497
+    448,
+    492
    ],
-   "fingerprint": "877f67cb3b5d40f9"
+   "fingerprint": "4704737f25783bd6"
   },
   {
-   "pointer": "django/core/handlers/asgi.py:ASGIRequest.close",
-   "line": 162,
-   "sentence": "The handler registers it on the response, and it runs when the response is closed ([Streaming and file responses](streaming.md#closing)) (`django/http/request.py:HttpRequest.close`, `django/core/handlers/asgi.py:ASGIRequest.close`).",
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 155,
+   "sentence": "The comments beside both calls give this reason (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
-   "path": "django/core/handlers/asgi.py",
-   "symbol": "ASGIRequest.close",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
    "kind": "function",
    "lines": [
-    145,
-    147
+    64,
+    160
    ],
-   "fingerprint": "48646373b12180c5"
+   "fingerprint": "a7418f0de8e640e0"
   }
  ]
 }

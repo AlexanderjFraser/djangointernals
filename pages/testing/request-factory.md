@@ -82,7 +82,7 @@ Beagle
 Content-Disposition: form-data; name="tonnage"
 ```
 
-An iterable that is not a `str`, bytes among them, gives a part for each item. A file-like value, one with a callable read method, is written by `encode_file` with its base name, or the key, and a content type: the one the object carries, else a guess from the name, else `"application/octet-stream"`. A key's value of `None` is refused with a `TypeError` asking whether an empty string or no value was meant (`django/test/client.py:encode_multipart`, `django/test/client.py:encode_file`); the parser's side is [Multipart parsing and upload handlers](../http/uploads.md).
+An iterable that is not a `str`, bytes among them, gives a part for each item. A file-like value, one with a callable read method, is written by `encode_file` with its base name, or the key, and a content type: the one the object carries, else a guess from the name, else `"application/octet-stream"`. A key's value of `None` is refused with a `TypeError` asking whether an empty string or no value was meant (`django/test/client.py:encode_multipart`, `django/test/client.py:encode_file`); the parser's side is [Multipart parsing: `MultiPartParser`](../http/multipart.md).
 
 ## `FakePayload`
 

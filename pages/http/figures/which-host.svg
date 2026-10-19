@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 786 470">
+  <!-- the two ladders' headings -->
+  <text class="strong" x="24" y="14">the host: <tspan class="name">HttpRequest.get_host</tspan></text>
+  <text class="strong" x="424" y="14">the scheme: <tspan class="name">HttpRequest.scheme</tspan></text>
+
+  <!-- the host's ladder: three stations, each with its condition, one under another -->
+  <rect class="mark-box" x="24.5" y="32.5" width="360" height="68" rx="4"/>
+  <text class="name strong" x="36.5" y="53.5">X-Forwarded-Host</text>
+  <text x="36.5" y="71.5">if <tspan class="name">USE_X_FORWARDED_HOST</tspan> is true</text>
+  <text x="36.5" y="89.5">and the request has the header</text>
+
+  <path class="line" d="M204.5 100.5 V126.5"/>
+  <polygon class="head" points="204.5,136.5 199.5,126.5 209.5,126.5"/>
+  <text class="quiet" x="214" y="123">else</text>
+
+  <rect class="mark-box" x="24.5" y="136.5" width="360" height="50" rx="4"/>
+  <text class="name strong" x="36.5" y="157.5">Host</text>
+  <text x="36.5" y="175.5">if the request has the header</text>
+
+  <path class="line" d="M204.5 186.5 V212.5"/>
+  <polygon class="head" points="204.5,222.5 199.5,212.5 209.5,212.5"/>
+  <text class="quiet" x="214" y="209">else</text>
+
+  <rect class="box" x="24.5" y="222.5" width="360" height="68" rx="4"/>
+  <text class="name strong" x="36.5" y="243.5">SERVER_NAME</text>
+  <text x="36.5" y="261.5">with the port added when it is not</text>
+  <text x="36.5" y="279.5">the scheme's usual one</text>
+
+  <!-- whichever station gives the value, the value goes on to the check -->
+  <path class="line" d="M24.5 66.5 H4.5 V357.5 H14.5"/>
+  <path class="line" d="M24.5 161.5 H4.5"/>
+  <path class="line" d="M24.5 256.5 H4.5"/>
+  <polygon class="head" points="24.5,357.5 14.5,352.5 14.5,362.5"/>
+
+  <!-- the check -->
+  <rect class="ground" x="24.5" y="314.5" width="360" height="86" rx="4"/>
+  <text x="36.5" y="335.5">the name, in lower case, without its port or a trailing dot,</text>
+  <text x="36.5" y="353.5">compared with <tspan class="name">ALLOWED_HOSTS</tspan>,</text>
+  <text x="36.5" y="371.5">or, when that is empty and <tspan class="name">DEBUG</tspan> is true,</text>
+  <text x="36.5" y="389.5">with <tspan class="name">".localhost"</tspan>, <tspan class="name">"127.0.0.1"</tspan> and <tspan class="name">"[::1]"</tspan></text>
+
+  <!-- its two outcomes -->
+  <path class="line" d="M110.5 400.5 V426.5"/>
+  <polygon class="head" points="110.5,436.5 105.5,426.5 115.5,426.5"/>
+  <text class="quiet" x="120" y="423">it matches</text>
+  <rect class="ground" x="24.5" y="436.5" width="172" height="32" rx="4"/>
+  <text x="36.5" y="457.5">the value unchanged</text>
+
+  <path class="line" d="M298.5 400.5 V426.5"/>
+  <polygon class="head" points="298.5,436.5 293.5,426.5 303.5,426.5"/>
+  <text class="quiet" x="308" y="423">it does not</text>
+  <rect class="ground" x="212.5" y="436.5" width="172" height="32" rx="4"/>
+  <text class="name" x="224.5" y="457.5">DisallowedHost</text>
+
+  <!-- the scheme's ladder: two stations, the second on the row of the host's last -->
+  <rect class="mark-box" x="424.5" y="32.5" width="360" height="86" rx="4"/>
+  <text class="strong" x="436.5" y="53.5">the header <tspan class="name">SECURE_PROXY_SSL_HEADER</tspan> names</text>
+  <text x="436.5" y="71.5">if the setting is set and the request has the header:</text>
+  <text x="436.5" y="89.5"><tspan class="name">"https"</tspan> if its first item is the setting's value,</text>
+  <text x="436.5" y="107.5">and <tspan class="name">"http"</tspan> if it is not</text>
+
+  <path class="line" d="M604.5 118.5 V212.5"/>
+  <polygon class="head" points="604.5,222.5 599.5,212.5 609.5,212.5"/>
+  <text class="quiet" x="614" y="170">else</text>
+
+  <rect class="box" x="424.5" y="222.5" width="360" height="68" rx="4"/>
+  <text class="strong" x="436.5" y="243.5">what the server says</text>
+  <text x="436.5" y="261.5">the environ's <tspan class="name">"wsgi.url_scheme"</tspan>,</text>
+  <text x="436.5" y="279.5">or the scope's <tspan class="name">"scheme"</tspan></text>
+</svg>

@@ -130,6 +130,43 @@ The body's stream is read once: what can follow what
       request.read(8), then request.POST  ->  POST is {}
       request.POST, then request.encoding = "utf-8", then request.POST  ->  POST is {}
 
+One middleware installed, of the script's own, that reads eight bytes of the request as a file; the view behind it reads request.POST
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the middleware calls request.read(8)
+          HttpRequest.read(8)
+            LimitedStream.read(8)
+              -> 8 bytes
+          -> b'customer'
+        the view reads request.POST
+          WSGIRequest._get_post
+            HttpRequest._load_post_and_files
+              HttpRequest._mark_post_parse_error
+          -> <QueryDict: {}>
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    the server sends 2 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      HttpRequest.close
+      signal request_finished
+
+The encoding setter: what each read finds after it, on a multipart request and on a plain HttpRequest
+    a WSGIRequest for a multipart form of a field and a file, 251 bytes
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.POST  ->  <QueryDict: {'customer': ['Ada']}>
+      request.encoding = "utf-8"
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.POST  ->  <QueryDict: {}>
+      request.FILES  ->  <MultiValueDict: {}>
+    a plain HttpRequest, as a test or a script makes one
+      request = HttpRequest()
+      request.GET  ->  <QueryDict: {}>
+      request.encoding = "utf-8"
+      request.GET  ->  raises AttributeError: 'HttpRequest' object has no attribute 'GET'
+
 A multipart form with a small file: the body, 251 bytes, is under FILE_UPLOAD_MAX_MEMORY_SIZE (2621440)
     WSGIHandler.__call__(environ, start_response)
       signal request_started
@@ -306,6 +343,54 @@ Two multipart forms that are not what they seem
     the small form above, cut off after 204 of its 251 bytes, inside the file  ->  POST is {'customer': ['Ada']}, FILES is {}
     a form whose one part is a file input left empty: name="photo"; filename=""  ->  POST is {'photo': ['']}, FILES is {}
 
+SkipFile, raised by an upload handler of the script's own put first, for the second of two files
+    a fresh WSGIRequest for each statement below, for a form of 200462 bytes: the field customer, the file notes of 29 bytes, the file scan of 200,000 bytes, and the field city
+    request.upload_handlers.insert(0, Raises(SkipFile(), in_method="new_file", for_field="scan"))
+      request.POST  ->  <QueryDict: {'customer': ['Ada'], 'city': ['Leeds']}>
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.FILES["notes"].read()  ->  raises ValueError: I/O operation on closed file.
+      environ["wsgi.input"].tell()  ->  200462
+    request.upload_handlers.insert(0, Raises(SkipFile(), in_method="receive_data_chunk", for_field="scan"))
+      request.POST  ->  <QueryDict: {'customer': ['Ada'], 'city': ['Leeds']}>
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.FILES["notes"].read()  ->  b'Leave it with the neighbour.\n'
+      environ["wsgi.input"].tell()  ->  200462
+
+StopUpload, raised by an upload handler of the script's own put first, for the second of two files
+    a fresh WSGIRequest for each statement below, for a form of 200462 bytes: the field customer, the file notes of 29 bytes, the file scan of 200,000 bytes, and the field city
+    request.upload_handlers.insert(0, Raises(StopUpload(), in_method="new_file", for_field="scan"))
+      request.POST  ->  <QueryDict: {'customer': ['Ada']}>
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.FILES["notes"].read()  ->  raises ValueError: I/O operation on closed file.
+      environ["wsgi.input"].tell()  ->  200462
+    request.upload_handlers.insert(0, Raises(StopUpload(), in_method="receive_data_chunk", for_field="scan"))
+      request.POST  ->  <QueryDict: {'customer': ['Ada']}>
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.FILES["notes"].read()  ->  b'Leave it with the neighbour.\n'
+      environ["wsgi.input"].tell()  ->  200462
+    request.upload_handlers.insert(0, Raises(StopUpload(connection_reset=True), in_method="receive_data_chunk", for_field="scan"))
+      request.POST  ->  <QueryDict: {'customer': ['Ada']}>
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.FILES["notes"].read()  ->  b'Leave it with the neighbour.\n'
+      environ["wsgi.input"].tell()  ->  65536
+
+upload_handlers, assigned once FILES exists, and appended to by an upload handler while the form is parsed
+    a fresh WSGIRequest for the form of a field and a small file, 251 bytes
+      request.FILES  ->  <MultiValueDict: {'notes': [<InMemoryUploadedFile: notes.txt (text/plain)>]}>
+      request.upload_handlers = []
+        raises AttributeError: You cannot set the upload handlers after the upload has been processed.
+    another, for the same form
+      request.upload_handlers.insert(0, AppendsAHandler(request))
+      request.POST  ->  raises AttributeError: You cannot alter upload handlers after the upload has been processed.
+
+A file part whose file name sanitizes to nothing: filename="../", between two fields
+    a fresh WSGIRequest for a multipart form of 294 bytes: the field customer, the file part photo, and the field city
+      request.FILES
+        MultiPartParser.sanitize_file_name('../')
+          -> None
+      request.POST  ->  <QueryDict: {'customer': ['Ada'], 'city': ['Leeds']}>
+      request.FILES  ->  <MultiValueDict: {}>
+
 What is refused, by which exception, and what the client gets
     a query string of 1001 parameters; the view reads request.GET
       WSGIRequest.__init__(environ)
@@ -384,6 +469,51 @@ What is refused, by which exception, and what the client gets
         HttpRequest._set_content_type_params
           raises BadRequest
       the handler raises BadRequest to the server, and has made no response
+
+ASGI: what ASGIHandler.create_request does with a request that cannot be made, and what the server is sent
+    a query string that is not UTF-8, b'q=caf\xe9'; no view is reached
+      signal request_started
+      ASGIHandler.create_request
+        ASGIRequest.__init__(scope, body_file)
+          raises UnicodeDecodeError
+        logged by django.request at WARNING: Bad Request (UnicodeDecodeError)
+      send: http.response.start, status 400, headers:
+        Content-Type: text/html; charset=utf-8
+      send: http.response.body, 0 bytes, more_body False
+      HttpResponseBase.close  (HttpResponseBadRequest)
+        signal request_finished
+    a Content-Type of "text/plain; charset=utf-8", and a query string of 1001 parameters; no view is reached
+      signal request_started
+      ASGIHandler.create_request
+        ASGIRequest.__init__(scope, body_file)
+          HttpRequest._set_content_type_params
+            HttpRequest.encoding = 'utf-8'
+              ASGIRequest.GET
+                raises TooManyFieldsSent
+      the handler raises TooManyFieldsSent to the server, and has sent it no message
+    a Content-Type header 10,014 characters long; no view is reached
+      signal request_started
+      ASGIHandler.create_request
+        ASGIRequest.__init__(scope, body_file)
+          HttpRequest._set_content_type_params
+            raises BadRequest
+      the handler raises BadRequest to the server, and has sent it no message
+
+ASGI: a form of 150 bytes sent with no Content-Length, under DATA_UPLOAD_MAX_MEMORY_SIZE = 100 for this block alone; the view reads request.POST
+    signal request_started
+    ASGIRequest._get_post
+      HttpRequest._load_post_and_files
+        HttpRequest.body
+          HttpRequest._check_data_too_big(0)
+          HttpRequest._check_data_too_big(150)
+            raises RequestDataTooBig
+    HttpRequest._mark_post_parse_error
+    logged by django.security.RequestDataTooBig at ERROR: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE.
+    send: http.response.start, status 400, headers:
+      Content-Type: text/html; charset=utf-8
+    send: http.response.body, 143 bytes, more_body False
+    HttpResponseBase.close  (HttpResponseBadRequest)
+      signal request_finished
 
 A response under WSGI, from its constructor to the server's close()
     WSGIHandler.__call__(environ, start_response)
@@ -464,6 +594,46 @@ A streaming response under WSGI, and the client goes away after the first part
       HttpRequest.close
       signal request_finished
 
+WSGI: a streaming response over an asynchronous iterator, consumed whole before the server gets a byte
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes StreamingHttpResponse(parts())
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    StreamingHttpResponse.__iter__
+      warning (Warning): StreamingHttpResponse must consume asynchronous iterators in order to serve them synchronously. Use a synchronous iterator instead.
+      the async generator produces part 1
+      the async generator produces part 2
+      the async generator produces part 3
+      the async generator has no more parts
+    the server sends 7 bytes
+    the server sends 7 bytes
+    the server sends 7 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (StreamingHttpResponse)
+      HttpRequest.close
+      signal request_finished
+
+A streaming response under WSGI whose generator raises after its first part; the script's server, as wsgiref's does, catches the exception, stops iterating and calls close()
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+        the view makes StreamingHttpResponse(parts())
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    StreamingHttpResponse.__iter__
+    the generator produces part 1
+    the server sends 7 bytes
+    the generator raises ValueError
+    the server's loop gets ValueError: the second part could not be made; the server stops iterating
+    the server calls close() on what it was given
+    HttpResponseBase.close  (StreamingHttpResponse)
+      HttpRequest.close
+      signal request_finished
+
 A FileResponse under WSGI, to a server that offers no file wrapper
     WSGIHandler.__call__(environ, start_response)
       signal request_started
@@ -531,6 +701,38 @@ A FileResponse under WSGI, to a server that offers wsgi.file_wrapper
         HttpRequest.close
         signal request_finished
 
+The test client and an HttpResponse: the response is closed before client.get returns
+    response = client.get("/queried/")
+      ClientHandler.__call__(environ)
+        signal request_started
+        WSGIRequest.__init__(environ)
+        BaseHandler.get_response
+        conditional_content_removal
+        HttpResponseBase.close  (HttpResponse)
+          HttpRequest.close
+          signal request_finished
+    response.closed  ->  True
+
+The test client and a StreamingHttpResponse: the response is closed when the test has read streaming_content to its end
+    response = client.get("/stream/")
+      ClientHandler.__call__(environ)
+        signal request_started
+        WSGIRequest.__init__(environ)
+        BaseHandler.get_response
+          the view makes StreamingHttpResponse(parts())
+        conditional_content_removal
+    response.closed  ->  False
+    content = b"".join(response.streaming_content)
+      closing_iterator_wrapper
+        the generator produces part 1
+        the generator produces part 2
+        the generator produces part 3
+        the generator has no more parts
+        HttpResponseBase.close  (StreamingHttpResponse)
+          HttpRequest.close
+          signal request_finished
+    response.closed  ->  True
+
 ASGI: an HttpResponse is two messages
     send: http.response.start, status 200, headers:
       Content-Type: text/html; charset=utf-8
@@ -591,6 +793,12 @@ ASGI: the multipart form of 251 bytes again, and what its Content-Length header 
     with Content-Length: 251, which is the body's length  ->  POST is {'customer': ['Ada']}, FILES is {'notes': ['InMemoryUploadedFile, 29 bytes']}
     with Content-Length: 5  ->  POST is {'customer': ['Ada']}, FILES is {'notes': ['InMemoryUploadedFile, 29 bytes']}
     with no Content-Length header  ->  POST is {}, FILES is {}
+
+ASGI: the multipart form of 251 bytes, with a Content-Length that is missing, zero, not a number or negative
+    with no Content-Length header  ->  POST is {}, FILES is {}
+    with Content-Length: 0  ->  POST is {}, FILES is {}
+    with Content-Length: abc  ->  POST is {}, FILES is {}
+    with Content-Length: -1  ->  raises MultiPartParserError: Invalid content length: -1
 
 QueryDict: one key, several values, and no changing it
     q = QueryDict("tag=new&tag=sale&page=2&empty=")
@@ -680,6 +888,42 @@ The response classes: what a constructor leaves
     JsonResponse({"a": 1}, safe=False)  ->  200 OK; headers: Content-Type: application/json; body b'{"a": 1}'; warns RemovedInDjango2029Warning: The safe parameter is deprecated.
     JsonResponse([1, 2], safe=True)  ->  raises TypeError: In order to allow non-dict objects to be serialized set the safe parameter to False.; warns RemovedInDjango2029Warning: The safe parameter is deprecated.
 
+HttpResponse.text: kept once it is read, through a write, until content is assigned
+    response = HttpResponse("one")
+    response.text  ->  'one'
+    response.write(" two")
+    response.content  ->  b'one two'
+    response.text  ->  'one'
+    response.content = "three"
+    response.text  ->  'three'
+
+A "HEAD" request under WSGI: the handler gives the server the body
+    WSGIHandler.__call__(environ, start_response)
+      signal request_started
+      WSGIRequest.__init__(environ)
+      BaseHandler.get_response
+      start_response("200 OK", headers)
+    the handler has returned the response; the server iterates it
+    the server sends 2 bytes
+    the server calls close() on what it was given
+    HttpResponseBase.close  (HttpResponse)
+      HttpRequest.close
+      signal request_finished
+
+A "HEAD" request through the test client: conditional_content_removal empties the body
+    response = client.head("/queried/")
+      ClientHandler.__call__(environ)
+        signal request_started
+        WSGIRequest.__init__(environ)
+        BaseHandler.get_response
+          HttpResponse.content = 'ok'
+        conditional_content_removal
+          HttpResponse.content = b''
+        HttpResponseBase.close  (HttpResponse)
+          HttpRequest.close
+          signal request_finished
+    response.content  ->  b''
+
 Headers on a response: what is stored, and what is refused
     response["X-Note"] = "plain"  ->  stored as 'plain'
     response["X-Note"] = 42  ->  stored as '42'
@@ -715,6 +959,13 @@ Cookies on a response, and cookies coming back
       two hours later, with max_age=3600  ->  raises SignatureExpired
       two hours later, with no max_age  ->  '3'
     parse_cookie, given the header  theme=dark; basket=3; flag; note="a b\073 c"  ->  {'theme': 'dark', 'basket': '3', '': 'flag', 'note': 'a b; c'}
+
+A cookie set twice on one response
+    response = HttpResponse()
+    response.set_cookie("basket", "3", max_age=3600, httponly=True)
+      Set-Cookie: basket=3; expires=Mon, 21 Sep 2026 15:13:20 GMT; HttpOnly; Max-Age=3600; Path=/
+    response.set_cookie("basket", "4")
+      Set-Cookie: basket=4; HttpOnly; Max-Age=3600; Path=/
 
 The helpers of django/utils/http.py
     dates

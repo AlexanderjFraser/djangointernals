@@ -9,7 +9,7 @@
  "pointers": [
   {
    "pointer": "django/http/request.py:HttpHeaders",
-   "line": 13,
+   "line": 39,
    "sentence": "Each key is turned back into a header's usual spelling, underscores to hyphens and each word capitalised (`django/http/request.py:HttpHeaders`, `django/http/request.py:HttpHeaders.parse_header_name`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -23,7 +23,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpHeaders.parse_header_name",
-   "line": 13,
+   "line": 39,
    "sentence": "Each key is turned back into a header's usual spelling, underscores to hyphens and each word capitalised (`django/http/request.py:HttpHeaders`, `django/http/request.py:HttpHeaders.parse_header_name`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -38,7 +38,7 @@
   },
   {
    "pointer": "django/utils/datastructures.py:CaseInsensitiveMapping",
-   "line": 15,
+   "line": 41,
    "sentence": "Its base class, `CaseInsensitiveMapping`, keeps each entry under its name in lower case beside the name as it was written, and has no method that changes it (`django/utils/datastructures.py:CaseInsensitiveMapping`).",
    "tree": "django",
    "path": "django/utils/datastructures.py",
@@ -52,7 +52,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpHeaders.__getitem__",
-   "line": 17,
+   "line": 43,
    "sentence": "That spelling is there for templates, where a hyphen cannot appear in a variable's name (`django/http/request.py:HttpHeaders.__getitem__`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -65,36 +65,38 @@
    "fingerprint": "5944f3cb7cdb23d1"
   },
   {
-   "pointer": "django/test/client.py:RequestFactory.generic",
-   "line": 19,
-   "sentence": "`HttpHeaders.to_asgi_names` only puts each name in upper case with underscores, and the asynchronous half of the test client turns the result into the header names of a scope (`django/test/client.py:RequestFactory.generic`, `django/test/client.py:AsyncRequestFactory.generic`).",
+   "pointer": "django/http/request.py:HttpHeaders.to_wsgi_names",
+   "line": 45,
+   "sentence": "The class also runs the other way, in `HttpHeaders.to_wsgi_names` and `HttpHeaders.to_asgi_names`, for the test client, which lets a test give headers by their real names ([Building a request: `RequestFactory`](../testing/request-factory.md)) (`django/http/request.py:HttpHeaders.to_wsgi_names`, `django/http/request.py:HttpHeaders.to_asgi_names`).",
    "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "RequestFactory.generic",
+   "path": "django/http/request.py",
+   "symbol": "HttpHeaders.to_wsgi_names",
    "kind": "function",
    "lines": [
-    636,
-    674
+    564,
+    569
    ],
-   "fingerprint": "2d7072d44cb0e84d"
+   "at": 565,
+   "fingerprint": "4da8fee983470c24"
   },
   {
-   "pointer": "django/test/client.py:AsyncRequestFactory.generic",
-   "line": 19,
-   "sentence": "`HttpHeaders.to_asgi_names` only puts each name in upper case with underscores, and the asynchronous half of the test client turns the result into the header names of a scope (`django/test/client.py:RequestFactory.generic`, `django/test/client.py:AsyncRequestFactory.generic`).",
+   "pointer": "django/http/request.py:HttpHeaders.to_asgi_names",
+   "line": 45,
+   "sentence": "The class also runs the other way, in `HttpHeaders.to_wsgi_names` and `HttpHeaders.to_asgi_names`, for the test client, which lets a test give headers by their real names ([Building a request: `RequestFactory`](../testing/request-factory.md)) (`django/http/request.py:HttpHeaders.to_wsgi_names`, `django/http/request.py:HttpHeaders.to_asgi_names`).",
    "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "AsyncRequestFactory.generic",
+   "path": "django/http/request.py",
+   "symbol": "HttpHeaders.to_asgi_names",
    "kind": "function",
    "lines": [
-    736,
-    785
+    571,
+    576
    ],
-   "fingerprint": "ea59f719f96af760"
+   "at": 572,
+   "fingerprint": "92551a6128e594ee"
   },
   {
    "pointer": "django/http/request.py:HttpRequest.get_host",
-   "line": 23,
+   "line": 49,
    "sentence": "`HttpRequest.get_host` answers the question of which host the client asked for, and refuses to answer when the host is not one the site has agreed to serve (`django/http/request.py:HttpRequest.get_host`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -108,7 +110,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest._get_raw_host",
-   "line": 25,
+   "line": 51,
    "sentence": "It looks in up to three places, in a fixed order (`django/http/request.py:HttpRequest._get_raw_host`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -121,8 +123,22 @@
    "fingerprint": "d35433a77db3745d"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest.get_port",
+   "line": 51,
+   "sentence": "A request with neither gets the server's own name from `\"SERVER_NAME\"`, with the port added when it is not the usual one for the scheme: `HttpRequest.get_port`'s answer, which is the `X-Forwarded-Port` header when `settings.USE_X_FORWARDED_PORT` is true and the request has one, and `\"SERVER_PORT\"` otherwise (`django/http/request.py:HttpRequest.get_port`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_port",
+   "kind": "function",
+   "lines": [
+    212,
+    218
+   ],
+   "fingerprint": "d2984e027fbd37fe"
+  },
+  {
    "pointer": "django/http/request.py:split_domain_port",
-   "line": 27,
+   "line": 53,
    "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host exactly (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -136,7 +152,7 @@
   },
   {
    "pointer": "django/http/request.py:validate_host",
-   "line": 27,
+   "line": 53,
    "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host exactly (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -150,7 +166,7 @@
   },
   {
    "pointer": "django/utils/http.py:is_same_domain",
-   "line": 27,
+   "line": 53,
    "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host exactly (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/utils/http.py",
@@ -163,9 +179,51 @@
    "fingerprint": "ff659092d60e432d"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest.get_host",
+   "line": 55,
+   "sentence": "An empty `ALLOWED_HOSTS` allows nothing, unless `settings.DEBUG` is true, when `get_host` uses in its place the local machine's names, `\".localhost\"`, `\"127.0.0.1\"` and `\"[::1]\"`, the first of which matches localhost and any subdomain of it (`django/http/request.py:HttpRequest.get_host`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_host",
+   "kind": "function",
+   "lines": [
+    190,
+    210
+   ],
+   "fingerprint": "8b3e972265b23d16"
+  },
+  {
+   "pointer": "docs/releases/1.10.3.txt",
+   "line": 57,
+   "sentence": "That security release, with 1.9.11 and 1.8.16 beside it, checked the host in either case, and for convenience allowed the names of localhost when the setting was empty and debugging on (`docs/releases/1.10.3.txt`).",
+   "tree": "django",
+   "path": "docs/releases/1.10.3.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    68
+   ],
+   "fingerprint": "979e776eebd6c468"
+  },
+  {
+   "pointer": "docs/releases/3.1.txt",
+   "line": 57,
+   "sentence": "Subdomains of localhost, such as static.localhost, joined that fallback in 3.1 (`docs/releases/3.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/3.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    866
+   ],
+   "fingerprint": "594cce9c22ddaf62"
+  },
+  {
    "pointer": "django/middleware/common.py:CommonMiddleware.process_request",
-   "line": 51,
-   "sentence": "In a project with the middleware that `django-admin startproject` writes, every request is checked all the same, because `CommonMiddleware.process_request` calls `get_host` on its way in, once the request has passed that middleware's check of its user agent; a request answered by a middleware listed before that one, or served by a project without it, is checked only if something asks for the host (`django/middleware/common.py:CommonMiddleware.process_request`).",
+   "line": 82,
+   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), and `SecurityMiddleware.process_request`, listed before it, calls it when it redirects a request made over plain HTTP to HTTPS and `SECURE_SSL_HOST` is not set (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.process_request",
@@ -177,22 +235,36 @@
    "fingerprint": "cf9f9179763268ef"
   },
   {
-   "pointer": "django/http/request.py:HttpRequest.get_port",
-   "line": 53,
-   "sentence": "It returns `\"SERVER_PORT\"`, or the `X-Forwarded-Port` header when `settings.USE_X_FORWARDED_PORT` is true and the header is there, and it validates nothing (`django/http/request.py:HttpRequest.get_port`).",
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
+   "line": 82,
+   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), and `SecurityMiddleware.process_request`, listed before it, calls it when it redirects a request made over plain HTTP to HTTPS and `SECURE_SSL_HOST` is not set (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
-   "path": "django/http/request.py",
-   "symbol": "HttpRequest.get_port",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.process_request",
    "kind": "function",
    "lines": [
-    212,
-    218
+    23,
+    33
    ],
-   "fingerprint": "d2984e027fbd37fe"
+   "fingerprint": "9a87791cf038990b"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.get_host",
+   "line": 84,
+   "sentence": "A response made for such a request, whether from a middleware listed before `CommonMiddleware` or from a view in a project without that middleware, goes out whatever the `\"Host\"` header said (`django/http/request.py:HttpRequest.get_host`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_host",
+   "kind": "function",
+   "lines": [
+    190,
+    210
+   ],
+   "fingerprint": "8b3e972265b23d16"
   },
   {
    "pointer": "django/http/request.py:HttpRequest.scheme",
-   "line": 57,
+   "line": 88,
    "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -207,7 +279,7 @@
   },
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest._get_scheme",
-   "line": 57,
+   "line": 88,
    "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
@@ -220,23 +292,9 @@
    "fingerprint": "226a0cb6c30bd4b8"
   },
   {
-   "pointer": "django/http/request.py:HttpRequest.build_absolute_uri",
-   "line": 75,
-   "sentence": "It takes the scheme and host from `HttpRequest.scheme` and `get_host`, so it raises `DisallowedHost` where `get_host` would, unless the location it is given already has a scheme and a host of its own (`django/http/request.py:HttpRequest.build_absolute_uri`, `django/utils/cache.py:_generate_cache_key`).",
-   "tree": "django",
-   "path": "django/http/request.py",
-   "symbol": "HttpRequest.build_absolute_uri",
-   "kind": "function",
-   "lines": [
-    263,
-    300
-   ],
-   "fingerprint": "204a9cc3ca42ecf4"
-  },
-  {
    "pointer": "django/utils/cache.py:_generate_cache_key",
-   "line": 75,
-   "sentence": "It takes the scheme and host from `HttpRequest.scheme` and `get_host`, so it raises `DisallowedHost` where `get_host` would, unless the location it is given already has a scheme and a host of its own (`django/http/request.py:HttpRequest.build_absolute_uri`, `django/utils/cache.py:_generate_cache_key`).",
+   "line": 108,
+   "sentence": "It is what code calls when a path is not enough: the cache middleware, for one, keeps a page under a key that holds a hash of the request's full URL, made by this method (`django/utils/cache.py:_generate_cache_key`).",
    "tree": "django",
    "path": "django/utils/cache.py",
    "symbol": "_generate_cache_key",
@@ -248,9 +306,38 @@
    "fingerprint": "4b5184964adc7d6e"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest.build_absolute_uri",
+   "line": 108,
+   "sentence": "It keeps the two after their first use as `HttpRequest._current_scheme_host`, so a view that builds many URLs validates the host once (`django/http/request.py:HttpRequest.build_absolute_uri`, `django/http/request.py:HttpRequest._current_scheme_host`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.build_absolute_uri",
+   "kind": "function",
+   "lines": [
+    263,
+    300
+   ],
+   "fingerprint": "204a9cc3ca42ecf4"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._current_scheme_host",
+   "line": 108,
+   "sentence": "It keeps the two after their first use as `HttpRequest._current_scheme_host`, so a view that builds many URLs validates the host once (`django/http/request.py:HttpRequest.build_absolute_uri`, `django/http/request.py:HttpRequest._current_scheme_host`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._current_scheme_host",
+   "kind": "function",
+   "lines": [
+    302,
+    304
+   ],
+   "at": 303,
+   "fingerprint": "e5c94e42d5fd5497"
+  },
+  {
    "pointer": "django/http/request.py:HttpRequest._get_full_path",
-   "line": 90,
-   "sentence": "`HttpRequest.get_full_path` is the path and the query string with neither scheme nor host, escaped for use in a URL; `HttpRequest.get_full_path_info` is the same for `path_info` (`django/http/request.py:HttpRequest._get_full_path`).",
+   "line": 110,
+   "sentence": "With no location the result is the request's own URL: the scheme and host, then the path and the query string that `HttpRequest.get_full_path` gives (`django/http/request.py:HttpRequest._get_full_path`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._get_full_path",
@@ -263,7 +350,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.accepted_types",
-   "line": 94,
+   "line": 126,
    "sentence": "Each item of the header becomes one `MediaType`, an item with a weight of zero is dropped, and a request with no such header is treated as accepting anything (`django/http/request.py:HttpRequest.accepted_types`, `django/http/request.py:MediaType`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -278,7 +365,7 @@
   },
   {
    "pointer": "django/http/request.py:MediaType",
-   "line": 94,
+   "line": 126,
    "sentence": "Each item of the header becomes one `MediaType`, an item with a weight of zero is dropped, and a request with no such header is treated as accepting anything (`django/http/request.py:HttpRequest.accepted_types`, `django/http/request.py:MediaType`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -292,7 +379,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.accepted_type",
-   "line": 100,
+   "line": 132,
    "sentence": "`HttpRequest.accepted_types_by_precedence` is the same list sorted the other way, by how specific an item is first and by its weight second, and `HttpRequest.accepted_type` returns the first item of it that matches a given type (`django/http/request.py:HttpRequest.accepted_type`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -306,7 +393,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.get_preferred_type",
-   "line": 113,
+   "line": 134,
    "sentence": "`HttpRequest.accepts` says only whether a type is acceptable at all (`django/http/request.py:HttpRequest.get_preferred_type`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -317,6 +404,20 @@
     150
    ],
    "fingerprint": "fdbdcb14f9e05fc3"
+  },
+  {
+   "pointer": "docs/releases/5.2.txt",
+   "line": 150,
+   "sentence": "`get_preferred_type` was added in that release, and `accepted_types` has been sorted by the client's preference since then (`docs/releases/5.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "56a4c82a284e4c7a"
   }
  ]
 }

@@ -16,8 +16,46 @@ arguments that tell them apart; a line that begins `->` is what the call above i
 and `raises` the exception that left it. Everything between them ran and is left out. The
 other blocks put one question to a running Django on each line and write down the answer.
 
+In many blocks a line of Python is run from the text it prints. A statement stands on a
+line of its own, with the calls it made that the block watches nested under it and, under
+them, `raises` and the exception that left it, if one did (`do`); a question is
+`expression  ->  answer`, evaluated as written, with no calls written under it (`ask`). The
+names these lines use are Django's, the script's own classes below, and `request`,
+`response`, `environ` (the request's environ) and `client`.
+
+The servers and the client. Under WSGI the script is the server: it calls the handler,
+iterates what it is given, writes down each piece it sends, and calls close() on it. In one
+block it also catches an exception raised while it iterates, stops, and calls close(), as
+wsgiref's server does; the title says so. Under ASGI the script is the server too: it sends the
+whole body in one message and writes down each message it is sent. The ASGI blocks of
+`asgi_exchange` watch their rules on every thread (`threading.setprofile_all_threads`),
+because a view that is a plain function and a response's close run in worker threads; there
+the two signal lines are written by receivers of the script's own, connected for the
+exchange, since the handler sends request_started with `Signal.asend`; and an exception that
+leaves the handler is said in a line of the server's. Where a line calls `client`, it is
+Django's test client, `django.test.Client`, with this script's URLconf, and the test is the
+script. A block that calls neither a handler nor `client` has no server and no handler: the
+script makes the request or the response itself, as a handler or a view does, and reads it.
+The blocks of `asgi_form` are of this kind: the script makes an `ASGIRequest` around the
+body, as the handler does, and reads its FILES and POST; their "ASGI:" names the class of the
+request, not a server. In such a block an exception a line says is raised is what the read
+raised, and the block says nothing of what a client would be sent.
+
+What the script brings of its own, each in the blocks that name it: the middleware
+`ReadsEight`, which reads eight bytes of the request as a file and passes the request on,
+installed for the one handler made for its block (the title says one middleware is installed,
+and the setting is put back once the handler is made); the upload handler `Raises`, put first
+among a request's handlers, which raises the exception it is given from the method it names,
+for the file of the field it names, and passes every other file on; and the upload handler
+`AppendsAHandler`, which appends a handler to `request.upload_handlers` at the start of each
+file. In the blocks of these handlers each statement is run on a fresh request. One block
+sets `DATA_UPLOAD_MAX_MEMORY_SIZE` to 100 and puts it back, and its title says so. Nothing of
+Django's is patched.
+
 `time.time` is stopped, so that a cookie's expiry date and a signature's timestamp are the same
-on every run. The sizes in the titles and labels are computed from the data, not typed.
+on every run. The sizes in the titles and labels, of bodies, forms and files and of the pieces
+a body is sent in, and the limits and the counts that go over them, are computed from the
+data and from the values that set them (a setting, the script's own, or Django's), not typed.
 
     RECORD_EVERYTHING=1 python recordings/http.py     every call in the chapter's modules
 """
@@ -35,6 +73,7 @@ import io  # noqa: E402
 import logging  # noqa: E402
 import shutil  # noqa: E402
 import tempfile  # noqa: E402
+import threading  # noqa: E402
 import time  # noqa: E402
 import warnings  # noqa: E402
 
@@ -55,12 +94,14 @@ settings.configure(
 django.setup()
 
 from django.core import signals, signing  # noqa: E402
+from django.core.files.uploadhandler import FileUploadHandler, MemoryFileUploadHandler, SkipFile, StopUpload  # noqa: E402
 from django.core.handlers.asgi import ASGIHandler, ASGIRequest  # noqa: E402
 from django.core.handlers.wsgi import WSGIHandler, WSGIRequest  # noqa: E402
 from django.http import (  # noqa: E402
-    FileResponse, HttpResponse, HttpResponseNotAllowed, HttpResponseNotModified, HttpResponsePermanentRedirect,
+    FileResponse, HttpRequest, HttpResponse, HttpResponseNotAllowed, HttpResponseNotModified, HttpResponsePermanentRedirect,
     HttpResponseRedirect, JsonResponse, QueryDict, StreamingHttpResponse, parse_cookie,
 )
+from django.test import Client, override_settings  # noqa: E402
 from django.urls import path  # noqa: E402
 
 NOW = 1790000000.0  # 21 September 2026, 14:13:20 GMT
@@ -557,8 +598,11 @@ def download(request):
     return response
 
 
+LARGE_PAGE = b"x" * 150000
+
+
 def large(request):
-    return HttpResponse(b"x" * 150000)
+    return HttpResponse(LARGE_PAGE)
 
 
 async def async_stream(request):
@@ -575,11 +619,58 @@ async def async_stream(request):
     return StreamingHttpResponse(parts())
 
 
+def async_parts(request):
+    """A view that is a plain function, and streams from an asynchronous generator."""
+    async def parts():
+        for number in (1, 2, 3):
+            note(f"the async generator produces part {number}")
+            yield f"part {number}\n"
+        note("the async generator has no more parts")
+
+    with reading("StreamingHttpResponse(parts())", "the view makes"):
+        response = StreamingHttpResponse(parts())
+    return response
+
+
+def failing_stream(request):
+    def parts():
+        note("the generator produces part 1")
+        yield "part 1\n"
+        note("the generator raises ValueError")
+        raise ValueError("the second part could not be made")
+
+    with reading("StreamingHttpResponse(parts())", "the view makes"):
+        response = StreamingHttpResponse(parts())
+    return response
+
+
+def peeked(request):
+    with reading("request.POST"):
+        value = request.POST
+        note(f"-> {value!r}")
+    return HttpResponse("ok")
+
+
+class ReadsEight:
+    """A middleware of the script's own, installed for one block: it reads eight bytes of the
+    request as a file, to look at them, and passes the request on."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        with reading("request.read(8)", "the middleware calls"):
+            value = request.read(8)
+            note(f"-> {value!r}")
+        return self.get_response(request)
+
+
 urlpatterns = [
     path("orders/", order), path("upload/", upload), path("posted/", posted), path("queried/", queried),
     path("hosted/", hosted), path("page/", page), path("stream/", stream), path("download/", download),
     path("large/", large), path("async-stream/", async_stream),
 ]
+urlpatterns += [path("async-parts/", async_parts), path("failing-stream/", failing_stream), path("peeked/", peeked)]
 
 # ---------------------------------------------------------------------------------------------
 # The server's part.
@@ -619,8 +710,11 @@ def environ(method: str, url: str, body: bytes = b"", content_type: str = "", **
     return made
 
 
-def serve(handler, env: dict, title: str, rules: dict, *, stop_after: int = 0, files: bool = False) -> None:
-    """Call the handler as a WSGI server does: start the response, send the body, close it."""
+def serve(handler, env: dict, title: str, rules: dict, *, stop_after: int = 0, files: bool = False,
+          catch: bool = False) -> None:
+    """Call the handler as a WSGI server does: start the response, send the body, close it.
+    With catch, an exception raised while the server iterates the body is caught: the server
+    stops iterating and closes what it was given, as wsgiref's server does."""
     global RULES
     RULES = {**COMMON, **rules}
     TEMPORARY.clear()
@@ -640,12 +734,17 @@ def serve(handler, env: dict, title: str, rules: dict, *, stop_after: int = 0, f
     else:
         note(f"the handler has returned a {type(result).__name__}, the server's own wrapper around the file; the server iterates it")
     sent = 0
-    for piece in result:
-        sent += 1
-        note(f"the server sends {len(piece)} bytes")
-        if sent == stop_after:
-            note("the client goes away; the server stops iterating")
-            break
+    try:
+        for piece in result:
+            sent += 1
+            note(f"the server sends {len(piece)} bytes")
+            if sent == stop_after:
+                note("the client goes away; the server stops iterating")
+                break
+    except Exception as raised:
+        if not catch:
+            raise
+        note(f"the server's loop gets {type(raised).__name__}: {raised}; the server stops iterating")
     if files and TEMPORARY:
         note(f"the uploaded files' temporary files exist: {[os.path.exists(p) for p in TEMPORARY]}")
     note("the server calls close() on what it was given")
@@ -717,6 +816,92 @@ def attempt(what: str, do, brief: bool = False) -> None:
     except Exception as raised:
         said = f"raises {type(raised).__name__}" + ("" if brief else f": {raised}")
     note(f"{what}  ->  {said}")
+
+
+ASKING = {}  # the names a line run from its own text may use
+
+
+def ask(expression: str, brief: bool = False) -> None:
+    """One question and its answer, on one line. The question is evaluated as it is written
+    down, so the line cannot say one thing and the script do another."""
+    watching = sys.getprofile()
+    sys.setprofile(None)  # a question is its answer and nothing else: no calls are written down under it
+    attempt(expression, lambda: repr(eval(expression, ASKING)), brief)
+    sys.setprofile(watching)
+
+
+def do(statement: str) -> None:
+    """A statement, written down and then run as it is written, with the calls the rules in
+    force record nested under it, and under them the exception that left it, if one did."""
+    note(statement)
+    STACK.append(None)
+    try:
+        exec(statement, ASKING)
+    except Exception as raised:
+        flush()
+        LINES.append("  " * len(STACK) + f"raises {type(raised).__name__}: {raised}")
+    finally:
+        flush()
+        STACK.pop()
+
+
+def asgi_exchange(handler, scope: dict, body: bytes = b"") -> None:
+    """Call the handler as an ASGI server does, with the body in one message, and write down
+    each message it is sent. The rules in force are watched on every thread, so that a view or
+    a response's close run by a worker thread is written down as well. The handler sends
+    request_started with Signal.asend, which no rule watches: the two signals are written down
+    by receivers of the script's own, connected for the exchange. An exception that leaves the
+    handler is caught and said. The lines stand under whatever the caller has written."""
+    sent = []
+    depth = len(STACK)
+
+    async def run():
+        waiting = [{"type": "http.request", "body": body, "more_body": False}]
+        never = asyncio.Event()
+
+        async def receive():
+            if waiting:
+                return waiting.pop(0)
+            await never.wait()  # the client stays: the handler's listener waits until it is cancelled
+
+        async def send(message):
+            sent.append(message)
+            if message["type"] == "http.response.start":
+                note(f'send: http.response.start, status {message["status"]}, headers:')
+                for name, value in message["headers"]:
+                    note(f"  {name.decode()}: {value.decode()}")
+            else:
+                said = [f"{len(message['body'])} bytes" if "body" in message else "no body"]
+                if "more_body" in message:
+                    said.append(f"more_body {message['more_body']}")
+                note("send: http.response.body, " + ", ".join(said))
+
+        await handler(scope, receive, send)
+
+    started = lambda **kwargs: note("signal request_started")  # noqa: E731
+    finished = lambda **kwargs: note("signal request_finished")  # noqa: E731
+    signals.request_started.connect(started)
+    signals.request_finished.connect(finished)
+    threading.setprofile_all_threads(profile)
+    try:
+        asyncio.run(run())
+    except Exception as raised:
+        threading.setprofile_all_threads(None)
+        flush()
+        del STACK[depth:]
+        note(f"the handler raises {type(raised).__name__} to the server, and has sent it "
+             + ("no message" if not sent else f"{len(sent)} messages"))
+    finally:
+        threading.setprofile_all_threads(None)
+        signals.request_started.disconnect(started)
+        signals.request_finished.disconnect(finished)
+    flush()
+    del STACK[depth:]
+
+
+def asgi_scope(url: str, method: str = "GET", query_string: bytes = b"", *headers) -> dict:
+    return {"type": "http", "method": method, "path": url, "query_string": query_string, "scheme": "http",
+            "server": ("shop.example", 80), "headers": [(b"host", b"shop.example"), *headers]}
 
 
 print("Django", django.get_version(), "with no middleware, and ALLOWED_HOSTS = ['shop.example']\n")
@@ -827,19 +1012,54 @@ for label, content_type, body in (("a form (application/x-www-form-urlencoded)",
     STACK.pop()
 show("The body's stream is read once: what can follow what")
 
+PEEKING = {
+    ("django.http.request", "HttpRequest.read"): request_read,
+    ("django.core.handlers.wsgi", "LimitedStream.read"): limited_read,
+    ("django.core.handlers.wsgi", "WSGIRequest._get_post"): plain,
+    ("django.http.request", "HttpRequest._load_post_and_files"): plain,
+    ("django.http.request", "HttpRequest._mark_post_parse_error"): plain,
+}
+with override_settings(MIDDLEWARE=[f"{__name__}.ReadsEight"]):
+    peeking_handler = WSGIHandler()  # the handler loads its middleware as it is made: the setting is put back after
+serve(peeking_handler, environ("POST", "/peeked/", URLENCODED, FORM),
+      "One middleware installed, of the script's own, that reads eight bytes of the request as a file; "
+      "the view behind it reads request.POST", PEEKING)
+
+ASKING.update(HttpRequest=HttpRequest)
+WITH_A_FILE = multipart(("customer", b"Ada"), ("notes", "notes.txt", "text/plain", b"Leave it with the neighbour.\n"))
+ASKING["request"] = fresh(MULTIPART, WITH_A_FILE)
+note(f"a WSGIRequest for a multipart form of a field and a file, {len(WITH_A_FILE)} bytes")
+STACK.append(None)
+ask("request.FILES")
+ask("request.POST")
+do('request.encoding = "utf-8"')
+ask("request.FILES")
+ask("request.POST")
+ask("request.FILES")
+STACK.pop()
+note("a plain HttpRequest, as a test or a script makes one")
+STACK.append(None)
+do("request = HttpRequest()")
+ask("request.GET")
+do('request.encoding = "utf-8"')
+ask("request.GET")
+STACK.pop()
+show("The encoding setter: what each read finds after it, on a multipart request and on a plain HttpRequest")
+
 # ---------------------------------------------------------------------------------------------
 # Uploads.
 
 NOTES = ("notes", "notes.txt", "text/plain", b"Leave it with the neighbour.\n")
 SMALL = multipart(("customer", b"Ada"), NOTES)
-LARGE = multipart(("customer", b"Ada"), NOTES, ("scan", "../scans/receipt.bin", "application/octet-stream", bytes(3_000_000)))
+RECEIPT = bytes(3_000_000)
+LARGE = multipart(("customer", b"Ada"), NOTES, ("scan", "../scans/receipt.bin", "application/octet-stream", RECEIPT))
 LIMIT = settings.FILE_UPLOAD_MAX_MEMORY_SIZE
 serve(wsgi_handler, environ("POST", "/upload/", SMALL, MULTIPART),
       f"A multipart form with a small file: the body, {len(SMALL)} bytes, is under FILE_UPLOAD_MAX_MEMORY_SIZE ({LIMIT})", REQUEST,
       files=True)
 serve(wsgi_handler, environ("POST", "/upload/", LARGE, MULTIPART),
-      f"The same form with a second file of 3,000,000 bytes: the body, {len(LARGE)} bytes, is over FILE_UPLOAD_MAX_MEMORY_SIZE ({LIMIT})",
-      REQUEST, files=True)
+      f"The same form with a second file of {len(RECEIPT):,} bytes: the body, {len(LARGE)} bytes, is over "
+      f"FILE_UPLOAD_MAX_MEMORY_SIZE ({LIMIT})", REQUEST, files=True)
 
 
 def parsed(what: str, body: bytes) -> None:
@@ -855,6 +1075,104 @@ parsed(f"the small form above, cut off after {len(CUT)} of its {len(SMALL)} byte
 parsed('a form whose one part is a file input left empty: name="photo"; filename=""',
        multipart(("photo", "", "application/octet-stream", b"")))
 show("Two multipart forms that are not what they seem")
+
+
+class Raises(FileUploadHandler):
+    """An upload handler of the script's own. Put first among a request's handlers, it raises
+    the exception it is given, from the method it names, for the file of the field it names,
+    and passes every other file and chunk on to the handlers after it."""
+
+    def __init__(self, exception, in_method, for_field):
+        super().__init__()
+        self.exception, self.in_method, self.for_field = exception, in_method, for_field
+
+    def new_file(self, field_name, *args, **kwargs):
+        super().new_file(field_name, *args, **kwargs)
+        if self.in_method == "new_file" and field_name == self.for_field:
+            raise self.exception
+
+    def receive_data_chunk(self, raw_data, start):
+        if self.in_method == "receive_data_chunk" and self.field_name == self.for_field:
+            raise self.exception
+        return raw_data
+
+    def file_complete(self, file_size):
+        return None
+
+
+class AppendsAHandler(FileUploadHandler):
+    """An upload handler of the script's own: at the start of each file it appends another
+    handler to the request's handlers."""
+
+    def new_file(self, *args, **kwargs):
+        super().new_file(*args, **kwargs)
+        self.request.upload_handlers.append(MemoryFileUploadHandler(self.request))
+
+    def receive_data_chunk(self, raw_data, start):
+        return raw_data
+
+    def file_complete(self, file_size):
+        return None
+
+
+ASKING.update(Raises=Raises, SkipFile=SkipFile, StopUpload=StopUpload, AppendsAHandler=AppendsAHandler)
+SCAN = ("scan", "receipt.bin", "application/octet-stream", bytes(200_000))
+STOPPED = multipart(("customer", b"Ada"), NOTES, SCAN, ("city", b"Leeds"))
+
+
+def handled(statement: str, *questions: str, body: bytes = STOPPED) -> None:
+    """A fresh WSGIRequest for the form, the statement run on it, and the questions asked of
+    it, under the statement."""
+    ASKING["environ"] = environ("POST", "/upload/", body, MULTIPART)
+    ASKING["request"] = WSGIRequest(ASKING["environ"])
+    do(statement)
+    STACK.append(None)
+    for question in questions:
+        ask(question)
+    STACK.pop()
+
+
+THE_FORM = (f"a fresh WSGIRequest for each statement below, for a form of {len(STOPPED)} bytes: the field customer, "
+            f"the file notes of {len(NOTES[3])} bytes, the file scan of {len(SCAN[3]):,} bytes, and the field city")
+AFTER_IT = ("request.POST", "request.FILES", 'request.FILES["notes"].read()', 'environ["wsgi.input"].tell()')
+note(THE_FORM)
+handled('request.upload_handlers.insert(0, Raises(SkipFile(), in_method="new_file", for_field="scan"))', *AFTER_IT)
+handled('request.upload_handlers.insert(0, Raises(SkipFile(), in_method="receive_data_chunk", for_field="scan"))', *AFTER_IT)
+show("SkipFile, raised by an upload handler of the script's own put first, for the second of two files")
+note(THE_FORM)
+handled('request.upload_handlers.insert(0, Raises(StopUpload(), in_method="new_file", for_field="scan"))', *AFTER_IT)
+handled('request.upload_handlers.insert(0, Raises(StopUpload(), in_method="receive_data_chunk", for_field="scan"))', *AFTER_IT)
+handled('request.upload_handlers.insert(0, Raises(StopUpload(connection_reset=True), in_method="receive_data_chunk", '
+        'for_field="scan"))', *AFTER_IT)
+show("StopUpload, raised by an upload handler of the script's own put first, for the second of two files")
+
+note(f"a fresh WSGIRequest for the form of a field and a small file, {len(SMALL)} bytes")
+STACK.append(None)
+ASKING["request"] = fresh(MULTIPART, SMALL)
+ask("request.FILES")
+do("request.upload_handlers = []")
+STACK.pop()
+note("another, for the same form")
+STACK.append(None)
+ASKING["request"] = fresh(MULTIPART, SMALL)
+do("request.upload_handlers.insert(0, AppendsAHandler(request))")
+ask("request.POST")
+STACK.pop()
+show("upload_handlers, assigned once FILES exists, and appended to by an upload handler while the form is parsed")
+
+NAMELESS = multipart(("customer", b"Ada"), ("photo", "../", "image/png", b"PNG"), ("city", b"Leeds"))
+RULES = {("django.http.multipartparser", "MultiPartParser.sanitize_file_name"): with_arg("file_name")}
+ASKING["request"] = fresh(MULTIPART, NAMELESS)
+note(f"a fresh WSGIRequest for a multipart form of {len(NAMELESS)} bytes: the field customer, the file part photo, "
+     "and the field city")
+STACK.append(None)
+sys.setprofile(profile)
+do("request.FILES")
+sys.setprofile(None)
+ask("request.POST")
+ask("request.FILES")
+STACK.pop()
+show('A file part whose file name sanitizes to nothing: filename="../", between two fields')
 
 # ---------------------------------------------------------------------------------------------
 # The limits, and what the client gets.
@@ -883,16 +1201,19 @@ def refused(what: str, env: dict) -> None:
 
 
 RULES = LIMITS
-refused("a query string of 1001 parameters; the view reads request.GET",
-        environ("GET", "/queried/?" + "&".join(f"f{n}=1" for n in range(1001))))
-refused("a form of 1001 fields; the view reads request.POST",
-        environ("POST", "/posted/", "&".join(f"f{n}=1" for n in range(1001)).encode(), FORM))
+FIELDS = settings.DATA_UPLOAD_MAX_NUMBER_FIELDS + 1
+MANY = "&".join(f"f{n}=1" for n in range(FIELDS))
+refused(f"a query string of {FIELDS} parameters; the view reads request.GET", environ("GET", "/queried/?" + MANY))
+refused(f"a form of {FIELDS} fields; the view reads request.POST", environ("POST", "/posted/", MANY.encode(), FORM))
 TOO_BIG = b"a=" + b"x" * (settings.DATA_UPLOAD_MAX_MEMORY_SIZE - 1)
 refused(f"a form of {len(TOO_BIG)} bytes; the view reads request.POST", environ("POST", "/posted/", TOO_BIG, FORM))
-refused("a multipart form with one field of 3,000,000 bytes and no file; the view reads request.POST",
-        environ("POST", "/posted/", multipart(("essay", b"x" * 3_000_000)), MULTIPART))
-refused("a multipart form with 101 files; the view reads request.POST",
-        environ("POST", "/posted/", multipart(*((f"f{n}", f"{n}.txt", "text/plain", b"x") for n in range(101))), MULTIPART))
+ESSAY = b"x" * 3_000_000
+refused(f"a multipart form with one field of {len(ESSAY):,} bytes and no file; the view reads request.POST",
+        environ("POST", "/posted/", multipart(("essay", ESSAY)), MULTIPART))
+FILES_SENT = settings.DATA_UPLOAD_MAX_NUMBER_FILES + 1
+refused(f"a multipart form with {FILES_SENT} files; the view reads request.POST",
+        environ("POST", "/posted/", multipart(*((f"f{n}", f"{n}.txt", "text/plain", b"x") for n in range(FILES_SENT))),
+                MULTIPART))
 refused("a multipart form whose Content-Type names no boundary; the view reads request.POST",
         environ("POST", "/posted/", PARTS, "multipart/form-data"))
 refused('a form whose Content-Type is "application/x-www-form-urlencoded; charset=iso-8859-1"; the view reads request.POST',
@@ -904,6 +1225,51 @@ refused(f"a request whose Content-Type header is {len(TOO_LONG):,} characters lo
         environ("POST", "/posted/", URLENCODED, TOO_LONG))
 show("What is refused, by which exception, and what the client gets")
 
+asgi_refusing = ASGIHandler()
+RULES = {
+    ("django.core.handlers.asgi", "ASGIHandler.create_request"): plain,
+    ("django.core.handlers.asgi", "ASGIRequest.__init__"): lambda f: "ASGIRequest.__init__(scope, body_file)",
+    ("django.http.request", "HttpRequest._set_content_type_params"): plain,
+    ("django.http.request", "HttpRequest.encoding"): setter("val"),
+    ("django.core.handlers.asgi", "ASGIRequest.GET"): plain,
+    ("django.http.response", "HttpResponseBase.close"): on,
+    # the chain's first call, in BaseHandler._get_response_async: had the chain been entered, it would stand here
+    ("django.core.handlers.base", "BaseHandler.resolve_request"): plain,
+}
+NOT_UTF8 = b"q=caf\xe9"
+for what, scope in (
+    (f"a query string that is not UTF-8, {NOT_UTF8!r}; no view is reached", asgi_scope("/queried/", "GET", NOT_UTF8)),
+    (f'a Content-Type of "text/plain; charset=utf-8", and a query string of {FIELDS} parameters; no view is reached',
+     asgi_scope("/queried/", "GET", MANY.encode(), (b"content-type", b"text/plain; charset=utf-8"))),
+    (f"a Content-Type header {len(TOO_LONG):,} characters long; no view is reached",
+     asgi_scope("/queried/", "GET", b"", (b"content-type", TOO_LONG.encode()))),
+):
+    note(what)
+    STACK.append(None)
+    RAISED.clear()
+    asgi_exchange(asgi_refusing, scope)
+    STACK.pop()
+show("ASGI: what ASGIHandler.create_request does with a request that cannot be made, and what the server is sent")
+
+RULES = {
+    ("django.core.handlers.asgi", "ASGIRequest._get_post"): plain,
+    ("django.http.request", "HttpRequest._load_post_and_files"): plain,
+    ("django.http.request", "HttpRequest.body"): plain,
+    ("django.http.request", "HttpRequest._check_data_too_big"): with_arg("length"),
+    ("django.http.request", "HttpRequest._mark_post_parse_error"): plain,
+    ("django.http.response", "HttpResponseBase.close"): on,
+}
+OVER = b"a=" + b"x" * 148
+LIMIT_FOR_BLOCK = 100
+saved = settings.DATA_UPLOAD_MAX_MEMORY_SIZE
+settings.DATA_UPLOAD_MAX_MEMORY_SIZE = LIMIT_FOR_BLOCK
+try:
+    asgi_exchange(asgi_refusing, asgi_scope("/posted/", "POST", b"", (b"content-type", FORM.encode())), OVER)
+finally:
+    settings.DATA_UPLOAD_MAX_MEMORY_SIZE = saved
+show(f"ASGI: a form of {len(OVER)} bytes sent with no Content-Length, under DATA_UPLOAD_MAX_MEMORY_SIZE = {LIMIT_FOR_BLOCK} "
+     "for this block alone; the view reads request.POST")
+
 # ---------------------------------------------------------------------------------------------
 # A response leaves, under WSGI.
 
@@ -912,24 +1278,51 @@ serve(wsgi_handler, environ("GET", "/stream/"), "A streaming response under WSGI
       RESPONSE)
 serve(wsgi_handler, environ("GET", "/stream/"), "A streaming response under WSGI, and the client goes away after the first part",
       RESPONSE, stop_after=1)
+STREAMING = {("django.http.response", "StreamingHttpResponse.__iter__"): on}
+serve(wsgi_handler, environ("GET", "/async-parts/"),
+      "WSGI: a streaming response over an asynchronous iterator, consumed whole before the server gets a byte", STREAMING)
+serve(wsgi_handler, environ("GET", "/failing-stream/"),
+      "A streaming response under WSGI whose generator raises after its first part; the script's server, as wsgiref's "
+      "does, catches the exception, stops iterating and calls close()", STREAMING, catch=True)
 serve(wsgi_handler, environ("GET", "/download/"), "A FileResponse under WSGI, to a server that offers no file wrapper", RESPONSE)
 env = environ("GET", "/download/")
 env["wsgi.file_wrapper"] = ServerFileWrapper
 serve(wsgi_handler, env, "A FileResponse under WSGI, to a server that offers wsgi.file_wrapper", RESPONSE)
+
+# The test client: Django's own, with the script's URLconf.
+CLIENT = {
+    ("django.test.client", "ClientHandler.__call__"): lambda f: "ClientHandler.__call__(environ)",
+    ("django.test.client", "conditional_content_removal"): plain,
+    ("django.test.client", "closing_iterator_wrapper"): plain,
+}
+ASKING["client"] = Client()
+RULES = {**COMMON, **CLIENT}
+sys.setprofile(profile)
+do('response = client.get("/queried/")')
+ask("response.closed")
+sys.setprofile(None)
+show("The test client and an HttpResponse: the response is closed before client.get returns")
+sys.setprofile(profile)
+do('response = client.get("/stream/")')
+ask("response.closed")
+do('content = b"".join(response.streaming_content)')
+ask("response.closed")
+sys.setprofile(None)
+show("The test client and a StreamingHttpResponse: the response is closed when the test has read streaming_content to its end")
 
 # ---------------------------------------------------------------------------------------------
 # A response leaves, under ASGI: what the server is sent.
 
 asgi_handler = ASGIHandler()
 asgi(asgi_handler, "/page/", "ASGI: an HttpResponse is two messages")
-asgi(asgi_handler, "/large/", "ASGI: a body of 150,000 bytes goes in pieces of at most 65,536")
+asgi(asgi_handler, "/large/", f"ASGI: a body of {len(LARGE_PAGE):,} bytes goes in pieces of at most {ASGIHandler.chunk_size:,}")
 asgi(asgi_handler, "/async-stream/", "ASGI: a streaming response over an asynchronous iterator")
 asgi(asgi_handler, "/stream/", "ASGI: a streaming response over a synchronous iterator")
 finished = lambda **kwargs: note("signal request_finished")  # noqa: E731
 signals.request_finished.connect(finished)
 asgi(asgi_handler, "/async-stream/", "ASGI: a streaming response, and the client goes away after the first part", leave_after=1)
 signals.request_finished.disconnect(finished)
-asgi(asgi_handler, "/download/", "ASGI: a FileResponse of 10,000 bytes")
+asgi(asgi_handler, "/download/", f"ASGI: a FileResponse of {os.path.getsize(REPORT):,} bytes")
 
 
 def asgi_form(what: str, body: bytes, *headers) -> None:
@@ -948,6 +1341,11 @@ asgi_form(f"with Content-Length: {SIZE}, which is the body's length", FORM_WITH_
 asgi_form("with Content-Length: 5", FORM_WITH_FILE, (b"content-length", b"5"))
 asgi_form("with no Content-Length header", FORM_WITH_FILE)
 show(f"ASGI: the multipart form of {SIZE} bytes again, and what its Content-Length header says")
+
+for length in (None, b"0", b"abc", b"-1"):
+    asgi_form("with no Content-Length header" if length is None else f"with Content-Length: {length.decode()}",
+              FORM_WITH_FILE, *(() if length is None else ((b"content-length", length),)))
+show(f"ASGI: the multipart form of {SIZE} bytes, with a Content-Length that is missing, zero, not a number or negative")
 
 # ---------------------------------------------------------------------------------------------
 # Small questions, each put to a running Django.
@@ -1125,6 +1523,24 @@ made_response('JsonResponse({"a": 1}, safe=False)', lambda: JsonResponse({"a": 1
 made_response("JsonResponse([1, 2], safe=True)", lambda: JsonResponse([1, 2], safe=True))
 show("The response classes: what a constructor leaves")
 
+ASKING.update(HttpResponse=HttpResponse)
+do('response = HttpResponse("one")')
+ask("response.text")
+do('response.write(" two")')
+ask("response.content")
+ask("response.text")
+do('response.content = "three"')
+ask("response.text")
+show("HttpResponse.text: kept once it is read, through a write, until content is assigned")
+
+serve(wsgi_handler, environ("HEAD", "/queried/"), 'A "HEAD" request under WSGI: the handler gives the server the body', {})
+RULES = {**COMMON, **CLIENT, ("django.http.response", "HttpResponse.content"): setter("value")}
+sys.setprofile(profile)
+do('response = client.head("/queried/")')
+ask("response.content")
+sys.setprofile(None)
+show('A "HEAD" request through the test client: conditional_content_removal empties the body')
+
 
 def header(what: str, value) -> None:
     def describe():
@@ -1202,6 +1618,13 @@ STACK.pop()
 COOKIE_HEADER = r'theme=dark; basket=3; flag; note="a b\073 c"'
 attempt(f"parse_cookie, given the header  {COOKIE_HEADER}", lambda: repr(parse_cookie(COOKIE_HEADER)))
 show("Cookies on a response, and cookies coming back")
+
+do("response = HttpResponse()")
+do('response.set_cookie("basket", "3", max_age=3600, httponly=True)')
+cookies(ASKING["response"])
+do('response.set_cookie("basket", "4")')
+cookies(ASKING["response"])
+show("A cookie set twice on one response")
 
 from django.utils import http as helpers  # noqa: E402
 from django.utils.datastructures import MultiValueDict  # noqa: E402

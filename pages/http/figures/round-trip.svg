@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 860 378">
+  <!-- the three columns: Django's side, the headers that cross, the browser's side -->
+  <text class="strong" x="0.5" y="14">Django, on the server</text>
+  <text class="strong" x="342.5" y="14">the headers</text>
+  <text class="strong" x="692.5" y="14">the browser</text>
+
+  <!-- going out: the response's SimpleCookie, an entry to a box -->
+  <text class="quiet" x="0.5" y="46">going out</text>
+  <text class="name strong" x="0.5" y="76">HttpResponseBase.cookies</text>
+  <text class="quiet small" x="0.5" y="94">a SimpleCookie</text>
+  <rect class="box" x="0.5" y="109.5" width="312" height="50" rx="4"/>
+  <text class="name" x="12.5" y="130">theme<tspan x="75.5">dark</tspan></text>
+  <text class="name mark" x="12.5" y="148">path /</text>
+  <rect class="box" x="0.5" y="173.5" width="312" height="68" rx="4"/>
+  <text class="name" x="12.5" y="194">basket<tspan x="75.5">3</tspan></text>
+  <text class="name mark" x="12.5" y="212">expires Mon, 21 Sep 2026 15:13:20 GMT</text>
+  <text class="name mark" x="12.5" y="230">httponly, max-age 3600, path /</text>
+
+  <!-- going out: one Set-Cookie line for each entry, line for line -->
+  <text class="quiet small" x="342.5" y="76">the handler writes one Set-Cookie line</text>
+  <text class="quiet small" x="342.5" y="94">for each entry, as it hands the response over</text>
+  <rect class="ground" x="342.5" y="109.5" width="320" height="50" rx="4"/>
+  <text class="name" x="354.5" y="130">Set-Cookie: theme=dark;</text>
+  <text class="name mark" x="354.5" y="148">Path=/</text>
+  <rect class="ground" x="342.5" y="173.5" width="320" height="68" rx="4"/>
+  <text class="name" x="354.5" y="194">Set-Cookie: basket=3;</text>
+  <text class="name mark" x="354.5" y="212">expires=Mon, 21 Sep 2026 15:13:20 GMT;</text>
+  <text class="name mark" x="354.5" y="230">HttpOnly; Max-Age=3600; Path=/</text>
+
+  <!-- going out: entry to line, line to browser -->
+  <path class="line" d="M313 134.5 H332"/>
+  <polygon class="head" points="342,134.5 332,129.5 332,139.5"/>
+  <path class="line" d="M663 134.5 H682"/>
+  <polygon class="head" points="692,134.5 682,129.5 682,139.5"/>
+  <path class="line" d="M313 207.5 H332"/>
+  <polygon class="head" points="342,207.5 332,202.5 332,212.5"/>
+  <path class="line" d="M663 207.5 H682"/>
+  <polygon class="head" points="692,207.5 682,202.5 682,212.5"/>
+
+  <!-- the browser, through both rows -->
+  <rect class="ground" x="692.5" y="109.5" width="167" height="268" rx="4"/>
+  <text x="704.5" y="140">keeps each cookie</text>
+  <text x="704.5" y="158">with its attributes,</text>
+  <text x="704.5" y="176">most saying how long</text>
+  <text x="704.5" y="194">to keep it and when</text>
+  <text x="704.5" y="212">to send it back</text>
+  <text x="704.5" y="312">sends names and values</text>
+  <text x="704.5" y="330">only, in one header:</text>
+  <text x="704.5" y="348">the attributes</text>
+  <text x="704.5" y="366">stay behind</text>
+
+  <!-- coming back: the one Cookie header, and the request's dictionary -->
+  <text class="quiet" x="0.5" y="282">coming back</text>
+  <text class="name strong" x="0.5" y="312">COOKIES</text>
+  <text class="quiet small" x="0.5" y="330">a dictionary of strings</text>
+  <rect class="box" x="0.5" y="345.5" width="312" height="32" rx="4"/>
+  <text class="name" x="12.5" y="366">{'theme': 'dark', 'basket': '3'}</text>
+
+  <text class="quiet small" x="342.5" y="312">kept in META, and read by parse_cookie</text>
+  <text class="quiet small" x="342.5" y="330">the first time COOKIES is read</text>
+  <rect class="ground" x="342.5" y="345.5" width="320" height="32" rx="4"/>
+  <text class="name" x="354.5" y="366">Cookie: theme=dark; basket=3</text>
+
+  <!-- coming back: browser to line, line to dictionary -->
+  <path class="line" d="M692 361.5 H673"/>
+  <polygon class="head" points="663,361.5 673,356.5 673,366.5"/>
+  <path class="line" d="M342 361.5 H323"/>
+  <polygon class="head" points="313,361.5 323,356.5 323,366.5"/>
+</svg>

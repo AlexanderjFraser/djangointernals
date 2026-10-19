@@ -202,7 +202,7 @@ second.scan.name, second.scan._committed, os.path.exists(os.path.join(MEDIA, 'ma
 
 What a save does with the field therefore depends on what was assigned to it, by the lines of the table above. A file is saved, under a name made from its own. A string is written to the column as it stands, with no directory put in front of it and no look at the storage. A file whose name is `None` cannot be saved: `pre_save` raises `FieldError` before that file is saved and before the statement is sent, with a note, where the file is a `ContentFile`, saying to pass it a name. And a raw save, which calls no field's `pre_save`, writes the name the attribute has and saves no file.
 
-A model form does its assigning through `FileField.save_form_data`, which sets the attribute to what the form's field cleaned unless that is `None`, a form's way of saying that no new file came and the old one stands; any other false value empties the field (`django/db/models/fields/files.py:FileField.save_form_data`) ([The built-in form fields](../forms/field-types.md)). How an uploaded file comes off the request is in [Multipart parsing and upload handlers](../http/uploads.md).
+A model form does its assigning through `FileField.save_form_data`, which sets the attribute to what the form's field cleaned unless that is `None`, a form's way of saying that no new file came and the old one stands; any other false value empties the field (`django/db/models/fields/files.py:FileField.save_form_data`) ([The built-in form fields](../forms/field-types.md)). How an uploaded file comes off the request is in [Upload handlers and uploaded files](../http/uploads.md).
 
 ## A file that nothing names any more
 

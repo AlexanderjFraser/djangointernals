@@ -9,7 +9,7 @@
  "pointers": [
   {
    "pointer": "django/http/response.py:StreamingHttpResponse._set_streaming_content",
-   "line": 13,
+   "line": 36,
    "sentence": "If the iterable has a `close` method, which a synchronous generator has, that method is added to the response's closers; an asynchronous generator has none, and adds nothing (`django/http/response.py:StreamingHttpResponse._set_streaming_content`).",
    "tree": "django",
    "path": "django/http/response.py",
@@ -23,7 +23,7 @@
   },
   {
    "pointer": "django/http/response.py:StreamingHttpResponse.streaming_content",
-   "line": 15,
+   "line": 38,
    "sentence": "A middleware that wants to change a streamed body cannot edit it; it assigns `streaming_content` a new iterator that wraps the old one, which is how `GZipMiddleware` compresses a stream piece by piece (`django/http/response.py:StreamingHttpResponse.streaming_content`, `django/middleware/gzip.py:GZipMiddleware.process_response`).",
    "tree": "django",
    "path": "django/http/response.py",
@@ -44,7 +44,7 @@
   },
   {
    "pointer": "django/middleware/gzip.py:GZipMiddleware.process_response",
-   "line": 15,
+   "line": 38,
    "sentence": "A middleware that wants to change a streamed body cannot edit it; it assigns `streaming_content` a new iterator that wraps the old one, which is how `GZipMiddleware` compresses a stream piece by piece (`django/http/response.py:StreamingHttpResponse.streaming_content`, `django/middleware/gzip.py:GZipMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/gzip.py",
@@ -58,8 +58,8 @@
   },
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.process_response",
-   "line": 17,
-   "sentence": "`CommonMiddleware` does not add a `Content-Length` to a streaming response, the cache middleware does not store one, and no `\"ETag\"` is computed for one, each because doing so would need the body (`django/middleware/common.py:CommonMiddleware.process_response`, `django/middleware/cache.py:UpdateCacheMiddleware.process_response`, `django/utils/cache.py:set_response_etag`).",
+   "line": 40,
+   "sentence": "Code that handles responses in general is expected to look first at the class attribute `streaming`, true here and false on `HttpResponse`, and the middleware Django ships do, leaving undone what would need the body: `CommonMiddleware` adds no `Content-Length` to a streaming response, the cache middleware does not store one, and no `\"ETag\"` is computed for one (`django/middleware/common.py:CommonMiddleware.process_response`, `django/middleware/cache.py:UpdateCacheMiddleware.process_response`, `django/utils/cache.py:set_response_etag`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.process_response",
@@ -72,8 +72,8 @@
   },
   {
    "pointer": "django/middleware/cache.py:UpdateCacheMiddleware.process_response",
-   "line": 17,
-   "sentence": "`CommonMiddleware` does not add a `Content-Length` to a streaming response, the cache middleware does not store one, and no `\"ETag\"` is computed for one, each because doing so would need the body (`django/middleware/common.py:CommonMiddleware.process_response`, `django/middleware/cache.py:UpdateCacheMiddleware.process_response`, `django/utils/cache.py:set_response_etag`).",
+   "line": 40,
+   "sentence": "Code that handles responses in general is expected to look first at the class attribute `streaming`, true here and false on `HttpResponse`, and the middleware Django ships do, leaving undone what would need the body: `CommonMiddleware` adds no `Content-Length` to a streaming response, the cache middleware does not store one, and no `\"ETag\"` is computed for one (`django/middleware/common.py:CommonMiddleware.process_response`, `django/middleware/cache.py:UpdateCacheMiddleware.process_response`, `django/utils/cache.py:set_response_etag`).",
    "tree": "django",
    "path": "django/middleware/cache.py",
    "symbol": "UpdateCacheMiddleware.process_response",
@@ -86,8 +86,8 @@
   },
   {
    "pointer": "django/utils/cache.py:set_response_etag",
-   "line": 17,
-   "sentence": "`CommonMiddleware` does not add a `Content-Length` to a streaming response, the cache middleware does not store one, and no `\"ETag\"` is computed for one, each because doing so would need the body (`django/middleware/common.py:CommonMiddleware.process_response`, `django/middleware/cache.py:UpdateCacheMiddleware.process_response`, `django/utils/cache.py:set_response_etag`).",
+   "line": 40,
+   "sentence": "Code that handles responses in general is expected to look first at the class attribute `streaming`, true here and false on `HttpResponse`, and the middleware Django ships do, leaving undone what would need the body: `CommonMiddleware` adds no `Content-Length` to a streaming response, the cache middleware does not store one, and no `\"ETag\"` is computed for one (`django/middleware/common.py:CommonMiddleware.process_response`, `django/middleware/cache.py:UpdateCacheMiddleware.process_response`, `django/utils/cache.py:set_response_etag`).",
    "tree": "django",
    "path": "django/utils/cache.py",
    "symbol": "set_response_etag",
@@ -100,8 +100,22 @@
   },
   {
    "pointer": "django/http/response.py:StreamingHttpResponse.__iter__",
-   "line": 39,
-   "sentence": "Each turn of it asks `StreamingHttpResponse.__iter__`'s iterator for one more piece, which runs the view's generator as far as its next `yield`, and the piece is sent before the next is made (`django/http/response.py:StreamingHttpResponse.__iter__`).",
+   "line": 44,
+   "sentence": "`WSGIHandler.__call__` returns the response object and a WSGI server iterates whatever it is given: each turn of its loop asks the iterator that `StreamingHttpResponse.__iter__` returned for one more piece, which runs a synchronous generator as far as its next `yield` (`django/http/response.py:StreamingHttpResponse.__iter__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "StreamingHttpResponse.__iter__",
+   "kind": "function",
+   "lines": [
+    517,
+    535
+   ],
+   "fingerprint": "1ee2857c05fabfbd"
+  },
+  {
+   "pointer": "django/http/response.py:StreamingHttpResponse.__iter__",
+   "line": 72,
+   "sentence": "An exception raised there is not turned into Django's error page, since no layer of the chain is on the stack to catch it: it comes out of the iterator into the server's loop, Django logs nothing, and a server that catches it and calls `close`, as wsgiref's does, still ends the request (`django/http/response.py:StreamingHttpResponse.__iter__`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "StreamingHttpResponse.__iter__",
@@ -114,8 +128,8 @@
   },
   {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.send_response",
-   "line": 64,
-   "sentence": "`ASGIHandler.send_response` cuts a body it is given whole into pieces of at most `ASGIHandler.chunk_size`, 65,536 bytes, and marks every message but the last as having more to come (`django/core/handlers/asgi.py:ASGIHandler.send_response`).",
+   "line": 93,
+   "sentence": "An ASGI handler sends the response itself, as messages: `ASGIHandler.send_response` sends the status and headers in one, and then the body, an `HttpResponse`'s cut into messages of at most `ASGIHandler.chunk_size`, 65,536 bytes (`django/core/handlers/asgi.py:ASGIHandler.send_response`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.send_response",
@@ -128,8 +142,8 @@
   },
   {
    "pointer": "django/http/response.py:StreamingHttpResponse.__aiter__",
-   "line": 90,
-   "sentence": "`StreamingHttpResponse.__aiter__` therefore hands it to a thread, runs it to the end there, collects everything it yields into a list, and only then starts to send, with a warning (`django/http/response.py:StreamingHttpResponse.__aiter__`).",
+   "line": 95,
+   "sentence": "A synchronous one cannot be run on the event loop without stopping every other request while it works, so `__aiter__` hands it to a thread, which runs it to its end and collects what it yields into a list; only then are the parts sent, with a warning (`django/http/response.py:StreamingHttpResponse.__aiter__`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "StreamingHttpResponse.__aiter__",
@@ -141,9 +155,37 @@
    "fingerprint": "bf6c44a5585bb099"
   },
   {
+   "pointer": "docs/ref/request-response.txt",
+   "line": 129,
+   "sentence": "The reference gives the reason the kinds must match: under WSGI the response is iterated synchronously and under ASGI asynchronously, and consuming an iterator of the wrong kind \"defeats the purpose of using a StreamingHttpResponse at all\" (`docs/ref/request-response.txt`, `django/http/response.py:StreamingHttpResponse.__iter__`).",
+   "tree": "django",
+   "path": "docs/ref/request-response.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1502
+   ],
+   "fingerprint": "b33496c155d07e2c"
+  },
+  {
+   "pointer": "django/http/response.py:StreamingHttpResponse.__iter__",
+   "line": 129,
+   "sentence": "The reference gives the reason the kinds must match: under WSGI the response is iterated synchronously and under ASGI asynchronously, and consuming an iterator of the wrong kind \"defeats the purpose of using a StreamingHttpResponse at all\" (`docs/ref/request-response.txt`, `django/http/response.py:StreamingHttpResponse.__iter__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "StreamingHttpResponse.__iter__",
+   "kind": "function",
+   "lines": [
+    517,
+    535
+   ],
+   "fingerprint": "1ee2857c05fabfbd"
+  },
+  {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
-   "line": 109,
-   "sentence": "In this recording the view's generator waits before each part, as one that fetched its data would, and the cancellation reaches it in that wait (`django/core/handlers/asgi.py:ASGIHandler.handle`, `django/core/handlers/asgi.py:ASGIHandler.listen_for_disconnect`):",
+   "line": 131,
+   "sentence": "A client that leaves in the middle is noticed by the handler, which listens for a disconnection while it sends, then cancels the sending where it waits and closes the response as at the end ([The two entry points](../handlers/entry.md#an-asgi-request)) (`django/core/handlers/asgi.py:ASGIHandler.handle`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.handle",
@@ -155,22 +197,8 @@
    "fingerprint": "045a0e5289611a7b"
   },
   {
-   "pointer": "django/core/handlers/asgi.py:ASGIHandler.listen_for_disconnect",
-   "line": 109,
-   "sentence": "In this recording the view's generator waits before each part, as one that fetched its data would, and the cancellation reaches it in that wait (`django/core/handlers/asgi.py:ASGIHandler.handle`, `django/core/handlers/asgi.py:ASGIHandler.listen_for_disconnect`):",
-   "tree": "django",
-   "path": "django/core/handlers/asgi.py",
-   "symbol": "ASGIHandler.listen_for_disconnect",
-   "kind": "function",
-   "lines": [
-    220,
-    226
-   ],
-   "fingerprint": "e39b353146d2d6b9"
-  },
-  {
    "pointer": "django/http/response.py:FileResponse._set_streaming_content",
-   "line": 124,
+   "line": 145,
    "sentence": "Given anything else it behaves as its base class (`django/http/response.py:FileResponse._set_streaming_content`).",
    "tree": "django",
    "path": "django/http/response.py",
@@ -184,7 +212,7 @@
   },
   {
    "pointer": "django/http/response.py:FileResponse.set_headers",
-   "line": 145,
+   "line": 172,
    "sentence": "For both of these headers the name is the response's `filename` argument if one was given, and otherwise the file's own (`django/http/response.py:FileResponse.set_headers`, `django/utils/http.py:content_disposition_header`).",
    "tree": "django",
    "path": "django/http/response.py",
@@ -198,7 +226,7 @@
   },
   {
    "pointer": "django/utils/http.py:content_disposition_header",
-   "line": 145,
+   "line": 172,
    "sentence": "For both of these headers the name is the response's `filename` argument if one was given, and otherwise the file's own (`django/http/response.py:FileResponse.set_headers`, `django/utils/http.py:content_disposition_header`).",
    "tree": "django",
    "path": "django/utils/http.py",
@@ -211,9 +239,51 @@
    "fingerprint": "868bb5621c0c52ca"
   },
   {
+   "pointer": "django/http/response.py:FileResponse.set_headers",
+   "line": 174,
+   "sentence": "A name that Python recognises as a compressed file, such as `\"report.csv.gz\"`, is given the compressed file's own type, here `\"application/gzip\"`, and no Content-Encoding: by the comment at that line, the encoding is left unset so that a browser does not uncompress the file (`django/http/response.py:FileResponse.set_headers`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "FileResponse.set_headers",
+   "kind": "function",
+   "lines": [
+    584,
+    636
+   ],
+   "fingerprint": "f6a08e97734ab3e7"
+  },
+  {
+   "pointer": "django/http/response.py:FileResponse._set_streaming_content",
+   "line": 176,
+   "sentence": "A WSGI server that is simply given the response iterates it like any other streaming response, and gets the file a block at a time, in pieces of at most 4096 bytes (`django/http/response.py:FileResponse._set_streaming_content`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "FileResponse._set_streaming_content",
+   "kind": "function",
+   "lines": [
+    572,
+    582
+   ],
+   "fingerprint": "3237ed96fb5791bf"
+  },
+  {
    "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
-   "line": 157,
-   "sentence": "When the response has a file and the server offers the wrapper, `WSGIHandler.__call__` returns the server's wrapper around the file in place of the response, and the server sends the file by whatever means it has (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "line": 178,
+   "sentence": "When the response has a file and the server offers the wrapper, `WSGIHandler.__call__` replaces the file's `close` with the response's and returns, in place of the response, the server's wrapper around the file, made with the response's block size; the server sends the file by whatever means it has (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 196,
+   "sentence": "Without the replacement nothing would close the response: the request's uploaded files would stay open, and `request_finished` would never be sent (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIHandler.__call__",
@@ -226,8 +296,8 @@
   },
   {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.run_get_response",
-   "line": 174,
-   "sentence": "The handler raises the block size to its own chunk size, and the file is then read to its end in a thread and held in memory before any of it is sent (`django/core/handlers/asgi.py:ASGIHandler.run_get_response`):",
+   "line": 198,
+   "sentence": "`ASGIHandler.run_get_response` raises the response's block size to the handler's chunk size, and the file is read to its end in a thread and held in memory before any of it is sent (`django/core/handlers/asgi.py:ASGIHandler.run_get_response`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.run_get_response",
@@ -239,23 +309,9 @@
    "fingerprint": "8a13ebe693b317b4"
   },
   {
-   "pointer": "django/contrib/staticfiles/handlers.py:ASGIStaticFilesHandler.get_response_async",
-   "line": 187,
-   "sentence": "The handler that serves static files under ASGI reads the whole file in a thread as well, deliberately and without the warning, by wrapping the content itself; its comment says that `FileResponse` is not async compatible (`django/contrib/staticfiles/handlers.py:ASGIStaticFilesHandler.get_response_async`).",
-   "tree": "django",
-   "path": "django/contrib/staticfiles/handlers.py",
-   "symbol": "ASGIStaticFilesHandler.get_response_async",
-   "kind": "function",
-   "lines": [
-    103,
-    115
-   ],
-   "fingerprint": "95a367cc7a96ecbf"
-  },
-  {
    "pointer": "django/http/response.py:HttpResponseBase.close",
-   "line": 191,
-   "sentence": "It calls each, ignoring any exception one raises so that the rest still run, empties the list, marks the response closed, and sends `request_finished` (`django/http/response.py:HttpResponseBase.close`).",
+   "line": 210,
+   "sentence": "It calls each, ignoring any `Exception` one raises so that the rest still run, empties the list, marks the response closed, and sends `request_finished` (`django/http/response.py:HttpResponseBase.close`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "HttpResponseBase.close",
@@ -268,8 +324,8 @@
   },
   {
    "pointer": "django/test/client.py:ClientHandler.__call__",
-   "line": 203,
-   "sentence": "The test client calls it too: at once for an ordinary response, and for a streaming one when a test has iterated the content to its end (`django/test/client.py:ClientHandler.__call__`).",
+   "line": 222,
+   "sentence": "`close` is called from outside, once the body has been sent or the client has gone: by a WSGI server, by the ASGI handler after `send_response`, and by the test client, which closes an ordinary response before its call returns and a streaming one once the test has read `streaming_content` to its end ([The two entry points](../handlers/entry.md#who-ends-the-request), [The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`, `django/test/client.py:closing_iterator_wrapper`).",
    "tree": "django",
    "path": "django/test/client.py",
    "symbol": "ClientHandler.__call__",
@@ -279,6 +335,20 @@
     210
    ],
    "fingerprint": "3a378c0ad831b908"
+  },
+  {
+   "pointer": "django/test/client.py:closing_iterator_wrapper",
+   "line": 222,
+   "sentence": "`close` is called from outside, once the body has been sent or the client has gone: by a WSGI server, by the ASGI handler after `send_response`, and by the test client, which closes an ordinary response before its call returns and a streaming one once the test has read `streaming_content` to its end ([The two entry points](../handlers/entry.md#who-ends-the-request), [The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`, `django/test/client.py:closing_iterator_wrapper`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "closing_iterator_wrapper",
+   "kind": "function",
+   "lines": [
+    120,
+    126
+   ],
+   "fingerprint": "d71120ba7cc267ac"
   }
  ]
 }

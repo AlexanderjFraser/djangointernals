@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 829 323">
+  <!-- the two handlers, one column each, in their order -->
+  <text class="name strong" x="236" y="14">MemoryFileUploadHandler</text>
+  <text class="name strong" x="500" y="14">TemporaryFileUploadHandler</text>
+
+  <!-- a small body: the first handler keeps the file, the second hears nothing of it -->
+  <text class="strong" x="0" y="51">a body no larger than</text>
+  <text class="name" x="0" y="69">FILE_UPLOAD_MAX_MEMORY_SIZE</text>
+  <text class="name quiet" x="0" y="87">activated = True</text>
+
+  <rect class="mark-box" x="236.5" y="30.5" width="224" height="132" rx="4"/>
+  <text class="name" x="248" y="51">receive_data_chunk</text>
+  <text x="248" y="69">keeps the chunk in memory,</text>
+  <text x="248" y="87">and returns <tspan class="name">None</tspan></text>
+  <text class="name" x="248" y="115">file_complete</text>
+  <text x="248" y="133">returns an</text>
+  <text class="name" x="248" y="151">InMemoryUploadedFile</text>
+
+  <rect class="ground dashed" x="500.5" y="30.5" width="224" height="32" rx="4"/>
+  <text class="quiet" x="512" y="51">is told nothing of the file</text>
+
+  <path class="line" d="M460.5 146.5 H754.5"/>
+  <polygon class="head" points="764.5,146.5 754.5,141.5 754.5,151.5"/>
+  <rect class="ground" x="764.5" y="130.5" width="64" height="32" rx="4"/>
+  <text class="name" x="776" y="151">FILES</text>
+
+  <!-- a larger body: the first handler hands each chunk on, the second writes it and returns the file -->
+  <text class="strong" x="0" y="211">a larger body</text>
+  <text class="name quiet" x="0" y="229">activated = False</text>
+
+  <rect class="box" x="236.5" y="190.5" width="224" height="132" rx="4"/>
+  <text class="name" x="248" y="211">receive_data_chunk</text>
+  <text x="248" y="229">hands the chunk on unchanged</text>
+  <text class="name" x="248" y="275">file_complete</text>
+  <text x="248" y="293">returns <tspan class="name">None</tspan></text>
+
+  <path class="line" d="M460.5 224.5 H490.5"/>
+  <polygon class="head" points="500.5,224.5 490.5,219.5 490.5,229.5"/>
+
+  <rect class="mark-box" x="500.5" y="190.5" width="224" height="132" rx="4"/>
+  <text class="name" x="512" y="211">receive_data_chunk</text>
+  <text x="512" y="229">writes it to a temporary file,</text>
+  <text x="512" y="247">and returns <tspan class="name">None</tspan></text>
+  <text class="name" x="512" y="275">file_complete</text>
+  <text x="512" y="293">returns the</text>
+  <text class="name" x="512" y="311">TemporaryUploadedFile</text>
+
+  <path class="line" d="M724.5 306.5 H754.5"/>
+  <polygon class="head" points="764.5,306.5 754.5,301.5 754.5,311.5"/>
+  <rect class="ground" x="764.5" y="290.5" width="64" height="32" rx="4"/>
+  <text class="name" x="776" y="311">FILES</text>
+</svg>

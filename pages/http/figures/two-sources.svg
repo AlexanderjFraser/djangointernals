@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 737 401">
+  <!-- what each server passes, one column each -->
+  <rect class="ground" x="148.5" y="0.5" width="280" height="50" rx="4"/>
+  <text x="160" y="30"><tspan class="strong">the environ</tspan>, from a WSGI server</text>
+  <rect class="ground" x="444.5" y="0.5" width="280" height="50" rx="4"/>
+  <text x="456" y="21"><tspan class="strong">the scope</tspan>, from an ASGI server,</text>
+  <text x="456" y="39">and <tspan class="strong">the body file</tspan> the handler has received</text>
+
+  <!-- down into each constructor -->
+  <path class="line" d="M288.5 51 V74.5"/>
+  <polygon class="head" points="288.5,84.5 283.5,74.5 293.5,74.5"/>
+  <path class="line" d="M584.5 51 V74.5"/>
+  <polygon class="head" points="584.5,84.5 579.5,74.5 589.5,74.5"/>
+  <rect class="mark-box" x="148.5" y="84.5" width="280" height="32" rx="4"/>
+  <text class="name" x="160" y="105">WSGIRequest.__init__</text>
+  <rect class="mark-box" x="444.5" y="84.5" width="280" height="32" rx="4"/>
+  <text class="name" x="456" y="105">ASGIRequest.__init__</text>
+
+  <!-- down into the attributes both set: a row for each, the request's attribute on the left -->
+  <path class="line" d="M288.5 117 V140.5"/>
+  <polygon class="head" points="288.5,150.5 283.5,140.5 293.5,140.5"/>
+  <path class="line" d="M584.5 117 V140.5"/>
+  <polygon class="head" points="584.5,150.5 579.5,140.5 589.5,140.5"/>
+  <rect class="box" x="0.5" y="150.5" width="736" height="250" rx="4"/>
+  <text class="strong" x="12" y="172">the same attributes on either request</text>
+
+  <!-- META -->
+  <text class="name" x="12" y="209">META</text>
+  <rect class="ground" x="148.5" y="188.5" width="280" height="32" rx="4"/>
+  <text x="160" y="209">the environ itself</text>
+  <rect class="ground" x="444.5" y="188.5" width="280" height="32" rx="4"/>
+  <text x="456" y="209">built from the scope, in WSGI's keys</text>
+
+  <!-- path, path_info -->
+  <text x="12" y="253"><tspan class="name">path</tspan>, <tspan class="name">path_info</tspan></text>
+  <rect class="ground" x="148.5" y="232.5" width="280" height="32" rx="4"/>
+  <text x="160" y="253">decoded a second time</text>
+  <rect class="ground" x="444.5" y="232.5" width="280" height="32" rx="4"/>
+  <text x="456" y="253">the scope's, already text</text>
+
+  <!-- the body's stream -->
+  <text x="12" y="297">the body's stream</text>
+  <rect class="ground" x="148.5" y="276.5" width="280" height="32" rx="4"/>
+  <text x="160" y="297">a <tspan class="name">LimitedStream</tspan> over <tspan class="name">"wsgi.input"</tspan></text>
+  <rect class="ground" x="444.5" y="276.5" width="280" height="32" rx="4"/>
+  <text x="456" y="297">the body file, as it is</text>
+
+  <!-- the foot: the three set alike, by the one method both constructors call -->
+  <text x="12" y="337"><tspan class="name">content_type</tspan>,</text>
+  <text x="12" y="355"><tspan class="name">content_params</tspan>,</text>
+  <text x="12" y="373"><tspan class="name">encoding</tspan></text>
+  <rect class="ground" x="148.5" y="320.5" width="576" height="68" rx="4"/>
+  <text class="quiet small" x="436.5" y="348" text-anchor="middle">both constructors, near their end:</text>
+  <text class="name" x="436.5" y="366" text-anchor="middle">HttpRequest._set_content_type_params</text>
+</svg>

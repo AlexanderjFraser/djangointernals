@@ -1,48 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 444">
-  <!-- above: the stream wrapped in iterators that cut it into parts; below: what the parser does with a field and with a file -->
-  <rect class="ground" x="0" y="0" width="646" height="150" rx="4"/>
-  <text x="12" y="24">the request's stream</text>
-  <text class="quiet small" x="220" y="24">read 64 KB at a time by ChunkIter</text>
-  <rect class="box" x="12" y="36" width="622" height="102" rx="4"/>
-  <text class="name" x="24" y="58">LazyStream</text>
-  <text class="quiet small" x="220" y="58">the same bytes, with a way to push some back</text>
-  <rect class="ground" x="24" y="70" width="598" height="56" rx="4"/>
-  <text class="name" x="36" y="92">BoundaryIter</text>
-  <text class="quiet small" x="220" y="92">the bytes up to the next boundary: one part</text>
-  <text class="name" x="36" y="114">parse_boundary_stream</text>
-  <text class="quiet small" x="220" y="114">the part's kind (raw, field or file), its headers, its content</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 416">
+  <!-- the nest: each object reads from the one that encloses it -->
+  <rect class="ground" x="0.5" y="0.5" width="645" height="216" rx="4"/>
+  <text x="12" y="22">the request's stream</text>
 
-  <path class="line" d="M323 150 V170"/>
-  <polygon class="head" points="323,180 318,170 328,170"/>
+  <rect class="box" x="12.5" y="34.5" width="621" height="170" rx="4"/>
+  <text class="name" x="24" y="56">ChunkIter</text>
+  <text class="quiet" x="240" y="56">reads it a chunk at a time: 64 KB with the handlers Django installs</text>
 
-  <text class="name" x="0" y="200">MultiPartParser._parse</text>
-  <text class="quiet small" x="186" y="200">for each part</text>
+  <rect class="ground" x="24.5" y="68.5" width="597" height="124" rx="4"/>
+  <text class="name" x="36" y="90">LazyStream</text>
+  <text class="quiet" x="240" y="90">the same bytes, with a way to push some back: <tspan class="name">unget</tspan></text>
+
+  <rect class="box" x="36.5" y="102.5" width="573" height="78" rx="4"/>
+  <text class="name" x="48" y="124">BoundaryIter</text>
+  <text class="quiet" x="240" y="124">the bytes up to the next boundary: one part</text>
+
+  <rect class="mark-box" x="48.5" y="136.5" width="549" height="32" rx="4"/>
+  <text class="name" x="60" y="157">parse_boundary_stream</text>
+  <text class="quiet" x="240" y="157">the part's headers, and its kind: raw, field or file</text>
+
+  <!-- a part, cut out of the stream, goes down to the parser's loop -->
+  <path class="mark-line" d="M162.5 168.5 V242.5"/>
+  <polygon class="head mark" points="162.5,252.5 157.5,242.5 167.5,242.5"/>
+
+  <!-- the loop of MultiPartParser._parse -->
+  <rect class="box" x="0.5" y="252.5" width="324" height="162" rx="4"/>
+  <text class="name strong" x="12" y="274">MultiPartParser._parse</text>
+  <text class="quiet" x="196" y="274">for each part</text>
 
   <!-- a field -->
-  <text class="strong small" x="0" y="228">a field</text>
-  <rect class="ground" x="0" y="238" width="150" height="44" rx="4"/>
-  <text class="small" x="10" y="265">appended to POST</text>
+  <text class="strong" x="12" y="318">a field</text>
+  <path class="line" d="M70 313.5 H98.5"/>
+  <polygon class="head" points="108.5,313.5 98.5,308.5 98.5,318.5"/>
+  <rect class="ground" x="108.5" y="288.5" width="204" height="50" rx="4"/>
+  <text x="120" y="309">its value, decoded</text>
+  <text x="120" y="327">and appended to <tspan class="name">POST</tspan></text>
 
   <!-- a file -->
-  <text class="strong small" x="176" y="228">a file</text>
-  <text class="quiet small" x="216" y="228">each chunk passes along the upload handlers, in their order</text>
+  <text class="strong" x="12" y="382">a file</text>
+  <path class="line" d="M70 377.5 H98.5"/>
+  <polygon class="head" points="108.5,377.5 98.5,372.5 98.5,382.5"/>
+  <rect class="ground" x="108.5" y="352.5" width="204" height="50" rx="4"/>
+  <text x="120" y="382">its chunks, one at a time</text>
 
-  <rect class="box" x="176" y="238" width="220" height="150" rx="4"/>
-  <text class="name small" x="188" y="260">MemoryFileUploadHandler</text>
-  <rect class="box" x="426" y="238" width="220" height="150" rx="4"/>
-  <text class="name small" x="438" y="260">TemporaryFileUploadHandler</text>
-
-  <text class="strong small" x="188" y="288">a body that is small</text>
-  <text class="quiet small" x="188" y="306">keeps the chunk in memory,</text>
-  <text class="quiet small" x="188" y="321">and returns None</text>
-  <text class="quiet small" x="438" y="306">is given nothing</text>
-
-  <text class="strong small" x="188" y="350">a body that is large</text>
-  <text class="quiet small" x="188" y="368">returns the chunk unchanged</text>
-  <path class="line" d="M396 364 H416"/>
-  <polygon class="head" points="426,364 416,359 416,369"/>
-  <text class="quiet small" x="438" y="368">writes it to a temporary file</text>
-
-  <text class="small" x="0" y="414">At the end of the part, the first handler to return an object from file_complete has made the entry</text>
-  <text class="small" x="0" y="431">in FILES: an InMemoryUploadedFile or a TemporaryUploadedFile.</text>
+  <!-- the request's upload handlers, drawn as one -->
+  <path class="line" d="M312.5 377.5 H350.5"/>
+  <polygon class="head" points="360.5,377.5 350.5,372.5 350.5,382.5"/>
+  <rect class="box" x="360.5" y="352.5" width="285" height="50" rx="4"/>
+  <text x="372" y="373">the request's upload handlers, in their order,</text>
+  <text x="372" y="391">which decide where the file goes</text>
 </svg>

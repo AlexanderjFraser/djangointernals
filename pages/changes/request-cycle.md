@@ -82,7 +82,7 @@ Passing `safe=` any value but `None` now warns, since the argument goes in Djang
 
 ## The multipart parser's Base64
 
-Since 6.1 the multipart parser is strict about a part whose Content-Transfer-Encoding is `"base64"`. Before 6.1 it decoded such a part leniently: invalid data "could be silently ignored or result in empty values", the 6.1 notes say (`docs/releases/6.1.txt`). `MultiPartParser.parse` now decodes with `validate=True`, which refuses any character outside the Base64 alphabet (`django/http/multipartparser.py:MultiPartParser.parse`; [Multipart parsing and upload handlers](../http/uploads.md)).
+Since 6.1 the multipart parser is strict about a part whose Content-Transfer-Encoding is `"base64"`. Before 6.1 it decoded such a part leniently: invalid data "could be silently ignored or result in empty values", the 6.1 notes say (`docs/releases/6.1.txt`). `MultiPartParser.parse` now decodes with `validate=True`, which refuses any character outside the Base64 alphabet (`django/http/multipartparser.py:MultiPartParser.parse`; [Multipart parsing: `MultiPartParser`](../http/multipart.md)).
 
 A file's data has an exclamation mark inside it, and the `b'Monday'` of 5.2.17 and 6.0.8 is the mark dropped without a word:
 
@@ -119,7 +119,7 @@ The rest, by name:
 | a form not in UTF-8 | Since 5.0, a urlencoded body declared in another charset raises `BadRequest`, a 400 | `django/http/request.py:HttpRequest._load_post_and_files` |
 | `HttpRequest.accepted_types` | Since 5.2, sorted by the client's preference | [Headers, host and scheme](../http/headers.md) |
 | `HttpRequest.get_preferred_type` | New in 5.2: of the types given, the one the client prefers | `django/http/request.py:HttpRequest.get_preferred_type` |
-| `HttpRequest.multipart_parser_class` | New in 6.1: the parser's class, replaceable until the body is parsed | [Multipart parsing and upload handlers](../http/uploads.md#changing-the-handlers) |
+| `HttpRequest.multipart_parser_class` | New in 6.1: the parser's class, replaceable until the body is parsed | [Multipart parsing: `MultiPartParser`](../http/multipart.md#replacing-the-parser-multipart_parser_class) |
 | `django.views.decorators` | Since 5.0, each wraps a coroutine view in an `async def` that awaits it; `sensitive_variables` leaves it unwrapped | [Asynchronous views](../views/async.md#what-a-decorator-has-to-keep) |
 | `method_decorator` | Since 5.2, marks its replacement a coroutine function when the method is one | `django/utils/decorators.py:_multi_decorate` |
 | `preserve_request=` of a redirect | New in 5.2: 307 for 302 and 308 for 301, in `HttpResponseRedirect`, `HttpResponsePermanentRedirect` and `redirect` | [The response object](../http/response.md#redirects) |

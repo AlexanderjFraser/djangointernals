@@ -10,7 +10,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest.__init__",
    "line": 9,
-   "sentence": "Neither constructor calls the base one; a comment in the base says so of `WSGIRequest`, and warns that whatever the base assigns has to be assigned there too (`django/http/request.py:HttpRequest.__init__`).",
+   "sentence": "Neither constructor calls the base one, and a comment in the base's `__init__` warns that each assignment made there should be made in `WSGIRequest.__init__` as well: the two are kept in step by hand (`django/http/request.py:HttpRequest.__init__`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.__init__",
@@ -23,7 +23,7 @@
   },
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest.__init__",
-   "line": 13,
+   "line": 31,
    "sentence": "`WSGIRequest.__init__` does not copy it: the request's `META` is that same dictionary, and the request also keeps it as `environ` (`django/core/handlers/wsgi.py:WSGIRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
@@ -36,9 +36,23 @@
    "fingerprint": "39da82012b104293"
   },
   {
+   "pointer": "django/core/handlers/wsgi.py:get_bytes_from_wsgi",
+   "line": 33,
+   "sentence": "Django undoes the server's step and then decodes properly: `get_bytes_from_wsgi` encodes the string with ISO-8859-1, which gives back exactly the bytes the server had, and `get_path_info` decodes those as UTF-8, first percent-escaping any byte sequence that is not valid UTF-8 so that the decoding cannot fail (`django/core/handlers/wsgi.py:get_bytes_from_wsgi`, `django/core/handlers/wsgi.py:get_path_info`, `django/utils/encoding.py:repercent_broken_unicode`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "get_bytes_from_wsgi",
+   "kind": "function",
+   "lines": [
+    187,
+    197
+   ],
+   "fingerprint": "3bafc5863f46eedd"
+  },
+  {
    "pointer": "django/core/handlers/wsgi.py:get_path_info",
-   "line": 15,
-   "sentence": "Django undoes the server's step and then decodes properly: `get_bytes_from_wsgi` encodes the string with ISO-8859-1, which gives back exactly the bytes the server had, and `get_path_info` decodes those as UTF-8, first percent-escaping any byte sequence that is not valid UTF-8 so that the decoding cannot fail (`django/core/handlers/wsgi.py:get_path_info`, `django/utils/encoding.py:repercent_broken_unicode`).",
+   "line": 33,
+   "sentence": "Django undoes the server's step and then decodes properly: `get_bytes_from_wsgi` encodes the string with ISO-8859-1, which gives back exactly the bytes the server had, and `get_path_info` decodes those as UTF-8, first percent-escaping any byte sequence that is not valid UTF-8 so that the decoding cannot fail (`django/core/handlers/wsgi.py:get_bytes_from_wsgi`, `django/core/handlers/wsgi.py:get_path_info`, `django/utils/encoding.py:repercent_broken_unicode`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "get_path_info",
@@ -51,8 +65,8 @@
   },
   {
    "pointer": "django/utils/encoding.py:repercent_broken_unicode",
-   "line": 15,
-   "sentence": "Django undoes the server's step and then decodes properly: `get_bytes_from_wsgi` encodes the string with ISO-8859-1, which gives back exactly the bytes the server had, and `get_path_info` decodes those as UTF-8, first percent-escaping any byte sequence that is not valid UTF-8 so that the decoding cannot fail (`django/core/handlers/wsgi.py:get_path_info`, `django/utils/encoding.py:repercent_broken_unicode`).",
+   "line": 33,
+   "sentence": "Django undoes the server's step and then decodes properly: `get_bytes_from_wsgi` encodes the string with ISO-8859-1, which gives back exactly the bytes the server had, and `get_path_info` decodes those as UTF-8, first percent-escaping any byte sequence that is not valid UTF-8 so that the decoding cannot fail (`django/core/handlers/wsgi.py:get_bytes_from_wsgi`, `django/core/handlers/wsgi.py:get_path_info`, `django/utils/encoding.py:repercent_broken_unicode`).",
    "tree": "django",
    "path": "django/utils/encoding.py",
    "symbol": "repercent_broken_unicode",
@@ -65,8 +79,8 @@
   },
   {
    "pointer": "django/core/handlers/wsgi.py:get_script_name",
-   "line": 17,
-   "sentence": "The constructor then writes the decoded script name and path info back into the environ, so `META` holds the corrected values (`django/core/handlers/wsgi.py:get_script_name`).",
+   "line": 35,
+   "sentence": "`get_script_name` takes the script name from `settings.FORCE_SCRIPT_NAME` when that is not `None`; otherwise from `\"SCRIPT_URL\"` or `\"REDIRECT_URL\"`, in which Apache's mod_rewrite leaves the URL as it was before rewriting, with the path info taken off its end, so that the script name is the one the client saw; and otherwise from the environ's `\"SCRIPT_NAME\"` (`django/core/handlers/wsgi.py:get_script_name`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "get_script_name",
@@ -78,9 +92,37 @@
    "fingerprint": "8853b84d5de53366"
   },
   {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.__init__",
+   "line": 35,
+   "sentence": "The constructor then writes the decoded script name and path info back into the environ, so `META` holds the corrected values (`django/core/handlers/wsgi.py:WSGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    57,
+    80
+   ],
+   "fingerprint": "39da82012b104293"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.__init__",
+   "line": 49,
+   "sentence": "A `WSGIRequest` whose environ has no `\"CONTENT_LENGTH\"` therefore has an empty body (`django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/wsgi.py:LimitedStream`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    57,
+    80
+   ],
+   "fingerprint": "39da82012b104293"
+  },
+  {
    "pointer": "django/core/handlers/wsgi.py:LimitedStream",
-   "line": 30,
-   "sentence": "A body sent without a `Content-Length` is therefore, to a `WSGIRequest`, an empty body, unless the server has put a length of its own into the environ (`django/core/handlers/wsgi.py:LimitedStream`).",
+   "line": 49,
+   "sentence": "A `WSGIRequest` whose environ has no `\"CONTENT_LENGTH\"` therefore has an empty body (`django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/wsgi.py:LimitedStream`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "LimitedStream",
@@ -92,8 +134,22 @@
    "fingerprint": "94b9eaf646cd39c0"
   },
   {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.read_body",
+   "line": 53,
+   "sentence": "By the time an `ASGIRequest` is made the handler has received the whole body into a temporary file, one that is held in memory until it grows past `settings.FILE_UPLOAD_MAX_MEMORY_SIZE` and is then written to disk (`django/core/handlers/asgi.py:ASGIHandler.read_body`), and the constructor is given the scope and that file ([The two entry points](../handlers/entry.md#an-asgi-request) has the handler's side).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.read_body",
+   "kind": "function",
+   "lines": [
+    239,
+    267
+   ],
+   "fingerprint": "8c1984707322f62e"
+  },
+  {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
-   "line": 34,
+   "line": 53,
    "sentence": "The file becomes the request's stream as it is, with no wrapper (`django/core/handlers/asgi.py:ASGIRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
@@ -107,8 +163,8 @@
   },
   {
    "pointer": "django/core/handlers/asgi.py:get_script_prefix",
-   "line": 73,
-   "sentence": "The client's and the server's addresses become the keys WSGI uses for them, and when the scope names no server the name is `\"unknown\"` and the port `\"0\"` (`django/core/handlers/asgi.py:get_script_prefix`).",
+   "line": 57,
+   "sentence": "WSGI's test is only that the setting is not `None`, so a setting of `\"\"` forces an empty script name under WSGI and is passed over under ASGI (`django/core/handlers/asgi.py:get_script_prefix`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "get_script_prefix",
@@ -120,8 +176,36 @@
    "fingerprint": "3a9668e2d5b5453b"
   },
   {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 57,
+   "sentence": "WSGI's test is only that the setting is not `None`, so a setting of `\"\"` forces an empty script name under WSGI and is passed over under ASGI (`django/core/handlers/asgi.py:get_script_prefix`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 59,
+   "sentence": "The constructor therefore drops every header with an underscore in its name (`django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
    "pointer": "django/core/servers/basehttp.py:WSGIRequestHandler.get_environ",
-   "line": 75,
+   "line": 59,
    "sentence": "Under WSGI this is the server's affair, and Django's development server does the same before it builds the environ (`django/core/servers/basehttp.py:WSGIRequestHandler.get_environ`).",
    "tree": "django",
    "path": "django/core/servers/basehttp.py",
@@ -134,8 +218,36 @@
    "fingerprint": "a26fc62812f63658"
   },
   {
+   "pointer": "docs/releases/6.0.4.txt",
+   "line": 61,
+   "sentence": "It now ignores such headers, as Daphne, the reference ASGI server, does (`docs/releases/6.0.4.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.4.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    87
+   ],
+   "fingerprint": "c216faca99d3a6db"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 63,
+   "sentence": "HTTP/2 lets a client send each cookie as a `\"cookie\"` header of its own, and a comma is not what separates cookies, so those values are joined with a semicolon and a space (`django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
    "pointer": "django/http/request.py:HttpRequest._set_content_type_params",
-   "line": 81,
+   "line": 90,
    "sentence": "If one of the parameters is a charset that Python has a codec for, it becomes the request's `encoding`; an unknown charset is ignored (`django/http/request.py:HttpRequest._set_content_type_params`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -149,8 +261,8 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.encoding",
-   "line": 83,
-   "sentence": "A multipart form that was parsed from the stream cannot be: after the encoding is assigned, the next read of `POST` comes back empty, and `FILES` with it (`django/http/request.py:HttpRequest.encoding`).",
+   "line": 92,
+   "sentence": "A view or a middleware may assign it, and because the collections may already have been decoded with the old value, the setter deletes `GET` and the parsed `POST`, so that the next read parses them again (`django/http/request.py:HttpRequest.encoding`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.encoding",
@@ -169,9 +281,23 @@
    "fingerprint": "bff622b7321f490e"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 94,
+   "sentence": "The setter leaves `FILES` alone, so it still holds the files of the first parse until `POST` is read again; that read comes back empty, and empties `FILES` with it (`django/http/request.py:HttpRequest._load_post_and_files`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest.GET",
-   "line": 101,
-   "sentence": "`ASGIRequest.GET` does not, so under ASGI a query string is decoded with the default charset whatever the request's encoding is (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`).",
+   "line": 96,
+   "sentence": "`ASGIRequest.GET` does not: its constructor has decoded the scope's query string as UTF-8 to put it in `META`, and the `QueryDict` decodes the percent-escapes in it with the default charset, whatever the request's encoding is (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.GET`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest.GET",
@@ -184,9 +310,23 @@
    "fingerprint": "44516bf042f7a841"
   },
   {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 96,
+   "sentence": "`ASGIRequest.GET` does not: its constructor has decoded the scope's query string as UTF-8 to put it in `META`, and the `QueryDict` decodes the percent-escapes in it with the default charset, whatever the request's encoding is (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.GET`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.GET",
-   "line": 101,
-   "sentence": "`ASGIRequest.GET` does not, so under ASGI a query string is decoded with the default charset whatever the request's encoding is (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`).",
+   "line": 96,
+   "sentence": "`ASGIRequest.GET` does not: its constructor has decoded the scope's query string as UTF-8 to put it in `META`, and the `QueryDict` decodes the percent-escapes in it with the default charset, whatever the request's encoding is (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.GET`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest.GET",
@@ -199,9 +339,58 @@
    "fingerprint": "f1ec7e02baf6402d"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest.encoding",
+   "line": 98,
+   "sentence": "It stores the new encoding, then asks whether the request has `GET`, and deletes it if so (`django/http/request.py:HttpRequest.encoding`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.encoding",
+   "kind": "function",
+   "lines": [
+    332,
+    334
+   ],
+   "at": 333,
+   "more": [
+    [
+     336,
+     347
+    ]
+   ],
+   "fingerprint": "bff622b7321f490e"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict.__init__",
+   "line": 116,
+   "sentence": "The setter's parse of the query string raises `TooManyFieldsSent` from the constructor in the same way, when the query string has more parameters than `settings.DATA_UPLOAD_MAX_NUMBER_FIELDS` allows (`django/http/request.py:QueryDict.__init__`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict.__init__",
+   "kind": "function",
+   "lines": [
+    599,
+    628
+   ],
+   "fingerprint": "e42e36748c604427"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 116,
+   "sentence": "Under either handler, then, the exception reaches the server with no response made, and what the client sees is the server's doing (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.create_request`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.create_request",
-   "line": 103,
-   "sentence": "In these cases Django has made no response, and what the client sees is the server's doing (`django/core/handlers/asgi.py:ASGIHandler.create_request`).",
+   "line": 116,
+   "sentence": "Under either handler, then, the exception reaches the server with no response made, and what the client sees is the server's doing (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.create_request`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.create_request",
@@ -211,20 +400,6 @@
     284
    ],
    "fingerprint": "c01db06ee54c3a7b"
-  },
-  {
-   "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
-   "line": 134,
-   "sentence": "The handler sets `HttpRequest.resolver_match` when the URL has been resolved, and middleware add the session, the user and the rest; [From the server's call to the view](../overview/arrival.md#the-way-in) follows a request through the default set (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
-   "tree": "django",
-   "path": "django/core/handlers/base.py",
-   "symbol": "BaseHandler.resolve_request",
-   "kind": "function",
-   "lines": [
-    302,
-    317
-   ],
-   "fingerprint": "df4893b47d5285a9"
   }
  ]
 }

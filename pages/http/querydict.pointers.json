@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/http/request.py:QueryDict.__init__",
-   "line": 37,
+   "line": 32,
    "sentence": "Django adds three things around it (`django/http/request.py:QueryDict.__init__`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -50,51 +50,23 @@
    "fingerprint": "e42e36748c604427"
   },
   {
-   "pointer": "django/http/request.py:QueryDict._assert_mutable",
-   "line": 53,
-   "sentence": "The guard is in those methods and nowhere else: the in-place union operator, which `dict` supplies and `QueryDict` does not override, changes an immutable one without complaint, as the last line of the recording above shows (`django/http/request.py:QueryDict._assert_mutable`).",
+   "pointer": "django/http/request.py:QueryDict.__init__",
+   "line": 38,
+   "sentence": "The comments beside the two attempts give the reason: a query string \"normally contains URL-encoded data, a subset of ASCII\", \"but some user agents are misbehaving\" and send bytes outside it (`django/http/request.py:QueryDict.__init__`).",
    "tree": "django",
    "path": "django/http/request.py",
-   "symbol": "QueryDict._assert_mutable",
+   "symbol": "QueryDict.__init__",
    "kind": "function",
    "lines": [
-    653,
-    655
+    599,
+    628
    ],
-   "fingerprint": "ed6bbaa61952e275"
-  },
-  {
-   "pointer": "django/http/request.py:QueryDict.copy",
-   "line": 55,
-   "sentence": "On a mutable `QueryDict`, a key or a value set by subscript, `setlist`, `appendlist` or `setdefault` is decoded with the dictionary's encoding if it is bytes and stored as it is otherwise; `update`, which the class inherits, stores what it is given (`django/http/request.py:QueryDict.copy`, `django/http/request.py:bytes_to_text`).",
-   "tree": "django",
-   "path": "django/http/request.py",
-   "symbol": "QueryDict.copy",
-   "kind": "function",
-   "lines": [
-    714,
-    716
-   ],
-   "fingerprint": "624b39215b64f662"
-  },
-  {
-   "pointer": "django/http/request.py:bytes_to_text",
-   "line": 55,
-   "sentence": "On a mutable `QueryDict`, a key or a value set by subscript, `setlist`, `appendlist` or `setdefault` is decoded with the dictionary's encoding if it is bytes and stored as it is otherwise; `update`, which the class inherits, stores what it is given (`django/http/request.py:QueryDict.copy`, `django/http/request.py:bytes_to_text`).",
-   "tree": "django",
-   "path": "django/http/request.py",
-   "symbol": "bytes_to_text",
-   "kind": "function",
-   "lines": [
-    835,
-    846
-   ],
-   "fingerprint": "4bd2f8992e9c531c"
+   "fingerprint": "e42e36748c604427"
   },
   {
    "pointer": "django/http/request.py:QueryDict.urlencode",
-   "line": 57,
-   "sentence": "Its one argument names characters to leave unescaped (`django/http/request.py:QueryDict.urlencode`).",
+   "line": 51,
+   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, in order: inside Django, `reverse` uses it for a `query` given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "QueryDict.urlencode",
@@ -106,9 +78,166 @@
    "fingerprint": "f91176e108f6348b"
   },
   {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 51,
+   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, in order: inside Django, `reverse` uses it for a `query` given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/template/defaulttags.py:querystring",
+   "line": 51,
+   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, in order: inside Django, `reverse` uses it for a `query` given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
+   "tree": "django",
+   "path": "django/template/defaulttags.py",
+   "symbol": "querystring",
+   "kind": "function",
+   "lines": [
+    1286,
+    1349
+   ],
+   "at": 1287,
+   "fingerprint": "c124c7a8cbce92fd"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict._assert_mutable",
+   "line": 55,
+   "sentence": "The guard is in those methods alone, and a method the class inherits meets it only by calling one of them, as `MultiValueDict.update` does through `QueryDict.setlistdefault` (`django/http/request.py:QueryDict._assert_mutable`, `django/utils/datastructures.py:MultiValueDict.update`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict._assert_mutable",
+   "kind": "function",
+   "lines": [
+    653,
+    655
+   ],
+   "fingerprint": "ed6bbaa61952e275"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.update",
+   "line": 55,
+   "sentence": "The guard is in those methods alone, and a method the class inherits meets it only by calling one of them, as `MultiValueDict.update` does through `QueryDict.setlistdefault` (`django/http/request.py:QueryDict._assert_mutable`, `django/utils/datastructures.py:MultiValueDict.update`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.update",
+   "kind": "function",
+   "lines": [
+    200,
+    215
+   ],
+   "fingerprint": "ce539938b1017dd1"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict.copy",
+   "line": 57,
+   "sentence": "Past the guard, `update` decodes no value: under a key given as text, a value given as bytes is stored as bytes (`django/http/request.py:QueryDict.copy`, `django/utils/datastructures.py:MultiValueDict.__setitem__`, `django/http/request.py:bytes_to_text`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict.copy",
+   "kind": "function",
+   "lines": [
+    714,
+    716
+   ],
+   "fingerprint": "624b39215b64f662"
+  },
+  {
+   "pointer": "django/utils/datastructures.py:MultiValueDict.__setitem__",
+   "line": 57,
+   "sentence": "Past the guard, `update` decodes no value: under a key given as text, a value given as bytes is stored as bytes (`django/http/request.py:QueryDict.copy`, `django/utils/datastructures.py:MultiValueDict.__setitem__`, `django/http/request.py:bytes_to_text`).",
+   "tree": "django",
+   "path": "django/utils/datastructures.py",
+   "symbol": "MultiValueDict.__setitem__",
+   "kind": "function",
+   "lines": [
+    94,
+    95
+   ],
+   "fingerprint": "ca4636b9b457c173"
+  },
+  {
+   "pointer": "django/http/request.py:bytes_to_text",
+   "line": 57,
+   "sentence": "Past the guard, `update` decodes no value: under a key given as text, a value given as bytes is stored as bytes (`django/http/request.py:QueryDict.copy`, `django/utils/datastructures.py:MultiValueDict.__setitem__`, `django/http/request.py:bytes_to_text`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "bytes_to_text",
+   "kind": "function",
+   "lines": [
+    835,
+    846
+   ],
+   "fingerprint": "4bd2f8992e9c531c"
+  },
+  {
+   "pointer": "django/http/request.py:QueryDict",
+   "line": 71,
+   "sentence": "`dict` supplies it, neither `MultiValueDict` nor `QueryDict` overrides it, and it stores what it is given without calling any guarded method: in the recording above, the dictionary called frozen gained a key and stayed immutable (`django/http/request.py:QueryDict`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "QueryDict",
+   "kind": "class",
+   "lines": [
+    579,
+    748
+   ],
+   "fingerprint": "84175302e4644e30"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.GET",
+   "line": 75,
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.GET",
+   "kind": "function",
+   "lines": [
+    85,
+    89
+   ],
+   "at": 86,
+   "fingerprint": "44516bf042f7a841"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.GET",
+   "line": 75,
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.GET",
+   "kind": "function",
+   "lines": [
+    118,
+    120
+   ],
+   "at": 119,
+   "fingerprint": "f1ec7e02baf6402d"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 75,
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
    "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
-   "line": 77,
-   "sentence": "It makes a mutable one, appends each field as it reads it, and sets `_mutable` to false itself before handing the dictionary back (`django/http/multipartparser.py:MultiPartParser._parse`).",
+   "line": 75,
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
    "tree": "django",
    "path": "django/http/multipartparser.py",
    "symbol": "MultiPartParser._parse",
@@ -118,20 +247,6 @@
     371
    ],
    "fingerprint": "f8b9b47b9d0bccd2"
-  },
-  {
-   "pointer": "django/utils/datastructures.py",
-   "line": 79,
-   "sentence": "`MultiValueDict` is also the type of `FILES`, with uploaded files as its values, and is told with the other data structures of `django/utils/datastructures.py` in [Data structures: `MultiValueDict` and its neighbours](../utils/datastructures.md).",
-   "tree": "django",
-   "path": "django/utils/datastructures.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    365
-   ],
-   "fingerprint": "cfe76fe0e3ed795f"
   }
  ]
 }
