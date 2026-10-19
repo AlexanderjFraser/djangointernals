@@ -147,9 +147,11 @@ The standard is a university textbook. A page explains.
   quote of a recording is labelled as recorded from a running Django,
   or from the versions of Django a recording ran, so that a reader knows
   it is a trace and not code.
-- **A section is one sitting's reading**: about 12,000 characters. Past
-  18,000 it is two sections, or has something to cut. A chapter's opening
-  page is shorter than its sections.
+- **A section is one subject, read in one sitting.** Its length is its
+  subject's: a page long because it tells what another page owns, reads a
+  block back or quotes a trace whole is cut; one long because its subject
+  is stays long. A chapter's opening page gives the model and leaves the
+  detail to its sections, so it is usually the shorter.
 - **Newest version only.** What a reader may believe from an older release
   is corrected in a note where it matters, and collected in the last
   chapter.
@@ -283,19 +285,21 @@ request  ->  A  ->  B  ->  C  ->  the view
   the classes (`box`, `ground`, `mark-box`, `line`, `dashed`, `mark-line`,
   `head`, `mark`, `name`, `quiet`, `strong`, `small`); a chapter may add
   its own in `pages/<chapter>/figures/figures.css`.
-- **It is drawn for a desktop's screen**, where the book is mainly read; a
-  phone is served as well as that allows, and never at the desktop's
-  cost. One unit of the `viewBox` is one CSS pixel, and type in a figure
-  is 14 pixels, names 13. The text column is 646 pixels wide, and a
-  figure whose content runs across may run into the margin, to at most
-  860: in a window narrower than 1280 there is no margin, and the figure
-  is shrunk to the column, which keeps 860 at three quarters of its size.
-  It is seen whole with its caption on a laptop's screen, so it is at
-  most about 600 tall and never over 640. It is composed landscape: what
-  stands side by side stays side by side, a note stands beside what it
-  notes, and a sequence too long for the height turns a corner rather
-  than running down the page. On a phone a figure keeps three quarters of
-  its width and scrolls past it.
+- **It is drawn for a desktop's screen**, where the book is mainly read,
+  and composed for what it shows: a nest, a tree or a long sequence is as
+  tall as it is, a comparison or a timeline as wide. A phone is served as
+  well as that allows, and never at the desktop's cost. The facts of the
+  page a drawer weighs: one unit of the `viewBox` is one CSS pixel, and
+  type in a figure is 14 pixels, names 13; the text column is 646 pixels
+  wide, and a figure whose content runs across may run into the margin,
+  to about 860, which a window of 1280 or more shows at its drawn size
+  and a narrower one shrinks to the column (860 keeps three quarters of
+  its size there); a laptop shows 650 to 800 pixels of a page at once,
+  so a figure much taller is read in parts, a cost weighed against
+  crowding it or cutting it in two, and usually the smaller. What stands
+  side by side stays side by side, and a note stands beside what it
+  notes. On a phone a figure keeps three quarters of its width and
+  scrolls past it.
 - **It is looked at rendered**, in a light palette and a dark one, at a
   desktop's width first and then a phone's, before its page is
   published.
@@ -304,10 +308,10 @@ request  ->  A  ->  B  ->  C  ->  the view
 
 A table is ruled above and below and may run into the margin. An italic
 paragraph directly under a table is its caption, and gives it a number. A
-pointer in a table cell is shown with its file under it, so a cell holds at
-most one, and not inside parentheses or ahead of the words of its cell: a
-row that needs more places names them in words, and their pointers stand in
-the prose beside the table.
+pointer in a table cell is shown as a block with its file under it, after
+the words of its cell: one reads well, and several read as a stack, so a
+row that needs more places usually names them in words, with their
+pointers in the prose beside the table.
 
 A narrow screen has no room for a table of three columns or more, and sets
 it row by row: a row's first cell stands alone as the row's name, and each

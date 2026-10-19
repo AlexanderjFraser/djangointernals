@@ -47,10 +47,10 @@ on the site but the book.
    page shows a recording from a running Django (`recordings/`).
 9. **Figures are drawn for the page, looked at rendered, and legible where
    they stand.** The desktop is the main reading and the phone the
-   second: a figure is composed for a desktop's screen, landscape and
-   seen whole there with its caption (`SPEC.md` gives the sizes). A
-   figure's source is in the markdown, and it carries no fact the text
-   does not.
+   second: a figure is composed for a desktop's screen and for what it
+   shows, as wide and as tall as that is (`SPEC.md` gives the facts of
+   the page). A figure's source is in the markdown, and it carries no
+   fact the text does not.
 10. **Links resolve**, and the build refuses one that does not.
 11. **Every rule a program can check has a gate, and every gate a
     `--probe`** that proves it fails on what it should.
