@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 840 417">
+  <!-- the three headings: the stack at the left, the reads across the middle, the signal at the right -->
+  <text class="strong" x="0" y="14">the stack, from the proxy down</text>
+  <text class="strong" x="406" y="14" text-anchor="middle">reads, from the proxy down</text>
+  <text class="name strong" x="643" y="14">setting_changed</text>
+
+  <!-- the name each column reads -->
+  <text class="name" x="262" y="58" text-anchor="middle">APPEND_SLASH</text>
+  <text class="name" x="358" y="58" text-anchor="middle">DEBUG</text>
+  <text class="name" x="454" y="58" text-anchor="middle">TIME_ZONE</text>
+  <text x="550" y="40" text-anchor="middle"><tspan class="name">TIME_ZONE</tspan>,</text>
+  <text class="quiet" x="550" y="58" text-anchor="middle">after del</text>
+
+  <!-- the four layers, the proxy at the top -->
+  <rect class="ground" x="0.5" y="84.5" width="619" height="32" rx="4"/>
+  <text class="strong" x="12" y="105"><tspan class="name">settings</tspan>, the proxy</text>
+
+  <rect class="box" x="0.5" y="148.5" width="619" height="68" rx="4"/>
+  <text class="strong" x="12" y="169">the inner override's holder</text>
+  <text class="name" x="12" y="187">APPEND_SLASH = False</text>
+  <text x="12" y="205">deleted: <tspan class="name">TIME_ZONE</tspan><tspan class="quiet">, after del</tspan></text>
+
+  <rect class="box" x="0.5" y="248.5" width="619" height="68" rx="4"/>
+  <text class="strong" x="12" y="269">the outer override's holder</text>
+  <text class="name" x="12" y="287">DEBUG = True</text>
+
+  <rect class="ground" x="0.5" y="348.5" width="619" height="68" rx="4"/>
+  <text class="strong" x="12" y="369">the <tspan class="name">Settings</tspan></text>
+  <text class="quiet" x="12" y="387">the project's settings module</text>
+  <text class="quiet" x="12" y="405">over the defaults</text>
+
+  <!-- each layer's reference to the one below -->
+  <path class="line" d="M28 117 V138"/>
+  <polygon class="head" points="28,148 23,138 33,138"/>
+  <text class="quiet" x="40" y="137">wraps</text>
+  <path class="line" d="M28 217 V238"/>
+  <polygon class="head" points="28,248 23,238 33,238"/>
+  <text class="quiet" x="40" y="237">its <tspan class="name">default_settings</tspan></text>
+  <path class="line" d="M28 317 V338"/>
+  <polygon class="head" points="28,348 23,338 33,338"/>
+  <text class="quiet" x="40" y="337">its <tspan class="name">default_settings</tspan></text>
+
+  <!-- each read falls from the proxy until a layer has the name, or holds it as deleted -->
+  <path class="mark-line" d="M262 68 V138"/>
+  <polygon class="head mark" points="262,148 257,138 267,138"/>
+  <text class="quiet small" x="262" y="169" text-anchor="middle">stops:</text>
+  <text class="name" x="262" y="187" text-anchor="middle">False</text>
+
+  <path class="mark-line" d="M358 68 V238"/>
+  <polygon class="head mark" points="358,248 353,238 363,238"/>
+  <text class="quiet small" x="358" y="269" text-anchor="middle">stops:</text>
+  <text class="name" x="358" y="287" text-anchor="middle">True</text>
+
+  <path class="mark-line" d="M454 68 V338"/>
+  <polygon class="head mark" points="454,348 449,338 459,338"/>
+  <text class="quiet small" x="454" y="369" text-anchor="middle">stops:</text>
+  <text x="454" y="387" text-anchor="middle">its value</text>
+
+  <path class="mark-line" d="M550 68 V138"/>
+  <polygon class="head mark" points="550,148 545,138 555,138"/>
+  <text class="quiet small" x="550" y="169" text-anchor="middle">stops:</text>
+  <text class="name" x="550" y="187" text-anchor="middle">AttributeError</text>
+
+  <!-- the signal each override sends, beside its holder -->
+  <text x="643" y="169">pushed second:</text>
+  <text class="name" x="643" y="187">APPEND_SLASH, enter=True</text>
+  <text x="643" y="205">popped first:</text>
+  <text class="name" x="643" y="223">APPEND_SLASH, enter=False</text>
+
+  <text x="643" y="269">pushed first:</text>
+  <text class="name" x="643" y="287">DEBUG, enter=True</text>
+  <text x="643" y="305">popped second:</text>
+  <text class="name" x="643" y="323">DEBUG, enter=False</text>
+</svg>

@@ -9,7 +9,7 @@
  "pointers": [
   {
    "pointer": "django/apps/registry.py:Apps.populate",
-   "line": 13,
+   "line": 32,
    "sentence": "`Apps.populate` is written to be called more than once and to do its work once (`django/apps/registry.py:Apps.populate`).",
    "tree": "django",
    "path": "django/apps/registry.py",
@@ -22,8 +22,36 @@
    "fingerprint": "32f7c6ad9925afa8"
   },
   {
+   "pointer": "django/__init__.py:setup",
+   "line": 34,
+   "sentence": "The same thread arrives twice when code that runs during the phases calls `django.setup`: a module imported in any of them, or a `ready` method (`django/__init__.py:setup`).",
+   "tree": "django",
+   "path": "django/__init__.py",
+   "symbol": "setup",
+   "kind": "function",
+   "lines": [
+    8,
+    24
+   ],
+   "fingerprint": "1d9e6fad619c10ab"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.populate",
+   "line": 62,
+   "sentence": "Where a server's log shows only `populate() isn't reentrant`, and no code run in the phases called `django.setup`, the exception that says what is wrong was raised earlier in the same process (`django/apps/registry.py:Apps.populate`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.populate",
+   "kind": "function",
+   "lines": [
+    61,
+    127
+   ],
+   "fingerprint": "32f7c6ad9925afa8"
+  },
+  {
    "pointer": "django/apps/config.py:AppConfig.create",
-   "line": 32,
+   "line": 66,
    "sentence": "The first phase calls `AppConfig.create` on each entry in turn, which works out what kind of entry it is by trying to import it (`django/apps/config.py:AppConfig.create`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -38,7 +66,7 @@
   },
   {
    "pointer": "django/contrib/admin/apps.py:AdminConfig",
-   "line": 60,
+   "line": 95,
    "sentence": "The entry `\"django.contrib.admin\"` therefore gets `AdminConfig`, whose `ready` goes looking for every application's `admin` module; a project that wants an admin without that search names the other class by its path (`django/contrib/admin/apps.py:AdminConfig`).",
    "tree": "django",
    "path": "django/contrib/admin/apps.py",
@@ -52,7 +80,7 @@
   },
   {
    "pointer": "django/apps/config.py:AppConfig.__init__",
-   "line": 62,
+   "line": 97,
    "sentence": "`AppConfig.__init__` then fixes the facts about the application that the rest of Django reads (`django/apps/config.py:AppConfig.__init__`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -65,8 +93,64 @@
    "fingerprint": "04990c5f8a8a943c"
   },
   {
+   "pointer": "django/db/models/base.py:ModelBase.__new__",
+   "line": 114,
+   "sentence": "A model's class statement asks the registry which application its module belongs to (`django/db/models/base.py:ModelBase.__new__`), and `Apps.get_containing_app_config` will not answer before `apps_ready` (`django/apps/registry.py:Apps.get_containing_app_config`; [The registry and its models](registry.md)).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelBase.__new__",
+   "kind": "function",
+   "lines": [
+    105,
+    397
+   ],
+   "fingerprint": "0088098d570317e1"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.get_containing_app_config",
+   "line": 114,
+   "sentence": "A model's class statement asks the registry which application its module belongs to (`django/db/models/base.py:ModelBase.__new__`), and `Apps.get_containing_app_config` will not answer before `apps_ready` (`django/apps/registry.py:Apps.get_containing_app_config`; [The registry and its models](registry.md)).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_containing_app_config",
+   "kind": "function",
+   "lines": [
+    251,
+    268
+   ],
+   "fingerprint": "685d245c52b92940"
+  },
+  {
+   "pointer": "docs/ref/applications.txt",
+   "line": 135,
+   "sentence": "The documentation says that \"Strictly speaking, Django allows importing models once their application configuration is loaded\" (`docs/ref/applications.txt`).",
+   "tree": "django",
+   "path": "docs/ref/applications.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    553
+   ],
+   "fingerprint": "8267965c77c4bc34"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.check_apps_ready",
+   "line": 135,
+   "sentence": "Django does not: a model's class statement is refused, whatever its application, until `Apps.apps_ready` is set at the end of the first phase, when every application's configuration is loaded (`django/apps/registry.py:Apps.check_apps_ready`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.check_apps_ready",
+   "kind": "function",
+   "lines": [
+    129,
+    138
+   ],
+   "fingerprint": "7dbef7462298717a"
+  },
+  {
    "pointer": "django/apps/config.py:AppConfig.import_models",
-   "line": 81,
+   "line": 139,
    "sentence": "The second phase calls `AppConfig.import_models` on each configuration, in the order of the setting (`django/apps/config.py:AppConfig.import_models`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -80,8 +164,8 @@
   },
   {
    "pointer": "django/db/models/base.py:ModelBase.__new__",
-   "line": 83,
-   "sentence": "The class statement of a model runs the metaclass `ModelBase.__new__`, which ends by calling `Apps.register_model` with the new class (`django/db/models/base.py:ModelBase.__new__`).",
+   "line": 141,
+   "sentence": "The class statement of a model runs the metaclass `ModelBase.__new__`, which, unless the model is abstract, ends by calling `Apps.register_model` with the new class (`django/db/models/base.py:ModelBase.__new__`).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "ModelBase.__new__",
@@ -94,7 +178,7 @@
   },
   {
    "pointer": "django/apps/config.py:AppConfig.ready",
-   "line": 93,
+   "line": 151,
    "sentence": "The base method does nothing (`django/apps/config.py:AppConfig.ready`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -108,7 +192,7 @@
   },
   {
    "pointer": "django/utils/autoreload.py:BaseReloader.wait_for_apps_ready",
-   "line": 93,
+   "line": 151,
    "sentence": "When all have returned, `Apps.ready` is set, and so is `Apps.ready_event`, a `threading.Event` that the development server's reloader waits on before it starts watching files (`django/utils/autoreload.py:BaseReloader.wait_for_apps_ready`).",
    "tree": "django",
    "path": "django/utils/autoreload.py",
@@ -121,8 +205,36 @@
    "fingerprint": "d38521c72f9b64b1"
   },
   {
+   "pointer": "django/contrib/admin/apps.py",
+   "line": 163,
+   "sentence": "Each of these needs something the earlier phases could not give: a model class from another application, or simply a place to run once everything is importable (`django/contrib/admin/apps.py`, `django/contrib/messages/apps.py`).",
+   "tree": "django",
+   "path": "django/contrib/admin/apps.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    27
+   ],
+   "fingerprint": "04e8ae940e2db1bd"
+  },
+  {
+   "pointer": "django/contrib/messages/apps.py",
+   "line": 163,
+   "sentence": "Each of these needs something the earlier phases could not give: a model class from another application, or simply a place to run once everything is importable (`django/contrib/admin/apps.py`, `django/contrib/messages/apps.py`).",
+   "tree": "django",
+   "path": "django/contrib/messages/apps.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    19
+   ],
+   "fingerprint": "5bf9f26b49735d80"
+  },
+  {
    "pointer": "django/contrib/auth/apps.py:AuthConfig.ready",
-   "line": 110,
+   "line": 163,
    "sentence": "It asks for the user model, which may belong to any application, to see whether it has a `last_login` field (`django/contrib/auth/apps.py:AuthConfig.ready`).",
    "tree": "django",
    "path": "django/contrib/auth/apps.py",
@@ -136,7 +248,7 @@
   },
   {
    "pointer": "django/apps/registry.py:Apps.check_apps_ready",
-   "line": 114,
+   "line": 167,
    "sentence": "The registry's methods test them, and a question asked too early is refused with `AppRegistryNotReady` and not answered wrongly from a half-filled registry (`django/apps/registry.py:Apps.check_apps_ready`, `django/apps/registry.py:Apps.check_models_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
@@ -150,7 +262,7 @@
   },
   {
    "pointer": "django/apps/registry.py:Apps.check_models_ready",
-   "line": 114,
+   "line": 167,
    "sentence": "The registry's methods test them, and a question asked too early is refused with `AppRegistryNotReady` and not answered wrongly from a half-filled registry (`django/apps/registry.py:Apps.check_apps_ready`, `django/apps/registry.py:Apps.check_models_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
@@ -163,9 +275,51 @@
    "fingerprint": "680540c181eede70"
   },
   {
+   "pointer": "django/apps/registry.py:Apps.get_model",
+   "line": 202,
+   "sentence": "`Apps.get_model` accepts an argument, `require_ready=False`, that lowers its requirement to `apps_ready`, and imports the application's models module there and then if phase two has not reached it yet (`django/apps/registry.py:Apps.get_model`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_model",
+   "kind": "function",
+   "lines": [
+    188,
+    213
+   ],
+   "fingerprint": "bc409748c76018b2"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:get_user_model",
+   "line": 222,
+   "sentence": "`get_user_model` asks for the user model this way, which is what allows it to be fetched while models are still being imported (`django/contrib/auth/__init__.py:get_user_model`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "get_user_model",
+   "kind": "function",
+   "lines": [
+    261,
+    275
+   ],
+   "fingerprint": "c2397fbd81505386"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.get_registered_model",
+   "line": 224,
+   "sentence": "It looks in the dictionary of registered classes and raises `LookupError` if the class is not there yet (`django/apps/registry.py:Apps.get_registered_model`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_registered_model",
+   "kind": "function",
+   "lines": [
+    270,
+    281
+   ],
+   "fingerprint": "8d8bfc589df1518c"
+  },
+  {
    "pointer": "django/db/backends/utils.py:CursorWrapper._execute",
-   "line": 153,
-   "sentence": "A query executed during startup while it is false, in a `ready` method or as a module is imported, draws a `RuntimeWarning` that says to keep away from the database during application initialization; the cursor makes an exception of the time a test has the list of applications overridden, when the flag is false for a moment too (`django/db/backends/utils.py:CursorWrapper._execute`).",
+   "line": 228,
+   "sentence": "A query executed before `Apps.ready` is set, in a `ready` method or as a module is imported, draws a `RuntimeWarning`, \"Accessing the database during app initialization is discouraged\", unless `Apps.set_installed_apps` or `Apps.set_available_apps` is in effect, as in a test that changes the installed applications (`django/db/backends/utils.py:CursorWrapper._execute`).",
    "tree": "django",
    "path": "django/db/backends/utils.py",
    "symbol": "CursorWrapper._execute",
@@ -177,18 +331,18 @@
    "fingerprint": "7d23debb1b13c6c9"
   },
   {
-   "pointer": "django/contrib/auth/__init__.py:get_user_model",
-   "line": 155,
-   "sentence": "`get_user_model` uses it, which is what allows the user model to be fetched while models are still being imported (`django/contrib/auth/__init__.py:get_user_model`).",
+   "pointer": "docs/ref/applications.txt",
+   "line": 228,
+   "sentence": "The warning is worth heeding: a `ready` method runs during the startup of every management command, so `manage.py test` still executes its queries against the production database (`docs/ref/applications.txt`).",
    "tree": "django",
-   "path": "django/contrib/auth/__init__.py",
-   "symbol": "get_user_model",
-   "kind": "function",
+   "path": "docs/ref/applications.txt",
+   "symbol": null,
+   "kind": "file",
    "lines": [
-    261,
-    275
+    1,
+    553
    ],
-   "fingerprint": "c2397fbd81505386"
+   "fingerprint": "8267965c77c4bc34"
   }
  ]
 }

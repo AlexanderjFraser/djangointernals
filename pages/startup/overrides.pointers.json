@@ -8,6 +8,20 @@
  "document": "overrides.md",
  "pointers": [
   {
+   "pointer": "docs/topics/settings.txt",
+   "line": 9,
+   "sentence": "Once `django.setup` has returned, Django treats the settings as constants of the process ([Settings, apps and startup](../startup.md#settings-and-the-registry-are-constants-of-the-process)), and its documentation asks an application not to alter them at runtime (`docs/topics/settings.txt`).",
+   "tree": "django",
+   "path": "docs/topics/settings.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    316
+   ],
+   "fingerprint": "9390999ba9473085"
+  },
+  {
    "pointer": "django/conf/",
    "line": 9,
    "sentence": "The machinery for this lives partly in `django/conf/`, where the settings objects are built to be stacked, and partly in `django/test/`, which does the stacking.",
@@ -28,6 +42,66 @@
    "fingerprint": "4f6c0380aff7ea28"
   },
   {
+   "pointer": "django/template/utils.py:EngineHandler.templates",
+   "line": 17,
+   "sentence": "None of these looks at the setting again (`django/template/utils.py:EngineHandler.templates`, `django/utils/timezone.py:get_default_timezone`, `django/contrib/auth/hashers.py:get_hashers`, `django/core/files/storage/filesystem.py:FileSystemStorage.base_location`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.templates",
+   "kind": "function",
+   "lines": [
+    25,
+    65
+   ],
+   "at": 26,
+   "fingerprint": "3a28f74f3d2b5f7d"
+  },
+  {
+   "pointer": "django/utils/timezone.py:get_default_timezone",
+   "line": 17,
+   "sentence": "None of these looks at the setting again (`django/template/utils.py:EngineHandler.templates`, `django/utils/timezone.py:get_default_timezone`, `django/contrib/auth/hashers.py:get_hashers`, `django/core/files/storage/filesystem.py:FileSystemStorage.base_location`).",
+   "tree": "django",
+   "path": "django/utils/timezone.py",
+   "symbol": "get_default_timezone",
+   "kind": "function",
+   "lines": [
+    45,
+    52
+   ],
+   "at": 46,
+   "fingerprint": "852d3ad35aab0558"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:get_hashers",
+   "line": 17,
+   "sentence": "None of these looks at the setting again (`django/template/utils.py:EngineHandler.templates`, `django/utils/timezone.py:get_default_timezone`, `django/contrib/auth/hashers.py:get_hashers`, `django/core/files/storage/filesystem.py:FileSystemStorage.base_location`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "get_hashers",
+   "kind": "function",
+   "lines": [
+    121,
+    132
+   ],
+   "at": 122,
+   "fingerprint": "efed92eb526b81ac"
+  },
+  {
+   "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage.base_location",
+   "line": 17,
+   "sentence": "None of these looks at the setting again (`django/template/utils.py:EngineHandler.templates`, `django/utils/timezone.py:get_default_timezone`, `django/contrib/auth/hashers.py:get_hashers`, `django/core/files/storage/filesystem.py:FileSystemStorage.base_location`).",
+   "tree": "django",
+   "path": "django/core/files/storage/filesystem.py",
+   "symbol": "FileSystemStorage.base_location",
+   "kind": "function",
+   "lines": [
+    39,
+    41
+   ],
+   "at": 40,
+   "fingerprint": "71148fff26405eb5"
+  },
+  {
    "pointer": "django/core/handlers/base.py:BaseHandler.get_response",
    "line": 19,
    "sentence": "The handler reads `settings.ROOT_URLCONF` afresh for each request, and an assignment to it is seen by the next one (`django/core/handlers/base.py:BaseHandler.get_response`).",
@@ -40,6 +114,20 @@
     152
    ],
    "fingerprint": "1936a064b0c5bd82"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 21,
+   "sentence": "The third is outside Python altogether: where the platform's `time` module has the function `\"tzset\"`, loading a settings module put `TIME_ZONE` into the process's environment and had the C library read it (`django/conf/__init__.py:Settings.__init__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
   },
   {
    "pointer": "django/test/utils.py:override_settings.enable",
@@ -56,9 +144,37 @@
    "fingerprint": "9161f91a4efca350"
   },
   {
+   "pointer": "django/test/utils.py:override_settings.disable",
+   "line": 33,
+   "sentence": "On the way out, `override_settings.disable` puts the earlier wrapped object back and sends the signal again for each name, with the restored value and `enter=False` (`django/test/utils.py:override_settings.disable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_settings.disable",
+   "kind": "function",
+   "lines": [
+    523,
+    544
+   ],
+   "fingerprint": "d8ad312f56c1c53c"
+  },
+  {
+   "pointer": "django/test/utils.py:override_settings.enable",
+   "line": 57,
+   "sentence": "If a receiver raises, `enable` keeps the exception as `override_settings.enable_exception` and calls `disable` there and then, which raises it, so the code the override was to wrap never runs (`django/test/utils.py:override_settings.enable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_settings.enable",
+   "kind": "function",
+   "lines": [
+    497,
+    521
+   ],
+   "fingerprint": "9161f91a4efca350"
+  },
+  {
    "pointer": "django/conf/__init__.py:UserSettingsHolder.__getattr__",
-   "line": 53,
-   "sentence": "It keeps only the names set on it, and passes a read of any other upper-case name to the object behind it (`django/conf/__init__.py:UserSettingsHolder.__getattr__`).",
+   "line": 83,
+   "sentence": "A holder passes a read of a setting not set on it to its `default_settings` ([The settings object](settings.md#settingsconfigure-settings-without-a-module)), and an override's holder has for its `default_settings` whatever the proxy wrapped when it was made: the holder of the override it is nested in or, at the bottom, what the settings were loaded into, for a project with a settings module the `Settings`, that module over the defaults (`django/conf/__init__.py:UserSettingsHolder.__getattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "UserSettingsHolder.__getattr__",
@@ -71,8 +187,8 @@
   },
   {
    "pointer": "django/conf/__init__.py:UserSettingsHolder.__delattr__",
-   "line": 53,
-   "sentence": "A setting deleted inside an override is recorded in the holder's set of deleted names, so that the read does not fall through to the layer below and find it again (`django/conf/__init__.py:UserSettingsHolder.__delattr__`).",
+   "line": 125,
+   "sentence": "`del settings.TIME_ZONE` inside both overrides marks the name deleted on the inner holder alone, and a read of it then stops there with `AttributeError`, though the `Settings` below still has it (`django/conf/__init__.py:UserSettingsHolder.__delattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "UserSettingsHolder.__delattr__",
@@ -85,8 +201,8 @@
   },
   {
    "pointer": "django/core/signals.py",
-   "line": 59,
-   "sentence": "`setting_changed` is an ordinary signal, defined beside the three signals of the request cycle (`django/core/signals.py`).",
+   "line": 129,
+   "sentence": "`setting_changed` is an ordinary signal, defined beside the three signals of the request cycle, `request_started`, `request_finished` and `got_request_exception` (`django/core/signals.py`).",
    "tree": "django",
    "path": "django/core/signals.py",
    "symbol": null,
@@ -99,7 +215,7 @@
   },
   {
    "pointer": "django/test/signals.py",
-   "line": 59,
+   "line": 129,
    "sentence": "Most of them live in one file, `django/test/signals.py`.",
    "tree": "django",
    "path": "django/test/signals.py",
@@ -113,8 +229,8 @@
   },
   {
    "pointer": "django/test/signals.py",
-   "line": 81,
-   "sentence": "*The receivers of `setting_changed` in `django/test/signals.py`, by the names they compare the changed setting's with.*",
+   "line": 151,
+   "sentence": "*The receivers of `setting_changed` in `django/test/signals.py`, by the names of the settings each one tests for.*",
    "tree": "django",
    "path": "django/test/signals.py",
    "symbol": null,
@@ -127,8 +243,8 @@
   },
   {
    "pointer": "django/contrib/auth/hashers.py:reset_hashers",
-   "line": 83,
-   "sentence": "The password hashers clear their cached list for `PASSWORD_HASHERS` (`django/contrib/auth/hashers.py:reset_hashers`).",
+   "line": 153,
+   "sentence": "Others are connected by the code that owns what they discard, among them the password hashers, the translation machinery, each `FileSystemStorage` as it is made, a swappable model's `_meta`, the task backends, and the messages application in its `ready` (`django/contrib/auth/hashers.py:reset_hashers`, `django/utils/translation/trans_real.py:reset_cache`, `django/core/files/storage/filesystem.py:FileSystemStorage.__init__`, `django/db/models/options.py:Options.setting_changed`, `django/tasks/signals.py:clear_tasks_handlers`, `django/contrib/messages/apps.py:MessagesConfig.ready`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "reset_hashers",
@@ -142,8 +258,8 @@
   },
   {
    "pointer": "django/utils/translation/trans_real.py:reset_cache",
-   "line": 83,
-   "sentence": "The translation machinery clears its caches of supported languages (`django/utils/translation/trans_real.py:reset_cache`).",
+   "line": 153,
+   "sentence": "Others are connected by the code that owns what they discard, among them the password hashers, the translation machinery, each `FileSystemStorage` as it is made, a swappable model's `_meta`, the task backends, and the messages application in its `ready` (`django/contrib/auth/hashers.py:reset_hashers`, `django/utils/translation/trans_real.py:reset_cache`, `django/core/files/storage/filesystem.py:FileSystemStorage.__init__`, `django/db/models/options.py:Options.setting_changed`, `django/tasks/signals.py:clear_tasks_handlers`, `django/contrib/messages/apps.py:MessagesConfig.ready`).",
    "tree": "django",
    "path": "django/utils/translation/trans_real.py",
    "symbol": "reset_cache",
@@ -157,8 +273,8 @@
   },
   {
    "pointer": "django/core/files/storage/filesystem.py:FileSystemStorage.__init__",
-   "line": 83,
-   "sentence": "Each `FileSystemStorage` connects a method of its own when it is made, to forget its computed location and URL (`django/core/files/storage/filesystem.py:FileSystemStorage.__init__`).",
+   "line": 153,
+   "sentence": "Others are connected by the code that owns what they discard, among them the password hashers, the translation machinery, each `FileSystemStorage` as it is made, a swappable model's `_meta`, the task backends, and the messages application in its `ready` (`django/contrib/auth/hashers.py:reset_hashers`, `django/utils/translation/trans_real.py:reset_cache`, `django/core/files/storage/filesystem.py:FileSystemStorage.__init__`, `django/db/models/options.py:Options.setting_changed`, `django/tasks/signals.py:clear_tasks_handlers`, `django/contrib/messages/apps.py:MessagesConfig.ready`).",
    "tree": "django",
    "path": "django/core/files/storage/filesystem.py",
    "symbol": "FileSystemStorage.__init__",
@@ -171,8 +287,8 @@
   },
   {
    "pointer": "django/db/models/options.py:Options.setting_changed",
-   "line": 83,
-   "sentence": "The `_meta` of a swappable model connects one that forgets whether the model is swapped out (`django/db/models/options.py:Options.setting_changed`).",
+   "line": 153,
+   "sentence": "Others are connected by the code that owns what they discard, among them the password hashers, the translation machinery, each `FileSystemStorage` as it is made, a swappable model's `_meta`, the task backends, and the messages application in its `ready` (`django/contrib/auth/hashers.py:reset_hashers`, `django/utils/translation/trans_real.py:reset_cache`, `django/core/files/storage/filesystem.py:FileSystemStorage.__init__`, `django/db/models/options.py:Options.setting_changed`, `django/tasks/signals.py:clear_tasks_handlers`, `django/contrib/messages/apps.py:MessagesConfig.ready`).",
    "tree": "django",
    "path": "django/db/models/options.py",
    "symbol": "Options.setting_changed",
@@ -185,8 +301,8 @@
   },
   {
    "pointer": "django/tasks/signals.py:clear_tasks_handlers",
-   "line": 83,
-   "sentence": "The task backends are reset for `TASKS` (`django/tasks/signals.py:clear_tasks_handlers`).",
+   "line": 153,
+   "sentence": "Others are connected by the code that owns what they discard, among them the password hashers, the translation machinery, each `FileSystemStorage` as it is made, a swappable model's `_meta`, the task backends, and the messages application in its `ready` (`django/contrib/auth/hashers.py:reset_hashers`, `django/utils/translation/trans_real.py:reset_cache`, `django/core/files/storage/filesystem.py:FileSystemStorage.__init__`, `django/db/models/options.py:Options.setting_changed`, `django/tasks/signals.py:clear_tasks_handlers`, `django/contrib/messages/apps.py:MessagesConfig.ready`).",
    "tree": "django",
    "path": "django/tasks/signals.py",
    "symbol": "clear_tasks_handlers",
@@ -200,8 +316,8 @@
   },
   {
    "pointer": "django/contrib/messages/apps.py:MessagesConfig.ready",
-   "line": 83,
-   "sentence": "The messages application connects its receiver in its `ready` method (`django/contrib/messages/apps.py:MessagesConfig.ready`).",
+   "line": 153,
+   "sentence": "Others are connected by the code that owns what they discard, among them the password hashers, the translation machinery, each `FileSystemStorage` as it is made, a swappable model's `_meta`, the task backends, and the messages application in its `ready` (`django/contrib/auth/hashers.py:reset_hashers`, `django/utils/translation/trans_real.py:reset_cache`, `django/core/files/storage/filesystem.py:FileSystemStorage.__init__`, `django/db/models/options.py:Options.setting_changed`, `django/tasks/signals.py:clear_tasks_handlers`, `django/contrib/messages/apps.py:MessagesConfig.ready`).",
    "tree": "django",
    "path": "django/contrib/messages/apps.py",
    "symbol": "MessagesConfig.ready",
@@ -214,7 +330,7 @@
   },
   {
    "pointer": "django/test/signals.py",
-   "line": 87,
+   "line": 157,
    "sentence": "The receivers in `django/test/signals.py` are connected when that module is imported, and it is imported with `django.test`.",
    "tree": "django",
    "path": "django/test/signals.py",
@@ -228,7 +344,7 @@
   },
   {
    "pointer": "django/test/",
-   "line": 100,
+   "line": 170,
    "sentence": "A serving process has no reason to import `django.test`, and nothing in it would send the signal if it did: every send of `setting_changed` in Django's source is in `django/test/`, and `LazySettings.__setattr__` sends nothing.",
    "tree": "django",
    "path": "django/test/",
@@ -238,8 +354,8 @@
   },
   {
    "pointer": "django/test/client.py:ClientHandler.__call__",
-   "line": 102,
-   "sentence": "`MIDDLEWARE` has no receiver: a handler builds its chain once, and the test client's handler builds its own at its first request (`django/test/client.py:ClientHandler.__call__`).",
+   "line": 172,
+   "sentence": "`MIDDLEWARE` has no receiver: a handler builds its chain once, and the test client's handler builds its own at its first request, from the `MIDDLEWARE` in force then (`django/test/client.py:ClientHandler.__call__`).",
    "tree": "django",
    "path": "django/test/client.py",
    "symbol": "ClientHandler.__call__",
@@ -251,9 +367,38 @@
    "fingerprint": "3a378c0ad831b908"
   },
   {
+   "pointer": "django/utils/connection.py:BaseConnectionHandler.settings",
+   "line": 172,
+   "sentence": "`DATABASES` has one that only warns, because the connections are not rebuilt (`django/utils/connection.py:BaseConnectionHandler.settings`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "BaseConnectionHandler.settings",
+   "kind": "function",
+   "lines": [
+    43,
+    46
+   ],
+   "at": 44,
+   "fingerprint": "4acbab78a9dc4c38"
+  },
+  {
+   "pointer": "django/test/utils.py:override_settings.enable",
+   "line": 176,
+   "sentence": "`INSTALLED_APPS` is the one setting whose override changes the app registry, and `override_settings.enable` handles it first, before it touches the settings, so that a list that cannot be loaded leaves the settings as they were (`django/test/utils.py:override_settings.enable`).",
+   "tree": "django",
+   "path": "django/test/utils.py",
+   "symbol": "override_settings.enable",
+   "kind": "function",
+   "lines": [
+    497,
+    521
+   ],
+   "fingerprint": "9161f91a4efca350"
+  },
+  {
    "pointer": "django/apps/registry.py:Apps.set_installed_apps",
-   "line": 108,
-   "sentence": "It pushes the current dictionary of application configurations onto a stack, `Apps.stored_app_configs`, empties the registry's view of what is installed, sets its three flags and `Apps.loading` back to false, and calls `Apps.populate` with the new list (`django/apps/registry.py:Apps.set_installed_apps`).",
+   "line": 178,
+   "sentence": "It pushes the current dictionary of application configurations onto a stack, `Apps.stored_app_configs`, empties the registry's view of what is installed, sets its three flags and `Apps.loading` back to false, and calls `Apps.populate` with the new list, so that all three phases run again ([Populating the app registry](populate.md)) (`django/apps/registry.py:Apps.set_installed_apps`); on leaving, `Apps.unset_installed_apps` pops the stack, sets the flags true again, and runs no phase (`django/apps/registry.py:Apps.unset_installed_apps`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.set_installed_apps",
@@ -265,23 +410,23 @@
    "fingerprint": "2d6e863f3aafad98"
   },
   {
-   "pointer": "django/dispatch/dispatcher.py:Signal.connect",
-   "line": 126,
-   "sentence": "Connecting a signal receiver is: `Signal.connect` does not add a receiver whose key, the identifier it was connected with or else its own identity, is already connected for the same sender (`django/dispatch/dispatcher.py:Signal.connect`).",
+   "pointer": "django/apps/registry.py:Apps.unset_installed_apps",
+   "line": 178,
+   "sentence": "It pushes the current dictionary of application configurations onto a stack, `Apps.stored_app_configs`, empties the registry's view of what is installed, sets its three flags and `Apps.loading` back to false, and calls `Apps.populate` with the new list, so that all three phases run again ([Populating the app registry](populate.md)) (`django/apps/registry.py:Apps.set_installed_apps`); on leaving, `Apps.unset_installed_apps` pops the stack, sets the flags true again, and runs no phase (`django/apps/registry.py:Apps.unset_installed_apps`).",
    "tree": "django",
-   "path": "django/dispatch/dispatcher.py",
-   "symbol": "Signal.connect",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.unset_installed_apps",
    "kind": "function",
    "lines": [
-    102,
-    177
+    364,
+    368
    ],
-   "fingerprint": "1143db3a23fcde19"
+   "fingerprint": "09920cfdcd1902b7"
   },
   {
    "pointer": "django/apps/registry.py:Apps.set_available_apps",
-   "line": 132,
-   "sentence": "It imports nothing and calls no `ready`; `TransactionTestCase` uses it for its `available_apps` attribute (`django/apps/registry.py:Apps.set_available_apps`).",
+   "line": 178,
+   "sentence": "`Apps.set_available_apps`, which a `TransactionTestCase` with `available_apps` uses, only narrows the installed applications to a subset, importing nothing and calling no `ready` ([Emptying the tables after each test: `TransactionTestCase`](../testing/transaction-test-case.md#fewer-applications-available_apps)) (`django/apps/registry.py:Apps.set_available_apps`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.set_available_apps",
@@ -291,6 +436,48 @@
     332
    ],
    "fingerprint": "942db4763f502fd7"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.set_installed_apps",
+   "line": 198,
+   "sentence": "An override can still add models, when it installs an application whose models module was never imported, and they stay in `all_models` after `Apps.unset_installed_apps` ([The registry and its models](registry.md#two-maps-appsapp_configs-and-appsall_models)) (`django/apps/registry.py:Apps.set_installed_apps`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.set_installed_apps",
+   "kind": "function",
+   "lines": [
+    339,
+    362
+   ],
+   "fingerprint": "2d6e863f3aafad98"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:_make_id",
+   "line": 202,
+   "sentence": "`Signal.connect` adds a receiver only if its key is not already there, and a bound method's key is made from its object as well as its function, so the method of the new configuration is a receiver of its own; a function defined at a module's top level, or a dispatch uid, gives the same key each time (`django/dispatch/dispatcher.py:_make_id`, `django/dispatch/dispatcher.py:Signal.connect`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "_make_id",
+   "kind": "function",
+   "lines": [
+    15,
+    18
+   ],
+   "fingerprint": "33b57aa818bb4410"
+  },
+  {
+   "pointer": "django/dispatch/dispatcher.py:Signal.connect",
+   "line": 202,
+   "sentence": "`Signal.connect` adds a receiver only if its key is not already there, and a bound method's key is made from its object as well as its function, so the method of the new configuration is a receiver of its own; a function defined at a module's top level, or a dispatch uid, gives the same key each time (`django/dispatch/dispatcher.py:_make_id`, `django/dispatch/dispatcher.py:Signal.connect`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.connect",
+   "kind": "function",
+   "lines": [
+    102,
+    177
+   ],
+   "fingerprint": "1143db3a23fcde19"
   }
  ]
 }

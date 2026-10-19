@@ -37,8 +37,8 @@
   },
   {
    "pointer": "django/utils/log.py:DEFAULT_LOGGING",
-   "line": 25,
-   "sentence": "`DEFAULT_LOGGING` configures two loggers and leaves the root logger alone (`django/utils/log.py:DEFAULT_LOGGING`).",
+   "line": 23,
+   "sentence": "`DEFAULT_LOGGING` configures two loggers, `\"django\"` and `\"django.server\"`, and leaves the root logger alone (`django/utils/log.py:DEFAULT_LOGGING`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "DEFAULT_LOGGING",
@@ -51,7 +51,7 @@
   },
   {
    "pointer": "django/utils/log.py:RequireDebugFalse",
-   "line": 42,
+   "line": 25,
    "sentence": "The filters read the setting each time a record passes, not when logging is configured (`django/utils/log.py:RequireDebugFalse`).",
    "tree": "django",
    "path": "django/utils/log.py",
@@ -65,8 +65,8 @@
   },
   {
    "pointer": "django/utils/log.py:ServerFormatter.format",
-   "line": 44,
-   "sentence": "Its formatter, `ServerFormatter`, colours each line by the status code the server attached to the record (`django/utils/log.py:ServerFormatter.format`).",
+   "line": 27,
+   "sentence": "The handler's formatter, `ServerFormatter`, colours each line by the status code the server attached to the record (`django/utils/log.py:ServerFormatter.format`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "ServerFormatter.format",
@@ -78,8 +78,50 @@
    "fingerprint": "bb1e0442bba71a8c"
   },
   {
+   "pointer": "django/utils/log.py:configure_logging",
+   "line": 85,
+   "sentence": "The two are applied by two separate calls, and the second is, by default, whatever the standard library makes of a second configuration over the first: a logger the project's dictionary names has its handlers replaced by the ones the dictionary gives it, and one the dictionary does not name but whose name puts it below a named one is reset, with no level, no handlers, and its records passed up (`django/utils/log.py:configure_logging`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "configure_logging",
+   "kind": "function",
+   "lines": [
+    70,
+    79
+   ],
+   "fingerprint": "e1779be4c70b05e5"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 115,
+   "sentence": "`response_for_exception` obtains the logger named `\"django.security.\"` and the exception's class name as it handles a `SuspiciousOperation`, so a logger first obtained then, after the dictionary was applied, is not disabled, and here its error reaches `\"mail_admins\"`, the handler of the disabled `\"django\"`, as well as `\"project\"` (`django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "docs/topics/logging.txt",
+   "line": 117,
+   "sentence": "The documentation warns of it: a disabled logger \"will silently discard anything logged to it, not even propagating entries to a parent logger\" (`docs/topics/logging.txt`).",
+   "tree": "django",
+   "path": "docs/topics/logging.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    459
+   ],
+   "fingerprint": "725874b6a0ceed90"
+  },
+  {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.queries_logged",
-   "line": 92,
+   "line": 150,
    "sentence": "A connection records queries, and logs them, when `settings.DEBUG` is true or its `force_debug_cursor` is set; otherwise its cursors are of a class that does neither (`django/db/backends/base/base.py:BaseDatabaseWrapper.queries_logged`, `django/db/backends/utils.py:CursorDebugWrapper.debug_sql`).",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
@@ -94,7 +136,7 @@
   },
   {
    "pointer": "django/db/backends/utils.py:CursorDebugWrapper.debug_sql",
-   "line": 92,
+   "line": 150,
    "sentence": "A connection records queries, and logs them, when `settings.DEBUG` is true or its `force_debug_cursor` is set; otherwise its cursors are of a class that does neither (`django/db/backends/base/base.py:BaseDatabaseWrapper.queries_logged`, `django/db/backends/utils.py:CursorDebugWrapper.debug_sql`).",
    "tree": "django",
    "path": "django/db/backends/utils.py",
@@ -109,7 +151,7 @@
   },
   {
    "pointer": "django/utils/log.py:log_response",
-   "line": 96,
+   "line": 154,
    "sentence": "It calls `log_response`, which hands the message and the response's status to `log_message`, then marks the response as logged; for a response that is already marked it returns at once (`django/utils/log.py:log_response`).",
    "tree": "django",
    "path": "django/utils/log.py",
@@ -123,7 +165,7 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 96,
+   "line": 156,
    "sentence": "When an exception of any kind but `Http404` becomes a response, the code that catches it logs the response there, with the exception attached so that the record carries a traceback (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
@@ -137,7 +179,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.get_response",
-   "line": 96,
+   "line": 156,
    "sentence": "Later the request handler, seeing a response with a status of 400 or more come out of the middleware chain, calls `log_response` again (`django/core/handlers/base.py:BaseHandler.get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -150,9 +192,23 @@
    "fingerprint": "1936a064b0c5bd82"
   },
   {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.create_request",
+   "line": 176,
+   "sentence": "When making the `ASGIRequest` raises `UnicodeDecodeError`, the ASGI handler answers with a 400 before the middleware chain is reached, and logs it itself, as a warning on `\"django.request\"` ([The two entry points](../handlers/entry.md#an-asgi-request)) (`django/core/handlers/asgi.py:ASGIHandler.create_request`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.create_request",
+   "kind": "function",
+   "lines": [
+    269,
+    284
+   ],
+   "fingerprint": "c01db06ee54c3a7b"
+  },
+  {
    "pointer": "django/utils/log.py:log_message",
-   "line": 100,
-   "sentence": "A path taken from a request is text an attacker controls, and without this a crafted path could forge lines in a log (`django/utils/log.py:log_message`).",
+   "line": 178,
+   "sentence": "Before it logs, it escapes every string argument so that control characters, a line break among them, are written as escape sequences (`django/utils/log.py:log_message`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_message",
@@ -164,8 +220,36 @@
    "fingerprint": "6fd85549bf556a44"
   },
   {
+   "pointer": "docs/releases/5.2.2.txt",
+   "line": 180,
+   "sentence": "Django 5.2.2 made `log_response` escape its positional arguments, and 5.2.3 moved the response logging that did not yet go through `log_response` onto it (`docs/releases/5.2.2.txt`, `docs/releases/5.2.3.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "224ff1c2478d6b7a"
+  },
+  {
+   "pointer": "docs/releases/5.2.3.txt",
+   "line": 180,
+   "sentence": "Django 5.2.2 made `log_response` escape its positional arguments, and 5.2.3 moved the response logging that did not yet go through `log_response` onto it (`docs/releases/5.2.2.txt`, `docs/releases/5.2.3.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.3.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    22
+   ],
+   "fingerprint": "78598abe935370f3"
+  },
+  {
    "pointer": "django/utils/log.py:AdminEmailHandler.emit",
-   "line": 106,
+   "line": 186,
    "sentence": "`AdminEmailHandler.emit` does nothing when `ADMINS` is empty, unless a subclass has replaced the method that sends, which it takes as a sign that the mail has somewhere else to go (`django/utils/log.py:AdminEmailHandler.emit`).",
    "tree": "django",
    "path": "django/utils/log.py",
@@ -179,7 +263,7 @@
   },
   {
    "pointer": "django/utils/log.py:AdminEmailHandler.send_mail",
-   "line": 106,
+   "line": 186,
    "sentence": "The message goes out through `mail_admins` (`django/utils/log.py:AdminEmailHandler.send_mail`).",
    "tree": "django",
    "path": "django/utils/log.py",
@@ -190,6 +274,62 @@
     178
    ],
    "fingerprint": "6ebb1f7436efd1a5"
+  },
+  {
+   "pointer": "django/utils/log.py:AdminEmailHandler.__init__",
+   "line": 188,
+   "sentence": "`\"mail_admins\"` imports the class named by `DEFAULT_EXCEPTION_REPORTER` when it is constructed, so that setting is read as soon as `configure_logging` applies the defaults (`django/utils/log.py:AdminEmailHandler.__init__`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.__init__",
+   "kind": "function",
+   "lines": [
+    89,
+    121
+   ],
+   "fingerprint": "0c1609920b7f002c"
+  },
+  {
+   "pointer": "django/utils/log.py:AdminEmailHandler.__init__",
+   "line": 190,
+   "sentence": "`AdminEmailHandler` takes `using=`, the alias of the mailer in `MAILERS` to send through, and `email_backend=` is deprecated: the handler refuses it beside `using=`, or once `MAILERS` is defined (`django/utils/log.py:AdminEmailHandler.__init__`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.__init__",
+   "kind": "function",
+   "lines": [
+    89,
+    121
+   ],
+   "fingerprint": "0c1609920b7f002c"
+  },
+  {
+   "pointer": "django/utils/log.py:AdminEmailHandler.send_mail",
+   "line": 190,
+   "sentence": "Until 6.1 the handler always sent through a connection made to fail silently, and while `MAILERS` is not defined it still does; once it is, the handler sends through the mailer and catches only `MailerDoesNotExist`, so it no longer ignores a failure to send (`django/utils/log.py:AdminEmailHandler.send_mail`, `docs/howto/mailers-migration.txt`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.send_mail",
+   "kind": "function",
+   "lines": [
+    166,
+    178
+   ],
+   "fingerprint": "6ebb1f7436efd1a5"
+  },
+  {
+   "pointer": "docs/howto/mailers-migration.txt",
+   "line": 190,
+   "sentence": "Until 6.1 the handler always sent through a connection made to fail silently, and while `MAILERS` is not defined it still does; once it is, the handler sends through the mailer and catches only `MailerDoesNotExist`, so it no longer ignores a failure to send (`django/utils/log.py:AdminEmailHandler.send_mail`, `docs/howto/mailers-migration.txt`).",
+   "tree": "django",
+   "path": "docs/howto/mailers-migration.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    496
+   ],
+   "fingerprint": "dda62b5962cb5843"
   }
  ]
 }

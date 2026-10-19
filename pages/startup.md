@@ -1,24 +1,24 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
 part: The request cycle
-contents: settings, populate, registry, logging, callers, overrides
+contents: settings, logging, populate, registry, callers, overrides
 ---
 
 # Settings, apps and startup
 
-How a Python process becomes a configured Django: the settings object `django.conf.settings`, the app registry `django.apps.apps`, and `django.setup`, the function every kind of process calls to have both ready.
+Startup makes a Python process a configured Django. `django.conf.settings` loads the module that `"DJANGO_SETTINGS_MODULE"` names at the first read or write of a setting, and `django.setup` populates the app registry, `django.apps.apps`: an `AppConfig` for each entry of `settings.INSTALLED_APPS`, and every application's models imported. Until that call the registry answers most questions with `AppRegistryNotReady`.
 
-Importing `django` does almost nothing: the package's own module defines a version and one function (`django/__init__.py`). Yet nearly every other part of the framework takes two things for granted about the process it runs in: that there are settings to read, and that the process knows which applications are installed and which models they define. Neither is true of a process that has only imported Django. Making them true is what startup means, and it happens once in a process's life, before the first request is served or the first command runs.
+Importing `django` does almost nothing: the package's own module defines a version and one function (`django/__init__.py`). Yet nearly every other part of the framework takes two things for granted about the process it runs in: that there are settings to read, and that the process knows which applications are installed and which models they define. Neither is true of a process that has only imported Django. Making them true is what startup means.
 
-## Two objects, made empty
+## `settings` and `apps`, made empty
 
 The answers to both questions live in two objects, each made by the last statement of its module.
 
-`django.conf.settings` is a `LazySettings`: a stand-in for the project's settings that holds nothing until something reads a setting from it (`django/conf/__init__.py:settings`). `django.apps.apps` is an `Apps`, the **app registry**: the record of the installed applications and of every model class (`django/apps/registry.py:apps`). Each is made when its module is first imported, with nothing in it. Every module that imports one of them gets the same object, so there is one of each in a process.
+`django.conf.settings` is a `LazySettings`: a stand-in for the project's settings (`django/conf/__init__.py:settings`). `django.apps.apps` is an `Apps`, the **app registry**: the record of the installed applications and of the model classes (`django/apps/registry.py:apps`). Each is made when its module is first imported, with nothing in it, and every module that imports one of them gets that same object.
 
 Starting empty is what lets any module, Django's or a project's, import the two objects at its top without caring whether startup has happened yet. What a module cannot do is use them too early, and here the two behave differently.
 
-**The settings load themselves.** The first read of any setting imports the module named by the environment variable `"DJANGO_SETTINGS_MODULE"` and builds a `Settings` from it. Neither a server nor a command ever says "load the settings": whichever line of code reads a setting first does it, and every later read finds it done (`django/conf/__init__.py:LazySettings._setup`).
+**The settings load themselves.** The first read or write of any setting imports the module named by the environment variable `"DJANGO_SETTINGS_MODULE"` and builds a `Settings` from it, unless `settings.configure` has already filled the settings by hand. Startup never says "load the settings": whichever line of code first reads or writes a setting does it (`django/conf/__init__.py:LazySettings._setup`, `django/utils/functional.py:LazyObject.__setattr__`).
 
 **The registry has to be told.** It stays empty until `Apps.populate` is called with the list of applications, and until then it refuses most questions with the exception `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).
 
@@ -26,9 +26,11 @@ Starting empty is what lets any module, Django's or a project's, import the two 
 
 `django.setup` is the function that takes a process from the one state to the other, from having imported Django to being able to use it (`django/__init__.py:setup`).
 
-1. It configures logging, from `settings.LOGGING_CONFIG` and `settings.LOGGING`. Reading the first of these is a read of a setting, and in a process where nothing has read one before, this is the moment the settings module is imported.
-2. It sets the script prefix, the part of a URL's path that belongs to the server's mount point and that the URLs Django generates have to begin with, to `"/"` or to `settings.FORCE_SCRIPT_NAME`. A caller can ask it not to. A server does, because the handler sets the prefix again for each request, from that setting or else from what the server passes; a command has no request to take it from.
+1. It configures logging, from `settings.LOGGING_CONFIG` and `settings.LOGGING`. Reading the first of these is a read of a setting, and where the settings are still empty, this is the moment the settings module is imported.
+2. It sets the script prefix to `"/"` or to `settings.FORCE_SCRIPT_NAME`, unless its caller asks it not to, as a server's does. The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`).
 3. It calls `Apps.populate` with `settings.INSTALLED_APPS`.
+
+The figure sets the three statements between the two objects: the first reaches across to the settings, and the third runs the registry's phases, each over every application and each ending in a flag.
 
 ```text figure=two-objects
 settings                               django.setup()                         apps
@@ -36,7 +38,7 @@ a LazySettings, made empty                                                    an
 when django.conf is imported                                                  when django.apps is imported
 
 a Settings: the settings module,  <-   1  configure_logging
-imported on the first read             reads settings.LOGGING_CONFIG
+imported on the first read or write    reads settings.LOGGING_CONFIG
 
                                        2  set_script_prefix
                                        unless the caller asks it not to
@@ -49,9 +51,9 @@ imported on the first read             reads settings.LOGGING_CONFIG
                                                                               then ready is true
 ```
 
-*The three statements of `django.setup`, and what the first and the third set off: the settings module is imported, and the app registry is populated.*
+*The three statements of `django.setup`: the first imports the settings module where the settings are still empty, and the third populates the app registry.*
 
-This is `django.setup` recorded in a new process, for a project of three applications, each with one model. The lines are a selection of the calls made, nested as they were made. `LazySettings.__getattr__` is called when a setting is read for the first time, so each of those lines is a setting that startup was the first to read. Lines have been left out under each `AppConfig.create` and under each model's class statement, the first reads of four more settings among them.
+Each statement is preceded by the reads of the settings it passes, and the very first of them, a read of `LOGGING_CONFIG`, is what imports the settings module: `import library.settings` stands nested under it. The project, library, installs three applications with one model each.
 
 ```text recording=startup
 django.setup() in a new process
@@ -62,31 +64,12 @@ django.setup() in a new process
             import library.settings
       LazySettings.__getattr__("LOGGING")
       configure_logging("logging.config.dictConfig", {})
-        AdminEmailHandler.__init__
-          LazySettings.__getattr__("DEFAULT_EXCEPTION_REPORTER")
+        ...
       LazySettings.__getattr__("FORCE_SCRIPT_NAME")
       set_script_prefix("/")
       LazySettings.__getattr__("INSTALLED_APPS")
       Apps.populate
-        AppConfig.create("library.loans")
-        AppConfig.create("library.catalogue.apps.CatalogueConfig")
-        AppConfig.create("library.members")
-        AppConfig.import_models  (loans)
-          import library.loans.models
-            ModelBase.__new__  (class Loan)
-              Apps.register_model(loans.Loan)
-        AppConfig.import_models  (catalogue)
-          import library.catalogue.models
-            ModelBase.__new__  (class Book)
-              Apps.register_model(catalogue.Book)
-        AppConfig.import_models  (members)
-          import library.members.models
-            ModelBase.__new__  (class Member)
-              Apps.register_model(members.Member)
-        Apps.clear_cache
-        LoansConfig.ready  (loans)
-        AppConfig.ready  (catalogue)
-        AppConfig.ready  (members)
+        ...
 ```
 
 ## The registry fills in three phases
@@ -94,32 +77,25 @@ django.setup() in a new process
 `Apps.populate` does not finish one application before starting the next. It runs three passes over the whole list, and what the registry can answer grows with each.
 
 1. **Each entry of `INSTALLED_APPS` becomes an `AppConfig`**, the object that stands for one installed application. Making it imports the application's package. When every entry has one, `Apps.apps_ready` becomes true, and the registry can say which applications are installed.
-2. **Each application's `models` module is imported.** Nobody hands the models to the registry: a model class registers itself, as the last act of its own class statement, so importing the module is enough. When every application has had its turn, `Apps.models_ready` becomes true, and the registry can be asked for a model.
-3. **Each application's `AppConfig.ready` is called.** This is the place for work that needs every model to exist, such as connecting signal receivers. When all have returned, `Apps.ready` becomes true.
+2. **Each application's `models` module is imported.** Nobody hands the models to the registry: each registers itself, as the last act of its own class statement, so importing the module is enough. When every application has had its turn, `Apps.models_ready` becomes true, and the registry can be asked for a model.
+3. **Each application's `AppConfig.ready` is called.** This is the place for startup work, such as connecting signal receivers, once every models module is imported. When all have returned, `Apps.ready` becomes true.
 
-The phases explain three rules that a project otherwise meets as errors. An application's package, its `__init__`, cannot import the application's models. The package is imported during the first phase, and a model's class statement asks the registry which application it belongs to, which the registry will not say until that phase is complete. A models module cannot simply fetch another application's model from the registry. It is imported during the second phase, and `Apps.get_model` refuses, unless told not to wait, until every models module has been imported. And `ready` exists because it is the first moment at which everything is in place. [Populating the app registry](startup/populate.md) follows each phase, and shows what the registry answers during each.
+The phases are the reason for two rules a project otherwise meets as errors, and for `ready`. Nothing imported during the first phase can define a model, not even a model of an application whose configuration is already made, because a model's class statement asks the registry which application it belongs to, and the registry will not say until every entry has its configuration (`django/apps/registry.py:Apps.get_containing_app_config`). A models module cannot fetch another application's model with `Apps.get_model` while the second phase runs, unless it asks not to wait. And `ready` exists because it is the first moment at which everything is in place. [Populating the app registry](startup/populate.md) follows each phase and what the registry answers during it.
 
-## Who starts it, and how often
+> **History.** Before Django 1.7 a singleton called the app cache dealt with both installed applications and models, and many APIs took an application's models module to stand for the application. 1.7 refactored it into the app registry, in which an application has a configuration object of its own, with a `ready` method, and Django began to import every application's configuration and models as soon as it started, "through a deterministic and straightforward process" that the release notes expected to make import loops easier to diagnose. From then on a script that relied on `"DJANGO_SETTINGS_MODULE"` had to call `django.setup` itself, or meet `AppRegistryNotReady` (`docs/releases/1.7.txt`).
 
-Whatever starts the process calls `django.setup`. Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`). For a management command it is `ManagementUtility.execute`, before it looks for the command (`django/core/management/__init__.py:ManagementUtility.execute`). A script that uses Django on its own calls it by hand. [Who calls `django.setup`](startup/callers.md) has each case.
+## Who calls `django.setup`
 
-Calling it again is harmless and nearly free. `Apps.populate` returns at once when the registry is ready, and the settings are already loaded. Logging is configured again and the script prefix set again.
+Whatever starts the process calls `django.setup`. Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`). For a management command it is ordinarily `ManagementUtility.execute`, before it looks for the command (`django/core/management/__init__.py:ManagementUtility.execute`). A script that uses Django on its own calls it by hand. [Who calls `django.setup`](startup/callers.md) has each case.
 
-```text recording=startup
-django.setup() a second time in the same process
-    setup
-      configure_logging("logging.config.dictConfig", {})
-        AdminEmailHandler.__init__
-      set_script_prefix("/")
-      Apps.populate
-```
+A call after one that succeeded finds the registry ready, and `Apps.populate` returns at once; but logging is configured again, which can disable loggers made between the two calls (`django/utils/log.py:configure_logging`).
 
-## After startup, both are meant to stay as they are
+## Settings and the registry are constants of the process
 
-Once `django.setup` has returned, the settings and the registry are treated as constants of the process. Django does not copy them defensively or watch them for changes; it does the opposite, and builds on them things it never rebuilds. `SecurityMiddleware` reads its settings into attributes once, in its constructor, when the middleware chain is made (`django/middleware/security.py:SecurityMiddleware.__init__`). The template engines are made once, from `settings.TEMPLATES` as it then stood, and kept. A model's `_meta` caches lists of fields that depend on which other models exist.
+Once `django.setup` has returned, the settings and the registry are treated as constants of the process. Django does not copy them defensively or watch them for changes; it does the opposite, and builds on them things it keeps. `SecurityMiddleware` reads its settings into attributes once, in its constructor, when the middleware chain is made (`django/middleware/security.py:SecurityMiddleware.__init__`). The template engines are made at their first use, from `settings.TEMPLATES` as it then stood, and kept (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`). A model's `_meta` caches lists of fields that depend on which other models exist (`django/db/models/options.py:Options.related_objects`).
 
-So a setting assigned in a running process changes what the next read of it returns, and nothing that was built from the old value. Changing one properly takes more, and the machinery for it belongs to the test framework: [Overriding settings](startup/overrides.md) follows `override_settings`, which wraps a second object around the first and sends a signal, `setting_changed`, whose receivers throw away what was built.
+So a setting assigned in a running process changes what the next read of it returns, and nothing that was built from the old value (`django/conf/__init__.py:LazySettings.__setattr__`). A test that needs other settings has machinery of its own, in the test framework: [Overriding settings](startup/overrides.md) follows `override_settings`, which wraps a second object around the settings and sends a signal, `setting_changed`, whose receivers discard or redo what was built.
 
 ## The neighbours
 
-Startup ends where the rest of the book begins. A server's next step is to make a handler, whose constructor builds the middleware chain ([Handlers and middleware](handlers.md)); a command's is to find and run the command, which is also where the system checks run, those the applications registered in their `ready` methods among them ([Management commands](commands.md)). The class statement that registers a model belongs to [Models and fields](models.md), and the registries of historical models that migrations build for themselves, separate from `django.apps.apps`, to [Historical models: `StateApps` and rendering](migrations/historical-models.md). What startup leaves for the first request, the root URLconf, the template engines and the database connection among it, is listed in [Before the first request](overview/startup.md#what-the-process-keeps).
+Startup ends where the rest of the book begins. A server's next step is to make a handler, whose constructor builds the middleware chain ([Handlers and middleware](handlers.md)); a command's is to find the command and run it, and a command that asks for them runs the system checks first, those the applications registered in their `ready` methods among them ([Management commands](commands.md)). The class statement that registers a model belongs to [Models and fields](models.md), and the registries of historical models that migrations build for themselves, separate from `django.apps.apps`, to [Historical models: `StateApps` and rendering](migrations/historical-models.md). What startup leaves for the first request, the root URLconf, the template engines and the database connection among it, is listed in [Before the first request](overview/startup.md#what-the-process-keeps).

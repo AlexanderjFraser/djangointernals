@@ -1,4 +1,4 @@
-Django 6.2.dev20260926051415 and the project library: three applications, one model each
+Django 6.2.dev20260926051415 and the project library: three applications installed by its settings, one model each, and eight more installed only by the parts that name them
 
 No settings: DJANGO_SETTINGS_MODULE is not set, and settings.configure has not been called
     settings.configured  -> False
@@ -41,6 +41,20 @@ A settings module: reads, and one assignment
       -> True
     settings.is_overridden('USE_TZ')
       -> False
+
+settings.configure(STATIC_URL="static/"): a relative STATIC_URL read under two script prefixes keeps the first
+    set_script_prefix("/first/")
+    settings.STATIC_URL
+      LazyObject.__getattribute__("STATIC_URL")
+      LazySettings.__getattr__("STATIC_URL")
+        LazySettings._add_script_prefix('static/')
+          get_script_prefix
+      -> '/first/static/'
+    set_script_prefix("/second/")
+    get_script_prefix()  -> '/second/'
+    settings.STATIC_URL
+      LazyObject.__getattribute__("STATIC_URL")
+      -> '/first/static/'
 
 No settings module: settings.configure
     settings.configure(DEBUG=True)
@@ -175,10 +189,194 @@ django.setup() a second time in the same process
       set_script_prefix("/")
       Apps.populate
 
+django.setup() with INSTALLED_APPS = ["library.archive"], whose package imports its own models module: the class statement is refused in phase one, and the package is imported three times
+    django.setup()
+      Apps.populate
+        AppConfig.create("library.archive")
+          import library.archive
+            import library.archive.models
+              ModelBase.__new__  (class Box)
+                Apps.get_containing_app_config("library.archive.models")
+                  Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                    raises AppRegistryNotReady: Apps aren't loaded yet.
+          import_string("library.archive")
+            import library.archive
+              import library.archive.models
+                ModelBase.__new__  (class Box)
+                  Apps.get_containing_app_config("library.archive.models")
+                    Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                      raises AppRegistryNotReady: Apps aren't loaded yet.
+          import library.archive
+            import library.archive.models
+              ModelBase.__new__  (class Box)
+                Apps.get_containing_app_config("library.archive.models")
+                  Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                    raises AppRegistryNotReady: Apps aren't loaded yet.
+      -> raises AppRegistryNotReady: Apps aren't loaded yet.
+
+django.setup() with INSTALLED_APPS = ["library.reading_room"], whose apps module imports its own models module: the class statement is refused in phase one
+    django.setup()
+      Apps.populate
+        AppConfig.create("library.reading_room")
+          import library.reading_room
+          import library.reading_room.apps
+            import library.reading_room.models
+              ModelBase.__new__  (class Seat)
+                Apps.get_containing_app_config("library.reading_room.models")
+                  Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                    raises AppRegistryNotReady: Apps aren't loaded yet.
+      -> raises AppRegistryNotReady: Apps aren't loaded yet.
+
+django.setup() with INSTALLED_APPS = ["library.catalogue", "library.shelving"], shelving's package importing catalogue's models: the class statement is refused in phase one, though catalogue's configuration is made
+    django.setup()
+      Apps.populate
+        AppConfig.create("library.catalogue")
+          import library.catalogue
+          import library.catalogue.apps
+          AppConfig.__init__("library.catalogue", app_module)  (CatalogueConfig)
+        AppConfig.create("library.shelving")
+          import library.shelving
+            import library.catalogue.models
+              ModelBase.__new__  (class Book)
+                Apps.get_containing_app_config("library.catalogue.models")
+                  Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                    raises AppRegistryNotReady: Apps aren't loaded yet.
+          import_string("library.shelving")
+            import library.shelving
+              import library.catalogue.models
+                ModelBase.__new__  (class Book)
+                  Apps.get_containing_app_config("library.catalogue.models")
+                    Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                      raises AppRegistryNotReady: Apps aren't loaded yet.
+          import library.shelving
+            import library.catalogue.models
+              ModelBase.__new__  (class Book)
+                Apps.get_containing_app_config("library.catalogue.models")
+                  Apps.check_apps_ready  apps_ready False, models_ready False, ready False
+                    raises AppRegistryNotReady: Apps aren't loaded yet.
+      -> raises AppRegistryNotReady: Apps aren't loaded yet.
+
+django.setup() with INSTALLED_APPS = ["library.reservations", "library.catalogue"]: a models module asks for a later application's model with require_ready=False
+    django.setup()
+      Apps.populate
+        AppConfig.create("library.reservations")
+          import library.reservations
+        AppConfig.create("library.catalogue")
+          import library.catalogue
+          import library.catalogue.apps
+        AppConfig.import_models  (reservations)
+          import library.reservations.models
+            Apps.get_model("catalogue", "Book", require_ready=False)  apps_ready True, models_ready False
+              AppConfig.import_models  (catalogue)
+                import library.catalogue.models
+                  ModelBase.__new__  (class Book)
+                    Apps.register_model(catalogue.Book)
+              AppConfig.get_model("Book", require_ready=False)  (catalogue)
+            ModelBase.__new__  (class Reservation)
+              Apps.register_model(reservations.Reservation)
+        AppConfig.import_models  (catalogue)
+        AppConfig.ready  (reservations)
+        AppConfig.ready  (catalogue)
+
+django.setup() with INSTALLED_APPS = ["library.catalogue", "library.wishlist"]: two references by string that never resolve wait in Apps._pending_operations, and nothing is raised
+    django.setup()  -> None
+    apps._pending_operations
+      ("catalogue", "bok"): resolve_related_class for the field book
+      ("periodicals", "issue"): resolve_related_class for the field issue
+
+The system check, run as manage.py check runs it, on what never resolved
+    call_command("check")  -> raises SystemCheckError, whose message is:
+      SystemCheckError: System check identified some issues:
+      ERRORS:
+      wishlist.Wish.book: (fields.E300) Field defines a relation with model 'catalogue.Bok', which is either not installed, or is abstract.
+      wishlist.Wish.book: (fields.E307) The field wishlist.Wish.book was declared with a lazy reference to 'catalogue.bok', but app 'catalogue' doesn't provide model 'bok'.
+      wishlist.Wish.issue: (fields.E300) Field defines a relation with model 'periodicals.Issue', which is either not installed, or is abstract.
+      wishlist.Wish.issue: (fields.E307) The field wishlist.Wish.issue was declared with a lazy reference to 'periodicals.issue', but app 'periodicals' isn't installed.
+      System check identified 4 issues (0 silenced).
+
 django.setup() with an entry that cannot be imported: INSTALLED_APPS = ["library.loans", "library.no_such_app"]
     django.setup()  -> raises ModuleNotFoundError: No module named 'library.no_such_app'
     apps.loading True, apps_ready False, ready False
     django.setup(), again  -> raises RuntimeError: populate() isn't reentrant
+
+django.setup() with INSTALLED_APPS = ["library.reopening"], whose ready calls django.setup(): the second call configures logging and sets the prefix again, and its Apps.populate raises
+    django.setup()
+      setup
+        configure_logging("logging.config.dictConfig", {})
+        set_script_prefix("/")
+        Apps.populate  (ready False, loading False)
+          AppConfig.create("library.reopening")
+          AppConfig.import_models  (reopening)
+          ReopeningConfig.ready  (reopening)
+            setup
+              configure_logging("logging.config.dictConfig", {})
+              set_script_prefix("/")
+              Apps.populate  (ready False, loading True)
+                raises RuntimeError: populate() isn't reentrant
+      -> raises RuntimeError: populate() isn't reentrant
+    apps.loading True, apps_ready True, models_ready True, ready False
+
+get_wsgi_application() in a new process: django.setup(set_prefix=False), then the handler
+    get_wsgi_application()
+      setup(set_prefix=False)
+        LazySettings.__getattr__("LOGGING_CONFIG")
+          LazySettings._setup("LOGGING_CONFIG")
+            Settings.__init__("library.settings")
+              import library.settings
+        LazySettings.__getattr__("LOGGING")
+        configure_logging("logging.config.dictConfig", {})
+        LazySettings.__getattr__("INSTALLED_APPS")
+        Apps.populate
+      WSGIHandler.__init__
+        BaseHandler.load_middleware(is_async=False)
+          LazySettings.__getattr__("MIDDLEWARE")
+      -> a WSGIHandler
+
+get_asgi_application() in a new process: django.setup(set_prefix=False), then the handler
+    get_asgi_application()
+      setup(set_prefix=False)
+        LazySettings.__getattr__("LOGGING_CONFIG")
+          LazySettings._setup("LOGGING_CONFIG")
+            Settings.__init__("library.settings")
+              import library.settings
+        LazySettings.__getattr__("LOGGING")
+        configure_logging("logging.config.dictConfig", {})
+        LazySettings.__getattr__("INSTALLED_APPS")
+        Apps.populate
+      ASGIHandler.__init__
+        BaseHandler.load_middleware(is_async=True)
+          LazySettings.__getattr__("MIDDLEWARE")
+      -> an ASGIHandler
+
+ManagementUtility.execute() for runserver, INSTALLED_APPS = ["library.catalogue", "library.misprint"] and misprint's models module raising: the error is swallowed, and the command, replaced by the script, is not run
+    ManagementUtility(['manage.py', 'runserver', '--nostatic']).execute()
+      check_errors.<locals>.wrapper
+        setup
+          Apps.populate
+            AppConfig.create("library.catalogue")
+              import library.catalogue
+              import library.catalogue.apps
+            AppConfig.create("library.misprint")
+              import library.misprint
+            AppConfig.import_models  (catalogue)
+              import library.catalogue.models
+                ModelBase.__new__  (class Book)
+                  Apps.register_model(catalogue.Book)
+            AppConfig.import_models  (misprint)
+              import library.misprint.models
+                raises AttributeError: module 'django.db.models' has no attribute 'TextFeld'
+      ManagementUtility.fetch_command("runserver")
+      ManagementUtility.fetch_command("runserver")
+      runserver's Command.run_from_argv(['manage.py', 'runserver']), replaced: it writes this line and returns
+    autoreload._exception[1]  -> AttributeError("module 'django.db.models' has no attribute 'TextFeld'")
+    autoreload._error_files  -> ['library/misprint/models.py'], each path relative to recordings/
+
+The registry as ManagementUtility.execute() leaves it when django.setup() has failed under runserver
+    apps.app_configs  -> {}
+    dict(apps.all_models)  -> {}
+    apps_ready True, models_ready True, ready True
+    apps.loading  -> True
+    apps.ready_event.is_set()  -> False
 
 A setting is overridden for a block, and restored
     settings.DEBUG  -> False
@@ -241,6 +439,133 @@ The receivers of setting_changed in this process, in the order they were connect
       user_model_swapped  (django.test.signals)
       update_logging_config  (django.test.signals)
 
+django.setup() with INSTALLED_APPS = ["library.notices"], whose ready connects three receivers to its signal book_returned
+    django.setup()
+      Apps.populate
+        NoticesConfig.ready  (notices)
+          Signal.connect(send_notice)
+          Signal.connect(NoticesConfig.count_return, bound to the first NoticesConfig)
+          Signal.connect(NoticesConfig.ready.<locals>.remind)
+    book_returned.receivers, after gc.collect()
+      send_notice                                                    alive
+      NoticesConfig.count_return, bound to the first NoticesConfig   alive
+      NoticesConfig.ready.<locals>.remind                            dead: its weak reference returns None
+    the receivers a send would call: 2
+
+The same ready run again by override_settings(INSTALLED_APPS=[...]), and what book_returned keeps inside the block and after it
+    with override_settings(INSTALLED_APPS=["library.notices"]):
+      override_settings.enable
+        Apps.set_installed_apps
+          Apps.populate
+            NoticesConfig.ready  (notices)
+              Signal.connect(send_notice)
+              Signal.connect(NoticesConfig.count_return, bound to the second NoticesConfig)
+              Signal.connect(NoticesConfig.ready.<locals>.remind)
+      book_returned.receivers, after gc.collect()
+        send_notice                                                     alive
+        NoticesConfig.count_return, bound to the first NoticesConfig    alive
+        NoticesConfig.count_return, bound to the second NoticesConfig   alive
+        NoticesConfig.ready.<locals>.remind                             dead: its weak reference returns None
+      the receivers a send would call: 3
+      override_settings.disable
+        Apps.unset_installed_apps
+    book_returned.receivers, after gc.collect()
+      send_notice                                                     alive
+      NoticesConfig.count_return, bound to the first NoticesConfig    alive
+      NoticesConfig.count_return, bound to the second NoticesConfig   dead: its weak reference returns None
+      NoticesConfig.ready.<locals>.remind                             dead: its weak reference returns None
+    the receivers a send would call: 2
+
+A receiver of setting_changed, refuse, raises as the first of two overridden settings is entered
+    with override_settings(APPEND_SLASH=False, PREPEND_WWW=True):
+      override_settings.enable
+        UserSettingsHolder.__init__(a Settings)
+        UserSettingsHolder.__setattr__("APPEND_SLASH", False)
+        UserSettingsHolder.__setattr__("PREPEND_WWW", True)
+        LazySettings.__setattr__("_wrapped", a UserSettingsHolder)
+        setting_changed.send(setting="APPEND_SLASH", value=False, enter=True)  to 19 receivers
+          refuse(setting="APPEND_SLASH", enter=True)
+            raises ValueError: APPEND_SLASH may not be overridden
+        override_settings.disable
+          LazySettings.__setattr__("_wrapped", a Settings)
+          LazySettings.__getattr__("APPEND_SLASH")
+          setting_changed.send_robust(setting="APPEND_SLASH", value=True, enter=False)  to 19 receivers
+            refuse(setting="APPEND_SLASH", enter=False)
+          LazySettings.__getattr__("PREPEND_WWW")
+          setting_changed.send_robust(setting="PREPEND_WWW", value=False, enter=False)  to 19 receivers
+            refuse(setting="PREPEND_WWW", enter=False)
+          raises ValueError: APPEND_SLASH may not be overridden
+      -> raises ValueError: APPEND_SLASH may not be overridden
+    settings.APPEND_SLASH  -> True
+    settings.PREPEND_WWW  -> False
+
+Two overrides, one inside the other, each entered as a with statement enters it: the holders stacked
+    outer, inner = override_settings(DEBUG=True), override_settings(APPEND_SLASH=False)
+    outer.__enter__()
+      override_settings.enable
+        UserSettingsHolder.__init__(a Settings)
+        UserSettingsHolder.__setattr__("DEBUG", True)
+        LazySettings.__setattr__("_wrapped", a UserSettingsHolder)
+        setting_changed.send(setting="DEBUG", value=True, enter=True)  to 18 receivers
+    inner.__enter__()
+      override_settings.enable
+        UserSettingsHolder.__init__(a UserSettingsHolder)
+        UserSettingsHolder.__setattr__("APPEND_SLASH", False)
+        LazySettings.__setattr__("_wrapped", a UserSettingsHolder)
+        setting_changed.send(setting="APPEND_SLASH", value=False, enter=True)  to 18 receivers
+    settings._wrapped, and below it each default_settings in turn
+      a UserSettingsHolder, the holder of APPEND_SLASH
+      a UserSettingsHolder, the holder of DEBUG
+      a Settings, "library.settings"
+
+Inside both overrides: a read falls through the holders until one has the name
+    settings.APPEND_SLASH
+      LazySettings.__getattr__("APPEND_SLASH")
+      -> False
+    settings.DEBUG
+      LazySettings.__getattr__("DEBUG")
+        UserSettingsHolder.__getattr__("DEBUG")  on the holder of APPEND_SLASH
+      -> True
+    settings.TIME_ZONE
+      LazySettings.__getattr__("TIME_ZONE")
+        UserSettingsHolder.__getattr__("TIME_ZONE")  on the holder of APPEND_SLASH
+          UserSettingsHolder.__getattr__("TIME_ZONE")  on the holder of DEBUG
+      -> 'America/Chicago'
+
+Inside both overrides: a setting deleted, and read
+    del settings.TIME_ZONE
+      LazySettings.__delattr__("TIME_ZONE")
+        UserSettingsHolder.__delattr__("TIME_ZONE")  on the holder of APPEND_SLASH
+          UserSettingsHolder.__getattr__("TIME_ZONE")  on the holder of APPEND_SLASH, deleted TIME_ZONE
+            raises AttributeError
+    settings.TIME_ZONE
+      LazySettings.__getattr__("TIME_ZONE")
+        UserSettingsHolder.__getattr__("TIME_ZONE")  on the holder of APPEND_SLASH, deleted TIME_ZONE
+          raises AttributeError
+      -> raises AttributeError
+    settings._wrapped, and below it each default_settings in turn
+      a UserSettingsHolder, the holder of APPEND_SLASH, deleted TIME_ZONE
+      a UserSettingsHolder, the holder of DEBUG
+      a Settings, "library.settings"
+
+The two overrides left, the inner first: what the proxy wraps after each
+    inner.__exit__(None, None, None)
+      override_settings.disable
+        LazySettings.__setattr__("_wrapped", a UserSettingsHolder)
+        LazySettings.__getattr__("APPEND_SLASH")
+          UserSettingsHolder.__getattr__("APPEND_SLASH")  on the holder of DEBUG
+        setting_changed.send_robust(setting="APPEND_SLASH", value=True, enter=False)  to 18 receivers
+    settings._wrapped, and below it each default_settings in turn
+      a UserSettingsHolder, the holder of DEBUG
+      a Settings, "library.settings"
+    outer.__exit__(None, None, None)
+      override_settings.disable
+        LazySettings.__setattr__("_wrapped", a Settings)
+        LazySettings.__getattr__("DEBUG")
+        setting_changed.send_robust(setting="DEBUG", value=False, enter=False)  to 18 receivers
+    settings._wrapped, and below it each default_settings in turn
+      a Settings, "library.settings"
+
 The loggers that configure_logging leaves configured, with LOGGING empty
     "django": level INFO, handlers console, mail_admins, propagate True
     "django.server": level INFO, handlers django.server, propagate False
@@ -262,4 +587,74 @@ Where a log record goes: the handlers whose emit is called
       "django" INFO                           -> console
       "django.server" INFO                    -> django.server
       "library" WARNING                       -> Python's handler of last resort
+
+LOGGING without "disable_existing_loggers": the loggers that existed when django.setup() applied it are disabled
+    logging.getLogger("library.early"), before django.setup()
+    settings.configure(LOGGING={'version': 1, 'handlers': {'project': {'class': 'logging.StreamHandler'}}, 'root': {'handlers': ['project'], 'level': 'INFO'}})
+    django.setup()
+    logging.getLogger("library.late"), after it
+    every logger whose name begins with django or library, as it is now
+      "django": disabled True
+      "django.db.backends": disabled True
+      "django.db.models": disabled True
+      "django.dispatch": disabled True
+      "django.request": disabled True
+      "django.server": disabled True
+      "django.template": disabled True
+      "django.utils.autoreload": disabled True
+      "library.early": disabled True
+      "library.late": disabled False
+
+Where a log record goes, with LOGGING that leaves out "disable_existing_loggers": the handlers whose emit is called
+    "django.request" ERROR                  -> no handler
+    "django.server" INFO                    -> no handler
+    "django.security.DisallowedHost" ERROR  -> mail_admins, project  (the logger is made at this line, by logging.getLogger)
+    "library.early" WARNING                 -> no handler
+    "library.late" WARNING                  -> project
+
+LOGGING that names "django" and not "django.server": the server's logger is reset, and its records go to the project's handler
+    settings.configure(LOGGING={'version': 1, 'disable_existing_loggers': False, 'handlers': {'project': {'class': 'logging.StreamHandler'}}, 'loggers': {'django': {'handlers': ['project'], 'level': 'INFO'}}})
+    django.setup()
+    "django": level INFO, handlers project, propagate True
+    "django.server": level NOTSET, handlers none, propagate True
+    "django.server" INFO                    -> project
+    "django.request" ERROR                  -> project
+
+django.setup() twice in one process, with LOGGING that leaves out "disable_existing_loggers": a logger obtained between the two calls is disabled by the second
+    settings.configure(LOGGING={'version': 1, 'handlers': {'project': {'class': 'logging.StreamHandler'}}, 'root': {'handlers': ['project'], 'level': 'INFO'}})
+    django.setup()
+      configure_logging
+    between = logging.getLogger("library.between")
+    between.disabled  -> False
+    "library.between" WARNING               -> project
+    django.setup(), a second time
+      configure_logging
+    between.disabled  -> True
+    "library.between" WARNING               -> no handler
+    the root logger's handler is the one the first django.setup() made: False
+
+log_response for one 500: called where the exception is caught and again by the handler, which finds the response marked
+    GET /broken/, a view that raises
+      BaseHandler.get_response
+        BaseHandler.resolve_request
+        broken  (the view)
+          raises ValueError: the view fails
+        response_for_exception(request, a ValueError)
+          handle_uncaught_exception
+          log_response("%s: %s", 'Internal Server Error', '/broken/', exception=ValueError)  the 500 response is not yet marked
+            log_message(the logger "django.request", level=None, status_code=500)
+              Logger.error  ("django.request")
+        log_response("%s: %s", 'Internal Server Error', '/broken/', exception=None)  the 500 response is already marked
+      start_response("500 Internal Server Error", headers)
+
+log_response for a 404: called once, by the handler
+    GET /missing/, a path no pattern matches
+      BaseHandler.get_response
+        BaseHandler.resolve_request
+          raises Resolver404: {'tried': [[<URLPattern 'broken/'>]], 'path': 'missing/'}
+        response_for_exception(request, a Resolver404)
+        log_response("%s: %s", 'Not Found', '/missing/', exception=None)  the 404 response is not yet marked
+          log_message(the logger "django.request", level=None, status_code=404)
+            Logger.warning  ("django.request")
+      start_response("404 Not Found", headers)
 

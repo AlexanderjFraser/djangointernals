@@ -24,7 +24,7 @@
   {
    "pointer": "django/conf/__init__.py:settings",
    "line": 17,
-   "sentence": "`django.conf.settings` is a `LazySettings`: a stand-in for the project's settings that holds nothing until something reads a setting from it (`django/conf/__init__.py:settings`).",
+   "sentence": "`django.conf.settings` is a `LazySettings`: a stand-in for the project's settings (`django/conf/__init__.py:settings`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "settings",
@@ -38,7 +38,7 @@
   {
    "pointer": "django/apps/registry.py:apps",
    "line": 17,
-   "sentence": "`django.apps.apps` is an `Apps`, the **app registry**: the record of the installed applications and of every model class (`django/apps/registry.py:apps`).",
+   "sentence": "`django.apps.apps` is an `Apps`, the **app registry**: the record of the installed applications and of the model classes (`django/apps/registry.py:apps`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "apps",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/conf/__init__.py:LazySettings._setup",
    "line": 21,
-   "sentence": "Neither a server nor a command ever says \"load the settings\": whichever line of code reads a setting first does it, and every later read finds it done (`django/conf/__init__.py:LazySettings._setup`).",
+   "sentence": "Startup never says \"load the settings\": whichever line of code first reads or writes a setting does it (`django/conf/__init__.py:LazySettings._setup`, `django/utils/functional.py:LazyObject.__setattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings._setup",
@@ -62,6 +62,20 @@
     109
    ],
    "fingerprint": "6721d7ba7192c979"
+  },
+  {
+   "pointer": "django/utils/functional.py:LazyObject.__setattr__",
+   "line": 21,
+   "sentence": "Startup never says \"load the settings\": whichever line of code first reads or writes a setting does it (`django/conf/__init__.py:LazySettings._setup`, `django/utils/functional.py:LazyObject.__setattr__`).",
+   "tree": "django",
+   "path": "django/utils/functional.py",
+   "symbol": "LazyObject.__setattr__",
+   "kind": "function",
+   "lines": [
+    289,
+    296
+   ],
+   "fingerprint": "b9d104fcf7c21ee3"
   },
   {
    "pointer": "django/apps/registry.py:Apps.populate",
@@ -106,8 +120,50 @@
    "fingerprint": "1d9e6fad619c10ab"
   },
   {
+   "pointer": "django/urls/base.py:set_script_prefix",
+   "line": 30,
+   "sentence": "The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "set_script_prefix",
+   "kind": "function",
+   "lines": [
+    120,
+    126
+   ],
+   "fingerprint": "40b5e4374d595bce"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.get_containing_app_config",
+   "line": 83,
+   "sentence": "Nothing imported during the first phase can define a model, not even a model of an application whose configuration is already made, because a model's class statement asks the registry which application it belongs to, and the registry will not say until every entry has its configuration (`django/apps/registry.py:Apps.get_containing_app_config`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_containing_app_config",
+   "kind": "function",
+   "lines": [
+    251,
+    268
+   ],
+   "fingerprint": "685d245c52b92940"
+  },
+  {
+   "pointer": "docs/releases/1.7.txt",
+   "line": 85,
+   "sentence": "From then on a script that relied on `\"DJANGO_SETTINGS_MODULE\"` had to call `django.setup` itself, or meet `AppRegistryNotReady` (`docs/releases/1.7.txt`).",
+   "tree": "django",
+   "path": "docs/releases/1.7.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1868
+   ],
+   "fingerprint": "50fd00872b76d036"
+  },
+  {
    "pointer": "django/core/wsgi.py:get_wsgi_application",
-   "line": 104,
+   "line": 89,
    "sentence": "Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`).",
    "tree": "django",
    "path": "django/core/wsgi.py",
@@ -121,8 +177,8 @@
   },
   {
    "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
-   "line": 104,
-   "sentence": "For a management command it is `ManagementUtility.execute`, before it looks for the command (`django/core/management/__init__.py:ManagementUtility.execute`).",
+   "line": 89,
+   "sentence": "For a management command it is ordinarily `ManagementUtility.execute`, before it looks for the command (`django/core/management/__init__.py:ManagementUtility.execute`).",
    "tree": "django",
    "path": "django/core/management/__init__.py",
    "symbol": "ManagementUtility.execute",
@@ -134,8 +190,22 @@
    "fingerprint": "31851105e39a4745"
   },
   {
+   "pointer": "django/utils/log.py:configure_logging",
+   "line": 91,
+   "sentence": "A call after one that succeeded finds the registry ready, and `Apps.populate` returns at once; but logging is configured again, which can disable loggers made between the two calls (`django/utils/log.py:configure_logging`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "configure_logging",
+   "kind": "function",
+   "lines": [
+    70,
+    79
+   ],
+   "fingerprint": "e1779be4c70b05e5"
+  },
+  {
    "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
-   "line": 119,
+   "line": 95,
    "sentence": "`SecurityMiddleware` reads its settings into attributes once, in its constructor, when the middleware chain is made (`django/middleware/security.py:SecurityMiddleware.__init__`).",
    "tree": "django",
    "path": "django/middleware/security.py",
@@ -146,6 +216,64 @@
     21
    ],
    "fingerprint": "d589cea40c7ab213"
+  },
+  {
+   "pointer": "django/template/utils.py:EngineHandler.templates",
+   "line": 95,
+   "sentence": "The template engines are made at their first use, from `settings.TEMPLATES` as it then stood, and kept (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.templates",
+   "kind": "function",
+   "lines": [
+    25,
+    65
+   ],
+   "at": 26,
+   "fingerprint": "3a28f74f3d2b5f7d"
+  },
+  {
+   "pointer": "django/template/utils.py:EngineHandler.__getitem__",
+   "line": 95,
+   "sentence": "The template engines are made at their first use, from `settings.TEMPLATES` as it then stood, and kept (`django/template/utils.py:EngineHandler.templates`, `django/template/utils.py:EngineHandler.__getitem__`).",
+   "tree": "django",
+   "path": "django/template/utils.py",
+   "symbol": "EngineHandler.__getitem__",
+   "kind": "function",
+   "lines": [
+    67,
+    88
+   ],
+   "fingerprint": "fb1491113fd312c3"
+  },
+  {
+   "pointer": "django/db/models/options.py:Options.related_objects",
+   "line": 95,
+   "sentence": "A model's `_meta` caches lists of fields that depend on which other models exist (`django/db/models/options.py:Options.related_objects`).",
+   "tree": "django",
+   "path": "django/db/models/options.py",
+   "symbol": "Options.related_objects",
+   "kind": "function",
+   "lines": [
+    617,
+    638
+   ],
+   "at": 618,
+   "fingerprint": "2d75d005b955385d"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__setattr__",
+   "line": 97,
+   "sentence": "So a setting assigned in a running process changes what the next read of it returns, and nothing that was built from the old value (`django/conf/__init__.py:LazySettings.__setattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__setattr__",
+   "kind": "function",
+   "lines": [
+    148,
+    181
+   ],
+   "fingerprint": "e5b5c43bb4fbb547"
   }
  ]
 }

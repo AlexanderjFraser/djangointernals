@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 822 489">
+  <!-- the root logger, at the top: no handler of its own -->
+  <rect class="box" x="249.5" y="0.5" width="440" height="68" rx="4"/>
+  <text class="strong" x="261" y="21">the root logger</text>
+  <text class="quiet" x="261" y="39">no handler of its own: a record that meets no handler on its way up</text>
+  <text class="quiet" x="261" y="57">goes to Python’s handler of last resort, which prints warnings and errors</text>
+
+  <!-- "django" and "library" pass their records up to the root -->
+  <path class="line" d="M204.5 116.5 V92.5 H734.5 V116.5 M469.5 92.5 V78.5"/>
+  <polygon class="head" points="469.5,68.5 464.5,78.5 474.5,78.5"/>
+
+  <!-- "django", with its two handlers beside it -->
+  <rect class="box" x="129.5" y="116.5" width="150" height="50" rx="4"/>
+  <text class="name" x="141" y="137">"django"</text>
+  <text x="141" y="155"><tspan class="quiet">level </tspan><tspan class="name">"INFO"</tspan></text>
+
+  <path class="line" d="M279.5 141.5 H327.5 M303.5 141.5 V265.5 H327.5"/>
+
+  <rect class="ground" x="327.5" y="116.5" width="288" height="112" rx="4"/>
+  <text x="339" y="137"><tspan class="quiet">handler </tspan><tspan class="name">"console"</tspan></text>
+  <text x="603" y="137" text-anchor="end"><tspan class="quiet">level </tspan><tspan class="name">"INFO"</tspan></text>
+  <rect class="mark-box" x="339.5" y="148.5" width="264" height="50" rx="4"/>
+  <text class="name" x="351" y="169">RequireDebugTrue</text>
+  <text x="351" y="187"><tspan class="quiet">acts only while </tspan><tspan class="name">settings.DEBUG</tspan><tspan class="quiet"> is true</tspan></text>
+  <text x="339" y="219"><tspan class="quiet">→ </tspan>the standard error stream</text>
+
+  <rect class="ground" x="327.5" y="240.5" width="288" height="112" rx="4"/>
+  <text x="339" y="261"><tspan class="quiet">handler </tspan><tspan class="name">"mail_admins"</tspan></text>
+  <text x="603" y="261" text-anchor="end"><tspan class="quiet">level </tspan><tspan class="name">"ERROR"</tspan></text>
+  <rect class="mark-box" x="339.5" y="272.5" width="264" height="50" rx="4"/>
+  <text class="name" x="351" y="293">RequireDebugFalse</text>
+  <text x="351" y="311"><tspan class="quiet">acts only while </tspan><tspan class="name">settings.DEBUG</tspan><tspan class="quiet"> is false</tspan></text>
+  <text x="339" y="343"><tspan class="quiet">→ </tspan>email, through <tspan class="name">AdminEmailHandler</tspan></text>
+
+  <!-- a project's logger, beside them -->
+  <rect class="box" x="647.5" y="116.5" width="174" height="68" rx="4"/>
+  <text class="name" x="659" y="137">"library"</text>
+  <text class="quiet" x="659" y="155">a project’s logger:</text>
+  <text class="quiet" x="659" y="173">nothing from the defaults</text>
+
+  <!-- three of the loggers below "django": their records climb to it -->
+  <rect class="box" x="0.5" y="190.5" width="180" height="32" rx="4"/>
+  <text class="name" x="12" y="211">"django.request"</text>
+  <rect class="box" x="0.5" y="234.5" width="180" height="32" rx="4"/>
+  <text class="name" x="12" y="255">"django.security.*"</text>
+  <rect class="box" x="0.5" y="278.5" width="180" height="32" rx="4"/>
+  <text class="name" x="12" y="299">"django.db.backends"</text>
+
+  <path class="line" d="M180.5 206.5 H204.5 M180.5 250.5 H204.5 M180.5 294.5 H204.5 V176.5"/>
+  <polygon class="head" points="204.5,166.5 199.5,176.5 209.5,176.5"/>
+
+  <!-- "django.server": a child by its name, which passes nothing up, and its own handler -->
+  <path class="line dashed" d="M204.5 294.5 V376.5"/>
+  <path class="line" d="M198.5 329.5 L210.5 341.5 M210.5 329.5 L198.5 341.5"/>
+  <text x="0" y="340"><tspan class="quiet">passes nothing up to </tspan><tspan class="name">"django"</tspan></text>
+
+  <rect class="box" x="129.5" y="376.5" width="150" height="50" rx="4"/>
+  <text class="name" x="141" y="397">"django.server"</text>
+  <text x="141" y="415"><tspan class="quiet">level </tspan><tspan class="name">"INFO"</tspan></text>
+
+  <path class="line" d="M279.5 401.5 H327.5"/>
+
+  <rect class="ground" x="327.5" y="376.5" width="288" height="112" rx="4"/>
+  <text x="339" y="397"><tspan class="quiet">handler </tspan><tspan class="name">"django.server"</tspan></text>
+  <text x="603" y="397" text-anchor="end"><tspan class="quiet">level </tspan><tspan class="name">"INFO"</tspan></text>
+  <rect class="ground dashed" x="339.5" y="408.5" width="264" height="32" rx="4"/>
+  <text class="quiet" x="351" y="429">no filter</text>
+  <text x="339" y="461"><tspan class="quiet">→ </tspan>the standard error stream,</text>
+  <text x="354" y="479">formatted by <tspan class="name">ServerFormatter</tspan></text>
+</svg>

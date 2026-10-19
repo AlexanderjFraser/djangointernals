@@ -10,7 +10,7 @@
   {
    "pointer": "django/utils/functional.py:LazyObject",
    "line": 13,
-   "sentence": "`LazySettings` is built on `LazyObject`, Django's general lazy proxy (`django/utils/functional.py:LazyObject`).",
+   "sentence": "`LazySettings` is a `LazyObject`, Django's general lazy proxy, which holds what it stands for in `LazyObject._wrapped`, the marker `empty` until a subclass's `_setup` method puts something there ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md)) (`django/utils/functional.py:LazyObject`).",
    "tree": "django",
    "path": "django/utils/functional.py",
    "symbol": "LazyObject",
@@ -23,8 +23,8 @@
   },
   {
    "pointer": "django/conf/__init__.py:LazySettings._setup",
-   "line": 15,
-   "sentence": "Otherwise it makes a `Settings` from the module's name and wraps it (`django/conf/__init__.py:LazySettings._setup`).",
+   "line": 13,
+   "sentence": "If the variable is unset or empty it raises `ImproperlyConfigured`, with a message that names the setting that was being read; otherwise it makes a `Settings` from the module's name and wraps it (`django/conf/__init__.py:LazySettings._setup`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings._setup",
@@ -37,8 +37,8 @@
   },
   {
    "pointer": "django/conf/__init__.py:LazySettings.configured",
-   "line": 42,
-   "sentence": "And code that may run before there are settings has a way to ask without triggering the load: the property `LazySettings.configured` is true when something is wrapped, and reading it loads nothing (`django/conf/__init__.py:LazySettings.configured`).",
+   "line": 40,
+   "sentence": "And code that may run before there are settings can ask without loading them: the property `LazySettings.configured` is true when something is wrapped, and reading it loads nothing (`django/conf/__init__.py:LazySettings.configured`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings.configured",
@@ -52,8 +52,8 @@
   },
   {
    "pointer": "django/dispatch/dispatcher.py:Signal.connect",
-   "line": 42,
-   "sentence": "It validates the receiver only in debug mode, and receivers are connected as modules are imported, so it tests `settings.configured` before it reads `settings.DEBUG` (`django/dispatch/dispatcher.py:Signal.connect`).",
+   "line": 40,
+   "sentence": "`Signal.connect`, run as modules are imported, tests it before it reads `settings.DEBUG` to decide whether to validate the receiver (`django/dispatch/dispatcher.py:Signal.connect`).",
    "tree": "django",
    "path": "django/dispatch/dispatcher.py",
    "symbol": "Signal.connect",
@@ -66,8 +66,8 @@
   },
   {
    "pointer": "django/apps/registry.py:Apps.check_apps_ready",
-   "line": 44,
-   "sentence": "Before it raises that, it reads `settings.INSTALLED_APPS`, so that where the real trouble is missing settings, the message about settings is the one that appears (`django/apps/registry.py:Apps.check_apps_ready`).",
+   "line": 52,
+   "sentence": "A model's class statement asks the app registry which application it belongs to, and the registry reads `settings.INSTALLED_APPS` before it refuses with `AppRegistryNotReady`, so that missing settings are reported as such ([The registry and its models](registry.md#a-model-class-registers-itself)) (`django/apps/registry.py:Apps.check_apps_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.check_apps_ready",
@@ -81,7 +81,7 @@
   {
    "pointer": "django/conf/__init__.py:Settings.__init__",
    "line": 56,
-   "sentence": "Its constructor fills it in two layers and then looks at a few of the results (`django/conf/__init__.py:Settings.__init__`).",
+   "sentence": "Its constructor fills it in two layers, and refuses, warns about or acts on a few of the values (`django/conf/__init__.py:Settings.__init__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "Settings.__init__",
@@ -107,8 +107,64 @@
    "fingerprint": "3c82ce45a0f468df"
   },
   {
+   "pointer": "docs/releases/1.10.txt",
+   "line": 62,
+   "sentence": "Five settings must each be a list or a tuple, or `ImproperlyConfigured` is raised: `\"ALLOWED_HOSTS\"`, `\"INSTALLED_APPS\"`, `\"LOCALE_PATHS\"`, `\"SECRET_KEY_FALLBACKS\"` and `\"TEMPLATE_DIRS\"`, which 1.10 removed as a setting and the constructor tests still (`docs/releases/1.10.txt`).",
+   "tree": "django",
+   "path": "docs/releases/1.10.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1383
+   ],
+   "fingerprint": "d491274bfc61d8d9"
+  },
+  {
+   "pointer": "django/conf/__init__.py:_check_email_settings_conflicts",
+   "line": 62,
+   "sentence": "The settings 6.1 deprecated that the module defines are each warned about with `RemovedInDjango2028Warning`, and a deprecated email setting defined beside `MAILERS` is refused instead (`django/conf/__init__.py:_check_email_settings_conflicts`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "_check_email_settings_conflicts",
+   "kind": "function",
+   "lines": [
+    63,
+    70
+   ],
+   "fingerprint": "ea841fffc4876789"
+  },
+  {
+   "pointer": "django/conf/project_template/project_name/settings.py-tpl",
+   "line": 64,
+   "sentence": "The settings module that `django-admin startproject` writes defines `MAILERS` (`django/conf/project_template/project_name/settings.py-tpl`).",
+   "tree": "django",
+   "path": "django/conf/project_template/project_name/settings.py-tpl",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    127
+   ],
+   "fingerprint": "778ed3436668bba6"
+  },
+  {
+   "pointer": "django/conf/__init__.py:Settings.__init__",
+   "line": 68,
+   "sentence": "The move is made only where `time` has `\"tzset\"`, and the comment at that line says why by its ticket: \"See ticket #2315 for why we don't do this unconditionally (breaks Windows)\" (`django/conf/__init__.py:Settings.__init__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "Settings.__init__",
+   "kind": "function",
+   "lines": [
+    243,
+    314
+   ],
+   "fingerprint": "203785028e2e9bc4"
+  },
+  {
    "pointer": "django/conf/global_settings.py",
-   "line": 70,
+   "line": 72,
    "sentence": "`django/conf/global_settings.py` is a module of plain assignments, and it has to stay one: it is imported by `django.conf` itself, before there are settings, so it can import nothing that reads a setting.",
    "tree": "django",
    "path": "django/conf/global_settings.py",
@@ -121,38 +177,50 @@
    "fingerprint": "3c82ce45a0f468df"
   },
   {
-   "pointer": "django/core/checks/urls.py:check_url_config",
-   "line": 74,
-   "sentence": "A project sets it, and code that must work without one reads it with a fallback, as the URL system checks do (`django/core/checks/urls.py:check_url_config`).",
+   "pointer": "django/conf/global_settings.py:gettext_noop",
+   "line": 72,
+   "sentence": "The translation functions are such a thing, which is why the module defines a function of its own, `gettext_noop`, that returns its argument, to mark the names of languages for translation (`django/conf/global_settings.py:gettext_noop`).",
    "tree": "django",
-   "path": "django/core/checks/urls.py",
-   "symbol": "check_url_config",
+   "path": "django/conf/global_settings.py",
+   "symbol": "gettext_noop",
    "kind": "function",
    "lines": [
-    10,
-    17
+    9,
+    10
    ],
-   "at": 11,
-   "fingerprint": "d65f1e8ee080de99"
-  },
-  {
-   "pointer": "django/core/mail/handler.py:MailersHandler._is_configured",
-   "line": 75,
-   "sentence": "Its absence is meaningful: mail code tells the old configuration from the new by whether the project defined `MAILERS` (`django/core/mail/handler.py:MailersHandler._is_configured`).",
-   "tree": "django",
-   "path": "django/core/mail/handler.py",
-   "symbol": "MailersHandler._is_configured",
-   "kind": "function",
-   "lines": [
-    38,
-    41
-   ],
-   "at": 39,
-   "fingerprint": "57bd1f539679bde4"
+   "fingerprint": "0467c77c04d05c7a"
   },
   {
    "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
-   "line": 82,
+   "line": 74,
+   "sentence": "Not every setting has a default there: `ROOT_URLCONF` has none, and where the project does not set it either, reading it raises `AttributeError` (`django/conf/__init__.py:LazySettings.__getattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__getattr__",
+   "kind": "function",
+   "lines": [
+    119,
+    146
+   ],
+   "fingerprint": "fd7eca125afabf3c"
+  },
+  {
+   "pointer": "django/conf/global_settings.py:MANAGERS",
+   "line": 76,
+   "sentence": "`global_settings` assigns it the very list it assigns to `ADMINS`, an empty one: it is computed from the default, once, and a project that sets `ADMINS` has not thereby set `MANAGERS` (`django/conf/global_settings.py:MANAGERS`).",
+   "tree": "django",
+   "path": "django/conf/global_settings.py",
+   "symbol": "MANAGERS",
+   "kind": "assignment",
+   "lines": [
+    175,
+    175
+   ],
+   "fingerprint": "a491f52ad8863a85"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
+   "line": 80,
    "sentence": "The method therefore ends by storing the value it found in the proxy's own instance dictionary, under the setting's name (`django/conf/__init__.py:LazySettings.__getattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
@@ -167,7 +235,7 @@
   {
    "pointer": "django/conf/__init__.py:LazySettings._add_script_prefix",
    "line": 104,
-   "sentence": "`MEDIA_URL` and `STATIC_URL`, when they are relative, have the script prefix put in front of them: a value that begins with neither a slash nor `http://` or `https://` is joined to what `get_script_prefix` returns at that moment, and the joined value is what is kept (`django/conf/__init__.py:LazySettings._add_script_prefix`, `django/urls/base.py:get_script_prefix`).",
+   "sentence": "`MEDIA_URL` and `STATIC_URL`, when they are relative, have the script prefix put in front of them: a value that begins with neither a slash nor `\"http://\"` or `\"https://\"` is joined to what `get_script_prefix` returns at that moment, and the joined value is what is kept (`django/conf/__init__.py:LazySettings._add_script_prefix`, `django/urls/base.py:get_script_prefix`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings._add_script_prefix",
@@ -182,7 +250,7 @@
   {
    "pointer": "django/urls/base.py:get_script_prefix",
    "line": 104,
-   "sentence": "`MEDIA_URL` and `STATIC_URL`, when they are relative, have the script prefix put in front of them: a value that begins with neither a slash nor `http://` or `https://` is joined to what `get_script_prefix` returns at that moment, and the joined value is what is kept (`django/conf/__init__.py:LazySettings._add_script_prefix`, `django/urls/base.py:get_script_prefix`).",
+   "sentence": "`MEDIA_URL` and `STATIC_URL`, when they are relative, have the script prefix put in front of them: a value that begins with neither a slash nor `\"http://\"` or `\"https://\"` is joined to what `get_script_prefix` returns at that moment, and the joined value is what is kept (`django/conf/__init__.py:LazySettings._add_script_prefix`, `django/urls/base.py:get_script_prefix`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "get_script_prefix",
@@ -194,9 +262,51 @@
    "fingerprint": "aa0edc00dcbde8de"
   },
   {
+   "pointer": "docs/ref/settings.txt",
+   "line": 124,
+   "sentence": "The documentation says that a relative `STATIC_URL` or `MEDIA_URL` is prefixed by the server-provided value of `\"SCRIPT_NAME\"` (`docs/ref/settings.txt`).",
+   "tree": "django",
+   "path": "docs/ref/settings.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4179
+   ],
+   "fingerprint": "23ab897ca680e6a7"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__setattr__",
+   "line": 124,
+   "sentence": "It is prefixed by the script prefix in force at its first read, and kept: a later read returns that value whatever the prefix has become, until a write through the proxy drops it (`django/conf/__init__.py:LazySettings.__setattr__`, `django/conf/__init__.py:LazySettings.__delattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__setattr__",
+   "kind": "function",
+   "lines": [
+    148,
+    181
+   ],
+   "fingerprint": "e5b5c43bb4fbb547"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__delattr__",
+   "line": 124,
+   "sentence": "It is prefixed by the script prefix in force at its first read, and kept: a later read returns that value whatever the prefix has become, until a write through the proxy drops it (`django/conf/__init__.py:LazySettings.__setattr__`, `django/conf/__init__.py:LazySettings.__delattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__delattr__",
+   "kind": "function",
+   "lines": [
+    183,
+    186
+   ],
+   "fingerprint": "41afc4e98b131663"
+  },
+  {
    "pointer": "django/conf/__init__.py:_show_settings_deprecation_warning",
-   "line": 108,
-   "sentence": "The warning is given only when the reader is outside Django: Django's own compatibility code has to read these settings, and `_show_settings_deprecation_warning` inspects the stack to tell the two apart (`django/conf/__init__.py:_show_settings_deprecation_warning`, `django/utils/deprecation.py:warn_about_external_use`).",
+   "line": 128,
+   "sentence": "A read of a deprecated email setting is intercepted here too: it raises `AttributeError` where `MAILERS` is defined, and otherwise warns only a reader outside Django, so that Django's own compatibility code reads it in silence ([Sending email: `mailers` and the email backends](../services/mailers.md#without-mailers-the-deprecated-settings)) (`django/conf/__init__.py:_show_settings_deprecation_warning`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "_show_settings_deprecation_warning",
@@ -208,36 +318,8 @@
    "fingerprint": "67b353137a8267ec"
   },
   {
-   "pointer": "django/utils/deprecation.py:warn_about_external_use",
-   "line": 108,
-   "sentence": "The warning is given only when the reader is outside Django: Django's own compatibility code has to read these settings, and `_show_settings_deprecation_warning` inspects the stack to tell the two apart (`django/conf/__init__.py:_show_settings_deprecation_warning`, `django/utils/deprecation.py:warn_about_external_use`).",
-   "tree": "django",
-   "path": "django/utils/deprecation.py",
-   "symbol": "warn_about_external_use",
-   "kind": "function",
-   "lines": [
-    50,
-    126
-   ],
-   "fingerprint": "6b8d6bf8462df763"
-  },
-  {
-   "pointer": "django/conf/project_template/project_name/settings.py-tpl",
-   "line": 110,
-   "sentence": "The settings module that `django-admin startproject` writes defines `MAILERS` (`django/conf/project_template/project_name/settings.py-tpl`).",
-   "tree": "django",
-   "path": "django/conf/project_template/project_name/settings.py-tpl",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    127
-   ],
-   "fingerprint": "778ed3436668bba6"
-  },
-  {
    "pointer": "django/conf/__init__.py:LazySettings.__setattr__",
-   "line": 114,
+   "line": 132,
    "sentence": "Assigning a new wrapped object clears every kept value at once (`django/conf/__init__.py:LazySettings.__setattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
@@ -250,8 +332,22 @@
    "fingerprint": "e5b5c43bb4fbb547"
   },
   {
+   "pointer": "django/conf/__init__.py:LazySettings.__delattr__",
+   "line": 132,
+   "sentence": "Deleting a setting removes its kept value in the same way (`django/conf/__init__.py:LazySettings.__delattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__delattr__",
+   "kind": "function",
+   "lines": [
+    183,
+    186
+   ],
+   "fingerprint": "41afc4e98b131663"
+  },
+  {
    "pointer": "django/conf/__init__.py:LazySettings.configure",
-   "line": 139,
+   "line": 138,
    "sentence": "A process can supply its settings directly, with no module and no environment variable, by calling `LazySettings.configure` before anything reads a setting (`django/conf/__init__.py:LazySettings.configure`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
@@ -265,8 +361,8 @@
   },
   {
    "pointer": "django/conf/__init__.py:UserSettingsHolder.__getattr__",
-   "line": 141,
-   "sentence": "It keeps only the names that were set on it, and a read of any other upper-case name falls through to a second object it was given, its `default_settings`, which for `configure` is the `global_settings` module unless the caller passes another (`django/conf/__init__.py:UserSettingsHolder.__getattr__`).",
+   "line": 140,
+   "sentence": "It keeps only the names set on it, and a read of any other upper-case name not deleted falls through to a second object, its `default_settings`: for `configure` the `global_settings` module unless the caller passes another, for an override the object wrapped before it ([Overriding settings](overrides.md)) (`django/conf/__init__.py:UserSettingsHolder.__getattr__`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "UserSettingsHolder.__getattr__",
@@ -276,6 +372,20 @@
     344
    ],
    "fingerprint": "345a5b4911dd92ba"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.configure",
+   "line": 165,
+   "sentence": "A deprecated email setting given beside `MAILERS` is refused all the same (`django/conf/__init__.py:LazySettings.configure`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.configure",
+   "kind": "function",
+   "lines": [
+    202,
+    219
+   ],
+   "fingerprint": "f4609487cdebc62e"
   }
  ]
 }
