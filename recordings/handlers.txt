@@ -202,6 +202,111 @@ MIDDLEWARE = [A, Unused, C], where Unused raises MiddlewareNotUsed: it is left o
     C(get_response)    get_response is the wrapper around BaseHandler._get_response
     A(get_response)    get_response is the wrapper around C
 
+WSGI, GET /plain/: B.process_request returns a response
+    signal: request_started
+    A.process_request
+    B.process_request, returning a response
+    B.process_response(200)
+    A.process_response(200)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /plain/: B.process_view returns a response
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view, returning a response
+    C.process_response(200)
+    B.process_response(200)
+    A.process_response(200)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /broken/: the view raises ValueError, and C.process_exception returns a response
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, raising ValueError
+    C.process_exception(ValueError), returning a response
+    C.process_response(200)
+    B.process_response(200)
+    A.process_response(200)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /plain/: C.process_response raises RuntimeError
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view
+    C.process_response(200), raising RuntimeError
+    signal: got_request_exception
+    B.process_response(500)
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /template-raises/: a TemplateResponse whose template raises ValueError when it is rendered
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, returning a TemplateResponse of {{ boom }}
+    C.process_template_response
+    B.process_template_response
+    A.process_template_response
+    the template calls boom, which raises ValueError
+    C.process_exception(ValueError)
+    B.process_exception(ValueError)
+    A.process_exception(ValueError)
+    signal: got_request_exception
+    C.process_response(500)
+    B.process_response(500)
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /template/: B.process_template_response returns an HttpResponse, which has no render method
+    signal: request_started
+    A.process_request
+    B.process_request
+    C.process_request
+    A.process_view
+    B.process_view
+    C.process_view
+    the view, returning a TemplateResponse
+    C.process_template_response
+    B.process_template_response, returning an HttpResponse
+    A.process_template_response
+    C.process_exception(AttributeError)
+    B.process_exception(AttributeError)
+    A.process_exception(AttributeError)
+    signal: got_request_exception
+    C.process_response(500)
+    B.process_response(500)
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
 From here on A, B and C have process_request and process_response and no other hook, each line says
 which thread it ran on, and every crossing between the event loop and a thread is written down.
 
@@ -296,4 +401,403 @@ Making an ASGIHandler; A and C can run either way, B only synchronously
     B(get_response)    get_response is async_to_sync(the wrapper around C)
     A(get_response)    get_response is the wrapper around B
     the chain: sync_to_async(the wrapper around A)
+
+From here on the three signal receivers are connected again, the server's receive writes a line
+each time it is called, and the handler writes down the request it makes and the URL it resolves.
+
+ASGI, GET /async/: an async view, A and C either way and B only synchronously
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+      loop -> thread: sync_to_async(the wrapper around A)
+    receive() from ASGIHandler.listen_for_disconnect: waiting  [loop, meanwhile]
+    A.process_request  [worker]
+    B.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around C)
+      loop -> thread: sync_to_async(C.process_request)
+    C.process_request  [worker]
+    BaseHandler.resolve_request  [loop]
+    the view (async def)  [loop]
+      loop -> thread: sync_to_async(C.process_response)
+    C.process_response(200)  [worker]
+    B.process_response(200)  [worker]
+    A.process_response(200)  [worker]
+    send(http.response.start), status 200  [loop]
+    send(http.response.body)  [loop]
+    receive() from ASGIHandler.listen_for_disconnect: cancelled  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /plain/: a synchronous view, synchronous middleware, as the server sees it
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+      loop -> thread: sync_to_async(the wrapper around A)
+    receive() from ASGIHandler.listen_for_disconnect: waiting  [loop, meanwhile]
+    A.process_request  [worker]
+    B.process_request  [worker]
+    C.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+    BaseHandler.resolve_request  [loop]
+      loop -> thread: sync_to_async(plain)
+    the view  [worker]
+    C.process_response(200)  [worker]
+    B.process_response(200)  [worker]
+    A.process_response(200)  [worker]
+    send(http.response.start), status 200  [loop]
+    send(http.response.body)  [loop]
+    receive() from ASGIHandler.listen_for_disconnect: cancelled  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /plain/ with the query string b"q=\xff", which is not UTF-8: a 400 from ASGIHandler.create_request
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+    ASGIRequest.__init__ raises UnicodeDecodeError  [loop]
+    send(http.response.start), status 400  [loop]
+    send(http.response.body)  [loop]
+      loop -> thread: sync_to_async(HttpResponseBase.close)
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, POST /plain/: the client disconnects while the body is arriving
+    receive() from ASGIHandler.read_body -> http.request, more_body True  [loop]
+    receive() from ASGIHandler.read_body -> http.disconnect  [loop]
+    (nothing ran on a worker thread)
+
+ASGI, GET /hang/: the client disconnects during an async view, middleware in async mode
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+      loop -> thread: sync_to_async(A.process_request)
+    receive() from ASGIHandler.listen_for_disconnect: waiting  [loop, meanwhile]
+    A.process_request  [worker]
+      loop -> thread: sync_to_async(B.process_request)
+    B.process_request  [worker]
+      loop -> thread: sync_to_async(C.process_request)
+    C.process_request  [worker]
+    BaseHandler.resolve_request  [loop]
+    the view (async def), letting the client disconnect  [loop]
+    receive() from ASGIHandler.listen_for_disconnect -> http.disconnect  [loop]
+    the view (async def) is cancelled  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /hang/: the client disconnects during an async view, synchronous middleware
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+      loop -> thread: sync_to_async(the wrapper around A)
+    receive() from ASGIHandler.listen_for_disconnect: waiting  [loop, meanwhile]
+    A.process_request  [worker]
+    B.process_request  [worker]
+    C.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+    BaseHandler.resolve_request  [loop]
+    the view (async def), letting the client disconnect  [loop]
+    receive() from ASGIHandler.listen_for_disconnect -> http.disconnect  [loop]
+    the view (async def) is cancelled  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /hang-sync/: the client disconnects during a synchronous view that is still running when the loop has handled it, synchronous middleware
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+      loop -> thread: sync_to_async(the wrapper around A)
+    receive() from ASGIHandler.listen_for_disconnect: waiting  [loop, meanwhile]
+    A.process_request  [worker]
+    B.process_request  [worker]
+    C.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+    BaseHandler.resolve_request  [loop]
+      loop -> thread: sync_to_async(hang_sync)
+    the view, letting the client disconnect  [worker]
+    receive() from ASGIHandler.listen_for_disconnect -> http.disconnect  [loop]
+    the view returns, after the centre's task on the loop has ended  [worker]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /plain/: the client disconnects during B.process_request, which is still running when the loop has handled it, synchronous middleware
+    receive() from ASGIHandler.read_body -> http.request, more_body False  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    signal: request_started  [worker]
+    ASGIRequest(scope, body_file)  [loop]
+      loop -> thread: sync_to_async(the wrapper around A)
+    receive() from ASGIHandler.listen_for_disconnect: waiting  [loop, meanwhile]
+    A.process_request  [worker]
+    B.process_request, letting the client disconnect  [worker]
+    receive() from ASGIHandler.listen_for_disconnect -> http.disconnect  [loop]
+      loop -> thread: sync_to_async(Signal.asend.<locals>.sync_send)
+    B.process_request returns, after the loop's next call into a thread  [worker]
+    C.process_request  [worker]
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+    BaseHandler.resolve_request  [loop]
+      loop -> thread: sync_to_async(plain)
+    the view  [worker]
+    C.process_response(200)  [worker]
+    B.process_response(200)  [worker]
+    A.process_response(200)  [worker]
+    signal: request_finished  [worker]
+    (everything marked worker ran on 1 thread)
+
+ASGI, GET /together/ twice at once under one event loop, synchronous middleware: the threads
+    request 1:
+        signal: request_started  [worker 1]
+        A.process_request  [worker 1]
+        B.process_request  [worker 1]
+        C.process_request  [worker 1]
+        the view, waiting until the other request's view is running too  [worker 1]
+        C.process_response(200)  [worker 1]
+        B.process_response(200)  [worker 1]
+        A.process_response(200)  [worker 1]
+        signal: request_finished  [worker 1]
+    request 2:
+        signal: request_started  [worker 2]
+        A.process_request  [worker 2]
+        B.process_request  [worker 2]
+        C.process_request  [worker 2]
+        the view, waiting until the other request's view is running too  [worker 2]
+        C.process_response(200)  [worker 2]
+        B.process_response(200)  [worker 2]
+        A.process_response(200)  [worker 2]
+        signal: request_finished  [worker 2]
+    (request 1's lines marked worker ran on 1 thread)
+    (request 2's lines marked worker ran on 1 thread)
+    (no thread ran lines of both requests)
+
+From here on, under WSGI again, A, B and C have process_request and process_response only and stand
+around Django's own middleware, which write down their hooks as they are called. A line "A sees" is a
+header of the response A's process_response was given, and so for B and C. A block's first line is the chain.
+
+WSGI, GET /plain: CommonMiddleware turns the 404 that C saw into a redirect
+    MIDDLEWARE = [A, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    C.process_request
+    C.process_response(404)
+    CommonMiddleware.process_response(404)
+    A.process_response(301)
+    A sees Location: /plain/
+    start_response("301 Moved Permanently", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, POST /plain: with DEBUG = True, CommonMiddleware.process_response raises RuntimeError
+    MIDDLEWARE = [A, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    C.process_request
+    C.process_response(404)
+    CommonMiddleware.process_response(404)
+    CommonMiddleware.process_response raises RuntimeError
+    signal: got_request_exception
+    A.process_response(500)
+    start_response("500 Internal Server Error", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /plain/: the User-Agent is one that DISALLOWED_USER_AGENTS refuses
+    MIDDLEWARE = [A, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    CommonMiddleware.process_request raises PermissionDenied
+    A.process_response(403)
+    start_response("403 Forbidden", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /plain: with PREPEND_WWW = True, one redirect for the www. and the slash
+    MIDDLEWARE = [A, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    CommonMiddleware.process_response(301)
+    A.process_response(301)
+    A sees Location: http://www.recording/plain/
+    start_response("301 Moved Permanently", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /plain/: CommonMiddleware gives a response the Content-Length it lacked
+    MIDDLEWARE = [A, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    C.process_request
+    the view
+    C.process_response(200)
+    C sees no Content-Length header
+    CommonMiddleware.process_response(200)
+    A.process_response(200)
+    A sees Content-Length: 2
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /stream/: CommonMiddleware gives a streaming response no Content-Length
+    MIDDLEWARE = [A, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    C.process_request
+    the view, returning a StreamingHttpResponse
+    C.process_response(200)
+    C sees no Content-Length header
+    CommonMiddleware.process_response(200)
+    A.process_response(200)
+    A sees no Content-Length header
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /small/: GZipMiddleware and a body under 200 bytes, with Accept-Encoding: gzip
+    MIDDLEWARE = [A, GZipMiddleware, C]
+    signal: request_started
+    A.process_request
+    C.process_request
+    the view, returning 199 bytes
+    C.process_response(200)
+    GZipMiddleware.process_response(200)
+    A.process_response(200)
+    A sees no Content-Encoding header
+    A sees no Vary header
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /large/: GZipMiddleware and 400 bytes, with no Accept-Encoding
+    MIDDLEWARE = [A, GZipMiddleware, C]
+    signal: request_started
+    A.process_request
+    C.process_request
+    the view, returning 400 bytes
+    C.process_response(200)
+    GZipMiddleware.process_response(200)
+    A.process_response(200)
+    A sees no Content-Encoding header
+    A sees Vary: Accept-Encoding
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /tagged/: GZipMiddleware and 400 bytes with a strong ETag, with Accept-Encoding: gzip
+    MIDDLEWARE = [A, GZipMiddleware, C]
+    signal: request_started
+    A.process_request
+    C.process_request
+    the view, returning 400 bytes with ETag: "v1"
+    C.process_response(200)
+    C sees ETag: "v1"
+    C sees no Content-Length header
+    GZipMiddleware.process_response(200)
+    A.process_response(200)
+    A sees Content-Encoding: gzip
+    A sees Vary: Accept-Encoding
+    A sees ETag: W/"v1"
+    A sees Content-Length: (varies)
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /file/: GZipMiddleware and a FileResponse, with Accept-Encoding: gzip
+    MIDDLEWARE = [A, GZipMiddleware, C]
+    signal: request_started
+    A.process_request
+    C.process_request
+    the view, returning a FileResponse of 400 bytes
+    C.process_response(200)
+    C sees Content-Length: 400
+    GZipMiddleware.process_response(200)
+    A.process_response(200)
+    A sees Content-Encoding: gzip
+    A sees no Content-Length header
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /large/: ConditionalGetMiddleware inside GZipMiddleware, with Accept-Encoding: gzip
+    MIDDLEWARE = [A, GZipMiddleware, B, ConditionalGetMiddleware]
+    signal: request_started
+    A.process_request
+    B.process_request
+    the view, returning 400 bytes
+    ConditionalGetMiddleware.process_response(200)
+    B.process_response(200)
+    B sees ETag: "0d723d1c244281678c8cd2957f0744b2"
+    B sees no Content-Encoding header
+    GZipMiddleware.process_response(200)
+    A.process_response(200)
+    A sees ETag: W/"0d723d1c244281678c8cd2957f0744b2"
+    A sees Content-Encoding: gzip
+    start_response("200 OK", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /missing/: BrokenLinkEmailsMiddleware and a 404 with a Referer on the same host
+    MIDDLEWARE = [A, BrokenLinkEmailsMiddleware, C]
+    signal: request_started
+    A.process_request
+    C.process_request
+    the view, raising Http404
+    C.process_response(404)
+    BrokenLinkEmailsMiddleware.process_response(404)
+    a mail to manager@example.com: "[Django] Broken INTERNAL link on recording"
+    A.process_response(404)
+    start_response("404 Not Found", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /missing/, the view raising Http404, through BrokenLinkEmailsMiddleware: which Referer mails
+    MIDDLEWARE = [A, BrokenLinkEmailsMiddleware, C]
+    no Referer -> no mail
+    Referer: http://recording/elsewhere/ -> a mail to manager@example.com: "[Django] Broken INTERNAL link on recording"
+    Referer: https://example.com/page/ -> a mail to manager@example.com: "[Django] Broken link on recording"
+    Referer: http://recording/elsewhere/, with DEBUG = True -> no mail
+    Referer: http://recording/missing -> a mail to manager@example.com: "[Django] Broken INTERNAL link on recording"
+    Referer: /missing -> no mail
+
+WSGI, GET /plain: BrokenLinkEmailsMiddleware outside CommonMiddleware, with a Referer on the same host
+    MIDDLEWARE = [A, BrokenLinkEmailsMiddleware, CommonMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    C.process_request
+    C.process_response(404)
+    CommonMiddleware.process_response(404)
+    BrokenLinkEmailsMiddleware.process_response(301)
+    A.process_response(301)
+    start_response("301 Moved Permanently", headers)
+    the server closes the response
+    signal: request_finished
+
+WSGI, GET /plain: BrokenLinkEmailsMiddleware inside CommonMiddleware, with a Referer on the same host
+    MIDDLEWARE = [A, CommonMiddleware, BrokenLinkEmailsMiddleware, C]
+    signal: request_started
+    A.process_request
+    CommonMiddleware.process_request
+    C.process_request
+    C.process_response(404)
+    BrokenLinkEmailsMiddleware.process_response(404)
+    a mail to manager@example.com: "[Django] Broken INTERNAL link on recording"
+    CommonMiddleware.process_response(404)
+    A.process_response(301)
+    start_response("301 Moved Permanently", headers)
+    the server closes the response
+    signal: request_finished
 

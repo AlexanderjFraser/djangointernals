@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 836 552">
+  <!-- the setting, and the key to the dashed arrows -->
+  <text class="name" x="0" y="14">MIDDLEWARE = [A, B, C]</text>
+  <path class="line dashed" d="M552 10 H570"/>
+  <polygon class="head" points="580,10 570,5 570,15"/>
+  <text class="quiet small" x="590" y="14">a hook's response going on down the column</text>
+
+  <!-- the column: the stations of _get_response, top to bottom -->
+  <rect class="box" x="146.5" y="36.5" width="248" height="32" rx="4"/>
+  <text class="name" x="158.5" y="57.5">resolve_request</text>
+
+  <rect class="box" x="146.5" y="96.5" width="248" height="32" rx="4"/>
+  <text x="158.5" y="117.5">the <tspan class="name">process_view</tspan> hooks: <tspan class="name">A</tspan>, <tspan class="name">B</tspan>, <tspan class="name">C</tspan></text>
+
+  <rect class="box" x="146.5" y="156.5" width="248" height="50" rx="4"/>
+  <text x="158.5" y="177.5"><tspan class="name">make_view_atomic</tspan>, then</text>
+  <text x="158.5" y="195.5"><tspan class="name">async_to_sync</tspan> for an async view</text>
+
+  <rect class="box" x="146.5" y="234.5" width="248" height="32" rx="4"/>
+  <text x="158.5" y="255.5">the call of the view</text>
+
+  <rect class="box" x="146.5" y="324.5" width="248" height="32" rx="4"/>
+  <text class="name" x="158.5" y="345.5">check_response</text>
+
+  <rect class="box" x="146.5" y="424.5" width="248" height="50" rx="4"/>
+  <text x="158.5" y="445.5">the <tspan class="name">process_template_response</tspan></text>
+  <text x="158.5" y="463.5">hooks: <tspan class="name">C</tspan>, <tspan class="name">B</tspan>, <tspan class="name">A</tspan>, then <tspan class="name">render</tspan></text>
+
+  <!-- the spine: the path down the column -->
+  <path class="mark-line" d="M270.5 68.5 V86.5"/>
+  <polygon class="head mark" points="270.5,96.5 265.5,86.5 275.5,86.5"/>
+  <path class="mark-line" d="M270.5 128.5 V146.5"/>
+  <polygon class="head mark" points="270.5,156.5 265.5,146.5 275.5,146.5"/>
+  <path class="mark-line" d="M270.5 206.5 V224.5"/>
+  <polygon class="head mark" points="270.5,234.5 265.5,224.5 275.5,224.5"/>
+  <path class="mark-line" d="M270.5 266.5 V314.5"/>
+  <polygon class="head mark" points="270.5,324.5 265.5,314.5 275.5,314.5"/>
+  <path class="mark-line" d="M270.5 356.5 V414.5"/>
+  <polygon class="head mark" points="270.5,424.5 265.5,414.5 275.5,414.5"/>
+  <text x="282.5" y="392.5">only a response with</text>
+  <text x="282.5" y="410.5">a callable <tspan class="name">render</tspan></text>
+  <!-- any other response goes round the template station -->
+  <path class="mark-line" d="M270.5 370.5 H126.5 V496.5 H259.5"/>
+  <polygon class="head mark" points="269.5,496.5 259.5,491.5 259.5,501.5"/>
+  <path class="mark-line" d="M270.5 474.5 V514.5"/>
+  <polygon class="head mark" points="270.5,524.5 265.5,514.5 275.5,514.5"/>
+  <text x="270.5" y="544.5" text-anchor="middle">the response, returned to the wrapper around the centre</text>
+
+  <!-- a process_view hook answers: the view is skipped -->
+  <text x="114" y="177.5" text-anchor="end">one answers:</text>
+  <text x="114" y="195.5" text-anchor="end">the view is skipped</text>
+  <path class="line dashed" d="M146.5 112.5 H126.5 V296.5 H259.5"/>
+  <polygon class="head" points="269.5,296.5 259.5,291.5 259.5,301.5"/>
+
+  <!-- the process_exception hooks beside the call -->
+  <path class="line" d="M394.5 250.5 H488.5"/>
+  <polygon class="head" points="498.5,250.5 488.5,245.5 488.5,255.5"/>
+  <text x="446.5" y="242.5" text-anchor="middle">it raises</text>
+  <rect class="box" x="498.5" y="225.5" width="224" height="50" rx="4"/>
+  <text x="510.5" y="246.5">the <tspan class="name">process_exception</tspan> hooks:</text>
+  <text x="510.5" y="264.5"><tspan class="name">C</tspan>, <tspan class="name">B</tspan>, <tspan class="name">A</tspan></text>
+  <path class="line dashed" d="M610.5 275.5 V296.5 H281.5"/>
+  <polygon class="head" points="271.5,296.5 281.5,291.5 281.5,301.5"/>
+  <text x="446.5" y="288.5" text-anchor="middle">one answers</text>
+
+  <!-- the process_exception hooks beside render -->
+  <path class="line" d="M394.5 449.5 H488.5"/>
+  <polygon class="head" points="498.5,449.5 488.5,444.5 488.5,454.5"/>
+  <text x="446.5" y="441.5" text-anchor="middle"><tspan class="name">render</tspan> raises</text>
+  <rect class="box" x="498.5" y="424.5" width="224" height="50" rx="4"/>
+  <text x="510.5" y="445.5">the <tspan class="name">process_exception</tspan> hooks:</text>
+  <text x="510.5" y="463.5"><tspan class="name">C</tspan>, <tspan class="name">B</tspan>, <tspan class="name">A</tspan></text>
+  <path class="line dashed" d="M610.5 474.5 V496.5 H281.5"/>
+  <polygon class="head" points="271.5,496.5 281.5,491.5 281.5,501.5"/>
+  <text x="446.5" y="488.5" text-anchor="middle">one answers</text>
+
+  <!-- the rail, and the four ways onto it -->
+  <path class="line" d="M830.5 40.5 V514.5"/>
+  <polygon class="head" points="830.5,524.5 825.5,514.5 835.5,514.5"/>
+  <text x="836" y="544.5" text-anchor="end">the rail: out of the centre, to the wrapper around it</text>
+
+  <path class="line" d="M394.5 52.5 H820"/>
+  <polygon class="head" points="830,52.5 820,47.5 820,57.5"/>
+  <text class="name" x="446.5" y="44.5" text-anchor="middle">Resolver404</text>
+
+  <path class="line" d="M722.5 250.5 H820"/>
+  <polygon class="head" points="830,250.5 820,245.5 820,255.5"/>
+  <text x="734.5" y="224.5">none answers:</text>
+  <text x="734.5" y="242.5">raised again</text>
+
+  <path class="line" d="M394.5 340.5 H820"/>
+  <polygon class="head" points="830,340.5 820,335.5 820,345.5"/>
+  <text x="510.5" y="360.5">None or an unawaited coroutine: <tspan class="name">ValueError</tspan>,</text>
+  <text x="510.5" y="378.5">past the <tspan class="name">process_exception</tspan> hooks</text>
+
+  <path class="line" d="M722.5 449.5 H820"/>
+  <polygon class="head" points="830,449.5 820,444.5 820,454.5"/>
+  <text x="734.5" y="423.5">none answers:</text>
+  <text x="734.5" y="441.5">raised again</text>
+</svg>

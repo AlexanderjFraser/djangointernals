@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 753 407">
+  <!-- the nest: seven layers, outermost first, the three accented -->
+  <rect class="ground" x="0.5" y="32.5" width="752" height="374" rx="8"/>
+  <rect class="mark-box" x="12.5" y="68.5" width="728" height="326" rx="8"/>
+  <rect class="ground" x="24.5" y="122.5" width="704" height="260" rx="7"/>
+  <rect class="mark-box" x="36.5" y="158.5" width="680" height="212" rx="7"/>
+  <rect class="ground" x="48.5" y="212.5" width="656" height="146" rx="6"/>
+  <rect class="mark-box" x="60.5" y="248.5" width="632" height="98" rx="6"/>
+  <rect class="box" x="72.5" y="302.5" width="608" height="32" rx="4"/>
+
+  <!-- the heading -->
+  <text class="quiet" x="0" y="16"><tspan class="name">MIDDLEWARE</tspan>, outermost first</text>
+
+  <!-- each layer: its name, what it does on the way out, and what places it -->
+  <text class="name" x="12" y="54">UpdateCacheMiddleware</text>
+  <text x="274" y="54">stores the response under the headers <tspan class="name">"Vary"</tspan> names</text>
+
+  <text class="name strong" x="24" y="90">GZipMiddleware</text>
+  <text x="274" y="90">adds Accept-Encoding to <tspan class="name">"Vary"</tspan>, compresses the body</text>
+  <text x="274" y="108">[outside all that reads or changes the body]</text>
+
+  <text class="name" x="36" y="144">ConditionalGetMiddleware</text>
+  <text x="274" y="144">tags the body</text>
+
+  <text class="name strong" x="48" y="180">BrokenLinkEmailsMiddleware</text>
+  <text x="274" y="180">mails about a 404</text>
+  <text x="274" y="198">[outside all that turns a 404 into something else]</text>
+
+  <text class="name" x="60" y="234">LocaleMiddleware</text>
+  <text x="274" y="234">may turn a 404 into a redirect</text>
+
+  <text class="name strong" x="72" y="270">CommonMiddleware</text>
+  <text x="274" y="270">may turn a 404 into a redirect with a slash, measures the body</text>
+  <text x="274" y="288">[outside all that changes the response]</text>
+
+  <text x="84" y="323">the centre</text>
+  <text x="274" y="323">the resolver’s 404, or a view’s <tspan class="name">Http404</tspan></text>
+
+  <!-- the response, climbing from the centre out through every layer -->
+  <path class="line" d="M656 302.5 V14"/>
+  <polygon class="head" points="656,4 651,14 661,14"/>
+  <text class="quiet" x="644" y="16" text-anchor="end">a response climbs from the centre</text>
+</svg>

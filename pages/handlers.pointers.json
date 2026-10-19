@@ -24,7 +24,7 @@
   {
    "pointer": "django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request",
    "line": 33,
-   "sentence": "A middleware that reads something another one puts on the request has to come after it in the list: `AuthenticationMiddleware` refuses to run unless the session middleware has already set the session on the request (`django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request`).",
+   "sentence": "A middleware that reads on the way in something another one puts on the request has to come after it in the list: `AuthenticationMiddleware` refuses to run unless the session middleware has already set the session on the request (`django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request`).",
    "tree": "django",
    "path": "django/contrib/auth/middleware.py",
    "symbol": "AuthenticationMiddleware.process_request",
@@ -36,23 +36,9 @@
    "fingerprint": "1e4d2e3b602fc35d"
   },
   {
-   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
-   "line": 63,
-   "sentence": "It sends the `request_started` signal, builds a `WSGIRequest` from what the server passed, and gives it to `BaseHandler.get_response`, which calls the chain (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
-   "tree": "django",
-   "path": "django/core/handlers/wsgi.py",
-   "symbol": "WSGIHandler.__call__",
-   "kind": "function",
-   "lines": [
-    120,
-    144
-   ],
-   "fingerprint": "cc47513ec3bc5a49"
-  },
-  {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
-   "line": 64,
-   "sentence": "What the handler calls is the middleware itself, and `process_request` is how `MiddlewareMixin`, the base class nearly all of Django's middleware use, spends its turn on the way in (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
+   "line": 61,
+   "sentence": "The `process_request` hooks run outermost first and the `process_response` hooks innermost first, yet the handler calls neither: `MiddlewareMixin`, the base class nearly all of Django's middleware use, calls them when its layer is called, one before it calls the layer inside and the other on what comes back ([Building the middleware chain](handlers/chain.md)) (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin.__call__",
@@ -65,8 +51,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
-   "line": 65,
-   "sentence": "`BaseHandler._get_response` resolves the URL to a view, runs the `process_view` hooks in the same outermost-first order, and calls the view (`django/core/handlers/base.py:BaseHandler._get_response`).",
+   "line": 61,
+   "sentence": "The `process_view` hooks and the view are called from the centre ([The centre of the chain](handlers/view.md)) (`django/core/handlers/base.py:BaseHandler._get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler._get_response",
@@ -79,8 +65,8 @@
   },
   {
    "pointer": "django/http/response.py:HttpResponseBase.close",
-   "line": 66,
-   "sentence": "When the server has sent the body it closes the response, and closing it is what sends `request_finished` (`django/http/response.py:HttpResponseBase.close`).",
+   "line": 61,
+   "sentence": "And the request ends after the handler has returned: the server closes the response, and closing it sends `request_finished` ([The two entry points](handlers/entry.md#who-ends-the-request)) (`django/http/response.py:HttpResponseBase.close`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "HttpResponseBase.close",
@@ -92,8 +78,22 @@
    "fingerprint": "7689c4f13ba32ef4"
   },
   {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 63,
+   "sentence": "Most of Django's own middleware are synchronous only, so they run together on a thread of the request's own while the centre runs on the event loop, and each change of mode is a crossing between the loop and a thread ([Sync and async in one chain](handlers/async.md)) (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
    "pointer": "django/core/handlers/exception.py:convert_exception_to_response",
-   "line": 72,
+   "line": 67,
    "sentence": "[How an exception becomes a response](handlers/exceptions.md) has the whole table, and says what does get through (`django/core/handlers/exception.py:convert_exception_to_response`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",

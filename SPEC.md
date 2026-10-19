@@ -34,7 +34,7 @@ its **sections**; there is nothing deeper.
 | id | `handlers/chain` |
 | address | `/handlers/chain` |
 | the file itself, as markdown | `/handlers/chain.md` |
-| a heading on it | `/handlers/chain#the-loop` |
+| a heading on it | `/handlers/chain#from-the-centre-outwards` |
 
 A page lists its children in its front matter: `contents: entry, chain` in
 `pages/handlers.md` makes `pages/handlers/entry.md` and

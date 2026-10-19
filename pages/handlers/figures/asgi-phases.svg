@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 857 239">
+  <!-- the heading -->
+  <text class="quiet" x="0" y="22.5"><tspan class="name">ASGIHandler.handle</tspan>, its phases left to right;</text>
+  <text class="quiet" x="0" y="40.5">an exit drops below the phase it leaves</text>
+
+  <!-- the phases before the task group, on the path -->
+  <rect class="box" x="0.5" y="85.5" width="108" height="50" rx="4"/>
+  <text class="name" x="12.5" y="106.5">read_body</text>
+  <text x="12.5" y="124.5">the whole body</text>
+
+  <rect class="box" x="136.5" y="85.5" width="141" height="50" rx="4"/>
+  <text x="148.5" y="106.5">signal</text>
+  <text class="name" x="148.5" y="124.5">request_started</text>
+
+  <rect class="box" x="305.5" y="85.5" width="134" height="50" rx="4"/>
+  <text class="name" x="317.5" y="106.5">create_request</text>
+  <text x="317.5" y="124.5">the <tspan class="name">ASGIRequest</tspan></text>
+
+  <!-- the path, left to right -->
+  <path class="mark-line" d="M108.5 110.5 H126.5"/>
+  <polygon class="head mark" points="136.5,110.5 126.5,105.5 126.5,115.5"/>
+  <path class="mark-line" d="M277.5 110.5 H295.5"/>
+  <polygon class="head mark" points="305.5,110.5 295.5,105.5 295.5,115.5"/>
+  <path class="mark-line" d="M439.5 110.5 H457.5"/>
+  <polygon class="head mark" points="467.5,110.5 457.5,105.5 457.5,115.5"/>
+  <path class="mark-line" d="M679.5 110.5 H687.5 M687.5 68.5 V152.5 M687.5 68.5 H697.5 M687.5 152.5 H697.5"/>
+  <polygon class="head mark" points="707.5,68.5 697.5,63.5 697.5,73.5"/>
+  <polygon class="head mark" points="707.5,152.5 697.5,147.5 697.5,157.5"/>
+
+  <!-- the task group: its two tasks at once -->
+  <rect class="ground" x="467.5" y="0.5" width="212" height="186" rx="4"/>
+  <text class="strong" x="479.5" y="22.5">the task group</text>
+  <rect class="box" x="479.5" y="34.5" width="188" height="50" rx="4"/>
+  <text x="491.5" y="55.5">the chain,</text>
+  <text x="491.5" y="73.5">then <tspan class="name">send_response</tspan></text>
+  <rect class="box" x="479.5" y="136.5" width="188" height="32" rx="4"/>
+  <text class="name" x="491.5" y="157.5">listen_for_disconnect</text>
+  <!-- whichever ends first cancels the other -->
+  <path class="line dashed" d="M497.5 84.5 V126.5"/>
+  <polygon class="head" points="497.5,136.5 492.5,126.5 502.5,126.5"/>
+  <path class="line dashed" d="M649.5 136.5 V94.5"/>
+  <polygon class="head" points="649.5,84.5 644.5,94.5 654.5,94.5"/>
+  <text x="573.5" y="106.5" text-anchor="middle">whichever ends first</text>
+  <text x="573.5" y="124.5" text-anchor="middle">cancels the other</text>
+
+  <!-- the end -->
+  <text class="strong" x="719.5" y="22.5">the end</text>
+  <rect class="box" x="707.5" y="34.5" width="149" height="68" rx="4"/>
+  <text x="719.5" y="55.5">a response:</text>
+  <text x="719.5" y="73.5">closed, which sends</text>
+  <text class="name" x="719.5" y="91.5">request_finished</text>
+  <rect class="box" x="707.5" y="118.5" width="149" height="68" rx="4"/>
+  <text x="719.5" y="139.5">no response:</text>
+  <text x="719.5" y="157.5"><tspan class="name">handle</tspan> sends</text>
+  <text class="name" x="719.5" y="175.5">request_finished</text>
+
+  <!-- the exits, each below the phase it leaves -->
+  <path class="line" d="M54.5 135.5 V185.5"/>
+  <polygon class="head" points="54.5,195.5 49.5,185.5 59.5,185.5"/>
+  <text x="66.5" y="165.5">a disconnect</text>
+  <text x="54.5" y="213.5" text-anchor="middle">return,</text>
+  <text x="54.5" y="231.5" text-anchor="middle">no signal at all</text>
+
+  <path class="line" d="M372.5 135.5 V185.5"/>
+  <polygon class="head" points="372.5,195.5 367.5,185.5 377.5,185.5"/>
+  <text class="name" x="360.5" y="165.5" text-anchor="end">UnicodeDecodeError</text>
+  <text x="372.5" y="213.5" text-anchor="middle">a 400, sent and closed,</text>
+  <text x="372.5" y="231.5" text-anchor="middle">no middleware</text>
+</svg>

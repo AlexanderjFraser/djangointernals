@@ -4,72 +4,105 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # The centre of the chain
 
-What `BaseHandler._get_response` does once a request has passed every middleware: it resolves the URL to a view, offers the view to the view middleware, calls it, and renders the response if it is a template still waiting to be rendered.
+`BaseHandler._get_response` is the centre of the chain: `BaseHandler.resolve_request` finds the view, which is offered to the `process_view` hooks and called; `BaseHandler.check_response` refuses `None` or an unawaited coroutine in place of a response; and a template response is rendered after the `process_template_response` hooks. `BaseHandler._get_response_async` is its twin under ASGI.
 
-The innermost layer of the chain is not a middleware. It is a method of the handler, `BaseHandler._get_response`: in its docstring's words, everything that happens inside the request and response middleware (`django/core/handlers/base.py:BaseHandler._get_response`). This section follows it from top to bottom. A request can leave it early at almost every step.
+The innermost layer of the chain is not a middleware but a method of the handler: in its docstring's words, everything that happens inside the request and response middleware (`django/core/handlers/base.py:BaseHandler._get_response`). A request can leave it early at almost every step: in the figure, look to the right of a station for its way out. A, B and C, there and in the blocks below, are three middleware that write down each hook as Django calls it.
+
+```text figure=the-stations
+MIDDLEWARE = [A, B, C]
+on the right, one rail: out of the centre, to the wrapper around it
+a dashed arrow, - - ->, is a hook's response going on down the column
+
+resolve_request  ->  Resolver404  ->  the rail
+the process_view hooks: A, B, C
+    one answers: the view is skipped  - - ->  its response rejoins below the call
+make_view_atomic, then async_to_sync for an async view
+the call of the view  ->  it raises: the process_exception hooks: C, B, A
+    one answers  - - ->  its response rejoins below the call
+    none answers: raised again  ->  the rail
+check_response  ->  None or an unawaited coroutine: ValueError, past the process_exception hooks  ->  the rail
+only a response with a callable render:
+the process_template_response hooks: C, B, A, then render  ->  render raises: the process_exception hooks: C, B, A
+    one answers  - - ->  its response is returned
+    none answers: raised again  ->  the rail
+the response, returned to the wrapper around the centre
+```
+
+*The stations of `BaseHandler._get_response`, top to bottom. An arrow to the rail is an exception leaving the centre, for the wrapper around it to turn into a response; the boxes beside the call and `render` are the `process_exception` hooks; the three dashed arrows, from a `process_view` hook and from the exception hooks, are a hook's response going on down the column, not to the rail.*
 
 ## Resolving the URL
 
-`BaseHandler.resolve_request` picks a resolver, asks it to match the request's `path_info`, which is the path without the script prefix, and stores the answer on the request (`django/core/handlers/base.py:BaseHandler.resolve_request`).
+`BaseHandler.resolve_request` picks a resolver, asks it to match the request's `path_info`, which is the path without the script prefix, and stores the answer, a `ResolverMatch`, on the request as `HttpRequest.resolver_match`; it unpacks into the view and its positional and keyword arguments (`django/core/handlers/base.py:BaseHandler.resolve_request`) ([Resolving a path](../urls/resolving.md#a-resolvermatch-attribute-by-attribute)). The resolver is the one for `settings.ROOT_URLCONF` unless the request has an attribute named `"urlconf"` other than `None`, which a middleware may set: that URLconf is then made the current one ([The script prefix, the current URLconf and the caches](../urls/state.md#the-current-urlconf)).
 
-The resolver is normally the one for `settings.ROOT_URLCONF`, which `get_resolver` makes on first use and keeps. A middleware can route a single request by a different URLconf by setting an attribute named `"urlconf"` on the request: `resolve_request` looks for that attribute, and when it is there it makes the named URLconf the current one (for the thread, or under ASGI for the task) and resolves with it ([The script prefix, the current URLconf and the caches](../urls/state.md#the-current-urlconf)).
-
-The match is a `ResolverMatch`. It is kept as `HttpRequest.resolver_match`, where the view and anything after it can read it, and it unpacks into the three things the handler needs: the view, its positional arguments and its keyword arguments ([Resolving a path](../urls/resolving.md#a-resolvermatch-attribute-by-attribute)).
-
-When nothing matches, the resolver raises `Resolver404`, which is a subclass of `Http404` (`django/urls/exceptions.py:Resolver404`). No view has been chosen, so nothing described below runs. The exception leaves `_get_response` and is turned into a 404 response by the wrapper around the centre. The middleware never see the exception, only the response on its way out:
+When nothing matches, the resolver raises `Resolver404`, a subclass of `Http404` (`django/urls/exceptions.py:Resolver404`). No view has been chosen, so nothing below runs: the exception leaves `_get_response`, and the wrapper around the centre turns it into a 404. Between C's `process_request` and C's `process_response` no other hook stands; the middleware never see the exception, only the response on its way out:
 
 ```text recording=handlers
 WSGI, GET /nowhere/: no URL pattern matches
-    signal: request_started
+...
     A.process_request
     B.process_request
     C.process_request
     C.process_response(404)
     B.process_response(404)
     A.process_response(404)
-    start_response("404 Not Found", headers)
-    the server closes the response
-    signal: request_finished
+    ...
 ```
 
-## The view middleware
+## The `process_view` hooks
 
-With a view in hand, the handler calls each method in `BaseHandler._view_middleware`: the `process_view` hooks, in the order of the setting. Each is given the request, the view, and the arguments the view is about to be called with. If one returns a response, the loop stops and the view is not called; the response goes on through the rest of this method as if the view had returned it.
+With a view in hand, the handler calls each method in `BaseHandler._view_middleware`: the `process_view` hooks, in the order of the setting. Each is given the request, the view, and the arguments the view is about to be called with. If one returns a response, the loop stops and the view is not called; the response goes on through the rest of this method as if the view had returned it (`django/core/handlers/base.py:BaseHandler._get_response`).
 
-This hook exists because of what it is told. A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for. `process_view` runs after, and is handed the view itself. `CsrfViewMiddleware` does its checking here for that reason: whether a view is exempt is an attribute of the view ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).
+When B's hook answers, C's hook and the view never run, yet C's `process_response` is the first to receive the response, made inside the centre, which C surrounds:
+
+```text recording=handlers
+WSGI, GET /plain/: B.process_view returns a response
+...
+    A.process_view
+    B.process_view, returning a response
+    C.process_response(200)
+    B.process_response(200)
+    A.process_response(200)
+    ...
+```
+
+> **Why.** The hook exists because of what it is told. A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for; `process_view` runs after, just before the view is called, and is handed the view itself (`docs/topics/http/middleware.txt`). `CsrfViewMiddleware` does its checking here for that reason: whether a view is exempt is an attribute of the view ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).
 
 ## Calling the view
 
-The view may be wrapped before it is called.
+Before the call, `BaseHandler.make_view_atomic` wraps the view in `django.db.transaction.atomic` for each database whose settings have `"ATOMIC_REQUESTS"` true, unless the view was marked to be left out, as [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#atomic_requests-and-non_atomic_requests) shows; an async view it refuses with `RuntimeError` instead of wrapping it (`django/core/handlers/base.py:BaseHandler.make_view_atomic`). Then a view that is a coroutine function is wrapped in `async_to_sync`, so that the synchronous handler can call it.
 
-`BaseHandler.make_view_atomic` goes through the configured databases, and for each one whose settings have `"ATOMIC_REQUESTS"` true it wraps the view in `django.db.transaction.atomic` for that database, unless the view was marked to be left out. The transaction is around the view and nothing else. The middleware run outside it, and so does the rendering of a template response, which comes later in this method. An async view cannot be wrapped this way: the method raises `RuntimeError` if it finds one while a database asks for atomic requests (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).
+> **Trap.** The transaction is around the view and nothing else: the middleware run outside it, and so does the rendering of a template response, later in this method (`django/core/handlers/base.py:BaseHandler._get_response`). The documentation says so (`docs/topics/db/transactions.txt`).
 
-If the view is a coroutine function and the handler is running synchronously, the view is then wrapped in `async_to_sync`, so that it can be called like a function.
+Then the view is called, inside a `try`. An `Exception` it raises is offered to the `process_exception` hooks, innermost first, by `BaseHandler.process_exception_by_middleware`, until one answers: its response replaces the view's; if none answers, the exception is raised again and leaves the centre for the wrapper around it ([How an exception becomes a response](exceptions.md)) (`django/core/handlers/base.py:BaseHandler.process_exception_by_middleware`).
 
-Then the view is called, inside a `try`. If it raises an `Exception`, the handler passes the exception to `BaseHandler.process_exception_by_middleware`, which calls the `process_exception` hooks, innermost middleware first, until one returns a response (`django/core/handlers/base.py:BaseHandler.process_exception_by_middleware`). If one does, that response replaces the view's and the request carries on. If none does, the exception is raised again and leaves the centre, to be turned into a response by the wrapper around it, as [How an exception becomes a response](exceptions.md) describes.
+## `check_response`: the view must return a response
 
-## The view must have returned a response
+`BaseHandler.check_response` then refuses two things a view can return by mistake: `None`, and a coroutine that was never awaited. Each raises a `ValueError` whose message names the view (`django/core/handlers/base.py:BaseHandler.check_response`) ([What the handler asks of a view](../views/callable.md#what-a-view-may-return)).
 
-`BaseHandler.check_response` then refuses two things a view can return by mistake: `None`, and a coroutine that was never awaited. Each raises a `ValueError` whose message names the view (`django/core/handlers/base.py:BaseHandler.check_response`). The first is a message most Django developers have met:
+No `process_exception` hook follows a view that returns `None`: the signal comes at once, and the 500 goes out through every layer:
 
-```text
-The view app.views.detail didn't return an HttpResponse object. It returned None instead.
+```text recording=handlers
+WSGI, GET /nothing/: the view returns None
+...
+    the view, returning None
+    signal: got_request_exception
+    C.process_response(500)
+    B.process_response(500)
+    A.process_response(500)
+    ...
 ```
 
-The check stands after the `try` that surrounds the view, not inside it. So this error is not offered to the `process_exception` hooks: it goes straight out of the centre and becomes a 500.
+> **Trap.** `check_response` stands after the `try` that surrounds the view, not inside it, so its `ValueError` is never offered to the `process_exception` hooks: it leaves the centre at once, and the wrapper around the centre sends `got_request_exception` and ordinarily makes a 500 (`django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/exception.py:response_for_exception`).
 
 ## Template responses
 
-A view may return a response that has not been rendered yet: a `TemplateResponse` holds a template and a context, and makes its content only when its `render` method is called. The handler tests for exactly that, a response with a callable `render`, and has more to do with such a response before it leaves the centre.
+A view may return a response that has not been rendered yet: a `TemplateResponse` holds a template and a context, and makes its content only when its `render` method is called. The handler tests for a response with a callable `render`, and has more to do with one.
 
-It is first passed through each method in `BaseHandler._template_response_middleware`, the `process_template_response` hooks, innermost first. A hook may change the template or the context, or return a different response, which must itself have a `render` method. Whatever it returns is checked as the view's result was. Then the handler calls `render`. An exception raised while rendering gets the same treatment as one raised by the view: the exception hooks first, and out of the centre if none of them answers.
+It is first passed through each method in `BaseHandler._template_response_middleware`, the `process_template_response` hooks, innermost first. A hook may change the template or the context, or return a different response; whatever it returns is checked as the view's result was, and given to the next hook. Then the handler calls `render` (`django/core/handlers/base.py:BaseHandler._get_response`). The three hooks stand between the view's line and the first `process_response`, inside the centre:
 
 ```text recording=handlers
 WSGI, GET /template/: a view that returns a TemplateResponse
-    signal: request_started
-    A.process_request
-    B.process_request
-    C.process_request
+...
     A.process_view
     B.process_view
     C.process_view
@@ -78,23 +111,31 @@ WSGI, GET /template/: a view that returns a TemplateResponse
     B.process_template_response
     A.process_template_response
     C.process_response(200)
-    B.process_response(200)
-    A.process_response(200)
-    start_response("200 OK", headers)
-    the server closes the response
-    signal: request_finished
+    ...
 ```
 
-This is the reason to return a `TemplateResponse` and not a rendered `HttpResponse`: the rendering is deferred until the middleware have had the chance to alter what is rendered.
+Rendering last is a reason to return a `TemplateResponse` and not a rendered `HttpResponse`: the middleware can still alter what is rendered ([`SimpleTemplateResponse` and `TemplateResponse`](../templates/responses.md)).
 
-## The asynchronous twin
+An exception raised while rendering is offered to the `process_exception` hooks too: `render` is called inside a `try` of its own, a response from one of them is returned as it is, and if none answers the exception is raised again out of the centre (`django/core/handlers/base.py:BaseHandler._get_response`). The documentation asks a hook to return a response with a `render` method (`docs/topics/http/middleware.txt`), but nothing checks: `render` is called on whatever the last hook returned. A plain `HttpResponse` from B's hook is still given to A's, and its missing `render` raises `AttributeError`, which takes that path:
 
-`BaseHandler._get_response_async` is the same method written as a coroutine, and an `ASGIHandler` puts it at the centre of its chain. The steps are the same, and each adaptation runs the other way (`django/core/handlers/base.py:BaseHandler._get_response_async`):
+```text recording=handlers
+WSGI, GET /template/: B.process_template_response returns an HttpResponse, which has no render method
+...
+    B.process_template_response, returning an HttpResponse
+    A.process_template_response
+    C.process_exception(AttributeError)
+    B.process_exception(AttributeError)
+    A.process_exception(AttributeError)
+    signal: got_request_exception
+    ...
+```
 
-- A view that is *not* a coroutine function is wrapped in `sync_to_async`, so that it runs in a thread and the event loop is not blocked.
-- The view middleware and the template response middleware are awaited. `load_middleware` adapted them to the handler's mode when it filed them.
-- The exception hooks are synchronous whatever the mode, so `process_exception_by_middleware` is itself called through `sync_to_async`.
-- `render` is awaited if it is a coroutine function and called through `sync_to_async` if it is not.
-- As a last guard, a response that is still a coroutine when the method is about to return raises `RuntimeError`.
+## `_get_response_async`, the asynchronous twin
 
-URL resolving is not adapted at all. `resolve_request` is called directly in both methods, so under ASGI the URL is matched on the event loop's thread.
+`BaseHandler._get_response_async` is the twin of `_get_response`, written as a coroutine, at the centre of an `ASGIHandler`'s chain. Its adaptations run the other way from `_get_response`'s, from the event loop into a thread (`django/core/handlers/base.py:BaseHandler._get_response_async`):
+
+- A view that is *not* a coroutine function is wrapped in `sync_to_async`, so that it runs in a thread, off the event loop.
+- The `process_view` and `process_template_response` hooks are awaited, as they were adapted when filed, and the exception hooks, filed synchronous, are reached by calling `process_exception_by_middleware` through `sync_to_async` ([Building the middleware chain](chain.md#the-three-lists-of-hooks)).
+- `render` is awaited if it is a coroutine function, and called through `sync_to_async` if not.
+
+URL resolving is not adapted at all: `resolve_request` is called directly in both methods, so under ASGI the URL is resolved on the event loop's thread ([Sync and async in one chain](async.md#what-the-arrangements-cost)).

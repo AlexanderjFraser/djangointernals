@@ -10,7 +10,7 @@
  "pointers": [
   {
    "pointer": "asgiref:asgiref/sync.py:sync_to_async",
-   "line": 11,
+   "line": 9,
    "sentence": "`sync_to_async` makes a function awaitable by running it in a thread, and `async_to_sync` makes a coroutine function callable by running it on an event loop and waiting for it (`asgiref:asgiref/sync.py:sync_to_async`, `asgiref:asgiref/sync.py:async_to_sync`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",
@@ -35,7 +35,7 @@
   },
   {
    "pointer": "asgiref:asgiref/sync.py:async_to_sync",
-   "line": 11,
+   "line": 9,
    "sentence": "`sync_to_async` makes a function awaitable by running it in a thread, and `async_to_sync` makes a coroutine function callable by running it on an event loop and waiting for it (`asgiref:asgiref/sync.py:sync_to_async`, `asgiref:asgiref/sync.py:async_to_sync`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",
@@ -60,8 +60,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.adapt_method_mode",
-   "line": 15,
-   "sentence": "`BaseHandler.adapt_method_mode` is given the mode that is wanted and a method, and returns something that can be called in that mode (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
+   "line": 13,
+   "sentence": "`BaseHandler.adapt_method_mode` fits a method to the mode wanted: a coroutine function wanted synchronous is wrapped in `async_to_sync`, a function wanted asynchronous in `sync_to_async` with `thread_sensitive=True`, which keeps it on the request's one thread ([One thread per request](#one-thread-per-request)), and a method already in that mode is returned unchanged (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.adapt_method_mode",
@@ -74,8 +74,8 @@
   },
   {
    "pointer": "django/utils/decorators.py:sync_and_async_middleware",
-   "line": 33,
-   "sentence": "For a factory that is a function, the three decorators `sync_only_middleware`, `async_only_middleware` and `sync_and_async_middleware` set the pair (`django/utils/decorators.py:sync_and_async_middleware`).",
+   "line": 17,
+   "sentence": "For a function, the decorators `sync_only_middleware`, `async_only_middleware` and `sync_and_async_middleware` set the pair (`django/utils/decorators.py:sync_and_async_middleware`).",
    "tree": "django",
    "path": "django/utils/decorators.py",
    "symbol": "sync_and_async_middleware",
@@ -88,8 +88,8 @@
   },
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__init__",
-   "line": 35,
-   "sentence": "In async mode `MiddlewareMixin.__call__` hands over to `MiddlewareMixin.__acall__`, which awaits the inner layer and runs `process_request` and `process_response` each through `sync_to_async`, since those two methods are ordinary functions (`django/middleware/__init__.py:MiddlewareMixin.__init__`, `django/middleware/__init__.py:MiddlewareMixin.__acall__`).",
+   "line": 19,
+   "sentence": "In async mode `MiddlewareMixin.__call__` hands over to `MiddlewareMixin.__acall__`, which awaits the inner layer and runs `process_request` and `process_response` each through `sync_to_async` (`django/middleware/__init__.py:MiddlewareMixin.__init__`, `django/middleware/__init__.py:MiddlewareMixin.__acall__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin.__init__",
@@ -102,8 +102,8 @@
   },
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__acall__",
-   "line": 35,
-   "sentence": "In async mode `MiddlewareMixin.__call__` hands over to `MiddlewareMixin.__acall__`, which awaits the inner layer and runs `process_request` and `process_response` each through `sync_to_async`, since those two methods are ordinary functions (`django/middleware/__init__.py:MiddlewareMixin.__init__`, `django/middleware/__init__.py:MiddlewareMixin.__acall__`).",
+   "line": 19,
+   "sentence": "In async mode `MiddlewareMixin.__call__` hands over to `MiddlewareMixin.__acall__`, which awaits the inner layer and runs `process_request` and `process_response` each through `sync_to_async` (`django/middleware/__init__.py:MiddlewareMixin.__init__`, `django/middleware/__init__.py:MiddlewareMixin.__acall__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin.__acall__",
@@ -116,8 +116,8 @@
   },
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.async_capable",
-   "line": 39,
-   "sentence": "So under ASGI Django's own middleware now run synchronously, where they used to run in the mixin's async mode (`django/middleware/common.py:CommonMiddleware.async_capable`).",
+   "line": 23,
+   "sentence": "So under ASGI they now run synchronously, where they used to run in the mixin's async mode (`django/middleware/common.py:CommonMiddleware.async_capable`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.async_capable",
@@ -130,8 +130,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 48,
-   "sentence": "And when the loop ends, the outermost layer is adapted to the handler's mode (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "line": 27,
+   "sentence": "If the two modes differ, the chain so far is adapted before the middleware is given it, and when the loop ends the outermost layer is adapted to the handler's mode (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.load_middleware",
@@ -143,9 +143,79 @@
    "fingerprint": "430bac571d4dc266"
   },
   {
+   "pointer": "django/dispatch/dispatcher.py:Signal.asend",
+   "line": 63,
+   "sentence": "Every ASGI request that is answered makes the first and last, whatever its middleware: Django's own receivers of `request_started` are synchronous, and so is closing the response (`django/dispatch/dispatcher.py:Signal.asend`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "tree": "django",
+   "path": "django/dispatch/dispatcher.py",
+   "symbol": "Signal.asend",
+   "kind": "function",
+   "lines": [
+    265,
+    320
+   ],
+   "fingerprint": "454e19a7fecb9a68"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
+   "line": 63,
+   "sentence": "Every ASGI request that is answered makes the first and last, whatever its middleware: Django's own receivers of `request_started` are synchronous, and so is closing the response (`django/dispatch/dispatcher.py:Signal.asend`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.handle",
+   "kind": "function",
+   "lines": [
+    175,
+    218
+   ],
+   "fingerprint": "045a0e5289611a7b"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.__call__",
+   "line": 78,
+   "sentence": "The thread can run the view while it waits inside the middleware: until the centre returns, `async_to_sync` keeps it in a `CurrentThreadExecutor`, which runs on it any thread-sensitive code the centre calls through `sync_to_async` (`asgiref:asgiref/sync.py:AsyncToSync.__call__`, `asgiref:asgiref/current_thread_executor.py:CurrentThreadExecutor.run_until_future`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.__call__",
+   "kind": "function",
+   "lines": [
+    217,
+    332
+   ],
+   "fingerprint": "95cabb14938d5e3f"
+  },
+  {
+   "pointer": "asgiref:asgiref/current_thread_executor.py:CurrentThreadExecutor.run_until_future",
+   "line": 78,
+   "sentence": "The thread can run the view while it waits inside the middleware: until the centre returns, `async_to_sync` keeps it in a `CurrentThreadExecutor`, which runs on it any thread-sensitive code the centre calls through `sync_to_async` (`asgiref:asgiref/sync.py:AsyncToSync.__call__`, `asgiref:asgiref/current_thread_executor.py:CurrentThreadExecutor.run_until_future`).",
+   "tree": "asgiref",
+   "path": "asgiref/current_thread_executor.py",
+   "symbol": "CurrentThreadExecutor.run_until_future",
+   "kind": "function",
+   "lines": [
+    58,
+    86
+   ],
+   "fingerprint": "d89551126d3596a3"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
+   "line": 102,
+   "sentence": "Under synchronous middleware it is inside their call, waiting in `async_to_sync` for the centre; in async mode it is idle in its executor from the last `process_request` to the first `process_response`, and the second pays in switching (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.__call__",
+   "kind": "function",
+   "lines": [
+    457,
+    549
+   ],
+   "fingerprint": "6be21e12b059ba25"
+  },
+  {
    "pointer": "docs/releases/6.2.txt",
-   "line": 112,
-   "sentence": "The release notes for 6.2 give that switching as the reason for the change, and say that a deployment with high in-process concurrency over I/O that is not the ORM's may prefer the old behaviour, and can restore it by setting `async_capable = True` (`docs/releases/6.2.txt`).",
+   "line": 104,
+   "sentence": "Its release notes allow that for high in-process concurrency over I/O that is not the ORM's, \"where no thread is otherwise held\", the switching may be preferable to \"pinning a thread per request\" (`docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
    "symbol": null,
@@ -157,9 +227,93 @@
    "fingerprint": "e1d5d9202432f6d1"
   },
   {
+   "pointer": "docs/topics/async.txt",
+   "line": 104,
+   "sentence": "The documentation says that with synchronous middleware around an async view Django will \"hold the sync thread open for middleware exception propagation\" (`docs/topics/async.txt`).",
+   "tree": "django",
+   "path": "docs/topics/async.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    437
+   ],
+   "fingerprint": "491be9ad7b5f2a72"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 106,
+   "sentence": "A `process_view` or a `process_template_response` is adapted to the handler's mode as it is filed ([Building the middleware chain](chain.md#the-three-lists-of-hooks)), so under ASGI a synchronous `process_view` is a crossing of its own on each call, whatever mode its middleware runs in (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 108,
+   "sentence": "The centre runs it through `async_to_sync`, on an event loop in a thread of its own, while the handler's thread waits (`django/core/handlers/base.py:BaseHandler._get_response`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
+   "lines": [
+    176,
+    228
+   ],
+   "fingerprint": "8a7faacfec18a9da"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.__call__",
+   "line": 108,
+   "sentence": "The centre runs it through `async_to_sync`, on an event loop in a thread of its own, while the handler's thread waits (`django/core/handlers/base.py:BaseHandler._get_response`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.__call__",
+   "kind": "function",
+   "lines": [
+    217,
+    332
+   ],
+   "fingerprint": "95cabb14938d5e3f"
+  },
+  {
+   "pointer": "docs/topics/async.txt",
+   "line": 108,
+   "sentence": "It can still await several things at once, but it occupies two threads where a synchronous view would occupy one; as the documentation says, \"you will not get the benefits of an async stack\" (`docs/topics/async.txt`).",
+   "tree": "django",
+   "path": "docs/topics/async.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    437
+   ],
+   "fingerprint": "491be9ad7b5f2a72"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.__call__",
+   "line": 112,
+   "sentence": "Together these mean that everything those crossings run for one request runs on one thread for the length of the request, and that two requests do not share a thread (`django/core/handlers/asgi.py:ASGIHandler.__call__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    161,
+    173
+   ],
+   "fingerprint": "46807d2758fb3e86"
+  },
+  {
    "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
-   "line": 118,
-   "sentence": "Every ASGI request therefore has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "line": 129,
+   "sentence": "The thread is made at a request's first thread-sensitive crossing, the one for `request_started`, and lasts until the request ends: every request that gets that far has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",
    "symbol": "SyncToAsync.__call__",
@@ -172,8 +326,8 @@
   },
   {
    "pointer": "django/db/utils.py:ConnectionHandler.thread_critical",
-   "line": 122,
-   "sentence": "A database connection belongs to the thread that opened it (`django/db/utils.py:ConnectionHandler.thread_critical`), so a middleware's `process_request` and the view it precedes see the same connection, and the same transaction, only if they run on the same thread.",
+   "line": 131,
+   "sentence": "The single thread matters because a database connection belongs to the thread that opened it (`django/db/utils.py:ConnectionHandler.thread_critical`): a middleware's `process_request` and the view it precedes see the same connection, and the same transaction, only on the same thread.",
    "tree": "django",
    "path": "django/db/utils.py",
    "symbol": "ConnectionHandler.thread_critical",

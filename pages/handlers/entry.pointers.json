@@ -11,7 +11,7 @@
   {
    "pointer": "django/core/wsgi.py:get_wsgi_application",
    "line": 9,
-   "sentence": "The functions exist so that the two classes can stay private: a project names the function and never the class (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "sentence": "A server imports the project's `wsgi.py` or `asgi.py`, which makes the handler by calling one of the two functions; each runs `django.setup` first (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
    "tree": "django",
    "path": "django/core/wsgi.py",
    "symbol": "get_wsgi_application",
@@ -25,7 +25,7 @@
   {
    "pointer": "django/core/asgi.py:get_asgi_application",
    "line": 9,
-   "sentence": "The functions exist so that the two classes can stay private: a project names the function and never the class (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "sentence": "A server imports the project's `wsgi.py` or `asgi.py`, which makes the handler by calling one of the two functions; each runs `django.setup` first (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
    "tree": "django",
    "path": "django/core/asgi.py",
    "symbol": "get_asgi_application",
@@ -38,8 +38,8 @@
   },
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
-   "line": 13,
-   "sentence": "`WSGIHandler.__call__` works through them in this order (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "line": 15,
+   "sentence": "It then calls the server's function with the status line and the headers, and returns the response (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIHandler.__call__",
@@ -51,37 +51,9 @@
    "fingerprint": "cc47513ec3bc5a49"
   },
   {
-   "pointer": "django/core/handlers/wsgi.py:get_script_name",
-   "line": 15,
-   "sentence": "The value comes from the environ, unless `settings.FORCE_SCRIPT_NAME` overrides it (`django/core/handlers/wsgi.py:get_script_name`).",
-   "tree": "django",
-   "path": "django/core/handlers/wsgi.py",
-   "symbol": "get_script_name",
-   "kind": "function",
-   "lines": [
-    154,
-    184
-   ],
-   "fingerprint": "8853b84d5de53366"
-  },
-  {
-   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.__init__",
-   "line": 17,
-   "sentence": "The query string, the cookies and the form data are each parsed when first asked for (`django/core/handlers/wsgi.py:WSGIRequest.__init__`).",
-   "tree": "django",
-   "path": "django/core/handlers/wsgi.py",
-   "symbol": "WSGIRequest.__init__",
-   "kind": "function",
-   "lines": [
-    57,
-    80
-   ],
-   "fingerprint": "39da82012b104293"
-  },
-  {
    "pointer": "django/core/handlers/base.py:BaseHandler.get_response",
-   "line": 26,
-   "sentence": "`BaseHandler.get_response` is a thin shell around the call of the chain (`django/core/handlers/base.py:BaseHandler.get_response`).",
+   "line": 21,
+   "sentence": "`BaseHandler.get_response` is a thin shell around the chain's call (`django/core/handlers/base.py:BaseHandler.get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.get_response",
@@ -93,23 +65,9 @@
    "fingerprint": "1936a064b0c5bd82"
   },
   {
-   "pointer": "django/urls/base.py:get_urlconf",
-   "line": 28,
-   "sentence": "It is what `reverse` and `resolve` consult when they are given no URLconf, and where `response_for_exception` looks for the error views (`django/urls/base.py:get_urlconf`).",
-   "tree": "django",
-   "path": "django/urls/base.py",
-   "symbol": "get_urlconf",
-   "kind": "function",
-   "lines": [
-    161,
-    166
-   ],
-   "fingerprint": "efca757d27709b6b"
-  },
-  {
    "pointer": "django/utils/log.py:log_response",
-   "line": 30,
-   "sentence": "And if the status is 400 or above it passes the response to `log_response`, which logs a 4xx as a warning and a 5xx as an error, unless the response was already logged where its exception was caught (`django/utils/log.py:log_response`).",
+   "line": 21,
+   "sentence": "After it, it adds the request's `close`, which closes its uploaded files, to the response's closers, the functions the response's `close` calls, and passes a response of 400 or above to `log_response` (`django/utils/log.py:log_response`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_response",
@@ -122,8 +80,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.get_response_async",
-   "line": 32,
-   "sentence": "There are two because sending everything, WSGI included, through one asynchronous path proved too slow: each mode has its own, and neither pays for a context switch it does not need (`django/core/handlers/base.py:BaseHandler.get_response_async`).",
+   "line": 23,
+   "sentence": "By the docstring of `BaseHandler.get_response_async`, one asynchronous `get_response` for everything, WSGI included, is too slow, and a separate path avoids the context switch (`django/core/handlers/base.py:BaseHandler.get_response_async`): under WSGI no event loop is running, and `async_to_sync` then runs a coroutine on a new loop in a new thread while the calling thread waits (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.get_response_async",
@@ -135,8 +93,22 @@
    "fingerprint": "d166bd9a34bec1ac"
   },
   {
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.__call__",
+   "line": 23,
+   "sentence": "By the docstring of `BaseHandler.get_response_async`, one asynchronous `get_response` for everything, WSGI included, is too slow, and a separate path avoids the context switch (`django/core/handlers/base.py:BaseHandler.get_response_async`): under WSGI no event loop is running, and `async_to_sync` then runs a coroutine on a new loop in a new thread while the calling thread waits (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.__call__",
+   "kind": "function",
+   "lines": [
+    217,
+    332
+   ],
+   "fingerprint": "95cabb14938d5e3f"
+  },
+  {
    "pointer": "django/http/response.py:HttpResponseBase.close",
-   "line": 36,
+   "line": 27,
    "sentence": "`HttpResponseBase.close` runs every closer registered on the response, the request's among them, and then sends `request_finished` (`django/http/response.py:HttpResponseBase.close`).",
    "tree": "django",
    "path": "django/http/response.py",
@@ -150,8 +122,8 @@
   },
   {
    "pointer": "django/core/signals.py",
-   "line": 48,
-   "sentence": "They are defined in `django/core/signals.py`.",
+   "line": 37,
+   "sentence": "*The three signals of the request cycle, defined in `django/core/signals.py`.*",
    "tree": "django",
    "path": "django/core/signals.py",
    "symbol": null,
@@ -163,79 +135,9 @@
    "fingerprint": "e6f8757bb2203cde"
   },
   {
-   "pointer": "django/db/__init__.py",
-   "line": 48,
-   "sentence": "The receivers are connected where they are defined: `django/db/__init__.py`, `django/core/cache/__init__.py`, `django/core/handlers/base.py`, `django/utils/autoreload.py` and `django/test/client.py`.*",
-   "tree": "django",
-   "path": "django/db/__init__.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    63
-   ],
-   "fingerprint": "081b9e8484eb9153"
-  },
-  {
-   "pointer": "django/core/cache/__init__.py",
-   "line": 48,
-   "sentence": "The receivers are connected where they are defined: `django/db/__init__.py`, `django/core/cache/__init__.py`, `django/core/handlers/base.py`, `django/utils/autoreload.py` and `django/test/client.py`.*",
-   "tree": "django",
-   "path": "django/core/cache/__init__.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    67
-   ],
-   "fingerprint": "94894838835d5cd7"
-  },
-  {
-   "pointer": "django/core/handlers/base.py",
-   "line": 48,
-   "sentence": "The receivers are connected where they are defined: `django/db/__init__.py`, `django/core/cache/__init__.py`, `django/core/handlers/base.py`, `django/utils/autoreload.py` and `django/test/client.py`.*",
-   "tree": "django",
-   "path": "django/core/handlers/base.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    375
-   ],
-   "fingerprint": "b661b5d782bed13a"
-  },
-  {
-   "pointer": "django/utils/autoreload.py",
-   "line": 48,
-   "sentence": "The receivers are connected where they are defined: `django/db/__init__.py`, `django/core/cache/__init__.py`, `django/core/handlers/base.py`, `django/utils/autoreload.py` and `django/test/client.py`.*",
-   "tree": "django",
-   "path": "django/utils/autoreload.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    694
-   ],
-   "fingerprint": "993ebf655deb5ecd"
-  },
-  {
-   "pointer": "django/test/client.py",
-   "line": 48,
-   "sentence": "The receivers are connected where they are defined: `django/db/__init__.py`, `django/core/cache/__init__.py`, `django/core/handlers/base.py`, `django/utils/autoreload.py` and `django/test/client.py`.*",
-   "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1763
-   ],
-   "fingerprint": "04fab2a961cd37be"
-  },
-  {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.__call__",
-   "line": 54,
-   "sentence": "That class comes from asgiref, the library of adapters between synchronous and asynchronous code that Django depends on, and its effect is that the synchronous code of this request's middleware and view runs on a thread of the request's own (`django/core/handlers/asgi.py:ASGIHandler.__call__`, `asgiref:asgiref/sync.py:ThreadSensitiveContext`).",
+   "line": 41,
+   "sentence": "`ASGIHandler.__call__` accepts only a scope of the type `\"http\"` and runs `ASGIHandler.handle` inside asgiref's `ThreadSensitiveContext`, which gives the request's synchronous code a thread of its own ([Sync and async in one chain](async.md#one-thread-per-request)) (`django/core/handlers/asgi.py:ASGIHandler.__call__`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.__call__",
@@ -247,23 +149,9 @@
    "fingerprint": "46807d2758fb3e86"
   },
   {
-   "pointer": "asgiref:asgiref/sync.py:ThreadSensitiveContext",
-   "line": 54,
-   "sentence": "That class comes from asgiref, the library of adapters between synchronous and asynchronous code that Django depends on, and its effect is that the synchronous code of this request's middleware and view runs on a thread of the request's own (`django/core/handlers/asgi.py:ASGIHandler.__call__`, `asgiref:asgiref/sync.py:ThreadSensitiveContext`).",
-   "tree": "asgiref",
-   "path": "asgiref/sync.py",
-   "symbol": "ThreadSensitiveContext",
-   "kind": "class",
-   "lines": [
-    110,
-    164
-   ],
-   "fingerprint": "7f8057cc67999ac2"
-  },
-  {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
-   "line": 56,
-   "sentence": "`ASGIHandler.handle` then does what the WSGI handler does, with these differences (`django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "line": 43,
+   "sentence": "`ASGIHandler.handle` works in phases (`django/core/handlers/asgi.py:ASGIHandler.handle`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.handle",
@@ -275,23 +163,23 @@
    "fingerprint": "045a0e5289611a7b"
   },
   {
-   "pointer": "django/core/handlers/asgi.py:ASGIHandler.read_body",
-   "line": 58,
-   "sentence": "If the client disconnects while the body is arriving, the handler returns without a response (`django/core/handlers/asgi.py:ASGIHandler.read_body`).",
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.listen_for_disconnect",
+   "line": 45,
+   "sentence": "At a disconnect the listener raises `RequestAborted` (`django/core/handlers/asgi.py:ASGIHandler.listen_for_disconnect`), and the group cancels `handle`'s own task where it waits; leaving its block, it withdraws that cancellation and raises the `RequestAborted` in an exception group (`asyncio.TaskGroup`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
-   "symbol": "ASGIHandler.read_body",
+   "symbol": "ASGIHandler.listen_for_disconnect",
    "kind": "function",
    "lines": [
-    239,
-    267
+    220,
+    226
    ],
-   "fingerprint": "8c1984707322f62e"
+   "fingerprint": "e39b353146d2d6b9"
   },
   {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.create_request",
-   "line": 60,
-   "sentence": "Any other exception raised while the request is made is not caught here (`django/core/handlers/asgi.py:ASGIHandler.create_request`).",
+   "line": 85,
+   "sentence": "It would return a 413 for `RequestDataTooBig`, but making an `ASGIRequest` reads no body and so never raises it; any other exception it does not catch (`django/core/handlers/asgi.py:ASGIHandler.create_request`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.create_request",
@@ -303,88 +191,88 @@
    "fingerprint": "c01db06ee54c3a7b"
   },
   {
-   "pointer": "django/core/handlers/asgi.py:ASGIHandler.send_response",
-   "line": 64,
-   "sentence": "A streaming response whose content is an asynchronous iterator is sent a part at a time, as the parts are produced; one whose content is a synchronous iterator is first read to its end in a thread, with a warning, and then sent; [Streaming and file responses](../http/streaming.md#under-asgi) has both recorded (`django/core/handlers/asgi.py:ASGIHandler.send_response`, `django/http/response.py:StreamingHttpResponse.__aiter__`).",
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.read_body",
+   "line": 89,
+   "sentence": "A disconnect while the body arrives ends the request earliest: `ASGIHandler.read_body` raises `RequestAborted`, and `handle` returns before either signal (`django/core/handlers/asgi.py:ASGIHandler.read_body`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
-   "symbol": "ASGIHandler.send_response",
+   "symbol": "ASGIHandler.read_body",
    "kind": "function",
    "lines": [
-    298,
-    350
+    239,
+    267
    ],
-   "fingerprint": "0c490117391fe1df"
+   "fingerprint": "8c1984707322f62e"
   },
   {
-   "pointer": "django/http/response.py:StreamingHttpResponse.__aiter__",
-   "line": 64,
-   "sentence": "A streaming response whose content is an asynchronous iterator is sent a part at a time, as the parts are produced; one whose content is a synchronous iterator is first read to its end in a thread, with a warning, and then sent; [Streaming and file responses](../http/streaming.md#under-asgi) has both recorded (`django/core/handlers/asgi.py:ASGIHandler.send_response`, `django/http/response.py:StreamingHttpResponse.__aiter__`).",
-   "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "StreamingHttpResponse.__aiter__",
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
+   "line": 91,
+   "sentence": "If a task the thread started on the loop with `async_to_sync` is still running, that crossing cancels it and waits for the thread (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.__call__",
    "kind": "function",
    "lines": [
-    537,
-    551
+    457,
+    549
    ],
-   "fingerprint": "bf6c44a5585bb099"
+   "fingerprint": "6be21e12b059ba25"
   },
   {
-   "pointer": "django/test/client.py:ClientHandler.__call__",
-   "line": 70,
-   "sentence": "A test therefore exercises the whole of the middleware and the view, and none of `WSGIHandler.__call__` (`django/test/client.py:ClientHandler.__call__`).",
-   "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "ClientHandler.__call__",
+   "pointer": "asgiref:asgiref/sync.py:AsyncToSync.main_wrap",
+   "line": 91,
+   "sentence": "Its cancellation becomes an `asyncio.CancelledError` raised in that layer's call (`asgiref:asgiref/sync.py:AsyncToSync.main_wrap`): at once for an async view, which is cancelled where it awaits; for a synchronous view, which the thread runs inside that call, when the view returns.",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "AsyncToSync.main_wrap",
    "kind": "function",
    "lines": [
-    169,
-    210
+    341,
+    380
    ],
-   "fingerprint": "3a378c0ad831b908"
+   "fingerprint": "5b3da3d4d2f1673e"
   },
   {
-   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.load_middleware",
-   "line": 72,
-   "sentence": "Their `load_middleware` does nothing, and their `get_response` and `get_response_async` serve the file directly, so a static file served this way passes through no middleware at all (`django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.load_middleware`, `django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.get_response`).",
+   "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
+   "line": 93,
+   "sentence": "That error is no `Exception`: `MiddlewareMixin.__call__` never reaches its `process_response`, and each layer's wrapper, catching only `Exception`, lets it through (`django/middleware/__init__.py:MiddlewareMixin.__call__`, `django/core/handlers/exception.py:convert_exception_to_response`).",
    "tree": "django",
-   "path": "django/contrib/staticfiles/handlers.py",
-   "symbol": "StaticFilesHandlerMixin.load_middleware",
+   "path": "django/middleware/__init__.py",
+   "symbol": "MiddlewareMixin.__call__",
    "kind": "function",
    "lines": [
-    24,
-    27
+    35,
+    45
    ],
-   "fingerprint": "a8d35b73bfb90708"
+   "fingerprint": "1c249bc0b063a1d2"
   },
   {
-   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.get_response",
-   "line": 72,
-   "sentence": "Their `load_middleware` does nothing, and their `get_response` and `get_response_async` serve the file directly, so a static file served this way passes through no middleware at all (`django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.load_middleware`, `django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.get_response`).",
+   "pointer": "django/core/handlers/exception.py:convert_exception_to_response",
+   "line": 93,
+   "sentence": "That error is no `Exception`: `MiddlewareMixin.__call__` never reaches its `process_response`, and each layer's wrapper, catching only `Exception`, lets it through (`django/middleware/__init__.py:MiddlewareMixin.__call__`, `django/core/handlers/exception.py:convert_exception_to_response`).",
    "tree": "django",
-   "path": "django/contrib/staticfiles/handlers.py",
-   "symbol": "StaticFilesHandlerMixin.get_response",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "convert_exception_to_response",
    "kind": "function",
    "lines": [
-    52,
-    56
+    25,
+    61
    ],
-   "fingerprint": "2f7612165dcb6bd5"
+   "fingerprint": "b436496b20e4ff34"
   },
   {
-   "pointer": "django/test/testcases.py:FSFilesHandler",
-   "line": 74,
-   "sentence": "A last kind is for Django's live-server test case: `FSFilesHandler` and its subclasses serve static and media files in front of a real `WSGIHandler` (`django/test/testcases.py:FSFilesHandler`).",
+   "pointer": "django/middleware/__init__.py:MiddlewareMixin.__acall__",
+   "line": 93,
+   "sentence": "Middleware in async mode let it through alike (`django/middleware/__init__.py:MiddlewareMixin.__acall__`).",
    "tree": "django",
-   "path": "django/test/testcases.py",
-   "symbol": "FSFilesHandler",
-   "kind": "class",
+   "path": "django/middleware/__init__.py",
+   "symbol": "MiddlewareMixin.__acall__",
+   "kind": "function",
    "lines": [
-    1660,
-    1706
+    47,
+    64
    ],
-   "fingerprint": "161c65fb19943853"
+   "fingerprint": "389f3ec93f6bfa2e"
   }
  ]
 }

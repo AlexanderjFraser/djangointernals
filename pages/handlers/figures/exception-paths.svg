@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 860 413">
+  <!-- the nest: A, B, C and the centre, each box's edge its wrapper -->
+  <rect class="ground" x="0.5" y="0.5" width="572" height="412" rx="8"/>
+  <rect class="box" x="32.5" y="36.5" width="508" height="332" rx="8"/>
+  <rect class="ground" x="64.5" y="114.5" width="444" height="222" rx="8"/>
+  <rect class="box" x="96.5" y="174.5" width="380" height="130" rx="6"/>
+
+  <text class="name strong" x="14" y="23">A</text>
+  <text class="quiet small" x="30" y="23">first in MIDDLEWARE</text>
+  <text class="name strong" x="46" y="59">B</text>
+  <text class="name strong" x="78" y="137">C</text>
+  <text class="quiet small" x="94" y="137">last in MIDDLEWARE</text>
+  <text class="name" x="110" y="197">BaseHandler._get_response</text>
+
+  <text class="small" x="14" y="396">A, B, C and <tspan class="name small">BaseHandler._get_response</tspan>, each in its wrapper</text>
+
+  <!-- B.process_request raises: caught at B's edge, the 500 out through A -->
+  <text x="46" y="81"><tspan class="name">B.process_request</tspan> raises <tspan class="name">RuntimeError</tspan></text>
+  <text class="quiet" x="46" y="99">C and the centre do not run</text>
+  <path class="mark-line" d="M320 76 H530.5"/>
+  <polygon class="head mark" points="540.5,76 530.5,71 530.5,81"/>
+  <path class="line" d="M540.5 76 H850"/>
+  <polygon class="head" points="860,76 850,71 850,81"/>
+  <text x="860" y="68" text-anchor="end">500</text>
+
+  <!-- C.process_response raises: caught at C's edge, the 500 out through B and A -->
+  <text x="462" y="159" text-anchor="end"><tspan class="name">C.process_response</tspan> raises <tspan class="name">RuntimeError</tspan></text>
+  <path class="mark-line" d="M470 154 H498.5"/>
+  <polygon class="head mark" points="508.5,154 498.5,149 498.5,159"/>
+  <path class="line" d="M508.5 154 H850"/>
+  <polygon class="head" points="860,154 850,149 850,159"/>
+  <text x="860" y="146" text-anchor="end">500</text>
+
+  <!-- the view raises: offered to the hooks, caught at the centre's edge, the 500 out through C, B and A -->
+  <text x="110" y="219">the view raises <tspan class="name">ValueError</tspan></text>
+  <path class="mark-line" d="M284 214 H312 V230.5"/>
+  <polygon class="head mark" points="312,240.5 307,230.5 317,230.5"/>
+  <rect class="ground" x="192.5" y="240.5" width="239" height="50" rx="4"/>
+  <text x="205" y="262">offered to the <tspan class="name">process_exception</tspan></text>
+  <text x="205" y="280">hooks of C, B and A; none answers</text>
+  <path class="mark-line" d="M431.5 265.5 H466.5"/>
+  <polygon class="head mark" points="476.5,265.5 466.5,260.5 466.5,270.5"/>
+  <path class="line" d="M476.5 265.5 H850"/>
+  <polygon class="head" points="860,265.5 850,260.5 850,270.5"/>
+  <text x="860" y="257.5" text-anchor="end">500</text>
+
+  <!-- what passes A's edge to the server -->
+  <text class="strong" x="600" y="296">past A’s boundary, to the server:</text>
+  <text x="600" y="320">an exception that is not an <tspan class="name">Exception</tspan></text>
+  <text x="600" y="346">an unrecognised exception, with</text>
+  <text class="name" x="600" y="364">DEBUG_PROPAGATE_EXCEPTIONS = True</text>
+  <text x="600" y="390">a 500 error view that raises</text>
+  <text x="600" y="408">an unrecognised exception</text>
+</svg>

@@ -4,50 +4,29 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # Sync and async in one chain
 
-How one chain serves both WSGI and ASGI when each of its layers may be synchronous or asynchronous: the two flags a middleware declares, the rule `BaseHandler.load_middleware` applies to them, and what each arrangement costs in crossings between the event loop and a thread.
+Synchronous and asynchronous code meet in one middleware chain: a handler calls its chain under WSGI and awaits it under ASGI, each middleware and the view may be either kind, and wherever two neighbours differ an adapter must join them, at the price of a switch between the event loop and a thread. A middleware declares its modes with `sync_capable` and `async_capable`, `BaseHandler.load_middleware` gives each layer one, and asgiref's `sync_to_async` and `async_to_sync` are the adapters.
 
-A handler runs its chain in one of two modes. A `WSGIHandler` calls it as a function, and an `ASGIHandler` awaits it as a coroutine. The layers, though, are written by different people at different times: a middleware may be an ordinary callable or a coroutine function, and so may a view. Django makes every combination work by placing an adapter wherever two neighbours disagree.
+`sync_to_async` makes a function awaitable by running it in a thread, and `async_to_sync` makes a coroutine function callable by running it on an event loop and waiting for it (`asgiref:asgiref/sync.py:sync_to_async`, `asgiref:asgiref/sync.py:async_to_sync`). Each use is a **crossing** between the event loop and a thread, and Django is built to make as few as it can.
 
-The adapters come from asgiref, a small library that Django depends on. `sync_to_async` makes a function awaitable by running it in a thread, and `async_to_sync` makes a coroutine function callable by running it on an event loop and waiting for it (`asgiref:asgiref/sync.py:sync_to_async`, `asgiref:asgiref/sync.py:async_to_sync`). Each use is a crossing between the event loop and a thread, and this part of Django is designed to make as few of them as it can.
+## The adapter: `adapt_method_mode`
 
-## The adapter
-
-`BaseHandler.adapt_method_mode` is given the mode that is wanted and a method, and returns something that can be called in that mode (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).
-
-| | the method is synchronous | the method is a coroutine function |
-|---|---|---|
-| **synchronous wanted** | the method, unchanged | `async_to_sync(method)` |
-| **asynchronous wanted** | `sync_to_async(method, thread_sensitive=True)` | the method, unchanged |
-
-It can be told which kind the method is. When it is not told, it asks `inspect.iscoroutinefunction`.
+`BaseHandler.adapt_method_mode` fits a method to the mode wanted: a coroutine function wanted synchronous is wrapped in `async_to_sync`, a function wanted asynchronous in `sync_to_async` with `thread_sensitive=True`, which keeps it on the request's one thread ([One thread per request](#one-thread-per-request)), and a method already in that mode is returned unchanged (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).
 
 ## What a middleware declares
 
-A middleware factory says which modes it can run in through two attributes, which `load_middleware` reads from the class or the function itself.
+A middleware factory, a class or a function, says which modes it can run in with two attributes: `sync_capable`, true when absent, that it can be given a synchronous inner layer and be called, and `async_capable`, false when absent, that it can be given a coroutine function and be awaited. A middleware that says nothing is therefore synchronous only; one that sets both to false is refused with a `RuntimeError` when the chain is built. For a function, the decorators `sync_only_middleware`, `async_only_middleware` and `sync_and_async_middleware` set the pair (`django/utils/decorators.py:sync_and_async_middleware`).
 
-| attribute | when it is absent | meaning |
-|---|---|---|
-| `sync_capable` | taken as true | the middleware can be given a synchronous inner layer and be called as a function |
-| `async_capable` | taken as false | the middleware can be given a coroutine function and be awaited |
+`MiddlewareMixin` sets both to true and handles both modes itself. Its `__init__` looks at the inner layer it was given: if that is a coroutine function, the instance goes into async mode and marks itself as a coroutine function too, so that whatever wraps it next sees one. In async mode `MiddlewareMixin.__call__` hands over to `MiddlewareMixin.__acall__`, which awaits the inner layer and runs `process_request` and `process_response` each through `sync_to_async` (`django/middleware/__init__.py:MiddlewareMixin.__init__`, `django/middleware/__init__.py:MiddlewareMixin.__acall__`).
 
-A middleware that says nothing is therefore synchronous only. One that sets both to false is refused with a `RuntimeError` when the chain is built. For a factory that is a function, the three decorators `sync_only_middleware`, `async_only_middleware` and `sync_and_async_middleware` set the pair (`django/utils/decorators.py:sync_and_async_middleware`).
+Django's own middleware are nearly all built on the mixin, and nearly all turn its second flag off again.
 
-`MiddlewareMixin` sets both to true and handles both modes itself. Its `__init__` looks at the inner layer it was given: if that is a coroutine function, the instance goes into async mode and marks itself as a coroutine function too, so that whatever wraps it next sees one. In async mode `MiddlewareMixin.__call__` hands over to `MiddlewareMixin.__acall__`, which awaits the inner layer and runs `process_request` and `process_response` each through `sync_to_async`, since those two methods are ordinary functions (`django/middleware/__init__.py:MiddlewareMixin.__init__`, `django/middleware/__init__.py:MiddlewareMixin.__acall__`).
+> **Changed in 6.2.** Every middleware class Django ships that is built on `MiddlewareMixin` and has a `process_request` or a `process_response` sets `async_capable = False`. Before 6.2 they inherited the mixin's `True`. So under ASGI they now run synchronously, where they used to run in the mixin's async mode (`django/middleware/common.py:CommonMiddleware.async_capable`).
 
-Django's own middleware are nearly all built on the mixin, and nearly all of them turn its second flag off again.
+## How a layer's mode is chosen
 
-> **Changed in 6.2.** Every middleware class Django ships that is built on `MiddlewareMixin` and has a `process_request` or a `process_response` sets `async_capable = False`. Before 6.2 they inherited the mixin's `True`. So under ASGI Django's own middleware now run synchronously, where they used to run in the mixin's async mode (`django/middleware/common.py:CommonMiddleware.async_capable`).
+As `BaseHandler.load_middleware` works outwards from the centre it tracks the mode of the chain so far, at the centre the handler's own. Each middleware takes the mode of the chain inside it if it can run in that mode, and the other mode if it cannot. If the two modes differ, the chain so far is adapted before the middleware is given it, and when the loop ends the outermost layer is adapted to the handler's mode (`django/core/handlers/base.py:BaseHandler.load_middleware`).
 
-## The rule
-
-As `load_middleware` works outwards from the centre it keeps track of the mode of the chain so far. At the centre that is the handler's own mode. For each middleware it then decides:
-
-- If the chain so far is synchronous and the middleware can run synchronously, the middleware runs synchronously.
-- Otherwise the middleware runs asynchronously if it is able to, and synchronously if it is not.
-
-If the mode chosen differs from that of the chain so far, the chain so far is adapted before the middleware is given it. And when the loop ends, the outermost layer is adapted to the handler's mode (`django/core/handlers/base.py:BaseHandler.load_middleware`).
-
-A chain that mixes the kinds shows the rule at work. In this recording of an `ASGIHandler` being made, A and C can run either way and B can only run synchronously:
+A, B and C are three middleware that write down each hook as Django calls it. When an `ASGIHandler` is made with A and C able to run either way and B only synchronously, the mode changes at B and at the top:
 
 ```text recording=handlers
 Making an ASGIHandler; A and C can run either way, B only synchronously
@@ -57,13 +36,11 @@ Making an ASGIHandler; A and C can run either way, B only synchronously
     the chain: sync_to_async(the wrapper around A)
 ```
 
-C sits on an asynchronous centre and can run asynchronously, so nothing is adapted. B cannot, so the chain so far is put inside `async_to_sync` before B is given it. A could run either way, but the layer inside it is now synchronous, so A runs synchronously too and nothing is adapted. At the top, one `sync_to_async` joins the synchronous chain to the asynchronous handler.
-
-The rule keeps each layer in the mode of the layer inside it whenever the layer is able, so the mode changes only where it must. Under WSGI with ordinary middleware nothing is adapted at all.
+B cannot run asynchronously, so it takes the other mode and is given the chain so far inside `async_to_sync`. A can run either way and takes B's, and one `sync_to_async` joins the top to the asynchronous handler.
 
 ## What the arrangements cost
 
-Under ASGI, then, a chain of Django's own middleware is synchronous from top to bottom, around an asynchronous centre. This is a request for an async view through three such middleware. Every crossing made by one of the adapters is written down, and each hook says which thread it ran on.
+Under ASGI, then, a chain of Django's own middleware that turn `async_capable` off is synchronous throughout, around an asynchronous centre. For an async view ([Asynchronous views](../views/async.md)) the layers cost two crossings in all, into a thread at the top and back to the event loop for the centre; the request's first crossing comes before the chain, and its last after the response is sent:
 
 ```text recording=handlers
 ASGI, GET /async/: an async view, synchronous middleware
@@ -83,16 +60,29 @@ ASGI, GET /async/: an async view, synchronous middleware
     (everything marked worker ran on 1 thread)
 ```
 
-The first crossing and the last are made for every ASGI request, whatever its middleware: Django's own receivers of `request_started` are synchronous functions, and so is closing the response. Between them, the whole of the middleware is one call into a thread, and from inside it the centre of the chain is one call back to the event loop, where the view runs.
+Every ASGI request that is answered makes the first and last, whatever its middleware: Django's own receivers of `request_started` are synchronous, and so is closing the response (`django/dispatch/dispatcher.py:Signal.asend`, `django/core/handlers/asgi.py:ASGIHandler.handle`).
 
-With a synchronous view there is one crossing more. The centre hands the view to a thread, and the thread that takes it is the same one: the worker that is waiting inside the middleware for the centre to return.
+With a synchronous view there is one crossing more ([The centre of the chain](view.md)): the centre resolves the URL on the event loop's thread and hands the view, a function named plain, back to the thread that ran the middleware:
 
-A chain of middleware that are built on `MiddlewareMixin` and leave the flag alone, as Django's own did before 6.2, runs in async mode instead. The chain itself then stays on the event loop, and each `process_request` and each `process_response` is a call into a thread and back: one for each of the two hooks a middleware has.
+```text recording=handlers
+ASGI, GET /plain/: a synchronous view, synchronous middleware, as the server sees it
+...
+      thread -> loop: async_to_sync(the wrapper around BaseHandler._get_response_async)
+    BaseHandler.resolve_request  [loop]
+      loop -> thread: sync_to_async(plain)
+    the view  [worker]
+...
+    (everything marked worker ran on 1 thread)
+```
+
+The thread can run the view while it waits inside the middleware: until the centre returns, `async_to_sync` keeps it in a `CurrentThreadExecutor`, which runs on it any thread-sensitive code the centre calls through `sync_to_async` (`asgiref:asgiref/sync.py:AsyncToSync.__call__`, `asgiref:asgiref/current_thread_executor.py:CurrentThreadExecutor.run_until_future`).
+
+A chain of middleware built on `MiddlewareMixin` that leave the flag alone, as Django's own did before 6.2, runs in async mode instead: the chain stays on the event loop, and each `process_request` and each `process_response` is a call into a thread and back. The figure draws the two arrangements, time running left to right.
 
 ```text figure=crossings
 A request for an async view under ASGI, through middleware A, B and C. Time runs left to right.
 
-Synchronous middleware, as Django's own is:
+Synchronous middleware, as most of Django's own is:
   event loop:  handle                      the centre of the chain, the view                       send
   worker:              A B C process_request                                 C B A process_response
   (the middleware makes two calls between the loop and the worker: in, and back out to the centre)
@@ -103,26 +93,39 @@ MiddlewareMixin in async mode, as Django's own was before 6.2:
                        (process_request)                                     (process_response)
   (the middleware makes six calls: each hook goes to the worker and returns to the loop)
 
-Not drawn: the two crossings every ASGI request makes whatever its middleware,
+Not drawn: the two crossings every answered ASGI request makes whatever its middleware,
 for the receivers of request_started and for closing the response.
 ```
 
-*The same request under the two arrangements. Synchronous middleware run together on the worker thread, and the chain leaves it once, for the centre. Middleware in async mode stay on the event loop and send each hook to the worker separately. The two crossings that every request makes, for the receivers of `request_started` and for closing the response, are not drawn.*
+*The same request under the two arrangements. Synchronous middleware run together on the worker thread, and the chain leaves it once, for the centre; middleware in async mode stay on the event loop and send each hook to the worker. The two crossings every answered request makes, for the receivers of `request_started` and for closing the response, are not drawn.*
 
-Neither arrangement is free. In the first a thread is busy for the whole request: it is inside the middleware's call, waiting, for as long as the view takes. In the second the request's thread is idle while the view runs, and the price is the repeated switching. The release notes for 6.2 give that switching as the reason for the change, and say that a deployment with high in-process concurrency over I/O that is not the ORM's may prefer the old behaviour, and can restore it by setting `async_capable = True` (`docs/releases/6.2.txt`).
+Neither arrangement spares the request its thread ([One thread per request](#one-thread-per-request)); they differ in where it is while an async view runs. Under synchronous middleware it is inside their call, waiting in `async_to_sync` for the centre; in async mode it is idle in its executor from the last `process_request` to the first `process_response`, and the second pays in switching (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).
+
+> **Why.** 6.2 turned `async_capable` off to avoid the repeated switching in `MiddlewareMixin.__acall__`. Its release notes allow that for high in-process concurrency over I/O that is not the ORM's, "where no thread is otherwise held", the switching may be preferable to "pinning a thread per request" (`docs/releases/6.2.txt`). The documentation says that with synchronous middleware around an async view Django will "hold the sync thread open for middleware exception propagation" (`docs/topics/async.txt`).
+
+A `process_view` or a `process_template_response` is adapted to the handler's mode as it is filed ([Building the middleware chain](chain.md#the-three-lists-of-hooks)), so under ASGI a synchronous `process_view` is a crossing of its own on each call, whatever mode its middleware runs in (`django/core/handlers/base.py:BaseHandler.load_middleware`).
+
+> **Trap.** Under WSGI an async view gains nothing between requests. The centre runs it through `async_to_sync`, on an event loop in a thread of its own, while the handler's thread waits (`django/core/handlers/base.py:BaseHandler._get_response`, `asgiref:asgiref/sync.py:AsyncToSync.__call__`). It can still await several things at once, but it occupies two threads where a synchronous view would occupy one; as the documentation says, "you will not get the benefits of an async stack" (`docs/topics/async.txt`).
 
 ## One thread per request
 
-The crossings on the path through the chain (into a layer, a hook, the view, the rendering of a template, the conversion of an exception) are all made with `thread_sensitive=True`, and `ASGIHandler.__call__` runs each request inside asgiref's `ThreadSensitiveContext`. Together these mean that all of this code runs on one thread for the length of a request, however many separate crossings reach it, and that two requests do not share a thread. The last line of the recording above is the recorder's own count.
+The crossings into a thread on the path through the chain are all made with `thread_sensitive=True`, and `ASGIHandler.__call__` runs each request inside asgiref's `ThreadSensitiveContext`. Together these mean that everything those crossings run for one request runs on one thread for the length of the request, and that two requests do not share a thread (`django/core/handlers/asgi.py:ASGIHandler.__call__`).
 
-The thread is made at a request's first such crossing and lasts until the request ends. Because Django's own receivers of `request_started` are synchronous, the first crossing comes before the request object even exists. Every ASGI request therefore has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).
+Two requests sent at once under one event loop, each view waiting until the other's is running, keep to a thread each. Only lines run on a worker are kept, and the quote shows each view's:
 
-Two crossings are not thread-sensitive, and use the event loop's ordinary pool of threads: the logging of a response in `BaseHandler.get_response_async`, and writing the request body to its temporary file once that file is on disk.
+```text recording=handlers
+ASGI, GET /together/ twice at once under one event loop, synchronous middleware: the threads
+    request 1:
+...
+        the view, waiting until the other request's view is running too  [worker 1]
+...
+    request 2:
+...
+        the view, waiting until the other request's view is running too  [worker 2]
+...
+    (no thread ran lines of both requests)
+```
 
-The single thread matters because of what Django keeps per thread. A database connection belongs to the thread that opened it (`django/db/utils.py:ConnectionHandler.thread_critical`), so a middleware's `process_request` and the view it precedes see the same connection, and the same transaction, only if they run on the same thread.
+The thread is made at a request's first thread-sensitive crossing, the one for `request_started`, and lasts until the request ends: every request that gets that far has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).
 
-## Hooks and views
-
-The three lists of hooks are adapted separately from the layers. A `process_view` or a `process_template_response` is adapted to the handler's mode when it is filed, whatever mode its middleware runs in as a layer. Under ASGI, then, a synchronous `process_view` is a crossing of its own for every request. The `process_exception` hooks are kept synchronous in both modes and reached, under ASGI, through one `sync_to_async` around the whole list.
-
-A view is adapted at the moment it is called. Under ASGI a synchronous view runs on the request's thread, through `sync_to_async`. Under WSGI an async view is run by `async_to_sync`, on a thread of its own, while the thread that called the handler waits for it. Such a view can still await several things at once. It gains nothing between requests, and for its length it occupies two threads where a synchronous view would occupy one.
+The single thread matters because a database connection belongs to the thread that opened it (`django/db/utils.py:ConnectionHandler.thread_critical`): a middleware's `process_request` and the view it precedes see the same connection, and the same transaction, only on the same thread.
