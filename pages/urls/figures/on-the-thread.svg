@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 826 495">
+  <!-- the thread, and the two values' lanes -->
+  <rect class="ground" x="0.5" y="0.5" width="825" height="438" rx="4"/>
+  <text class="strong" x="12" y="22">one thread under WSGI</text>
+  <text class="strong" x="466" y="22">the script prefix</text>
+  <text class="strong" x="640" y="22">the current URLconf</text>
+
+  <!-- before the request -->
+  <text x="12" y="58">before the request</text>
+  <text class="name" x="466" y="58">'/'</text>
+  <text class="name" x="640" y="58">None</text>
+
+  <!-- the request -->
+  <rect class="box" x="12.5" y="78.5" width="801" height="272" rx="4"/>
+  <text class="strong" x="24" y="100">serving <tspan class="name">GET /museum/east/rooms/12/</tspan> with the server's <tspan class="name">SCRIPT_NAME</tspan> <tspan class="name">/museum</tspan></text>
+
+  <text class="name" x="24" y="136">WSGIHandler.__call__: set_script_prefix('/museum')</text>
+  <text class="name" x="24" y="172">BaseHandler.get_response: set_urlconf('museum.urls')</text>
+  <text x="24" y="208">a middleware may set <tspan class="name">"urlconf"</tspan> on the request</text>
+  <text class="name" x="24" y="244">BaseHandler.resolve_request</text>
+  <text x="24" y="280">the view: <tspan class="name">reverse("entrance")  -&gt;  '/museum/'</tspan></text>
+  <text x="24" y="316">the response is closed: <tspan class="name">request_finished</tspan>,</text>
+  <text x="24" y="334">and <tspan class="name">reset_urlconf</tspan> calls <tspan class="name">set_urlconf(None)</tspan></text>
+
+  <!-- the script prefix: set by the handler, and nothing unsets it -->
+  <polygon class="head mark" points="451,131 457,131 457,438 451,438"/>
+  <text x="466" y="136"><tspan class="name">'/museum/'</tspan> <tspan class="quiet">from here</tspan></text>
+
+  <!-- the current URLconf: set by get_response, perhaps replaced at resolve_request, unset by reset_urlconf -->
+  <polygon class="head" points="624,167 630,167 630,238 624,238"/>
+  <polygon class="head" points="624,241 630,241 630,329 624,329"/>
+  <path class="line" d="M620 329.5 H634"/>
+  <text x="640" y="172"><tspan class="name">'museum.urls'</tspan> <tspan class="quiet">from here</tspan></text>
+  <text class="quiet" x="640" y="208">still <tspan class="name">'museum.urls'</tspan></text>
+  <text class="quiet" x="640" y="244">the request's <tspan class="name">"urlconf"</tspan></text>
+  <text class="quiet" x="640" y="262">from here, if it has one</text>
+  <text class="name" x="640" y="334">None</text>
+
+  <!-- after the request -->
+  <text x="12" y="376">after the request, on the same thread</text>
+  <text class="name mark" x="466" y="376">'/museum/'</text>
+  <text class="name" x="640" y="376">None</text>
+
+  <!-- the note, beside the prefix's line where it runs on -->
+  <text class="quiet" x="466" y="408">the prefix's line runs on past the end of the request;</text>
+  <text class="quiet" x="466" y="426">the URLconf's stops at <tspan class="name">reset_urlconf</tspan></text>
+
+  <!-- another thread -->
+  <rect class="ground" x="0.5" y="462.5" width="825" height="32" rx="4"/>
+  <text x="12" y="483">a thread started now</text>
+  <text class="name" x="466" y="483">'/'</text>
+</svg>

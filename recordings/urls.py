@@ -7,10 +7,10 @@ thread while it does so.
 The chapter of the book (pages/urls.md and the pages under it) is written against this output.
 It needs only the pinned Django (the project's virtual environment has it) and the small
 project beside it, `museum/`: a root URLconf that includes one application's URLs twice, a
-converter of its own, and five more URLconfs, each for a particular part of the recording. The
-message catalogue that translates one route into Dutch is written into a temporary directory
-as the script starts. Run it again after a re-pin: where the output changes, the chapter has
-to.
+converter of its own, nine more URLconfs, each for a particular part of the recording, and
+two views that are coroutines (`views_async.py`). The message catalogue that translates two
+routes into Dutch is written into a temporary directory as the script starts. Run it again
+after a re-pin: where the output changes, the chapter has to.
 
 A block is one of three kinds. Where the order of calls is the point, the lines are the calls
 of Django's own functions that the chapter names, nested as they were made, with the
@@ -23,8 +23,38 @@ whose converter refused. And a function behind `functools.cache`, `lru_cache` or
 `cached_property` is written down only when its body runs: where such a call is missing from
 a block, the answer came out of the cache. A second kind of block puts one question to a
 running Django on each line; the text before `->` is the expression that was evaluated, or,
-where a few words stand there, they say of what object it was asked. The third kind writes
-down what an object holds, read by this script after Django made it.
+where a few words stand there, they say of what object it was asked. In a question,
+`converters_of(...)` is the script's: it writes each converter by its class. The third kind
+writes down what an object holds, read by this script after Django made it.
+
+Every request is made by the script, which is the server. Under WSGI it calls the handler
+with an environ whose PATH_INFO is the path the block names, writes down start_response, joins
+the body and calls close(); in the two blocks of /files/maps/ground%20floor.pdf the title says
+whether it first decoded the request line's path, as wsgiref's server does. Under ASGI it runs
+a coroutine of its own with asyncio.run() on the script's thread, gives the body, empty, in one
+message, and then waits in receive until the handler cancels it. asyncio.run() runs that
+coroutine in a copy of the script's thread's context, so nothing set in that copy reaches the
+script's thread once asyncio.run() has returned. The ASGI handler runs a view that is a
+plain function, and a response's close(), on a thread of asgiref's: in those blocks
+the rules are watched on every thread, a call made on such a thread from the event loop ends
+`[on a worker thread]` (the calls under it ran on the same thread), and a coroutine that is
+waiting stays open, so that what runs meanwhile on the worker thread stands under it. There
+`signal request_started` is written for Signal.asend.
+
+The recording has a middleware of its own, which gives a request for the members' host the
+members' URLconf: HostURLconf under WSGI, and host_urlconf_on_the_loop, a coroutine, under
+ASGI. A block that installs it, or changes a setting, says so in its title. Where it is
+installed in front of a URLconf that cannot be imported, the wrapper Django puts around each
+layer of the chain is written by its name, `convert_exception_to_response.<locals>.inner`,
+and the brackets say what it wraps. In the block of two ASGI requests at once the interleaving is the script's: before it
+asks anything, each view awaits an asyncio.Event that the other request's view sets (the
+museum's view waits until the members' view has started, and the members' until the museum's
+has asked), so the lines are the same on every run whatever order the event loop ran the rest
+in; only the views' questions and the server's answers are written down.
+
+Nothing of Django's is patched or replaced. The blocks after those of get_callable() come last
+because they change, in place, the converters of matchers that URLconfs of earlier blocks
+share, and that is not put back.
 
     RECORD_EVERYTHING=1 python recordings/urls.py     every call in the chapter's modules
 """
@@ -38,6 +68,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # a package of the standard library, which Django imports.
 sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != HERE] + [HERE]
 
+import asyncio  # noqa: E402
+import dis  # noqa: E402
 import io  # noqa: E402
 import pickle  # noqa: E402
 import shutil  # noqa: E402
@@ -70,7 +102,7 @@ def catalogue(messages: dict) -> bytes:
 LOCALE = tempfile.mkdtemp()
 os.makedirs(os.path.join(LOCALE, "nl", "LC_MESSAGES"))
 with open(os.path.join(LOCALE, "nl", "LC_MESSAGES", "django.mo"), "wb") as f:
-    f.write(catalogue({"opening-hours/": "openingstijden/"}))
+    f.write(catalogue({"opening-hours/": "openingstijden/", "visits/<int:year>/": "bezoeken/<int:jaar>/"}))
 
 settings.configure(
     DEBUG=False,
@@ -88,6 +120,8 @@ django.setup()
 
 from django.conf.urls.i18n import i18n_patterns, is_language_prefix_patterns_used  # noqa: E402
 from django.core import checks, signals  # noqa: E402
+from django.core.handlers import asgi, wsgi  # noqa: E402
+from django.core.handlers.asgi import ASGIHandler  # noqa: E402
 from django.core.handlers.wsgi import WSGIHandler  # noqa: E402
 from django.core.management import call_command  # noqa: E402
 from django.template import engines  # noqa: E402
@@ -145,6 +179,7 @@ def show(title: str) -> None:
     AT.clear()
     SEEN.clear()
     RAISED.clear()
+    THREAD_OF.clear()
 
 
 class doing:
@@ -520,6 +555,8 @@ AFTER = {
     ("django.urls.resolvers", "URLResolver._reverse_with_prefix"): lambda f, v: repr(v),
     ("django.urls.resolvers", "URLResolver.resolve_error_handler"): lambda f, v: named(v),
     ("django.urls.resolvers", "get_ns_resolver"): ns_resolver_made,
+    ("django.middleware.common", "CommonMiddleware.process_request"): responded,
+    ("django.urls.utils", "get_callable"): lambda f, v: named(v),
     **{key: (lambda f, v: repr(v)) for key in CONVERTERS},
 }
 
@@ -533,6 +570,12 @@ def find(module: str, qualname: str):
     return label
 
 
+GENERATOR, COROUTINE = 0x20, 0x80  # the flags of a code object that say what kind of function it is
+YIELD_VALUE = dis.opmap["YIELD_VALUE"]
+MAIN = threading.get_ident()  # the script's thread, on which asyncio.run() runs the event loop
+THREAD_OF = {}  # the thread each watched call open at this moment was made on, by its frame
+
+
 def profile(frame, event, arg):
     code = frame.f_code
     if code is UNWINDING:
@@ -541,24 +584,33 @@ def profile(frame, event, arg):
         label = find(frame.f_globals.get("__name__", ""), code.co_qualname)
         if label is None:
             return
-        if code.co_flags & 0x20:  # a generator: every resumption is a call event
+        if code.co_flags & (GENERATOR | COROUTINE):  # every resumption is a call event
             known = SEEN.get(id(frame))
             if known is not None and known() is frame.f_generator:
-                STACK.append(frame)
-                return
+                if code.co_flags & GENERATOR:
+                    STACK.append(frame)
+                return  # a coroutine was kept open while it waited
             SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         flush()  # what the call before this one returned is said first: a label may depend on it
         text = label(frame)
         if text is None:
             return
+        here = threading.get_ident()
+        above = next((THREAD_OF[id(f)] for f in reversed(STACK) if id(f) in THREAD_OF), MAIN)
+        if here != MAIN and here != above:  # said of the call that crossed to the thread, not of the calls under it
+            text += "  [on a worker thread]"
         note(text)
         AT[id(frame)] = len(LINES) - 1
+        THREAD_OF[id(frame)] = here
         STACK.append(frame)
     elif event == "return":
+        if code.co_flags & COROUTINE and code.co_code[frame.f_lasti] == YIELD_VALUE:
+            return  # a coroutine waits and stays open: what runs meanwhile on a worker thread stands under it
         if STACK and STACK[-1] is frame:
             flush()
-            after = None if code.co_flags & 0x20 else AFTER.get((frame.f_globals.get("__name__", ""), code.co_qualname))
+            after = None if code.co_flags & (GENERATOR | COROUTINE) else AFTER.get((frame.f_globals.get("__name__", ""), code.co_qualname))
             PENDING.append((frame, len(STACK), AT.pop(id(frame), -1), after, arg))
+            THREAD_OF.pop(id(frame), None)
             STACK.pop()
 
 
@@ -598,6 +650,21 @@ class recorded:
 
     def __exit__(self, *exc):
         sys.setprofile(None)
+        flush()
+
+
+class recorded_on_every_thread(recorded):
+    """The same, on the script's thread and on every thread started while it is in force: the
+    ASGI handler runs a view that is a plain function, and a response's close, on a thread of
+    asgiref's."""
+
+    def __enter__(self):
+        global RULES
+        RULES = self.rules
+        threading.setprofile_all_threads(profile)
+
+    def __exit__(self, *exc):
+        threading.setprofile_all_threads(None)
         flush()
 
 
@@ -680,6 +747,40 @@ class HostURLconf:
             note('request.urlconf = "museum.urls_members"')
             ask("get_urlconf()", show_as="and then, still in the middleware: get_urlconf()")
         return self.get_response(request)
+
+
+def asgi_scope(url: str, root_path: str = "", host: str = "museum.example") -> dict:
+    scope = {"type": "http", "method": "GET", "path": url, "query_string": b"", "scheme": "http",
+             "server": (host, 80), "headers": [(b"host", host.encode())]}
+    if root_path:
+        scope["root_path"] = root_path
+    return scope
+
+
+async def asgi_call(handler, scope: dict, said: bool = True) -> list:
+    """Call the handler as an ASGI server does, from a coroutine on the event loop: the body,
+    empty, in one message, and then a receive that waits until the handler cancels it. With
+    said, the server writes down the body it gives and each message it is sent."""
+    waiting = [{"type": "http.request", "body": b"", "more_body": False}]
+    never = asyncio.Event()
+    sent = []
+
+    async def receive():
+        if waiting:
+            if said:
+                note("the server's receive returns http.request, with no body and more_body False")
+            return waiting.pop(0)
+        await never.wait()  # the client stays: the handler's listener waits until it is cancelled
+
+    async def send(message):
+        sent.append(message)
+        if said and message["type"] == "http.response.start":
+            note(f"the server is sent http.response.start, status {message['status']}")
+        elif said:
+            note(f"the server is sent http.response.body: {message.get('body', b'').decode()!r}")
+
+    await handler(scope, receive, send)
+    return sent
 
 
 print("Django", django.get_version(), "and the project museum: ROOT_URLCONF = 'museum.urls', no middleware unless a block says so\n")
@@ -800,6 +901,20 @@ ask('include("museum.nowhere")', brief=True)
 ask('include("museum.urls_languages")')
 show("What include() returns: the URLconf, the application namespace and the instance namespace")
 
+NAMED = (path("guide/", include([path("", views.shop, name="shop")]), name="guide"),)
+ASKING["NAMED"] = NAMED
+note('NAMED is a URLconf of one entry: path("guide/", include([path("", views.shop, name="shop")]), name="guide")')
+STACK.append(None)
+ask("type(NAMED[0]).__name__")
+ask('hasattr(NAMED[0], "name")')
+ask("NAMED[0].pattern.name")
+ask('"guide" in vars(NAMED[0]).values()')
+ask('"guide" in vars(NAMED[0].pattern).values()')
+ask('reverse("guide", urlconf=NAMED)')
+ask('reverse("shop", urlconf=NAMED)')
+STACK.pop()
+show("A name written beside an include(): what path() makes, and reverse() of that name")
+
 SLASHLESS = (path("east", include("museum.gallery.urls"), {"wing": "east"}),)
 ASKING["SLASHLESS"] = SLASHLESS
 
@@ -881,6 +996,30 @@ with settings_as(ROOT_URLCONF="museum.urls_broken", DEBUG=True):
 set_urlconf(None)
 show("The same request with DEBUG = True")
 
+
+def wrapper_called(frame) -> str:
+    """The function convert_exception_to_response returns, by what it wraps: the middleware,
+    or the centre of the chain."""
+    around = frame.f_locals["get_response"]
+    return f"{frame.f_code.co_qualname}  (around {type(around).__name__ if isinstance(around, HostURLconf) else around.__qualname__})"
+
+
+BROKEN_CHAIN = {
+    **BROKEN,
+    ("django.core.handlers.exception", "convert_exception_to_response.<locals>.inner"): wrapper_called,
+    ("__main__", "HostURLconf.__call__"): lambda f: "HostURLconf.__call__, the recording's middleware",
+}
+with settings_as(MIDDLEWARE=[f"{__name__}.HostURLconf"]):
+    chain_handler = WSGIHandler()
+with settings_as(ROOT_URLCONF="museum.urls_broken"):
+    with recorded(BROKEN_CHAIN):
+        try:
+            chain_handler(environ("/"), lambda status, headers: note(f'start_response("{status}", headers)'))
+        except Exception as left:
+            note(f"the handler raises {type(left).__name__} to the server")
+set_urlconf(None)
+show("GET / when ROOT_URLCONF names a module that cannot be imported, with DEBUG = False and one middleware installed, the recording's own")
+
 # ---------------------------------------------------------------------------------------------
 # A path is resolved.
 
@@ -913,6 +1052,32 @@ for url in ("/", "/tickets/2026/", "/tickets/2026/03/", "/tickets/2026/3/", "/ti
             "/east/rooms/12/audio/intro/", "/east/rooms/12", "east/rooms/12/", "/north/rooms/12/"):
     found(url)
 show("resolve(path): the view found, and what it will be called with")
+
+from urllib.parse import unquote  # noqa: E402
+
+ASKING["unquote"] = unquote
+DECODED = {
+    ("django.core.handlers.base", "BaseHandler.resolve_request"): plain,
+    ("django.urls.resolvers", "URLResolver.resolve"): root_resolve,
+    **VIEWS,
+}
+
+
+def path_info_asked(request) -> None:
+    note(f"request.path_info  ->  {request.path_info!r}")
+
+
+views.ON_VIEW.append(path_info_asked)
+note("the request line's path is /files/maps/ground%20floor.pdf, and the server puts in PATH_INFO what wsgiref's server puts there:")
+ask('unquote("/files/maps/ground%20floor.pdf", "iso-8859-1")')
+serve(plain_handler, environ(unquote("/files/maps/ground%20floor.pdf", "iso-8859-1")), DECODED)
+show("GET /files/maps/ground%20floor.pdf, the server having decoded the path into PATH_INFO as wsgiref's server does: what is resolved, and what the view is given")
+
+LEFT_ENCODED = environ("/files/maps/ground%20floor.pdf")
+note(f"the server puts the request line's path in PATH_INFO as it stands: PATH_INFO  ->  {LEFT_ENCODED['PATH_INFO']!r}")
+serve(plain_handler, LEFT_ENCODED, DECODED)
+views.ON_VIEW.clear()
+show("The same request from a server that leaves the escape in PATH_INFO: neither the request nor the resolver decodes it")
 
 match = resolve("/east/rooms/12/audio/intro/")
 ASKING["match"] = match
@@ -984,6 +1149,21 @@ found("/c/1/d/2/", POSITIONAL, "POSITIONAL")
 STACK.pop()
 show("Arguments from several levels: which one the view gets")
 
+CAPTURED = (path("<slug:wing>/", include([path("rooms/<int:room>/", views.room, name="room")]), {"room": 1}),)
+EACH = (path("<slug:wing>/", include([path("rooms/<int:room>/", views.room, {"room": 1}, name="room")])),)
+ASKING.update(CAPTURED=CAPTURED, EACH=EACH)
+note('CAPTURED is path("<slug:wing>/", include([path("rooms/<int:room>/", views.room, name="room")]), {"room": 1})')
+STACK.append(None)
+found("/east/rooms/12/", CAPTURED, "CAPTURED")
+ask('resolve("/east/rooms/12/", urlconf=CAPTURED).captured_kwargs')
+ask('resolve("/east/rooms/12/", urlconf=CAPTURED).extra_kwargs')
+STACK.pop()
+note('EACH gives the same extra argument to the line instead: path("<slug:wing>/", include([path("rooms/<int:room>/", views.room, {"room": 1}, name="room")]))')
+STACK.append(None)
+found("/east/rooms/12/", EACH, "EACH")
+STACK.pop()
+show("An include's extra argument against a capture of the same name further down, and the same argument given to the line instead")
+
 RETURNS = (
     path("shop/", include([path("", views.shop, name="shop"), path("<slug:item>/", views.item, name="item")])),
     path("shop/<slug:item>/closed/", views.item, name="closed"),
@@ -1009,6 +1189,16 @@ with settings_as(MIDDLEWARE=["django.middleware.common.CommonMiddleware"]):
     common_handler = WSGIHandler()
 serve(common_handler, environ("/east/rooms/12"), SLASH)
 show("GET /east/rooms/12, with CommonMiddleware and APPEND_SLASH: the resolver is asked three times")
+
+WWW = {**SLASH, ("django.middleware.common", "CommonMiddleware.process_request"): hook}
+with settings_as(PREPEND_WWW=True):
+    serve(common_handler, environ("/east/rooms/12"), WWW)
+show("GET /east/rooms/12 for the host museum.example, with CommonMiddleware, APPEND_SLASH and PREPEND_WWW = True: "
+     "process_request asks the resolver, and the handler does not")
+
+with settings_as(PREPEND_WWW=False):
+    serve(common_handler, environ("/east/rooms/12"), WWW)
+show("The same request with PREPEND_WWW = False, the default: process_request does not ask the resolver")
 
 def compiled_or_not(resolver, done: set) -> None:
     """Each matcher of the tree, and whether it has compiled its regular expression yet."""
@@ -1042,6 +1232,29 @@ show("reverse(): the first call for a URLconf fills its resolvers' tables, and e
 
 compiled_or_not(root, set())
 show("After that first reverse with museum.urls: which entries of its tree have a matcher with a compiled expression")
+
+UNCLOSED = "museum.urls_unclosed"
+ASKING["UNCLOSED"] = UNCLOSED
+for check in (checks.urls.check_url_config, checks.urls.check_url_namespaces_unique, checks.urls.check_url_settings,
+              checks.urls.check_custom_error_handlers):
+    ASKING[check.__name__] = check
+note("UNCLOSED is 'museum.urls_unclosed', a URLconf of three entries, the second with a group that is never closed:")
+note('  path("", views.entrance, name="entrance")')
+note('  re_path(r"^plans/(?P<floor>[0-9]/$", views.plan, name="plan")')
+note('  path("shop/", views.shop, name="shop")')
+ask('re_path(r"^plans/(?P<floor>[0-9]/$", views.plan, name="plan")')
+ask("get_resolver(UNCLOSED).url_patterns[1]")
+ask('"regex" in vars(get_resolver(UNCLOSED).url_patterns[1].pattern)')
+with settings_as(ROOT_URLCONF=UNCLOSED):
+    with under("with ROOT_URLCONF = 'museum.urls_unclosed', the four checks tagged urls, each called by name"):
+        for name in ("check_url_config", "check_url_namespaces_unique", "check_url_settings", "check_custom_error_handlers"):
+            ask(f"{name}(None)")
+ask('resolve("/", urlconf=UNCLOSED).url_name')
+ask('resolve("/plans/2/", urlconf=UNCLOSED)')
+ask('resolve("/shop/", urlconf=UNCLOSED)', brief=True)
+ask('reverse("entrance", urlconf=UNCLOSED)', brief=True)
+show("A re_path() whose expression does not compile: the import, the four URL checks with ROOT_URLCONF = 'museum.urls_unclosed', "
+     "and the first paths matched against it")
 
 
 def candidates_said(candidates) -> list:
@@ -1148,6 +1361,30 @@ ask('reverse("feed", urlconf=FEEDS, kwargs={"kind": "atom"})')
 ask('reverse("feed", urlconf=FEEDS)')
 ask('reverse("feed", urlconf=FEEDS, kwargs={"kind": "json"})', brief=True)
 show("Two patterns with one name, told apart by their extra arguments")
+
+ASKING["OVERRIDES"] = OVERRIDES
+note('OVERRIDES is path("<slug:wing>/", include([path("rooms/<int:room>/", views.room, {"room": 1}, name="room")]), {"wing": "annexe"})')
+STACK.append(None)
+found("/east/rooms/12/", OVERRIDES, "OVERRIDES")
+ask('get_resolver(OVERRIDES).reverse_dict.getlist("room")[0][2]')
+ask('reverse("room", urlconf=OVERRIDES, kwargs={"wing": "annexe", "room": 1})')
+ask('reverse("room", urlconf=OVERRIDES, kwargs={"wing": "east", "room": 12})')
+ask('reverse("room", urlconf=OVERRIDES, kwargs={"room": 1})')
+ask('reverse("room", urlconf=OVERRIDES)')
+STACK.pop()
+show("OVERRIDES reversed: its candidate keeps both extra arguments, and reverse() does not hold a parameter the route captures to its extra argument")
+
+SAME_NAME = (path("plans/", include([path("<int:floor>/", views.plan, {"format": "pdf"}, name="plan")]), {"format": "svg"}),)
+ASKING["SAME_NAME"] = SAME_NAME
+note('SAME_NAME is path("plans/", include([path("<int:floor>/", views.plan, {"format": "pdf"}, name="plan")]), {"format": "svg"})')
+STACK.append(None)
+found("/plans/2/", SAME_NAME, "SAME_NAME")
+ask('get_resolver(SAME_NAME).reverse_dict.getlist("plan")[0][2]')
+ask('reverse("plan", urlconf=SAME_NAME, kwargs={"floor": 2, "format": "pdf"})', brief=True)
+ask('reverse("plan", urlconf=SAME_NAME, kwargs={"floor": 2, "format": "svg"})')
+ask('reverse("plan", urlconf=SAME_NAME, kwargs={"floor": 2})')
+STACK.pop()
+show("An extra argument of the same name at an include and at its pattern: the view is given the pattern's, and reverse() holds to the include's")
 
 ALTERNATIVES = (path("about/", views.entrance, name="about"), re_path(r"^(?:east|west)/lift/$", views.entrance, name="lift"))
 PERCENT = (path("about/", views.entrance, name="about"), path("sale-50%/", views.shop, name="sale"))
@@ -1309,6 +1546,61 @@ show("The same request with FORCE_SCRIPT_NAME = '/exhibits': the prefix the hand
 
 views.ON_VIEW.clear()
 
+# The same under ASGI: the script is the server, and runs it on an event loop of its own thread.
+ASGI_REQUEST = {
+    ("django.core.handlers.asgi", "ASGIHandler.__call__"): lambda f: "ASGIHandler.__call__(scope, receive, send)",
+    ("django.core.handlers.asgi", "ASGIHandler.handle"): plain,
+    ("django.core.handlers.asgi", "ASGIHandler.read_body"): plain,
+    ("django.core.handlers.asgi", "ASGIHandler.create_request"): plain,
+    ("django.urls.base", "set_script_prefix"): with_arg("prefix"),
+    ("django.urls.base", "set_urlconf"): with_arg("urlconf_name"),
+    ("django.dispatch.dispatcher", "Signal.send"): signal_sent,
+    ("django.dispatch.dispatcher", "Signal.asend"): signal_sent,
+    ("django.core.handlers.base", "BaseHandler.get_response_async"): plain,
+    ("django.core.handlers.base", "BaseHandler.resolve_request"): plain,
+    ("django.urls.resolvers", "get_resolver"): get_resolver_called,
+    ("django.urls.resolvers", "URLResolver.resolve"): root_resolve,
+    ("django.http.response", "HttpResponseBase.close"): on,
+    ("django.core.handlers.base", "reset_urlconf"): plain,
+    **VIEWS,
+}
+asgi_handler = ASGIHandler()
+
+
+async def served_under_asgi() -> None:
+    with under("before this request, in the server's coroutine"):
+        ask("get_script_prefix()")
+        ask("get_urlconf()")
+    with recorded_on_every_thread(ASGI_REQUEST):
+        await asgi_call(asgi_handler, asgi_scope("/museum/east/rooms/12/", root_path="/museum"))
+    with under("after the request, in the server's coroutine"):
+        ask("get_script_prefix()")
+        ask("get_urlconf()")
+
+
+views.ON_VIEW.append(inside)
+asyncio.run(served_under_asgi())
+views.ON_VIEW.clear()
+with under("and on the script's thread, once asyncio.run() has returned (it ran the server's coroutine in a copy of this thread's context)"):
+    ask("get_script_prefix()")
+    ask("get_urlconf()")
+show("GET /museum/east/rooms/12/ under ASGI, where the scope's root_path is /museum: what the handler sets, and what clears it")
+
+ASKING.update(wsgi=wsgi, asgi=asgi)
+with settings_as(FORCE_SCRIPT_NAME=""):
+    ask('wsgi.get_script_name({"SCRIPT_NAME": "/museum", "PATH_INFO": "/east/rooms/12/"})')
+    ask('asgi.get_script_prefix({"root_path": "/museum", "path": "/museum/east/rooms/12/"})')
+    views.ON_VIEW.append(lambda request: ask(
+        "get_script_prefix()", show_as="through WSGIHandler, SCRIPT_NAME being /museum: the view's get_script_prefix()"))
+    plain_handler(environ("/east/rooms/12/", SCRIPT_NAME="/museum"), lambda status, headers: None).close()
+    views.ON_VIEW.clear()
+    views.ON_VIEW.append(lambda request: ask(
+        "get_script_prefix()", show_as="through ASGIHandler, root_path being /museum: the view's get_script_prefix()"))
+    asyncio.run(asgi_call(asgi_handler, asgi_scope("/museum/east/rooms/12/", root_path="/museum"), said=False))
+    views.ON_VIEW.clear()
+set_script_prefix("/")
+show("FORCE_SCRIPT_NAME = '', and a server that mounts the project at /museum: the prefix each handler takes")
+
 
 def inside_members(request) -> None:
     with under("the view asks"):
@@ -1325,6 +1617,70 @@ with under("after the request"):
     ask("get_urlconf()")
 show("GET / for the host members.museum.example: a middleware sets request.urlconf")
 views.ON_VIEW.clear()
+
+from museum import views_async  # noqa: E402
+
+
+def host_urlconf_on_the_loop(get_response):
+    """The recording's middleware again, as a coroutine for the ASGI handler, so that the whole
+    chain runs on the event loop: a request for the members' host is given the members' URLconf
+    for that server, museum.urls_members_async."""
+    async def middleware(request):
+        if request.get_host().startswith("members."):
+            request.urlconf = "museum.urls_members_async"
+        return await get_response(request)
+    return middleware
+
+
+host_urlconf_on_the_loop.sync_capable = False
+host_urlconf_on_the_loop.async_capable = True
+
+STARTED = {}  # for each of the two requests, set when its view has started
+ASKED = []  # set when the museum's view has asked its questions
+ASKING["threading"] = threading
+
+
+async def asks_in_turn(request) -> None:
+    """In each view: the museum's asks once the members' view has started, and the members'
+    once the museum's has asked. Each waits on an event the other sets."""
+    mine, other = ("members", "museum") if request.get_host().startswith("members.") else ("museum", "members")
+    STARTED[mine].set()
+    await STARTED[other].wait()
+    if mine == "members":
+        await ASKED[0].wait()
+    with under("the members' view, once the museum's view has asked" if mine == "members" else
+               "the museum's view, once the members' view has started"):
+        ask("threading.current_thread() is threading.main_thread()")
+        ask("get_urlconf()")
+        ask('reverse("tickets", kwargs={"year": 2026})', brief=True)
+        ask('reverse("renew", kwargs={"year": 2026})', brief=True)
+    if mine == "museum":
+        ASKED[0].set()
+
+
+async def two_at_once():
+    STARTED.update(museum=asyncio.Event(), members=asyncio.Event())
+    ASKED[:] = [asyncio.Event()]
+    return await asyncio.gather(
+        asgi_call(together_handler, asgi_scope("/"), said=False),
+        asgi_call(together_handler, asgi_scope("/", host="members.museum.example"), said=False),
+    )
+
+
+with settings_as(ROOT_URLCONF="museum.urls_async", MIDDLEWARE=[f"{__name__}.host_urlconf_on_the_loop"]):
+    together_handler = ASGIHandler()
+    note("the server runs GET / for museum.example and GET / for members.museum.example together, with asyncio.gather, "
+         "on an event loop on the script's thread")
+    views_async.ON_VIEW.append(asks_in_turn)
+    answered = asyncio.run(two_at_once())
+    views_async.ON_VIEW.clear()
+    for host, sent in zip(("museum.example", "members.museum.example"), answered):
+        note(f"the server is sent, for {host}: status {sent[0]['status']}, {sent[1]['body'].decode()!r}")
+with under("afterwards, on the script's thread"):
+    ask("get_urlconf()")
+show("Two requests at once under ASGI, with ROOT_URLCONF = 'museum.urls_async' and a middleware of the recording's own that gives "
+     "the members' host its URLconf: each view, a coroutine on the event loop, asks once the other request's view has started, "
+     "the two waiting on events each other sets")
 
 from django.test import Client  # noqa: E402
 
@@ -1458,6 +1814,38 @@ with settings_as(ROOT_URLCONF=LANGUAGES, MIDDLEWARE=["django.middleware.locale.L
     ask("is_language_prefix_patterns_used.cache_info()", show_as="afterwards: is_language_prefix_patterns_used.cache_info()")
     show("With LocaleMiddleware and ROOT_URLCONF = 'museum.urls_languages': GET /shop/ with Accept-Language: nl")
 
+RENAMED = "museum.urls_renamed"
+ASKING.update(RENAMED=RENAMED, converters_of=lambda converters: Said(converters_of(converters)))
+note("RENAMED is 'museum.urls_renamed': i18n_patterns(path(_(\"visits/<int:year>/\"), views.tickets, name=\"visits\")), "
+     "where the catalogue translates the route as \"bezoeken/<int:jaar>/\"")
+with translation.override("en"):
+    with under("with en active, the script reads the URLconf's patterns, and so imports it"):
+        ask("converters_of(get_resolver(RENAMED).url_patterns[0].url_patterns[0].pattern.converters)")
+        found("/en/visits/2026/", RENAMED, "RENAMED")
+with translation.override("nl"):
+    with under("with nl active"):
+        ask("str(get_resolver(RENAMED).url_patterns[0].url_patterns[0].pattern)")
+        ask("converters_of(get_resolver(RENAMED).url_patterns[0].url_patterns[0].pattern.converters)")
+        with recorded(RESOLVE):
+            with doing('the script calls resolve("/nl/bezoeken/2026/", urlconf=RENAMED)'):
+                try:
+                    resolve("/nl/bezoeken/2026/", urlconf=RENAMED)
+                except KeyError:
+                    pass
+        ask('resolve("/nl/bezoeken/2026/", urlconf=RENAMED)')
+show("A translated route whose Dutch translation renames its parameter: the converters are those of the route as it read at the import")
+
+RENAMED_RULES = {
+    **LOCALE_RULES,
+    ("django.core.handlers.exception", "response_for_exception"): plain,
+    ("django.core.handlers.exception", "handle_uncaught_exception"): plain,
+    ("django.urls.resolvers", "URLResolver.resolve_error_handler"): error_handler,
+}
+with settings_as(ROOT_URLCONF=RENAMED):
+    serve(locale_handler, environ("/nl/bezoeken/2026/"), RENAMED_RULES)
+    translation.deactivate()
+show("With LocaleMiddleware and ROOT_URLCONF = 'museum.urls_renamed': GET /nl/bezoeken/2026/")
+
 # ---------------------------------------------------------------------------------------------
 # The checks, and the tools that walk the tree.
 
@@ -1507,5 +1895,73 @@ ask("named(get_resolver().resolve_error_handler(404))", show_as="get_resolver().
 ask("named(get_resolver().resolve_error_handler(500))", show_as="get_resolver().resolve_error_handler(500)")
 ask("get_resolver().resolve_error_handler(418)", brief=True)
 show("get_callable(), and the error views used when a URLconf names none")
+
+from django.core.exceptions import ViewDoesNotExist  # noqa: E402
+
+GET_CALLABLE = {("django.urls.utils", "get_callable"): with_arg("lookup_view")}
+ask("get_callable.cache_info()")
+with recorded(GET_CALLABLE):
+    with doing('the script calls get_callable("museum.nowhere.item") twice'):
+        for _ in range(2):
+            try:
+                get_callable("museum.nowhere.item")
+            except ViewDoesNotExist:
+                pass
+ask("get_callable.cache_info()")
+with recorded(GET_CALLABLE):
+    with doing('the script calls get_callable("museum.views.item") twice'):
+        for _ in range(2):
+            get_callable("museum.views.item")
+ask("get_callable.cache_info()")
+show("get_callable(), kept by functools.cache: a name that fails is looked up again at each call, and one that works once")
+
+# ---------------------------------------------------------------------------------------------
+# A matcher's converters, shared through the cache of _route_to_regex. These blocks come last:
+# what they change in place is not put back.
+
+ask('path("tour/<slug:stop>/", include([])).pattern.converters is path("tour/<slug:stop>/", include([])).pattern.converters')
+ask('path("tour/<slug:stop>/", views.entrance).pattern.converters is path("tour/<slug:stop>/", include([])).pattern.converters')
+show("path() called twice with one route: whether the two matchers hold one dictionary of converters")
+
+LEVELS = (path("floors/<int:floor>/", include([path("tour/<slug:stop>/", include(([path("", views.entrance, name="stop")], "tour")))])),)
+ASKING.update(LEVELS=LEVELS, inner=LEVELS[0].url_patterns[0].pattern)
+note('LEVELS is path("floors/<int:floor>/", include([path("tour/<slug:stop>/", include(([path("", views.entrance, name="stop")], "tour")))])), '
+     "and inner is the matcher of the include with the namespace tour")
+STACK.append(None)
+ask("converters_of(inner.converters)")
+ask('reverse("tour:stop", urlconf=LEVELS, kwargs={"floor": 2, "stop": "intro"})')
+ask("converters_of(inner.converters)")
+found("/floors/2/tour/intro/", LEVELS, "LEVELS")
+STACK.pop()
+show("reverse() over a namespaced include under a plain include with a converter: the plain include's converters are put into the namespaced one's matcher")
+
+SMALL = (
+    path("", views.entrance, name="entrance"),
+    path("floors/<int:wing>/", include([path("<slug:wing>/", include(([path("", views.wing, name="wing")], "tour")))])),
+)
+ASKING.update(SMALL=SMALL, inner=SMALL[1].url_patterns[0].pattern)
+note("SMALL is a URLconf of two entries:")
+note('  path("", views.entrance, name="entrance")')
+note('  path("floors/<int:wing>/", include([path("<slug:wing>/", include(([path("", views.wing, name="wing")], "tour")))]))')
+note("inner is the matcher of the include with the namespace tour")
+ask("converters_of(inner.converters)")
+found("/floors/2/east/", SMALL, "SMALL")
+ask('reverse("entrance", urlconf=SMALL)')
+ask("converters_of(inner.converters)")
+found("/floors/2/east/", SMALL, "SMALL")
+found("/floors/2/3/", SMALL, "SMALL")
+show("The same with one parameter's name at both levels: after a reverse(), the namespaced include's matcher converts with the plain include's converter")
+
+ASKING.update(NESTED=NESTED, CAPTURED=CAPTURED)
+note("inner is still the matcher of SMALL's include with the namespace tour, whose route is \"<slug:wing>/\"")
+ask("inner.converters is NESTED[0].pattern.converters")
+ask("inner.converters is CAPTURED[0].pattern.converters")
+ask("inner.converters is OVERRIDES[0].pattern.converters")
+found("/east/west/", NESTED, "NESTED")
+found("/east/rooms/12/", CAPTURED, "CAPTURED")
+found("/east/rooms/12/", OVERRIDES, "OVERRIDES")
+found("/7/rooms/12/", CAPTURED, "CAPTURED")
+show("NESTED, CAPTURED and OVERRIDES, URLconfs of earlier blocks whose includes have the same route, "
+     "hold the same dictionary as SMALL's namespaced include, and after that reverse() refuse the paths they resolved there")
 
 shutil.rmtree(LOCALE, ignore_errors=True)

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 860 409">
+  <!-- the left panel's heading: the call whose path is traced -->
+  <text class="strong" x="0" y="16">the way down</text>
+  <text x="0" y="34"><tspan class="name">resolve("/shop/poster/closed/")</tspan> with RETURNS</text>
+  <path class="mark-line" d="M128.5 42 V54.5"/>
+  <polygon class="head mark" points="128.5,64.5 123.5,54.5 133.5,54.5"/>
+
+  <!-- the root resolver -->
+  <rect class="ground" x="0.5" y="64.5" width="256" height="68" rx="4"/>
+  <text class="strong" x="12" y="86">the root resolver</text>
+  <text class="quiet" x="12" y="104">its matcher takes <tspan class="name">/</tspan>, and</text>
+  <text class="quiet" x="12" y="122"><tspan class="name">shop/poster/closed/</tspan> is left</text>
+  <path class="mark-line" d="M128.5 132.5 V146.5"/>
+  <polygon class="head mark" points="128.5,156.5 123.5,146.5 133.5,146.5"/>
+
+  <!-- the root's first entry, a resolver -->
+  <rect class="ground" x="0.5" y="156.5" width="256" height="68" rx="4"/>
+  <text class="quiet" x="12" y="178">1</text>
+  <text class="name" x="32" y="178">shop/</text>
+  <text class="quiet" x="32" y="196">a resolver: its route takes <tspan class="name">shop/</tspan>,</text>
+  <text class="quiet" x="32" y="214">and <tspan class="name">poster/closed/</tspan> is left</text>
+
+  <!-- into the include's list -->
+  <path class="mark-line" d="M256.5 190.5 H278.5"/>
+  <polygon class="head mark" points="288.5,190.5 278.5,185.5 278.5,195.5"/>
+  <rect class="ground" x="288.5" y="156.5" width="160" height="96" rx="4"/>
+  <text class="name" x="300" y="178">""</text>
+  <text class="quiet" x="300" y="196">a pattern: no match</text>
+  <text class="name" x="300" y="224">&lt;slug:item&gt;/</text>
+  <text class="quiet" x="300" y="242">a pattern: no match</text>
+
+  <!-- back out to the root's list, and on to its next entry -->
+  <path class="mark-line" d="M288.5 240.5 H128.5 V256.5"/>
+  <polygon class="head mark" points="128.5,266.5 123.5,256.5 133.5,256.5"/>
+  <text class="quiet" x="289" y="288">nothing in its list matched:</text>
+  <text class="quiet" x="289" y="306"><tspan class="name">Resolver404</tspan>, back out</text>
+  <text class="quiet" x="289" y="324">to the root's list</text>
+
+  <!-- the root's second entry, a pattern, which matches -->
+  <rect class="ground" x="0.5" y="266.5" width="256" height="68" rx="4"/>
+  <text class="quiet" x="12" y="288">2</text>
+  <text class="name" x="32" y="288">shop/&lt;slug:item&gt;/closed/</text>
+  <text class="quiet" x="32" y="306">a pattern: it takes all of</text>
+  <text class="quiet" x="32" y="324"><tspan class="name">shop/poster/closed/</tspan></text>
+  <path class="mark-line" d="M128.5 334.5 V348.5"/>
+  <polygon class="head mark" points="128.5,358.5 123.5,348.5 133.5,348.5"/>
+  <rect class="mark-box" x="0.5" y="358.5" width="256" height="50" rx="4"/>
+  <text class="quiet" x="12" y="380">the first match, which ends the search:</text>
+  <text class="name" x="12" y="398">views.item, item="poster"</text>
+
+  <!-- the right panel's heading -->
+  <text x="500" y="16"><tspan class="strong">the way up</tspan><tspan class="quiet">, read from the bottom</tspan></text>
+  <text x="500" y="34"><tspan class="name">resolve("/east/rooms/12/")</tspan> with OVERRIDES</text>
+
+  <!-- the match: what the view is given -->
+  <rect class="mark-box" x="500.5" y="64.5" width="359" height="50" rx="4"/>
+  <text class="strong" x="512" y="86">the match</text>
+  <text class="name" x="512" y="104">views.room, wing="annexe", room=1</text>
+  <path class="mark-line" d="M680.5 138.5 V124.5"/>
+  <polygon class="head mark" points="680.5,114.5 675.5,124.5 685.5,124.5"/>
+
+  <!-- the root resolver -->
+  <rect class="ground" x="500.5" y="138.5" width="359" height="68" rx="4"/>
+  <text class="strong" x="512" y="160">the root resolver</text>
+  <text class="quiet" x="512" y="178">nothing of its own</text>
+  <text class="quiet" x="512" y="196">from below, laid over it:</text>
+  <text class="name" x="847" y="196" text-anchor="end">wing="annexe", room=1</text>
+  <path class="mark-line" d="M680.5 230.5 V216.5"/>
+  <polygon class="head mark" points="680.5,206.5 675.5,216.5 685.5,216.5"/>
+
+  <!-- the resolver for <slug:wing>/ -->
+  <rect class="ground" x="500.5" y="230.5" width="359" height="86" rx="4"/>
+  <text x="512" y="252"><tspan class="strong">the resolver </tspan><tspan class="name">&lt;slug:wing&gt;/</tspan></text>
+  <text class="quiet" x="512" y="270">its capture:</text>
+  <text class="name quiet" x="847" y="270" text-anchor="end">wing="east"</text>
+  <text class="quiet" x="512" y="288">its extra argument, laid over it:</text>
+  <text class="name" x="847" y="288" text-anchor="end">wing="annexe"</text>
+  <text class="quiet" x="512" y="306">from below, laid over both:</text>
+  <text class="name" x="847" y="306" text-anchor="end">room=1</text>
+  <path class="mark-line" d="M680.5 340.5 V326.5"/>
+  <polygon class="head mark" points="680.5,316.5 675.5,326.5 685.5,326.5"/>
+
+  <!-- the pattern rooms/<int:room>/, where the match is made -->
+  <rect class="ground" x="500.5" y="340.5" width="359" height="68" rx="4"/>
+  <text x="512" y="362"><tspan class="strong">the pattern </tspan><tspan class="name">rooms/&lt;int:room&gt;/</tspan></text>
+  <text class="quiet" x="512" y="380">its capture:</text>
+  <text class="name quiet" x="847" y="380" text-anchor="end">room=12</text>
+  <text class="quiet" x="512" y="398">its extra argument, laid over it:</text>
+  <text class="name" x="847" y="398" text-anchor="end">room=1</text>
+</svg>

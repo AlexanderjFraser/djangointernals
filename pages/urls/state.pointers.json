@@ -10,7 +10,7 @@
  "pointers": [
   {
    "pointer": "django/urls/base.py:set_script_prefix",
-   "line": 24,
+   "line": 48,
    "sentence": "It is kept in a module-level object, `_prefixes`, by `set_script_prefix`, which adds a final slash if there is none, and read by `get_script_prefix` (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:get_script_prefix`).",
    "tree": "django",
    "path": "django/urls/base.py",
@@ -24,7 +24,7 @@
   },
   {
    "pointer": "django/urls/base.py:get_script_prefix",
-   "line": 24,
+   "line": 48,
    "sentence": "It is kept in a module-level object, `_prefixes`, by `set_script_prefix`, which adds a final slash if there is none, and read by `get_script_prefix` (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:get_script_prefix`).",
    "tree": "django",
    "path": "django/urls/base.py",
@@ -37,9 +37,93 @@
    "fingerprint": "aa0edc00dcbde8de"
   },
   {
+   "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
+   "line": 50,
+   "sentence": "Each of the two handlers sets it before it makes the request object: `WSGIHandler.__call__` as its first statement, from the server's environ, and `ASGIHandler.handle` from the scope's `\"root_path\"`, once it has read the request's body and before it sends `request_started` ([The two entry points](../handlers/entry.md)) (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIHandler.__call__",
+   "kind": "function",
+   "lines": [
+    120,
+    144
+   ],
+   "fingerprint": "cc47513ec3bc5a49"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
+   "line": 50,
+   "sentence": "Each of the two handlers sets it before it makes the request object: `WSGIHandler.__call__` as its first statement, from the server's environ, and `ASGIHandler.handle` from the scope's `\"root_path\"`, once it has read the request's body and before it sends `request_started` ([The two entry points](../handlers/entry.md)) (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.handle",
+   "kind": "function",
+   "lines": [
+    175,
+    218
+   ],
+   "fingerprint": "045a0e5289611a7b"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 50,
+   "sentence": "`reverse` reads the prefix on every call and passes it down to be put in front of the path (`django/urls/base.py:reverse`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/urls/base.py:_prefixes",
+   "line": 77,
+   "sentence": "`clear_script_prefix` would unset it, and nothing in Django calls it (`django/urls/base.py:_prefixes`, `django/urls/base.py:clear_script_prefix`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "_prefixes",
+   "kind": "assignment",
+   "lines": [
+    16,
+    16
+   ],
+   "fingerprint": "94084fe005f09793"
+  },
+  {
+   "pointer": "django/urls/base.py:clear_script_prefix",
+   "line": 77,
+   "sentence": "`clear_script_prefix` would unset it, and nothing in Django calls it (`django/urls/base.py:_prefixes`, `django/urls/base.py:clear_script_prefix`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "clear_script_prefix",
+   "kind": "function",
+   "lines": [
+    138,
+    145
+   ],
+   "fingerprint": "4ff19abbd0bf6d55"
+  },
+  {
    "pointer": "django/core/handlers/wsgi.py:get_script_name",
-   "line": 26,
-   "sentence": "In both, `settings.FORCE_SCRIPT_NAME` takes the server's place: under WSGI whenever the setting is not `None`, and under ASGI whenever it is not empty ([The two entry points](../handlers/entry.md)) (`django/core/handlers/wsgi.py:get_script_name`, `django/core/handlers/asgi.py:get_script_prefix`).",
+   "line": 79,
+   "sentence": "With it set to `\"/exhibits\"` and a WSGI server saying `\"/museum\"`, the prefix is `\"/exhibits/\"`, and the view's `path` and the path it reverses begin with it (`django/core/handlers/wsgi.py:get_script_name`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "get_script_name",
+   "kind": "function",
+   "lines": [
+    154,
+    184
+   ],
+   "fingerprint": "8853b84d5de53366"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:get_script_name",
+   "line": 81,
+   "sentence": "The ASGI handler's `get_script_prefix` takes it only when it is not empty, so under ASGI an empty one is passed over and the view's prefix is the server's, `\"/museum/\"` (`django/core/handlers/wsgi.py:get_script_name`, `django/core/handlers/asgi.py:get_script_prefix`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "get_script_name",
@@ -52,8 +136,8 @@
   },
   {
    "pointer": "django/core/handlers/asgi.py:get_script_prefix",
-   "line": 26,
-   "sentence": "In both, `settings.FORCE_SCRIPT_NAME` takes the server's place: under WSGI whenever the setting is not `None`, and under ASGI whenever it is not empty ([The two entry points](../handlers/entry.md)) (`django/core/handlers/wsgi.py:get_script_name`, `django/core/handlers/asgi.py:get_script_prefix`).",
+   "line": 81,
+   "sentence": "The ASGI handler's `get_script_prefix` takes it only when it is not empty, so under ASGI an empty one is passed over and the view's prefix is the server's, `\"/museum/\"` (`django/core/handlers/wsgi.py:get_script_name`, `django/core/handlers/asgi.py:get_script_prefix`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "get_script_prefix",
@@ -65,8 +149,64 @@
    "fingerprint": "3a9668e2d5b5453b"
   },
   {
+   "pointer": "django/__init__.py:setup",
+   "line": 83,
+   "sentence": "A server's own call of `setup`, from `get_wsgi_application` or `get_asgi_application`, passes `set_prefix=False` and leaves the prefix to each request ([Settings, apps and startup](../startup.md)) (`django/__init__.py:setup`, `django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "tree": "django",
+   "path": "django/__init__.py",
+   "symbol": "setup",
+   "kind": "function",
+   "lines": [
+    8,
+    24
+   ],
+   "fingerprint": "1d9e6fad619c10ab"
+  },
+  {
+   "pointer": "django/core/wsgi.py:get_wsgi_application",
+   "line": 83,
+   "sentence": "A server's own call of `setup`, from `get_wsgi_application` or `get_asgi_application`, passes `set_prefix=False` and leaves the prefix to each request ([Settings, apps and startup](../startup.md)) (`django/__init__.py:setup`, `django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "tree": "django",
+   "path": "django/core/wsgi.py",
+   "symbol": "get_wsgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "db32b08cd1f96afc"
+  },
+  {
+   "pointer": "django/core/asgi.py:get_asgi_application",
+   "line": 83,
+   "sentence": "A server's own call of `setup`, from `get_wsgi_application` or `get_asgi_application`, passes `set_prefix=False` and leaves the prefix to each request ([Settings, apps and startup](../startup.md)) (`django/__init__.py:setup`, `django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "tree": "django",
+   "path": "django/core/asgi.py",
+   "symbol": "get_asgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "03951811c2123fc0"
+  },
+  {
+   "pointer": "django/test/client.py:ClientHandler.__call__",
+   "line": 83,
+   "sentence": "The test client's handlers set no prefix at all: a request made through `Client` has the script name it was given in its `path`, while `reverse` in the view uses whatever prefix the thread already had ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:ClientHandler.__call__`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "ClientHandler.__call__",
+   "kind": "function",
+   "lines": [
+    169,
+    210
+   ],
+   "fingerprint": "3a378c0ad831b908"
+  },
+  {
    "pointer": "django/urls/base.py:set_urlconf",
-   "line": 104,
+   "line": 87,
    "sentence": "`resolve` and `reverse` both begin by reading it unless they are given a URLconf, and `get_resolver` turns the `None` of an unset one into `settings.ROOT_URLCONF` (`django/urls/base.py:set_urlconf`, `django/urls/base.py:get_urlconf`, `django/urls/resolvers.py:get_resolver`).",
    "tree": "django",
    "path": "django/urls/base.py",
@@ -80,7 +220,7 @@
   },
   {
    "pointer": "django/urls/base.py:get_urlconf",
-   "line": 104,
+   "line": 87,
    "sentence": "`resolve` and `reverse` both begin by reading it unless they are given a URLconf, and `get_resolver` turns the `None` of an unset one into `settings.ROOT_URLCONF` (`django/urls/base.py:set_urlconf`, `django/urls/base.py:get_urlconf`, `django/urls/resolvers.py:get_resolver`).",
    "tree": "django",
    "path": "django/urls/base.py",
@@ -94,7 +234,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:get_resolver",
-   "line": 104,
+   "line": 87,
    "sentence": "`resolve` and `reverse` both begin by reading it unless they are given a URLconf, and `get_resolver` turns the `None` of an unset one into `settings.ROOT_URLCONF` (`django/urls/base.py:set_urlconf`, `django/urls/base.py:get_urlconf`, `django/urls/resolvers.py:get_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -108,8 +248,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.get_response",
-   "line": 138,
-   "sentence": "And when the response was closed and the signal `request_finished` was sent, a receiver the handler's module connected, `reset_urlconf`, set it back to nothing (`django/core/handlers/base.py:BaseHandler.get_response`, `django/core/handlers/base.py:reset_urlconf`).",
+   "line": 89,
+   "sentence": "For each request, `BaseHandler.get_response`, or `BaseHandler.get_response_async`, sets it to `settings.ROOT_URLCONF` before it calls the middleware chain, and when the response is closed, `reset_urlconf`, a receiver of `request_finished` that the handler's module connects, unsets it (`django/core/handlers/base.py:BaseHandler.get_response`, `django/core/handlers/base.py:reset_urlconf`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.get_response",
@@ -122,8 +262,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:reset_urlconf",
-   "line": 138,
-   "sentence": "And when the response was closed and the signal `request_finished` was sent, a receiver the handler's module connected, `reset_urlconf`, set it back to nothing (`django/core/handlers/base.py:BaseHandler.get_response`, `django/core/handlers/base.py:reset_urlconf`).",
+   "line": 89,
+   "sentence": "For each request, `BaseHandler.get_response`, or `BaseHandler.get_response_async`, sets it to `settings.ROOT_URLCONF` before it calls the middleware chain, and when the response is closed, `reset_urlconf`, a receiver of `request_finished` that the handler's module connects, unsets it (`django/core/handlers/base.py:BaseHandler.get_response`, `django/core/handlers/base.py:reset_urlconf`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "reset_urlconf",
@@ -135,9 +275,65 @@
    "fingerprint": "4bb512828ef75bbe"
   },
   {
+   "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
+   "line": 91,
+   "sentence": "A middleware sets an attribute named `\"urlconf\"` on the request, and when the request reaches the centre of the chain `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.resolve_request",
+   "kind": "function",
+   "lines": [
+    302,
+    317
+   ],
+   "fingerprint": "df4893b47d5285a9"
+  },
+  {
+   "pointer": "docs/ref/request-response.txt",
+   "line": 113,
+   "sentence": "The `process_view` hooks are called after `resolve_request`, and find the new one (`docs/ref/request-response.txt`, `django/core/handlers/base.py:BaseHandler._get_response`).",
+   "tree": "django",
+   "path": "docs/ref/request-response.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1502
+   ],
+   "fingerprint": "b33496c155d07e2c"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 113,
+   "sentence": "The `process_view` hooks are called after `resolve_request`, and find the new one (`docs/ref/request-response.txt`, `django/core/handlers/base.py:BaseHandler._get_response`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
+   "lines": [
+    176,
+    228
+   ],
+   "fingerprint": "8a7faacfec18a9da"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 115,
+   "sentence": "Because `resolve_request` makes the URLconf current, and does not merely resolve with it, the rest of the request agrees with it: the view reverses by the members' names, and had it raised, with `settings.DEBUG` off, the error view would have been looked for in the members' URLconf module, since the handler asks for the resolver of the current URLconf when it needs one ([From a URLconf to a tree](urlconf.md#what-else-a-urlconf-module-may-hold)) (`django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
    "pointer": "asgiref:asgiref/local.py:Local",
-   "line": 144,
-   "sentence": "Under ASGI, where many requests share the event loop's thread, the same object keeps the value with the asynchronous context it was set in: its docstring says a value is visible to code awaited from the frame that set it, to tasks spawned from there, and to synchronous code that `sync_to_async` runs in a thread on that code's behalf (`asgiref:asgiref/local.py:Local`).",
+   "line": 119,
+   "sentence": "`_prefixes` and `_urlconfs` are each a `Local` from asgiref, an object whose attributes hold a value for each thread (`asgiref:asgiref/local.py:Local`).",
    "tree": "asgiref",
    "path": "asgiref/local.py",
    "symbol": "Local",
@@ -149,9 +345,37 @@
    "fingerprint": "6d26fdd4e1538965"
   },
   {
+   "pointer": "asgiref:asgiref/local.py:Local",
+   "line": 134,
+   "sentence": "The `Local` keeps a value with the asynchronous context it was set in, and asgiref's docstring gives its reach: code awaited from the frame that set the value sees it, and so do tasks started from there and synchronous code that `sync_to_async` runs in a thread (`asgiref:asgiref/local.py:Local`).",
+   "tree": "asgiref",
+   "path": "asgiref/local.py",
+   "symbol": "Local",
+   "kind": "class",
+   "lines": [
+    77,
+    168
+   ],
+   "fingerprint": "6d26fdd4e1538965"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
+   "line": 134,
+   "sentence": "So a view that is a plain function, which the ASGI handler runs on a worker thread, reads its request's prefix and URLconf; and the way back is open too: `reset_urlconf`, run on the worker thread as the response is closed, leaves the URLconf unset for the coroutine that awaited the handler as well (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "SyncToAsync.__call__",
+   "kind": "function",
+   "lines": [
+    457,
+    549
+   ],
+   "fingerprint": "6be21e12b059ba25"
+  },
+  {
    "pointer": "django/urls/base.py:clear_url_caches",
-   "line": 183,
-   "sentence": "In the recording's last lines the script keeps the root resolver, enters such an override and leaves it, and the root resolver it gets afterwards is another object ([Settings for one test: `override_settings` and `TestContextDecorator`](../testing/test-decorators.md)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
+   "line": 173,
+   "sentence": "Within Django it has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "clear_url_caches",
@@ -164,8 +388,8 @@
   },
   {
    "pointer": "django/test/signals.py:root_urlconf_changed",
-   "line": 183,
-   "sentence": "In the recording's last lines the script keeps the root resolver, enters such an override and leaves it, and the root resolver it gets afterwards is another object ([Settings for one test: `override_settings` and `TestContextDecorator`](../testing/test-decorators.md)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
+   "line": 173,
+   "sentence": "Within Django it has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
    "tree": "django",
    "path": "django/test/signals.py",
    "symbol": "root_urlconf_changed",

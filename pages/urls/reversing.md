@@ -256,7 +256,7 @@ reverse(): a query string and a fragment
 
 ## `reverse_lazy`
 
-`reverse_lazy` is `reverse` wrapped by `lazy`: calling it returns a stand-in at once and reverses nothing, and the stand-in calls `reverse` each time it is used as a string. It is for a URL that is wanted before the URLconf can be read, which means in code that runs at import time: an attribute in the body of a class-based view, an argument to a decorator, the default of a parameter. Such code is often imported by the URLconf itself, and a plain `reverse` there asks for patterns that do not yet exist ([From a URLconf to a tree](urlconf.md#when-the-import-fails)) (`django/urls/base.py:reverse_lazy`, `django/utils/functional.py:lazy`).
+`reverse_lazy` is `reverse` wrapped by `lazy`: calling it returns a stand-in at once and reverses nothing, and the stand-in calls `reverse` each time it is used as a string. It is for a URL that is wanted before the URLconf can be read, which means in code that runs at import time: an attribute in the body of a class-based view, an argument to a decorator, the default of a parameter. Such code is often imported by the URLconf itself, and a plain `reverse` there asks for patterns that do not yet exist ([When a URLconf is imported](import.md#when-the-import-fails)) (`django/urls/base.py:reverse_lazy`, `django/utils/functional.py:lazy`).
 
 ```text recording=urls
 reverse_lazy(): nothing is reversed until the text is asked for

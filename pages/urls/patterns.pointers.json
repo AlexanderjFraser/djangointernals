@@ -23,8 +23,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:RoutePattern.__init__",
-   "line": 25,
-   "sentence": "A `RoutePattern` calls it as it is made, which is as its call of `path` runs, during the import of the URLconf (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`).",
+   "line": 47,
+   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "RoutePattern.__init__",
@@ -37,8 +37,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:_route_to_regex",
-   "line": 25,
-   "sentence": "A `RoutePattern` calls it as it is made, which is as its call of `path` runs, during the import of the URLconf (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`).",
+   "line": 47,
+   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "_route_to_regex",
@@ -52,8 +52,22 @@
   },
   {
    "pointer": "django/urls/resolvers.py:RoutePattern.match",
-   "line": 103,
-   "sentence": "Only a route with parameters is matched with the expression, searched for at the start of the text (`django/urls/resolvers.py:RoutePattern.match`).",
+   "line": 102,
+   "sentence": "Only one with converters is matched with the expression, searched for at the start of the text (`django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "RoutePattern.match",
+   "kind": "function",
+   "lines": [
+    325,
+    347
+   ],
+   "fingerprint": "abbdc3f145f19e6d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:RoutePattern.match",
+   "line": 104,
+   "sentence": "**Why.** \"Only use regex overhead if there are converters,\" says the comment above that test (`django/urls/resolvers.py:RoutePattern.match`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "RoutePattern.match",
@@ -66,7 +80,7 @@
   },
   {
    "pointer": "django/urls/converters.py:DEFAULT_CONVERTERS",
-   "line": 115,
+   "line": 116,
    "sentence": "Five are registered to begin with (`django/urls/converters.py:DEFAULT_CONVERTERS`).",
    "tree": "django",
    "path": "django/urls/converters.py",
@@ -80,8 +94,8 @@
   },
   {
    "pointer": "django/urls/converters.py:register_converter",
-   "line": 127,
-   "sentence": "Since a route is expanded as its call of `path` runs, a converter has to be registered before the call of `path` for any route that uses it, as the museum's URLconf does in its first line (`django/urls/converters.py:register_converter`).",
+   "line": 128,
+   "sentence": "Since a route is expanded as its call of `path` runs, a converter has to be registered before the call of `path` for any route that uses it, as the museum's URLconf does above its patterns (`django/urls/converters.py:register_converter`).",
    "tree": "django",
    "path": "django/urls/converters.py",
    "symbol": "register_converter",
@@ -93,9 +107,37 @@
    "fingerprint": "05ae741346cd8ef8"
   },
   {
+   "pointer": "docs/topics/http/urls.txt",
+   "line": 165,
+   "sentence": "The documentation describes a converter as a class (`docs/topics/http/urls.txt`), but Django uses a single instance of it: the one `register_converter` made, or for a default the one its module made as it was imported (`django/urls/converters.py:DEFAULT_CONVERTERS`).",
+   "tree": "django",
+   "path": "docs/topics/http/urls.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    911
+   ],
+   "fingerprint": "c8a70d51a406e67d"
+  },
+  {
+   "pointer": "django/urls/converters.py:DEFAULT_CONVERTERS",
+   "line": 165,
+   "sentence": "The documentation describes a converter as a class (`docs/topics/http/urls.txt`), but Django uses a single instance of it: the one `register_converter` made, or for a default the one its module made as it was imported (`django/urls/converters.py:DEFAULT_CONVERTERS`).",
+   "tree": "django",
+   "path": "django/urls/converters.py",
+   "symbol": "DEFAULT_CONVERTERS",
+   "kind": "assignment",
+   "lines": [
+    43,
+    49
+   ],
+   "fingerprint": "1cb44202aa052dd3"
+  },
+  {
    "pointer": "django/urls/converters.py:get_converters",
-   "line": 129,
-   "sentence": "A converter is therefore written to keep no state (`django/urls/converters.py:get_converters`).",
+   "line": 165,
+   "sentence": "`_route_to_regex` puts that instance into the converters of every route that names it, so it serves every route, in every thread, for the life of the process (`django/urls/converters.py:get_converters`).",
    "tree": "django",
    "path": "django/urls/converters.py",
    "symbol": "get_converters",
@@ -109,8 +151,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:RegexPattern.match",
-   "line": 167,
-   "sentence": "A `RegexPattern` keeps the expression it was given, and converts nothing: `RegexPattern.match` never looks at converters (`django/urls/resolvers.py:RegexPattern.match`).",
+   "line": 169,
+   "sentence": "A pattern's expression that ends in `$` is matched with `re.Pattern.fullmatch`, which requires the whole text and, unlike `$` alone, does not let a trailing newline pass; every other expression, a resolver's or a pattern's without the `$`, with `re.Pattern.search`, which looks for it anywhere in the text (`django/urls/resolvers.py:RegexPattern.match`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "RegexPattern.match",
@@ -122,8 +164,22 @@
    "fingerprint": "a98152859c2bd07d"
   },
   {
+   "pointer": "docs/ref/urls.txt",
+   "line": 171,
+   "sentence": "The reference says what a final `$` does (`docs/ref/urls.txt`), and not what follows from leaving it out: the search finds the expression wherever it stands, and a pattern so found serves the path, so that one with a `^` and no anchor at its end serves every path that begins with its expression.",
+   "tree": "django",
+   "path": "docs/ref/urls.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    224
+   ],
+   "fingerprint": "a22588d38c678e18"
+  },
+  {
    "pointer": "django/urls/resolvers.py:LocaleRegexRouteDescriptor",
-   "line": 216,
+   "line": 206,
    "sentence": "On both classes the attribute `regex` is a descriptor, an object on the class that is run when the attribute is read (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`, `django/urls/resolvers.py:LocaleRegexDescriptor`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -137,7 +193,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:LocaleRegexDescriptor",
-   "line": 216,
+   "line": 206,
    "sentence": "On both classes the attribute `regex` is a descriptor, an object on the class that is run when the attribute is read (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`, `django/urls/resolvers.py:LocaleRegexDescriptor`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -150,18 +206,74 @@
    "fingerprint": "aa6815d2d8374db6"
   },
   {
-   "pointer": "django/urls/resolvers.py:LocaleRegexRouteDescriptor",
-   "line": 258,
-   "sentence": "For a route that is a lazily translated string the descriptor compiles for the language in use at that moment and keeps the result by language code, which [Language prefixes and translated routes](i18n.md#a-route-that-is-a-translated-string) describes (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`).",
+   "pointer": "django/urls/resolvers.py:LocaleRegexDescriptor._compile",
+   "line": 208,
+   "sentence": "`re_path` keeps the expression as text, and one that is not valid raises `ImproperlyConfigured`, with the compiler's reason, only when its matcher is asked for `regex`: by `RegexPattern.match` as a path reaches it, or by `URLResolver._populate` as the tables for reversing are built (`django/urls/resolvers.py:LocaleRegexDescriptor._compile`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
-   "symbol": "LocaleRegexRouteDescriptor",
+   "symbol": "LocaleRegexDescriptor._compile",
+   "kind": "function",
+   "lines": [
+    150,
+    156
+   ],
+   "fingerprint": "683928085bfc7dd3"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:RegexPattern.check",
+   "line": 210,
+   "sentence": "The import passes it, and so do the URL checks, which read its text and never compile it ([The URL checks, and listing the patterns](checks.md)) (`django/urls/resolvers.py:RegexPattern.check`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "RegexPattern.check",
+   "kind": "function",
+   "lines": [
+    219,
+    224
+   ],
+   "fingerprint": "723a62f24ca3f91b"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 210,
+   "sentence": "Then every path that reaches its entry raises, one meant for an entry after it as much as one meant for it, and so does every `reverse` with the URLconf, whatever the name, since the tables are built from every entry's expression (`django/urls/resolvers.py:URLResolver._populate`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:LocaleRegexDescriptor",
+   "line": 210,
+   "sentence": "The descriptor stores nothing when the compile fails, so each raises again, every time (`django/urls/resolvers.py:LocaleRegexDescriptor`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "LocaleRegexDescriptor",
    "kind": "class",
    "lines": [
-    294,
-    312
+    131,
+    156
    ],
-   "fingerprint": "87fa539231346db6"
+   "fingerprint": "aa6815d2d8374db6"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 227,
+   "sentence": "Building the tables for reversing reads the expression of every entry's matcher, and after the first `reverse` with the museum's URLconf every one of them is compiled (`django/urls/resolvers.py:URLResolver._populate`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
   }
  ]
 }

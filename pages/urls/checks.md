@@ -91,7 +91,7 @@ The recording shows one oddity of the walk. `URLResolver.check` returns the mess
 
 *The messages of the URL checks, and the code that makes each. The letter in an id is its level: W for a warning, E for an error.*
 
-`check_url_config` reads `url_patterns` to do its work, which makes it one of the things that import a project's whole URLconf ([From a URLconf to a tree](urlconf.md#who-reads-the-list-first)).
+`check_url_config` reads `url_patterns` to do its work, which makes it one of the things that import a project's whole URLconf ([When a URLconf is imported](import.md#who-reads-the-urlconf-first)).
 
 ## Listing what a project serves
 

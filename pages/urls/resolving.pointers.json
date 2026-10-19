@@ -10,7 +10,7 @@
   {
    "pointer": "django/urls/base.py:resolve",
    "line": 9,
-   "sentence": "`is_valid_path` is `resolve` with the exception turned into `False` (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
+   "sentence": "`is_valid_path` returns what `resolve` returns, the match, with `False` in place of the exception (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "resolve",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/urls/base.py:is_valid_path",
    "line": 9,
-   "sentence": "`is_valid_path` is `resolve` with the exception turned into `False` (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
+   "sentence": "`is_valid_path` returns what `resolve` returns, the match, with `False` in place of the exception (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "is_valid_path",
@@ -36,9 +36,51 @@
    "fingerprint": "fb31513e25389eed"
   },
   {
+   "pointer": "django/core/handlers/wsgi.py:get_path_info",
+   "line": 11,
+   "sentence": "It is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with its percent escapes as the server left them, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "get_path_info",
+   "kind": "function",
+   "lines": [
+    147,
+    151
+   ],
+   "fingerprint": "a15510d2a1c3e3f3"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 11,
+   "sentence": "It is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with its percent escapes as the server left them, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
+   "pointer": "django/core/servers/basehttp.py:WSGIRequestHandler.get_environ",
+   "line": 11,
+   "sentence": "Python's wsgiref server, on which Django's development server is built, decodes them into `\"PATH_INFO\"`, and from `\"/files/maps/ground%20floor.pdf\"` the museum's pattern for files captures `\"maps/ground floor.pdf\"`; behind a server that leaves the escape, it captures `\"maps/ground%20floor.pdf\"` (`django/core/servers/basehttp.py:WSGIRequestHandler.get_environ`).",
+   "tree": "django",
+   "path": "django/core/servers/basehttp.py",
+   "symbol": "WSGIRequestHandler.get_environ",
+   "kind": "function",
+   "lines": [
+    208,
+    217
+   ],
+   "fingerprint": "a26fc62812f63658"
+  },
+  {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve",
-   "line": 19,
-   "sentence": "`URLResolver.resolve` is the same method at every level of the tree, the root included (`django/urls/resolvers.py:URLResolver.resolve`).",
+   "line": 15,
+   "sentence": "The first entry to produce a match ends the search (`django/urls/resolvers.py:URLResolver.resolve`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver.resolve",
@@ -51,8 +93,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLPattern.resolve",
-   "line": 91,
-   "sentence": "`URLPattern.resolve` applies the last step as it makes the first `ResolverMatch`; each resolver on the way up makes a new match, starting from its own two and laying the match from below over them (`django/urls/resolvers.py:URLPattern.resolve`).",
+   "line": 98,
+   "sentence": "The root resolver, whose matcher captures nothing and which is given no extra arguments, adds none (`django/urls/resolvers.py:URLPattern.resolve`, `django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLPattern.resolve",
@@ -64,9 +106,80 @@
    "fingerprint": "f09e73cc364f3fd3"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 98,
+   "sentence": "The root resolver, whose matcher captures nothing and which is given no extra arguments, adds none (`django/urls/resolvers.py:URLPattern.resolve`, `django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:_get_cached_resolver`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:_get_cached_resolver",
+   "line": 98,
+   "sentence": "The root resolver, whose matcher captures nothing and which is given no extra arguments, adds none (`django/urls/resolvers.py:URLPattern.resolve`, `django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:_get_cached_resolver`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "_get_cached_resolver",
+   "kind": "function",
+   "lines": [
+    115,
+    117
+   ],
+   "at": 116,
+   "fingerprint": "0e0ffd0f7d120d77"
+  },
+  {
+   "pointer": "docs/topics/http/urls.txt",
+   "line": 111,
+   "sentence": "An extra argument given to `include` is not passed to each line of the included URLconf as if it had been written there, though the documentation calls the two forms \"functionally identical\" (`docs/topics/http/urls.txt`).",
+   "tree": "django",
+   "path": "docs/topics/http/urls.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    911
+   ],
+   "fingerprint": "c8a70d51a406e67d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 111,
+   "sentence": "In the first case `ResolverMatch.extra_kwargs` still reports `{'room': 1}`, a value the view was not given (`django/urls/resolvers.py:URLResolver.resolve`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 115,
+   "sentence": "Without an extra argument, `r\"^a/([0-9]+)/\"` over `r\"^b/([0-9]+)/$\"` gives `('1', '2')` for `\"/a/1/b/2/\"` (`django/urls/resolvers.py:URLResolver.resolve`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
+  },
+  {
    "pointer": "django/urls/resolvers.py:ResolverMatch.__init__",
-   "line": 145,
-   "sentence": "The first three attributes are what the handler needs, and the rest describe how the match came about (`django/urls/resolvers.py:ResolverMatch.__init__`).",
+   "line": 130,
+   "sentence": "A `ResolverMatch` carries the view and its arguments, which are what the handler needs, and besides them a record of how the match came about (`django/urls/resolvers.py:ResolverMatch.__init__`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "ResolverMatch.__init__",
@@ -78,8 +191,22 @@
    "fingerprint": "8525996a49dbb6a6"
   },
   {
+   "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
+   "line": 169,
+   "sentence": "`BaseHandler.resolve_request` keeps the match on the request, as `HttpRequest.resolver_match`, where the middleware's `process_view` hooks and the view can read it, and a template through the request in its context (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.resolve_request",
+   "kind": "function",
+   "lines": [
+    302,
+    317
+   ],
+   "fingerprint": "df4893b47d5285a9"
+  },
+  {
    "pointer": "django/urls/resolvers.py:URLResolver._extend_tried",
-   "line": 166,
+   "line": 173,
    "sentence": "An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver._extend_tried`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -94,8 +221,8 @@
   },
   {
    "pointer": "django/views/debug.py:technical_404_response",
-   "line": 186,
-   "sentence": "It gives its template the exception's message when the exception was raised with a string, and the name of the exception's class otherwise (`django/views/debug.py:technical_404_response`, `django/views/defaults.py:page_not_found`).",
+   "line": 190,
+   "sentence": "Outside the resolvers `\"tried\"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page)) (`django/views/debug.py:technical_404_response`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "technical_404_response",
@@ -108,24 +235,9 @@
    "fingerprint": "b34c50c9868ef6a8"
   },
   {
-   "pointer": "django/views/defaults.py:page_not_found",
-   "line": 186,
-   "sentence": "It gives its template the exception's message when the exception was raised with a string, and the name of the exception's class otherwise (`django/views/debug.py:technical_404_response`, `django/views/defaults.py:page_not_found`).",
-   "tree": "django",
-   "path": "django/views/defaults.py",
-   "symbol": "page_not_found",
-   "kind": "function",
-   "lines": [
-    34,
-    79
-   ],
-   "at": 35,
-   "fingerprint": "ca702cab079a2acb"
-  },
-  {
    "pointer": "django/middleware/common.py:CommonMiddleware.should_redirect_with_slash",
-   "line": 211,
-   "sentence": "And when `settings.DEBUG` is true and the request's method is `\"DELETE\"`, `\"POST\"`, `\"PUT\"` or `\"PATCH\"`, the middleware raises `RuntimeError` in place of the redirect: its message says that Django cannot redirect to the address with the slash and keep the request's data (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`, `django/middleware/common.py:CommonMiddleware.get_full_path_with_slash`, `django/views/decorators/common.py:no_append_slash`).",
+   "line": 196,
+   "sentence": "Handed a 404 for a path without a final slash while `settings.APPEND_SLASH` is true, its method `CommonMiddleware.should_redirect_with_slash` asks `is_valid_path` about the path as it came and, when that fails, about the path with a slash; the second answer is the match itself, whose view the method reads for the mark `\"should_append_slash\"` that `no_append_slash` sets (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.should_redirect_with_slash",
@@ -137,36 +249,22 @@
    "fingerprint": "cef28aef1cb723b0"
   },
   {
-   "pointer": "django/middleware/common.py:CommonMiddleware.get_full_path_with_slash",
-   "line": 211,
-   "sentence": "And when `settings.DEBUG` is true and the request's method is `\"DELETE\"`, `\"POST\"`, `\"PUT\"` or `\"PATCH\"`, the middleware raises `RuntimeError` in place of the redirect: its message says that Django cannot redirect to the address with the slash and keep the request's data (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`, `django/middleware/common.py:CommonMiddleware.get_full_path_with_slash`, `django/views/decorators/common.py:no_append_slash`).",
+   "pointer": "django/middleware/common.py:CommonMiddleware.process_request",
+   "line": 215,
+   "sentence": "`CommonMiddleware.process_request` calls it only under `settings.PREPEND_WWW`, for a host that does not begin with `\"www.\"`, and then answers with a redirect to the www. host before the handler has resolved anything; with that setting off, the default, `process_request` resolves nothing (`django/middleware/common.py:CommonMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/common.py",
-   "symbol": "CommonMiddleware.get_full_path_with_slash",
+   "symbol": "CommonMiddleware.process_request",
    "kind": "function",
    "lines": [
-    77,
-    99
+    35,
+    61
    ],
-   "fingerprint": "778c92053bea9528"
-  },
-  {
-   "pointer": "django/views/decorators/common.py:no_append_slash",
-   "line": 211,
-   "sentence": "And when `settings.DEBUG` is true and the request's method is `\"DELETE\"`, `\"POST\"`, `\"PUT\"` or `\"PATCH\"`, the middleware raises `RuntimeError` in place of the redirect: its message says that Django cannot redirect to the address with the slash and keep the request's data (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`, `django/middleware/common.py:CommonMiddleware.get_full_path_with_slash`, `django/views/decorators/common.py:no_append_slash`).",
-   "tree": "django",
-   "path": "django/views/decorators/common.py",
-   "symbol": "no_append_slash",
-   "kind": "function",
-   "lines": [
-    5,
-    26
-   ],
-   "fingerprint": "2bdc24ff96e43016"
+   "fingerprint": "cf9f9179763268ef"
   },
   {
    "pointer": "django/test/client.py:Client.request",
-   "line": 213,
+   "line": 217,
    "sentence": "The test client resolves each path it requested once more, lazily, to give a test `resolver_match` on the response ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:Client.request`).",
    "tree": "django",
    "path": "django/test/client.py",
