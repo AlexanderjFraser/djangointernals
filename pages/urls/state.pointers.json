@@ -277,7 +277,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
    "line": 91,
-   "sentence": "A middleware sets an attribute named `\"urlconf\"` on the request, and when the request reaches the centre of the chain `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
+   "sentence": "A middleware sets an attribute named `\"urlconf\"` on the request, and when the request reaches the centre of the middleware chain ([Handlers and middleware](../handlers.md)) `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.resolve_request",
@@ -361,7 +361,7 @@
   {
    "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
    "line": 134,
-   "sentence": "So a view that is a plain function, which the ASGI handler runs on a worker thread, reads its request's prefix and URLconf; and the way back is open too: `reset_urlconf`, run on the worker thread as the response is closed, leaves the URLconf unset for the coroutine that awaited the handler as well (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "sentence": "And the handler closes the response through `sync_to_async`, and when the close returns asgiref copies the worker thread's context back to the coroutine that awaited it, so the URLconf that `reset_urlconf` unsets on the worker thread is unset for that coroutine as well (`asgiref:asgiref/sync.py:SyncToAsync.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",
    "symbol": "SyncToAsync.__call__",
@@ -373,9 +373,23 @@
    "fingerprint": "6be21e12b059ba25"
   },
   {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
+   "line": 134,
+   "sentence": "And the handler closes the response through `sync_to_async`, and when the close returns asgiref copies the worker thread's context back to the coroutine that awaited it, so the URLconf that `reset_urlconf` unsets on the worker thread is unset for that coroutine as well (`asgiref:asgiref/sync.py:SyncToAsync.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.handle",
+   "kind": "function",
+   "lines": [
+    175,
+    218
+   ],
+   "fingerprint": "045a0e5289611a7b"
+  },
+  {
    "pointer": "django/urls/base.py:clear_url_caches",
-   "line": 173,
-   "sentence": "Within Django it has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
+   "line": 170,
+   "sentence": "Within Django `clear_url_caches` has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "clear_url_caches",
@@ -388,8 +402,8 @@
   },
   {
    "pointer": "django/test/signals.py:root_urlconf_changed",
-   "line": 173,
-   "sentence": "Within Django it has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
+   "line": 170,
+   "sentence": "Within Django `clear_url_caches` has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`).",
    "tree": "django",
    "path": "django/test/signals.py",
    "symbol": "root_urlconf_changed",

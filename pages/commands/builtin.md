@@ -30,7 +30,7 @@ These are the modules of `django/core/management/commands/`, which are commands 
 | sendtestemail | the mail functions `django/core/mail/__init__.py:send_mail` | [Sending email: `mailers` and the email backends](../services/mailers.md) |
 | makemessages, compilemessages | the GNU gettext programs, run as child processes `django/core/management/utils.py:popen_wrapper` | [Making catalogues: makemessages and compilemessages](../i18n/commands.md) |
 | test | the test runner class, named by `--testrunner` or else by `settings.TEST_RUNNER`, and its method that runs the tests `django/test/runner.py:DiscoverRunner.run_tests` | [The runner: the test command and `DiscoverRunner`](../testing/runner.md) |
-| listurls | a walk over the root URLconf's patterns `django/urls/utils.py:extract_views_from_urlpatterns` | [URL routing](../urls.md) |
+| listurls | a walk over the root URLconf's patterns `django/urls/utils.py:extract_views_from_urlpatterns` | [The URL checks, and listing the patterns](../urls/checks.md) |
 | diffsettings | a comparison of the loaded settings with `django/conf/global_settings.py` `django/core/management/commands/diffsettings.py:Command.handle` | [Settings, apps and startup](../startup.md) |
 | check | the check framework `django/core/management/base.py:BaseCommand.check` | [The system checks](checks.md) |
 | runserver | the development server `django/core/servers/basehttp.py:run` | [The development server](runserver.md) |
@@ -39,8 +39,6 @@ These are the modules of `django/core/management/commands/`, which are commands 
 | shell | an interactive interpreter | [below](#the-shell) |
 
 *The commands of `django/core/management/commands/`, by what does their work.*
-
-> **Changed in 6.2.** listurls is new.
 
 Some functions that several of these share live beside the commands. `emit_pre_migrate_signal` and `emit_post_migrate_signal` send the two signals once for each installed application that has a models module; migrate calls both, and flush the second (`django/core/management/sql.py:emit_post_migrate_signal`). And `run_formatters` runs the Black formatter, if one is installed, over the files or the directory a command has just written; the migration commands that write files and the two template commands call it (`django/core/management/utils.py:run_formatters`).
 

@@ -4,7 +4,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # The script prefix, the current URLconf and the caches
 
-The script prefix and the current URLconf are the two values the URL system keeps for the thread or task serving a request: the handler sets the first with `set_script_prefix`, from the server's mount point or `FORCE_SCRIPT_NAME`, and `django.urls.get_script_prefix` reads it; `set_urlconf` and `get_urlconf` keep the second, which `reset_urlconf` unsets when the request finishes. The resolvers and compiled expressions worked out from a URLconf are kept for the process, until `clear_url_caches` empties some of them.
+The URL system keeps two values for the thread or task serving a request, the script prefix and the current URLconf, and keeps the resolvers and compiled expressions it works out from a URLconf for the whole process. `django.urls.get_script_prefix` and `get_urlconf` read the two values, and `clear_url_caches` empties some of the process's caches.
 
 `resolve` and `reverse` are called with very little: a path, or a name and some arguments. What else they need they find in state that something set earlier, and that state has two lifetimes. Some of it belongs to the request being served, and is kept apart for each thread, since a server's threads serve different requests at once. The rest is derived from the URLconf, is not made for any one request, and is kept for the life of the process.
 
@@ -88,7 +88,7 @@ The **current URLconf** is kept the same way, in `_urlconfs`, by `set_urlconf`, 
 
 For each request, `BaseHandler.get_response`, or `BaseHandler.get_response_async`, sets it to `settings.ROOT_URLCONF` before it calls the middleware chain, and when the response is closed, `reset_urlconf`, a receiver of `request_finished` that the handler's module connects, unsets it (`django/core/handlers/base.py:BaseHandler.get_response`, `django/core/handlers/base.py:reset_urlconf`).
 
-The value exists so that one request can be routed by another URLconf. A middleware sets an attribute named `"urlconf"` on the request, and when the request reaches the centre of the chain `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`). A middleware that gives a request for the members' host the members' URLconf, which has a pattern named renew and none named tickets, shows where the change happens: watch the current URLconf the middleware reads just after setting the attribute, and what the view can reverse.
+The value exists so that one request can be routed by another URLconf. A middleware sets an attribute named `"urlconf"` on the request, and when the request reaches the centre of the middleware chain ([Handlers and middleware](../handlers.md)) `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`). A middleware that gives a request for the members' host the members' URLconf, which has a pattern named renew and none named tickets, shows where the change happens: watch the current URLconf the middleware reads just after setting the attribute, and what the view can reverse.
 
 ```text recording=urls
 GET / for the host members.museum.example: a middleware sets request.urlconf
@@ -131,7 +131,7 @@ Two requests at once under ASGI, with ROOT_URLCONF = 'museum.urls_async' and a m
       ...
 ```
 
-The `Local` keeps a value with the asynchronous context it was set in, and asgiref's docstring gives its reach: code awaited from the frame that set the value sees it, and so do tasks started from there and synchronous code that `sync_to_async` runs in a thread (`asgiref:asgiref/local.py:Local`). So a view that is a plain function, which the ASGI handler runs on a worker thread, reads its request's prefix and URLconf; and the way back is open too: `reset_urlconf`, run on the worker thread as the response is closed, leaves the URLconf unset for the coroutine that awaited the handler as well (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).
+The `Local` keeps a value with the asynchronous context it was set in, and asgiref's docstring gives its reach: code awaited from the frame that set the value sees it, and so do tasks started from there and synchronous code that `sync_to_async` runs in a thread (`asgiref:asgiref/local.py:Local`). So a view that is a plain function, which the ASGI handler runs on a worker thread, reads its request's prefix and URLconf. And the handler closes the response through `sync_to_async`, and when the close returns asgiref copies the worker thread's context back to the coroutine that awaited it, so the URLconf that `reset_urlconf` unsets on the worker thread is unset for that coroutine as well (`asgiref:asgiref/sync.py:SyncToAsync.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).
 
 ## For the process: resolvers and compiled expressions
 
@@ -139,7 +139,7 @@ What is worked out from the URLconf is kept in these places.
 
 | what is kept | where | until |
 |---|---|---|
-| the root resolver of each URLconf | `functools.cache` on `_get_cached_resolver`, by the value it was asked for | `clear_url_caches` |
+| the root resolver of each URLconf | `functools.cache` on `_get_cached_resolver`, by the value it was asked for ([From a URLconf to a tree](urlconf.md#the-root-resolver)) | `clear_url_caches` |
 | the resolver made for reversing inside a namespace, for each expression that leads to one | `functools.cache` on `get_ns_resolver` | `clear_url_caches` |
 | each view or error view imported from a dotted name | `functools.cache` on `get_callable` | `clear_url_caches` |
 | a resolver's module and its list of entries | `URLResolver.urlconf_module` and `URLResolver.url_patterns`, each kept on the resolver once it has been computed | the resolver is discarded |
@@ -151,14 +151,11 @@ What is worked out from the URLconf is kept in these places.
 
 *What the URL system keeps for the process, and what empties it.*
 
-`get_resolver` keeps a root resolver for each value, `None` counting as `ROOT_URLCONF`, and every call with the same value gets the same object; the fourth question asks for one URLconf by its dotted name and as the module itself, which are two values and get two resolvers.
+`clear_url_caches` empties the first three rows of the table. Around a call of it, the caches of the first two go from holding resolvers to holding none, and the root resolver `get_resolver` returns afterwards is a new object; the last three lines ask the same of a test's override of `ROOT_URLCONF`.
 
 ```text recording=urls
 One root resolver for each value get_resolver() is given, kept until the caches are cleared
-    get_resolver() is get_resolver()  ->  True
-    get_resolver() is get_resolver("museum.urls")  ->  True
-    get_resolver("museum.urls_members") is get_resolver()  ->  False
-    get_resolver(sys.modules["museum.urls"]) is get_resolver("museum.urls")  ->  False
+...
     _get_cached_resolver.cache_info().currsize > 1  ->  True
     get_ns_resolver.cache_info().currsize > 0  ->  True
     the script calls clear_url_caches()
@@ -170,4 +167,4 @@ One root resolver for each value get_resolver() is given, kept until the caches 
     get_resolver() is the root resolver the script kept  ->  False
 ```
 
-`clear_url_caches` empties the first three rows of the table. Within Django it has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`). A server never calls it, so a serving process keeps the tree it has built, and an edited URLconf is noticed only by a new process, which the development server starts when a file changes ([The autoreloader](../commands/autoreload.md)).
+Within Django `clear_url_caches` has one caller, `root_urlconf_changed`, a receiver of `setting_changed` that the test framework connects: when a test overrides `ROOT_URLCONF`, it clears the caches and unsets the current URLconf, as the override begins and again as it ends, so the root resolver found after an override is not the one there was before it ([Overriding settings](../startup/overrides.md#the-receivers-of-setting_changed)) (`django/urls/base.py:clear_url_caches`, `django/test/signals.py:root_urlconf_changed`). A server never calls it, so a serving process keeps the tree it has built, and an edited URLconf is noticed only by a new process, which the development server starts when a file changes ([The autoreloader](../commands/autoreload.md)).

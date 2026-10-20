@@ -9,7 +9,7 @@
  "pointers": [
   {
    "pointer": "django/conf/urls/i18n.py:i18n_patterns",
-   "line": 27,
+   "line": 51,
    "sentence": "With `settings.USE_I18N` false it returns the entries as a list, with no resolver around them (`django/conf/urls/i18n.py:i18n_patterns`).",
    "tree": "django",
    "path": "django/conf/urls/i18n.py",
@@ -23,7 +23,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:LocalePrefixPattern.language_prefix",
-   "line": 29,
+   "line": 53,
    "sentence": "`LocalePrefixPattern.match` succeeds when the path begins with exactly that (`django/urls/resolvers.py:LocalePrefixPattern.language_prefix`, `django/urls/resolvers.py:LocalePrefixPattern.match`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -38,7 +38,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:LocalePrefixPattern.match",
-   "line": 29,
+   "line": 53,
    "sentence": "`LocalePrefixPattern.match` succeeds when the path begins with exactly that (`django/urls/resolvers.py:LocalePrefixPattern.language_prefix`, `django/urls/resolvers.py:LocalePrefixPattern.match`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -51,9 +51,37 @@
    "fingerprint": "83e550c145bc41ea"
   },
   {
+   "pointer": "django/urls/resolvers.py:LocalePrefixPattern.__str__",
+   "line": 53,
+   "sentence": "The matcher writes itself as the same prefix, so the route on the figure's match begins with `\"nl/\"` (`django/urls/resolvers.py:LocalePrefixPattern.__str__`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "LocalePrefixPattern.__str__",
+   "kind": "function",
+   "lines": [
+    419,
+    420
+   ],
+   "fingerprint": "b075f9803dabbfd7"
+  },
+  {
+   "pointer": "docs/topics/i18n/translation.txt",
+   "line": 90,
+   "sentence": "`prefix_default_language=False`, the documentation says, \"can be useful when adding translations to existing site so that the current URLs won't change\" (`docs/topics/i18n/translation.txt`): the default language keeps the addresses it had.",
+   "tree": "django",
+   "path": "docs/topics/i18n/translation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    2251
+   ],
+   "fingerprint": "fcfcc07bb9aa3a58"
+  },
+  {
    "pointer": "django/middleware/locale.py:LocaleMiddleware.process_request",
-   "line": 78,
-   "sentence": "`LocaleMiddleware` is, in its `process_request`, which runs before the handler resolves anything ([Choosing a language: `LocaleMiddleware`](../i18n/choosing.md)) (`django/middleware/locale.py:LocaleMiddleware.process_request`).",
+   "line": 94,
+   "sentence": "`LocaleMiddleware` chooses the request's language and activates it in its `process_request`, which runs before the handler resolves the path in `BaseHandler.resolve_request` ([Choosing a language: `LocaleMiddleware`](../i18n/choosing.md)) (`django/middleware/locale.py:LocaleMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/locale.py",
    "symbol": "LocaleMiddleware.process_request",
@@ -66,7 +94,7 @@
   },
   {
    "pointer": "django/conf/urls/i18n.py:is_language_prefix_patterns_used",
-   "line": 80,
+   "line": 96,
    "sentence": "`is_language_prefix_patterns_used` goes through the entries of the root resolver's list, and no deeper, and returns two answers: whether one of them has a `LocalePrefixPattern` for its matcher, and whether that matcher gives the default language a prefix (`django/conf/urls/i18n.py:is_language_prefix_patterns_used`).",
    "tree": "django",
    "path": "django/conf/urls/i18n.py",
@@ -81,8 +109,8 @@
   },
   {
    "pointer": "django/urls/conf.py:include",
-   "line": 95,
-   "sentence": "The function looks nowhere but in that one list, and `include` refuses a URLconf that would put a language prefix lower down: it looks through the list of the URLconf it is given and raises `ImproperlyConfigured` if one of the entries has a `LocalePrefixPattern` (`django/urls/conf.py:include`).",
+   "line": 105,
+   "sentence": "The function looks nowhere but in that one list, and `include` refuses, with `ImproperlyConfigured`, a URLconf one of whose entries has a `LocalePrefixPattern` (`django/urls/conf.py:include`).",
    "tree": "django",
    "path": "django/urls/conf.py",
    "symbol": "include",
@@ -95,8 +123,8 @@
   },
   {
    "pointer": "django/middleware/locale.py:LocaleMiddleware.process_response",
-   "line": 134,
-   "sentence": "It asks the resolver through `is_valid_path`, as `CommonMiddleware` does for a missing slash (`django/middleware/locale.py:LocaleMiddleware.process_response`).",
+   "line": 107,
+   "sentence": "`LocaleMiddleware.process_response`, handed the 404, puts the active language's prefix in front of the path, asks the resolver through `is_valid_path` whether that resolves, as `CommonMiddleware` does for a missing slash, and if it does redirects to it (`django/middleware/locale.py:LocaleMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/locale.py",
    "symbol": "LocaleMiddleware.process_response",
@@ -108,9 +136,37 @@
    "fingerprint": "a214ba49def05f9d"
   },
   {
+   "pointer": "django/urls/resolvers.py:RoutePattern.match",
+   "line": 129,
+   "sentence": "Given to `path` without parameters, it is compared with what is left of the path as text, so the hours' route matches `\"openingstijden/\"` while Dutch is active and `\"opening-hours/\"` while English is (`django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "RoutePattern.match",
+   "kind": "function",
+   "lines": [
+    325,
+    347
+   ],
+   "fingerprint": "abbdc3f145f19e6d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 129,
+   "sentence": "Its regular expression, which reversing reads for every entry, is kept for each language (`django/urls/resolvers.py:URLResolver._populate`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
    "pointer": "django/urls/resolvers.py:LocaleRegexRouteDescriptor",
-   "line": 142,
-   "sentence": "For anything else it asks the route for its text, expands that into an expression, compiles it, and keeps the result in a dictionary on the matcher under the active language's code; a read under another language does all of that again (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`).",
+   "line": 129,
+   "sentence": "The descriptor behind `regex` ([When a matcher's expression is compiled](patterns.md#when-a-matchers-expression-is-compiled)) expands the route's text under the active language, compiles it, and keeps the result in the matcher's `_regex_dict` under the language's code, so a read under another language does all of that again (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "LocaleRegexRouteDescriptor",
@@ -123,7 +179,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:LocaleRegexDescriptor",
-   "line": 142,
+   "line": 129,
    "sentence": "`RegexPattern` has a descriptor of the same design (`django/urls/resolvers.py:LocaleRegexDescriptor`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -136,8 +192,36 @@
    "fingerprint": "aa6815d2d8374db6"
   },
   {
+   "pointer": "django/urls/resolvers.py:RoutePattern.__init__",
+   "line": 145,
+   "sentence": "A `RoutePattern` takes its converters once, as it is made, from the route's text in the language active as the URLconf is imported, and `RoutePattern.match` looks up by name the converter of each group that the active language's expression captured (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "RoutePattern.__init__",
+   "kind": "function",
+   "lines": [
+    318,
+    323
+   ],
+   "fingerprint": "d761c7dbc7e99a3c"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:RoutePattern.match",
+   "line": 145,
+   "sentence": "A `RoutePattern` takes its converters once, as it is made, from the route's text in the language active as the URLconf is imported, and `RoutePattern.match` looks up by name the converter of each group that the active language's expression captured (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "RoutePattern.match",
+   "kind": "function",
+   "lines": [
+    325,
+    347
+   ],
+   "fingerprint": "abbdc3f145f19e6d"
+  },
+  {
    "pointer": "django/urls/resolvers.py:URLResolver._populate",
-   "line": 163,
+   "line": 149,
    "sentence": "`URLResolver._populate` files what it builds under the language that is active as it runs, and each of the three properties that read them calls it again when the active language has no entry yet (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver.reverse_dict`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -151,7 +235,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.reverse_dict",
-   "line": 163,
+   "line": 149,
    "sentence": "`URLResolver._populate` files what it builds under the language that is active as it runs, and each of the three properties that read them calls it again when the active language has no entry yet (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver.reverse_dict`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -166,7 +250,7 @@
   },
   {
    "pointer": "django/urls/base.py:translate_url",
-   "line": 173,
+   "line": 155,
    "sentence": "The scheme, host, query string and fragment of the URL it was given are put back around the new path (`django/urls/base.py:translate_url`).",
    "tree": "django",
    "path": "django/urls/base.py",
@@ -179,23 +263,23 @@
    "fingerprint": "0863da6f8dd3ee2d"
   },
   {
-   "pointer": "django/conf/urls/i18n.py",
-   "line": 190,
-   "sentence": "`django/conf/urls/i18n.py` is itself a small URLconf, of one pattern that routes to that view, for a project to include (`django/views/i18n.py:set_language`).",
+   "pointer": "django/urls/base.py:translate_url",
+   "line": 172,
+   "sentence": "It resolves the path before it activates the language it was asked for, so a Dutch address handed in while English is active does not resolve, and comes back untranslated (`django/urls/base.py:translate_url`).",
    "tree": "django",
-   "path": "django/conf/urls/i18n.py",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/urls/base.py",
+   "symbol": "translate_url",
+   "kind": "function",
    "lines": [
-    1,
-    39
+    181,
+    208
    ],
-   "fingerprint": "33f94eeaaffdd90a"
+   "fingerprint": "0863da6f8dd3ee2d"
   },
   {
    "pointer": "django/views/i18n.py:set_language",
-   "line": 190,
-   "sentence": "`django/conf/urls/i18n.py` is itself a small URLconf, of one pattern that routes to that view, for a project to include (`django/views/i18n.py:set_language`).",
+   "line": 174,
+   "sentence": "Its one caller in Django is the view `set_language`, which redirects a visitor who has chosen a language to the page's address in that language ([The language views: `set_language` and `JavaScriptCatalog`](../i18n/views.md)) (`django/views/i18n.py:set_language`).",
    "tree": "django",
    "path": "django/views/i18n.py",
    "symbol": "set_language",

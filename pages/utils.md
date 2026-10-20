@@ -125,7 +125,7 @@ Two of the module's helpers decide how a deprecated feature warns. `warn_about_e
 | `django/utils/translation/`, `formats.py`, `dateformat.py`, `numberformat.py`, `timezone.py`, `timesince.py`, `dates.py` | translation, locale formats and time zones | [Internationalization and time zones](i18n.md) |
 | `django/utils/html.py`, `safestring.py` | escaping and safe strings | [Autoescaping and safe strings](templates/autoescape.md) |
 | `django/utils/http.py` | dates, ETags and URLs in HTTP | [The helpers in `django/utils/http.py`](http/helpers.md) |
-| `django/utils/regex_helper.py` | reversing a regular expression | [Reversing a name](urls/reversing.md) |
+| `django/utils/regex_helper.py` | reversing a regular expression | [`normalize`, and the patterns that cannot be reversed](urls/normalize.md) |
 | `django/utils/crypto.py` | secret keys, hashes and random strings | [Secret keys and `django.utils.crypto`](security/keys.md) |
 | `django/utils/csp.py` | the Content Security Policy and its nonce | [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](security/csp.md) |
 | `django/utils/cache.py` | cache headers and conditional requests | [Cache headers and conditional requests: `django/utils/cache.py`](services/http-caching.md) |

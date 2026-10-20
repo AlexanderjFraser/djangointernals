@@ -23,8 +23,8 @@
   },
   {
    "pointer": "django/urls/conf.py:_path",
-   "line": 37,
-   "sentence": "`_path` makes the resolver without it, so the `URLResolver` has no name and its matcher's is `None`, and `reverse` of the name raises `NoReverseMatch` as for a name never written, while the names of the patterns under the include reverse as usual (`django/urls/conf.py:_path`).",
+   "line": 33,
+   "sentence": "`_path` makes the resolver without it, so nothing in the tree keeps the name, and `reverse` of the name raises `NoReverseMatch` as for a name never written, while the names of the patterns under the include reverse as usual (`django/urls/conf.py:_path`).",
    "tree": "django",
    "path": "django/urls/conf.py",
    "symbol": "_path",
@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/urls/conf.py:include",
-   "line": 41,
+   "line": 37,
    "sentence": "It returns a tuple of three things, and `path` makes the resolver from the tuple: the URLconf to include, its application namespace, and its instance namespace ([Namespaces](namespaces.md) has what the two are for) (`django/urls/conf.py:include`).",
    "tree": "django",
    "path": "django/urls/conf.py",
@@ -51,7 +51,7 @@
   },
   {
    "pointer": "django/contrib/admin/sites.py:AdminSite.urls",
-   "line": 65,
+   "line": 61,
    "sentence": "`AdminSite.urls` is a property that returns the list of the site's entries, the application namespace `\"admin\"`, and the site's name as the instance namespace, and a URLconf gives it to `path` directly (`django/contrib/admin/sites.py:AdminSite.urls`).",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
@@ -66,7 +66,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:get_resolver",
-   "line": 69,
+   "line": 65,
    "sentence": "What it makes is a `URLResolver` around the argument, with a matcher of its own choosing, a `RegexPattern` for the expression `\"^/\"` (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -80,7 +80,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:_get_cached_resolver",
-   "line": 69,
+   "line": 65,
    "sentence": "What it makes is a `URLResolver` around the argument, with a matcher of its own choosing, a `RegexPattern` for the expression `\"^/\"` (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -95,7 +95,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.urlconf_module",
-   "line": 71,
+   "line": 67,
    "sentence": "`URLResolver.url_patterns` reads the attribute `\"urlpatterns\"` from that, or takes the thing itself when it has no such attribute, which is how a bare list serves as a URLconf (`django/urls/resolvers.py:URLResolver.urlconf_module`, `django/urls/resolvers.py:URLResolver.url_patterns`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -110,7 +110,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.url_patterns",
-   "line": 71,
+   "line": 67,
    "sentence": "`URLResolver.url_patterns` reads the attribute `\"urlpatterns\"` from that, or takes the thing itself when it has no such attribute, which is how a bare list serves as a URLconf (`django/urls/resolvers.py:URLResolver.urlconf_module`, `django/urls/resolvers.py:URLResolver.url_patterns`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -124,23 +124,8 @@
    "fingerprint": "1fdafd8426b57393"
   },
   {
-   "pointer": "django/urls/resolvers.py:URLResolver.url_patterns",
-   "line": 89,
-   "sentence": "So the two read the same list and hold the same pattern objects (`django/urls/resolvers.py:URLResolver.url_patterns`).",
-   "tree": "django",
-   "path": "django/urls/resolvers.py",
-   "symbol": "URLResolver.url_patterns",
-   "kind": "function",
-   "lines": [
-    728,
-    742
-   ],
-   "at": 729,
-   "fingerprint": "1fdafd8426b57393"
-  },
-  {
    "pointer": "django/conf/urls/__init__.py",
-   "line": 97,
+   "line": 87,
    "sentence": "`URLResolver.resolve_error_handler` reads the one it is asked for from its resolver's URLconf module, and takes the default of the same name from `django/conf/urls/__init__.py` when the module has none (`django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
    "tree": "django",
    "path": "django/conf/urls/__init__.py",
@@ -154,7 +139,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve_error_handler",
-   "line": 97,
+   "line": 87,
    "sentence": "`URLResolver.resolve_error_handler` reads the one it is asked for from its resolver's URLconf module, and takes the default of the same name from `django/conf/urls/__init__.py` when the module has none (`django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -168,7 +153,7 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 97,
+   "line": 87,
    "sentence": "So the names are read from a root URLconf's module, and one written in an included module is read by neither ([The error views](../views/errors.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/checks/urls.py:check_custom_error_handlers`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
@@ -182,7 +167,7 @@
   },
   {
    "pointer": "django/core/checks/urls.py:check_custom_error_handlers",
-   "line": 97,
+   "line": 87,
    "sentence": "So the names are read from a root URLconf's module, and one written in an included module is read by neither ([The error views](../views/errors.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/checks/urls.py:check_custom_error_handlers`).",
    "tree": "django",
    "path": "django/core/checks/urls.py",
@@ -197,7 +182,7 @@
   },
   {
    "pointer": "django/urls/utils.py:get_callable",
-   "line": 99,
+   "line": 89,
    "sentence": "The setting that names the view for a CSRF failure is read through it as well (`django/urls/utils.py:get_callable`, `django/middleware/csrf.py:_get_failure_view`).",
    "tree": "django",
    "path": "django/urls/utils.py",
@@ -212,7 +197,7 @@
   },
   {
    "pointer": "django/middleware/csrf.py:_get_failure_view",
-   "line": 99,
+   "line": 89,
    "sentence": "The setting that names the view for a CSRF failure is read through it as well (`django/urls/utils.py:get_callable`, `django/middleware/csrf.py:_get_failure_view`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
@@ -226,8 +211,8 @@
   },
   {
    "pointer": "django/core/checks/urls.py:check_custom_error_handlers",
-   "line": 113,
-   "sentence": "The check of the error views catches both, which is how a mistyped error view becomes a line of a check's report and not a traceback (`django/core/checks/urls.py:check_custom_error_handlers`).",
+   "line": 105,
+   "sentence": "The check of the error views catches `ViewDoesNotExist` and `ImportError`, which is how a mistyped error view becomes a line of a check's report and not a traceback (`django/core/checks/urls.py:check_custom_error_handlers`).",
    "tree": "django",
    "path": "django/core/checks/urls.py",
    "symbol": "check_custom_error_handlers",
@@ -241,7 +226,7 @@
   },
   {
    "pointer": "django/conf/urls/static.py:static",
-   "line": 115,
+   "line": 107,
    "sentence": "`static`, for serving files during development, returns a list of one pattern, made with `re_path`, only while `settings.DEBUG` is true, so the setting is read once, at the import ([The static file view](../views/static-files.md#who-routes-to-it)) (`django/conf/urls/static.py:static`).",
    "tree": "django",
    "path": "django/conf/urls/static.py",

@@ -2,15 +2,30 @@
  "generated": {
   "tool": "tools/pointers.py",
   "trees": {
+   "deps": "f5492c9fdf242f3da463f662e385f0555e203403",
    "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
   }
  },
  "document": "reversing.md",
  "pointers": [
   {
+   "pointer": "docs/releases/1.1.txt",
+   "line": 11,
+   "sentence": "`reverse` and the `{% url %}` tag already turned names into paths in Django 1.1 (`docs/releases/1.1.txt`), when every pattern was a regular expression.",
+   "tree": "django",
+   "path": "docs/releases/1.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    460
+   ],
+   "fingerprint": "82337b7a843c234c"
+  },
+  {
    "pointer": "docs/releases/2.0.txt",
    "line": 11,
-   "sentence": "`path` arrived in Django 2.0 (`docs/releases/2.0.txt`); before it every pattern was written as a regular expression, with the function that is now `re_path`.",
+   "sentence": "Routes, and `path` to write them, came in 2.0 as a \"simplified URL routing syntax\", and the function that had written patterns until then was made available as `re_path` (`docs/releases/2.0.txt`).",
    "tree": "django",
    "path": "docs/releases/2.0.txt",
    "symbol": null,
@@ -22,9 +37,23 @@
    "fingerprint": "18747cac58381fbc"
   },
   {
+   "pointer": "deps:final/0201-simplified-routing-syntax.rst",
+   "line": 11,
+   "sentence": "Routes were fitted to the machinery already there (`deps:final/0201-simplified-routing-syntax.rst`): a route is expanded into a regular expression as its matcher is made (`django/urls/resolvers.py:_route_to_regex`), and reversing works on expressions whichever function wrote the pattern.",
+   "tree": "deps",
+   "path": "final/0201-simplified-routing-syntax.rst",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    352
+   ],
+   "fingerprint": "0706a88d27fffa92"
+  },
+  {
    "pointer": "django/urls/resolvers.py:_route_to_regex",
    "line": 11,
-   "sentence": "A route is expanded into an expression as its matcher is made (`django/urls/resolvers.py:_route_to_regex`), and reversing works on expressions whichever function wrote the pattern.",
+   "sentence": "Routes were fitted to the machinery already there (`deps:final/0201-simplified-routing-syntax.rst`): a route is expanded into a regular expression as its matcher is made (`django/urls/resolvers.py:_route_to_regex`), and reversing works on expressions whichever function wrote the pattern.",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "_route_to_regex",
@@ -65,9 +94,23 @@
    "fingerprint": "7990db2ae9316bda"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 27,
+   "sentence": "Each of its candidates is filed again in the upper table under the same key, with the include's regular expression put in front of its own, its forms made afresh from the longer expression, and the include's extra arguments and converters merged with its own; where both give an extra argument of the same name, the include's is kept here (`django/urls/resolvers.py:URLResolver._populate`), though the view is called with the pattern's ([Resolving a path](resolving.md#how-the-arguments-are-merged)).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
    "pointer": "docs/topics/http/urls.txt",
-   "line": 88,
-   "sentence": "Django's documentation relies on that order: a project that wants its own view at a name an application already uses, a login page for one, is told to write its pattern after the application's include, and a `reverse` of that name whose arguments fit the project's pattern then finds the project's (`docs/topics/http/urls.txt`).",
+   "line": 74,
+   "sentence": "Django's documentation relies on that order: a project that wants its own view at a name an application already uses, a login page for one, is told to write its pattern after the application's include (`docs/topics/http/urls.txt`).",
    "tree": "django",
    "path": "docs/topics/http/urls.txt",
    "symbol": null,
@@ -79,22 +122,23 @@
    "fingerprint": "c8a70d51a406e67d"
   },
   {
-   "pointer": "django/utils/regex_helper.py:normalize",
-   "line": 94,
-   "sentence": "Its module's docstring says it is not a complete decompiler of regular expressions and is meant to be good enough for a large class of URLs (`django/utils/regex_helper.py:normalize`).",
+   "pointer": "django/contrib/admindocs/views.py:ViewDetailView._get_view_func",
+   "line": 76,
+   "sentence": "The pass also fills a set on the side, `URLResolver._callback_strs`, with the dotted name of every view in the tree, namespaced or not, from which `URLResolver._is_callback` answers whether a dotted name is that of a view of the URLconf; the admin's documentation asks it before it imports a view named in its address (`django/contrib/admindocs/views.py:ViewDetailView._get_view_func`).",
    "tree": "django",
-   "path": "django/utils/regex_helper.py",
-   "symbol": "normalize",
+   "path": "django/contrib/admindocs/views.py",
+   "symbol": "ViewDetailView._get_view_func",
    "kind": "function",
    "lines": [
-    42,
-    193
+    166,
+    181
    ],
-   "fingerprint": "22535a0ab1d1ee8b"
+   "at": 167,
+   "fingerprint": "4a55771b5b365d23"
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver._reverse_with_prefix",
-   "line": 132,
+   "line": 80,
    "sentence": "Then it tries each form of each candidate, in order, against the arguments (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -107,8 +151,36 @@
    "fingerprint": "75377f012f27b33d"
   },
   {
+   "pointer": "docs/topics/http/urls.txt",
+   "line": 128,
+   "sentence": "The documentation allows an extra argument to have the name of a parameter its route captures, and the extra argument then replaces the capture (`docs/topics/http/urls.txt`).",
+   "tree": "django",
+   "path": "docs/topics/http/urls.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    911
+   ],
+   "fingerprint": "c8a70d51a406e67d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._reverse_with_prefix",
+   "line": 128,
+   "sentence": "`reverse` neither requires such a parameter nor holds it to the extra argument's value: a call that gives it fits with any value, and a call by keyword that leaves it out fits too, since the extra arguments' names are not compared, but then nothing fills its gap, and `reverse` raises `KeyError`, not `NoReverseMatch` (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._reverse_with_prefix",
+   "kind": "function",
+   "lines": [
+    757,
+    844
+   ],
+   "fingerprint": "75377f012f27b33d"
+  },
+  {
    "pointer": "django/utils/http.py:escape_leading_slashes",
-   "line": 185,
+   "line": 142,
    "sentence": "And a result that begins with two slashes has the second replaced by `%2F`, so that a browser cannot read the path as the name of another host (`django/utils/http.py:escape_leading_slashes`).",
    "tree": "django",
    "path": "django/utils/http.py",
@@ -121,9 +193,23 @@
    "fingerprint": "2f73f7e9a0aba5da"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLResolver._reverse_with_prefix",
+   "line": 156,
+   "sentence": "The check is made on the unescaped text because that is what the resolver is matched against: \"WSGI provides decoded URLs, without %xx escapes, and the URL resolver operates on such URLs,\" says the comment above it (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._reverse_with_prefix",
+   "kind": "function",
+   "lines": [
+    757,
+    844
+   ],
+   "fingerprint": "75377f012f27b33d"
+  },
+  {
    "pointer": "django/urls/base.py:reverse_lazy",
-   "line": 259,
-   "sentence": "Such code is often imported by the URLconf itself, and a plain `reverse` there asks for patterns that do not yet exist ([When a URLconf is imported](import.md#when-the-import-fails)) (`django/urls/base.py:reverse_lazy`, `django/utils/functional.py:lazy`).",
+   "line": 173,
+   "sentence": "Such code may be imported by the URLconf itself, and a plain `reverse` there asks for patterns that do not yet exist ([When a URLconf is imported](import.md#when-the-import-fails)) (`django/urls/base.py:reverse_lazy`, `django/utils/functional.py:lazy`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "reverse_lazy",
@@ -136,8 +222,8 @@
   },
   {
    "pointer": "django/utils/functional.py:lazy",
-   "line": 259,
-   "sentence": "Such code is often imported by the URLconf itself, and a plain `reverse` there asks for patterns that do not yet exist ([When a URLconf is imported](import.md#when-the-import-fails)) (`django/urls/base.py:reverse_lazy`, `django/utils/functional.py:lazy`).",
+   "line": 173,
+   "sentence": "Such code may be imported by the URLconf itself, and a plain `reverse` there asks for patterns that do not yet exist ([When a URLconf is imported](import.md#when-the-import-fails)) (`django/urls/base.py:reverse_lazy`, `django/utils/functional.py:lazy`).",
    "tree": "django",
    "path": "django/utils/functional.py",
    "symbol": "lazy",
@@ -147,34 +233,6 @@
     197
    ],
    "fingerprint": "bc329d542ba122d7"
-  },
-  {
-   "pointer": "django/template/defaulttags.py:URLNode.render",
-   "line": 273,
-   "sentence": "Among the callers of `reverse` within Django: the template tag `{% url %}` resolves its arguments in the template's context and calls `reverse` ([The built-in tags](../templates/tags.md)) (`django/template/defaulttags.py:URLNode.render`).",
-   "tree": "django",
-   "path": "django/template/defaulttags.py",
-   "symbol": "URLNode.render",
-   "kind": "function",
-   "lines": [
-    494,
-    522
-   ],
-   "fingerprint": "5ef0c50901620bf9"
-  },
-  {
-   "pointer": "django/shortcuts.py:resolve_url",
-   "line": 273,
-   "sentence": "Unless its argument is an object with a `get_absolute_url` method or a path that begins `\"./\"` or `\"../\"`, that function tries the argument as a name to reverse, and when `reverse` raises `NoReverseMatch` and the argument contains a slash or a dot, it takes it to be a URL already ([The shortcuts](../views/shortcuts.md#redirect-and-resolve_url)) (`django/shortcuts.py:resolve_url`).",
-   "tree": "django",
-   "path": "django/shortcuts.py",
-   "symbol": "resolve_url",
-   "kind": "function",
-   "lines": [
-    173,
-    211
-   ],
-   "fingerprint": "d9062979fcc6170c"
   }
  ]
 }

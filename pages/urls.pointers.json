@@ -124,7 +124,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
    "line": 97,
-   "sentence": "At the centre of the middleware chain, `BaseHandler.resolve_request` asks `get_resolver` for the root resolver and calls `URLResolver.resolve` on it with the request's `path_info` (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
+   "sentence": "At the centre of the middleware chain, `BaseHandler._get_response`, or its asynchronous twin, calls `BaseHandler.resolve_request`, which asks `get_resolver` for the root resolver and calls `URLResolver.resolve` on it with the request's `path_info` (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.resolve_request",
@@ -166,7 +166,7 @@
   {
    "pointer": "django/urls/resolvers.py:URLResolver._populate",
    "line": 103,
-   "sentence": "The candidates of a plain include are lifted into the table above it with the include's route in front; a resolver with an application namespace keeps a table of its own, and `reverse` goes from namespace to namespace before it looks the name up ([Reversing a name](urls/reversing.md), [Namespaces](urls/namespaces.md)) (`django/urls/resolvers.py:URLResolver._populate`).",
+   "sentence": "The candidates under an include without a namespace are lifted into the table above it, with the include's route in front; a resolver with an application namespace keeps a table of its own, and `reverse` goes from namespace to namespace before it looks the name up ([Reversing a name](urls/reversing.md), [`normalize`, and the patterns that cannot be reversed](urls/normalize.md), [Namespaces](urls/namespaces.md)) (`django/urls/resolvers.py:URLResolver._populate`, `django/utils/regex_helper.py:normalize`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver._populate",
@@ -179,8 +179,8 @@
   },
   {
    "pointer": "django/utils/regex_helper.py:normalize",
-   "line": 128,
-   "sentence": "At the heart of a candidate is ordinarily one string with a gap where each parameter goes, `\"tickets/%(year)s/%(month)s/\"`, which `normalize` makes from the pattern's regular expression; beside it are the names of its parameters, the expression itself, the pattern's extra arguments and its converters (`django/utils/regex_helper.py:normalize`).",
+   "line": 103,
+   "sentence": "The candidates under an include without a namespace are lifted into the table above it, with the include's route in front; a resolver with an application namespace keeps a table of its own, and `reverse` goes from namespace to namespace before it looks the name up ([Reversing a name](urls/reversing.md), [`normalize`, and the patterns that cannot be reversed](urls/normalize.md), [Namespaces](urls/namespaces.md)) (`django/urls/resolvers.py:URLResolver._populate`, `django/utils/regex_helper.py:normalize`).",
    "tree": "django",
    "path": "django/utils/regex_helper.py",
    "symbol": "normalize",
@@ -193,8 +193,8 @@
   },
   {
    "pointer": "django/urls/base.py:reverse",
-   "line": 128,
-   "sentence": "If no candidate passes, it raises `NoReverseMatch` (`django/urls/base.py:reverse`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
+   "line": 105,
+   "sentence": "If every candidate is tried and none passes, it raises `NoReverseMatch` (`django/urls/base.py:reverse`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "reverse",
@@ -207,8 +207,8 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver._reverse_with_prefix",
-   "line": 128,
-   "sentence": "If no candidate passes, it raises `NoReverseMatch` (`django/urls/base.py:reverse`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
+   "line": 105,
+   "sentence": "If every candidate is tried and none passes, it raises `NoReverseMatch` (`django/urls/base.py:reverse`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver._reverse_with_prefix",
@@ -220,8 +220,23 @@
    "fingerprint": "75377f012f27b33d"
   },
   {
+   "pointer": "django/urls/resolvers.py:_route_to_regex",
+   "line": 132,
+   "sentence": "So a route with parameters is kept twice over: as a regular expression to resolve with, which `_route_to_regex` makes of the route as the URLconf is imported, and as a string to reverse with, which `normalize` makes of that expression; and each of its converters works in both directions (`django/urls/resolvers.py:_route_to_regex`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "_route_to_regex",
+   "kind": "function",
+   "lines": [
+    250,
+    291
+   ],
+   "at": 251,
+   "fingerprint": "80dd04506d4cb5aa"
+  },
+  {
    "pointer": "django/urls/resolvers.py:_get_cached_resolver",
-   "line": 148,
+   "line": 150,
    "sentence": "A middleware that sets an attribute named `\"urlconf\"` on the request gives it a URLconf of its own, which becomes the current one when the request is resolved ([The script prefix, the current URLconf and the caches](urls/state.md)) (`django/urls/resolvers.py:_get_cached_resolver`, `django/core/handlers/base.py:BaseHandler.get_response`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -236,7 +251,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.get_response",
-   "line": 148,
+   "line": 150,
    "sentence": "A middleware that sets an attribute named `\"urlconf\"` on the request gives it a URLconf of its own, which becomes the current one when the request is resolved ([The script prefix, the current URLconf and the caches](urls/state.md)) (`django/urls/resolvers.py:_get_cached_resolver`, `django/core/handlers/base.py:BaseHandler.get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",

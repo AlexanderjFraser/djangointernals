@@ -4,58 +4,56 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # Namespaces
 
-How `reverse` finds a name inside a namespace: the application namespace and the instance namespace a resolver is given, the two dictionaries `URLResolver._populate` files them in, the part the current application plays, and the resolver `get_ns_resolver` makes to reverse a name inside a namespace.
+Namespaces are the parts of a name that `reverse` reads before the name itself: an application namespace, an included URLconf's `app_name`, and an instance namespace, which an inclusion of it may be given as `namespace=...`. `reverse` follows a name's namespaces down the tree one at a time, choosing among an application's instances first by the current application, `current_app=...`, and ordinarily reverses the name itself in a resolver that `get_ns_resolver` makes for the way down.
 
-Names are chosen by whoever writes a URLconf, and nothing keeps two URLconfs from choosing the same one: an application's author cannot know what the other applications of a project call their patterns. And one URLconf can be included more than once. The museum's gallery URLs serve the east wing and the west, and the name room alone does not say which. On a page of the east wing, a link to another room should lead to a room of the east wing, without the gallery's templates having to know where the project put them.
+Names are chosen by whoever writes a URLconf, and nothing keeps two URLconfs from choosing the same one: an application's author cannot know what the other applications of a project call their patterns. And one URLconf can be included more than once, as the museum's gallery is, once for each of its two wings: a name alone then does not say which inclusion is meant, and a link on a page that one inclusion serves should lead within that inclusion, without the application's templates having to know where the project put it.
 
-Django answers both with names in two parts. An **application namespace** says which application's URLs a name belongs to. An **instance namespace** says which inclusion of them is meant, and is chosen by the project. A name is written with its namespaces in front, separated by colons, and either kind may stand there: `"east:room"` names an instance, and `"gallery:room"` names an application and leaves the instance to be decided. What decides it is a hint called the **current application**. The name is Django's and is a little misleading: its value is an instance namespace, the one the code that is asking belongs to.
+Django answers both with names in two parts. An **application namespace** says which application's URLs a name belongs to. An **instance namespace** says which inclusion of them is meant, and is chosen by the project. A name is written with its namespaces in front, separated by colons, and either kind may stand there: `"east:room"` names an instance, and `"gallery:room"` names an application and leaves the instance to be decided. What may decide it is a hint called the **current application**. Its value names instance namespaces, those the code that is asking belongs to.
 
 ## Where a resolver gets its namespaces
 
-A `URLResolver` holds the two as `URLResolver.app_name` and `URLResolver.namespace`, and `path` takes them from the three things it is given in place of a view. [From a URLconf to a tree](urlconf.md#what-include-returns) has how `include` arrives at them: the application namespace is the attribute `"app_name"` of what is included, or is given beside it in a tuple, and the instance namespace is the argument `namespace=...`, or else the application namespace again. A resolver made through `include` therefore has both or neither, since `include` refuses an instance namespace for a URLconf that has no application namespace.
+A `URLResolver` holds its namespaces as `URLResolver.app_name` and `URLResolver.namespace`, which `path` takes from the triple given in place of a view ([From a URLconf to a tree](urlconf.md#what-include-returns)) (`django/urls/conf.py:_path`). A resolver made through `include` has both or neither, since `include` refuses an instance namespace without an application namespace, and where none is given takes the application's (`django/urls/conf.py:include`). In the museum's tree the gallery's module is included as the instances east and west, and the audio guide's list inside it as the application audio, with no instance named, so that its instance namespace is audio too.
 
-The museum's root URLconf includes the gallery's module, whose application namespace is gallery, as the instances east and west. Inside it a list of one pattern is included as the application audio, with no instance named, so that resolver's instance namespace is audio too.
+Resolving records the same two as it goes: each resolver on the way to a match adds its own to the `ResolverMatch`, whose `ResolverMatch.view_name`, for a named pattern, is the name as `reverse` takes it, the instance namespaces in front ([Resolving a path](resolving.md#a-resolvermatch-attribute-by-attribute)) (`django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:ResolverMatch.__init__`).
 
 ## How namespaces are filed
 
-When `URLResolver._populate` meets an entry that is a resolver with an application namespace, it does not read the entry's names into its own table as it would for a plain include. It makes two notes of the entry and leaves its names where they are (`django/urls/resolvers.py:URLResolver._populate`).
+When `URLResolver._populate` meets an entry that is a resolver with an application namespace, it leaves the entry's names in the entry's own table, rather than lifting them into its own as it does a plain include's, and makes two notes of the entry. In `URLResolver.namespace_dict` it files the entry under its instance namespace, with the regular expression of the entry's own route; in `URLResolver.app_dict` it adds the instance namespace to the list kept under the application namespace. A plain include's own two dictionaries are lifted into the resolver above it as its names are, each namespace's expression with the include's in front (`django/urls/resolvers.py:URLResolver._populate`).
 
-In `URLResolver.namespace_dict` it files the entry under its instance namespace, with the regular expression of the entry's own route. In `URLResolver.app_dict` it adds the instance namespace to the list kept under the application namespace.
+In the root resolver the wings are listed under gallery in the reverse of the order they were included, since `_populate` goes through a resolver's entries last to first, an order that matters below.
 
 ```text recording=urls
-namespace_dict
-  'west'  ->  ('west/', the resolver 'west/')
-  'east'  ->  ('east/', the resolver 'east/')
-app_dict  ->  {'gallery': ['west', 'east']}
+What the root resolver keeps for reversing
+    ...
+    namespace_dict
+      'west'  ->  ('west/', the resolver 'west/')
+      'east'  ->  ('east/', the resolver 'east/')
+    app_dict  ->  {'gallery': ['west', 'east']}
+    ...
 ```
+
+The root resolver does not know the name room. The east wing's resolver does, in a table of its own where the form for it has no `"east/"` in front, and it files the audio guide's namespace one level further down, with an expression that has a parameter in it:
 
 ```text recording=urls
 What the resolver of 'east/' keeps for reversing
     reverse_dict: under each key its candidates, in the order they are tried; a candidate is its forms; its regular expression; its extra arguments; its converters
       'room'
         [('rooms/%(room)s/', ['room'])]; 'rooms/(?P<room>[0-9]+)/\\Z'; {}; {'room': IntConverter}
-      the function views.room  ->  the same candidates as 'room'
-      'wing'
-        [('', [])]; '\\Z'; {}; {}
-      the function views.wing  ->  the same candidates as 'wing'
+    ...
     namespace_dict
       'audio'  ->  ('rooms/(?P<room>[0-9]+)/audio/', the resolver 'rooms/<int:room>/audio/')
     app_dict  ->  {'audio': ['audio']}
 ```
 
-The root resolver knows two instances of gallery and how to reach each. It does not know the name room; the east wing's resolver does, in a table of its own, where the form for it has no `"east/"` in front. The audio namespace is one level further down, filed in the wing's resolver with an expression that has a parameter in it.
-
-The list of instances is in the reverse of the order they were included, because `_populate` goes through a resolver's entries last to first. That order matters once, below.
-
-`namespace_dict` holds one resolver for each instance namespace. If two includes at one level are given the same one, only one of them can be reached by that name, and a system check warns of it ([The URL checks, and listing the patterns](checks.md)).
+`namespace_dict` holds one resolver for each instance namespace. Where two includes filed in one resolver, directly or lifted through plain includes, have the same one, each filing replaces the one before, so the one whose entry is written first is kept and no `reverse` reaches the other (`django/urls/resolvers.py:URLResolver._populate`). The system check `check_url_namespaces_unique` warns of every chain of instance namespaces, joined from the root with colons, that occurs more than once in the tree, and so of those under a repeated one too, as for the gallery included twice as annexe ([The URL checks, and listing the patterns](checks.md)) (`django/core/checks/urls.py:check_url_namespaces_unique`).
 
 ## How `reverse` follows a qualified name
 
 `reverse` splits the name at its colons. The last piece is the pattern's name; the pieces before it are a chain of namespaces, followed one at a time from the root resolver (`django/urls/base.py:reverse`).
 
-For each piece it first asks whether the piece is an application namespace of the resolver it has reached, by looking in that resolver's `app_dict`. If it is, an instance has to be chosen from the list found there:
+For each piece it first asks whether the piece is an application namespace of the resolver it has reached, by looking in that resolver's `app_dict`. If it is, an instance has to be chosen from the list found there, by the steps the documentation sets out for reversing a namespaced name (`docs/topics/http/urls.txt`):
 
-1. If the caller gave a current application and it is one of the instances, that one is used.
+1. If the caller gave a current application and it is one of the instances, that one is used; one that is none of them is passed over, with no error (`django/urls/base.py:reverse`).
 2. Otherwise, if one of the instances has the application's own name, that one is used. An instance included with no namespace of its own is such an instance, and is called the default.
 3. Otherwise the first of the list is used, which is the instance included last.
 
@@ -63,25 +61,9 @@ A piece that is not an application namespace is taken as an instance namespace d
 
 The instance is then looked up in `namespace_dict`. That gives the resolver, which becomes the one the next piece is looked up in, and the regular expression that leads to it, which is added to those collected so far. A piece found in neither dictionary raises `NoReverseMatch` with a message that names it and, unless it is the first piece, the instance namespaces the walk had settled on.
 
-```text recording=urls
-reverse() and namespaces: which wing a name leads to
-    reverse("east:room", kwargs={"room": 12})  ->  '/east/rooms/12/'
-    reverse("west:room", kwargs={"room": 12})  ->  '/west/rooms/12/'
-    reverse("gallery:room", kwargs={"room": 12})  ->  '/west/rooms/12/'
-    reverse("gallery:room", kwargs={"room": 12}, current_app="east")  ->  '/east/rooms/12/'
-    reverse("gallery:room", kwargs={"room": 12}, current_app="north")  ->  '/west/rooms/12/'
-    reverse("east:room", kwargs={"room": 12}, current_app="west")  ->  '/east/rooms/12/'
-    reverse("room", kwargs={"room": 12})  ->  raises NoReverseMatch
-    reverse("east:audio:track", kwargs={"room": 12, "track": "intro"})  ->  '/east/rooms/12/audio/intro/'
-    reverse("gallery:audio:track", kwargs={"room": 12, "track": "intro"})  ->  '/west/rooms/12/audio/intro/'
-    reverse("gallery:audio:track", kwargs={"room": 12, "track": "intro"}, current_app="east:audio")  ->  '/east/rooms/12/audio/intro/'
-    reverse("north:room", kwargs={"room": 12})  ->  raises NoReverseMatch: 'north' is not a registered namespace
-    reverse("east:shop:item", kwargs={"item": "poster"})  ->  raises NoReverseMatch: 'shop' is not a registered namespace inside 'east'
-```
+A current application may have several pieces, separated by colons as a name's are, and they are offered in order, one to each piece of the name: its first when the name's first is settled, its second with the name's second. Once a piece of the name settles on an instance other than the one offered, nothing more is offered (`django/urls/base.py:reverse`). So for the name `"gallery:audio:track"` and the current application `"east:audio"`, gallery settles on east and audio on audio, and the address is the east wing's.
 
-The first six lines are the rules at work. A name with an instance in front goes to that instance, and a current application does not change it. A name with the application in front goes to the current application's instance when that is one of the two wings. Otherwise, since the museum has no default instance, it goes to the west wing, which the URLconf includes last.
-
-The current application is written like the front of a name, with colons, and is used up alongside the name's own pieces. In the tenth line the name is `"gallery:audio:track"` and the current application `"east:audio"`: east is offered when gallery is being settled, and audio when audio is. Once a piece of the name settles on an instance other than the one offered, the rest of the current application is ignored.
+In the figure, look for where the two kinds of name meet: one with the application in front is first turned into an instance, and both then go through `namespace_dict`.
 
 ```text figure=two-wings
 a name with an application in front              a name with an instance in front
@@ -105,6 +87,23 @@ get_ns_resolver puts east/ in front: east/rooms/%(room)s/   and room=12 fills th
 
 *The lookups that come before a name's own. An application namespace is turned into one of its instances, and an instance namespace into a resolver and the expression that leads to it. Both wings' resolvers hold the same patterns, and only what is put in front tells their addresses apart.*
 
+The museum has no default instance, so a name with the application in front goes to the current application's wing when that is one of the two, and otherwise to the west wing, which the URLconf includes last; a name with an instance in front goes to that instance, whatever the current application:
+
+```text recording=urls
+reverse() and namespaces: which wing a name leads to
+    ...
+    reverse("gallery:room", kwargs={"room": 12})  ->  '/west/rooms/12/'
+    reverse("gallery:room", kwargs={"room": 12}, current_app="east")  ->  '/east/rooms/12/'
+    reverse("gallery:room", kwargs={"room": 12}, current_app="north")  ->  '/west/rooms/12/'
+    reverse("east:room", kwargs={"room": 12}, current_app="west")  ->  '/east/rooms/12/'
+    ...
+    reverse("gallery:audio:track", kwargs={"room": 12, "track": "intro"})  ->  '/west/rooms/12/audio/intro/'
+    reverse("gallery:audio:track", kwargs={"room": 12, "track": "intro"}, current_app="east:audio")  ->  '/east/rooms/12/audio/intro/'
+    reverse("north:room", kwargs={"room": 12})  ->  raises NoReverseMatch: 'north' is not a registered namespace
+    reverse("east:shop:item", kwargs={"item": "poster"})  ->  raises NoReverseMatch: 'shop' is not a registered namespace inside 'east'
+    ...
+```
+
 A URLconf with a default instance behaves differently where no current application applies:
 
 ```text recording=urls
@@ -119,11 +118,13 @@ An instance whose namespace is the application's own is the default
     reverse("gallery:wing", urlconf=DEFAULT, current_app="north")  ->  '/main/'
 ```
 
-## A resolver made for the namespace
+## `get_ns_resolver`: a resolver made for the namespace
 
-The walk ends with the resolver of the innermost namespace, and the expressions collected on the way down to it, joined into one. Unless that one is empty, as it is for a namespace included at `""`, the resolver's own table cannot be used as it stands. Its forms lack what stands in front of them, and that may have parameters, as the audio guide's has the room's number, for which the caller has passed arguments that the inner resolver knows nothing of.
+`get_ns_resolver` makes a resolver in which a name inside a namespace can be reversed in the ordinary way: populating it lifts the namespace's names into its own table with the expression of the way down in front, as populating any resolver does a plain include's, so that the parameters of the way down are among the name's own. At the end of its walk `reverse` has the resolver of the innermost namespace and the expressions collected on the way down to it, joined into one, and unless that one is empty, as it is when each route on the way down is `""`, it hands both to `get_ns_resolver` (`django/urls/base.py:reverse`). The resolver made has the root's expression `"^/"`, and its one entry is a resolver with no namespace, whose matcher is a `RegexPattern` for the joined expression, carrying the converters of its parameters, and whose list is the namespace's resolver's (`django/urls/resolvers.py:get_ns_resolver`).
 
-So `reverse` asks `get_ns_resolver` for a resolver made to measure. Its matcher is a `RegexPattern` for the joined expression, carrying the converters of its parameters, and its list is the list of the namespace's resolver; around it stands one more resolver, with the root's expression `"^/"`. Populating that outer resolver does what populating any resolver does to a plain include: it lifts the inner names into its own table with the expression in front. The name can then be reversed there in the ordinary way, with the parameters of the way down among its own (`django/urls/resolvers.py:get_ns_resolver`).
+> **Why.** A namespace's own table cannot be used as it stands: its forms lack what stands in front of them, which may have parameters, as the audio guide's has the room's number, for which the caller passes arguments the inner resolver knows nothing of. The comment at the head of `get_ns_resolver` gives that reason: the resolver it builds "makes it possible to have captured parameters in the parent URLconf pattern" (`django/urls/resolvers.py:get_ns_resolver`).
+
+The first `reverse` of the audio track makes its resolver, for an expression two namespaces long that holds the room's number with its converter, and populates it. `get_ns_resolver` is wrapped in `functools.cache`, so the same call made again in the same language finds the resolver populated and goes straight to filling in; one is made, and kept until `clear_url_caches` is called, for each different combination of expression, resolver and converters (`django/urls/base.py:clear_url_caches`).
 
 ```text recording=urls
 reverse() of a name inside namespaces: a resolver is made for the routes that lead to the namespace, and kept
@@ -134,59 +135,58 @@ reverse() of a name inside namespaces: a resolver is made for the routes that le
         URLResolver._reverse_with_prefix('track', '/', room=12, track='intro')  (a resolver made for the namespace)
           URLResolver._populate  (a resolver made for the namespace)
             URLResolver._populate  (the resolver made for 'east/rooms/(?P<room>[0-9]+)/audio/')
-          IntConverter.to_url(12)  ->  '12'
-          StringConverter.to_url('intro')  (SlugConverter)  ->  'intro'
-          -> '/east/rooms/12/audio/intro/'
-        -> '/east/rooms/12/audio/intro/'
+    ...
     and calls it again
       reverse('east:audio:track', kwargs={'room': 12, 'track': 'intro'})
         get_resolver()
         URLResolver._reverse_with_prefix('track', '/', room=12, track='intro')  (a resolver made for the namespace)
           IntConverter.to_url(12)  ->  '12'
-          StringConverter.to_url('intro')  (SlugConverter)  ->  'intro'
-          -> '/east/rooms/12/audio/intro/'
-        -> '/east/rooms/12/audio/intro/'
-    the script calls reverse("east:room", kwargs={"room": 12})
-      reverse('east:room', kwargs={'room': 12})
-        get_resolver()
-        get_ns_resolver('east/', the resolver of 'east/', ())  ->  a URLResolver '^/' whose one entry is a URLResolver with the RegexPattern 'east/' and converters {}
-        URLResolver._reverse_with_prefix('room', '/', room=12)  (a resolver made for the namespace)
-          URLResolver._populate  (a resolver made for the namespace)
-            URLResolver._populate  (the resolver made for 'east/')
-              URLResolver._populate  ('rooms/<int:room>/audio/')
-          IntConverter.to_url(12)  ->  '12'
-          -> '/east/rooms/12/'
-        -> '/east/rooms/12/'
+    ...
 ```
 
-For the audio track the expression is two namespaces long and holds the room's number, with its converter. `get_ns_resolver` is wrapped in `functools.cache`, so the second call of `reverse` for the same name found the resolver already made and already populated, and went straight to filling in. One is made for each different combination of expression, resolver and converters, and kept until `clear_url_caches` is called.
+> **Trap.** A name inside a namespace is reversed without the extra arguments of the `include` it came from, which neither the namespace's table nor the resolver `get_ns_resolver` makes holds (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:get_ns_resolver`). The wing views are called with an argument naming their wing, and reversing with it is refused: `reverse("east:wing")` gives `'/east/'`, and with `kwargs={"wing": "east"}` raises `NoReverseMatch`.
 
-The made-to-measure resolver is given the namespace's list and the expression in front of it. It is not given the extra arguments of the `include` that the namespace came from, so reversing a name inside a namespace knows nothing of them. The wing views receive an argument naming their wing when a request is resolved, and passing that same argument to `reverse` is refused:
+The converters come from the walk: `reverse` gathers those of each namespace's resolver's matcher, the audio guide's `IntConverter` for the room among them (`django/urls/base.py:reverse`). A namespace lifted through a plain include has that include's route in front of it as well, whose parameters its own matcher does not capture; so `URLResolver._populate`, lifting it, copies the plain include's converters into the namespaced matcher for the walk to gather, and such a parameter is made text by its converter's `to_url` rather than by `str` (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).
+
+> **Trap.** The copy is made in place, and a route's matcher shares its dictionary: every matcher made from the same route text for the same kind of entry, while `_route_to_regex`'s cache holds the expansion, holds one dictionary of converters ([Routes, regular expressions and converters](patterns.md#a-route-is-expanded-into-a-regular-expression)). So where the plain include and the namespaced one under it give a parameter of the same name different converters, the first `reverse` with the URLconf leaves the namespaced include converting it with the plain include's. The namespaced include's expression is unchanged, so a path it matches is refused where that converter cannot take the text, and otherwise reaches the view converted by it (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`).
+
+SMALL, the URLconf below, has for its second entry a plain include of `"floors/<int:wing>/"` around a namespaced include of `"<slug:wing>/"`, so that the parameter wing stands at both levels with two converters; the recording writes the namespaced matcher's dictionary with each converter by its class. Before a `reverse` of the entrance, a name under neither include, that dictionary holds `SlugConverter` for wing, and after it `IntConverter`: the wing east is then refused, and the wing 3 reaches the view as a number.
 
 ```text recording=urls
-reverse("east:wing")  ->  '/east/'
-reverse("east:wing", kwargs={"wing": "east"})  ->  raises NoReverseMatch
+The same with one parameter's name at both levels: after a reverse(), the namespaced include's matcher converts with the plain include's converter
+    SMALL is a URLconf of two entries:
+      path("", views.entrance, name="entrance")
+      path("floors/<int:wing>/", include([path("<slug:wing>/", include(([path("", views.wing, name="wing")], "tour")))]))
+    inner is the matcher of the include with the namespace tour
+    converters_of(inner.converters)  ->  {'wing': SlugConverter}
+    resolve('/floors/2/east/', urlconf=SMALL)  ->  views.wing, args (), kwargs {'wing': 'east'}
+    reverse("entrance", urlconf=SMALL)  ->  '/'
+    converters_of(inner.converters)  ->  {'wing': IntConverter}
+    resolve('/floors/2/east/', urlconf=SMALL)  ->  raises Resolver404
+    resolve('/floors/2/3/', urlconf=SMALL)  ->  views.wing, args (), kwargs {'wing': 3}
 ```
+
+The change reaches every include holding that dictionary, in any URLconf: one made earlier, plain or namespaced, now refuses paths it had resolved, and one made afterwards gets the changed dictionary from the cache; `clear_url_caches` leaves that cache alone and puts nothing back (`django/urls/resolvers.py:_route_to_regex`, `django/urls/base.py:clear_url_caches`).
 
 ## Where the current application comes from
 
-`reverse` has no request to consult. It knows the current application only when its caller passes one, as the argument `current_app=...`.
+`reverse` has no request to consult, and knows the current application only when its caller passes one, as the argument `current_app=...`.
 
-The template tag `{% url %}` passes one without being asked. Before it calls `reverse` it looks on the request in the template's context, first for an attribute named `"current_app"` and then for the namespace of the request's `resolver_match`. On a page served from one of an application's instances, a link written with the application's namespace therefore leads to that same instance (`django/template/defaulttags.py:URLNode.render`).
+The template tag `{% url %}` can pass one without being asked. Before it calls `reverse` it looks on the request in the template's context, first for an attribute named `"current_app"` and then for the namespace of the request's `resolver_match`. On a page served from one of an application's instances, a link written with the application's namespace therefore leads to that same instance (`django/template/defaulttags.py:URLNode.render`).
+
+A view of the east wing that renders the tag twice, the second time after setting the attribute to `"west"`, finds the attribute winning over the request's own namespace:
 
 ```text recording=urls
-views.room(request, wing='east', room=12)
-  request.resolver_match.namespace  ->  'east'
-  the view renders the template {% url 'gallery:room' room=13 %}
-    reverse('gallery:room', kwargs={'room': 13}, current_app='east')  ->  '/east/rooms/13/'
-    the template renders as '/east/rooms/13/'
-  the view sets request.current_app = "west" and renders it again
-    reverse('gallery:room', kwargs={'room': 13}, current_app='west')  ->  '/west/rooms/13/'
-    the template renders as '/west/rooms/13/'
+GET /east/rooms/12/: the template tag {% url %} reverses for the wing the request is in
+    views.room(request, wing='east', room=12)
+      request.resolver_match.namespace  ->  'east'
+      the view renders the template {% url 'gallery:room' room=13 %}
+        reverse('gallery:room', kwargs={'room': 13}, current_app='east')  ->  '/east/rooms/13/'
+        the template renders as '/east/rooms/13/'
+      the view sets request.current_app = "west" and renders it again
+        reverse('gallery:room', kwargs={'room': 13}, current_app='west')  ->  '/west/rooms/13/'
+        the template renders as '/west/rooms/13/'
+        ...
 ```
 
-The second half of the recording is how a view overrides the request's own namespace: an attribute on the request wins. The admin's views set it to the name of their site, which is the instance namespace `AdminSite.urls` gives the site's URLs ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](../admin/site-urls.md)) (`django/contrib/admin/sites.py:AdminSite.index`).
-
-## What resolving records
-
-Resolving collects the same two kinds of namespace as it goes. Each `URLResolver` on the way to a match puts its application namespace and its instance namespace at the front of two lists on the `ResolverMatch`. `ResolverMatch.view_name` is the instance namespaces joined with colons to the pattern's name, or to the view's dotted name where the pattern has none ([Resolving a path](resolving.md#a-resolvermatch-attribute-by-attribute)).
+The admin's views set the attribute to the name of their site, which is the instance namespace `AdminSite.urls` gives the site's URLs ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](../admin/site-urls.md)) (`django/contrib/admin/sites.py:AdminSite.index`).

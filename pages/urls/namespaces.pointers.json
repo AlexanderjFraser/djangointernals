@@ -8,9 +8,65 @@
  "document": "namespaces.md",
  "pointers": [
   {
+   "pointer": "django/urls/conf.py:_path",
+   "line": 15,
+   "sentence": "A `URLResolver` holds its namespaces as `URLResolver.app_name` and `URLResolver.namespace`, which `path` takes from the triple given in place of a view ([From a URLconf to a tree](urlconf.md#what-include-returns)) (`django/urls/conf.py:_path`).",
+   "tree": "django",
+   "path": "django/urls/conf.py",
+   "symbol": "_path",
+   "kind": "function",
+   "lines": [
+    62,
+    93
+   ],
+   "fingerprint": "f27bfa96bd5b5bf5"
+  },
+  {
+   "pointer": "django/urls/conf.py:include",
+   "line": 15,
+   "sentence": "A resolver made through `include` has both or neither, since `include` refuses an instance namespace without an application namespace, and where none is given takes the application's (`django/urls/conf.py:include`).",
+   "tree": "django",
+   "path": "django/urls/conf.py",
+   "symbol": "include",
+   "kind": "function",
+   "lines": [
+    17,
+    59
+   ],
+   "fingerprint": "dbdde8addf1e3a34"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 17,
+   "sentence": "Resolving records the same two as it goes: each resolver on the way to a match adds its own to the `ResolverMatch`, whose `ResolverMatch.view_name`, for a named pattern, is the name as `reverse` takes it, the instance namespaces in front ([Resolving a path](resolving.md#a-resolvermatch-attribute-by-attribute)) (`django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:ResolverMatch.__init__`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:ResolverMatch.__init__",
+   "line": 17,
+   "sentence": "Resolving records the same two as it goes: each resolver on the way to a match adds its own to the `ResolverMatch`, whose `ResolverMatch.view_name`, for a named pattern, is the name as `reverse` takes it, the instance namespaces in front ([Resolving a path](resolving.md#a-resolvermatch-attribute-by-attribute)) (`django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:ResolverMatch.__init__`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "ResolverMatch.__init__",
+   "kind": "function",
+   "lines": [
+    36,
+    75
+   ],
+   "fingerprint": "8525996a49dbb6a6"
+  },
+  {
    "pointer": "django/urls/resolvers.py:URLResolver._populate",
    "line": 21,
-   "sentence": "It makes two notes of the entry and leaves its names where they are (`django/urls/resolvers.py:URLResolver._populate`).",
+   "sentence": "A plain include's own two dictionaries are lifted into the resolver above it as its names are, each namespace's expression with the include's in front (`django/urls/resolvers.py:URLResolver._populate`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver._populate",
@@ -22,8 +78,37 @@
    "fingerprint": "7990db2ae9316bda"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 48,
+   "sentence": "Where two includes filed in one resolver, directly or lifted through plain includes, have the same one, each filing replaces the one before, so the one whose entry is written first is kept and no `reverse` reaches the other (`django/urls/resolvers.py:URLResolver._populate`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/core/checks/urls.py:check_url_namespaces_unique",
+   "line": 48,
+   "sentence": "The system check `check_url_namespaces_unique` warns of every chain of instance namespaces, joined from the root with colons, that occurs more than once in the tree, and so of those under a repeated one too, as for the gallery included twice as annexe ([The URL checks, and listing the patterns](checks.md)) (`django/core/checks/urls.py:check_url_namespaces_unique`).",
+   "tree": "django",
+   "path": "django/core/checks/urls.py",
+   "symbol": "check_url_namespaces_unique",
+   "kind": "function",
+   "lines": [
+    33,
+    56
+   ],
+   "at": 34,
+   "fingerprint": "78f61d2017188a20"
+  },
+  {
    "pointer": "django/urls/base.py:reverse",
-   "line": 54,
+   "line": 52,
    "sentence": "The last piece is the pattern's name; the pieces before it are a chain of namespaces, followed one at a time from the root resolver (`django/urls/base.py:reverse`).",
    "tree": "django",
    "path": "django/urls/base.py",
@@ -36,9 +121,65 @@
    "fingerprint": "e83750a3b0d32038"
   },
   {
+   "pointer": "docs/topics/http/urls.txt",
+   "line": 54,
+   "sentence": "If it is, an instance has to be chosen from the list found there, by the steps the documentation sets out for reversing a namespaced name (`docs/topics/http/urls.txt`):",
+   "tree": "django",
+   "path": "docs/topics/http/urls.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    911
+   ],
+   "fingerprint": "c8a70d51a406e67d"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 56,
+   "sentence": "If the caller gave a current application and it is one of the instances, that one is used; one that is none of them is passed over, with no error (`django/urls/base.py:reverse`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 64,
+   "sentence": "Once a piece of the name settles on an instance other than the one offered, nothing more is offered (`django/urls/base.py:reverse`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 123,
+   "sentence": "At the end of its walk `reverse` has the resolver of the innermost namespace and the expressions collected on the way down to it, joined into one, and unless that one is empty, as it is when each route on the way down is `\"\"`, it hands both to `get_ns_resolver` (`django/urls/base.py:reverse`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
    "pointer": "django/urls/resolvers.py:get_ns_resolver",
-   "line": 126,
-   "sentence": "The name can then be reversed there in the ordinary way, with the parameters of the way down among its own (`django/urls/resolvers.py:get_ns_resolver`).",
+   "line": 123,
+   "sentence": "The resolver made has the root's expression `\"^/\"`, and its one entry is a resolver with no namespace, whose matcher is a `RegexPattern` for the joined expression, carrying the converters of its parameters, and whose list is the namespace's resolver's (`django/urls/resolvers.py:get_ns_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "get_ns_resolver",
@@ -49,6 +190,178 @@
    ],
    "at": 121,
    "fingerprint": "6bb1679031f9818e"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:get_ns_resolver",
+   "line": 125,
+   "sentence": "The comment at the head of `get_ns_resolver` gives that reason: the resolver it builds \"makes it possible to have captured parameters in the parent URLconf pattern\" (`django/urls/resolvers.py:get_ns_resolver`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "get_ns_resolver",
+   "kind": "function",
+   "lines": [
+    120,
+    128
+   ],
+   "at": 121,
+   "fingerprint": "6bb1679031f9818e"
+  },
+  {
+   "pointer": "django/urls/base.py:clear_url_caches",
+   "line": 127,
+   "sentence": "`get_ns_resolver` is wrapped in `functools.cache`, so the same call made again in the same language finds the resolver populated and goes straight to filling in; one is made, and kept until `clear_url_caches` is called, for each different combination of expression, resolver and converters (`django/urls/base.py:clear_url_caches`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "clear_url_caches",
+   "kind": "function",
+   "lines": [
+    114,
+    117
+   ],
+   "fingerprint": "9a5f47a8d65aa85d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 147,
+   "sentence": "A name inside a namespace is reversed without the extra arguments of the `include` it came from, which neither the namespace's table nor the resolver `get_ns_resolver` makes holds (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:get_ns_resolver`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:get_ns_resolver",
+   "line": 147,
+   "sentence": "A name inside a namespace is reversed without the extra arguments of the `include` it came from, which neither the namespace's table nor the resolver `get_ns_resolver` makes holds (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:get_ns_resolver`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "get_ns_resolver",
+   "kind": "function",
+   "lines": [
+    120,
+    128
+   ],
+   "at": 121,
+   "fingerprint": "6bb1679031f9818e"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 149,
+   "sentence": "The converters come from the walk: `reverse` gathers those of each namespace's resolver's matcher, the audio guide's `IntConverter` for the room among them (`django/urls/base.py:reverse`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 149,
+   "sentence": "A namespace lifted through a plain include has that include's route in front of it as well, whose parameters its own matcher does not capture; so `URLResolver._populate`, lifting it, copies the plain include's converters into the namespaced matcher for the walk to gather, and such a parameter is made text by its converter's `to_url` rather than by `str` (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._reverse_with_prefix",
+   "line": 149,
+   "sentence": "A namespace lifted through a plain include has that include's route in front of it as well, whose parameters its own matcher does not capture; so `URLResolver._populate`, lifting it, copies the plain include's converters into the namespaced matcher for the walk to gather, and such a parameter is made text by its converter's `to_url` rather than by `str` (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver._reverse_with_prefix`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._reverse_with_prefix",
+   "kind": "function",
+   "lines": [
+    757,
+    844
+   ],
+   "fingerprint": "75377f012f27b33d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
+   "line": 151,
+   "sentence": "The namespaced include's expression is unchanged, so a path it matches is refused where that converter cannot take the text, and otherwise reaches the view converted by it (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:_route_to_regex",
+   "line": 151,
+   "sentence": "The namespaced include's expression is unchanged, so a path it matches is refused where that converter cannot take the text, and otherwise reaches the view converted by it (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "_route_to_regex",
+   "kind": "function",
+   "lines": [
+    250,
+    291
+   ],
+   "at": 251,
+   "fingerprint": "80dd04506d4cb5aa"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:RoutePattern.match",
+   "line": 151,
+   "sentence": "The namespaced include's expression is unchanged, so a path it matches is refused where that converter cannot take the text, and otherwise reaches the view converted by it (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "RoutePattern.match",
+   "kind": "function",
+   "lines": [
+    325,
+    347
+   ],
+   "fingerprint": "abbdc3f145f19e6d"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:_route_to_regex",
+   "line": 169,
+   "sentence": "The change reaches every include holding that dictionary, in any URLconf: one made earlier, plain or namespaced, now refuses paths it had resolved, and one made afterwards gets the changed dictionary from the cache; `clear_url_caches` leaves that cache alone and puts nothing back (`django/urls/resolvers.py:_route_to_regex`, `django/urls/base.py:clear_url_caches`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "_route_to_regex",
+   "kind": "function",
+   "lines": [
+    250,
+    291
+   ],
+   "at": 251,
+   "fingerprint": "80dd04506d4cb5aa"
+  },
+  {
+   "pointer": "django/urls/base.py:clear_url_caches",
+   "line": 169,
+   "sentence": "The change reaches every include holding that dictionary, in any URLconf: one made earlier, plain or namespaced, now refuses paths it had resolved, and one made afterwards gets the changed dictionary from the cache; `clear_url_caches` leaves that cache alone and puts nothing back (`django/urls/resolvers.py:_route_to_regex`, `django/urls/base.py:clear_url_caches`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "clear_url_caches",
+   "kind": "function",
+   "lines": [
+    114,
+    117
+   ],
+   "fingerprint": "9a5f47a8d65aa85d"
   },
   {
    "pointer": "django/template/defaulttags.py:URLNode.render",
@@ -66,8 +379,8 @@
   },
   {
    "pointer": "django/contrib/admin/sites.py:AdminSite.index",
-   "line": 188,
-   "sentence": "The admin's views set it to the name of their site, which is the instance namespace `AdminSite.urls` gives the site's URLs ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](../admin/site-urls.md)) (`django/contrib/admin/sites.py:AdminSite.index`).",
+   "line": 192,
+   "sentence": "The admin's views set the attribute to the name of their site, which is the instance namespace `AdminSite.urls` gives the site's URLs ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](../admin/site-urls.md)) (`django/contrib/admin/sites.py:AdminSite.index`).",
    "tree": "django",
    "path": "django/contrib/admin/sites.py",
    "symbol": "AdminSite.index",

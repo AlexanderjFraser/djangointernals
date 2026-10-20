@@ -4,20 +4,20 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # The URL checks, and listing the patterns
 
-What goes over the whole tree with no path or name in hand: the system checks tagged urls, in which every resolver and pattern checks itself, and the tools that list a project's addresses, `extract_views_from_urlpatterns`, `simplify_regex` and the command listurls.
+Two of the URL checks and the command listurls go over a project's whole tree of resolvers and patterns with no path or name in hand. Among the checks, `check_url_config` has every entry check itself, and listurls is built on two functions, `extract_views_from_urlpatterns` and `simplify_regex`.
 
-Resolving looks at as much of the tree as one path needs. Other code goes over all of it, entry by entry: the building of the tables for reversing, the checks that look for mistakes in a URLconf when a management command runs them, and the tools that print what addresses a project has. This section has the checks and the tools, and both are walks down the same lists `URLResolver.resolve` searches.
+Resolving looks at as much of the tree as one path needs. Other code goes over all of it, entry by entry, down the same lists `URLResolver.resolve` searches: the building of the tables for reversing ([Reversing a name](reversing.md#the-tables)), two of the checks, which look for a URLconf's mistakes when a management command runs them, and the tools that list a project's addresses.
 
-## The checks
+## The four checks tagged urls
 
-`django/core/checks/urls.py` registers four functions under the tag urls. How the system checks are registered and run, and which commands run them, is in [The system checks](../commands/checks.md). All but the one about settings do nothing in a project that has no `ROOT_URLCONF`.
+`django/core/checks/urls.py` registers four functions under the tag urls. How the system checks are registered and run is in [The system checks](../commands/checks.md). All but the one about settings do nothing in a project that has no `ROOT_URLCONF`.
 
-- `check_url_config` asks the tree to check itself. It gets the root resolver from `get_resolver` and passes it to `check_resolver`, which calls the `check` method of whatever it is given. `URLResolver.check` passes each of its entries to `check_resolver` in turn, so the walk goes down through every include. A `URLPattern` checks its name, has its matcher check the route, and checks its view. An entry with neither a `check` method nor a `resolve` method is not a pattern at all, and is reported as that (`django/core/checks/urls.py:check_url_config`, `django/core/checks/urls.py:check_resolver`, `django/urls/resolvers.py:URLResolver.check`, `django/urls/resolvers.py:URLPattern.check`).
+- `check_url_config` asks the tree to check itself. It passes the root resolver to `check_resolver`, which calls the `check` method of whatever it is given, and `URLResolver.check` passes each of its entries back to `check_resolver`, so the walk goes down through every include, importing the project's whole URLconf ([When a URLconf is imported](import.md#who-reads-the-urlconf-first)). A `URLPattern` checks its name, has its matcher check the route, and checks its view; a matcher checks only the text of its route or expression and never compiles it, so an expression that does not compile passes ([Routes, regular expressions and converters](patterns.md#when-a-matchers-expression-is-compiled)). An entry with neither a `check` method nor a `resolve` method is not a pattern at all, and is reported as that (`django/core/checks/urls.py:check_url_config`, `django/core/checks/urls.py:check_resolver`, `django/urls/resolvers.py:URLResolver.check`, `django/urls/resolvers.py:URLPattern.check`, `django/urls/resolvers.py:RegexPattern.check`).
 - `check_url_namespaces_unique` collects every chain of instance namespaces in the tree, each namespace joined to those above it with colons, and warns of any that occurs more than once (`django/core/checks/urls.py:check_url_namespaces_unique`).
 - `check_url_settings` looks at `settings.STATIC_URL` and `settings.MEDIA_URL`, each of which must end in a slash if it is set (`django/core/checks/urls.py:check_url_settings`).
-- `check_custom_error_handlers` tries the error views. For each of the four it asks the root resolver for the view, as the handler would when a request failed, and then tests whether the view accepts the right number of positional arguments: two, the request and the exception, or for the 500 view one (`django/core/checks/urls.py:check_custom_error_handlers`).
+- `check_custom_error_handlers` tries the error views. For each of the four it asks the root resolver for the view and tests whether the view can be called with positional arguments alone: two, the request and the exception, or for the 500 view one (`django/core/checks/urls.py:check_custom_error_handlers`).
 
-The recording has a URLconf with one of each mistake, and calls the four functions over it one at a time. The view it names for 403 takes the request and nothing else, and the module has no view of the name it gives for 404.
+One of the museum's URLconfs has a mistake of each kind the checks look for in a URLconf. The view it names for 403 takes the request and nothing else, and the module has no view of the name it gives for 404.
 
 ```python
 # museum/urls_mistakes.py
@@ -46,6 +46,8 @@ handler403 = views.lost
 handler404 = "museum.views.nowhere"
 ```
 
+The module imports without complaint, and the four functions, called over it one at a time, report every slip in it but one: the `$` that ends the terrace's expression.
+
 ```text recording=urls
 The four checks tagged urls, each called over museum.urls_mistakes, with STATIC_URL = 'static'
     check_url_config
@@ -69,52 +71,30 @@ The four checks tagged urls, each called over museum.urls_mistakes, with STATIC_
         hint: Could not import 'museum.views.nowhere'. View does not exist in module museum.views.
 ```
 
-Most of these are slips that would otherwise be silent, because the URLconf imports and the wrong pattern simply never matches what was meant. The route for the stairs has an opening bracket and no closing one, so it has no parameter and is matched as literal text. The route for the lifts is taken as a route, escaped, and matched as literal text too. The view for the tour is a class, which is callable, so `path` accepted it; what the handler would call with a request is the class itself.
+Most of these slips would otherwise be silent. The route for the stairs has an opening bracket and no closing one, so it has no parameter and is matched as literal text. The route for the lifts is taken as a route, escaped, and matched as literal text too (`django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:RoutePattern.match`). The view for the tour is a class, which is callable, so `path` accepted it; what the handler would call with a request is the class itself (`django/urls/conf.py:_path`).
 
-The check of error views is looser and tighter than a real call. The handler passes the exception by keyword, as an argument named exception, and the check only counts positional arguments. A view whose second parameter has another name passes the check and fails when it is used, and one that takes the exception as a keyword-only argument works and is reported.
+Some of the messages leave something out. `"urls.W001"` does not say what the `$` does: the patterns under the include are left only the empty string, or a final newline, to match (`django/urls/resolvers.py:RegexPattern._check_include_trailing_dollar`, `django/urls/resolvers.py:RegexPattern.match`). `"urls.W002"` is not given when `settings.APPEND_SLASH` is false, nor where the expression ends in a slash too, as an include's may (`django/urls/resolvers.py:CheckURLMixin._check_pattern_startswith_slash`). `"urls.E008"` says that a handler's view could not be imported even of a value that is not a view at all, which `get_callable`, the function that turns a handler into its view, refuses (`django/core/checks/urls.py:check_custom_error_handlers`, `django/urls/utils.py:get_callable`). `"urls.E009"` is given only for a subclass of `View`, and any other class passes (`django/urls/resolvers.py:URLPattern._check_callback`).
 
-The recording shows one oddity of the walk. `URLResolver.check` returns the messages its entries produced, and checks its own matcher only when they produced none. The URLconf has two includes whose expressions end in `$`. The café's one entry is clean, and its `$` is reported. The terrace's entry has a warning of its own, for the slash in front of its route, and the terrace's `$` is not mentioned: it will be once the entry below it is put right.
+> **Trap.** A resolver's own matcher is checked only when everything under it is clean: `URLResolver.check` asks its matcher only when its entries produced no message (`django/urls/resolvers.py:URLResolver.check`). Of the two includes above whose expressions end in `$`, the café's, with one clean entry, is reported; the terrace's, whose entry has a slash in front of its route, is not, and will be once that entry is put right.
 
-| id | reported by | for |
-|---|---|---|
-| `"urls.W001"` | `RegexPattern._check_include_trailing_dollar` | an include whose regular expression ends in an unescaped `$`, which leaves the included patterns only the empty string to match |
-| `"urls.W002"` | `CheckURLMixin._check_pattern_startswith_slash` | a route that begins with a slash and whose expression does not end in one, which is any such route of a pattern written with `path`; the check is skipped when `settings.APPEND_SLASH` is false |
-| `"urls.W003"` | `URLPattern._check_pattern_name` | a pattern's name with a colon in it, which `reverse` would take for a namespace |
-| `"urls.E004"` | `get_warning_for_invalid_pattern` | an entry of a list that is not a pattern or a resolver: a string, a tuple |
-| `"urls.W005"` | `check_url_namespaces_unique` | a chain of namespaces that is not unique |
-| `"urls.E006"` | `check_url_settings` | one of the two settings not ending in a slash |
-| `"urls.E007"` | `check_custom_error_handlers` | an error view that cannot be called with two positional arguments, or the 500 view with one |
-| `"urls.E008"` | `check_custom_error_handlers` | an error view that `get_callable` cannot produce: a dotted name that cannot be imported, or a value that is not a view |
-| `"urls.E009"` | `URLPattern._check_callback` | a view that is a subclass of `View` passed as the class, without `as_view` |
-| `"urls.W010"` | `RoutePattern._check_pattern_unmatched_angle_brackets` | a route with an angle bracket that has no partner |
-| `"2_0.W001"` | `RoutePattern.check` | a route given to `path` that holds `(?P<`, begins with `^` or ends with `$`: a regular expression where a route was meant |
+The check of error views is looser and tighter than a real call. The handler passes the exception by keyword, as an argument named exception, and the check tries positional arguments alone ([The error views](../views/errors.md)) (`django/core/handlers/exception.py:get_exception_response`). A view whose second parameter has another name passes the check and fails when it is used, and one that takes the exception as a keyword-only argument works and is reported.
 
-*The messages of the URL checks, and the code that makes each. The letter in an id is its level: W for a warning, E for an error.*
+## Listing what a project serves: listurls
 
-`check_url_config` reads `url_patterns` to do its work, which makes it one of the things that import a project's whole URLconf ([When a URLconf is imported](import.md#who-reads-the-urlconf-first)).
+A URLconf is code, and the addresses it serves are spread over as many modules as it includes. A pair of functions turns the tree back into a flat list for a person to read; the command listurls is built on them, and so is the index of views in the admin's documentation ([The documentation generator: `django.contrib.admindocs`](../admin/admindocs.md)) (`django/urls/utils.py:extract_views_from_urlpatterns`, `django/urls/utils.py:simplify_regex`, `django/contrib/admindocs/views.py:ViewIndexView`).
 
-## Listing what a project serves
-
-A URLconf is code, and the addresses it serves are spread over as many modules as it includes. A pair of functions turns the tree back into a flat list for a person to read (`django/urls/utils.py:extract_views_from_urlpatterns`, `django/urls/utils.py:simplify_regex`).
-
-`extract_views_from_urlpatterns` is given a list of entries and goes down it. For a resolver it calls itself on the resolver's list, carrying along the routes met so far, joined, and the instance namespaces met so far. For a pattern it adds a tuple to its result: the view, the joined routes with the pattern's own at the end, the namespaces, and the name. It tells the two kinds of entry apart by whether an entry has `url_patterns` or `callback`. These are some of the tuples it returns for the museum's tree:
+`extract_views_from_urlpatterns` gives back a tuple for each pattern: its view, its address, the instance namespaces above it, and its name. An address is the routes of the includes above the pattern followed by its own, so the walk carries routes and namespaces down into each include, and the audio guide's track, two includes down, has two of each.
 
 ```text recording=urls
 extract_views_from_urlpatterns(get_resolver().url_patterns): a tuple for each pattern
-    (views.entrance, '', None, 'entrance')
-    (views.tickets, 'tickets/<int:year>/', None, 'tickets')
-    (views.tickets, 'tickets/<int:year>/<month:month>/', None, 'tickets')
-    (views.wing, 'east/', ['east'], 'wing')
-    (views.room, 'east/rooms/<int:room>/', ['east'], 'room')
+...
     (views.track, 'east/rooms/<int:room>/audio/<slug:track>/', ['east', 'audio'], 'track')
 ...
-    (views.shop, 'shop/', [], 'shop')
-    (views.item, 'shop/<slug:item>/', [], 'item')
     (views.plan, '^plans/(?P<floor>[0-9])(?:\\.(?P<format>pdf|svg))?$', None, 'plan')
-    (views.download, 'files/<path:name>', None, 'download')
+    ...
 ```
 
-The third item is `None` for a pattern in the list the walk began with, and a list, which may be empty, for a pattern under an include. Each address is the routes as written, joined: a route's parameters are still in angle brackets, and a regular expression is still a regular expression. `simplify_regex` makes the second kind readable. It deletes each group written `(?:…)`, with whatever is inside it, and replaces each named group with its name in angle brackets and each group that is left with `<var>`. It takes out the anchors `^`, `$`, `\A`, `\Z`, `\b` and `\B` and the quantifiers `?`, `*` and `+` where they stand unescaped; an escaped `^`, `$`, `?`, `*` or `+` keeps its character and loses its backslash, as an escaped dot, slash, parenthesis, underscore or hyphen does. Then it puts a slash in front if there is none.
+Each address is the routes as written, joined, so one that `re_path` made is still a regular expression. `simplify_regex` rewrites such an address for a person to read (`django/urls/utils.py:simplify_regex`). In the lines below, a group written `(?:…)` is deleted with all it holds, so the museum's plan address loses its optional format; each group left becomes its name in angle brackets, as a route writes a parameter, or `<var>` if it has none, and the anchors and quantifiers go. A route as plain as the museum's gains only a slash in front.
 
 ```text recording=urls
 simplify_regex(): a regular expression made into an address a person can read
@@ -124,9 +104,7 @@ simplify_regex(): a regular expression made into an address a person can read
     simplify_regex('east/rooms/<int:room>/audio/<slug:track>/')  ->  '/east/rooms/<int:room>/audio/<slug:track>/'
 ```
 
-Deleting a group that does not capture deletes whatever is inside it, so the optional format of the museum's plan address is gone from the second line. The fourth is a route, and gains only the slash in front.
-
-The command listurls is those two functions and some formatting. It imports the module `ROOT_URLCONF` names and reads the list from it directly, without the resolver. It extracts, simplifies each address, names each view by its module and its name, joins a pattern's namespaces to its name with colons, and prints the rows, sorted unless it is told otherwise (`django/core/management/commands/listurls.py:Command.get_url_patterns`, `django/core/management/commands/listurls.py:Command.handle`). The recording runs it with `call_command`:
+The command listurls is those two functions and some formatting. It makes a row of each tuple: the address made readable, the view named by its module and name, and the pattern's name with its instance namespaces joined in front by colons, which is the name it is reversed by; the rows are sorted unless it is told otherwise (`django/core/management/commands/listurls.py:Command.get_url_patterns`, `django/core/management/commands/listurls.py:Command.handle`). Over the museum's URLconf the gallery's patterns are listed once for each wing.
 
 ```text recording=urls
 call_command("listurls"), with ROOT_URLCONF = 'museum.urls': each line as printed, without the spaces at its end
@@ -134,19 +112,14 @@ call_command("listurls"), with ROOT_URLCONF = 'museum.urls': each line as printe
     /east/                                      museum.views.wing      east:wing
     /east/rooms/<int:room>/                     museum.views.room      east:room
     /east/rooms/<int:room>/audio/<slug:track>/  museum.views.track     east:audio:track
-    /files/<path:name>                          museum.views.download  download
+...
     /plans/<floor>                              museum.views.plan      plan
-    /shop/                                      museum.views.shop      shop
-    /shop/<slug:item>/                          museum.views.item      item
-    /tickets/<int:year>/                        museum.views.tickets   tickets
-    /tickets/<int:year>/<month:month>/          museum.views.tickets   tickets
+...
     /west/                                      museum.views.wing      west:wing
     /west/rooms/<int:room>/                     museum.views.room      west:room
     /west/rooms/<int:room>/audio/<slug:track>/  museum.views.track     west:audio:track
 ```
 
-The names in the last column are the names to reverse with.
+> **Trap.** listurls lists the module that `ROOT_URLCONF` names, which it imports itself: a URLconf that a middleware gives a request in its attribute `"urlconf"` is not listed ([The script prefix, the current URLconf and the caches](state.md#the-current-urlconf)) (`django/core/management/commands/listurls.py:Command.get_url_patterns`). And the prefix of `i18n_patterns`, a `LocalePrefixPattern`, is listed for the language active as the command runs. `BaseCommand.execute` activates none, so from the command line `get_language` falls back to `settings.LANGUAGE_CODE`, and the rows carry that language's prefix, or none under `prefix_default_language=False`; under `call_command`, the caller's (`django/core/management/base.py:BaseCommand.execute`, `django/utils/translation/trans_real.py:get_language`, `django/urls/resolvers.py:LocalePrefixPattern.language_prefix`).
 
-> **New in 6.2.** The command listurls was added in this release.
-
-The admin's documentation pages list a project's views with the same two functions (`django/contrib/admindocs/views.py:ViewIndexView`).
+> **New in 6.2.** The command listurls is new in this release (`docs/releases/6.2.txt`); portions of its code, its module says, are derived from django-extensions (`django/core/management/commands/listurls.py`). The two functions under it are older: until this release they were the admin's documentation application's, defined in its views module.

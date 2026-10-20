@@ -4,21 +4,21 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # Routes, regular expressions and converters
 
-The matchers `RoutePattern`, `RegexPattern` and `LocalePrefixPattern` decide how much of a path each entry of a URLconf accepts, and what it captures: the first for a route given to `path`, the second for a regular expression given to `re_path`, the third for the language at the front of the paths of `i18n_patterns`. `_route_to_regex` expands a route into a regular expression in which a converter supplies each parameter's part and turns what the parameter captures into a value, and a project adds converters of its own with `register_converter`.
+The matcher an entry of a URLconf holds decides how much of a path the entry accepts, and what it captures. A route given to `path` gets a `RoutePattern`, which expands the route into a regular expression in which a converter supplies each parameter's part and turns what that part captures into a value, while a regular expression given to `re_path` gets a `RegexPattern`, which keeps it as written.
 
 An entry of a URLconf, a `URLPattern` or a `URLResolver`, does not match a path itself. It holds a **matcher** as its `pattern`, and asks the matcher (`django/urls/resolvers.py:URLPattern`). The method that does the work is `match`: it is given what is left of a path, and returns `None`, or three things, the text that remains after the part it accepted, a tuple of positional arguments, and a dictionary of keyword arguments.
 
-Django has three classes of matcher. They have no base class in common; the two that `path` and `re_path` make share one mixin, `CheckURLMixin`, for the system checks.
+Django has three classes of matcher.
 
 | class | made by | written as | matches by | captures |
 |---|---|---|---|---|
 | `RoutePattern` | `path` | a route, with parameters in angle brackets | comparing strings when it has no converters, and otherwise a regular expression expanded from the route | keyword arguments, each passed through its converter |
-| `RegexPattern` | `re_path`; and Django itself, for the `"^/"` of a root resolver, and in `get_ns_resolver` for the routes that lead to a namespace and a `"^/"` above them ([Namespaces](namespaces.md)) | a regular expression | the expression as written | named groups as keyword arguments, or else unnamed groups as positional ones; never converted |
+| `RegexPattern` | `re_path`; and Django itself, for the `"^/"` of a root resolver, and, when `reverse` is given a name inside a namespace that an entry not at `""` leads to, for the routes that lead to it and a `"^/"` above them ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) | a regular expression | the expression as written | named groups as keyword arguments, or else unnamed groups as positional ones; never converted |
 | `LocalePrefixPattern` | `i18n_patterns` | nothing: its text is worked out from the active language each time it is used | comparing strings | nothing |
 
 *The three classes of matcher. The third is described in [Language prefixes and translated routes](i18n.md).*
 
-A `RoutePattern` or a `RegexPattern` is made knowing whether it stands for a pattern or for a resolver, by the argument `is_endpoint=True` or `is_endpoint=False`. A route obeys the flag completely: a pattern's route must account for the whole of the text it is given, and a resolver's only for the beginning. An expression given to `re_path` obeys it only in part: a pattern's expression is matched whole only when it ends in `$`, and every other expression is looked for anywhere in the text.
+A `RoutePattern` or a `RegexPattern` is made knowing whether it stands for a pattern or for a resolver, by the argument `is_endpoint=True` or `is_endpoint=False`. A route obeys the flag completely: a pattern's route must account for the whole of the text it is given, and a resolver's only for the beginning. An expression given to `re_path` obeys it only in part.
 
 The figure sets out the four ways, a row for each, with texts from the museum's recordings: the accepted part may begin only at the start of the text in the first three rows, and must run to its end in the first and the third.
 
@@ -44,7 +44,9 @@ any other expression: wherever search finds it
 
 ## A route is expanded into a regular expression
 
-`_route_to_regex` turns a route into the text of a regular expression, and returns that text with a dictionary from each parameter's name to its converter. A `RoutePattern` calls it as it is made, which is as its call of `path` runs, during the import of the URLconf. The function is wrapped in `functools.lru_cache`, which keeps the 128 results most recently used, so a route is expanded as `path` is first called with it, and a later call with the same route, for the same kind of entry and in any URLconf, takes the expansion from the cache while it is kept there. The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`).
+`_route_to_regex` turns a route into the text of a regular expression, and returns that text with a dictionary from each parameter's name to its converter. The function goes through the route looking for parameters, each a pair of angle brackets holding a name, or a converter's name, a colon and a name. The text between parameters is literal, and is escaped so that a dot or a plus in a route means itself. A parameter becomes a named group, and the body of the group is a regular expression the converter supplies: `<int:year>` becomes `(?P<year>[0-9]+)`. A parameter that names no converter gets `str`. The expression begins with `^`, and for a pattern it ends with `\Z` (`django/urls/resolvers.py:_route_to_regex`).
+
+A `RoutePattern` calls `_route_to_regex` as it is made, which is as its call of `path` runs, during the import of the URLconf. The function is wrapped in `functools.lru_cache`, which keeps the 128 results most recently used, so a route is expanded as `path` is first called with it, and a later call with the same route, for the same kind of entry and in any URLconf, takes the expansion from the cache while it is kept there. The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include under a plain one, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).
 
 Two calls of `path` made by a script, one for a pattern and one for an include, show the expansion running inside the call and returning the expression with its converters, the expression written as Python writes a string, with a backslash doubled:
 
@@ -60,8 +62,6 @@ path() turns its route into a regular expression as it is called, and the result
         _route_to_regex('lifts/', is_endpoint=False)  ->  ('^lifts/', {})
         ...
 ```
-
-The function goes through the route looking for parameters, each a pair of angle brackets holding a name, or a converter's name, a colon and a name. The text between parameters is literal, and is escaped so that a dot or a plus in a route means itself. A parameter becomes a named group, and the body of the group is a regular expression the converter supplies: `<int:year>` becomes `(?P<year>[0-9]+)`. A parameter that names no converter gets `str`. The expression begins with `^`, and for a pattern it ends with `\Z`.
 
 In the museum's tree each converter has put its own expression into its parameter's group, the month's two digits among them, and the one expression written for `re_path` is kept as it was written:
 
@@ -87,7 +87,7 @@ An include's route is matched as a prefix, and nothing puts a slash after it
     resolve('/eastrooms/12/', urlconf=SLASHLESS)  ->  views.room, args (), kwargs {'wing': 'east', 'room': 12}
 ```
 
-`_route_to_regex` refuses three mistakes in a route, each with an `ImproperlyConfigured` that names the route and stops the import of the URLconf: a converter that is not registered, white space inside the angle brackets, and a parameter whose name is not a Python identifier.
+`_route_to_regex` refuses three mistakes in a route, each with an `ImproperlyConfigured` that names the route and stops the import of the URLconf: a converter that is not registered, white space inside the angle brackets, and a parameter whose name is not a Python identifier. The lines below are those three refusals, without the expansions their block begins with:
 
 ```text recording=urls
 What a route expands to with and without a converter named, and the routes path() refuses
@@ -99,7 +99,7 @@ What a route expands to with and without a converter named, and the routes path(
 
 ## `RoutePattern.match`
 
-When a path is matched, a `RoutePattern` with no converters never reaches the regular expression. `RoutePattern.match` tests for converters first, and without any it compares strings: a pattern's route must equal the text, and a resolver's must be what the text starts with, as the museum's `"east/"` is the start of `"east/rooms/12/"`, which it takes, leaving `"rooms/12/"` for its list. Only one with converters is matched with the expression, searched for at the start of the text (`django/urls/resolvers.py:RoutePattern.match`).
+When a path is matched, a `RoutePattern` with no converters never reaches the regular expression. `RoutePattern.match` tests for converters first, and without any it compares strings: a pattern's route must equal the text, and a resolver's must be what the text starts with, as the museum's `"east/"` is the start of `"east/rooms/12/"`, which it takes, leaving `"rooms/12/"` for its list. Only one with converters is matched with its expression, which, since it begins with `^`, can match only from the start of the text (`django/urls/resolvers.py:RoutePattern.match`).
 
 > **Why.** "Only use regex overhead if there are converters," says the comment above that test (`django/urls/resolvers.py:RoutePattern.match`). A route without parameters is plain text, and comparing it with the text spares the cost of running an expression; so resolving never compiles the expression of a `RoutePattern` without converters, as [When a matcher's expression is compiled](#when-a-matchers-expression-is-compiled) shows.
 
@@ -129,7 +129,7 @@ A project adds its own with `register_converter`, which takes a class and a name
 
 > **Changed in 6.0.** `register_converter` refuses a name that is already registered. Overriding an existing converter by registering its name again was deprecated in 5.1, and since 6.0 it raises.
 
-The museum registers one converter, for a month written as two digits:
+The museum's converter for the month accepts any two digits by its regular expression, and its `to_python` narrows them to twelve:
 
 ```python
 class MonthConverter:
@@ -147,7 +147,7 @@ class MonthConverter:
         return "%02d" % int(value)
 ```
 
-Its regular expression accepts any two digits, and `to_python` narrows that to twelve of them. To the rest of the system a refusal by a converter and a failure of the regular expression are the same event: the matcher returns `None` for either, and so does its pattern, and both end, when nothing else matches, in a 404. Asked about `"/tickets/2026/13/"` during a request, the two patterns for tickets return `None` alike, the first because its expression does not match, the second because its month's converter raises once the year has been converted:
+To the rest of the system a refusal by a converter and a failure of the regular expression are the same event: the matcher returns `None` for either, and so does its pattern, and both end, when nothing else matches, in a 404. Asked about `"/tickets/2026/13/"` during a request, the two patterns for tickets return `None` alike, the first because its expression does not match, the second because its month's converter raises once the year has been converted:
 
 ```text recording=urls
 GET /tickets/2026/13/: a converter refuses, and nothing else matches
@@ -162,23 +162,21 @@ GET /tickets/2026/13/: a converter refuses, and nothing else matches
           ...
 ```
 
-> **Trap.** The documentation describes a converter as a class (`docs/topics/http/urls.txt`), but Django uses a single instance of it: the one `register_converter` made, or for a default the one its module made as it was imported (`django/urls/converters.py:DEFAULT_CONVERTERS`). `_route_to_regex` puts that instance into the converters of every route that names it, so it serves every route, in every thread, for the life of the process (`django/urls/converters.py:get_converters`). A converter that kept anything on itself between calls would share it among them all, and so a converter is written to keep no state.
+> **Trap.** A converter is written as a class, but Django uses a single instance of it: the one `register_converter` made, or for a default the one its module made as it was imported (`django/urls/converters.py:DEFAULT_CONVERTERS`). `_route_to_regex` puts that instance into the converters of every route that names it, so it serves every route, in every thread, for the life of the process (`django/urls/converters.py:get_converters`). A converter that kept anything on itself between calls would share it among them all, and so a converter is written to keep no state.
 
 ## `RegexPattern`
 
-A `RegexPattern` keeps the expression it was given, and converts nothing: `RegexPattern.match` never looks at converters. The flag and the expression decide between two methods of the compiled expression. A pattern's expression that ends in `$` is matched with `re.Pattern.fullmatch`, which requires the whole text and, unlike `$` alone, does not let a trailing newline pass; every other expression, a resolver's or a pattern's without the `$`, with `re.Pattern.search`, which looks for it anywhere in the text (`django/urls/resolvers.py:RegexPattern.match`).
-
-> **Trap.** An expression that is searched for is held to the start of what is left of the path, and to its end, only by its own anchors. The reference says what a final `$` does (`docs/ref/urls.txt`), and not what follows from leaving it out: the search finds the expression wherever it stands, and a pattern so found serves the path, so that one with a `^` and no anchor at its end serves every path that begins with its expression.
-
-Of four patterns in one URLconf, the café's, with a `$` and no `^`, serves `"/cafe/"` and still refuses a path with something in front, since a match of the whole text holds it at both ends; the lift's, with neither, serves `"/ground/lift/up"`, which holds it in the middle:
+A `RegexPattern` keeps the expression it was given, and converts nothing: `RegexPattern.match` never looks at converters. Nor does it add an anchor to the expression, as `_route_to_regex` adds `\Z` to a pattern's route, and the flag alone does not hold an expression to the end of the text. A pattern's expression that ends in `$` is matched with `re.Pattern.fullmatch`, which requires the whole text and, unlike `$` alone, does not let a trailing newline pass; every other expression, a resolver's or a pattern's without the `$`, with `re.Pattern.search`, under which nothing but its own anchors holds it to the start of the text or to its end (`django/urls/resolvers.py:RegexPattern.match`). So a pattern's expression with a `^` and no anchor at its end serves every path that begins with it, as `"^press/"` does in the URLconf whose café and lift the figure draws:
 
 ```text recording=urls
 Regular expressions written with re_path(): what holds a match to the start and to the end of the text
     ENDS is a URLconf of four patterns:
       ...
+      re_path(r"^press/", views.shop, name="press")
       re_path(r"cafe/$", views.shop, name="cafe")
       re_path(r"lift/", views.shop, name="lift")
     ...
+    resolve('/press/2026/release.pdf', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
     resolve('/cafe/', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
     resolve('/ground/cafe/', urlconf=ENDS)  ->  raises Resolver404
     resolve('/ground/lift/up', urlconf=ENDS)  ->  views.shop, args (), kwargs {}
@@ -203,13 +201,13 @@ Regular expressions written with re_path(): which groups become the view's argum
 
 ## When a matcher's expression is compiled
 
-Neither `RoutePattern` nor `RegexPattern` compiles its expression as it is made. On both classes the attribute `regex` is a descriptor, an object on the class that is run when the attribute is read (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`, `django/urls/resolvers.py:LocaleRegexDescriptor`). Its first read on a matcher whose route or expression is an ordinary string compiles the expression and stores the result in the matcher's own dictionary under the same name. Python looks there before it consults a descriptor of this kind, so every later read finds the compiled expression directly. A route or an expression that is a lazily translated string is compiled instead once for each language, a route given to `_route_to_regex` again each time ([Language prefixes and translated routes](i18n.md#a-route-that-is-a-translated-string)).
+Neither `RoutePattern` nor `RegexPattern` compiles its expression as it is made. On both classes the attribute `regex` is a descriptor, an object on the class that is run when the attribute is read (`django/urls/resolvers.py:LocaleRegexRouteDescriptor`, `django/urls/resolvers.py:LocaleRegexDescriptor`). Its first read on a matcher whose route or expression is an ordinary string compiles the expression and stores the result in the matcher's own dictionary under the same name. Neither descriptor defines `__set__` or `__delete__`, and Python looks in an instance's own dictionary before it runs such a descriptor, so every later read finds the compiled expression there. A route or an expression that is a lazily translated string is compiled instead once for each language, a route given to `_route_to_regex` again each time ([Language prefixes and translated routes](i18n.md#a-route-that-is-a-translated-string)).
 
 For an expression given to `re_path`, that first read is also the first time anything compiles what was written. `re_path` keeps the expression as text, and one that is not valid raises `ImproperlyConfigured`, with the compiler's reason, only when its matcher is asked for `regex`: by `RegexPattern.match` as a path reaches it, or by `URLResolver._populate` as the tables for reversing are built (`django/urls/resolvers.py:LocaleRegexDescriptor._compile`).
 
 > **Trap.** An expression that does not compile is not found out before a path or a name comes to it. The import passes it, and so do the URL checks, which read its text and never compile it ([The URL checks, and listing the patterns](checks.md)) (`django/urls/resolvers.py:RegexPattern.check`). Then every path that reaches its entry raises, one meant for an entry after it as much as one meant for it, and so does every `reverse` with the URLconf, whatever the name, since the tables are built from every entry's expression (`django/urls/resolvers.py:URLResolver._populate`). The descriptor stores nothing when the compile fails, so each raises again, every time (`django/urls/resolvers.py:LocaleRegexDescriptor`).
 
-A matcher that is never asked for its `regex` never compiles one. After the museum's paths have been resolved, and before any of its names has been reversed, resolving has compiled the expressions it used and no others: the routes without parameters, compared as text, have none, however often they matched.
+A matcher that is never asked for its `regex` never compiles one. Before the block below, the recording resolved a run of the museum's paths and reversed none of its names. Resolving compiled the expressions it used and no others: the routes without parameters, compared as text, have none, however often they matched.
 
 ```text recording=urls
 After every path above was resolved, and before any name of museum.urls is reversed: which entries of its tree have a matcher with a compiled expression

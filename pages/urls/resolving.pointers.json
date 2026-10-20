@@ -92,6 +92,20 @@
    "fingerprint": "4ff31b0b1c626919"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLPattern.__init__",
+   "line": 96,
+   "sentence": "the pattern's own extra arguments, its `URLPattern.default_args` (`django/urls/resolvers.py:URLPattern.__init__`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLPattern.__init__",
+   "kind": "function",
+   "lines": [
+    424,
+    428
+   ],
+   "fingerprint": "9bcca94aee5bb581"
+  },
+  {
    "pointer": "django/urls/resolvers.py:URLPattern.resolve",
    "line": 98,
    "sentence": "The root resolver, whose matcher captures nothing and which is given no extra arguments, adds none (`django/urls/resolvers.py:URLPattern.resolve`, `django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:_get_cached_resolver`).",
@@ -165,7 +179,7 @@
   {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve",
    "line": 115,
-   "sentence": "Without an extra argument, `r\"^a/([0-9]+)/\"` over `r\"^b/([0-9]+)/$\"` gives `('1', '2')` for `\"/a/1/b/2/\"` (`django/urls/resolvers.py:URLResolver.resolve`).",
+   "sentence": "The comment beside the test in `URLResolver.resolve` speaks of named groups only, but the dictionary it tests holds the extra arguments too (`django/urls/resolvers.py:URLResolver.resolve`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver.resolve",
@@ -192,7 +206,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.resolve_request",
-   "line": 169,
+   "line": 168,
    "sentence": "`BaseHandler.resolve_request` keeps the match on the request, as `HttpRequest.resolver_match`, where the middleware's `process_view` hooks and the view can read it, and a template through the request in its context (`django/core/handlers/base.py:BaseHandler.resolve_request`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -206,7 +220,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:URLResolver._extend_tried",
-   "line": 173,
+   "line": 172,
    "sentence": "An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver._extend_tried`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -221,7 +235,7 @@
   },
   {
    "pointer": "django/views/debug.py:technical_404_response",
-   "line": 190,
+   "line": 189,
    "sentence": "Outside the resolvers `\"tried\"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page)) (`django/views/debug.py:technical_404_response`).",
    "tree": "django",
    "path": "django/views/debug.py",
@@ -235,8 +249,36 @@
    "fingerprint": "b34c50c9868ef6a8"
   },
   {
+   "pointer": "django/middleware/locale.py:LocaleMiddleware.process_response",
+   "line": 193,
+   "sentence": "`LocaleMiddleware`, handed a 404, can ask about the path with a language's prefix put in front ([Language prefixes and translated routes](i18n.md)) (`django/middleware/locale.py:LocaleMiddleware.process_response`), and the test client resolves each path it requested once more, lazily, for the `resolver_match` it puts on the response ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:Client.request`).",
+   "tree": "django",
+   "path": "django/middleware/locale.py",
+   "symbol": "LocaleMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    39,
+    81
+   ],
+   "fingerprint": "a214ba49def05f9d"
+  },
+  {
+   "pointer": "django/test/client.py:Client.request",
+   "line": 193,
+   "sentence": "`LocaleMiddleware`, handed a 404, can ask about the path with a language's prefix put in front ([Language prefixes and translated routes](i18n.md)) (`django/middleware/locale.py:LocaleMiddleware.process_response`), and the test client resolves each path it requested once more, lazily, for the `resolver_match` it puts on the response ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:Client.request`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "Client.request",
+   "kind": "function",
+   "lines": [
+    1075,
+    1120
+   ],
+   "fingerprint": "38331cbc21ed78b0"
+  },
+  {
    "pointer": "django/middleware/common.py:CommonMiddleware.should_redirect_with_slash",
-   "line": 196,
+   "line": 195,
    "sentence": "Handed a 404 for a path without a final slash while `settings.APPEND_SLASH` is true, its method `CommonMiddleware.should_redirect_with_slash` asks `is_valid_path` about the path as it came and, when that fails, about the path with a slash; the second answer is the match itself, whose view the method reads for the mark `\"should_append_slash\"` that `no_append_slash` sets (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`).",
    "tree": "django",
    "path": "django/middleware/common.py",
@@ -250,8 +292,8 @@
   },
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.process_request",
-   "line": 215,
-   "sentence": "`CommonMiddleware.process_request` calls it only under `settings.PREPEND_WWW`, for a host that does not begin with `\"www.\"`, and then answers with a redirect to the www. host before the handler has resolved anything; with that setting off, the default, `process_request` resolves nothing (`django/middleware/common.py:CommonMiddleware.process_request`).",
+   "line": 214,
+   "sentence": "`CommonMiddleware.process_request` calls the method only under `settings.PREPEND_WWW`, for a host that does not begin with `\"www.\"`, and then answers with a redirect to the www. host before the handler has resolved anything; with that setting off, the default, `process_request` resolves nothing (`django/middleware/common.py:CommonMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.process_request",
@@ -261,20 +303,6 @@
     61
    ],
    "fingerprint": "cf9f9179763268ef"
-  },
-  {
-   "pointer": "django/test/client.py:Client.request",
-   "line": 217,
-   "sentence": "The test client resolves each path it requested once more, lazily, to give a test `resolver_match` on the response ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:Client.request`).",
-   "tree": "django",
-   "path": "django/test/client.py",
-   "symbol": "Client.request",
-   "kind": "function",
-   "lines": [
-    1075,
-    1120
-   ],
-   "fingerprint": "38331cbc21ed78b0"
   }
  ]
 }
