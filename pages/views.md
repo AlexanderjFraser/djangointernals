@@ -1,18 +1,44 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
 part: The request cycle
-contents: callable, as-view, decorators, middleware-decorators, async, shortcuts, generic, editing, dates, errors, debug, static-files
+contents: "The view and what wraps it: callable, as-view, decorators, method-decorator, middleware-decorators, async, shortcuts; The generic views: generic, editing, dates; What Django answers itself: errors, debug, static-files"
 ---
 
 # Views
 
-A view is the callable the URL resolver found for a request's path: the handler calls it with the request and the arguments the path gave, and it returns a response. Everything else that goes by the name is built around that one call: `View.as_view` turns a class into such a callable, a decorator puts another function around one, and the generic views and the error views are views that Django wrote itself.
+A view is the callable the URL resolver found for a request's path: the handler calls it with the request and the arguments the resolver found for it, and it returns a response or raises an exception. `View.as_view` makes a class into one, decorators such as `never_cache` wrap one, the shortcuts `render` and `redirect` make its commonest answers, and the generic views, the error views and the debug pages are Django's own.
 
-Up to this point the request cycle is Django's machinery. A server calls the handler, the handler sends the request down a chain of middleware, and at the centre of the chain the resolver matches the request's path against the URLconf. What the resolver finds is the code a project wrote to answer that address. Django has no base class that this code must extend and no registry it must be entered in. It asks for a callable, and it makes one call.
+Up to this point the request cycle is Django's machinery. A server calls the handler, the handler sends the request down a chain of middleware, and at the centre of the chain the resolver matches the request's path against the URLconf. What the resolver finds is the code a project chose to answer that address. Django has no base class that this code must extend and no registry it must be entered in. It asks for a callable, and it makes one call.
 
-Because the requirement is so small, what Django offers beyond it is optional help in meeting it. This chapter takes the help in layers, from the call outwards: what the handler asks of a view; how a class is made to answer that call; the decorators, which wrap a view in another function or leave a mark on it for some other part of Django to read; the shortcuts, which make the commonest responses in one line; and the generic views, which are whole views with the parts that differ between projects left as methods to replace. The last sections are about what Django answers with on its own account: the error views that are called when a view raises or no pattern matches, the debug pages, and the view that serves files during development.
+Because the requirement is so small, what Django offers beyond it is help in meeting it, and the help comes in layers around that call. The figure draws them for one request, from the handler inwards: the wrappers that decorators put around a view, the function `as_view` makes from a class, the instance that function makes for the request, and, innermost, a **handler method**, the method of the class named for the request's HTTP method (`get` for a `"GET"`; it has nothing to do with the handler, the object the server calls), which in a generic view is itself a series of small methods that a project can replace one at a time.
 
-The examples are the views of a town's newspaper, the Gazette. Everything recorded in this chapter was recorded from a running Django with these among its views.
+```text figure=the-layers
+A view's usual layers between the handler's call and its own code, outermost first:
+
+BaseHandler._get_response        resolves the path, then calls what the URLconf holds
+  the decorators' wrappers       on the view, made at import; the one written first is outermost
+    the view                     a function or other callable, or the function as_view returned
+      an instance of the class        made by that function, for this request alone
+        View.setup                    keeps the request and the view's arguments on the instance
+        View.dispatch                 picks the method named for the request's method
+          get, post, ...              the project's code, or a generic view's
+            get_object                in a generic view, small methods that a subclass
+            get_context_data          can replace one at a time: these three are
+            render_to_response        what DetailView's get calls
+
+The response travels back out through the same layers.
+A function view has only the first three.
+```
+
+*A view's usual layers between the handler and its own code, outermost first; the handler may put its own around them, a transaction or a crossing between a thread and the event loop. A function view is called directly, inside whatever wrappers its decorators made. A class-based view adds the instance that the function `as_view` returned makes for each request, with `setup`, `dispatch` and a handler method inside it; in a generic view that handler method is made of smaller methods, the innermost layer.*
+
+The chapter follows the figure in three runs. The first is the view and what wraps it: what the handler asks of the callable, how `as_view` makes one from a class, the decorators, how one is put on a method of a class, the decorators made from a middleware class, how a view that is a coroutine function stays one, and the shortcuts. The second opens the innermost layer: the generic views, the form views and the date views. The third leaves the nest, for what Django answers with on its own account: the error views and the debug pages, which the handler calls for an exception, and the view that serves files during development.
+
+## What the handler calls
+
+At the centre of the middleware chain, `BaseHandler._get_response` resolves the request's path and gets three things back: a callable, a tuple of positional arguments and a dictionary of keyword arguments. It calls the first with the request and the other two. Under ASGI the method's asynchronous twin makes the same call (`django/core/handlers/base.py:BaseHandler._get_response`).
+
+The examples are the views of a town's newspaper, the Gazette, a small project that the chapter's recordings run. Four of its views stand for four kinds:
 
 ```python
 # gazette/views.py
@@ -49,11 +75,7 @@ urlpatterns = [
 ]
 ```
 
-## What the handler calls
-
-At the centre of the middleware chain, `BaseHandler._get_response` resolves the request's path and gets three things back: a callable, a tuple of positional arguments and a dictionary of keyword arguments. It calls the first with the request and the other two. That call is the whole of the interface, and under ASGI the method's asynchronous twin makes the same one (`django/core/handlers/base.py:BaseHandler._get_response`).
-
-The callable is whatever the URLconf was given. `path` accepts anything Python can call, and stores it without looking further ([From a URLconf to a tree](urls/urlconf.md)). For the four patterns above the resolver hands back four functions, though only two were written as functions. The other two are what `as_view` returned when the URLconf was imported. Asked about one of each kind, the resolver gives the Gazette's own function for the front page, and for the colophon a function named `"view"` that remembers which class it was made from:
+The callable is whatever the URLconf holds ([From a URLconf to a tree](urls/urlconf.md)). For these four patterns the resolver hands back four functions, though only two were written as functions; the other two are what `as_view` returned when the URLconf was imported. Asked about one of each kind, the resolver gives the Gazette's own function for the front page, and for the colophon a function named `"view"` that remembers which class it was made from:
 
 ```text recording=views
 resolve("/").func is views.front  ->  True
@@ -62,142 +84,49 @@ resolve("/").func.__name__  ->  'front'
 resolve("/colophon/").func.__name__  ->  'view'
 resolve("/colophon/").func.__qualname__  ->  'View.as_view.<locals>.view'
 resolve("/colophon/").func.view_class  ->  <class 'gazette.views.Colophon'>
+...
 ```
 
-A view may answer in two ways. It returns a response, which the handler passes back up the chain. Or it raises an exception, which the handler offers to the middleware and then turns into a response of its own choosing: a 404 for `Http404`, a 403 for `PermissionDenied`, a 500 for anything it does not recognise ([How an exception becomes a response](handlers/exceptions.md)). The handler checks little of what comes back. After the call it refuses `None` and a coroutine nobody awaited, and nothing else: there is no test that the object returned is an `HttpResponse` (`django/core/handlers/base.py:BaseHandler.check_response`).
+A view answers in one of two ways. It returns a response, which the handler passes back out through the chain. Or it raises an exception, which the handler offers to the middleware's `process_exception` hooks and, if none of them answers, turns into a response chosen by the exception's class: with Django's own error views, a 404 for `Http404`, a 403 for `PermissionDenied`, a 400 for a bad request, a 500 for anything it does not recognise ([How an exception becomes a response](handlers/exceptions.md)). Of what comes back the handler checks little: `BaseHandler.check_response` refuses `None` and a coroutine nobody awaited, and tests nothing else ([What the handler asks of a view](views/callable.md)) (`django/core/handlers/base.py:BaseHandler.check_response`).
 
-The callable may be a coroutine function: one written with `async def`, or a function marked as one, as `as_view` marks what it returns for a class whose handler methods are coroutines. The handler asks which kind it has before it calls, and adapts the call to suit ([Asynchronous views](views/async.md)).
+The shortcuts make the commonest answers in a line. `render` renders a template into a finished response, `redirect` makes a redirect to a URL, to a pattern's name reversed or to an object's own URL, and `get_object_or_404` fetches one object, raising `Http404` when there is none ([The shortcuts](views/shortcuts.md)) (`django/shortcuts.py`).
 
-[What the handler asks of a view](views/callable.md) has the rest of the contract: the attributes that other parts of Django read off the callable, and how a view is named in an error message and in a `ResolverMatch`.
+The callable may be a coroutine function: one written with `async def`, or a function marked as one, as `as_view` marks what it returns for a class whose handler methods are coroutines. The handler asks which kind it has before it calls, and adapts the call to suit. A plain wrapper around a function written with `async def` hides what it holds, and if it hands back what the function returns, the call returns a coroutine that nobody awaits, which `check_response` refuses ([Asynchronous views](views/async.md)).
 
-## Functions around a function
+## `View.as_view`: a class made into a function
 
-A decorator is the plainest way to add to a view. Given a view, it returns what will go into the URLconf in the view's place. For each of the three on the Gazette's masthead that is a **wrapper**: a new function that calls the view and does something before or after. Two of the three are a more general decorator with its argument already supplied, and the recording names the wrappers by the general one: `require_GET` is `require_http_methods` with a list of one method, and `vary_on_cookie` is `vary_on_headers` with one header's name. A request enters the wrappers from the outside in:
+A view class is not itself a view. Called as the handler calls a view, with a request, it would only try to construct an instance of itself. `View.as_view` bridges the two. It is called on the class as the URLconf is imported, once for each pattern that names it, and returns a plain function, which the URLconf holds in the class's place, alone or inside a decorator's wrapper. Each time that function is called it makes a new instance of the class, stores the request and its arguments on it in `View.setup`, and calls the instance's `dispatch` (`django/views/generic/base.py:View.as_view`).
 
-```text recording=views
-GET /masthead/: three decorators around one function
-    BaseHandler._get_response
-      the wrapper require_http_methods made, for ['GET']
-        the wrapper never_cache made
-          the wrapper vary_on_headers made, for ('Cookie',)
-            views.masthead(request)  ->  an HttpResponse, status 200
-            patch_vary_headers(response, ('Cookie',))
-            -> an HttpResponse, status 200
-          add_never_cache_headers(response)
-          -> an HttpResponse, status 200
-        -> an HttpResponse, status 200
-    start_response("200 OK", headers), with Vary: Cookie, Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private
-    the server sends the body: 'The Gazette'
-```
+`View.dispatch` takes the request's method, lower-cases it, and calls the handler method of that name on the instance. A request whose method is not in `View.http_method_names`, or for which the instance has no method of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).
 
-The outermost wrapper, the one `require_GET` made, looks at the request's method before it calls anything. The other two change the response once the view has answered: `vary_on_cookie` adds to its `"Vary"` header, and `never_cache` adds the headers that tell a cache to keep nothing. So the decorator written first, at the top, is the first to see the request and the last to see the response. It is the middleware chain's order again, for the same reason, around one view and not around every view.
+Each request is served by an instance of its own, so nothing a handler method stores on `self` reaches the next request, and two requests served at once do not see each other's attributes. What they do share is the class's attributes and the arguments given to `as_view`, the same objects for every request ([`View.as_view` and dispatch](views/as-view.md)).
 
-A wrapper that answers by itself ends the request there. A `"POST"` to the same address is answered with a 405 by the outermost wrapper, and neither of the others runs, nor the view.
+## Decorators: functions around a view
 
-Some decorators make no difference to the call at all. `csrf_exempt` returns a wrapper that only calls the view, with an attribute set on it, and `CsrfViewMiddleware` looks for that attribute when the handler shows it the view ([View decorators](views/decorators.md)). And several of Django's decorators are a middleware class in disguise: one instance of the class is made for the view, and a wrapper calls the instance's hooks around the view. `csrf_protect` and `cache_page` are built so ([A middleware as a decorator](views/middleware-decorators.md)).
+A decorator is the plainest way to add to a view. Given a view, it returns what goes into the URLconf in the view's place. For each of the three on the Gazette's masthead that is a **wrapper**: a new function that calls the view and does something before or after. The decorator written first, at the top, makes the outermost wrapper, so it is the first to see the request and the last to see the response: the middleware chain's order again, around one view and not around every view. A wrapper that answers by itself calls nothing inside it, though the wrappers outside it still see its response. `require_GET`, outermost on the masthead, answers a `"POST"` with a 405, and neither the other two wrappers nor the view runs ([View decorators](views/decorators.md)) (`django/views/decorators/http.py:require_http_methods`).
 
-## A class, made into a function
+Some decorators change nothing about the call. `csrf_exempt` returns a wrapper that only calls the view, with an attribute set on it: a **mark**, which `CsrfViewMiddleware` reads when the handler shows it the view (`django/views/decorators/csrf.py:csrf_exempt`). Others are a middleware class applied to one view: `csrf_protect` and `cache_page` each make an instance of their middleware, `CsrfViewMiddleware` or `CacheMiddleware`, for the view they decorate, and a wrapper that calls its hooks around the view ([A middleware as a decorator](views/middleware-decorators.md)) (`django/utils/decorators.py:make_middleware_decorator`).
 
-A view class is not itself a view. Called as the handler calls a view, with a request, it would only try to construct an instance of itself. `View.as_view` bridges the two. It is called once, on the class, as the URLconf is imported, and returns a plain function. That function is the view as far as the handler is concerned. Each time it is called it makes a new instance of the class, stores the request and the arguments on it, and calls the instance's `dispatch` (`django/views/generic/base.py:View.as_view`).
+A class is decorated through `method_decorator`, which turns a decorator of functions into one for a method, most often `dispatch`. It applies the decorator anew at every call, so a decorator made from a middleware class makes a middleware for every request ([Decorating a class: `method_decorator`](views/method-decorator.md)) (`django/utils/decorators.py:method_decorator`).
 
-```text recording=views
-GET /colophon/, twice: a class-based view is a function that makes an instance for each request
-    BaseHandler._get_response
-      view(request)  (the function as_view returned for Colophon)
-        View.__init__()  (a new Colophon)
-        View.setup(request)
-        View.dispatch(request)
-          Colophon.get(request)  ->  an HttpResponse, status 200
-          -> an HttpResponse, status 200
-        -> an HttpResponse, status 200
-    start_response("200 OK", headers)
-    the server sends the body: 'set in 9 point'
-    and the same request again
-    BaseHandler._get_response
-      view(request)  (the function as_view returned for Colophon)
-        View.__init__()  (a new Colophon)
-        View.setup(request)
-        View.dispatch(request)
-          Colophon.get(request)  ->  an HttpResponse, status 200
-          -> an HttpResponse, status 200
-        -> an HttpResponse, status 200
-    start_response("200 OK", headers)
-    the server sends the body: 'set in 9 point'
-```
+## The generic views: a handler method in pieces
 
-`View.dispatch` takes the request's method, lower-cases it, and calls the method of that name on the instance: `get` for a `"GET"`. This chapter calls such a method a **handler method**. It has nothing to do with the handler, the object the server calls. A class with no method for the request's method answers with a 405 that lists the ones it has (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).
+The last of the four views has no code of its own. ArticleDetail names a model and inherits everything else from `DetailView`, whose `get` is a handler method with its decisions taken out and made methods of their own: `get_object` finds the article from the slug the path captured, `get_context_data` builds the template's context, and `render_to_response` makes the response, with a template name made from the app's label and the model's name when the class names none (`django/views/generic/detail.py:BaseDetailView.get`).
 
-The two requests were served by two instances. Nothing a handler method stores on `self` reaches the next request, and two requests served at the same moment by two threads cannot see each other's attributes. That is what the indirection gives: each request has an object of its own, so a view can keep one request's working state on the instance ([`View.as_view` and dispatch](views/as-view.md)).
+None of those methods is declared by `DetailView`. Each belongs to a small class called a **mixin**, `get_object` and `get_context_data` to `SingleObjectMixin` and `render_to_response` to `TemplateResponseMixin`, and `DetailView` is little more than the list of classes it inherits from: Python's method resolution order decides whose method runs. A project changes one decision by overriding one method, or by setting the attribute that method reads, and inherits the rest ([The generic views](views/generic.md)). The views that show a form and act on what is posted ([The form views](views/editing.md)) and the ones that list objects by year, month, week and day ([The date views](views/dates.md)) are built the same way.
 
-```text figure=the-layers
-What runs between the handler's call and the project's own code, outermost first:
+What `render_to_response` returns is a `TemplateResponse` not yet rendered: it holds the template's name and the context, and the handler renders it at the centre of the chain, after any `process_template_response` hooks have had the chance to change either ([The centre of the chain](handlers/view.md#template-responses)). The shortcut `render` is another way to use a template in a view: it renders at once and returns a finished `HttpResponse`.
 
-BaseHandler._get_response      resolves the path, then calls what the URLconf holds
-  the decorators' wrappers     made at import; the one written first is outermost
-    the view                   a function of the project's, or the function as_view returned
-      an instance of the class      made by that function, for this request alone
-        View.setup                  keeps the request and the path's arguments on the instance
-        View.dispatch               picks the method named for the request's method
-          get, post, ...            the project's code, or a generic view's
+## The error views and the debug pages
 
-The response travels back out through the same layers.
-A function view has only the first three.
-```
+Here the nest ends, for a client's answer can be made by a view that no pattern routes to. A view that cannot find what was asked for raises `Http404`, as `get_object` does for an article that does not exist, and the handler turns the exception into a response. For each of the four statuses it may choose, 404, 500, 400 and 403, it has an **error view**: the one the URLconf names (`handler404` and its three kin), or else Django's default from `django/views/defaults.py`, called with the request and, for every status but 500, the exception ([The error views](views/errors.md)). With `settings.DEBUG` on, an `Http404`, an exception the handler does not recognise, and a `BadRequest` or `SuspiciousOperation` are answered with a **debug page** instead, while a `PermissionDenied` still goes to its error view (`django/core/handlers/exception.py:response_for_exception`).
 
-*The layers between the handler and a view's own code. A function view is called directly, inside whatever wrappers its decorators made. A class-based view adds three more steps inside the function that `as_view` returned: an instance for the request, `setup`, and `dispatch`.*
+The debug page for an exception other than `Http404` is the work of an `ExceptionReporter`, which walks the traceback, collects each frame's source lines and local variables, and renders them with the request and the settings. A filter, `SafeExceptionReporterFilter`, replaces with stars the settings, `META` entries and cookies whose names look like a secret's, and, with `settings.DEBUG` off, whatever `sensitive_variables` and `sensitive_post_parameters` have marked. The same reporter writes the report that `AdminEmailHandler` mails to a site's administrators ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).
 
-## A generic view is a handler method in pieces
-
-The last of the four views has no code of its own. ArticleDetail names a model and inherits everything else from `DetailView`, which is a `get` method with its decisions taken out and made methods of their own: which object, which queryset to look for it in, what to put in the template's context, which template. This is the request for one article:
-
-```text recording=views
-GET /articles/ferry-timetable/: a DetailView
-    BaseHandler._get_response
-      view(request, slug='ferry-timetable')  (the function as_view returned for ArticleDetail)
-        View.__init__()  (a new ArticleDetail)
-        View.setup(request, slug='ferry-timetable')
-        View.dispatch(request, slug='ferry-timetable')
-          BaseDetailView.get(request, slug='ferry-timetable')
-            SingleObjectMixin.get_object()
-              SingleObjectMixin.get_queryset  ->  a QuerySet of Article, not yet fetched
-              SingleObjectMixin.get_slug_field  ->  'slug'
-              SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE "gazette_article"."slug" = %s LIMIT 21 with params ('ferry-timetable',)
-              -> <Article: New ferry timetable>
-            SingleObjectMixin.get_context_data(object=...)
-              SingleObjectMixin.get_context_object_name(obj)  ->  'article'
-              ContextMixin.get_context_data(object=..., article=...)  ->  a dict with the keys article, object, view
-              -> a dict with the keys article, object, view
-            TemplateResponseMixin.render_to_response(context)
-              SingleObjectTemplateResponseMixin.get_template_names
-                TemplateResponseMixin.get_template_names  raises ImproperlyConfigured
-                -> ['gazette/article_detail.html']
-              -> a TemplateResponse, status 200, not rendered
-            -> a TemplateResponse, status 200, not rendered
-          -> a TemplateResponse, status 200, not rendered
-        -> a TemplateResponse, status 200, not rendered
-      SimpleTemplateResponse.render
-    start_response("200 OK", headers)
-    the server sends the body: 'New ferry timetable, 3 March 2026\n'
-```
-
-The outline is the one above: the function, the instance, `setup`, `dispatch`, a handler method. Inside the handler method, `get_object` finds the article from the slug the path captured, `get_context_data` builds the context, and `render_to_response` makes a `TemplateResponse`, with a template name that `get_template_names` builds from the app's label and the model's name. The exception in the trace is part of the ordinary course: it is how that method learns that the class named no template.
-
-None of those methods is declared by `DetailView`. They belong to small classes called **mixins**, `get_object` and `get_context_data` to `SingleObjectMixin` and `render_to_response` to `TemplateResponseMixin`, and `DetailView` is little more than the list of classes it inherits from. A project changes one decision by overriding one method ([The generic views](views/generic.md)).
-
-The view returns before any template has been rendered. A `TemplateResponse` holds the template's name and the context, and the handler renders it afterwards, once the middleware have had the chance to change either: the last line under `BaseHandler._get_response` is that rendering ([The centre of the chain](handlers/view.md#template-responses)). The shortcut `render` is another way to use a template in a view. It renders at once and returns a finished `HttpResponse` ([The shortcuts](views/shortcuts.md)).
-
-The same construction gives the views that show a form and act on what is posted ([The form views](views/editing.md)) and the ones that list objects by year, month, week and day ([The date views](views/dates.md)).
-
-## When a view cannot answer
-
-A view that cannot find what was asked for raises `Http404`, and the generic views do so themselves: the request for an article that does not exist ends in `get_object` with that exception. On a site with `settings.DEBUG` off, what the client then receives is made by another view. The handler looks up an **error view** for the status, by default one of the four in `django/views/defaults.py`, and calls it with the request and, for every status but 500, the exception ([The error views](views/errors.md)).
-
-With `settings.DEBUG` on, the answer to a 404 or to an unrecognised exception is a debug page instead. The page for an exception is the work of an `ExceptionReporter`, which walks the traceback, collects each frame's source lines and local variables, and renders them with the request and the settings. A filter stands between the reporter and the settings, headers and cookies whose names look like a secret's. The same reporter writes the report that is mailed to a site's administrators when `settings.DEBUG` is off ([The debug pages and `ExceptionReporter`](views/debug.md)).
+The last view of the chapter serves files. `django.views.static.serve` answers a request with a file from a directory; `django.conf.urls.static.static` routes a prefix to it only while `settings.DEBUG` is on, and the static files app's own view calls it ([The static file view](views/static-files.md)) (`django/views/static.py:serve`).
 
 ## The neighbours
 
-The handler decides when a view is called and what becomes of what it returns or raises: the `process_view` hooks before it, the transaction around it, the rendering of a template response after it ([Handlers and middleware](handlers.md)). The resolver supplies the view and its arguments, and the shortcuts `redirect` and `resolve_url` call `reverse` on a view's behalf ([URL routing](urls.md)). The request a view reads and the response classes it returns are the subject of [Requests and responses](http.md).
+The handler decides when a view is called and what becomes of what it returns or raises: the `process_view` hooks before it, the transaction around it, the rendering of a template response after it ([Handlers and middleware](handlers.md)). The resolver supplies the view and its arguments, and `redirect` and `resolve_url` call `reverse` on a view's behalf ([URL routing](urls.md)). The request a view reads and the response classes it returns are the subject of [Requests and responses](http.md).
 
-The generic views lean on three other systems and own none of them: they ask a model's manager for a queryset ([QuerySets](querysets.md)), build and validate a form ([Forms](forms.md)), and name a template for a `TemplateResponse` to render ([Templates](templates.md)).
-
-The decorators made from middleware belong, for what they do, to the chapters of those middleware: CSRF to [Security](security.md), the page cache and the conditional-request code to [Caching, files, mail, signals and tasks](services.md). The decorators and mixins that require a login are in `django/contrib/auth/` ([Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](auth/requiring-login.md)). The admin has a wrapper of its own for its views, `AdminSite.admin_view`, which applies `never_cache` and `csrf_protect` unless told not to ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](admin/site-urls.md)). And the static files app serves its files during development through the view of [The static file view](views/static-files.md) ([Serving static files: `StaticFilesHandler` and the development server](contrib/serving-static.md)).
+The generic views ask a model's manager for a queryset ([QuerySets](querysets.md)), build and validate a form ([Forms](forms.md)), and name a template for a `TemplateResponse` to render ([Templates](templates.md)). What the decorators made from middleware do belongs to their middleware's chapters, CSRF to [Security](security.md) and the page cache and conditional requests to [Caching, files, mail, signals and tasks](services.md); the decorators and mixins that require a login are in [Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](auth/requiring-login.md).

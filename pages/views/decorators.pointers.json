@@ -10,7 +10,17 @@
   {
    "pointer": "django/views/decorators/",
    "line": 7,
-   "sentence": "The decorators of `django/views/decorators/`: the wrappers they put around a view, the marks some of them leave on a view, a response or a request, how `condition` answers a request without calling the view, and how `method_decorator` applies any of them to a method of a class.",
+   "sentence": "The decorators of `django/views/decorators/`, such as `require_http_methods`, `never_cache` and `csrf_exempt`: the wrappers they put around a view, acting before the call or after it, the marks some leave for other code to read, and how `condition` answers a request without calling the view.",
+   "tree": "django",
+   "path": "django/views/decorators/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e71195e970af2827"
+  },
+  {
+   "pointer": "django/views/decorators/",
+   "line": 13,
+   "sentence": "Each decorator whose wrapper is written in `django/views/decorators/`, all but `sensitive_variables`, defines that wrapper twice, once with `def` and once with `async def`, picks one by asking whether the view is a coroutine function, and passes it through `functools.wraps` (`django/views/decorators/cache.py:never_cache`).",
    "tree": "django",
    "path": "django/views/decorators/",
    "symbol": null,
@@ -20,7 +30,7 @@
   {
    "pointer": "django/views/decorators/cache.py:never_cache",
    "line": 13,
-   "sentence": "Each defines the wrapper twice, once with `def` and once with `async def`, picks one of the two by asking whether the view is a coroutine function, and returns it after passing it through `functools.wraps` (`django/views/decorators/cache.py:never_cache`).",
+   "sentence": "Each decorator whose wrapper is written in `django/views/decorators/`, all but `sensitive_variables`, defines that wrapper twice, once with `def` and once with `async def`, picks one by asking whether the view is a coroutine function, and passes it through `functools.wraps` (`django/views/decorators/cache.py:never_cache`).",
    "tree": "django",
    "path": "django/views/decorators/cache.py",
    "symbol": "never_cache",
@@ -32,8 +42,22 @@
    "fingerprint": "bdb7f131588aede2"
   },
   {
+   "pointer": "django/utils/decorators.py:make_middleware_decorator",
+   "line": 13,
+   "sentence": "The decorators made from a middleware class are defined in the directory too, but get their two wrappers from `make_middleware_decorator`, which is written to the same pattern (`django/utils/decorators.py:make_middleware_decorator`).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "make_middleware_decorator",
+   "kind": "function",
+   "lines": [
+    123,
+    201
+   ],
+   "fingerprint": "b9d42706d0c3b1b8"
+  },
+  {
    "pointer": "django/views/decorators/http.py:require_GET",
-   "line": 19,
+   "line": 17,
    "sentence": "The ones Django supplies ready-made, such as `require_GET` and `vary_on_cookie`, are the result of such a call kept under a name (`django/views/decorators/http.py:require_GET`).",
    "tree": "django",
    "path": "django/views/decorators/http.py",
@@ -48,7 +72,7 @@
   {
    "pointer": "django/views/decorators/http.py:require_http_methods",
    "line": 50,
-   "sentence": "The names in the list are compared as they stand, so they have to be in upper case (`django/views/decorators/http.py:require_http_methods`).",
+   "sentence": "The wrapper that `require_http_methods` makes compares the request's method with its list, and if the method is not there it returns an `HttpResponseNotAllowed` naming the list, logs a warning, and never calls what it wraps (`django/views/decorators/http.py:require_http_methods`).",
    "tree": "django",
    "path": "django/views/decorators/http.py",
    "symbol": "require_http_methods",
@@ -60,9 +84,65 @@
    "fingerprint": "e88b294b424f07ee"
   },
   {
-   "pointer": "django/views/decorators/vary.py:vary_on_headers",
+   "pointer": "django/views/decorators/http.py:require_http_methods",
    "line": 62,
-   "sentence": "`vary_on_headers` passes the response to `patch_vary_headers`, which adds the names it was given to the `\"Vary\"` header (`django/views/decorators/vary.py:vary_on_headers`).",
+   "sentence": "The docstring asks for the methods in upper case, and nothing converts the list (`django/views/decorators/http.py:require_http_methods`, `django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/views/decorators/http.py",
+   "symbol": "require_http_methods",
+   "kind": "function",
+   "lines": [
+    20,
+    67
+   ],
+   "fingerprint": "e88b294b424f07ee"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.__init__",
+   "line": 62,
+   "sentence": "The docstring asks for the methods in upper case, and nothing converts the list (`django/views/decorators/http.py:require_http_methods`, `django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "WSGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    57,
+    80
+   ],
+   "fingerprint": "39da82012b104293"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
+   "line": 62,
+   "sentence": "The docstring asks for the methods in upper case, and nothing converts the list (`django/views/decorators/http.py:require_http_methods`, `django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest.__init__",
+   "kind": "function",
+   "lines": [
+    49,
+    116
+   ],
+   "fingerprint": "ab1abbbd4220a34e"
+  },
+  {
+   "pointer": "django/utils/cache.py",
+   "line": 64,
+   "sentence": "What each of those functions writes, and how it merges with a header already there, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md) (`django/views/decorators/vary.py:vary_on_headers`, `django/views/decorators/cache.py:never_cache`, `django/views/decorators/cache.py:cache_control`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/views/decorators/vary.py:vary_on_headers",
+   "line": 64,
+   "sentence": "What each of those functions writes, and how it merges with a header already there, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md) (`django/views/decorators/vary.py:vary_on_headers`, `django/views/decorators/cache.py:never_cache`, `django/views/decorators/cache.py:cache_control`).",
    "tree": "django",
    "path": "django/views/decorators/vary.py",
    "symbol": "vary_on_headers",
@@ -75,8 +155,8 @@
   },
   {
    "pointer": "django/views/decorators/cache.py:never_cache",
-   "line": 62,
-   "sentence": "`never_cache` passes it to `add_never_cache_headers`, which sets `\"Expires\"` to the present moment, unless the response has that header already, and adds five directives to `Cache-Control`, which on a response with no such header gives the value in the recording (`django/views/decorators/cache.py:never_cache`, `django/utils/cache.py:add_never_cache_headers`).",
+   "line": 64,
+   "sentence": "What each of those functions writes, and how it merges with a header already there, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md) (`django/views/decorators/vary.py:vary_on_headers`, `django/views/decorators/cache.py:never_cache`, `django/views/decorators/cache.py:cache_control`).",
    "tree": "django",
    "path": "django/views/decorators/cache.py",
    "symbol": "never_cache",
@@ -88,23 +168,9 @@
    "fingerprint": "bdb7f131588aede2"
   },
   {
-   "pointer": "django/utils/cache.py:add_never_cache_headers",
-   "line": 62,
-   "sentence": "`never_cache` passes it to `add_never_cache_headers`, which sets `\"Expires\"` to the present moment, unless the response has that header already, and adds five directives to `Cache-Control`, which on a response with no such header gives the value in the recording (`django/views/decorators/cache.py:never_cache`, `django/utils/cache.py:add_never_cache_headers`).",
-   "tree": "django",
-   "path": "django/utils/cache.py",
-   "symbol": "add_never_cache_headers",
-   "kind": "function",
-   "lines": [
-    293,
-    300
-   ],
-   "fingerprint": "d8d45c06f0c739ec"
-  },
-  {
    "pointer": "django/views/decorators/cache.py:cache_control",
-   "line": 62,
-   "sentence": "`cache_control` is the general form: its keyword arguments go to `patch_cache_control`, which edits that header with them (`django/views/decorators/cache.py:cache_control`).",
+   "line": 64,
+   "sentence": "What each of those functions writes, and how it merges with a header already there, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md) (`django/views/decorators/vary.py:vary_on_headers`, `django/views/decorators/cache.py:never_cache`, `django/views/decorators/cache.py:cache_control`).",
    "tree": "django",
    "path": "django/views/decorators/cache.py",
    "symbol": "cache_control",
@@ -116,9 +182,37 @@
    "fingerprint": "d4123ce72e742a4f"
   },
   {
+   "pointer": "django/utils/cache.py",
+   "line": 66,
+   "sentence": "Written under `condition`, `vary_on_cookie` runs only when the view does; written over it, it patches the 304 as well ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#under-the-condition-decorator)) (`django/views/decorators/http.py:condition`).",
+   "tree": "django",
+   "path": "django/utils/cache.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    451
+   ],
+   "fingerprint": "cef63ee1b300683e"
+  },
+  {
+   "pointer": "django/views/decorators/http.py:condition",
+   "line": 66,
+   "sentence": "Written under `condition`, `vary_on_cookie` runs only when the view does; written over it, it patches the 304 as well ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#under-the-condition-decorator)) (`django/views/decorators/http.py:condition`).",
+   "tree": "django",
+   "path": "django/views/decorators/http.py",
+   "symbol": "condition",
+   "kind": "function",
+   "lines": [
+    82,
+    159
+   ],
+   "fingerprint": "c1eb2dbedb63b641"
+  },
+  {
    "pointer": "django/views/decorators/",
-   "line": 81,
-   "sentence": "*The view decorators of `django/views/decorators/` that are not made from a middleware.*",
+   "line": 83,
+   "sentence": "*The view decorators of `django/views/decorators/` that are not made from a middleware, by when each changes the request or the response.",
    "tree": "django",
    "path": "django/views/decorators/",
    "symbol": null,
@@ -126,106 +220,8 @@
    "fingerprint": "e71195e970af2827"
   },
   {
-   "pointer": "django/views/decorators/csrf.py:csrf_exempt",
-   "line": 89,
-   "sentence": "`csrf_exempt` and `no_append_slash` return a wrapper that does nothing but call the view, and set an attribute on the wrapper: `\"csrf_exempt\"` for `CsrfViewMiddleware`, `\"should_append_slash\"` for `CommonMiddleware` (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
-   "tree": "django",
-   "path": "django/views/decorators/csrf.py",
-   "symbol": "csrf_exempt",
-   "kind": "function",
-   "lines": [
-    50,
-    68
-   ],
-   "fingerprint": "9ecf5d113ebb9418"
-  },
-  {
-   "pointer": "django/views/decorators/common.py:no_append_slash",
-   "line": 89,
-   "sentence": "`csrf_exempt` and `no_append_slash` return a wrapper that does nothing but call the view, and set an attribute on the wrapper: `\"csrf_exempt\"` for `CsrfViewMiddleware`, `\"should_append_slash\"` for `CommonMiddleware` (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
-   "tree": "django",
-   "path": "django/views/decorators/common.py",
-   "symbol": "no_append_slash",
-   "kind": "function",
-   "lines": [
-    5,
-    26
-   ],
-   "fingerprint": "2bdc24ff96e43016"
-  },
-  {
-   "pointer": "django/contrib/auth/decorators.py",
-   "line": 102,
-   "sentence": "`login_not_required`, in `django/contrib/auth/decorators.py`, takes the other course.",
-   "tree": "django",
-   "path": "django/contrib/auth/decorators.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    138
-   ],
-   "fingerprint": "eb2e08bf11421b85"
-  },
-  {
-   "pointer": "django/db/transaction.py",
-   "line": 104,
-   "sentence": "`non_atomic_requests`, which lives with the transaction code in `django/db/transaction.py`, is of the same family: its wrapper carries a set of database aliases, and a second use of the decorator adds to the set the first one left.",
-   "tree": "django",
-   "path": "django/db/transaction.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    359
-   ],
-   "fingerprint": "d3e0d2dd56cd6158"
-  },
-  {
-   "pointer": "django/views/decorators/clickjacking.py:xframe_options_exempt",
-   "line": 108,
-   "sentence": "`csp_override` and `csp_report_only_override` each store a policy on the response, which `ContentSecurityPolicyMiddleware.process_response` uses in place of the one in the settings (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:_make_csp_decorator`).",
-   "tree": "django",
-   "path": "django/views/decorators/clickjacking.py",
-   "symbol": "xframe_options_exempt",
-   "kind": "function",
-   "lines": [
-    65,
-    89
-   ],
-   "fingerprint": "540e614f16766c13"
-  },
-  {
-   "pointer": "django/views/decorators/csp.py:_make_csp_decorator",
-   "line": 108,
-   "sentence": "`csp_override` and `csp_report_only_override` each store a policy on the response, which `ContentSecurityPolicyMiddleware.process_response` uses in place of the one in the settings (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:_make_csp_decorator`).",
-   "tree": "django",
-   "path": "django/views/decorators/csp.py",
-   "symbol": "_make_csp_decorator",
-   "kind": "function",
-   "lines": [
-    5,
-    30
-   ],
-   "fingerprint": "3a7a27e47288e289"
-  },
-  {
-   "pointer": "django/views/decorators/debug.py:sensitive_post_parameters",
-   "line": 110,
-   "sentence": "`sensitive_post_parameters` sets an attribute on the request each time the view is called, naming the posted fields that an error report must not show (`django/views/decorators/debug.py:sensitive_post_parameters`).",
-   "tree": "django",
-   "path": "django/views/decorators/debug.py",
-   "symbol": "sensitive_post_parameters",
-   "kind": "function",
-   "lines": [
-    81,
-    146
-   ],
-   "fingerprint": "fd87f3b57fc9c2fd"
-  },
-  {
    "pointer": "django/views/decorators/http.py:condition",
-   "line": 128,
+   "line": 89,
    "sentence": "If the client already holds the current version and the request is a `\"GET\"` or a `\"HEAD\"`, the answer is a 304 and the view is never called (`django/views/decorators/http.py:condition`).",
    "tree": "django",
    "path": "django/views/decorators/http.py",
@@ -239,8 +235,8 @@
   },
   {
    "pointer": "django/utils/cache.py",
-   "line": 187,
-   "sentence": "The comparisons themselves, and `ConditionalGetMiddleware`, which makes the same decision for a `\"GET\"` from the finished response and so only after the view has done its work, belong to [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md).",
+   "line": 117,
+   "sentence": "How `get_conditional_response` compares the versions, the 412 it gives a request that would replace a version other than the current one, and how the wrapper quotes a tag and reads a time without a time zone, are told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md), with `ConditionalGetMiddleware`, which makes the same decision for a `\"GET\"` from the finished response, and so only after the view has done its work.",
    "tree": "django",
    "path": "django/utils/cache.py",
    "symbol": null,
@@ -252,46 +248,172 @@
    "fingerprint": "cef63ee1b300683e"
   },
   {
-   "pointer": "django/utils/decorators.py:method_decorator",
-   "line": 191,
-   "sentence": "So a decorator whose wrapper uses the request cannot be written above a handler method as it stands, and `method_decorator` exists to adapt it (`django/utils/decorators.py:method_decorator`).",
+   "pointer": "django/views/decorators/csrf.py:csrf_exempt",
+   "line": 123,
+   "sentence": "`csrf_exempt` and `no_append_slash` return a wrapper that does nothing but call the view, and set an attribute on the wrapper, `\"csrf_exempt\"` or `\"should_append_slash\"` (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
    "tree": "django",
-   "path": "django/utils/decorators.py",
-   "symbol": "method_decorator",
+   "path": "django/views/decorators/csrf.py",
+   "symbol": "csrf_exempt",
    "kind": "function",
    "lines": [
-    61,
-    95
+    50,
+    68
    ],
-   "fingerprint": "12fa0dc64130e07c"
+   "fingerprint": "9ecf5d113ebb9418"
   },
   {
-   "pointer": "django/utils/decorators.py:_multi_decorate",
-   "line": 195,
-   "sentence": "A decorator does its setting up again for every request (`django/utils/decorators.py:_multi_decorate`).",
+   "pointer": "django/views/decorators/common.py:no_append_slash",
+   "line": 123,
+   "sentence": "`csrf_exempt` and `no_append_slash` return a wrapper that does nothing but call the view, and set an attribute on the wrapper, `\"csrf_exempt\"` or `\"should_append_slash\"` (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
    "tree": "django",
-   "path": "django/utils/decorators.py",
-   "symbol": "_multi_decorate",
+   "path": "django/views/decorators/common.py",
+   "symbol": "no_append_slash",
    "kind": "function",
    "lines": [
-    26,
-    58
+    5,
+    26
    ],
-   "fingerprint": "96434dac8ddc6429"
+   "fingerprint": "2bdc24ff96e43016"
   },
   {
-   "pointer": "django/utils/decorators.py:_update_method_wrapper",
-   "line": 237,
-   "sentence": "So `_multi_decorate` also applies each decorator once, when the class is defined, to a function that does nothing, and copies whatever attributes that function comes back with onto the replacement method (`django/utils/decorators.py:_update_method_wrapper`).",
+   "pointer": "django/db/transaction.py",
+   "line": 123,
+   "sentence": "`non_atomic_requests`, in `django/db/transaction.py`, marks its wrapper in the same way, with `\"_non_atomic_requests\"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`).",
    "tree": "django",
-   "path": "django/utils/decorators.py",
-   "symbol": "_update_method_wrapper",
+   "path": "django/db/transaction.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    359
+   ],
+   "fingerprint": "d3e0d2dd56cd6158"
+  },
+  {
+   "pointer": "django/db/transaction.py:_non_atomic_requests",
+   "line": 123,
+   "sentence": "`non_atomic_requests`, in `django/db/transaction.py`, marks its wrapper in the same way, with `\"_non_atomic_requests\"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "_non_atomic_requests",
    "kind": "function",
    "lines": [
-    16,
-    23
+    339,
+    350
    ],
-   "fingerprint": "b1e8d92dcc0380f8"
+   "fingerprint": "5ee6f0732dc71723"
+  },
+  {
+   "pointer": "django/views/decorators/csrf.py:csrf_exempt",
+   "line": 133,
+   "sentence": "Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, \"decorators are nicer if they don't have side effects\" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
+   "tree": "django",
+   "path": "django/views/decorators/csrf.py",
+   "symbol": "csrf_exempt",
+   "kind": "function",
+   "lines": [
+    50,
+    68
+   ],
+   "fingerprint": "9ecf5d113ebb9418"
+  },
+  {
+   "pointer": "django/views/decorators/common.py:no_append_slash",
+   "line": 133,
+   "sentence": "Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, \"decorators are nicer if they don't have side effects\" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
+   "tree": "django",
+   "path": "django/views/decorators/common.py",
+   "symbol": "no_append_slash",
+   "kind": "function",
+   "lines": [
+    5,
+    26
+   ],
+   "fingerprint": "2bdc24ff96e43016"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py",
+   "line": 133,
+   "sentence": "`login_not_required`, in `django/contrib/auth/decorators.py`, takes the other course: it sets its attribute on the view it is given and returns that same view (`django/contrib/auth/decorators.py:login_not_required`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    138
+   ],
+   "fingerprint": "eb2e08bf11421b85"
+  },
+  {
+   "pointer": "django/contrib/auth/decorators.py:login_not_required",
+   "line": 133,
+   "sentence": "`login_not_required`, in `django/contrib/auth/decorators.py`, takes the other course: it sets its attribute on the view it is given and returns that same view (`django/contrib/auth/decorators.py:login_not_required`).",
+   "tree": "django",
+   "path": "django/contrib/auth/decorators.py",
+   "symbol": "login_not_required",
+   "kind": "function",
+   "lines": [
+    91,
+    96
+   ],
+   "fingerprint": "64bd44c3bb1e1a77"
+  },
+  {
+   "pointer": "django/middleware/common.py:CommonMiddleware.should_redirect_with_slash",
+   "line": 135,
+   "sentence": "`\"should_append_slash\"` is read by `CommonMiddleware.should_redirect_with_slash`, which resolves the path with a slash added to find the view it would lead to, and is called from that middleware's `process_request` and `process_response` ([What the handler asks of a view](callable.md#what-other-code-reads-from-a-view)) (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`).",
+   "tree": "django",
+   "path": "django/middleware/common.py",
+   "symbol": "CommonMiddleware.should_redirect_with_slash",
+   "kind": "function",
+   "lines": [
+    63,
+    75
+   ],
+   "fingerprint": "cef28aef1cb723b0"
+  },
+  {
+   "pointer": "django/views/decorators/clickjacking.py:xframe_options_exempt",
+   "line": 137,
+   "sentence": "`csp_override` and `csp_report_only_override` each store a policy on the response, which `ContentSecurityPolicyMiddleware.process_response` uses in place of the one in the settings (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:_make_csp_decorator`).",
+   "tree": "django",
+   "path": "django/views/decorators/clickjacking.py",
+   "symbol": "xframe_options_exempt",
+   "kind": "function",
+   "lines": [
+    65,
+    89
+   ],
+   "fingerprint": "540e614f16766c13"
+  },
+  {
+   "pointer": "django/views/decorators/csp.py:_make_csp_decorator",
+   "line": 137,
+   "sentence": "`csp_override` and `csp_report_only_override` each store a policy on the response, which `ContentSecurityPolicyMiddleware.process_response` uses in place of the one in the settings (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:_make_csp_decorator`).",
+   "tree": "django",
+   "path": "django/views/decorators/csp.py",
+   "symbol": "_make_csp_decorator",
+   "kind": "function",
+   "lines": [
+    5,
+    30
+   ],
+   "fingerprint": "3a7a27e47288e289"
+  },
+  {
+   "pointer": "django/views/decorators/debug.py:sensitive_post_parameters",
+   "line": 139,
+   "sentence": "`sensitive_post_parameters` sets an attribute of its own name on the request each time the view is called, holding the names of the posted fields that an error report must not show, `(\"password\",)` for `sensitive_post_parameters(\"password\")`, or `\"__ALL__\"` for `sensitive_post_parameters()` (`django/views/decorators/debug.py:sensitive_post_parameters`).",
+   "tree": "django",
+   "path": "django/views/decorators/debug.py",
+   "symbol": "sensitive_post_parameters",
+   "kind": "function",
+   "lines": [
+    81,
+    146
+   ],
+   "fingerprint": "fd87f3b57fc9c2fd"
   }
  ]
 }

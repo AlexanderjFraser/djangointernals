@@ -287,6 +287,33 @@ GET /births/, twice: a decorator on dispatch is applied again at every call
     start_response("200 OK", headers)
     the server sends the body: 'births, marriages and deaths'
 
+gazette.listed is imported: method_decorator([first, second], name="dispatch") on the class Corrections
+    import gazette.listed
+      method_decorator([first, second], name='dispatch')
+      _multi_decorate(decorators, View.dispatch)
+        _update_method_wrapper
+          second is applied to _update_method_wrapper.<locals>.dummy
+        _update_method_wrapper
+          first is applied to _update_method_wrapper.<locals>.dummy
+
+GET /corrections/, with ROOT_URLCONF = 'gazette.desk' for this block: the two decorators of the list, at a call
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Corrections)
+        View.__init__()  (a new Corrections)
+        View.setup(request)
+        the wrapper method_decorator made
+          second is applied to a partial around the bound method View.dispatch
+          first is applied to the wrapper second made
+          the wrapper first made is called
+          the wrapper second made is called
+          View.dispatch(request)
+            Corrections.get(request)  ->  an HttpResponse, status 200
+            -> an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'corrections and clarifications'
+
 POST /tips/ and POST /tips/marked/ with CsrfViewMiddleware installed and no token sent
     POST /tips/, whose class has csrf_exempt on dispatch
     start_response("200 OK", headers)
@@ -383,6 +410,28 @@ GET /crossword/, twice: method_decorator applies its decorator again at every ca
     start_response("200 OK", headers)
     the server sends the body: "today's crossword"
 
+GET /notices/wire/ through an ASGIHandler, with ROOT_URLCONF = 'gazette.desk' for this block: the decorator made from Stamp around an async def view
+    BaseHandler._get_response_async  [loop]
+      the wrapper made from Stamp  [loop]
+        Stamp.process_request  [loop]
+        Stamp.process_view(view=wire_notices)  [loop]
+        desk.wire_notices(request)  [loop]  ->  an HttpResponse, status 200
+        Stamp.process_response(a 200, content='notices from the wire')  [loop]
+        -> an HttpResponse, status 200
+    send(http.response.start), status 200  [loop]
+    send(http.response.body), with the body 'notices from the wire'  [loop]
+
+GET /notices/ through an ASGIHandler: the decorator made from Stamp around a view that is not a coroutine
+    BaseHandler._get_response_async  [loop]
+      the wrapper made from Stamp  [worker]
+        Stamp.process_request  [worker]
+        Stamp.process_view(view=notices)  [worker]
+        views.notices(request)  [worker]  ->  an HttpResponse, status 200
+        Stamp.process_response(a 200, content='public notices')  [worker]
+        -> an HttpResponse, status 200
+    send(http.response.start), status 200  [loop]
+    send(http.response.body), with the body 'public notices'  [loop]
+
 The decorators Django makes from its own middleware
     csrf_protect(views.front)(request("/", "POST", {})).status_code  ->  403
       log, WARNING to django.security.csrf: Forbidden (CSRF cookie not set.): /
@@ -392,6 +441,38 @@ The decorators Django makes from its own middleware
     "csrftoken" in ensure_csrf_cookie(views.front)(request()).cookies  ->  True
     cache_page(60)(views.front)(request()).headers["Cache-Control"]  ->  'max-age=60'
     csrf_protect.__name__  ->  'csrf_protect'
+
+POST /subscribe/ with a valid token, with CsrfViewMiddleware installed and ROOT_URLCONF = 'gazette.desk' for this block: the middleware and csrf_protect together
+    desk.subscribe is under csrf_protect, and calls get_token(request), as a template that has {% csrf_token %} does;
+    the POST carries the cookie csrftoken=GazetteGazetteGazetteGazette1871 and the same secret as its field "csrfmiddlewaretoken"
+    CsrfViewMiddleware.process_request  (the chain's)
+    BaseHandler._get_response
+      CsrfViewMiddleware.process_view  (the chain's)
+        CsrfViewMiddleware._check_token  (the chain's)
+        CsrfViewMiddleware._accept  (the chain's)
+        -> None
+      the wrapper made from CsrfViewMiddleware
+        CsrfViewMiddleware.process_request  (the decorator's)
+        CsrfViewMiddleware.process_view  (the decorator's)  ->  None
+        desk.subscribe(request)  ->  an HttpResponse, status 200
+        CsrfViewMiddleware.process_response  (the decorator's)
+          CsrfViewMiddleware._set_csrf_cookie  (the decorator's)
+        -> an HttpResponse, status 200
+    CsrfViewMiddleware.process_response  (the chain's)
+    start_response("200 OK", headers)
+    the server sends the body: 'subscribed'
+
+POST /subscribe/ with no token, with CsrfViewMiddleware installed and ROOT_URLCONF = 'gazette.desk' for this block
+    CsrfViewMiddleware.process_request  (the chain's)
+    BaseHandler._get_response
+      CsrfViewMiddleware.process_view  (the chain's)
+        CsrfViewMiddleware._check_token  (the chain's)  raises RejectRequest
+        CsrfViewMiddleware._reject  (the chain's)
+          log, WARNING to django.security.csrf: Forbidden (CSRF cookie not set.): /subscribe/
+        -> an HttpResponseForbidden, status 403
+    CsrfViewMiddleware.process_response  (the chain's)
+    start_response("403 Forbidden", headers)
+    the server sends the body, 1613 bytes
 
 GET /edition/: a view under condition()
     BaseHandler._get_response
@@ -421,6 +502,53 @@ PUT /edition/ with If-Match: "edition-6"
           -> an HttpResponse, status 412
         -> an HttpResponse, status 412
     start_response("412 Precondition Failed", headers)
+    the server sends the body: ''
+
+GET /edition/vary-below/, with ROOT_URLCONF = 'gazette.desk' for this block: vary_on_cookie written under condition()
+    BaseHandler._get_response
+      the wrapper condition made
+        desk.edition_tag(request)  ->  'edition-7'
+        get_conditional_response(request, etag='"edition-7"', last_modified=None)  ->  None
+        the wrapper vary_on_headers made, for ('Cookie',)
+          desk.vary_below(request)  ->  an HttpResponse, status 200
+          patch_vary_headers(response, ('Cookie',))
+          -> an HttpResponse, status 200
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers), with ETag: "edition-7", Vary: Cookie
+    the server sends the body: "today's edition"
+
+GET /edition/vary-below/ with If-None-Match: "edition-7", with ROOT_URLCONF = 'gazette.desk' for this block
+    BaseHandler._get_response
+      the wrapper condition made
+        desk.edition_tag(request)  ->  'edition-7'
+        get_conditional_response(request, etag='"edition-7"', last_modified=None)  ->  an HttpResponseNotModified, status 304
+        -> an HttpResponseNotModified, status 304
+    start_response("304 Not Modified", headers), with ETag: "edition-7"
+    the server sends the body: ''
+
+GET /edition/vary-above/, with ROOT_URLCONF = 'gazette.desk' for this block: vary_on_cookie written over condition()
+    BaseHandler._get_response
+      the wrapper vary_on_headers made, for ('Cookie',)
+        the wrapper condition made
+          desk.edition_tag(request)  ->  'edition-7'
+          get_conditional_response(request, etag='"edition-7"', last_modified=None)  ->  None
+          desk.vary_above(request)  ->  an HttpResponse, status 200
+          -> an HttpResponse, status 200
+        patch_vary_headers(response, ('Cookie',))
+        -> an HttpResponse, status 200
+    start_response("200 OK", headers), with ETag: "edition-7", Vary: Cookie
+    the server sends the body: "today's edition"
+
+GET /edition/vary-above/ with If-None-Match: "edition-7", with ROOT_URLCONF = 'gazette.desk' for this block
+    BaseHandler._get_response
+      the wrapper vary_on_headers made, for ('Cookie',)
+        the wrapper condition made
+          desk.edition_tag(request)  ->  'edition-7'
+          get_conditional_response(request, etag='"edition-7"', last_modified=None)  ->  an HttpResponseNotModified, status 304
+          -> an HttpResponseNotModified, status 304
+        patch_vary_headers(response, ('Cookie',))
+        -> an HttpResponseNotModified, status 304
+    start_response("304 Not Modified", headers), with ETag: "edition-7", Vary: Cookie
     the server sends the body: ''
 
 Which views are coroutine functions, and which decorators keep them so
@@ -463,6 +591,80 @@ Views that are coroutine functions, requested through a WSGIHandler
     signal got_request_exception, for ValueError: The view gazette.views.wire_counted didn't return an HttpResponse object. It returned an unawaited coroutine instead. You may need to add an 'await' into your view.
     log, ERROR to django.request: Internal Server Error: /wire/counted/
     start_response("500 Internal Server Error", headers)
+
+GET /wire/, an async def function, through an ASGIHandler, with ATOMIC_REQUESTS set on the database for this block
+    BaseHandler._get_response_async  [loop]
+      BaseHandler.make_view_atomic  [loop]  raises RuntimeError
+    response_for_exception(request, RuntimeError)  [worker]
+      signal got_request_exception, for RuntimeError: You cannot use ATOMIC_REQUESTS with async views.  [worker]
+      log, ERROR to django.request: Internal Server Error: /wire/  [worker]
+      -> an HttpResponseServerError, status 500
+    send(http.response.start), status 500  [loop]
+    send(http.response.body), with a body of 145 bytes  [loop]
+    Python gives no warning
+
+GET /wire/, an async def function, through a WSGIHandler, with ATOMIC_REQUESTS set on the database for this block
+    BaseHandler._get_response
+      BaseHandler.make_view_atomic  raises RuntimeError
+    response_for_exception(request, RuntimeError)
+      signal got_request_exception, for RuntimeError: You cannot use ATOMIC_REQUESTS with async views.
+      log, ERROR to django.request: Internal Server Error: /wire/
+      -> an HttpResponseServerError, status 500
+    start_response("500 Internal Server Error", headers)
+    the server sends the body, 145 bytes
+    Python gives no warning
+
+GET /wire/outside/, the same function under non_atomic_requests, through an ASGIHandler, with ATOMIC_REQUESTS set on the database and ROOT_URLCONF = 'gazette.desk' for this block
+    desk.wire_outside is non_atomic_requests(views.wire), and the URLconf gazette.desk routes /wire/outside/ to it
+    iscoroutinefunction(desk.wire_outside)  ->  False
+    desk.wire_outside._non_atomic_requests  ->  {'default'}
+    BaseHandler._get_response_async  [loop]
+      BaseHandler.make_view_atomic  [loop]  ->  the view as the URLconf gave it
+      the wrapper non_atomic_requests made  [worker]  ->  a coroutine of wire, not yet started
+      BaseHandler.check_response  [loop]  raises ValueError
+    response_for_exception(request, ValueError)  [worker]
+      signal got_request_exception, for ValueError: The view gazette.views.wire didn't return an HttpResponse object. It returned an unawaited coroutine instead. You may need to add an 'await' into your view.  [worker]
+      log, ERROR to django.request: Internal Server Error: /wire/outside/  [worker]
+      -> an HttpResponseServerError, status 500
+    send(http.response.start), status 500  [loop]
+    send(http.response.body), with a body of 145 bytes  [loop]
+    Python warns: RuntimeWarning: coroutine 'wire' was never awaited
+
+GET /wire/outside/, the same function under non_atomic_requests, through a WSGIHandler, with ATOMIC_REQUESTS set on the database and ROOT_URLCONF = 'gazette.desk' for this block
+    BaseHandler._get_response
+      BaseHandler.make_view_atomic  ->  the view as the URLconf gave it
+      the wrapper non_atomic_requests made  ->  a coroutine of wire, not yet started
+      BaseHandler.check_response  raises ValueError
+    response_for_exception(request, ValueError)
+      signal got_request_exception, for ValueError: The view gazette.views.wire didn't return an HttpResponse object. It returned an unawaited coroutine instead. You may need to add an 'await' into your view.
+      log, ERROR to django.request: Internal Server Error: /wire/outside/
+      -> an HttpResponseServerError, status 500
+    start_response("500 Internal Server Error", headers)
+    the server sends the body, 145 bytes
+    Python warns: RuntimeWarning: coroutine 'wire' was never awaited
+
+GET /, a function that is not a coroutine, through a WSGIHandler, with ATOMIC_REQUESTS set on the database for this block
+    BaseHandler._get_response
+      BaseHandler.make_view_atomic  ->  a function that calls the view inside an Atomic, for the database 'default'
+      Atomic.__enter__
+        SQL BEGIN with params None
+      views.front(request)  ->  an HttpResponse, status 200
+      Atomic.__exit__
+        BaseDatabaseWrapper.commit
+      BaseHandler.check_response
+    start_response("200 OK", headers)
+    the server sends the body: 'the front page'
+
+GET /wire/class/ through an ASGIHandler: a class whose get is async def, call by call
+    BaseHandler._get_response_async  [loop]
+      view(request)  (the function as_view returned for Wire)  [loop]
+        View.__init__()  (a new Wire)  [loop]
+        View.setup(request)  [loop]
+        View.dispatch(request)  [loop]  ->  a coroutine of Wire.get, not yet started
+        -> a coroutine of Wire.get, not yet started
+      Wire.get(request): the coroutine is awaited, and its body runs  [loop]  ->  an HttpResponse, status 200
+    send(http.response.start), status 200  [loop]
+    send(http.response.body), with the body 'from the wire'  [loop]
 
 resolve_url(): an object, a name, or a URL
     resolve_url("/articles/")  ->  '/articles/'
@@ -644,6 +846,54 @@ GET /weather/: a RedirectView with nowhere to send the request
           -> an HttpResponseGone, status 410
         -> an HttpResponseGone, status 410
     start_response("410 Gone", headers)
+    the server sends the body: ''
+
+POST /news/: the same RedirectView, given a POST
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for RedirectView)
+        View.__init__(pattern_name='articles')  (a new RedirectView)
+        View.setup(request)
+        View.dispatch(request)
+          RedirectView.post(request)
+            RedirectView.get(request)
+              RedirectView.get_redirect_url()  ->  '/articles/'
+              -> an HttpResponseRedirect, status 302, Location '/articles/'
+            -> an HttpResponseRedirect, status 302, Location '/articles/'
+          -> an HttpResponseRedirect, status 302, Location '/articles/'
+        -> an HttpResponseRedirect, status 302, Location '/articles/'
+    start_response("302 Found", headers), with Location: /articles/
+    the server sends the body: ''
+
+POST /news/kept/, with ROOT_URLCONF = 'gazette.desk' for this block: a RedirectView with preserve_request=True
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for RedirectView)
+        View.__init__(url='/articles/', preserve_request=True)  (a new RedirectView)
+        View.setup(request)
+        View.dispatch(request)
+          RedirectView.post(request)
+            RedirectView.get(request)
+              RedirectView.get_redirect_url()  ->  '/articles/'
+              -> an HttpResponseRedirect, status 307, Location '/articles/'
+            -> an HttpResponseRedirect, status 307, Location '/articles/'
+          -> an HttpResponseRedirect, status 307, Location '/articles/'
+        -> an HttpResponseRedirect, status 307, Location '/articles/'
+    start_response("307 Temporary Redirect", headers), with Location: /articles/
+    the server sends the body: ''
+
+POST /news/kept/moved/, with ROOT_URLCONF = 'gazette.desk' for this block: a RedirectView with permanent=True and preserve_request=True
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for RedirectView)
+        View.__init__(url='/articles/', permanent=True, preserve_request=True)  (a new RedirectView)
+        View.setup(request)
+        View.dispatch(request)
+          RedirectView.post(request)
+            RedirectView.get(request)
+              RedirectView.get_redirect_url()  ->  '/articles/'
+              -> an HttpResponsePermanentRedirect, status 308, Location '/articles/'
+            -> an HttpResponsePermanentRedirect, status 308, Location '/articles/'
+          -> an HttpResponsePermanentRedirect, status 308, Location '/articles/'
+        -> an HttpResponsePermanentRedirect, status 308, Location '/articles/'
+    start_response("308 Permanent Redirect", headers), with Location: /articles/
     the server sends the body: ''
 
 GET /articles/ferry-timetable/: a DetailView
@@ -836,6 +1086,39 @@ POST /letters/ with a letter the form accepts
     start_response("302 Found", headers), with Location: /letters/thanks/
     the server sends the body: ''
     the view's own form_valid put the name in views.RECEIVED: ['A. Reader']
+
+PUT /letters/ with the body a POST that the form accepts would have
+    the request's body, as application/x-www-form-urlencoded: name=A.+Reader&letter=The+ferry+has+been+late+every+day+this+week.
+    BaseHandler._get_response
+      view(request)  (the function as_view returned for Letters)
+        View.__init__()  (a new Letters)
+        View.setup(request)
+        View.dispatch(request)
+          ProcessFormView.put(request)
+            ProcessFormView.post(request)
+              FormMixin.get_form()
+                FormMixin.get_form_class  ->  LetterForm
+                FormMixin.get_form_kwargs
+                  FormMixin.get_initial  ->  {}
+                  FormMixin.get_prefix  ->  None
+                  -> a dict with the keys data, files, initial, prefix; its data is a QueryDict with no keys
+                -> a LetterForm, bound
+              BaseForm.is_valid  ->  False
+              FormMixin.form_invalid(form)
+                FormMixin.get_context_data(form=...)
+                  ContextMixin.get_context_data(form=...)  ->  a dict with the keys form, view
+                  -> a dict with the keys form, view
+                TemplateResponseMixin.render_to_response(context)
+                  TemplateResponseMixin.get_template_names  ->  ['gazette/letters.html']
+                  -> a TemplateResponse, status 200, not rendered
+                -> a TemplateResponse, status 200, not rendered
+              -> a TemplateResponse, status 200, not rendered
+            -> a TemplateResponse, status 200, not rendered
+          -> a TemplateResponse, status 200, not rendered
+        -> a TemplateResponse, status 200, not rendered
+      SimpleTemplateResponse.render
+    start_response("200 OK", headers)
+    the server sends the body: 'Please correct: name, letter\n'
 
 POST /articles/new/: a CreateView saves a new object
     BaseHandler._get_response
@@ -1404,6 +1687,43 @@ The date views: what each puts in the context, for the model Article and its fie
       context(generic.MonthArchiveView, year=2026, month="3")  ->  raises Http404: Invalid date string “2026__3__” given format “%Y__%b__”
       context(generic.WeekArchiveView, {"week_format": "%V"}, year=2026, week=10)  ->  raises ValueError: ISO week directive '%V' is incompatible with the year directive '%Y'. Use the ISO year '%G' instead.
 
+TodayArchiveView, with the name datetime in django.views.generic.dates given for this block a stand-in whose date.today() is 2026-04-10
+    today_view is generic.TodayArchiveView.as_view(model=Article, date_field="published"), called with a GET request
+    view(request)  (the function as_view returned for TodayArchiveView)
+      View.__init__(model=<class 'gazette.models.Article'>, date_field='published')  (a new TodayArchiveView)
+      View.setup(request)
+      View.dispatch(request)
+        BaseDateListView.get(request)
+          BaseTodayArchiveView.get_dated_items
+            BaseDayArchiveView._get_dated_items(2026-04-10)
+              DateMixin._make_single_date_lookup(2026-04-10)
+                DateMixin.get_date_field  ->  'published'
+                DateMixin.uses_datetime_field
+                  DateMixin.get_date_field  ->  'published'
+                  -> True
+                DateMixin._make_date_lookup_arg(2026-04-10)  ->  2026-04-10 00:00+00:00
+                DateMixin._make_date_lookup_arg(2026-04-11)  ->  2026-04-11 00:00+00:00
+                -> {'published__gte': 2026-04-10 00:00+00:00, 'published__lt': 2026-04-11 00:00+00:00}
+              BaseDateListView.get_dated_queryset(published__gte=2026-04-10 00:00+00:00, published__lt=2026-04-11 00:00+00:00)
+                MultipleObjectMixin.get_queryset
+                  BaseDateListView.get_ordering
+                    DateMixin.get_date_field  ->  'published'
+                    -> '-published'
+                  -> a QuerySet of Article, ordered by -published, not yet fetched
+                DateMixin.get_date_field  ->  'published'
+                DateMixin.get_allow_future  ->  False
+                MultipleObjectMixin.get_allow_empty  ->  False
+                MultipleObjectMixin.get_paginate_by(queryset)  ->  None
+                SQL SELECT "gazette_article"."id", "gazette_article"."slug", "gazette_article"."headline", "gazette_article"."published" FROM "gazette_article" WHERE ("gazette_article"."published" >= %s AND "gazette_article"."published" < %s AND "gazette_article"."published" <= %s) ORDER BY "gazette_article"."published" DESC with params ('2026-04-10 00:00:00', '2026-04-11 00:00:00', '2026-04-10 09:00:00')
+                raises Http404
+    the call raises Http404: No articles available
+
+TodayArchiveView's day, with the stand-in for datetime and without it
+    (the queries these questions send are not written down)
+    with the stand-in: context(generic.TodayArchiveView, {"allow_empty": True})  ->  date_list = None; day = 2026-04-10; next_day = None; next_month = None; object_list = []; previous_day = 2026-04-09; previous_month = 2026-03-01
+    with the stand-in: day_of(generic.TodayArchiveView)  ->  2026-04-10
+    without it, timezone.now alone replaced: day_of(generic.TodayArchiveView)  ->  the machine's date
+
 GET /no-such-page/ with DEBUG = False and no template named 404.html
     BaseHandler._get_response  raises Resolver404
     response_for_exception(request, Resolver404)
@@ -1494,6 +1814,63 @@ The four error views, called directly
     defaults.bad_request(request(), BadRequest("no"))  ->  an HttpResponseBadRequest, status 400, between its body tags, white space run together: <h1>Bad Request (400)</h1><p></p>
     defaults.server_error(request())  ->  an HttpResponseServerError, status 500, between its body tags, white space run together: <h1>Server Error (500)</h1><p></p>
     with a template named 404.html: defaults.page_not_found(request("/x y/"), Http404("no such edition"))  ->  an HttpResponseNotFound, status 404, content 'Nothing is printed at /x%20y/ (no such edition).\n'
+
+GET /no-such-page/ with DEBUG = False and, for this block, ROOT_URLCONF set to a URLconf of the script's own whose handler404 returns a TemplateResponse not yet rendered
+    desk.not_found_unrendered returns a TemplateResponse not yet rendered; ROOT_URLCONF is a URLconf with no patterns whose handler404 is desk.not_found_unrendered
+    [message.id for message in check_url_config(None)]  ->  []
+    [message.id for message in check_custom_error_handlers(None)]  ->  []
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      get_exception_response(request, resolver, 404, exception)
+        URLResolver.resolve_error_handler(404)  ->  gazette.desk.not_found_unrendered
+        desk.not_found_unrendered(request, exception=Resolver404)  ->  a TemplateResponse, status 404, not rendered
+        -> a TemplateResponse, status 404, not rendered
+      SimpleTemplateResponse.render
+        get_template('gazette/not_found.html')
+      -> a TemplateResponse, status 404, rendered
+    log, WARNING to django.request: Not Found: /no-such-page/
+    start_response("404 Not Found", headers)
+    the server sends the body: 'Nothing is printed at /no-such-page/.\n'
+
+GET /no-such-page/ with DEBUG = False and, for this block, ROOT_URLCONF set to a URLconf of the script's own whose handler404 returns a response with the status 200
+    desk.not_found_ok returns a response with the status 200; ROOT_URLCONF is a URLconf with no patterns whose handler404 is desk.not_found_ok
+    [message.id for message in check_url_config(None)]  ->  []
+    [message.id for message in check_custom_error_handlers(None)]  ->  []
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      get_exception_response(request, resolver, 404, exception)
+        URLResolver.resolve_error_handler(404)  ->  gazette.desk.not_found_ok
+        desk.not_found_ok(request, exception=Resolver404)  ->  an HttpResponse, status 200
+        -> an HttpResponse, status 200
+      -> an HttpResponse, status 200
+    start_response("200 OK", headers)
+    the server sends the body: 'no page at /no-such-page/'
+
+GET /no-such-page/ with DEBUG = False and, for this block, ROOT_URLCONF set to a URLconf of the script's own whose handler404 names its second parameter exc
+    desk.not_found_misnamed names its second parameter exc; ROOT_URLCONF is a URLconf with no patterns whose handler404 is desk.not_found_misnamed
+    [message.id for message in check_url_config(None)]  ->  []
+    [message.id for message in check_custom_error_handlers(None)]  ->  []
+    BaseHandler._get_response  raises Resolver404
+    response_for_exception(request, Resolver404)
+      get_exception_response(request, resolver, 404, exception)
+        URLResolver.resolve_error_handler(404)  ->  gazette.desk.not_found_misnamed
+        signal got_request_exception, for TypeError: not_found_misnamed() got an unexpected keyword argument 'exception'
+        handle_uncaught_exception(request, resolver, exc_info)
+          URLResolver.resolve_error_handler(500)  ->  django.views.defaults.server_error
+          the wrapper made from _EnsureCsrfToken
+            CsrfViewMiddleware.process_request  (_EnsureCsrfToken)
+            CsrfViewMiddleware.process_view  (_EnsureCsrfToken)
+            server_error(request)
+              get_template('500.html')  raises TemplateDoesNotExist
+              -> an HttpResponseServerError, status 500
+            CsrfViewMiddleware.process_response  (_EnsureCsrfToken)
+            -> an HttpResponseServerError, status 500
+          -> an HttpResponseServerError, status 500
+        -> an HttpResponseServerError, status 500
+      -> an HttpResponseServerError, status 500
+    log, ERROR to django.request: Internal Server Error: /no-such-page/
+    start_response("500 Internal Server Error", headers)
+    the server sends the body, 145 bytes
 
 GET /editions/1790/ with DEBUG = True and Accept: text/html
     BaseHandler._get_response
@@ -1592,6 +1969,27 @@ GET / with DEBUG = True and a URLconf that has no patterns
       -> an HttpResponse, status 200
     start_response("200 OK", headers), with Content-Type: text/html; charset=utf-8
 
+GET /forged/ with DEBUG = True and, for this block, ROOT_URLCONF = 'gazette.development_urls': the view raises SuspiciousOperation
+    BaseHandler._get_response
+      desk.forged(request)  raises SuspiciousOperation
+    response_for_exception(request, SuspiciousOperation)
+      technical_500_response(request, SuspiciousOperation, ..., status_code=400)  ->  an HttpResponse, status 400, Content-Type 'text/html'
+      log, ERROR to django.security.SuspiciousOperation: the edition's date has been altered
+      -> an HttpResponse, status 400
+    start_response("400 Bad Request", headers), with Content-Type: text/html
+
+GET /media/../views.py with DEBUG = True and, for this block, ROOT_URLCONF = 'gazette.development_urls': a path that climbs out of the static file view's root
+    gazette.development_urls holds the pattern static("/media/", document_root=FILES) makes while DEBUG is on, which routes
+    /media/<path> to django.views.static.serve
+    BaseHandler._get_response
+      serve(request, '../views.py', document_root=FILES)
+        safe_join(FILES, '../views.py')  raises SuspiciousFileOperation
+    response_for_exception(request, SuspiciousFileOperation)
+      technical_500_response(request, SuspiciousFileOperation, ..., status_code=400)  ->  an HttpResponse, status 400, Content-Type 'text/html'
+      log, ERROR to django.security.SuspiciousFileOperation: The joined path (gazette/views.py) is located outside of the base path component (gazette/files)
+      -> an HttpResponse, status 400
+    start_response("400 Bad Request", headers), with Content-Type: text/html
+
 technical_500_response: HTML or plain text, by the request's Accept header
     page_type(...) is the Content-Type of what technical_500_response returns for a request with the headers given
       page_type()  ->  'text/html'
@@ -1627,6 +2025,68 @@ What a report shows of a frame's variables and of the posted data
       "urgent" in text(post_guarded, False, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  True
       "fourteen-ninety-two" in text(post_guarded, True, {"pin": "fourteen-ninety-two", "note": "urgent"})  ->  True
       "SECRET_KEY = '********************'" in text(views.missing, True)  ->  True
+
+GET /editions/1790/ with DEBUG = False, and ADMINS and MAILERS set for this block: the error email
+    Django's default logging is in force, as django.setup() configured it: the logger django sends records of ERROR and
+    above to an AdminEmailHandler, under the filter RequireDebugFalse; for this block ADMINS is ['editor@gazette.example'],
+    and the default mailer of MAILERS is Django's in-memory backend, which keeps each message in django.core.mail.outbox
+    BaseHandler._get_response
+      views.missing(request, year=1790)  raises LookupError
+    response_for_exception(request, LookupError)
+      signal got_request_exception, for LookupError: no edition for 1790
+      handle_uncaught_exception(request, resolver, exc_info)  ->  an HttpResponseServerError, status 500
+      log_response
+        log, ERROR to django.request: Internal Server Error: /editions/1790/
+        AdminEmailHandler.emit
+          ExceptionReporter.__init__(request, LookupError, ..., is_email=True)
+          ExceptionReporter.get_traceback_text
+          AdminEmailHandler.send_mail
+            mail_admins
+              EmailBackend.send_messages  (django.core.mail.backends.locmem)
+      -> an HttpResponseServerError, status 500
+    log_response
+    start_response("500 Internal Server Error", headers)
+    Python gives no warning
+    len(mail.outbox)  ->  1
+    mail.outbox[0].subject  ->  '[Django] ERROR (EXTERNAL IP): Internal Server Error: /editions/1790/'
+    mail.outbox[0].to  ->  ['editor@gazette.example']
+    [alternative.mimetype for alternative in mail.outbox[0].alternatives]  ->  []
+    the message's text, where it gives the frame of views.missing:
+      |   File "gazette/views.py", line 83, in missing
+      |     raise LookupError(f"no edition for {year}")
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    "open sesame" in mail.outbox[0].body  ->  False
+
+GET /editions/1790/ with DEBUG = False, ADMINS and MAILERS set, and the AdminEmailHandler's include_html set to True for this block: the error email
+    as before, and the AdminEmailHandler's include_html, False by default, set to True for this block
+    BaseHandler._get_response
+      views.missing(request, year=1790)  raises LookupError
+    response_for_exception(request, LookupError)
+      signal got_request_exception, for LookupError: no edition for 1790
+      handle_uncaught_exception(request, resolver, exc_info)  ->  an HttpResponseServerError, status 500
+      log_response
+        log, ERROR to django.request: Internal Server Error: /editions/1790/
+        AdminEmailHandler.emit
+          ExceptionReporter.__init__(request, LookupError, ..., is_email=True)
+          ExceptionReporter.get_traceback_text
+          ExceptionReporter.get_traceback_html
+          AdminEmailHandler.send_mail
+            mail_admins
+              EmailBackend.send_messages  (django.core.mail.backends.locmem)
+      -> an HttpResponseServerError, status 500
+    log_response
+    start_response("500 Internal Server Error", headers)
+    Python gives no warning
+    len(mail.outbox)  ->  1
+    mail.outbox[0].subject  ->  '[Django] ERROR (EXTERNAL IP): Internal Server Error: /editions/1790/'
+    mail.outbox[0].to  ->  ['editor@gazette.example']
+    [alternative.mimetype for alternative in mail.outbox[0].alternatives]  ->  ['text/html']
+    the message's text, where it gives the frame of views.missing:
+      |   File "gazette/views.py", line 83, in missing
+      |     raise LookupError(f"no edition for {year}")
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    "open sesame" in mail.outbox[0].body  ->  False
+    "open sesame" in mail.outbox[0].alternatives[0].content  ->  True
 
 The frames of a report, when one exception was raised from another
     lookup() raises KeyError; chained() calls it, catches the KeyError and raises LookupError from it;
@@ -1687,4 +2147,13 @@ static(): the pattern that routes a prefix to the view, made only when DEBUG is 
       static("/media/", document_root=FILES)[0].callback is serve  ->  True
       static("/media/", document_root=FILES)[0].default_args == {"document_root": FILES}  ->  True
       static("https://cdn.example/media/", document_root=FILES)  ->  []
+
+LoginView's dispatch after the class is made, not requested, with django.contrib.auth and django.contrib.contenttypes added to INSTALLED_APPS for this block
+    the decorators above the class statement of LoginView  ->  method_decorator([login_not_required, sensitive_post_parameters(), csrf_protect, never_cache], name='dispatch')
+    LoginView.dispatch.__qualname__  ->  'LoginView.dispatch'
+    sorted(vars(LoginView.dispatch))  ->  ['__wrapped__', 'login_required']
+    LoginView.dispatch.login_required  ->  False
+    LoginView.dispatch.__wrapped__.__qualname__  ->  'LoginView.dispatch'
+    LoginView.as_view().login_required  ->  False
+    hasattr(LoginView.as_view(), "csrf_exempt")  ->  False
 

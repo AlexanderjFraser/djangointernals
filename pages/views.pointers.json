@@ -9,8 +9,8 @@
  "pointers": [
   {
    "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
-   "line": 54,
-   "sentence": "That call is the whole of the interface, and under ASGI the method's asynchronous twin makes the same one (`django/core/handlers/base.py:BaseHandler._get_response`).",
+   "line": 39,
+   "sentence": "Under ASGI the method's asynchronous twin makes the same call (`django/core/handlers/base.py:BaseHandler._get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler._get_response",
@@ -23,8 +23,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.check_response",
-   "line": 67,
-   "sentence": "After the call it refuses `None` and a coroutine nobody awaited, and nothing else: there is no test that the object returned is an `HttpResponse` (`django/core/handlers/base.py:BaseHandler.check_response`).",
+   "line": 90,
+   "sentence": "Of what comes back the handler checks little: `BaseHandler.check_response` refuses `None` and a coroutine nobody awaited, and tests nothing else ([What the handler asks of a view](views/callable.md)) (`django/core/handlers/base.py:BaseHandler.check_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.check_response",
@@ -36,9 +36,23 @@
    "fingerprint": "57a5130d89d02af1"
   },
   {
+   "pointer": "django/shortcuts.py",
+   "line": 92,
+   "sentence": "`render` renders a template into a finished response, `redirect` makes a redirect to a URL, to a pattern's name reversed or to an object's own URL, and `get_object_or_404` fetches one object, raising `Http404` when there is none ([The shortcuts](views/shortcuts.md)) (`django/shortcuts.py`).",
+   "tree": "django",
+   "path": "django/shortcuts.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    211
+   ],
+   "fingerprint": "ebdc0e520009d0fd"
+  },
+  {
    "pointer": "django/views/generic/base.py:View.as_view",
-   "line": 101,
-   "sentence": "Each time it is called it makes a new instance of the class, stores the request and the arguments on it, and calls the instance's `dispatch` (`django/views/generic/base.py:View.as_view`).",
+   "line": 98,
+   "sentence": "Each time that function is called it makes a new instance of the class, stores the request and its arguments on it in `View.setup`, and calls the instance's `dispatch` (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.as_view",
@@ -52,8 +66,8 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.dispatch",
-   "line": 128,
-   "sentence": "A class with no method for the request's method answers with a 405 that lists the ones it has (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
+   "line": 100,
+   "sentence": "A request whose method is not in `View.http_method_names`, or for which the instance has no method of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.dispatch",
@@ -66,8 +80,8 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.http_method_not_allowed",
-   "line": 128,
-   "sentence": "A class with no method for the request's method answers with a 405 that lists the ones it has (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
+   "line": 100,
+   "sentence": "A request whose method is not in `View.http_method_names`, or for which the instance has no method of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.http_method_not_allowed",
@@ -79,9 +93,79 @@
    "fingerprint": "32c36fc71d62a654"
   },
   {
+   "pointer": "django/views/decorators/http.py:require_http_methods",
+   "line": 106,
+   "sentence": "`require_GET`, outermost on the masthead, answers a `\"POST\"` with a 405, and neither the other two wrappers nor the view runs ([View decorators](views/decorators.md)) (`django/views/decorators/http.py:require_http_methods`).",
+   "tree": "django",
+   "path": "django/views/decorators/http.py",
+   "symbol": "require_http_methods",
+   "kind": "function",
+   "lines": [
+    20,
+    67
+   ],
+   "fingerprint": "e88b294b424f07ee"
+  },
+  {
+   "pointer": "django/views/decorators/csrf.py:csrf_exempt",
+   "line": 108,
+   "sentence": "`csrf_exempt` returns a wrapper that only calls the view, with an attribute set on it: a **mark**, which `CsrfViewMiddleware` reads when the handler shows it the view (`django/views/decorators/csrf.py:csrf_exempt`).",
+   "tree": "django",
+   "path": "django/views/decorators/csrf.py",
+   "symbol": "csrf_exempt",
+   "kind": "function",
+   "lines": [
+    50,
+    68
+   ],
+   "fingerprint": "9ecf5d113ebb9418"
+  },
+  {
+   "pointer": "django/utils/decorators.py:make_middleware_decorator",
+   "line": 108,
+   "sentence": "Others are a middleware class applied to one view: `csrf_protect` and `cache_page` each make an instance of their middleware, `CsrfViewMiddleware` or `CacheMiddleware`, for the view they decorate, and a wrapper that calls its hooks around the view ([A middleware as a decorator](views/middleware-decorators.md)) (`django/utils/decorators.py:make_middleware_decorator`).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "make_middleware_decorator",
+   "kind": "function",
+   "lines": [
+    123,
+    201
+   ],
+   "fingerprint": "b9d42706d0c3b1b8"
+  },
+  {
+   "pointer": "django/utils/decorators.py:method_decorator",
+   "line": 110,
+   "sentence": "It applies the decorator anew at every call, so a decorator made from a middleware class makes a middleware for every request ([Decorating a class: `method_decorator`](views/method-decorator.md)) (`django/utils/decorators.py:method_decorator`).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "method_decorator",
+   "kind": "function",
+   "lines": [
+    61,
+    95
+   ],
+   "fingerprint": "12fa0dc64130e07c"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:BaseDetailView.get",
+   "line": 114,
+   "sentence": "ArticleDetail names a model and inherits everything else from `DetailView`, whose `get` is a handler method with its decisions taken out and made methods of their own: `get_object` finds the article from the slug the path captured, `get_context_data` builds the template's context, and `render_to_response` makes the response, with a template name made from the app's label and the model's name when the class names none (`django/views/generic/detail.py:BaseDetailView.get`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "BaseDetailView.get",
+   "kind": "function",
+   "lines": [
+    111,
+    114
+   ],
+   "fingerprint": "18901a409130fcbc"
+  },
+  {
    "pointer": "django/views/defaults.py",
-   "line": 193,
-   "sentence": "The handler looks up an **error view** for the status, by default one of the four in `django/views/defaults.py`, and calls it with the request and, for every status but 500, the exception ([The error views](views/errors.md)).",
+   "line": 122,
+   "sentence": "For each of the four statuses it may choose, 404, 500, 400 and 403, it has an **error view**: the one the URLconf names (`handler404` and its three kin), or else Django's default from `django/views/defaults.py`, called with the request and, for every status but 500, the exception ([The error views](views/errors.md)).",
    "tree": "django",
    "path": "django/views/defaults.py",
    "symbol": null,
@@ -93,14 +177,60 @@
    "fingerprint": "0574f7e9abb0f171"
   },
   {
-   "pointer": "django/contrib/auth/",
-   "line": 203,
-   "sentence": "The decorators and mixins that require a login are in `django/contrib/auth/` ([Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](auth/requiring-login.md)).",
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 122,
+   "sentence": "With `settings.DEBUG` on, an `Http404`, an exception the handler does not recognise, and a `BadRequest` or `SuspiciousOperation` are answered with a **debug page** instead, while a `PermissionDenied` still goes to its error view (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
-   "path": "django/contrib/auth/",
-   "symbol": null,
-   "kind": "directory",
-   "fingerprint": "c9774034ac720881"
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/views/debug.py:ExceptionReporter",
+   "line": 124,
+   "sentence": "The same reporter writes the report that `AdminEmailHandler` mails to a site's administrators ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "ExceptionReporter",
+   "kind": "class",
+   "lines": [
+    310,
+    604
+   ],
+   "fingerprint": "1a5373b867da780c"
+  },
+  {
+   "pointer": "django/utils/log.py:AdminEmailHandler.emit",
+   "line": 124,
+   "sentence": "The same reporter writes the report that `AdminEmailHandler` mails to a site's administrators ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.emit",
+   "kind": "function",
+   "lines": [
+    123,
+    164
+   ],
+   "fingerprint": "2bcdbf9a329cd643"
+  },
+  {
+   "pointer": "django/views/static.py:serve",
+   "line": 126,
+   "sentence": "`django.views.static.serve` answers a request with a file from a directory; `django.conf.urls.static.static` routes a prefix to it only while `settings.DEBUG` is on, and the static files app's own view calls it ([The static file view](views/static-files.md)) (`django/views/static.py:serve`).",
+   "tree": "django",
+   "path": "django/views/static.py",
+   "symbol": "serve",
+   "kind": "function",
+   "lines": [
+    28,
+    64
+   ],
+   "fingerprint": "d1fc8ba04f085844"
   }
  ]
 }

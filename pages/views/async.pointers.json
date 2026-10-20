@@ -10,7 +10,7 @@
   {
    "pointer": "django/views/decorators/",
    "line": 7,
-   "sentence": "The handler finds out by asking `iscoroutinefunction` of whatever the URLconf holds, and this section is about keeping the answer true: how `View.as_view` marks the function it returns, what `View.view_is_async` requires of a class, how the decorators of `django/views/decorators/` keep a coroutine function one, and what happens when a wrapper does not.",
+   "sentence": "`View.as_view` keeps the answer true for a class by marking the function it returns with `inspect.markcoroutinefunction` when `View.view_is_async` finds the class's handler methods are coroutines, and the decorators of `django/views/decorators/` keep a coroutine function one; a wrapper that does not hides the coroutine function, and the handler calls the wrapper as an ordinary function.",
    "tree": "django",
    "path": "django/views/decorators/",
    "symbol": null,
@@ -47,8 +47,8 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.as_view",
-   "line": 49,
-   "sentence": "So `as_view` asks the class, through `View.view_is_async`, and if the answer is yes it marks the function with `markcoroutinefunction` (`django/views/generic/base.py:View.as_view`).",
+   "line": 50,
+   "sentence": "So `as_view` asks the class, through `View.view_is_async`, and if the answer is yes it marks the function with `inspect.markcoroutinefunction` (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.as_view",
@@ -62,8 +62,8 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.view_is_async",
-   "line": 51,
-   "sentence": "A class that has one of each raises `ImproperlyConfigured`, and since `as_view` asks as the URLconf is imported, that is when the error appears (`django/views/generic/base.py:View.view_is_async`).",
+   "line": 52,
+   "sentence": "A class with both kinds, like Muddle, raises `ImproperlyConfigured` whether the property is read or `as_view` asks it, and since `as_view` asks as the URLconf is imported, that is when the error appears, naming the class (`django/views/generic/base.py:View.view_is_async`):",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.view_is_async",
@@ -76,9 +76,38 @@
    "fingerprint": "6b2581a6da748c7b"
   },
   {
+   "pointer": "django/views/generic/base.py:View.as_view",
+   "line": 75,
+   "sentence": "Under an `ASGIHandler`, then, the work a class does before its handler method, in `View.__init__`, `View.setup` and `View.dispatch` and whatever a subclass adds to them, is done in plain calls on the event loop's thread, before the handler's await, except in a `dispatch` that a subclass overrides with `async def` (`django/views/generic/base.py:View.as_view`, `django/core/handlers/base.py:BaseHandler._get_response_async`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.as_view",
+   "kind": "function",
+   "lines": [
+    81,
+    124
+   ],
+   "at": 82,
+   "fingerprint": "2cb7c2fdb4ae4ca3"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response_async",
+   "line": 75,
+   "sentence": "Under an `ASGIHandler`, then, the work a class does before its handler method, in `View.__init__`, `View.setup` and `View.dispatch` and whatever a subclass adds to them, is done in plain calls on the event loop's thread, before the handler's await, except in a `dispatch` that a subclass overrides with `async def` (`django/views/generic/base.py:View.as_view`, `django/core/handlers/base.py:BaseHandler._get_response_async`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response_async",
+   "kind": "function",
+   "lines": [
+    230,
+    300
+   ],
+   "fingerprint": "145fd5675456f50d"
+  },
+  {
    "pointer": "django/views/generic/base.py:View.options",
-   "line": 61,
-   "sentence": "Each therefore asks `view_is_async` and, when it is true, returns its response from inside a small coroutine (`django/views/generic/base.py:View.options`).",
+   "line": 77,
+   "sentence": "Each therefore asks `view_is_async` and, when it is true, returns its response from inside a small coroutine (`django/views/generic/base.py:View.options`, `django/views/generic/base.py:View.http_method_not_allowed`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.options",
@@ -90,8 +119,22 @@
    "fingerprint": "52ae53322aec3b53"
   },
   {
+   "pointer": "django/views/generic/base.py:View.http_method_not_allowed",
+   "line": 77,
+   "sentence": "Each therefore asks `view_is_async` and, when it is true, returns its response from inside a small coroutine (`django/views/generic/base.py:View.options`, `django/views/generic/base.py:View.http_method_not_allowed`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.http_method_not_allowed",
+   "kind": "function",
+   "lines": [
+    145,
+    162
+   ],
+   "fingerprint": "32c36fc71d62a654"
+  },
+  {
    "pointer": "django/views/generic/",
-   "line": 79,
+   "line": 90,
    "sentence": "None of the handler methods in `django/views/generic/` is written with `async def`, so under an asynchronous handler a generic view runs in a thread, like any other function.",
    "tree": "django",
    "path": "django/views/generic/",
@@ -101,8 +144,8 @@
   },
   {
    "pointer": "django/views/decorators/",
-   "line": 85,
-   "sentence": "So the decorators in `django/views/decorators/` ask `iscoroutinefunction` of the view they are given.",
+   "line": 96,
+   "sentence": "So the decorators in `django/views/decorators/` ask `inspect.iscoroutinefunction` of the view they are given.",
    "tree": "django",
    "path": "django/views/decorators/",
    "symbol": null,
@@ -111,7 +154,7 @@
   },
   {
    "pointer": "django/views/decorators/http.py:require_http_methods",
-   "line": 85,
+   "line": 96,
    "sentence": "A decorator that wraps has two wrappers to choose from, and the one for a coroutine function is itself written with `async def` and awaits the view (`django/views/decorators/http.py:require_http_methods`).",
    "tree": "django",
    "path": "django/views/decorators/http.py",
@@ -125,8 +168,8 @@
   },
   {
    "pointer": "django/utils/decorators.py:make_middleware_decorator",
-   "line": 85,
-   "sentence": "The function behind the decorators made from middleware does the same (`django/utils/decorators.py:make_middleware_decorator`).",
+   "line": 96,
+   "sentence": "The function behind the decorators made from middleware does the same, and from its coroutine wrapper calls the middleware's hooks directly, as plain function calls ([A middleware as a decorator](middleware-decorators.md#a-coroutine-view)) (`django/utils/decorators.py:make_middleware_decorator`).",
    "tree": "django",
    "path": "django/utils/decorators.py",
    "symbol": "make_middleware_decorator",
@@ -139,7 +182,7 @@
   },
   {
    "pointer": "django/utils/decorators.py:_multi_decorate",
-   "line": 85,
+   "line": 96,
    "sentence": "`method_decorator` does the equivalent for a method: when the method it replaces is a coroutine function, it marks the replacement (`django/utils/decorators.py:_multi_decorate`).",
    "tree": "django",
    "path": "django/utils/decorators.py",
@@ -153,8 +196,8 @@
   },
   {
    "pointer": "django/views/decorators/",
-   "line": 122,
-   "sentence": "The decorators of `django/views/decorators/` asked here keep the wire view a coroutine function, and so does `method_decorator` for the class's `get`.",
+   "line": 98,
+   "sentence": "Support for a coroutine function came in 5.0 to the decorators of `django/views/decorators/` that its release notes list as ones that \"now support wrapping asynchronous view functions\" (`docs/releases/5.0.txt`).",
    "tree": "django",
    "path": "django/views/decorators/",
    "symbol": null,
@@ -162,23 +205,89 @@
    "fingerprint": "e71195e970af2827"
   },
   {
-   "pointer": "django/db/transaction.py:non_atomic_requests",
+   "pointer": "docs/releases/5.0.txt",
+   "line": 98,
+   "sentence": "Support for a coroutine function came in 5.0 to the decorators of `django/views/decorators/` that its release notes list as ones that \"now support wrapping asynchronous view functions\" (`docs/releases/5.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    759
+   ],
+   "fingerprint": "f78c0112c823f44f"
+  },
+  {
+   "pointer": "docs/releases/5.2.txt",
+   "line": 98,
+   "sentence": "`method_decorator` began to mark its replacement in 5.2 (`docs/releases/5.2.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    495
+   ],
+   "fingerprint": "56a4c82a284e4c7a"
+  },
+  {
+   "pointer": "django/views/decorators/",
    "line": 122,
-   "sentence": "`non_atomic_requests`, which lives with the transaction code, does not: the wrapper it makes is a plain function (`django/db/transaction.py:non_atomic_requests`).",
+   "sentence": "The decorators of `django/views/decorators/` keep a coroutine function one; `non_atomic_requests`, which lives with the transaction code, does not keep the `async def` function one (`django/db/transaction.py:_non_atomic_requests`); and the Gazette's two wrappers answer alike around the `async def` function, and differently around the function `as_view` returned for Wire:",
+   "tree": "django",
+   "path": "django/views/decorators/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "e71195e970af2827"
+  },
+  {
+   "pointer": "django/db/transaction.py:_non_atomic_requests",
+   "line": 122,
+   "sentence": "The decorators of `django/views/decorators/` keep a coroutine function one; `non_atomic_requests`, which lives with the transaction code, does not keep the `async def` function one (`django/db/transaction.py:_non_atomic_requests`); and the Gazette's two wrappers answer alike around the `async def` function, and differently around the function `as_view` returned for Wire:",
    "tree": "django",
    "path": "django/db/transaction.py",
-   "symbol": "non_atomic_requests",
+   "symbol": "_non_atomic_requests",
    "kind": "function",
    "lines": [
-    353,
-    359
+    339,
+    350
    ],
-   "fingerprint": "cb406715cec22117"
+   "fingerprint": "5ee6f0732dc71723"
+  },
+  {
+   "pointer": "django/utils/decorators.py:_multi_decorate",
+   "line": 140,
+   "sentence": "`View.dispatch` is written with `def`, so at each request the decorator is handed a partial around the bound `dispatch`, which is not a coroutine function, and its `def` wrapper gets back the coroutine `get` made where it expected a response (`django/utils/decorators.py:_multi_decorate`).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "_multi_decorate",
+   "kind": "function",
+   "lines": [
+    26,
+    58
+   ],
+   "fingerprint": "96434dac8ddc6429"
+  },
+  {
+   "pointer": "docs/topics/async.txt",
+   "line": 140,
+   "sentence": "The documentation's remedy is an `async def` override of `dispatch` for `method_decorator` to decorate, and the override has to await `super().dispatch()`: returned unawaited, as in the documentation's example, the coroutine `get` made reaches the decorator again (`docs/topics/async.txt`).",
+   "tree": "django",
+   "path": "docs/topics/async.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    437
+   ],
+   "fingerprint": "491be9ad7b5f2a72"
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.check_response",
-   "line": 138,
-   "sentence": "The asynchronous handler makes the same check and raises the same error (`django/core/handlers/base.py:BaseHandler.check_response`).",
+   "line": 158,
+   "sentence": "`check_response` is the method that refuses a view's `None` ([What the handler asks of a view](callable.md#what-a-view-may-return)), and the asynchronous handler makes the same check and raises the same error (`django/core/handlers/base.py:BaseHandler.check_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.check_response",
@@ -191,8 +300,8 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.make_view_atomic",
-   "line": 146,
-   "sentence": "A view that is a coroutine function cannot be wrapped in a transaction: with `\"ATOMIC_REQUESTS\"` on for a database that the view's `\"_non_atomic_requests\"` does not name, `BaseHandler.make_view_atomic` raises `RuntimeError` for it (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
+   "line": 164,
+   "sentence": "With `\"ATOMIC_REQUESTS\"` on for a database that the view's `\"_non_atomic_requests\"` does not name, `BaseHandler.make_view_atomic` wraps an ordinary view in a transaction for that database, and for a coroutine function raises `RuntimeError` in its place, which the client receives as a 500 under either handler ([The centre of the chain](../handlers/view.md#calling-the-view)) (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.make_view_atomic",
@@ -202,6 +311,34 @@
     356
    ],
    "fingerprint": "b70830155a851958"
+  },
+  {
+   "pointer": "django/db/transaction.py:_non_atomic_requests",
+   "line": 166,
+   "sentence": "Its wrapper is a plain function, so the handler calls it as one and gets back the view's coroutine, not yet started, which `BaseHandler.check_response` refuses with the `ValueError` of [When the test is fooled](#when-the-test-is-fooled): the client gets a 500 under either handler, and Python warns that the coroutine was never awaited (`django/db/transaction.py:_non_atomic_requests`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "_non_atomic_requests",
+   "kind": "function",
+   "lines": [
+    339,
+    350
+   ],
+   "fingerprint": "5ee6f0732dc71723"
+  },
+  {
+   "pointer": "tests/handlers/tests.py:TransactionsPerRequestTests.test_non_atomic_requests_does_not_mutate_original",
+   "line": 166,
+   "sentence": "In 5.2, 6.0 and 6.1 the decorator set its mark on the view itself and returned it, still a coroutine function; at this commit it returns a new function, so that a second use leaves the first one's set as it was (`tests/handlers/tests.py:TransactionsPerRequestTests.test_non_atomic_requests_does_not_mutate_original`).",
+   "tree": "django",
+   "path": "tests/handlers/tests.py",
+   "symbol": "TransactionsPerRequestTests.test_non_atomic_requests_does_not_mutate_original",
+   "kind": "function",
+   "lines": [
+    147,
+    156
+   ],
+   "fingerprint": "4a1f21c18f8f0295"
   }
  ]
 }

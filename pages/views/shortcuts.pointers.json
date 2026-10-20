@@ -24,7 +24,35 @@
   {
    "pointer": "django/shortcuts.py",
    "line": 9,
-   "sentence": "The module's docstring says what that costs: it calls them helpers that span multiple levels, and says they introduce controlled coupling for convenience's sake (`django/shortcuts.py`).",
+   "sentence": "The shortcuts are those lines given names (`django/shortcuts.py`).",
+   "tree": "django",
+   "path": "django/shortcuts.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    211
+   ],
+   "fingerprint": "ebdc0e520009d0fd"
+  },
+  {
+   "pointer": "docs/misc/design-philosophies.txt",
+   "line": 11,
+   "sentence": "Django's design philosophies name loose coupling and tight cohesion as \"a fundamental goal of Django's stack\": its layers \"shouldn't 'know' about each other unless absolutely necessary\" (`docs/misc/design-philosophies.txt`).",
+   "tree": "django",
+   "path": "docs/misc/design-philosophies.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    327
+   ],
+   "fingerprint": "0effcf850ac82c7a"
+  },
+  {
+   "pointer": "django/shortcuts.py",
+   "line": 11,
+   "sentence": "The module's docstring calls them helpers that span multiple levels of MVC, and says that they \"introduce controlled coupling for convenience's sake\" (`django/shortcuts.py`).",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": null,
@@ -37,8 +65,8 @@
   },
   {
    "pointer": "django/shortcuts.py:render",
-   "line": 13,
-   "sentence": "It is two lines: `render_to_string` from the template loader, given the request so that the engine's context processors run, and then the response's constructor, given the string, the content type and the status (`django/shortcuts.py:render`, `django/template/loader.py:render_to_string`).",
+   "line": 15,
+   "sentence": "It calls `render_to_string` from the template loader, giving it the request so that the engine's context processors run, and then the response's constructor, with the string, the content type and the status (`django/shortcuts.py:render`, `django/template/loader.py:render_to_string`).",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": "render",
@@ -51,8 +79,8 @@
   },
   {
    "pointer": "django/template/loader.py:render_to_string",
-   "line": 13,
-   "sentence": "It is two lines: `render_to_string` from the template loader, given the request so that the engine's context processors run, and then the response's constructor, given the string, the content type and the status (`django/shortcuts.py:render`, `django/template/loader.py:render_to_string`).",
+   "line": 15,
+   "sentence": "It calls `render_to_string` from the template loader, giving it the request so that the engine's context processors run, and then the response's constructor, with the string, the content type and the status (`django/shortcuts.py:render`, `django/template/loader.py:render_to_string`).",
    "tree": "django",
    "path": "django/template/loader.py",
    "symbol": "render_to_string",
@@ -65,8 +93,8 @@
   },
   {
    "pointer": "django/template/response.py:SimpleTemplateResponse.render",
-   "line": 26,
-   "sentence": "A `TemplateResponse` is made without complaint, since it has only been told a name; the failure comes later, when the handler calls its `render` ([The centre of the chain](../handlers/view.md#template-responses)) (`django/template/response.py:SimpleTemplateResponse.render`).",
+   "line": 17,
+   "sentence": "They differ again when the template does not exist: `render` raises in the view, while a `TemplateResponse` is made without complaint, since it has only been told a name, and fails later, when the handler calls its `render` ([The centre of the chain](../handlers/view.md#template-responses)) (`django/template/response.py:SimpleTemplateResponse.render`).",
    "tree": "django",
    "path": "django/template/response.py",
    "symbol": "SimpleTemplateResponse.render",
@@ -80,7 +108,7 @@
   {
    "pointer": "django/shortcuts.py:redirect",
    "line": 30,
-   "sentence": "The response class is `HttpResponsePermanentRedirect` if `permanent` is true and `HttpResponseRedirect` if not, and `preserve_request` and `max_length` are passed to it untouched (`django/shortcuts.py:redirect`).",
+   "sentence": "It leaves working out the target to `resolve_url`, and chooses the response class: `HttpResponsePermanentRedirect` if `permanent` is true and `HttpResponseRedirect` if not, with `preserve_request` and `max_length` passed to it untouched (`django/shortcuts.py:redirect`).",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": "redirect",
@@ -92,9 +120,51 @@
    "fingerprint": "03a41b7a0966245a"
   },
   {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 32,
+   "sentence": "The last line is a target refused before any response is made: `reverse` reads the colon in `\"javascript:alert(1)\"` as the end of a namespace's name and raises `NoReverseMatch`, which `resolve_url` lets pass because the string holds neither a slash nor a dot (the fourth of its steps below), so the string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
+   "line": 32,
+   "sentence": "The last line is a target refused before any response is made: `reverse` reads the colon in `\"javascript:alert(1)\"` as the end of a namespace's name and raises `NoReverseMatch`, which `resolve_url` lets pass because the string holds neither a slash nor a dot (the fourth of its steps below), so the string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseRedirectBase.__init__",
+   "kind": "function",
+   "lines": [
+    642,
+    662
+   ],
+   "fingerprint": "d24c129d406f5945"
+  },
+  {
    "pointer": "django/shortcuts.py:resolve_url",
-   "line": 44,
-   "sentence": "It tries them in a fixed order (`django/shortcuts.py:resolve_url`):",
+   "line": 45,
+   "sentence": "`resolve_url` takes an object, a pattern's name, a view function or a URL under one parameter, and tries them in a fixed order (`django/shortcuts.py:resolve_url`):",
+   "tree": "django",
+   "path": "django/shortcuts.py",
+   "symbol": "resolve_url",
+   "kind": "function",
+   "lines": [
+    173,
+    211
+   ],
+   "fingerprint": "d9062979fcc6170c"
+  },
+  {
+   "pointer": "django/shortcuts.py:resolve_url",
+   "line": 77,
+   "sentence": "If it holds a slash or a dot, `resolve_url` returns it as it stands, as it returns `\"gazette.example\"` and `\"no such/name\"` above, so `redirect` given a misspelt name with a dot and no namespace raises nothing and sends the client to the name as a relative URL (`django/shortcuts.py:resolve_url`).",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": "resolve_url",
@@ -107,7 +177,7 @@
   },
   {
    "pointer": "django/contrib/auth/decorators.py:user_passes_test",
-   "line": 74,
+   "line": 79,
    "sentence": "`settings.LOGIN_URL` and `settings.LOGIN_REDIRECT_URL` may each hold a path or a pattern's name, and the code that uses them passes them through this function first (`django/contrib/auth/decorators.py:user_passes_test`, `django/contrib/auth/views.py:LoginView.get_default_redirect_url`).",
    "tree": "django",
    "path": "django/contrib/auth/decorators.py",
@@ -121,7 +191,7 @@
   },
   {
    "pointer": "django/contrib/auth/views.py:LoginView.get_default_redirect_url",
-   "line": 74,
+   "line": 79,
    "sentence": "`settings.LOGIN_URL` and `settings.LOGIN_REDIRECT_URL` may each hold a path or a pattern's name, and the code that uses them passes them through this function first (`django/contrib/auth/decorators.py:user_passes_test`, `django/contrib/auth/views.py:LoginView.get_default_redirect_url`).",
    "tree": "django",
    "path": "django/contrib/auth/views.py",
@@ -134,8 +204,22 @@
    "fingerprint": "4d4aa10ad4166e28"
   },
   {
+   "pointer": "django/views/generic/detail.py:SingleObjectMixin.get_object",
+   "line": 83,
+   "sentence": "The generic views do not call it: `SingleObjectMixin.get_object` makes the same translation itself, with a message of its own ([The generic views](generic.md#detailview-one-object)) (`django/views/generic/detail.py:SingleObjectMixin.get_object`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectMixin.get_object",
+   "kind": "function",
+   "lines": [
+    21,
+    59
+   ],
+   "fingerprint": "b9ab23efb58a66f9"
+  },
+  {
    "pointer": "django/shortcuts.py:_get_queryset",
-   "line": 80,
+   "line": 85,
    "sentence": "The rest of the arguments go to the queryset's `get` (`django/shortcuts.py:_get_queryset`, `django/shortcuts.py:get_object_or_404`).",
    "tree": "django",
    "path": "django/shortcuts.py",
@@ -149,7 +233,7 @@
   },
   {
    "pointer": "django/shortcuts.py:get_object_or_404",
-   "line": 80,
+   "line": 85,
    "sentence": "The rest of the arguments go to the queryset's `get` (`django/shortcuts.py:_get_queryset`, `django/shortcuts.py:get_object_or_404`).",
    "tree": "django",
    "path": "django/shortcuts.py",
@@ -162,8 +246,36 @@
    "fingerprint": "45f5ab8100bd3ae0"
   },
   {
+   "pointer": "django/shortcuts.py:get_object_or_404",
+   "line": 104,
+   "sentence": "A query that matches several objects raises `MultipleObjectsReturned`, as the search for a headline containing \"cat\" does above, and the handler, which does not recognise that exception, makes a 500 of it ([How an exception becomes a response](../handlers/exceptions.md#which-exception-becomes-which-response)) (`django/shortcuts.py:get_object_or_404`, `django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/shortcuts.py",
+   "symbol": "get_object_or_404",
+   "kind": "function",
+   "lines": [
+    79,
+    107
+   ],
+   "fingerprint": "45f5ab8100bd3ae0"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 104,
+   "sentence": "A query that matches several objects raises `MultipleObjectsReturned`, as the search for a headline containing \"cat\" does above, and the handler, which does not recognise that exception, makes a 500 of it ([How an exception becomes a response](../handlers/exceptions.md#which-exception-becomes-which-response)) (`django/shortcuts.py:get_object_or_404`, `django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
    "pointer": "django/shortcuts.py:get_list_or_404",
-   "line": 99,
+   "line": 106,
    "sentence": "The caller gets every row in memory and no queryset to refine (`django/shortcuts.py:get_list_or_404`).",
    "tree": "django",
    "path": "django/shortcuts.py",
@@ -177,7 +289,7 @@
   },
   {
    "pointer": "django/shortcuts.py:aget_object_or_404",
-   "line": 101,
+   "line": 108,
    "sentence": "`aget_object_or_404` awaits the queryset's `aget`, and `aget_list_or_404` builds its list by iterating the queryset asynchronously (`django/shortcuts.py:aget_object_or_404`, `django/shortcuts.py:aget_list_or_404`).",
    "tree": "django",
    "path": "django/shortcuts.py",
@@ -191,7 +303,7 @@
   },
   {
    "pointer": "django/shortcuts.py:aget_list_or_404",
-   "line": 101,
+   "line": 108,
    "sentence": "`aget_object_or_404` awaits the queryset's `aget`, and `aget_list_or_404` builds its list by iterating the queryset asynchronously (`django/shortcuts.py:aget_object_or_404`, `django/shortcuts.py:aget_list_or_404`).",
    "tree": "django",
    "path": "django/shortcuts.py",

@@ -39,8 +39,56 @@ what it was asked. The third kind writes down what an object holds.
 The clock is the recording's own: `django.utils.timezone.now` is replaced by a function that
 returns 10 April 2026, 09:00 UTC, so that what the date views decide by that function is the
 same on every run. One article is dated after that moment. Two of the date views also read
-`datetime.date.today()`, which is the machine's: TodayArchiveView is therefore not asked, and
-DateDetailView only about days long past.
+`datetime.date.today()`, which is the machine's: TodayArchiveView is asked only in the two
+blocks that say so, and DateDetailView only about days long past. `datetime.date` cannot be
+changed in place, so those two blocks give the name `datetime` in django.views.generic.dates a
+stand-in for the module: every name of `datetime`, with a subclass of `date` as `date`, whose
+`today()` answers 2026-04-10. The module is given back after them. The second block asks once
+more without the stand-in, and then says only whether the day was the machine's date; it never
+prints that date.
+
+The later blocks. The views most of them request are in `gazette/desk.py`, with a URLconf of its
+own, and `gazette/listed.py` has a class with two decorators given as a list; `gazette.urls` is
+not changed. A block that requests one of those views says in its title that ROOT_URLCONF is
+set to `gazette.desk` for it. The setting is assigned and put back, not overridden, so that no
+receiver of setting_changed empties get_resolver's cache. Three blocks about handler404 set it
+to a URLconf of the script's own, an object with no patterns and the handler404 its block is
+about, and two about SuspiciousOperation to `gazette/development_urls.py`, which holds the
+pattern `static()` makes and is first imported while DEBUG is on. Whatever else a block
+changes it names in its title, and puts back after it: ATOMIC_REQUESTS in the database's
+settings, MIDDLEWARE for a handler made for the block (CsrfViewMiddleware), ADMINS and MAILERS
+(the default mailer Django's in-memory backend, whose outbox is emptied after), the
+include_html of the AdminEmailHandler that Django's default logging put on the logger `django`,
+and, in the last block, INSTALLED_APPS, with two of Django's applications that LoginView's
+module needs to be imported; that block is last because it imports their models. A path of
+this machine, in a log record of the two SuspiciousOperation blocks and in the lines of a mail,
+is written from the recordings directory, with forward slashes. The `log` lines are written by a
+handler of the script's own on the logger `django`; in the two blocks about the error email it
+stands first there, before Django's, so that its line comes when the record is given and before
+AdminEmailHandler.emit acts on it, and their requests come from 203.0.113.7, an address set
+aside for documentation and not in INTERNAL_IPS, given as REMOTE_ADDR as a server gives its
+client's (the other blocks' requests have none). In the blocks about CSRF a method of
+CsrfViewMiddleware says whose instance it ran on, `(the chain's)` or `(the decorator's)`. A
+returned coroutine is said by the function that made it and whether it has started. A line
+that begins `|` is a line of a mail's text, as it stands there.
+
+The blocks that say "through an ASGIHandler" play an ASGI server: the scope is made from the
+same request as the WSGI blocks', one http.request message holds the whole body, and receive
+then waits, for the listener the handler starts for a disconnect, until the handler cancels it;
+`send(...)` lines are what the handler sent. Each request has an event loop of its own, which
+asyncio.run makes and closes. The calls are written down on every thread, and each line ends
+with the thread it was written on: `[loop]`, the event loop's, or `[worker]`, any other (the
+two may be different threads of an executor); a `->` line was written on the thread of the call
+above it. A coroutine that waits, for a thread say, keeps its place in the nesting, so that what
+runs on a thread meanwhile stands under the coroutine that awaits it; the loop does nothing
+else meanwhile that is written down (the listener writes nothing), so the order is the code's.
+
+The blocks about a coroutine view under ATOMIC_REQUESTS, and those about the error email, end
+their requests with a line that says whether Python gave a warning for it (`Python warns: ...`, by its class and its message,
+or `Python gives no warning`). A coroutine never awaited is warned of when it is collected,
+which is not an order of Django's: the line is written after the request, once the script has
+collected what earlier blocks left, held the garbage collector off during the request, let go
+of the exceptions the recorder was keeping, and collected.
 
     RECORD_EVERYTHING=1 python recordings/views.py     every call in the chapter's modules
 """
@@ -54,13 +102,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # a package of the standard library, which Django imports.
 sys.path[:] = [p for p in sys.path if os.path.abspath(p or ".") != HERE] + [HERE]
 
+import asyncio  # noqa: E402
 import atexit  # noqa: E402
 import datetime  # noqa: E402
+import dis  # noqa: E402
+import gc  # noqa: E402
 import io  # noqa: E402
 import logging  # noqa: E402
 import mimetypes  # noqa: E402
 import shutil  # noqa: E402
 import tempfile  # noqa: E402
+import threading  # noqa: E402
+import types  # noqa: E402
+import warnings  # noqa: E402
 from urllib.parse import urlencode  # noqa: E402
 
 import django  # noqa: E402
@@ -91,12 +145,13 @@ settings.configure(
 )
 django.setup()
 
-from inspect import iscoroutinefunction  # noqa: E402
+from inspect import getcoroutinestate, iscoroutinefunction  # noqa: E402
 
 from django.conf.urls.static import static  # noqa: E402
 from django.core import signals  # noqa: E402
+from django.core.handlers.asgi import ASGIHandler  # noqa: E402
 from django.core.handlers.wsgi import WSGIHandler, WSGIRequest  # noqa: E402
-from django.db import connection  # noqa: E402
+from django.db import connection, connections  # noqa: E402
 from django.db.models import QuerySet  # noqa: E402
 from django.db.transaction import non_atomic_requests  # noqa: E402
 from django.http import HttpResponseBase  # noqa: E402
@@ -143,7 +198,27 @@ def flush() -> None:
 
 def note(text: str) -> None:
     flush()
+    if TAGGED:
+        text += f"  [{thread_tag()}]"
     LINES.append("  " * len(STACK) + text)
+
+
+# The blocks requested through an ASGIHandler. In them every line says the thread it was written
+# on, and a coroutine that waits (for a thread, say) keeps its place in the nesting, so that what
+# runs on a thread meanwhile stands under the coroutine that awaits it.
+TAGGED = False
+KEEP = False
+COROUTINE = 0x80  # the flag of a code object that is a coroutine's
+
+
+def thread_tag() -> str:
+    return "loop" if threading.current_thread() is threading.main_thread() else "worker"
+
+
+def waits(frame) -> bool:
+    """Whether a coroutine's frame, which the profile hook is told is returning, is suspending at
+    an await instead: its last instruction is then a YIELD_VALUE."""
+    return dis.opname[frame.f_code.co_code[frame.f_lasti]] == "YIELD_VALUE"
 
 
 def show(title: str) -> None:
@@ -381,7 +456,8 @@ def ours_called(frame) -> str:
         return f"{qualname}(form)"
     if "." in qualname:
         return f"{qualname}(request{', ' + said if said else ''})" if frame.f_code.co_name in VERBS else f"{qualname}({said})"
-    return f"views.{qualname}(request{', ' + said if said else ''})"
+    module = frame.f_globals["__name__"].rpartition(".")[2]  # views, or a later block's desk
+    return f"{module}.{qualname}(request{', ' + said if said else ''})"
 
 
 def ours_returned(frame, value):
@@ -618,18 +694,26 @@ def find(module: str, qualname: str):
         return None
     if RULES.get("generic") and module.startswith(GENERIC) and qualname != "View.as_view":
         return generic_called
-    if RULES.get("ours") and module == "gazette.views":
+    if RULES.get("ours") and module in OUR_VIEWS:
         return ours_called
     if EVERYTHING and module.startswith(OURS):
         return plain
     return None
 
 
+# The project's modules of views: the first is the one the earlier blocks request, the second the
+# later blocks' (see gazette/desk.py). gazette.listed is not among them, its two decorators
+# writing their own lines: a block names the method of its class it watches.
+OUR_VIEWS = ("gazette.views", "gazette.desk")
+
+
 def after_of(module: str, code):
-    found = AFTER.get((module, code.co_qualname))
+    found = RULES.get("after", {}).get((module, code.co_qualname))  # what a block's own rules say first
+    if found is None:
+        found = AFTER.get((module, code.co_qualname))
     if found is None and module.startswith(GENERIC):
         found = RETURNED.get(code.co_name)
-    if found is None and module == "gazette.views":
+    if found is None and module in (*OUR_VIEWS, "gazette.listed"):
         found = ours_returned
     return found
 
@@ -645,7 +729,8 @@ def profile(frame, event, arg):
         if code.co_flags & RESUMABLE:  # every resumption is a call event
             known = SEEN.get(id(frame))
             if known is not None and known() is frame.f_generator:
-                STACK.append(frame)
+                if not (KEEP and code.co_flags & COROUTINE):  # a coroutine that waited kept its place
+                    STACK.append(frame)
                 return
             SEEN[id(frame)] = weakref.ref(frame.f_generator)  # by its generator, weakly held: a frame's address is used again once its generator is gone
         flush()  # what the call before this one returned is said first: a label may depend on it
@@ -662,8 +747,11 @@ def profile(frame, event, arg):
         STACK.append(frame)
     elif event == "return":
         if STACK and STACK[-1] is frame:
+            kept = KEEP and code.co_flags & COROUTINE
+            if kept and waits(frame):
+                return
             flush()
-            after = None if code.co_flags & RESUMABLE else after_of(frame.f_globals.get("__name__", ""), code)
+            after = None if code.co_flags & RESUMABLE and not kept else after_of(frame.f_globals.get("__name__", ""), code)
             # The value is put into words now, as it is returned: a dictionary its caller goes on to
             # add to would otherwise be described as the caller left it.
             try:
@@ -862,6 +950,124 @@ def request(url: str = "/", method: str = "GET", data: dict | None = None, **mor
     return WSGIRequest(environ(url, method, data, **more))
 
 
+# The later blocks: a request through an ASGIHandler, warnings, and a URLconf for a block.
+
+class recorded_asgi(recorded):
+    """As `recorded`, on every thread, with each line's thread written down and a waiting
+    coroutine kept in its place (see TAGGED and KEEP)."""
+
+    def __enter__(self):
+        global RULES, TAGGED, KEEP
+        RULES, TAGGED, KEEP = self.rules, True, True
+        threading.setprofile_all_threads(profile)
+
+    def __exit__(self, *exc):
+        global TAGGED, KEEP
+        threading.setprofile_all_threads(None)
+        flush()
+        TAGGED = KEEP = False
+
+
+def serve_asgi(handler, env: dict, rules: dict, headers: tuple = (), body: bool = True) -> None:
+    """Call an ASGIHandler as an ASGI server does, for the request the WSGI environ describes:
+    one http.request message holds the whole body, after which receive waits, for the listener
+    the handler starts, until it is cancelled; send writes down each message. The event loop is
+    one that asyncio.run makes for the request and closes after it."""
+    names = {"CONTENT_TYPE": b"content-type", "CONTENT_LENGTH": b"content-length"}
+    scope_headers = [(names[key], value.encode()) for key, value in env.items() if key in names]
+    scope_headers += [(key[5:].replace("_", "-").lower().encode(), value.encode()) for key, value in env.items() if key.startswith("HTTP_")]
+    scope = {
+        "type": "http", "asgi": {"version": "3.0"}, "http_version": "1.1", "method": env["REQUEST_METHOD"], "scheme": "http",
+        "path": env["PATH_INFO"], "query_string": env["QUERY_STRING"].encode(), "root_path": "", "headers": scope_headers,
+        "server": ("gazette.example", 80),
+    }
+    messages = [{"type": "http.request", "body": env["wsgi.input"].getvalue(), "more_body": False}]
+
+    async def receive():
+        if messages:
+            return messages.pop(0)
+        await asyncio.sleep(3600)  # the listener waits here until the handler cancels it
+
+    async def send(message):
+        if message["type"] == "http.response.start":
+            sent = {name.decode(): value.decode() for name, value in message["headers"]}
+            said = [f"{name}: {sent[name]}" for name in ("Location", "Allow", *headers) if name in sent]
+            note(f"send(http.response.start), status {message['status']}" + (", with " + ", ".join(said) if said else ""))
+        elif body:
+            text = message.get("body", b"").decode()
+            note(f"send(http.response.body), with the body {text!r}" if len(text) < 100 else
+                 f"send(http.response.body), with a body of {len(text.encode())} bytes")
+
+    with recorded_asgi(rules):
+        asyncio.run(handler(scope, receive, send))
+
+
+class warned:
+    """Write down, after a request, each warning Python gave for it, by its class and its
+    message. What earlier blocks left for the garbage collector is collected first, before the
+    warnings are caught; the collector is then held off until the request is over. Then the
+    recorder lets go of the exceptions it was keeping (and with them the frames of their
+    tracebacks, and what those frames held), and the collector runs once: by then every object
+    the request made and no longer needs is gone, and any warning given as one went is caught."""
+
+    def __enter__(self):
+        gc.collect()
+        self.catching = warnings.catch_warnings(record=True)
+        self.given = self.catching.__enter__()
+        warnings.simplefilter("always")
+        self.collecting = gc.isenabled()
+        gc.disable()
+
+    def __exit__(self, *exc):
+        flush()
+        RAISED.clear()
+        gc.collect()
+        if self.collecting:
+            gc.enable()
+        self.catching.__exit__(*exc)
+        for one in self.given:
+            note(f"Python warns: {one.category.__name__}: {one.message}")
+        if not self.given:
+            note("Python gives no warning")
+
+
+def import_desk():
+    """The later blocks' views and URLconf, gazette.desk, imported without writing anything down:
+    a block that requests one of its views has its own lines to write."""
+    if "gazette.desk" not in sys.modules:
+        gazette.stamp.SAY.remove(note)
+        try:
+            __import__("gazette.desk")
+        finally:
+            gazette.stamp.SAY.append(note)
+    return sys.modules["gazette.desk"]
+
+
+def coroutine_said(frame, value) -> str:
+    """A coroutine by the function that made it, and whether it has started; anything else as a
+    response is said."""
+    if asyncio.iscoroutine(value):
+        state = getcoroutinestate(value)
+        return f"a coroutine of {value.cr_code.co_qualname}" + (", not yet started" if state == "CORO_CREATED" else f", {state}")
+    return responded(frame, value)
+
+
+class routed:
+    """settings.ROOT_URLCONF set for a block's requests, and put back after them. The setting is
+    assigned, not overridden, so that no receiver of setting_changed empties get_resolver's cache
+    of the earlier URLconf."""
+
+    def __init__(self, urlconf):
+        self.urlconf = urlconf
+
+    def __enter__(self):
+        self.before = settings.ROOT_URLCONF
+        settings.ROOT_URLCONF = self.urlconf
+
+    def __exit__(self, *exc):
+        settings.ROOT_URLCONF = self.before
+
+
 print(f"Django {django.get_version()} and the project gazette: ROOT_URLCONF = 'gazette.urls', no middleware unless a block says so,\n"
       "DEBUG = False unless a block says so, and the clock at 2026-04-10 09:00 UTC\n")
 
@@ -1046,6 +1252,22 @@ note("and the same request again")
 serve(handler, environ("/births/"), WRAPPED)
 show("GET /births/, twice: a decorator on dispatch is applied again at every call")
 
+LISTED_IMPORT = {
+    ("gazette.listed", "<module>"): imported,
+    ("django.utils.decorators", "method_decorator"): method_decorated,
+    ("django.utils.decorators", "_multi_decorate"): lambda f: f"_multi_decorate(decorators, {f.f_locals['method'].__qualname__})",
+    ("django.utils.decorators", "_update_method_wrapper"): plain,
+}
+with recorded(LISTED_IMPORT):
+    import gazette.listed  # noqa: E402
+show("gazette.listed is imported: method_decorator([first, second], name=\"dispatch\") on the class Corrections")
+
+desk = import_desk()
+ASKING["desk"] = desk
+with routed("gazette.desk"):
+    serve(handler, environ("/corrections/"), {**WRAPPED, ("gazette.listed", "Corrections.get"): ours_called})
+show("GET /corrections/, with ROOT_URLCONF = 'gazette.desk' for this block: the two decorators of the list, at a call")
+
 settings.MIDDLEWARE = ["django.middleware.csrf.CsrfViewMiddleware"]
 guarded = WSGIHandler()
 note("POST /tips/, whose class has csrf_exempt on dispatch")
@@ -1075,6 +1297,17 @@ note("and the same request again")
 serve(handler, environ("/crossword/"), WRAPPED)
 show("GET /crossword/, twice: method_decorator applies its decorator again at every call")
 
+asgi_handler = ASGIHandler()
+WRAPPED_ASGI = {**WRAPPED, ("django.core.handlers.base", "BaseHandler._get_response_async"): plain}
+
+with routed("gazette.desk"):
+    serve_asgi(asgi_handler, environ("/notices/wire/"), WRAPPED_ASGI)
+show("GET /notices/wire/ through an ASGIHandler, with ROOT_URLCONF = 'gazette.desk' for this block: "
+     "the decorator made from Stamp around an async def view")
+
+serve_asgi(asgi_handler, environ("/notices/"), WRAPPED_ASGI)
+show("GET /notices/ through an ASGIHandler: the decorator made from Stamp around a view that is not a coroutine")
+
 ASKING.update(ensure_csrf_cookie=ensure_csrf_cookie, requires_csrf_token=requires_csrf_token, cache_page=cache_page)
 ask('csrf_protect(views.front)(request("/", "POST", {})).status_code')
 ask('requires_csrf_token(views.front)(request("/", "POST", {})).status_code')
@@ -1085,6 +1318,39 @@ ask('cache_page(60)(views.front)(request()).headers["Cache-Control"]')
 ask("csrf_protect.__name__")
 show("The decorators Django makes from its own middleware")
 
+settings.MIDDLEWARE = ["django.middleware.csrf.CsrfViewMiddleware"]
+both = WSGIHandler()
+settings.MIDDLEWARE = []
+THE_CHAINS = both._view_middleware[0].__self__  # the instance of CsrfViewMiddleware in the chain
+
+
+def csrf_whose(frame) -> str:
+    """A method of CsrfViewMiddleware, by whose instance it was called on."""
+    whose = "the chain's" if frame.f_locals["self"] is THE_CHAINS else "the decorator's"
+    return f"{frame.f_code.co_qualname}  ({whose})"
+
+
+CSRF_BOTH = {
+    ("django.core.handlers.base", "BaseHandler._get_response"): plain,
+    ("django.utils.decorators", "make_middleware_decorator.<locals>._make_decorator.<locals>._decorator.<locals>._view_wrapper"):
+        lambda f: f"the wrapper made from {type(middleware_of(f)).__name__}",
+    **{("django.middleware.csrf", f"CsrfViewMiddleware.{name}"): csrf_whose
+       for name in ("process_request", "process_view", "process_response", "_check_token", "_accept", "_reject", "_set_csrf_cookie")},
+    "ours": True,
+    "after": {("django.middleware.csrf", "CsrfViewMiddleware.process_view"): responded},
+}
+SECRET = "GazetteGazetteGazetteGazette1871"  # a CSRF secret: 32 letters and digits
+note("desk.subscribe is under csrf_protect, and calls get_token(request), as a template that has {% csrf_token %} does;")
+note(f'the POST carries the cookie csrftoken={SECRET} and the same secret as its field "csrfmiddlewaretoken"')
+with routed("gazette.desk"):
+    serve(both, environ("/subscribe/", "POST", {"csrfmiddlewaretoken": SECRET}, HTTP_COOKIE=f"csrftoken={SECRET}"), CSRF_BOTH)
+show("POST /subscribe/ with a valid token, with CsrfViewMiddleware installed and ROOT_URLCONF = 'gazette.desk' for this block: "
+     "the middleware and csrf_protect together")
+
+with routed("gazette.desk"):
+    serve(both, environ("/subscribe/", "POST", {}), CSRF_BOTH)
+show("POST /subscribe/ with no token, with CsrfViewMiddleware installed and ROOT_URLCONF = 'gazette.desk' for this block")
+
 serve(handler, environ("/edition/"), WRAPPED, headers=("ETag",))
 show("GET /edition/: a view under condition()")
 
@@ -1093,6 +1359,22 @@ show('GET /edition/ with If-None-Match: "edition-7"')
 
 serve(handler, environ("/edition/", "PUT", HTTP_IF_MATCH='"edition-6"'), WRAPPED, headers=("ETag",))
 show('PUT /edition/ with If-Match: "edition-6"')
+
+with routed("gazette.desk"):
+    serve(handler, environ("/edition/vary-below/"), WRAPPED, headers=("ETag", "Vary"))
+show("GET /edition/vary-below/, with ROOT_URLCONF = 'gazette.desk' for this block: vary_on_cookie written under condition()")
+
+with routed("gazette.desk"):
+    serve(handler, environ("/edition/vary-below/", HTTP_IF_NONE_MATCH='"edition-7"'), WRAPPED, headers=("ETag", "Vary"))
+show('GET /edition/vary-below/ with If-None-Match: "edition-7", with ROOT_URLCONF = \'gazette.desk\' for this block')
+
+with routed("gazette.desk"):
+    serve(handler, environ("/edition/vary-above/"), WRAPPED, headers=("ETag", "Vary"))
+show("GET /edition/vary-above/, with ROOT_URLCONF = 'gazette.desk' for this block: vary_on_cookie written over condition()")
+
+with routed("gazette.desk"):
+    serve(handler, environ("/edition/vary-above/", HTTP_IF_NONE_MATCH='"edition-7"'), WRAPPED, headers=("ETag", "Vary"))
+show('GET /edition/vary-above/ with If-None-Match: "edition-7", with ROOT_URLCONF = \'gazette.desk\' for this block')
 
 # ---------------------------------------------------------------------------------------------
 # Views that are coroutines.
@@ -1131,6 +1413,87 @@ serve(handler, environ("/wire/class/counted/"), {})
 note("GET /wire/counted/, an async def function inside the same kind of wrapper")
 serve(handler, environ("/wire/counted/"), {}, body=False)
 show("Views that are coroutine functions, requested through a WSGIHandler")
+
+
+def atomic_said(frame, value) -> str:
+    """What make_view_atomic returned, against the view the handler resolved."""
+    callback = frame.f_back.f_locals["callback"]
+    if value is callback:
+        return "the view as the URLconf gave it"
+    code = getattr(value, "__code__", None)
+    if getattr(value, "__wrapped__", None) is callback and code is not None and code.co_qualname == "ContextDecorator.__call__.<locals>.inner":
+        made = dict(zip(code.co_freevars, value.__closure__))["self"].cell_contents
+        return f"a function that calls the view inside {a(type(made).__name__)}, for the database {made.using!r}"
+    return "another callable"
+
+
+ATOMIC = {
+    ("django.core.handlers.base", "BaseHandler._get_response"): plain,
+    ("django.core.handlers.base", "BaseHandler._get_response_async"): plain,
+    ("django.core.handlers.base", "BaseHandler.make_view_atomic"): plain,
+    ("django.core.handlers.base", "BaseHandler.check_response"): plain,
+    ("django.core.handlers.exception", "response_for_exception"): lambda f: f"response_for_exception(request, {type(f.f_locals['exc']).__name__})",
+    ("django.db.transaction", "_non_atomic_requests.<locals>.wrapper"): lambda f: "the wrapper non_atomic_requests made",
+    ("django.db.transaction", "Atomic.__enter__"): plain,
+    ("django.db.transaction", "Atomic.__exit__"): plain,
+    ("django.db.backends.base.base", "BaseDatabaseWrapper.commit"): plain,
+    "ours": True,
+    "after": {
+        ("django.core.handlers.base", "BaseHandler.make_view_atomic"): atomic_said,
+        ("django.db.transaction", "_non_atomic_requests.<locals>.wrapper"): coroutine_said,
+    },
+}
+
+
+class atomic_requests:
+    """ATOMIC_REQUESTS on in the database's settings, which make_view_atomic reads at each
+    request, for a block, and as it was again after it."""
+
+    def __enter__(self):
+        self.before = connections.settings["default"]["ATOMIC_REQUESTS"]
+        connections.settings["default"]["ATOMIC_REQUESTS"] = True
+
+    def __exit__(self, *exc):
+        connections.settings["default"]["ATOMIC_REQUESTS"] = self.before
+
+
+with atomic_requests(), warned():
+    serve_asgi(asgi_handler, environ("/wire/"), ATOMIC)
+show('GET /wire/, an async def function, through an ASGIHandler, with ATOMIC_REQUESTS set on the database for this block')
+
+with atomic_requests(), warned():
+    serve(handler, environ("/wire/"), ATOMIC)
+show('GET /wire/, an async def function, through a WSGIHandler, with ATOMIC_REQUESTS set on the database for this block')
+
+note("desk.wire_outside is non_atomic_requests(views.wire), and the URLconf gazette.desk routes /wire/outside/ to it")
+ask("iscoroutinefunction(desk.wire_outside)")
+ask("desk.wire_outside._non_atomic_requests")
+with atomic_requests(), routed("gazette.desk"), warned():
+    serve_asgi(asgi_handler, environ("/wire/outside/"), ATOMIC)
+show("GET /wire/outside/, the same function under non_atomic_requests, through an ASGIHandler, "
+     "with ATOMIC_REQUESTS set on the database and ROOT_URLCONF = 'gazette.desk' for this block")
+
+with atomic_requests(), routed("gazette.desk"), warned():
+    serve(handler, environ("/wire/outside/"), ATOMIC)
+show("GET /wire/outside/, the same function under non_atomic_requests, through a WSGIHandler, "
+     "with ATOMIC_REQUESTS set on the database and ROOT_URLCONF = 'gazette.desk' for this block")
+
+with atomic_requests():
+    serve(handler, environ("/"), ATOMIC)
+show("GET /, a function that is not a coroutine, through a WSGIHandler, with ATOMIC_REQUESTS set on the database for this block")
+
+ASYNC_CLASS = {
+    ("django.core.handlers.base", "BaseHandler._get_response_async"): plain,
+    ("gazette.views", "Wire.get"): lambda f: "Wire.get(request): the coroutine is awaited, and its body runs",
+    "generic": True,
+    "ours": True,
+    "after": {
+        ("django.views.generic.base", "View.as_view.<locals>.view"): coroutine_said,
+        ("django.views.generic.base", "View.dispatch"): coroutine_said,
+    },
+}
+serve_asgi(asgi_handler, environ("/wire/class/"), ASYNC_CLASS)
+show("GET /wire/class/ through an ASGIHandler: a class whose get is async def, call by call")
 
 # ---------------------------------------------------------------------------------------------
 # The shortcuts.
@@ -1239,6 +1602,17 @@ show("GET /news/ferry-timetable/?ref=front: a RedirectView that is permanent and
 serve(handler, environ("/weather/"), REQUEST)
 show("GET /weather/: a RedirectView with nowhere to send the request")
 
+serve(handler, environ("/news/", "POST", {"tip": "the ferry is late"}), REQUEST)
+show("POST /news/: the same RedirectView, given a POST")
+
+with routed("gazette.desk"):
+    serve(handler, environ("/news/kept/", "POST", {"tip": "the ferry is late"}), REQUEST)
+show("POST /news/kept/, with ROOT_URLCONF = 'gazette.desk' for this block: a RedirectView with preserve_request=True")
+
+with routed("gazette.desk"):
+    serve(handler, environ("/news/kept/moved/", "POST", {"tip": "the ferry is late"}), REQUEST)
+show("POST /news/kept/moved/, with ROOT_URLCONF = 'gazette.desk' for this block: a RedirectView with permanent=True and preserve_request=True")
+
 serve(handler, environ("/articles/ferry-timetable/"), REQUEST)
 show("GET /articles/ferry-timetable/: a DetailView")
 
@@ -1260,6 +1634,23 @@ show("POST /letters/ with a letter that is too short: the form is not valid")
 serve(handler, environ("/letters/", "POST", {"name": "A. Reader", "letter": "The ferry has been late every day this week."}), REQUEST)
 note(f"the view's own form_valid put the name in views.RECEIVED: {views.RECEIVED!r}")
 show("POST /letters/ with a letter the form accepts")
+
+
+def form_kwargs_said(frame, value) -> str:
+    """What get_form_kwargs gives the form, with what its data holds."""
+    said = keys(frame, value)
+    if "data" in value:
+        data = value["data"]
+        said += f"; its data is {a(type(data).__name__)} with " + ("no keys" if not data else "the keys " + ", ".join(sorted(data)))
+    return said
+
+
+letter = {"name": "A. Reader", "letter": "The ferry has been late every day this week."}
+put = environ("/letters/", "PUT", letter)
+note(f"the request's body, as {put['CONTENT_TYPE']}: {put['wsgi.input'].getvalue().decode()}")
+serve(handler, put, {**REQUEST, ("django.views.generic.edit", "ProcessFormView.put"): lambda f: "ProcessFormView.put(request)",
+                     "after": {("django.views.generic.edit", "FormMixin.get_form_kwargs"): form_kwargs_said}})
+show("PUT /letters/ with the body a POST that the form accepts would have")
 
 serve(handler, environ("/articles/new/", "POST", {"slug": "regatta", "headline": "Regatta results", "published": "2026-04-05 17:00"}), REQUEST)
 show("POST /articles/new/: a CreateView saves a new object")
@@ -1344,6 +1735,73 @@ STACK.pop()
 show("The date views: what each puts in the context, for the model Article and its field published")
 connection.execute_wrappers.append(query)
 
+from django.views.generic import dates as date_views  # noqa: E402
+
+RECORDING_DAY = NOW.date()
+
+
+class RecordingDate(datetime.date):
+    """datetime.date, but for its today(), which answers the recording's day."""
+
+    @classmethod
+    def today(cls):
+        return RECORDING_DAY
+
+
+class recording_today:
+    """For a block: django.views.generic.dates finds datetime.date.today() through the name
+    datetime in its module, and datetime.date cannot be changed in place. The name is given a
+    stand-in for the module, with every name of datetime and RecordingDate as date, and given
+    the module back after."""
+
+    def __enter__(self):
+        self.real = date_views.datetime
+        names = {name: getattr(datetime, name) for name in dir(datetime) if not name.startswith("__")}
+        date_views.datetime = types.SimpleNamespace(**{**names, "date": RecordingDate})
+
+    def __exit__(self, *exc):
+        date_views.datetime = self.real
+
+
+TODAY = {
+    **REQUEST,
+    ("django.views.generic.dates", "BaseDayArchiveView._get_dated_items"):
+        lambda f: f"BaseDayArchiveView._get_dated_items({brief(f.f_locals['date'])})",
+}
+today_view = generic.TodayArchiveView.as_view(model=Article, date_field="published")
+note("today_view is generic.TodayArchiveView.as_view(model=Article, date_field=\"published\"), called with a GET request")
+with recording_today(), recorded(TODAY):
+    try:
+        today_view(request())
+    except Exception as raised:
+        note(f"the call raises {type(raised).__name__}: {raised}")
+show("TodayArchiveView, with the name datetime in django.views.generic.dates given for this block a stand-in "
+     "whose date.today() is 2026-04-10")
+
+
+def day_of(view_class) -> Said:
+    """The day a date view of the kind given, with allow_empty, puts in its context: with the
+    stand-in for datetime in place, the recording's day by its date; without it, the machine's
+    by those words and never by its date, whatever that date is. The machine's is read before the
+    call and after, so that a run that crosses midnight is answered too."""
+    before = datetime.date.today()
+    day = view_class.as_view(model=Article, date_field="published", allow_empty=True)(request()).context_data["day"]
+    if date_views.datetime is not datetime:
+        return Said(brief(day) if day == RECORDING_DAY else "not the recording's day")
+    return Said("the machine's date" if day in (before, datetime.date.today()) else "not the machine's date")
+
+
+ASKING.update(day_of=day_of, recording_today=recording_today)
+connection.execute_wrappers.remove(query)
+note("(the queries these questions send are not written down)")
+with recording_today():
+    ask('context(generic.TodayArchiveView, {"allow_empty": True})',
+        show_as='with the stand-in: context(generic.TodayArchiveView, {"allow_empty": True})')
+    ask("day_of(generic.TodayArchiveView)", show_as="with the stand-in: day_of(generic.TodayArchiveView)")
+ask("day_of(generic.TodayArchiveView)", show_as="without it, timezone.now alone replaced: day_of(generic.TodayArchiveView)")
+connection.execute_wrappers.append(query)
+show("TodayArchiveView's day, with the stand-in for datetime and without it")
+
 # ---------------------------------------------------------------------------------------------
 # The error views.
 
@@ -1376,6 +1834,36 @@ with override_settings(TEMPLATES=TEMPLATES_WITH_404):
         show_as='with a template named 404.html: defaults.page_not_found(request("/x y/"), Http404("no such edition"))')
 show("The four error views, called directly")
 
+from django.core.checks.urls import check_custom_error_handlers, check_url_config  # noqa: E402
+
+
+class ErrorURLconf:
+    """A URLconf of the script's own, for a block: no patterns, and the handler404 given."""
+
+    urlpatterns = []
+
+    def __init__(self, handler404):
+        self.handler404 = handler404
+
+
+ASKING.update(check_url_config=check_url_config, check_custom_error_handlers=check_custom_error_handlers)
+CUSTOM = {
+    **ERRORS,
+    ("django.template.response", "SimpleTemplateResponse.render"): plain,
+    **{("gazette.desk", name): lambda f: f"desk.{f.f_code.co_name}(request, exception={type(f.f_locals['exception']).__name__})"
+       for name in ("not_found_unrendered", "not_found_ok")},
+}
+for handler404, what in ((desk.not_found_unrendered, "returns a TemplateResponse not yet rendered"),
+                         (desk.not_found_ok, "returns a response with the status 200"),
+                         (desk.not_found_misnamed, "names its second parameter exc")):
+    with routed(ErrorURLconf(handler404)):
+        note(f"desk.{handler404.__name__} {what}; ROOT_URLCONF is a URLconf with no patterns whose handler404 is desk.{handler404.__name__}")
+        ask("[message.id for message in check_url_config(None)]")
+        ask("[message.id for message in check_custom_error_handlers(None)]")
+        serve(handler, environ("/no-such-page/"), CUSTOM)
+    show(f"GET /no-such-page/ with DEBUG = False and, for this block, ROOT_URLCONF set to a URLconf of the script's own "
+         f"whose handler404 {what}")
+
 # ---------------------------------------------------------------------------------------------
 # The debug pages.
 
@@ -1392,6 +1880,51 @@ show("GET /no-such-page/ with DEBUG = True")
 with override_settings(ROOT_URLCONF=()):
     serve(handler, environ("/"), ERRORS, headers=("Content-Type",), body=False)
     show("GET / with DEBUG = True and a URLconf that has no patterns")
+
+
+def from_here(text: str) -> str:
+    """A path of this machine written from the recordings directory, with forward slashes."""
+    return text.replace(HERE + os.sep, "").replace(os.sep, "/")
+
+
+class Scrubbed(logging.Filter):
+    """For the blocks that need it: the paths of this machine in a log record's message are
+    written from the recordings directory."""
+
+    def filter(self, record):
+        message = record.getMessage()
+        if HERE in message:
+            record.msg, record.args = from_here(message), None
+        return True
+
+
+SUSPICIOUS = {
+    ("django.core.handlers.base", "BaseHandler._get_response"): plain,
+    ("django.core.handlers.exception", "response_for_exception"): lambda f: f"response_for_exception(request, {type(f.f_locals['exc']).__name__})",
+    ("django.views.debug", "technical_500_response"):
+        lambda f: f"technical_500_response(request, {f.f_locals['exc_type'].__name__}, ..., status_code={f.f_locals['status_code']})",
+    ("django.views.static", "serve"): lambda f: f"serve(request, {f.f_locals['path']!r}, document_root=FILES)",
+    ("django.utils._os", "safe_join"): lambda f: f"safe_join(FILES, {', '.join(repr(p) for p in f.f_locals['paths'])})",
+    "ours": True,
+    "after": {("django.views.debug", "technical_500_response"): AFTER[("django.views.debug", "technical_500_response")]},
+}
+scrubbing = Scrubbed()
+for one in logging.getLogger("django").handlers:
+    if isinstance(one, Noted):
+        one.addFilter(scrubbing)
+with routed("gazette.development_urls"):
+    serve(handler, environ("/forged/"), SUSPICIOUS, headers=("Content-Type",), body=False)
+    show("GET /forged/ with DEBUG = True and, for this block, ROOT_URLCONF = 'gazette.development_urls': "
+         "the view raises SuspiciousOperation")
+
+    note("gazette.development_urls holds the pattern static(\"/media/\", document_root=FILES) makes while DEBUG is on, which routes")
+    note("/media/<path> to django.views.static.serve")
+    serve(handler, environ("/media/../views.py"), SUSPICIOUS, headers=("Content-Type",), body=False)
+    show("GET /media/../views.py with DEBUG = True and, for this block, ROOT_URLCONF = 'gazette.development_urls': "
+         "a path that climbs out of the static file view's root")
+for one in logging.getLogger("django").handlers:
+    if isinstance(one, Noted):
+        one.removeFilter(scrubbing)
 settings.DEBUG = False
 
 
@@ -1489,6 +2022,85 @@ ask('"SECRET_KEY = \'********************\'" in text(views.missing, True)')
 STACK.pop()
 show("What a report shows of a frame's variables and of the posted data")
 
+from django.core import mail  # noqa: E402
+from django.utils.log import AdminEmailHandler  # noqa: E402
+
+MAIL = {
+    ("django.core.handlers.base", "BaseHandler._get_response"): plain,
+    ("django.core.handlers.exception", "response_for_exception"): lambda f: f"response_for_exception(request, {type(f.f_locals['exc']).__name__})",
+    ("django.core.handlers.exception", "handle_uncaught_exception"): lambda f: "handle_uncaught_exception(request, resolver, exc_info)",
+    ("django.utils.log", "log_response"): plain,
+    ("django.utils.log", "AdminEmailHandler.emit"): plain,
+    ("django.utils.log", "AdminEmailHandler.send_mail"): plain,
+    ("django.views.debug", "ExceptionReporter.__init__"): reporter_made,
+    ("django.views.debug", "ExceptionReporter.get_traceback_text"): plain,
+    ("django.views.debug", "ExceptionReporter.get_traceback_html"): plain,
+    ("django.core.mail", "mail_admins"): plain,
+    ("django.core.mail.backends.locmem", "EmailBackend.send_messages"): lambda f: "EmailBackend.send_messages  (django.core.mail.backends.locmem)",
+    "ours": True,
+}
+ADMIN_MAIL = next(one for one in logging.getLogger("django").handlers if isinstance(one, AdminEmailHandler))
+
+
+def frame_in(text: str, function: str) -> list:
+    """The lines of a text report that give the frame of a function: its File line and the lines
+    under it, up to the next frame's, with the path of the file written from the recordings
+    directory."""
+    lines = text.splitlines()
+    start = next(i for i, line in enumerate(lines) if line.endswith(f", in {function}"))
+    end = next((i for i in range(start + 1, len(lines)) if lines[i].startswith("  File ") or not lines[i].strip()), len(lines))
+    return [from_here(line) if line.startswith("  File ") else line for line in lines[start:end]]
+
+
+def mailed(include_html: bool) -> None:
+    """A request for /editions/1790/, whose view raises, with ADMINS set and the in-memory mail
+    backend, and the AdminEmailHandler of Django's logging with include_html as given; then what
+    the message in the outbox holds. The script's own handler, which writes the `log` lines, is
+    put first on the logger django for the request, so that its line is written when the record
+    is given, before Django's handlers act on it; and the request comes from 203.0.113.7, an
+    address set aside for documentation, as a server's client would."""
+    had_outbox, was_html = hasattr(mail, "outbox"), ADMIN_MAIL.include_html
+    held = list(mail.outbox) if had_outbox else None
+    ADMIN_MAIL.include_html = include_html
+    django_logger = logging.getLogger("django")
+    handlers = list(django_logger.handlers)
+    try:
+        django_logger.handlers[:] = sorted(handlers, key=lambda one: not isinstance(one, Noted))
+        with override_settings(ADMINS=["editor@gazette.example"], MAILERS={"default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"}}), warned():
+            serve(handler, environ("/editions/1790/", REMOTE_ADDR="203.0.113.7"), MAIL, body=False)
+        ASKING["mail"] = mail
+        ask("len(mail.outbox)")
+        ask("mail.outbox[0].subject")
+        ask("mail.outbox[0].to")
+        ask("[alternative.mimetype for alternative in mail.outbox[0].alternatives]")
+        note("the message's text, where it gives the frame of views.missing:")
+        STACK.append(None)
+        for line in frame_in(mail.outbox[0].body, "missing"):
+            note(f"| {line}")
+        STACK.pop()
+        ask('"open sesame" in mail.outbox[0].body')
+        if include_html:
+            ask('"open sesame" in mail.outbox[0].alternatives[0].content')
+    finally:
+        django_logger.handlers[:] = handlers
+        ADMIN_MAIL.include_html = was_html
+        if had_outbox:
+            mail.outbox[:] = held
+        elif hasattr(mail, "outbox"):
+            del mail.outbox
+
+
+note("Django's default logging is in force, as django.setup() configured it: the logger django sends records of ERROR and")
+note("above to an AdminEmailHandler, under the filter RequireDebugFalse; for this block ADMINS is ['editor@gazette.example'],")
+note("and the default mailer of MAILERS is Django's in-memory backend, which keeps each message in django.core.mail.outbox")
+mailed(False)
+show("GET /editions/1790/ with DEBUG = False, and ADMINS and MAILERS set for this block: the error email")
+
+note("as before, and the AdminEmailHandler's include_html, False by default, set to True for this block")
+mailed(True)
+show("GET /editions/1790/ with DEBUG = False, ADMINS and MAILERS set, and the AdminEmailHandler's include_html set to True for "
+     "this block: the error email")
+
 note("lookup() raises KeyError; chained() calls it, catches the KeyError and raises LookupError from it;")
 note("frames() calls chained(), catches the LookupError, and returns what ExceptionReporter.get_traceback_frames makes of it:")
 note("the third frame is that of frames() itself, where the LookupError was caught")
@@ -1571,3 +2183,29 @@ with override_settings(DEBUG=True):
     ask('static("https://cdn.example/media/", document_root=FILES)')
     STACK.pop()
 show("static(): the pattern that routes a prefix to the view, made only when DEBUG is true")
+
+# ---------------------------------------------------------------------------------------------
+# Last, because it installs two applications: LoginView's dispatch.
+
+import ast  # noqa: E402
+import inspect  # noqa: E402
+
+
+def decorators_of(cls) -> Said:
+    """The decorators written above a class statement, as its source has them."""
+    return Said("; ".join(ast.unparse(one) for one in ast.parse(inspect.getsource(cls)).body[0].decorator_list))
+
+
+with override_settings(INSTALLED_APPS=["gazette", "django.contrib.auth", "django.contrib.contenttypes"]):
+    from django.contrib.auth.views import LoginView  # noqa: E402
+
+    ASKING.update(LoginView=LoginView, decorators_of=decorators_of)
+    ask("decorators_of(LoginView)", show_as="the decorators above the class statement of LoginView")
+    ask("LoginView.dispatch.__qualname__")
+    ask("sorted(vars(LoginView.dispatch))")
+    ask("LoginView.dispatch.login_required")
+    ask("LoginView.dispatch.__wrapped__.__qualname__")
+    ask("LoginView.as_view().login_required")
+    ask('hasattr(LoginView.as_view(), "csrf_exempt")')
+show("LoginView's dispatch after the class is made, not requested, with django.contrib.auth and django.contrib.contenttypes "
+     "added to INSTALLED_APPS for this block")
