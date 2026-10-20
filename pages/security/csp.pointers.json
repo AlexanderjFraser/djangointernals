@@ -10,7 +10,7 @@
   {
    "pointer": "docs/ref/csp.txt",
    "line": 9,
-   "sentence": "A policy that allows scripts only from the site itself also refuses every inline `<script>`, the site's own included, and the **nonce** is how a page names the inline elements it means: the policy lists a random value as `'nonce-…'`, and the browser runs an inline script or style only if its `\"nonce\"` attribute matches (`docs/ref/csp.txt`).",
+   "sentence": "The nonce is how a page names the inline elements it means: the policy lists it as `'nonce-…'`, and the browser runs an inline script or style only if its `\"nonce\"` attribute matches (`docs/ref/csp.txt`).",
    "tree": "django",
    "path": "docs/ref/csp.txt",
    "symbol": null,
@@ -22,9 +22,37 @@
    "fingerprint": "692d45850988c8d7"
   },
   {
+   "pointer": "docs/releases/6.0.txt",
+   "line": 11,
+   "sentence": "Django had no content security policy before 6.0, which brought the middleware, the two settings, the `csp` context processor and the decorators (`docs/releases/6.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    642
+   ],
+   "fingerprint": "0ea24de54cb358c8"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 11,
+   "sentence": "`{% csp_nonce_attr %}` and the nonce on the elements of Django's own templates came in 6.1 (`docs/releases/6.1.txt`).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
    "pointer": "django/conf/global_settings.py",
-   "line": 13,
-   "sentence": "Each is a dictionary from a directive (`\"script-src\"`) to the sources it allows, and each defaults to an empty dictionary, which adds no header (`django/conf/global_settings.py`).",
+   "line": 15,
+   "sentence": "`SECURE_CSP` and `SECURE_CSP_REPORT_ONLY` are each a dictionary from a directive (`\"script-src\"`) to the sources it allows, and each defaults to an empty dictionary, which adds no header (`django/conf/global_settings.py`).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
    "symbol": null,
@@ -36,8 +64,23 @@
    "fingerprint": "3c82ce45a0f468df"
   },
   {
-   "pointer": "django/utils/csp.py:CSP",
+   "pointer": "django/core/checks/security/base.py:check_csp_settings",
    "line": 15,
+   "sentence": "A value that is neither `None` nor a dictionary is refused by `\"security.E026\"`, on every check ([The security checks](checks.md)) (`django/core/checks/security/base.py:check_csp_settings`).",
+   "tree": "django",
+   "path": "django/core/checks/security/base.py",
+   "symbol": "check_csp_settings",
+   "kind": "function",
+   "lines": [
+    335,
+    348
+   ],
+   "at": 336,
+   "fingerprint": "9a7a53c08a0f2fa1"
+  },
+  {
+   "pointer": "django/utils/csp.py:CSP",
+   "line": 17,
    "sentence": "And `CSP.NONCE`, `\"<CSP_NONCE_SENTINEL>\"`, is Django's own: a placeholder that stands in a directive's list for the nonce until the header is written (`django/utils/csp.py:CSP`).",
    "tree": "django",
    "path": "django/utils/csp.py",
@@ -51,7 +94,7 @@
   },
   {
    "pointer": "django/utils/csp.py:build_policy",
-   "line": 19,
+   "line": 21,
    "sentence": "`build_policy` turns one dictionary and a nonce into the text of one header: each directive followed by its sources, the directives in the dictionary's order joined with `\"; \"` (`django/utils/csp.py:build_policy`).",
    "tree": "django",
    "path": "django/utils/csp.py",
@@ -65,7 +108,7 @@
   },
   {
    "pointer": "django/utils/csp.py:generate_nonce",
-   "line": 54,
+   "line": 45,
    "sentence": "`LazyNonce` is a `SimpleLazyObject` around `generate_nonce`, which returns `secrets.token_urlsafe(16)`, sixteen random bytes as 22 characters of URL-safe base64 (`django/utils/csp.py:generate_nonce`).",
    "tree": "django",
    "path": "django/utils/csp.py",
@@ -79,7 +122,7 @@
   },
   {
    "pointer": "django/utils/csp.py:LazyNonce",
-   "line": 56,
+   "line": 47,
    "sentence": "`LazyNonce.__bool__` answers instead whether the value has been made, and makes nothing (`django/utils/csp.py:LazyNonce`).",
    "tree": "django",
    "path": "django/utils/csp.py",
@@ -92,9 +135,37 @@
    "fingerprint": "047a85b4aa553113"
   },
   {
+   "pointer": "django/utils/csp.py:LazyNonce",
+   "line": 49,
+   "sentence": "`LazyNonce.__bool__` makes nothing for the sake of third-party libraries that support CSP without requiring it: such a library can test a request's nonce and leave it undrawn (`django/utils/csp.py:LazyNonce`).",
+   "tree": "django",
+   "path": "django/utils/csp.py",
+   "symbol": "LazyNonce",
+   "kind": "class",
+   "lines": [
+    56,
+    81
+   ],
+   "fingerprint": "047a85b4aa553113"
+  },
+  {
+   "pointer": "django/template/context_processors.py:csp",
+   "line": 53,
+   "sentence": "The `csp` context processor adds `\"csp_nonce\"` to the context, the request's nonce or `None` (`django/template/context_processors.py:csp`) ([The context: `Context`, `RequestContext` and context processors](../templates/context.md)).",
+   "tree": "django",
+   "path": "django/template/context_processors.py",
+   "symbol": "csp",
+   "kind": "function",
+   "lines": [
+    94,
+    98
+   ],
+   "fingerprint": "ed509f20b667050c"
+  },
+  {
    "pointer": "django/utils/csp.py:nonce_attr",
-   "line": 58,
-   "sentence": "The tag's function tests only that the context's value is not `None`, and writes it, so the tag itself makes the nonce: a run rendering the tag over a fresh `LazyNonce` found it false before and true after (`django/utils/csp.py:nonce_attr`).",
+   "line": 53,
+   "sentence": "`{% csp_nonce_attr %}` writes `nonce=\"…\"` from it, or nothing; given a form's `Media`, the stylesheets and scripts the form requires, it writes their elements, the nonce, when there is one, on all but those given as ready HTML (`django/utils/csp.py:nonce_attr`) ([The built-in tags](../templates/tags.md), [Form assets: `Media`](../forms/media.md)).",
    "tree": "django",
    "path": "django/utils/csp.py",
    "symbol": "nonce_attr",
@@ -106,8 +177,46 @@
    "fingerprint": "c60887ce72a1e513"
   },
   {
+   "pointer": "django/contrib/admin/templates/",
+   "line": 55,
+   "sentence": "Django's own templates carry the tag on their `<script>`, `<style>` and `<link>` elements, all but the debug pages (`django/contrib/admin/templates/`, `django/views/templates/csrf_403.html`).",
+   "tree": "django",
+   "path": "django/contrib/admin/templates/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4dc7f8fbc69c0e8f"
+  },
+  {
+   "pointer": "django/views/templates/csrf_403.html",
+   "line": 55,
+   "sentence": "Django's own templates carry the tag on their `<script>`, `<style>` and `<link>` elements, all but the debug pages (`django/contrib/admin/templates/`, `django/views/templates/csrf_403.html`).",
+   "tree": "django",
+   "path": "django/views/templates/csrf_403.html",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    86
+   ],
+   "fingerprint": "c01c7216dec59867"
+  },
+  {
+   "pointer": "django/views/csrf.py:csrf_failure",
+   "line": 55,
+   "sentence": "The CSRF failure page, which `csrf_failure` renders with an `Engine` of its own, is given the nonce by the view itself ([The CSRF check: `CsrfViewMiddleware.process_view`](csrf-check.md)) (`django/views/csrf.py:csrf_failure`).",
+   "tree": "django",
+   "path": "django/views/csrf.py",
+   "symbol": "csrf_failure",
+   "kind": "function",
+   "lines": [
+    22,
+    81
+   ],
+   "fingerprint": "141725332d9c81b8"
+  },
+  {
    "pointer": "django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_request",
-   "line": 62,
+   "line": 61,
    "sentence": "`ContentSecurityPolicyMiddleware.process_request` puts a new `LazyNonce` on the request as `\"_csp_nonce\"`, which costs nothing while no value is drawn (`django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/csp.py",
@@ -121,7 +230,7 @@
   },
   {
    "pointer": "django/middleware/csp.py:get_nonce",
-   "line": 62,
+   "line": 61,
    "sentence": "`get_nonce` reads it back, or gives `None` for a request the middleware has not seen (`django/middleware/csp.py:get_nonce`).",
    "tree": "django",
    "path": "django/middleware/csp.py",
@@ -135,7 +244,7 @@
   },
   {
    "pointer": "django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response",
-   "line": 64,
+   "line": 63,
    "sentence": "Otherwise the header is `build_policy` of the policy and the request's nonce, the same nonce for both headers (`django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csp.py",
@@ -149,8 +258,8 @@
   },
   {
    "pointer": "django/views/decorators/csp.py:_make_csp_decorator",
-   "line": 70,
-   "sentence": "It then wraps the view, in a coroutine function if the view is one, and the wrapper sets the attribute on the response the view returns (`django/views/decorators/csp.py:_make_csp_decorator`) ([View decorators](../views/decorators.md)).",
+   "line": 89,
+   "sentence": "A policy that is not a dictionary is refused with `TypeError` when the decorator is made, before there is a view to wrap (`django/views/decorators/csp.py:_make_csp_decorator`) ([View decorators](../views/decorators.md)).",
    "tree": "django",
    "path": "django/views/decorators/csp.py",
    "symbol": "_make_csp_decorator",
@@ -162,9 +271,23 @@
    "fingerprint": "3a7a27e47288e289"
   },
   {
+   "pointer": "django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response",
+   "line": 114,
+   "sentence": "An empty dictionary, then, takes the setting's place like any other policy, and so exempts a view from that decorator's header (`django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/csp.py",
+   "symbol": "ContentSecurityPolicyMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    16,
+    35
+   ],
+   "fingerprint": "90a7f2d15640a6b6"
+  },
+  {
    "pointer": "django/views/debug.py:technical_500_response",
-   "line": 103,
-   "sentence": "Django's debug pages, whose styles and script are written into them, carry both decorators with `{}` ([The debug pages and `ExceptionReporter`](../views/debug.md)) (`django/views/debug.py:technical_500_response`).",
+   "line": 114,
+   "sentence": "Django's debug pages, whose styles are written into them, carry both decorators with `{}` ([The debug pages and `ExceptionReporter`](../views/debug.md)) (`django/views/debug.py:technical_500_response`, `django/views/debug.py:technical_404_response`, `django/views/debug.py:default_urlconf`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "technical_500_response",
@@ -177,9 +300,39 @@
    "fingerprint": "952bd3c881d36383"
   },
   {
+   "pointer": "django/views/debug.py:technical_404_response",
+   "line": 114,
+   "sentence": "Django's debug pages, whose styles are written into them, carry both decorators with `{}` ([The debug pages and `ExceptionReporter`](../views/debug.md)) (`django/views/debug.py:technical_500_response`, `django/views/debug.py:technical_404_response`, `django/views/debug.py:default_urlconf`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "technical_404_response",
+   "kind": "function",
+   "lines": [
+    607,
+    668
+   ],
+   "at": 609,
+   "fingerprint": "b34c50c9868ef6a8"
+  },
+  {
+   "pointer": "django/views/debug.py:default_urlconf",
+   "line": 114,
+   "sentence": "Django's debug pages, whose styles are written into them, carry both decorators with `{}` ([The debug pages and `ExceptionReporter`](../views/debug.md)) (`django/views/debug.py:technical_500_response`, `django/views/debug.py:technical_404_response`, `django/views/debug.py:default_urlconf`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "default_urlconf",
+   "kind": "function",
+   "lines": [
+    671,
+    683
+   ],
+   "at": 673,
+   "fingerprint": "844904372b827c75"
+  },
+  {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 105,
-   "sentence": "A view that raises, `Http404` say, is answered by the handler's exception handling, with a response that carries no mark of the view's (`django/core/handlers/exception.py:response_for_exception`): in a run with `settings.DEBUG` off, a view under `csp_override({})` that raised `Http404` was answered with a 404 under the site's policy.",
+   "line": 116,
+   "sentence": "A view that raises, `Http404` say, is answered by the handler's exception handling, with a response that carries no mark of the view's: with `settings.DEBUG` off, a view under `csp_override({})` that raises `Http404` is answered with a 404 under the site's policy (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -189,50 +342,6 @@
     160
    ],
    "fingerprint": "a7418f0de8e640e0"
-  },
-  {
-   "pointer": "django/template/context_processors.py:csp",
-   "line": 109,
-   "sentence": "The `csp` context processor adds `\"csp_nonce\"` to the context, the request's nonce or `None` (`django/template/context_processors.py:csp`) ([The context: `Context`, `RequestContext` and context processors](../templates/context.md)).",
-   "tree": "django",
-   "path": "django/template/context_processors.py",
-   "symbol": "csp",
-   "kind": "function",
-   "lines": [
-    94,
-    98
-   ],
-   "fingerprint": "ed509f20b667050c"
-  },
-  {
-   "pointer": "django/core/checks/security/base.py:check_csp_nonce_context_processor",
-   "line": 109,
-   "sentence": "Without the processor a template's context holds the nonce only where a view puts it there, and unless other code reads it the header names none: `\"security.W027\"` warns of that when the middleware is installed and a policy holds `CSP.NONCE`, and `\"security.E026\"` refuses a policy setting that is not a dictionary, both on every check ([The security checks](checks.md)) (`django/core/checks/security/base.py:check_csp_nonce_context_processor`, `django/core/checks/security/base.py:check_csp_settings`).",
-   "tree": "django",
-   "path": "django/core/checks/security/base.py",
-   "symbol": "check_csp_nonce_context_processor",
-   "kind": "function",
-   "lines": [
-    351,
-    362
-   ],
-   "at": 352,
-   "fingerprint": "9c8e7562d206b4dd"
-  },
-  {
-   "pointer": "django/core/checks/security/base.py:check_csp_settings",
-   "line": 109,
-   "sentence": "Without the processor a template's context holds the nonce only where a view puts it there, and unless other code reads it the header names none: `\"security.W027\"` warns of that when the middleware is installed and a policy holds `CSP.NONCE`, and `\"security.E026\"` refuses a policy setting that is not a dictionary, both on every check ([The security checks](checks.md)) (`django/core/checks/security/base.py:check_csp_nonce_context_processor`, `django/core/checks/security/base.py:check_csp_settings`).",
-   "tree": "django",
-   "path": "django/core/checks/security/base.py",
-   "symbol": "check_csp_settings",
-   "kind": "function",
-   "lines": [
-    335,
-    348
-   ],
-   "at": 336,
-   "fingerprint": "9a7a53c08a0f2fa1"
   }
  ]
 }

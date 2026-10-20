@@ -80,7 +80,7 @@
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
    "line": 83,
-   "sentence": "Over plain HTTP the same request goes no further than the first layer: `SecurityMiddleware.process_request` answers it with a redirect to the same address over HTTPS, the three middleware inside never run, and the redirect leaves with `SecurityMiddleware`'s own headers but Strict-Transport-Security, which it sends only on a secure request (`django/middleware/security.py:SecurityMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_response`).",
+   "sentence": "Over plain HTTP the same request goes no further than the first layer, which answers it with a redirect to HTTPS ([The security headers: `SecurityMiddleware` and `XFrameOptionsMiddleware`](security/headers.md)) (`django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/security.py",
    "symbol": "SecurityMiddleware.process_request",
@@ -92,23 +92,9 @@
    "fingerprint": "9a87791cf038990b"
   },
   {
-   "pointer": "django/middleware/security.py:SecurityMiddleware.process_response",
-   "line": 83,
-   "sentence": "Over plain HTTP the same request goes no further than the first layer: `SecurityMiddleware.process_request` answers it with a redirect to the same address over HTTPS, the three middleware inside never run, and the redirect leaves with `SecurityMiddleware`'s own headers but Strict-Transport-Security, which it sends only on a secure request (`django/middleware/security.py:SecurityMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_response`).",
-   "tree": "django",
-   "path": "django/middleware/security.py",
-   "symbol": "SecurityMiddleware.process_response",
-   "kind": "function",
-   "lines": [
-    35,
-    68
-   ],
-   "fingerprint": "7ad22778135f164b"
-  },
-  {
    "pointer": "django/middleware/csrf.py:get_token",
    "line": 87,
-   "sentence": "So `CsrfViewMiddleware` keeps a CSRF secret for each browser, in its cookie or, with `CSRF_USE_SESSIONS`, in the session, and the site's own pages carry a token made from it, which differs on every page while the secret stays the same ([The CSRF secret and its token](security/csrf-token.md)) (`django/middleware/csrf.py:get_token`).",
+   "sentence": "So `CsrfViewMiddleware` keeps a CSRF secret for a browser, in its cookie or, with `CSRF_USE_SESSIONS`, in the session, and the site's own pages carry a token made from it, a different one on every page ([The CSRF secret and its token](security/csrf-token.md)) (`django/middleware/csrf.py:get_token`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "get_token",
@@ -178,7 +164,7 @@
   {
    "pointer": "django/utils/csp.py:build_policy",
    "line": 93,
-   "sentence": "The nonce `ContentSecurityPolicyMiddleware.process_request` gives each request is a `LazyNonce`, made only when something first reads it, so on the way out `build_policy` writes it into the policy if it was made and leaves it out if not ([Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](security/csp.md)) (`django/utils/csp.py:build_policy`).",
+   "sentence": "The nonce `ContentSecurityPolicyMiddleware.process_request` gives each request is a `LazyNonce`, made only when something first reads it, so on the way out `build_policy` writes it into the policy if it was made and leaves it out if not ([Content Security Policy and the nonce](security/csp.md)) (`django/utils/csp.py:build_policy`).",
    "tree": "django",
    "path": "django/utils/csp.py",
    "symbol": "build_policy",
@@ -192,7 +178,7 @@
   {
    "pointer": "django/utils/crypto.py:salted_hmac",
    "line": 97,
-   "sentence": "Django makes its values with `SECRET_KEY` alone, and checks them against it and then against each of `SECRET_KEY_FALLBACKS`, which is how a site changes its key without at once refusing everything made with the old one ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.unsign`).",
+   "sentence": "Django makes its values with `SECRET_KEY` alone, and its signers, the password-reset tokens and `get_user`, reading back the hash a session keeps, check what comes back against it and then against each of `SECRET_KEY_FALLBACKS`, which is how a site changes its key without at once refusing everything made with the old one ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.unsign`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`, `django/contrib/auth/__init__.py:get_user`).",
    "tree": "django",
    "path": "django/utils/crypto.py",
    "symbol": "salted_hmac",
@@ -206,7 +192,7 @@
   {
    "pointer": "django/core/signing.py:Signer.unsign",
    "line": 97,
-   "sentence": "Django makes its values with `SECRET_KEY` alone, and checks them against it and then against each of `SECRET_KEY_FALLBACKS`, which is how a site changes its key without at once refusing everything made with the old one ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.unsign`).",
+   "sentence": "Django makes its values with `SECRET_KEY` alone, and its signers, the password-reset tokens and `get_user`, reading back the hash a session keeps, check what comes back against it and then against each of `SECRET_KEY_FALLBACKS`, which is how a site changes its key without at once refusing everything made with the old one ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.unsign`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`, `django/contrib/auth/__init__.py:get_user`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "Signer.unsign",
@@ -218,9 +204,37 @@
    "fingerprint": "47eef6ac66b5ee46"
   },
   {
+   "pointer": "django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token",
+   "line": 97,
+   "sentence": "Django makes its values with `SECRET_KEY` alone, and its signers, the password-reset tokens and `get_user`, reading back the hash a session keeps, check what comes back against it and then against each of `SECRET_KEY_FALLBACKS`, which is how a site changes its key without at once refusing everything made with the old one ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.unsign`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`, `django/contrib/auth/__init__.py:get_user`).",
+   "tree": "django",
+   "path": "django/contrib/auth/tokens.py",
+   "symbol": "PasswordResetTokenGenerator.check_token",
+   "kind": "function",
+   "lines": [
+    51,
+    82
+   ],
+   "fingerprint": "2319dde9632082bc"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:get_user",
+   "line": 97,
+   "sentence": "Django makes its values with `SECRET_KEY` alone, and its signers, the password-reset tokens and `get_user`, reading back the hash a session keeps, check what comes back against it and then against each of `SECRET_KEY_FALLBACKS`, which is how a site changes its key without at once refusing everything made with the old one ([Secret keys and `django.utils.crypto`](security/keys.md)) (`django/utils/crypto.py:salted_hmac`, `django/core/signing.py:Signer.unsign`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`, `django/contrib/auth/__init__.py:get_user`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "get_user",
+   "kind": "function",
+   "lines": [
+    278,
+    319
+   ],
+   "fingerprint": "32127fae5f696512"
+  },
+  {
    "pointer": "django/core/signing.py:dumps",
    "line": 99,
-   "sentence": "The value itself is only base64, which anyone can decode: a signature makes a change detectable and hides nothing ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](security/signing.md)) (`django/core/signing.py:dumps`).",
+   "sentence": "The value `dumps` signs is only encoded, in base64 and sometimes compressed, which anyone can undo: a signature makes a change detectable and hides nothing ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](security/signing.md)) (`django/core/signing.py:dumps`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "dumps",

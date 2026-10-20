@@ -83,4 +83,4 @@ Given `as` and a name, `{% url %}`, `{% firstof %}`, `{% now %}`, `{% widthratio
 | `{% debug %}` | the context and the loaded modules, when `settings.DEBUG` is true ([Template errors and debug information](debugging.md)) | `django/template/defaulttags.py:DebugNode` |
 | `{% comment %}` | nothing: the parser skips to `{% endcomment %}` unparsed | `django/template/defaulttags.py:comment` |
 | `{% csrf_token %}` | a hidden input holding the CSRF context processor's token, or nothing when the context has none | `django/template/defaulttags.py:CsrfTokenNode` |
-| `{% csp_nonce_attr %}` | a simple tag: `nonce="…"` from the nonce of `django.template.context_processors.csp`, or nothing; given a form's media, its tags carrying that nonce | `django/utils/csp.py:nonce_attr` |
+| `{% csp_nonce_attr %}` | a simple tag: `nonce="…"` from the nonce of `django.template.context_processors.csp`, or nothing; given a form's media, its tags, with that nonce on all but those given as ready HTML | `django/utils/csp.py:nonce_attr` |

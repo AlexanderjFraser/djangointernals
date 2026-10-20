@@ -31,7 +31,7 @@ GET /no-such-page/ with DEBUG = False and no template named 404.html
           ...
 ```
 
-Each of the four is decorated with `requires_csrf_token`: the callable is that decorator's wrapper, and the `CsrfViewMiddleware` it runs never refuses the request ([A middleware as a decorator](middleware-decorators.md#the-decorators-made-this-way)) (`django/views/decorators/csrf.py:requires_csrf_token`).
+Each of the four is decorated with `requires_csrf_token`: the callable is that decorator's wrapper, and the `CsrfViewMiddleware` it runs never refuses the request ([A middleware as a decorator](middleware-decorators.md#the-decorators-made-this-way)) (`django/views/decorators/csrf.py:requires_csrf_token`, `django/views/decorators/csrf.py:_EnsureCsrfToken`).
 
 > **Why.** An error view can be called for a request that `CsrfViewMiddleware.process_view` never saw: a path that matches no pattern raises before any `process_view` hook runs (`django/core/handlers/base.py:BaseHandler._get_response`). The comment above the four views gives that as the reason for the decorator, in case a template needs `{% csrf_token %}` (`django/views/defaults.py`). A project's template for a 400, a 403 or a 404 can therefore use the token. The 500 view is called through the same wrapper, but renders its template without the request, so its template cannot use it (`django/views/defaults.py:server_error`).
 

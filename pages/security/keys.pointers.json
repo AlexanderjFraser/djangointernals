@@ -2,6 +2,7 @@
  "generated": {
   "tool": "tools/pointers.py",
   "trees": {
+   "deps": "f5492c9fdf242f3da463f662e385f0555e203403",
    "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
   }
  },
@@ -10,7 +11,7 @@
   {
    "pointer": "docs/topics/signing.txt",
    "line": 9,
-   "sentence": "The salt, unlike the key, need not be secret, as Django's documentation says (`docs/topics/signing.txt`).",
+   "sentence": "Unlike the key, the salt need not be secret (`docs/topics/signing.txt`).",
    "tree": "django",
    "path": "docs/topics/signing.txt",
    "symbol": null,
@@ -22,9 +23,23 @@
    "fingerprint": "ad28ada77794e265"
   },
   {
+   "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
+   "line": 13,
+   "sentence": "`SECRET_KEY` defaults to an empty string, and reading an empty one raises `ImproperlyConfigured`, so a project without a key fails at the first thing that needs it ([The settings object](../startup/settings.md)) (`django/conf/__init__.py:LazySettings.__getattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__getattr__",
+   "kind": "function",
+   "lines": [
+    119,
+    146
+   ],
+   "fingerprint": "fd7eca125afabf3c"
+  },
+  {
    "pointer": "django/core/signing.py:Signer.__init__",
-   "line": 23,
-   "sentence": "*What Django derives from `SECRET_KEY`, and whether it also tries the old keys (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).*",
+   "line": 13,
+   "sentence": "Every user that signs reaches it through one of them, with a salt of its own, and every branch ends in `salted_hmac` (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator._get_secret`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "Signer.__init__",
@@ -37,8 +52,8 @@
   },
   {
    "pointer": "django/core/signing.py:get_cookie_signer",
-   "line": 23,
-   "sentence": "*What Django derives from `SECRET_KEY`, and whether it also tries the old keys (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).*",
+   "line": 13,
+   "sentence": "Every user that signs reaches it through one of them, with a salt of its own, and every branch ends in `salted_hmac` (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator._get_secret`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "get_cookie_signer",
@@ -50,9 +65,51 @@
    "fingerprint": "3162cc89a1bdf525"
   },
   {
+   "pointer": "django/contrib/auth/tokens.py:PasswordResetTokenGenerator._get_secret",
+   "line": 13,
+   "sentence": "Every user that signs reaches it through one of them, with a salt of its own, and every branch ends in `salted_hmac` (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator._get_secret`).",
+   "tree": "django",
+   "path": "django/contrib/auth/tokens.py",
+   "symbol": "PasswordResetTokenGenerator._get_secret",
+   "kind": "function",
+   "lines": [
+    22,
+    23
+   ],
+   "fingerprint": "f8e5493184ed4841"
+  },
+  {
+   "pointer": "django/core/signing.py:Signer.signature",
+   "line": 15,
+   "sentence": "`dumps` and `loads` work through a `TimestampSigner`, under the salt `\"django.core.signing\"` unless they are given another; each may be given a key in place of `SECRET_KEY`, and `loads` old keys in place of `SECRET_KEY_FALLBACKS` ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](signing.md)) (`django/core/signing.py:Signer.signature`, `django/core/signing.py:dumps`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.signature",
+   "kind": "function",
+   "lines": [
+    240,
+    242
+   ],
+   "fingerprint": "055285e51d6c7144"
+  },
+  {
+   "pointer": "django/core/signing.py:dumps",
+   "line": 15,
+   "sentence": "`dumps` and `loads` work through a `TimestampSigner`, under the salt `\"django.core.signing\"` unless they are given another; each may be given a key in place of `SECRET_KEY`, and `loads` old keys in place of `SECRET_KEY_FALLBACKS` ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](signing.md)) (`django/core/signing.py:Signer.signature`, `django/core/signing.py:dumps`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "dumps",
+   "kind": "function",
+   "lines": [
+    172,
+    193
+   ],
+   "fingerprint": "0970fa05c223bafa"
+  },
+  {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase.encode",
-   "line": 23,
-   "sentence": "*What Django derives from `SECRET_KEY`, and whether it also tries the old keys (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).*",
+   "line": 15,
+   "sentence": "The sessions sign with `dumps`, but for the cache backend's: `SessionBase.encode` writes the stored data of the database, file and cached-database backends under the salt `\"django.contrib.sessions.SessionStore\"`, and the signed-cookie backend, which keeps the whole session in the cookie, signs it under `\"django.contrib.sessions.backends.signed_cookies\"` ([The session store: `SessionBase`](../auth/sessions.md), [The session backends](../auth/session-backends.md)) (`django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/sessions/backends/signed_cookies.py:SessionStore._get_session_key`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
    "symbol": "SessionBase.encode",
@@ -64,9 +121,51 @@
    "fingerprint": "ab7326d27aa3e74a"
   },
   {
+   "pointer": "django/contrib/sessions/backends/signed_cookies.py:SessionStore._get_session_key",
+   "line": 15,
+   "sentence": "The sessions sign with `dumps`, but for the cache backend's: `SessionBase.encode` writes the stored data of the database, file and cached-database backends under the salt `\"django.contrib.sessions.SessionStore\"`, and the signed-cookie backend, which keeps the whole session in the cookie, signs it under `\"django.contrib.sessions.backends.signed_cookies\"` ([The session store: `SessionBase`](../auth/sessions.md), [The session backends](../auth/session-backends.md)) (`django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/sessions/backends/signed_cookies.py:SessionStore._get_session_key`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/signed_cookies.py",
+   "symbol": "SessionStore._get_session_key",
+   "kind": "function",
+   "lines": [
+    85,
+    95
+   ],
+   "fingerprint": "90d48f06dc77e803"
+  },
+  {
+   "pointer": "django/core/signing.py:_cookie_signer_salt",
+   "line": 17,
+   "sentence": "A signed cookie's salt is `\"django.http.cookies.v2:\"`, the length of the caller's salt, `\":\"`, that salt and the cookie's name ([Cookies](../http/cookies.md#signed-cookies)); the messages' `CookieStorage` signs its cookie under `\"django.contrib.messages\"` ([Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md)) (`django/core/signing.py:_cookie_signer_salt`, `django/contrib/messages/storage/cookie.py:CookieStorage`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "_cookie_signer_salt",
+   "kind": "function",
+   "lines": [
+    123,
+    125
+   ],
+   "fingerprint": "ade2da5a1d2387e6"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage",
+   "line": 17,
+   "sentence": "A signed cookie's salt is `\"django.http.cookies.v2:\"`, the length of the caller's salt, `\":\"`, that salt and the cookie's name ([Cookies](../http/cookies.md#signed-cookies)); the messages' `CookieStorage` signs its cookie under `\"django.contrib.messages\"` ([Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md)) (`django/core/signing.py:_cookie_signer_salt`, `django/contrib/messages/storage/cookie.py:CookieStorage`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage",
+   "kind": "class",
+   "lines": [
+    76,
+    214
+   ],
+   "fingerprint": "039b781489ac44df"
+  },
+  {
    "pointer": "django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash",
-   "line": 23,
-   "sentence": "*What Django derives from `SECRET_KEY`, and whether it also tries the old keys (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).*",
+   "line": 19,
+   "sentence": "`PasswordResetTokenGenerator` makes a reset token under the salt `\"django.contrib.auth.tokens.PasswordResetTokenGenerator\"`, with its own `PasswordResetTokenGenerator.secret` and `PasswordResetTokenGenerator.secret_fallbacks`, which are `SECRET_KEY` and `SECRET_KEY_FALLBACKS` unless they are set ([Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md#the-token-passwordresettokengenerator)) (`django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).",
    "tree": "django",
    "path": "django/contrib/auth/base_user.py",
    "symbol": "AbstractBaseUser._get_session_auth_hash",
@@ -79,8 +178,8 @@
   },
   {
    "pointer": "django/contrib/auth/tokens.py:PasswordResetTokenGenerator",
-   "line": 23,
-   "sentence": "*What Django derives from `SECRET_KEY`, and whether it also tries the old keys (`django/core/signing.py:Signer.__init__`, `django/core/signing.py:get_cookie_signer`, `django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).*",
+   "line": 19,
+   "sentence": "`PasswordResetTokenGenerator` makes a reset token under the salt `\"django.contrib.auth.tokens.PasswordResetTokenGenerator\"`, with its own `PasswordResetTokenGenerator.secret` and `PasswordResetTokenGenerator.secret_fallbacks`, which are `SECRET_KEY` and `SECRET_KEY_FALLBACKS` unless they are set ([Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md#the-token-passwordresettokengenerator)) (`django/contrib/auth/base_user.py:AbstractBaseUser._get_session_auth_hash`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator`).",
    "tree": "django",
    "path": "django/contrib/auth/tokens.py",
    "symbol": "PasswordResetTokenGenerator",
@@ -92,23 +191,9 @@
    "fingerprint": "30438eddb9c090a0"
   },
   {
-   "pointer": "django/core/signing.py:Signer.unsign",
-   "line": 25,
-   "sentence": "`Signer.sign` uses the signer's key alone; `Signer.unsign` tries the key and then each fallback in turn, and `PasswordResetTokenGenerator.check_token` does the same with its secrets (`django/core/signing.py:Signer.unsign`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "Signer.unsign",
-   "kind": "function",
-   "lines": [
-    247,
-    254
-   ],
-   "fingerprint": "47eef6ac66b5ee46"
-  },
-  {
    "pointer": "django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token",
-   "line": 25,
-   "sentence": "`Signer.sign` uses the signer's key alone; `Signer.unsign` tries the key and then each fallback in turn, and `PasswordResetTokenGenerator.check_token` does the same with its secrets (`django/core/signing.py:Signer.unsign`, `django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`).",
+   "line": 45,
+   "sentence": "`PasswordResetTokenGenerator.check_token` makes the token again under its secret and then under each of its fallbacks, and `get_user` makes the user's session hash again the same way, to compare with the one the session holds (`django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`, `django/contrib/auth/__init__.py:get_user`).",
    "tree": "django",
    "path": "django/contrib/auth/tokens.py",
    "symbol": "PasswordResetTokenGenerator.check_token",
@@ -120,37 +205,9 @@
    "fingerprint": "2319dde9632082bc"
   },
   {
-   "pointer": "docs/ref/settings.txt",
-   "line": 25,
-   "sentence": "The documentation's way of rotating a key follows: the new key in `SECRET_KEY`, the old one at the front of `SECRET_KEY_FALLBACKS`, removed when what was made with it may expire (`docs/ref/settings.txt`).",
-   "tree": "django",
-   "path": "docs/ref/settings.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    4179
-   ],
-   "fingerprint": "23ab897ca680e6a7"
-  },
-  {
-   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.decode",
-   "line": 27,
-   "sentence": "A session's data stored in the database or a file that does not verify is logged to `\"django.security.SuspiciousSession\"` and read as an empty session (`django/contrib/sessions/backends/base.py:SessionBase.decode`).",
-   "tree": "django",
-   "path": "django/contrib/sessions/backends/base.py",
-   "symbol": "SessionBase.decode",
-   "kind": "function",
-   "lines": [
-    136,
-    148
-   ],
-   "fingerprint": "2f52ba0c47ea3596"
-  },
-  {
    "pointer": "django/contrib/auth/__init__.py:get_user",
-   "line": 27,
-   "sentence": "A user whose session hash was made under neither the key nor a fallback has the session flushed and is anonymous; one whose hash was made under a fallback keeps the session, under a new session key, with the hash made again under the new key (`django/contrib/auth/__init__.py:get_user`).",
+   "line": 45,
+   "sentence": "`PasswordResetTokenGenerator.check_token` makes the token again under its secret and then under each of its fallbacks, and `get_user` makes the user's session hash again the same way, to compare with the one the session holds (`django/contrib/auth/tokens.py:PasswordResetTokenGenerator.check_token`, `django/contrib/auth/__init__.py:get_user`).",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
    "symbol": "get_user",
@@ -163,8 +220,8 @@
   },
   {
    "pointer": "docs/ref/settings.txt",
-   "line": 29,
-   "sentence": "Passwords are hashed with salts of their own, and the documentation says a change of key does not affect them (`docs/ref/settings.txt`).",
+   "line": 45,
+   "sentence": "A key is changed in two steps, then: the new key into `SECRET_KEY` and the old one to the front of `SECRET_KEY_FALLBACKS`; and later the old one out of the list, which ends the sessions, reset tokens and other values it made (`docs/ref/settings.txt`).",
    "tree": "django",
    "path": "docs/ref/settings.txt",
    "symbol": null,
@@ -176,8 +233,148 @@
    "fingerprint": "23ab897ca680e6a7"
   },
   {
+   "pointer": "docs/releases/4.1.txt",
+   "line": 47,
+   "sentence": "4.1 added `SECRET_KEY_FALLBACKS`, a list of old keys for rotating the key (`docs/releases/4.1.txt`); in 4.1 a rotation under the fallbacks still invalidated the sessions, a bug fixed in 4.1.8 (`docs/releases/4.1.8.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    754
+   ],
+   "fingerprint": "9740cd5b06b1247b"
+  },
+  {
+   "pointer": "docs/releases/4.1.8.txt",
+   "line": 47,
+   "sentence": "4.1 added `SECRET_KEY_FALLBACKS`, a list of old keys for rotating the key (`docs/releases/4.1.txt`); in 4.1 a rotation under the fallbacks still invalidated the sessions, a bug fixed in 4.1.8 (`docs/releases/4.1.8.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.1.8.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    13
+   ],
+   "fingerprint": "6dcebfe061f035a7"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.get_signed_cookie",
+   "line": 49,
+   "sentence": "A session's stored data is read as an empty session, with a warning to `\"django.security.SuspiciousSession\"` ([The session store: `SessionBase`](../auth/sessions.md#the-stored-form-encode-and-decode)), and a reset link no longer checks ([Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md#the-token-passwordresettokengenerator)) (`django/http/request.py:HttpRequest.get_signed_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._decode`, `django/contrib/sessions/backends/base.py:SessionBase.decode`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.get_signed_cookie",
+   "kind": "function",
+   "lines": [
+    239,
+    261
+   ],
+   "fingerprint": "68b31391edbd56e4"
+  },
+  {
+   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage._decode",
+   "line": 49,
+   "sentence": "A session's stored data is read as an empty session, with a warning to `\"django.security.SuspiciousSession\"` ([The session store: `SessionBase`](../auth/sessions.md#the-stored-form-encode-and-decode)), and a reset link no longer checks ([Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md#the-token-passwordresettokengenerator)) (`django/http/request.py:HttpRequest.get_signed_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._decode`, `django/contrib/sessions/backends/base.py:SessionBase.decode`).",
+   "tree": "django",
+   "path": "django/contrib/messages/storage/cookie.py",
+   "symbol": "CookieStorage._decode",
+   "kind": "function",
+   "lines": [
+    198,
+    214
+   ],
+   "fingerprint": "a52d01243104cd86"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.decode",
+   "line": 49,
+   "sentence": "A session's stored data is read as an empty session, with a warning to `\"django.security.SuspiciousSession\"` ([The session store: `SessionBase`](../auth/sessions.md#the-stored-form-encode-and-decode)), and a reset link no longer checks ([Password reset: `PasswordResetTokenGenerator` and the reset views](../auth/password-reset.md#the-token-passwordresettokengenerator)) (`django/http/request.py:HttpRequest.get_signed_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._decode`, `django/contrib/sessions/backends/base.py:SessionBase.decode`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/base.py",
+   "symbol": "SessionBase.decode",
+   "kind": "function",
+   "lines": [
+    136,
+    148
+   ],
+   "fingerprint": "2f52ba0c47ea3596"
+  },
+  {
+   "pointer": "django/contrib/auth/__init__.py:get_user",
+   "line": 51,
+   "sentence": "Under the cache backend the data is not signed and still holds the id, but the hash beside it, made under the old key, no longer matches the user's, and `get_user` flushes the session, deleting it and dropping its session key (`django/contrib/auth/__init__.py:get_user`, `django/contrib/sessions/backends/cache.py:SessionStore.load`).",
+   "tree": "django",
+   "path": "django/contrib/auth/__init__.py",
+   "symbol": "get_user",
+   "kind": "function",
+   "lines": [
+    278,
+    319
+   ],
+   "fingerprint": "32127fae5f696512"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/cache.py:SessionStore.load",
+   "line": 51,
+   "sentence": "Under the cache backend the data is not signed and still holds the id, but the hash beside it, made under the old key, no longer matches the user's, and `get_user` flushes the session, deleting it and dropping its session key (`django/contrib/auth/__init__.py:get_user`, `django/contrib/sessions/backends/cache.py:SessionStore.load`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/cache.py",
+   "symbol": "SessionStore.load",
+   "kind": "function",
+   "lines": [
+    26,
+    36
+   ],
+   "fingerprint": "2bfecab003f7660d"
+  },
+  {
+   "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher.salt",
+   "line": 53,
+   "sentence": "A password's hash is made without it, with a salt the hasher draws for it, and a change of key leaves passwords as they were (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`, `docs/ref/settings.txt`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "BasePasswordHasher.salt",
+   "kind": "function",
+   "lines": [
+    241,
+    249
+   ],
+   "fingerprint": "307a2de5ba9ae9db"
+  },
+  {
+   "pointer": "docs/ref/settings.txt",
+   "line": 53,
+   "sentence": "A password's hash is made without it, with a salt the hasher draws for it, and a change of key leaves passwords as they were (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`, `docs/ref/settings.txt`).",
+   "tree": "django",
+   "path": "docs/ref/settings.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4179
+   ],
+   "fingerprint": "23ab897ca680e6a7"
+  },
+  {
+   "pointer": "django/utils/crypto.py:pbkdf2",
+   "line": 53,
+   "sentence": "The PBKDF2 hashers, the default among them, make the hash with `pbkdf2`, which is `hashlib.pbkdf2_hmac` with SHA-256 unless another digest is given ([Password hashing: `make_password` and the hashers](../auth/hashers.md)) (`django/utils/crypto.py:pbkdf2`).",
+   "tree": "django",
+   "path": "django/utils/crypto.py",
+   "symbol": "pbkdf2",
+   "kind": "function",
+   "lines": [
+    86,
+    93
+   ],
+   "fingerprint": "e837ea001524f436"
+  },
+  {
    "pointer": "django/utils/crypto.py:salted_hmac",
-   "line": 33,
+   "line": 57,
    "sentence": "Salt, secret and value may each be a string or bytes: `force_bytes` makes them bytes (`django/utils/crypto.py:salted_hmac`).",
    "tree": "django",
    "path": "django/utils/crypto.py",
@@ -191,8 +388,8 @@
   },
   {
    "pointer": "docs/releases/6.1.txt",
-   "line": 52,
-   "sentence": "Since 6.1 a call that names no algorithm warns with `RemovedInDjango2028Warning`, and in Django 2028 the default becomes `\"sha256\"` (`docs/releases/6.1.txt`).",
+   "line": 61,
+   "sentence": "Since 6.1 a call that names no algorithm warns, and in Django 2028 the default becomes `\"sha256\"` (`docs/releases/6.1.txt`).",
    "tree": "django",
    "path": "docs/releases/6.1.txt",
    "symbol": null,
@@ -204,9 +401,65 @@
    "fingerprint": "283b7ce3a441f06c"
   },
   {
+   "pointer": "docs/releases/6.2.txt",
+   "line": 61,
+   "sentence": "Django 2028 is the release that was to be 7.0, named by its year under DEP 20, and the warning was renamed with it: RemovedInDjango70Warning in 6.1, `RemovedInDjango2028Warning` at this commit ([What still warns: the deprecations and the releases that end them](../changes/deprecations.md)) (`docs/releases/6.2.txt`, `deps:accepted/0020-annual-release-cycle.rst`).",
+   "tree": "django",
+   "path": "docs/releases/6.2.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    432
+   ],
+   "fingerprint": "e1d5d9202432f6d1"
+  },
+  {
+   "pointer": "deps:accepted/0020-annual-release-cycle.rst",
+   "line": 61,
+   "sentence": "Django 2028 is the release that was to be 7.0, named by its year under DEP 20, and the warning was renamed with it: RemovedInDjango70Warning in 6.1, `RemovedInDjango2028Warning` at this commit ([What still warns: the deprecations and the releases that end them](../changes/deprecations.md)) (`docs/releases/6.2.txt`, `deps:accepted/0020-annual-release-cycle.rst`).",
+   "tree": "deps",
+   "path": "accepted/0020-annual-release-cycle.rst",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    497
+   ],
+   "fingerprint": "55f116fe0c05cad8"
+  },
+  {
+   "pointer": "django/utils/crypto.py:salted_hmac",
+   "line": 61,
+   "sentence": "It skips Django's own files, so it is reported at the innermost line outside Django that led to the call (`django/utils/crypto.py:salted_hmac`).",
+   "tree": "django",
+   "path": "django/utils/crypto.py",
+   "symbol": "salted_hmac",
+   "kind": "function",
+   "lines": [
+    23,
+    61
+   ],
+   "fingerprint": "2a2e7d76a37fdbcc"
+  },
+  {
+   "pointer": "django/core/signing.py:base64_hmac",
+   "line": 61,
+   "sentence": "`base64_hmac` has the same deprecation and warns under its own name; it passes `\"sha1\"` on to `salted_hmac`, so a call of it warns once (`django/core/signing.py:base64_hmac`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "base64_hmac",
+   "kind": "function",
+   "lines": [
+    103,
+    115
+   ],
+   "fingerprint": "b038e03c6a14c165"
+  },
+  {
    "pointer": "django/utils/crypto.py:constant_time_compare",
-   "line": 56,
-   "sentence": "`constant_time_compare` makes both values bytes and returns what `secrets.compare_digest` says of them (`django/utils/crypto.py:constant_time_compare`).",
+   "line": 65,
+   "sentence": "`constant_time_compare` makes both values bytes and returns what `secrets.compare_digest` says of them, a comparison that does not stop at the first difference: one that did would tell an attacker, by the time it took, how much of a guess was right (`django/utils/crypto.py:constant_time_compare`).",
    "tree": "django",
    "path": "django/utils/crypto.py",
    "symbol": "constant_time_compare",
@@ -218,8 +471,22 @@
    "fingerprint": "3cecbad198229944"
   },
   {
+   "pointer": "django/contrib/auth/hashers.py:Argon2PasswordHasher.verify",
+   "line": 65,
+   "sentence": "It is what `Signer.unsign`, `PasswordResetTokenGenerator.check_token`, the logging in and the loading of a request's user, the CSRF check ([The CSRF check: `CsrfViewMiddleware.process_view`](csrf-check.md)) and every password hasher but one compare with; `Argon2PasswordHasher` leaves the comparison to the argon2 library (`django/contrib/auth/hashers.py:Argon2PasswordHasher.verify`).",
+   "tree": "django",
+   "path": "django/contrib/auth/hashers.py",
+   "symbol": "Argon2PasswordHasher.verify",
+   "kind": "function",
+   "lines": [
+    436,
+    443
+   ],
+   "fingerprint": "90af3179b2329c3c"
+  },
+  {
    "pointer": "django/utils/crypto.py:get_random_string",
-   "line": 60,
+   "line": 69,
    "sentence": "`get_random_string` makes a string of the length asked for, each character chosen by `secrets.choice` from the characters it is given: `RANDOM_STRING_CHARS`, the letters of both cases and the digits, unless it is given others (`django/utils/crypto.py:get_random_string`).",
    "tree": "django",
    "path": "django/utils/crypto.py",
@@ -232,9 +499,37 @@
    "fingerprint": "d4dbd8ebc47b234b"
   },
   {
+   "pointer": "django/middleware/csrf.py:_get_new_csrf_string",
+   "line": 69,
+   "sentence": "A string's strength in bits is the base-2 logarithm of the number of strings that could have been drawn: the CSRF secret, 32 of the 62 letters and digits, is about 190 bits (`django/middleware/csrf.py:_get_new_csrf_string`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "_get_new_csrf_string",
+   "kind": "function",
+   "lines": [
+    55,
+    56
+   ],
+   "fingerprint": "abc7e5bc0c19b8d4"
+  },
+  {
+   "pointer": "django/contrib/sessions/backends/base.py:SessionBase._get_new_session_key",
+   "line": 69,
+   "sentence": "Among the other users are a session key, 32 of `VALID_KEY_CHARS`, lower-case letters and digits (`django/contrib/sessions/backends/base.py:SessionBase._get_new_session_key`), and the salts of the password hashers but the bcrypt ones (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`).",
+   "tree": "django",
+   "path": "django/contrib/sessions/backends/base.py",
+   "symbol": "SessionBase._get_new_session_key",
+   "kind": "function",
+   "lines": [
+    197,
+    202
+   ],
+   "fingerprint": "24d0224b8b1f32c1"
+  },
+  {
    "pointer": "django/contrib/auth/hashers.py:BasePasswordHasher.salt",
-   "line": 60,
-   "sentence": "Among its users are the CSRF secret, 32 letters and digits; a session's key, 32 of `VALID_KEY_CHARS`, lower-case letters and digits; the salts of the password hashers but the bcrypt ones (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`); and a new project's key.",
+   "line": 69,
+   "sentence": "Among the other users are a session key, 32 of `VALID_KEY_CHARS`, lower-case letters and digits (`django/contrib/sessions/backends/base.py:SessionBase._get_new_session_key`), and the salts of the password hashers but the bcrypt ones (`django/contrib/auth/hashers.py:BasePasswordHasher.salt`).",
    "tree": "django",
    "path": "django/contrib/auth/hashers.py",
    "symbol": "BasePasswordHasher.salt",
@@ -246,37 +541,9 @@
    "fingerprint": "307a2de5ba9ae9db"
   },
   {
-   "pointer": "django/utils/crypto.py:pbkdf2",
-   "line": 64,
-   "sentence": "`pbkdf2` is `hashlib.pbkdf2_hmac` with SHA-256 unless another digest is given, and a derived key as long as the digest's output unless a length is given (`django/utils/crypto.py:pbkdf2`).",
-   "tree": "django",
-   "path": "django/utils/crypto.py",
-   "symbol": "pbkdf2",
-   "kind": "function",
-   "lines": [
-    86,
-    93
-   ],
-   "fingerprint": "e837ea001524f436"
-  },
-  {
-   "pointer": "django/core/management/commands/startproject.py:Command.handle",
-   "line": 68,
-   "sentence": "The startproject command ([The commands Django ships](../commands/builtin.md)) writes into the new project's settings a key of `\"django-insecure-\"` followed by 50 characters from `get_random_secret_key`, drawn by `get_random_string` from lower-case letters, digits and punctuation (`django/core/management/commands/startproject.py:Command.handle`, `django/core/management/utils.py:get_random_secret_key`).",
-   "tree": "django",
-   "path": "django/core/management/commands/startproject.py",
-   "symbol": "Command.handle",
-   "kind": "function",
-   "lines": [
-    14,
-    21
-   ],
-   "fingerprint": "9568a2dce85abe62"
-  },
-  {
    "pointer": "django/core/management/utils.py:get_random_secret_key",
-   "line": 68,
-   "sentence": "The startproject command ([The commands Django ships](../commands/builtin.md)) writes into the new project's settings a key of `\"django-insecure-\"` followed by 50 characters from `get_random_secret_key`, drawn by `get_random_string` from lower-case letters, digits and punctuation (`django/core/management/commands/startproject.py:Command.handle`, `django/core/management/utils.py:get_random_secret_key`).",
+   "line": 69,
+   "sentence": "A new project's key is 50 characters that `get_random_secret_key` draws from lower-case letters, digits and punctuation, and the startproject command writes them into the new settings after a prefix that the deployment check of the key warns of ([The security checks](checks.md)) (`django/core/management/utils.py:get_random_secret_key`, `django/core/management/commands/startproject.py:Command.handle`).",
    "tree": "django",
    "path": "django/core/management/utils.py",
    "symbol": "get_random_secret_key",
@@ -286,6 +553,20 @@
     86
    ],
    "fingerprint": "3e729dfc6947a0f8"
+  },
+  {
+   "pointer": "django/core/management/commands/startproject.py:Command.handle",
+   "line": 69,
+   "sentence": "A new project's key is 50 characters that `get_random_secret_key` draws from lower-case letters, digits and punctuation, and the startproject command writes them into the new settings after a prefix that the deployment check of the key warns of ([The security checks](checks.md)) (`django/core/management/utils.py:get_random_secret_key`, `django/core/management/commands/startproject.py:Command.handle`).",
+   "tree": "django",
+   "path": "django/core/management/commands/startproject.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    14,
+    21
+   ],
+   "fingerprint": "9568a2dce85abe62"
   }
  ]
 }

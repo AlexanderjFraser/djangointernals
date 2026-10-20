@@ -73,7 +73,7 @@ Other settings name code, each loaded by `import_string` unless the loader says 
 |---|---|---|
 | `AUTH_PASSWORD_VALIDATORS`: dictionaries, a class in each `"NAME"` ([Authentication, sessions and messages](../auth.md)) | once a process | `django/contrib/auth/password_validation.py:get_password_validators` |
 | `AUTHENTICATION_BACKENDS`: each a `BaseBackend` ([Authentication, sessions and messages](../auth.md)) | at each use | `django/contrib/auth/__init__.py:load_backend` |
-| `CSRF_FAILURE_VIEW`: a view ([Security](../security.md)) | once a process | by `get_callable`: `django/middleware/csrf.py:_get_failure_view` |
+| `CSRF_FAILURE_VIEW`: a view ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)) | once a process | by `get_callable`: `django/middleware/csrf.py:_get_failure_view` |
 | `DATABASE_ROUTERS`: paths of router classes, or routers; no base class ([Database backends](../backends.md)) | once a process | `django/db/utils.py:ConnectionRouter.routers` |
 | `DEFAULT_AUTO_FIELD`: a subclass of `AutoField`, tested ([Models and fields](../models.md)) | once a model without its own primary key | `django/db/models/options.py:Options._get_default_pk_class` |
 | `DEFAULT_EXCEPTION_REPORTER`: an `ExceptionReporter` ([Views](../views.md)) | at each use | `django/views/debug.py:get_exception_reporter_class` |
@@ -89,7 +89,7 @@ Other settings name code, each loaded by `import_string` unless the loader says 
 | `SERIALIZATION_MODULES`, no default: a module for each format ([Caching, files, mail, signals and tasks](../services.md)) | once a process | by module: `django/core/serializers/__init__.py:_load_serializers` |
 | `SESSION_ENGINE`: a module with a `SessionBase` store ([Authentication, sessions and messages](../auth.md)) | the module once a process; a store once a request | by module: `django/contrib/sessions/middleware.py:SessionMiddleware.__init__` |
 | `SESSION_SERIALIZER`: a class like `django.core.signing.JSONSerializer` ([Authentication, sessions and messages](../auth.md)) | once a session store | `django/contrib/sessions/backends/base.py:SessionBase.__init__` |
-| `SIGNING_BACKEND`: a `Signer` ([Security](../security.md)) | at each use | `django/core/signing.py:get_cookie_signer` |
+| `SIGNING_BACKEND`: a `Signer` ([Signing: `Signer`, `TimestampSigner`, `dumps` and `loads`](../security/signing.md)) | at each use | `django/core/signing.py:get_cookie_signer` |
 | `STATICFILES_FINDERS`: each a `BaseFinder`, tested ([Content types, static files and the other contrib apps](../contrib.md)) | once a process | `django/contrib/staticfiles/finders.py:get_finder` |
 | `TEMPLATES`' `"OPTIONS"`: loaders, each a `django.template.loaders.base.Loader`; context processors; tag modules ([Templates](../templates.md)) | once an engine | tag modules by module: `django/template/engine.py:Engine` |
 | `TEST_RUNNER`: a `DiscoverRunner` ([The test framework](../testing.md)) | once a test run | by `__import__`: `django/test/utils.py:get_runner` |

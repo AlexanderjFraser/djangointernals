@@ -127,7 +127,7 @@ Two of the module's helpers decide how a deprecated feature warns. `warn_about_e
 | `django/utils/http.py` | dates, ETags and URLs in HTTP | [The helpers in `django/utils/http.py`](http/helpers.md) |
 | `django/utils/regex_helper.py` | reversing a regular expression | [`normalize`, and the patterns that cannot be reversed](urls/normalize.md) |
 | `django/utils/crypto.py` | secret keys, hashes and random strings | [Secret keys and `django.utils.crypto`](security/keys.md) |
-| `django/utils/csp.py` | the Content Security Policy and its nonce | [Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](security/csp.md) |
+| `django/utils/csp.py` | the Content Security Policy and its nonce | [Content Security Policy and the nonce](security/csp.md) |
 | `django/utils/cache.py` | cache headers and conditional requests | [Cache headers and conditional requests: `django/utils/cache.py`](services/http-caching.md) |
 | `django/utils/connection.py` | handlers of backends by alias | [Connections by alias: `DATABASES` and `ConnectionHandler`](backends/connections.md) |
 | `django/utils/deconstruct.py` | `deconstructible`, by which a migration can write an object | [Serializing values: `serializer_factory` and `deconstruct`](migrations/serializer.md) |

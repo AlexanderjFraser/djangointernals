@@ -8,23 +8,23 @@
  "document": "csrf-check.md",
  "pointers": [
   {
-   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._reject",
    "line": 9,
-   "sentence": "An accepted request goes on to its view; a refused one gets the failure view's response in its place (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "sentence": "Each refusal has a **reason**, a short sentence that is logged and handed to the failure view (`django/middleware/csrf.py:CsrfViewMiddleware._reject`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
-   "symbol": "CsrfViewMiddleware.process_view",
+   "symbol": "CsrfViewMiddleware._reject",
    "kind": "function",
    "lines": [
-    416,
-    472
+    211,
+    221
    ],
-   "fingerprint": "105c7f59f625c860"
+   "fingerprint": "e2c7a329c60b267b"
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._accept",
-   "line": 38,
-   "sentence": "`CsrfViewMiddleware._accept` marks an accepted request with the attribute `\"csrf_processing_done\"`, and `process_view` returns at once for a request so marked, which is what lets the middleware and the `csrf_protect` decorator share one request ([A middleware as a decorator](../views/middleware-decorators.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`).",
+   "line": 43,
+   "sentence": "`CsrfViewMiddleware._accept` marks an accepted request with the attribute `\"csrf_processing_done\"`, and `process_view` returns at once for a request so marked (`django/middleware/csrf.py:CsrfViewMiddleware._accept`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._accept",
@@ -36,8 +36,22 @@
    "fingerprint": "f8ffc93c3247fcb3"
   },
   {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 45,
+   "sentence": "It is tested only after `CsrfViewMiddleware.process_request` has read the browser's secret, so that `get_token` still works in an exempt view (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
+  },
+  {
    "pointer": "django/test/client.py:ClientHandler.__call__",
-   "line": 42,
+   "line": 47,
    "sentence": "Last, the test client's flag: its handler sets `\"_dont_enforce_csrf_checks\"` on every request, true unless the client was made with `enforce_csrf_checks=True` ([The test client: `Client` and `ClientHandler`](../testing/client.md)) (`django/test/client.py:ClientHandler.__call__`).",
    "tree": "django",
    "path": "django/test/client.py",
@@ -51,7 +65,7 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._origin_verified",
-   "line": 46,
+   "line": 51,
    "sentence": "A request with an `\"Origin\"` header is refused unless `CsrfViewMiddleware._origin_verified` accepts it, in one of three ways tried in order (`django/middleware/csrf.py:CsrfViewMiddleware._origin_verified`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
@@ -65,7 +79,7 @@
   },
   {
    "pointer": "django/utils/http.py:is_same_domain",
-   "line": 46,
+   "line": 51,
    "sentence": "Or it may have the scheme of a trusted origin written with a `\"*\"`, and a host that matches that origin's host, star taken off, by `is_same_domain`, where a pattern that begins with a dot matches the domain and every subdomain (`django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/utils/http.py",
@@ -78,9 +92,23 @@
    "fingerprint": "ff659092d60e432d"
   },
   {
+   "pointer": "django/http/request.py:validate_host",
+   "line": 53,
+   "sentence": "The same host over HTTP is compared with no trusted host, since no trusted origin has that scheme: the one `is_same_domain` under it is `get_host`'s, which tests the `\"Host\"` against `ALLOWED_HOSTS` (`django/http/request.py:validate_host`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "validate_host",
+   "kind": "function",
+   "lines": [
+    863,
+    880
+   ],
+   "fingerprint": "f6e8cf106a5b0538"
+  },
+  {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.allowed_origin_subdomains",
-   "line": 48,
-   "sentence": "The setting is read into three cached properties, once for each instance of the middleware (`django/middleware/csrf.py:CsrfViewMiddleware.allowed_origin_subdomains`).",
+   "line": 78,
+   "sentence": "The setting is read by each instance of the middleware, as the first request alone shows: `CSRF_TRUSTED_ORIGINS` goes into three cached properties, each the first time the instance needs it and never again (`django/middleware/csrf.py:CsrfViewMiddleware.allowed_origin_subdomains`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware.allowed_origin_subdomains",
@@ -93,9 +121,94 @@
    "fingerprint": "8033c9b08111ed32"
   },
   {
+   "pointer": "docs/releases/1.9.txt",
+   "line": 80,
+   "sentence": "A system check made for the change, `check_csrf_trusted_origins`, still reports a value without `\"://\"` as `\"4_0.E001\"` (`docs/releases/1.9.txt`, `docs/releases/4.0.txt`, `django/core/checks/compatibility/django_4_0.py:check_csrf_trusted_origins`).",
+   "tree": "django",
+   "path": "docs/releases/1.9.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1532
+   ],
+   "fingerprint": "a876ff59a4e83e40"
+  },
+  {
+   "pointer": "docs/releases/4.0.txt",
+   "line": 80,
+   "sentence": "A system check made for the change, `check_csrf_trusted_origins`, still reports a value without `\"://\"` as `\"4_0.E001\"` (`docs/releases/1.9.txt`, `docs/releases/4.0.txt`, `django/core/checks/compatibility/django_4_0.py:check_csrf_trusted_origins`).",
+   "tree": "django",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    772
+   ],
+   "fingerprint": "75c28734cc7b3883"
+  },
+  {
+   "pointer": "django/core/checks/compatibility/django_4_0.py:check_csrf_trusted_origins",
+   "line": 80,
+   "sentence": "A system check made for the change, `check_csrf_trusted_origins`, still reports a value without `\"://\"` as `\"4_0.E001\"` (`docs/releases/1.9.txt`, `docs/releases/4.0.txt`, `django/core/checks/compatibility/django_4_0.py:check_csrf_trusted_origins`).",
+   "tree": "django",
+   "path": "django/core/checks/compatibility/django_4_0.py",
+   "symbol": "check_csrf_trusted_origins",
+   "kind": "function",
+   "lines": [
+    5,
+    19
+   ],
+   "at": 6,
+   "fingerprint": "2df8b4971fb71d34"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 82,
+   "sentence": "Only a request with no `\"Origin\"` has its `\"Referer\"` read, and only if it is secure; over plain HTTP such a request goes on to the token with neither header read (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
+  },
+  {
+   "pointer": "docs/ref/csrf.txt",
+   "line": 84,
+   "sentence": "The cookie is what makes this work: browsers accept a cookie set over plain HTTP even for a site they reach over HTTPS, and since the secret is tied to no session, a secret of the attacker's making serves as well as the site's (`docs/ref/csrf.txt`).",
+   "tree": "django",
+   "path": "docs/ref/csrf.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    243
+   ],
+   "fingerprint": "75d54fe68f85eaf7"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 84,
+   "sentence": "The check can afford to be that strict because the `\"Referer\"` is seldom missing over HTTPS: Barth et al. found it absent from same-domain HTTPS requests in about 0.2% of cases or fewer (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
+  },
+  {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_referer",
-   "line": 52,
-   "sentence": "Otherwise the host must match the cookie's domain, `CSRF_COOKIE_DOMAIN` or, with `CSRF_USE_SESSIONS`, `SESSION_COOKIE_DOMAIN`, with the request's port added unless it is 443 or 80; or, when that domain is `None`, as by default, `get_host`, port and all, a `DisallowedHost` being refused (`django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
+   "line": 86,
+   "sentence": "When the domain is `None`, as by default, the host must match `get_host`, which includes the port, and a `DisallowedHost` from `get_host` is refused with `REASON_BAD_REFERER` (`django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._check_referer",
@@ -107,9 +220,23 @@
    "fingerprint": "8c2234832e93c32f"
   },
   {
+   "pointer": "docs/ref/csrf.txt",
+   "line": 115,
+   "sentence": "A request with no secret is refused too, and **login CSRF** is among the attacks that stops: another site tricking a user's browser into logging into this one with someone else's credentials (`docs/ref/csrf.txt`) (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
+   "tree": "django",
+   "path": "docs/ref/csrf.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    243
+   ],
+   "fingerprint": "75d54fe68f85eaf7"
+  },
+  {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_token",
-   "line": 67,
-   "sentence": "No secret is refused too: insisting on a cookie for a `\"POST\"`, the comment says, avoids all CSRF attacks, login CSRF among them (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
+   "line": 115,
+   "sentence": "A request with no secret is refused too, and **login CSRF** is among the attacks that stops: another site tricking a user's browser into logging into this one with someone else's credentials (`docs/ref/csrf.txt`) (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._check_token",
@@ -121,8 +248,36 @@
    "fingerprint": "b5d057f8cd09d712"
   },
   {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_token",
+   "line": 117,
+   "sentence": "No other body is read, so a `\"PUT\"` with a good token only in its form-encoded body is refused with `\"CSRF token missing.\"` (`django/middleware/csrf.py:CsrfViewMiddleware._check_token`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._check_token",
+   "kind": "function",
+   "lines": [
+    351,
+    401
+   ],
+   "fingerprint": "b5d057f8cd09d712"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:_check_token_format",
+   "line": 119,
+   "sentence": "The token must then be 32 or 64 letters and digits (`django/middleware/csrf.py:_check_token_format`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "_check_token_format",
+   "kind": "function",
+   "lines": [
+    130,
+    140
+   ],
+   "fingerprint": "86dd97e8ff57537f"
+  },
+  {
    "pointer": "django/middleware/csrf.py:_does_token_match",
-   "line": 71,
+   "line": 119,
    "sentence": "`_does_token_match` unmasks a token of 64, takes one of 32 as the secret itself, as a script that read the cookie sends it, and compares it with the secret by `constant_time_compare` ([Secret keys and `django.utils.crypto`](keys.md)) (`django/middleware/csrf.py:_does_token_match`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
@@ -135,9 +290,37 @@
    "fingerprint": "ac8630f09c582a7e"
   },
   {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._bad_token_message",
+   "line": 119,
+   "sentence": "The reason for a malformed or wrong token names where the token was found, the form or the header, as in `\"CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.\"` (`django/middleware/csrf.py:CsrfViewMiddleware._bad_token_message`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._bad_token_message",
+   "kind": "function",
+   "lines": [
+    344,
+    349
+   ],
+   "fingerprint": "fcb39f841ef1a3e8"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 123,
+   "sentence": "`CsrfViewMiddleware.process_view` makes the origin test's reason in place; the `\"Referer\"` and token tests raise `RejectRequest` with theirs, which `process_view` catches; and each refusal ends in `CsrfViewMiddleware._reject`, given the reason (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
+  },
+  {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._reject",
-   "line": 75,
-   "sentence": "It imports the view `CSRF_FAILURE_VIEW` names by `get_callable`, calls it with the request and the reason, and logs the response by `log_response` to `\"django.security.csrf\"`, as `\"Forbidden (%s): %s\"` with the reason and the path (`django/middleware/csrf.py:CsrfViewMiddleware._reject`).",
+   "line": 142,
+   "sentence": "`CsrfViewMiddleware._reject` calls the view `CSRF_FAILURE_VIEW` names, imported by `get_callable`, with the request and the reason, and logs the response it gets back by `log_response` on the logger `\"django.security.csrf\"`, as `\"Forbidden (%s): %s\"` with the reason and the path; that response goes out through the chain in the view's place (`django/middleware/csrf.py:CsrfViewMiddleware._reject`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._reject",
@@ -149,9 +332,23 @@
    "fingerprint": "e2c7a329c60b267b"
   },
   {
+   "pointer": "django/views/decorators/csrf.py",
+   "line": 142,
+   "sentence": "`_reject` is a method so that a subclass can replace it: the class of `requires_csrf_token`, like that of `ensure_csrf_cookie`, replaces it with one that refuses nothing ([A middleware as a decorator](../views/middleware-decorators.md)) (`django/views/decorators/csrf.py`).",
+   "tree": "django",
+   "path": "django/views/decorators/csrf.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    68
+   ],
+   "fingerprint": "30ef373ed1b043db"
+  },
+  {
    "pointer": "django/utils/log.py:log_response",
-   "line": 75,
-   "sentence": "`log_response` logs a 4xx as a warning and marks the response as logged, so the handler, which logs every response of 400 or more to `\"django.request\"`, does not log it again (`django/utils/log.py:log_response`).",
+   "line": 144,
+   "sentence": "`log_response` logs a 4xx as a warning and marks the response as logged, so that the handler, which logs a response of 400 or more to `\"django.request\"`, does not log it again ([Logging](../startup/logging.md#log_response-a-response-is-logged-once)) (`django/utils/log.py:log_response`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_response",
@@ -164,8 +361,8 @@
   },
   {
    "pointer": "django/views/csrf.py:csrf_failure",
-   "line": 96,
-   "sentence": "`csrf_failure` builds its page's context: a translated title and sentence; the reason; `\"no_referer\"` and `\"no_cookie\"`, true when the reason is `REASON_NO_REFERER` or `REASON_NO_CSRF_COOKIE`, each with paragraphs for the user; `settings.DEBUG`, with the documentation's version for its links and a line for when it is off; and the nonce, merged in from the `csp` context processor (`django/views/csrf.py:csrf_failure`).",
+   "line": 176,
+   "sentence": "`csrf_failure` asks the project's template engines for `\"403_csrf.html\"`, and only when none has it renders the built-in `\"csrf_403.html\"`, with an `Engine` of its own, which does not read `TEMPLATES`; either page goes back in an `HttpResponseForbidden` (`django/views/csrf.py:csrf_failure`).",
    "tree": "django",
    "path": "django/views/csrf.py",
    "symbol": "csrf_failure",
@@ -178,8 +375,8 @@
   },
   {
    "pointer": "django/views/csrf.py:csrf_failure",
-   "line": 98,
-   "sentence": "When no engine has it, `csrf_failure` renders the built-in `\"csrf_403.html\"` with an `Engine` of its own and the context, so the page does not depend on `TEMPLATES` (`django/views/csrf.py:csrf_failure`).",
+   "line": 178,
+   "sentence": "The built-in page's context holds the reason and two flags, `\"no_referer\"` and `\"no_cookie\"`, true under `REASON_NO_REFERER` and `REASON_NO_CSRF_COOKIE` (`django/views/csrf.py:csrf_failure`).",
    "tree": "django",
    "path": "django/views/csrf.py",
    "symbol": "csrf_failure",
@@ -192,8 +389,8 @@
   },
   {
    "pointer": "django/views/templates/csrf_403.html",
-   "line": 100,
-   "sentence": "The built-in page shows the paragraphs for a missing `\"Referer\"` or cookie when the reason is one of those, and, with `settings.DEBUG` true, the reason and a list of what to check (`django/views/templates/csrf_403.html`).",
+   "line": 178,
+   "sentence": "The page shows its paragraphs for a missing `\"Referer\"` or cookie only under those two reasons, and the reason itself, with a list of what to check, only when `settings.DEBUG` is true (`django/views/templates/csrf_403.html`).",
    "tree": "django",
    "path": "django/views/templates/csrf_403.html",
    "symbol": null,
@@ -205,18 +402,18 @@
    "fingerprint": "c01c7216dec59867"
   },
   {
-   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 102,
-   "sentence": "The check is synchronous for another reason: `process_view` is a synchronous method, which the handler adapts to its own mode separately from the layer ([Sync and async in one chain](../handlers/async.md)) (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "pointer": "django/views/csrf.py:csrf_failure",
+   "line": 180,
+   "sentence": "`csrf_failure` renders it with the request alone, so it sees what a `RequestContext` gives it, the context processors' values, and nothing of the view's: a template that writes `{{ reason }}`, `{{ no_cookie }}` and `{{ csp_nonce }}` renders the first two empty and the third, where the engine has the `csp` processor, with the nonce (`django/views/csrf.py:csrf_failure`).",
    "tree": "django",
-   "path": "django/core/handlers/base.py",
-   "symbol": "BaseHandler.load_middleware",
+   "path": "django/views/csrf.py",
+   "symbol": "csrf_failure",
    "kind": "function",
    "lines": [
-    27,
-    104
+    22,
+    81
    ],
-   "fingerprint": "430bac571d4dc266"
+   "fingerprint": "141725332d9c81b8"
   }
  ]
 }

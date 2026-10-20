@@ -77,7 +77,7 @@ The processors of `django/template/context_processors.py`:
 | `request` | `"request"` | the request itself |
 | `csp` | `"csp_nonce"` | the nonce `ContentSecurityPolicyMiddleware` put on the request, or `None` |
 
-> **Changed in 6.0.** The `csp` processor is new, with Content Security Policy support ([Content Security Policy: `ContentSecurityPolicyMiddleware` and the nonce](../security/csp.md)).
+> **Changed in 6.0.** The `csp` processor is new, with Content Security Policy support ([Content Security Policy and the nonce](../security/csp.md)).
 
 ## The tags that push a level
 

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 814 594">
+  <!-- the root: the key, and beside it the old keys, which only check -->
+  <rect class="mark-box" x="108.5" y="0.5" width="216" height="50" rx="4"/>
+  <text class="name" x="120" y="21">SECRET_KEY</text>
+  <text x="120" y="39">the key: signs, and checks first</text>
+
+  <rect class="ground dashed" x="372.5" y="0.5" width="330" height="50" rx="4"/>
+  <text class="name" x="384" y="21">SECRET_KEY_FALLBACKS</text>
+  <text x="384" y="39">the old keys: check only, each in turn after the key</text>
+
+  <!-- each reaches salted_hmac as its secret: the key always, the old keys only to check -->
+  <path class="mark-line" d="M216.5 50.5 V84.5"/>
+  <polygon class="head mark" points="216.5,94.5 211.5,84.5 221.5,84.5"/>
+  <path class="line dashed" d="M537.5 50.5 V68.5 H240.5 V84.5"/>
+  <polygon class="head" points="240.5,94.5 235.5,84.5 245.5,84.5"/>
+
+  <!-- salted_hmac, where every branch ends -->
+  <rect class="box" x="0.5" y="94.5" width="813" height="32" rx="4"/>
+  <text class="name" x="12" y="115">salted_hmac(salt, value, secret)</text>
+  <text x="384" y="115">the key of the HMAC: a digest of the salt and the secret</text>
+
+  <!-- the branches: each line hangs from what it calls -->
+  <path class="line" d="M18.5 136.5 V566.5 H36.5 M18.5 166.5 H36.5 M18.5 516.5 H36.5"/>
+  <polygon class="head" points="18.5,126.5 13.5,136.5 23.5,136.5"/>
+  <path class="line" d="M54.5 192.5 V366.5 H72.5 M54.5 216.5 H72.5"/>
+  <polygon class="head" points="54.5,182.5 49.5,192.5 59.5,192.5"/>
+  <path class="line" d="M90.5 242.5 V316.5 H108.5 M90.5 266.5 H108.5"/>
+  <polygon class="head" points="90.5,232.5 85.5,242.5 95.5,242.5"/>
+  <path class="line" d="M90.5 392.5 V466.5 H108.5 M90.5 416.5 H108.5"/>
+  <polygon class="head" points="90.5,382.5 85.5,392.5 95.5,392.5"/>
+
+  <!-- Signer -->
+  <rect class="box" x="36.5" y="150.5" width="324" height="32" rx="4"/>
+  <text x="48" y="171"><tspan class="name">Signer</tspan>, by way of <tspan class="name">base64_hmac</tspan></text>
+  <text class="quiet" x="384" y="171">salt:</text>
+  <text x="420" y="171">the signer's salt, then <tspan class="name">"signer"</tspan></text>
+
+  <!-- dumps and loads, and the sessions that sign through them -->
+  <rect class="box" x="72.5" y="200.5" width="288" height="32" rx="4"/>
+  <text x="84" y="221"><tspan class="name">dumps</tspan> and <tspan class="name">loads</tspan>, a <tspan class="name">TimestampSigner</tspan></text>
+  <text class="quiet" x="384" y="221">salt:</text>
+  <text x="420" y="221"><tspan class="name">"django.core.signing"</tspan>, unless given another</text>
+  <rect class="box" x="108.5" y="250.5" width="252" height="32" rx="4"/>
+  <text x="120" y="271">a session's stored data</text>
+  <text class="quiet" x="384" y="271">salt:</text>
+  <text class="name" x="420" y="271">"django.contrib.sessions.SessionStore"</text>
+  <rect class="box" x="108.5" y="300.5" width="252" height="32" rx="4"/>
+  <text x="120" y="321">the signed-cookie sessions</text>
+  <text class="quiet" x="384" y="321">salt:</text>
+  <text class="name" x="420" y="321">"django.contrib.sessions.backends.signed_cookies"</text>
+
+  <!-- get_cookie_signer, and the cookies that sign through it -->
+  <rect class="box" x="72.5" y="350.5" width="288" height="32" rx="4"/>
+  <text class="name" x="84" y="371">get_cookie_signer</text>
+  <text class="quiet" x="384" y="371">key:</text>
+  <text x="420" y="371"><tspan class="name">b"django.http.cookies"</tspan>, then the key</text>
+  <rect class="box" x="108.5" y="400.5" width="252" height="32" rx="4"/>
+  <text x="120" y="421">signed cookies</text>
+  <text class="quiet" x="384" y="421">salt:</text>
+  <text x="420" y="421"><tspan class="name">"django.http.cookies.v2:"</tspan>, the salt's length, <tspan class="name">":"</tspan>,</text>
+  <text x="420" y="439">the salt and the cookie's name</text>
+  <rect class="box" x="108.5" y="450.5" width="252" height="32" rx="4"/>
+  <text x="120" y="471">the messages' <tspan class="name">CookieStorage</tspan></text>
+  <text class="quiet" x="384" y="471">salt:</text>
+  <text class="name" x="420" y="471">"django.contrib.messages"</text>
+
+  <!-- the session's hash of the user's password -->
+  <rect class="box" x="36.5" y="500.5" width="324" height="32" rx="4"/>
+  <text class="name" x="48" y="521">AbstractBaseUser.get_session_auth_hash</text>
+  <text class="quiet" x="384" y="521">salt:</text>
+  <text class="name" x="420" y="521">"django.contrib.auth.models.</text>
+  <text class="name" x="427.8" y="539">AbstractBaseUser.get_session_auth_hash"</text>
+
+  <!-- the reset tokens -->
+  <rect class="box" x="36.5" y="550.5" width="324" height="32" rx="4"/>
+  <text class="name" x="48" y="571">PasswordResetTokenGenerator</text>
+  <text class="quiet" x="384" y="571">salt:</text>
+  <text class="name" x="420" y="571">"django.contrib.auth.tokens.</text>
+  <text class="name" x="427.8" y="589">PasswordResetTokenGenerator"</text>
+</svg>

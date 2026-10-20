@@ -8,37 +8,51 @@
  "document": "headers.md",
  "pointers": [
   {
-   "pointer": "django/middleware/security.py:SecurityMiddleware.async_capable",
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_response",
    "line": 9,
-   "sentence": "Both declare `async_capable = False`, so under ASGI they run synchronously ([Sync and async in one chain](../handlers/async.md)) (`django/middleware/security.py:SecurityMiddleware.async_capable`).",
+   "sentence": "Neither replaces a header the response already has, so a view that sets one keeps its own (`django/middleware/security.py:SecurityMiddleware.process_response`, `django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/security.py",
-   "symbol": "SecurityMiddleware.async_capable",
-   "kind": "assignment",
-   "lines": [
-    9,
-    9
-   ],
-   "fingerprint": "2861cab57245fbb1"
-  },
-  {
-   "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
-   "line": 13,
-   "sentence": "`SecurityMiddleware.__init__` copies its settings into attributes, and compiles each pattern of `SECURE_REDIRECT_EXEMPT` as a regular expression (`django/middleware/security.py:SecurityMiddleware.__init__`).",
-   "tree": "django",
-   "path": "django/middleware/security.py",
-   "symbol": "SecurityMiddleware.__init__",
+   "symbol": "SecurityMiddleware.process_response",
    "kind": "function",
    "lines": [
-    11,
-    21
+    35,
+    68
    ],
-   "fingerprint": "d589cea40c7ab213"
+   "fingerprint": "7ad22778135f164b"
+  },
+  {
+   "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response",
+   "line": 9,
+   "sentence": "Neither replaces a header the response already has, so a view that sets one keeps its own (`django/middleware/security.py:SecurityMiddleware.process_response`, `django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/clickjacking.py",
+   "symbol": "XFrameOptionsMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    27,
+    40
+   ],
+   "fingerprint": "89028bc106485437"
+  },
+  {
+   "pointer": "docs/ref/middleware.txt",
+   "line": 13,
+   "sentence": "A request made over plain HTTP travels on an unsecured connection, so a site served over HTTPS can send the browser to HTTPS rather than serve the page there (`docs/ref/middleware.txt`).",
+   "tree": "django",
+   "path": "docs/ref/middleware.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    727
+   ],
+   "fingerprint": "1dfcdb5f099f50d2"
   },
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
-   "line": 33,
-   "sentence": "The host is `SECURE_SSL_HOST` if it names one, and otherwise `HttpRequest.get_host`, which raises `DisallowedHost` for a host outside `ALLOWED_HOSTS`: in a run of the example, a plain request for evil.example got a 400 and no redirect (`django/middleware/security.py:SecurityMiddleware.process_request`).",
+   "line": 15,
+   "sentence": "The host is `SECURE_SSL_HOST` if it names one, and otherwise `HttpRequest.get_host`, which raises `DisallowedHost` for a host outside `ALLOWED_HOSTS` (`django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/security.py",
    "symbol": "SecurityMiddleware.process_request",
@@ -51,8 +65,8 @@
   },
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
-   "line": 39,
-   "sentence": "`MiddlewareMixin.__call__` passes the redirect to the same middleware's `process_response`, so it leaves with this middleware's headers, though without Strict-Transport-Security, since the request was not secure; the middleware inside it never run (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
+   "line": 17,
+   "sentence": "`MiddlewareMixin.__call__` calls the layer inside only when `process_request` has returned nothing, and gives the response it holds, whichever made it, to the same middleware's `process_response` (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
    "symbol": "MiddlewareMixin.__call__",
@@ -64,8 +78,36 @@
    "fingerprint": "1c249bc0b063a1d2"
   },
   {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 34,
+   "sentence": "`get_host` raises `DisallowedHost` inside `process_request`, the exception leaves `MiddlewareMixin.__call__` before it can call `process_response`, and `convert_exception_to_response`, around the layer, turns it into a 400 by way of `response_for_exception` (`django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
+   "line": 36,
+   "sentence": "So `r\"^health/$\"` exempts /health/ and neither /x/health/ nor /healthy/, `r\"health\"` exempts every path that holds the word, and `r\"^/health/$\"`, written as the path is, matches nothing, and /health/ is redirected (`django/middleware/security.py:SecurityMiddleware.process_request`).",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.process_request",
+   "kind": "function",
+   "lines": [
+    23,
+    33
+   ],
+   "fingerprint": "9a87791cf038990b"
+  },
+  {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_response",
-   "line": 43,
+   "line": 40,
    "sentence": "`SecurityMiddleware.process_response` adds up to four headers, in this order (`django/middleware/security.py:SecurityMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/security.py",
@@ -79,8 +121,8 @@
   },
   {
    "pointer": "docs/ref/middleware.txt",
-   "line": 47,
-   "sentence": "The browser applies the header to the whole domain and remembers it for the seconds given; Django's documentation advises starting with a small value, an hour, as the harbour office does, and raising it once everything is served over HTTPS (`docs/ref/middleware.txt`).",
+   "line": 42,
+   "sentence": "Its value is `\"max-age=\"` and the seconds, and for that many seconds the browser refuses to reach the site's host over plain HTTP, at any address on it, not only the one the header came with (`docs/ref/middleware.txt`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -93,8 +135,8 @@
   },
   {
    "pointer": "docs/ref/middleware.txt",
-   "line": 49,
-   "sentence": "The documentation's reason: a browser that guesses a file's type over its Content-Type may take an uploaded file for HTML or JavaScript (`docs/ref/middleware.txt`).",
+   "line": 42,
+   "sentence": "`\"; includeSubDomains\"` follows if `SECURE_HSTS_INCLUDE_SUBDOMAINS` is true, and extends the refusal to the host's subdomains; `\"; preload\"` follows if `SECURE_HSTS_PRELOAD` is, and without it the site cannot be submitted to the browser preload list (`docs/ref/middleware.txt`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -107,8 +149,8 @@
   },
   {
    "pointer": "docs/ref/middleware.txt",
-   "line": 51,
-   "sentence": "The comment gives the reason as fallback: the documentation says the browser takes the last value it understands (`docs/ref/middleware.txt`).",
+   "line": 44,
+   "sentence": "It keeps the browser from guessing a response's type over its Content-Type, a guess that could take an uploaded file for HTML or JavaScript (`docs/ref/middleware.txt`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -121,8 +163,8 @@
   },
   {
    "pointer": "docs/ref/middleware.txt",
-   "line": 53,
-   "sentence": "**Cross-Origin-Opener-Policy** comes from `SECURE_CROSS_ORIGIN_OPENER_POLICY`; the documentation describes it as isolating the site's windows from other sites' documents, against attacks like Spectre (`docs/ref/middleware.txt`).",
+   "line": 48,
+   "sentence": "`SECURE_REFERRER_POLICY` takes several values to give the browser a fallback: a browser that does not know a value of the policy uses the last one that it does understand (`docs/ref/middleware.txt`, `django/middleware/security.py:SecurityMiddleware.process_response`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -134,22 +176,50 @@
    "fingerprint": "1dfcdb5f099f50d2"
   },
   {
-   "pointer": "django/http/response.py:ResponseHeaders.setdefault",
-   "line": 55,
-   "sentence": "The other three are added with `setdefault`, the last through `HttpResponseBase.setdefault`, which hands it to `ResponseHeaders.setdefault`: a header is set only when the response lacks it (`django/http/response.py:ResponseHeaders.setdefault`).",
+   "pointer": "django/middleware/security.py:SecurityMiddleware.process_response",
+   "line": 48,
+   "sentence": "`SECURE_REFERRER_POLICY` takes several values to give the browser a fallback: a browser that does not know a value of the policy uses the last one that it does understand (`docs/ref/middleware.txt`, `django/middleware/security.py:SecurityMiddleware.process_response`).",
    "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "ResponseHeaders.setdefault",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.process_response",
    "kind": "function",
    "lines": [
-    101,
-    103
+    35,
+    68
    ],
-   "fingerprint": "6eddf3a9d4afc81d"
+   "fingerprint": "7ad22778135f164b"
+  },
+  {
+   "pointer": "docs/ref/middleware.txt",
+   "line": 50,
+   "sentence": "At `\"same-origin\"`, it asks the browser to keep the site's top-level windows apart from other sites' windows, so that a popup of another site opened from one of them gets no reference back to it: a defence in depth against cross-origin attacks such as Spectre (`docs/ref/middleware.txt`).",
+   "tree": "django",
+   "path": "docs/ref/middleware.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    727
+   ],
+   "fingerprint": "1dfcdb5f099f50d2"
+  },
+  {
+   "pointer": "docs/releases/4.0.txt",
+   "line": 52,
+   "sentence": "In the same release `SecurityMiddleware` began to add Cross-Origin-Opener-Policy, `\"same-origin\"` unless `SECURE_CROSS_ORIGIN_OPENER_POLICY` says otherwise, so that a popup of another origin is kept apart from the site's window (`docs/releases/4.0.txt`).",
+   "tree": "django",
+   "path": "docs/releases/4.0.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    772
+   ],
+   "fingerprint": "75c28734cc7b3883"
   },
   {
    "pointer": "django/conf/global_settings.py",
-   "line": 70,
+   "line": 67,
    "sentence": "*The two middleware's settings and their defaults (`django/conf/global_settings.py`).",
    "tree": "django",
    "path": "django/conf/global_settings.py",
@@ -163,8 +233,8 @@
   },
   {
    "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware",
-   "line": 74,
-   "sentence": "X-Frame-Options says whether a browser may show the response inside a frame: `\"DENY\"` nowhere, `\"SAMEORIGIN\"` only in a page of the same site, as the class's docstring says (`django/middleware/clickjacking.py:XFrameOptionsMiddleware`).",
+   "line": 71,
+   "sentence": "X-Frame-Options says whether a browser may show the response inside a frame: `\"DENY\"` in none, `\"SAMEORIGIN\"` only in a page of the same site (`django/middleware/clickjacking.py:XFrameOptionsMiddleware`).",
    "tree": "django",
    "path": "django/middleware/clickjacking.py",
    "symbol": "XFrameOptionsMiddleware",
@@ -176,8 +246,22 @@
    "fingerprint": "550d9209228b557c"
   },
   {
+   "pointer": "docs/ref/clickjacking.txt",
+   "line": 71,
+   "sentence": "Refusing the frame defends against clickjacking, in which another site loads a page of this one in an invisible frame laid over a button of its own, so that the user's click on that button lands on the framed page instead (`docs/ref/clickjacking.txt`).",
+   "tree": "django",
+   "path": "docs/ref/clickjacking.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    123
+   ],
+   "fingerprint": "d7444d668099cb6a"
+  },
+  {
    "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response",
-   "line": 74,
+   "line": 73,
    "sentence": "`XFrameOptionsMiddleware.process_response` leaves the response alone if it has the header already, or if it carries an attribute `\"xframe_options_exempt\"` that is true (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/clickjacking.py",
@@ -191,8 +275,8 @@
   },
   {
    "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value",
-   "line": 74,
-   "sentence": "Its docstring invites a subclass to override it, so that the value can depend on the request or the response (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value`).",
+   "line": 73,
+   "sentence": "The method is there to be overridden: a subclass can make the value depend on the request or the response (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value`).",
    "tree": "django",
    "path": "django/middleware/clickjacking.py",
    "symbol": "XFrameOptionsMiddleware.get_xframe_options_value",
@@ -205,8 +289,8 @@
   },
   {
    "pointer": "django/views/decorators/clickjacking.py",
-   "line": 78,
-   "sentence": "Each makes a coroutine function as its wrapper when the view is one and an ordinary function otherwise, so an async view stays async (`django/views/decorators/clickjacking.py`).",
+   "line": 77,
+   "sentence": "`xframe_options_deny` and `xframe_options_sameorigin` set the header to `\"DENY\"` or `\"SAMEORIGIN\"` on the response of the view they wrap, unless it already has one; `xframe_options_exempt` sets the attribute `\"xframe_options_exempt\"` to `True` (`django/views/decorators/clickjacking.py`).",
    "tree": "django",
    "path": "django/views/decorators/clickjacking.py",
    "symbol": null,
@@ -216,6 +300,48 @@
     89
    ],
    "fingerprint": "95a29fef843be720"
+  },
+  {
+   "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response",
+   "line": 79,
+   "sentence": "The harbour lets other sites frame its tide table, the view *tides*, and lets only its own pages frame its chart, the view *chart*: under `xframe_options_exempt` the first goes out with no X-Frame-Options, and under `xframe_options_sameorigin` the second with `\"SAMEORIGIN\"` in place of the site's `\"DENY\"`, `XFrameOptionsMiddleware.process_response` returning each response unchanged (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/clickjacking.py",
+   "symbol": "XFrameOptionsMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    27,
+    40
+   ],
+   "fingerprint": "89028bc106485437"
+  },
+  {
+   "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
+   "line": 83,
+   "sentence": "`SecurityMiddleware.__init__` copies its settings into attributes, and compiles each pattern of `SECURE_REDIRECT_EXEMPT` as a regular expression (`django/middleware/security.py:SecurityMiddleware.__init__`).",
+   "tree": "django",
+   "path": "django/middleware/security.py",
+   "symbol": "SecurityMiddleware.__init__",
+   "kind": "function",
+   "lines": [
+    11,
+    21
+   ],
+   "fingerprint": "d589cea40c7ab213"
+  },
+  {
+   "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value",
+   "line": 83,
+   "sentence": "`XFrameOptionsMiddleware` keeps no setting: `XFrameOptionsMiddleware.get_xframe_options_value` reads `X_FRAME_OPTIONS` at each call (`django/middleware/clickjacking.py:XFrameOptionsMiddleware.get_xframe_options_value`).",
+   "tree": "django",
+   "path": "django/middleware/clickjacking.py",
+   "symbol": "XFrameOptionsMiddleware.get_xframe_options_value",
+   "kind": "function",
+   "lines": [
+    42,
+    50
+   ],
+   "fingerprint": "d53105ddc8d755e9"
   }
  ]
 }

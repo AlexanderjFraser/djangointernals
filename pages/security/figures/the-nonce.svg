@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 785 489">
+  <!-- the two requests, one at the head of each column -->
+  <text x="196.5" y="14" text-anchor="middle"><tspan class="strong">GET</tspan> https://harbour.example/berths/</text>
+  <text x="588.5" y="14" text-anchor="middle"><tspan class="strong">POST</tspan> https://harbour.example/berths/, accepted</text>
+  <path class="line" d="M196.5 24 V58.5 M588.5 24 V58.5"/>
+  <polygon class="head" points="196.5,68.5 191.5,58.5 201.5,58.5"/>
+  <polygon class="head" points="588.5,68.5 583.5,58.5 593.5,58.5"/>
+
+  <!-- the way in: one step, the two requests alike -->
+  <text class="strong" x="12" y="52">the way in</text>
+  <rect class="box" x="12.5" y="68.5" width="760" height="50" rx="4"/>
+  <text class="name" x="392.5" y="90" text-anchor="middle">ContentSecurityPolicyMiddleware.process_request</text>
+  <text x="392.5" y="108" text-anchor="middle"><tspan class="name">request._csp_nonce</tspan> is a <tspan class="name">LazyNonce</tspan>, not drawn</text>
+
+  <!-- the view: where the two part -->
+  <rect class="mark-box" x="0.5" y="142.5" width="784" height="118" rx="4"/>
+  <path class="line" d="M196.5 118.5 V170.5 M588.5 118.5 V170.5"/>
+  <polygon class="head" points="196.5,180.5 191.5,170.5 201.5,170.5"/>
+  <polygon class="head" points="588.5,180.5 583.5,170.5 593.5,170.5"/>
+  <text class="strong" x="12" y="164">the view</text>
+  <rect class="ground" x="12.5" y="180.5" width="368" height="68" rx="4"/>
+  <text x="24" y="202">berths renders the form's template</text>
+  <text x="24" y="220"><tspan class="name">{% csp_nonce_attr %}</tspan> draws the nonce</text>
+  <text class="name" x="24" y="238">generate_nonce()  -&gt;  'WgGtjgT-tnPCZAmsOjekWQ'</text>
+  <rect class="ground" x="404.5" y="180.5" width="368" height="68" rx="4"/>
+  <text x="416" y="202">berths answers the post, with no template</text>
+  <text x="416" y="220">nothing reads the nonce</text>
+  <path class="line" d="M196.5 248.5 V302.5 M588.5 248.5 V302.5"/>
+  <polygon class="head" points="196.5,312.5 191.5,302.5 201.5,302.5"/>
+  <polygon class="head" points="588.5,312.5 583.5,302.5 593.5,302.5"/>
+
+  <!-- the way out: one step, then what it made of each request's nonce -->
+  <text class="strong" x="12" y="296">the way out</text>
+  <rect class="box" x="12.5" y="312.5" width="760" height="50" rx="4"/>
+  <text class="name" x="392.5" y="334" text-anchor="middle">ContentSecurityPolicyMiddleware.process_response</text>
+  <text x="392.5" y="352" text-anchor="middle"><tspan class="name">build_policy(SECURE_CSP,</tspan> the <tspan class="name">LazyNonce)</tspan></text>
+  <path class="line" d="M196.5 362.5 V384.5 M588.5 362.5 V384.5"/>
+  <polygon class="head" points="196.5,394.5 191.5,384.5 201.5,384.5"/>
+  <polygon class="head" points="588.5,394.5 583.5,384.5 593.5,384.5"/>
+
+  <rect class="box" x="12.5" y="394.5" width="368" height="94" rx="4"/>
+  <text x="24" y="416"><tspan class="strong">drawn:</tspan> <tspan class="name">CSP.NONCE</tspan> becomes the nonce</text>
+  <text x="24" y="442">Content-Security-Policy:</text>
+  <text x="40" y="460">default-src 'self';</text>
+  <text x="40" y="478">script-src 'self' 'nonce-WgGtjgT-tnPCZAmsOjekWQ'</text>
+  <rect class="box" x="404.5" y="394.5" width="368" height="94" rx="4"/>
+  <text x="416" y="416"><tspan class="strong">not drawn:</tspan> <tspan class="name">CSP.NONCE</tspan> is removed</text>
+  <text x="416" y="442">Content-Security-Policy:</text>
+  <text x="432" y="460">default-src 'self';</text>
+  <text x="432" y="478">script-src 'self'</text>
+</svg>

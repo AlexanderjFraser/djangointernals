@@ -9,7 +9,7 @@
  "pointers": [
   {
    "pointer": "django/core/signing.py:Signer.__init__",
-   "line": 13,
+   "line": 36,
    "sentence": "A `Signer` takes keyword arguments only (`django/core/signing.py:Signer.__init__`).",
    "tree": "django",
    "path": "django/core/signing.py",
@@ -22,23 +22,37 @@
    "fingerprint": "d18617469c7c4225"
   },
   {
-   "pointer": "docs/topics/signing.txt",
-   "line": 15,
-   "sentence": "The documentation states the rule as a separator outside the URL-safe base64 alphabet (`docs/topics/signing.txt`).",
+   "pointer": "django/core/signing.py:_SEP_UNSAFE",
+   "line": 38,
+   "sentence": "`Signer.__init__` raises `ValueError` for a separator that is empty or made only of the characters of URL-safe base64 and its padding: letters, digits, `\"-\"`, `\"_\"` and `\"=\"` (`django/core/signing.py:_SEP_UNSAFE`).",
    "tree": "django",
-   "path": "docs/topics/signing.txt",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/core/signing.py",
+   "symbol": "_SEP_UNSAFE",
+   "kind": "assignment",
    "lines": [
-    1,
-    255
+    52,
+    52
    ],
-   "fingerprint": "ad28ada77794e265"
+   "fingerprint": "0718219a68247a39"
+  },
+  {
+   "pointer": "django/core/signing.py:Signer.sign",
+   "line": 40,
+   "sentence": "`Signer.sign` returns the value, the separator and the signature (`django/core/signing.py:Signer.sign`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.sign",
+   "kind": "function",
+   "lines": [
+    244,
+    245
+   ],
+   "fingerprint": "7850832afde040de"
   },
   {
    "pointer": "django/core/signing.py:Signer.signature",
-   "line": 19,
-   "sentence": "`Signer.signature` calls `base64_hmac` with the signer's salt followed by `\"signer\"`, the value, the signer's key (or one passed to it) and the algorithm (`django/core/signing.py:Signer.signature`).",
+   "line": 40,
+   "sentence": "`Signer.signature` passes the signer's salt followed by `\"signer\"`, the value, the signer's key (or one passed to it) and its algorithm to `base64_hmac`, which writes in URL-safe base64 the HMAC that `salted_hmac` makes of the value under a key derived from that salt and key ([Secret keys and `django.utils.crypto`](keys.md)) (`django/core/signing.py:Signer.signature`, `django/core/signing.py:base64_hmac`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "Signer.signature",
@@ -50,9 +64,23 @@
    "fingerprint": "055285e51d6c7144"
   },
   {
+   "pointer": "django/core/signing.py:base64_hmac",
+   "line": 40,
+   "sentence": "`Signer.signature` passes the signer's salt followed by `\"signer\"`, the value, the signer's key (or one passed to it) and its algorithm to `base64_hmac`, which writes in URL-safe base64 the HMAC that `salted_hmac` makes of the value under a key derived from that salt and key ([Secret keys and `django.utils.crypto`](keys.md)) (`django/core/signing.py:Signer.signature`, `django/core/signing.py:base64_hmac`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "base64_hmac",
+   "kind": "function",
+   "lines": [
+    103,
+    115
+   ],
+   "fingerprint": "b038e03c6a14c165"
+  },
+  {
    "pointer": "django/core/signing.py:Signer.unsign",
-   "line": 30,
-   "sentence": "`Signer.unsign` reverses it (`django/core/signing.py:Signer.unsign`).",
+   "line": 44,
+   "sentence": "`Signer.unsign` reverses `Signer.sign` (`django/core/signing.py:Signer.unsign`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "Signer.unsign",
@@ -64,93 +92,23 @@
    "fingerprint": "47eef6ac66b5ee46"
   },
   {
-   "pointer": "django/core/signing.py:TimestampSigner.sign",
-   "line": 34,
-   "sentence": "`TimestampSigner.timestamp` is the current time in whole seconds since the epoch, written in base 62, and `TimestampSigner.sign` appends the separator and the timestamp to the value before passing it to `Signer.sign`, so the signature covers the time as well (`django/core/signing.py:TimestampSigner.sign`).",
+   "pointer": "django/core/signing.py:Signer.__init__",
+   "line": 69,
+   "sentence": "A signer given no keys reads both settings when it is made, not when it is used: one made before a change of `SECRET_KEY` goes on checking with the old key, and one made after the change refuses what the old key signed unless the old key is among its fallbacks (`django/core/signing.py:Signer.__init__`).",
    "tree": "django",
    "path": "django/core/signing.py",
-   "symbol": "TimestampSigner.sign",
+   "symbol": "Signer.__init__",
    "kind": "function",
    "lines": [
-    299,
-    301
+    219,
+    238
    ],
-   "fingerprint": "3f566db674ad9e38"
-  },
-  {
-   "pointer": "django/core/signing.py:TimestampSigner.unsign",
-   "line": 36,
-   "sentence": "It splits off the timestamp and decodes it, and if given a maximum age, as seconds or a timedelta, raises `SignatureExpired` when more seconds than that have passed (`django/core/signing.py:TimestampSigner.unsign`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "TimestampSigner.unsign",
-   "kind": "function",
-   "lines": [
-    303,
-    318
-   ],
-   "fingerprint": "e4c7c7625ec9dfb7"
-  },
-  {
-   "pointer": "django/core/signing.py:Signer.sign_object",
-   "line": 51,
-   "sentence": "`Signer.sign_object` signs a value of any type its serializer can write, not only a string (`django/core/signing.py:Signer.sign_object`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "Signer.sign_object",
-   "kind": "function",
-   "lines": [
-    256,
-    279
-   ],
-   "fingerprint": "09022e6519977eab"
-  },
-  {
-   "pointer": "django/core/signing.py:Signer.unsign_object",
-   "line": 53,
-   "sentence": "`Signer.unsign_object` calls `unsign` first, passing a maximum age on to a `TimestampSigner`, and only then looks for the `\".\"`, decodes the base64 and decompresses: nothing is decompressed that the key did not sign (`django/core/signing.py:Signer.unsign_object`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "Signer.unsign_object",
-   "kind": "function",
-   "lines": [
-    281,
-    292
-   ],
-   "fingerprint": "fd7f57a070980a0f"
-  },
-  {
-   "pointer": "django/core/signing.py:JSONSerializer",
-   "line": 55,
-   "sentence": "`JSONSerializer` writes JSON with no spaces after `\",\"` and `\":\"`, encoded as Latin-1, and reads it back the same way (`django/core/signing.py:JSONSerializer`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "JSONSerializer",
-   "kind": "class",
-   "lines": [
-    159,
-    169
-   ],
-   "fingerprint": "24d127572fd7c4cc"
-  },
-  {
-   "pointer": "docs/topics/signing.txt",
-   "line": 55,
-   "sentence": "The documentation's reason for JSON: even if `SECRET_KEY` is stolen, an attacker cannot run commands through it as through the pickle format (`docs/topics/signing.txt`).",
-   "tree": "django",
-   "path": "docs/topics/signing.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    255
-   ],
-   "fingerprint": "ad28ada77794e265"
+   "fingerprint": "d18617469c7c4225"
   },
   {
    "pointer": "django/core/signing.py:dumps",
-   "line": 59,
-   "sentence": "`dumps` makes a `TimestampSigner` from its key and salt and returns its `sign_object` of the value; `loads` makes one from its key, salt and fallback keys and returns its `unsign_object` of the string (`django/core/signing.py:dumps`, `django/core/signing.py:loads`).",
+   "line": 69,
+   "sentence": "`dumps`, `loads` and `get_cookie_signer` make a new signer at each call (`django/core/signing.py:dumps`, `django/core/signing.py:loads`, `django/core/signing.py:get_cookie_signer`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "dumps",
@@ -163,8 +121,8 @@
   },
   {
    "pointer": "django/core/signing.py:loads",
-   "line": 59,
-   "sentence": "`dumps` makes a `TimestampSigner` from its key and salt and returns its `sign_object` of the value; `loads` makes one from its key, salt and fallback keys and returns its `unsign_object` of the string (`django/core/signing.py:dumps`, `django/core/signing.py:loads`).",
+   "line": 69,
+   "sentence": "`dumps`, `loads` and `get_cookie_signer` make a new signer at each call (`django/core/signing.py:dumps`, `django/core/signing.py:loads`, `django/core/signing.py:get_cookie_signer`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "loads",
@@ -176,65 +134,9 @@
    "fingerprint": "b6b1110f798ed56f"
   },
   {
-   "pointer": "docs/topics/signing.txt",
-   "line": 61,
-   "sentence": "The documentation's reason: a salt is a namespace, and a string signed in one is refused by code that checks in another (`docs/topics/signing.txt`).",
-   "tree": "django",
-   "path": "docs/topics/signing.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    255
-   ],
-   "fingerprint": "ad28ada77794e265"
-  },
-  {
-   "pointer": "django/core/signing.py:b64_decode",
-   "line": 84,
-   "sentence": "`b64_encode` is URL-safe base64 with the trailing `\"=\"` padding stripped, and `b64_decode` restores the padding before decoding (`django/core/signing.py:b64_decode`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "b64_decode",
-   "kind": "function",
-   "lines": [
-    97,
-    99
-   ],
-   "fingerprint": "1f6e9d9a65b69420"
-  },
-  {
-   "pointer": "django/core/signing.py:b62_encode",
-   "line": 84,
-   "sentence": "`b62_encode` and `b62_decode` write and read an integer in the digits and letters of `BASE62_ALPHABET`, with a `\"-\"` in front of a negative one (`django/core/signing.py:b62_encode`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "b62_encode",
-   "kind": "function",
-   "lines": [
-    68,
-    77
-   ],
-   "fingerprint": "a4d16e3da71ecf76"
-  },
-  {
-   "pointer": "django/core/signing.py:base64_hmac",
-   "line": 86,
-   "sentence": "Called with no algorithm, `base64_hmac` warns with `RemovedInDjango2028Warning` and uses `\"sha1\"`; in Django 2028 its default becomes `\"sha256\"`, as does that of `salted_hmac` (`django/core/signing.py:base64_hmac`).",
-   "tree": "django",
-   "path": "django/core/signing.py",
-   "symbol": "base64_hmac",
-   "kind": "function",
-   "lines": [
-    103,
-    115
-   ],
-   "fingerprint": "b038e03c6a14c165"
-  },
-  {
    "pointer": "django/core/signing.py:get_cookie_signer",
-   "line": 90,
-   "sentence": "`get_cookie_signer` makes the signer for cookies (`django/core/signing.py:get_cookie_signer`).",
+   "line": 69,
+   "sentence": "`dumps`, `loads` and `get_cookie_signer` make a new signer at each call (`django/core/signing.py:dumps`, `django/core/signing.py:loads`, `django/core/signing.py:get_cookie_signer`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "get_cookie_signer",
@@ -246,9 +148,163 @@
    "fingerprint": "3162cc89a1bdf525"
   },
   {
+   "pointer": "django/core/signing.py:b62_encode",
+   "line": 73,
+   "sentence": "`TimestampSigner.timestamp` is the current time in whole seconds since the epoch, written in base 62 by `b62_encode`, with the digits and letters of `BASE62_ALPHABET` (`django/core/signing.py:b62_encode`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "b62_encode",
+   "kind": "function",
+   "lines": [
+    68,
+    77
+   ],
+   "fingerprint": "a4d16e3da71ecf76"
+  },
+  {
+   "pointer": "django/core/signing.py:TimestampSigner.sign",
+   "line": 73,
+   "sentence": "`TimestampSigner.sign` appends the separator and the timestamp to the value before passing it to `Signer.sign`, so the signature covers the time as well (`django/core/signing.py:TimestampSigner.sign`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "TimestampSigner.sign",
+   "kind": "function",
+   "lines": [
+    299,
+    301
+   ],
+   "fingerprint": "3f566db674ad9e38"
+  },
+  {
+   "pointer": "django/core/signing.py:TimestampSigner.unsign",
+   "line": 75,
+   "sentence": "It splits off the timestamp and decodes it with `b62_decode`, and if given a maximum age, as seconds or a timedelta, raises `SignatureExpired` when more seconds than that have passed (`django/core/signing.py:TimestampSigner.unsign`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "TimestampSigner.unsign",
+   "kind": "function",
+   "lines": [
+    303,
+    318
+   ],
+   "fingerprint": "e4c7c7625ec9dfb7"
+  },
+  {
+   "pointer": "django/core/signing.py:TimestampSigner.timestamp",
+   "line": 95,
+   "sentence": "An age is counted from the whole second that `TimestampSigner.timestamp` wrote, so it runs ahead of the time since signing by the fraction of a second that `timestamp` dropped (`django/core/signing.py:TimestampSigner.timestamp`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "TimestampSigner.timestamp",
+   "kind": "function",
+   "lines": [
+    296,
+    297
+   ],
+   "fingerprint": "bb7305908a4f1351"
+  },
+  {
+   "pointer": "django/core/signing.py:Signer.sign_object",
+   "line": 113,
+   "sentence": "`Signer.sign_object` signs a value of any type its serializer can write, not only a string (`django/core/signing.py:Signer.sign_object`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.sign_object",
+   "kind": "function",
+   "lines": [
+    256,
+    279
+   ],
+   "fingerprint": "09022e6519977eab"
+  },
+  {
+   "pointer": "django/core/signing.py:b64_encode",
+   "line": 113,
+   "sentence": "It serializes the value to bytes, with `JSONSerializer` unless given another serializer class, writes them in URL-safe base64 without the `\"=\"` padding (`django/core/signing.py:b64_encode`), and signs that with `sign`, which on a `TimestampSigner` adds the time.",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "b64_encode",
+   "kind": "function",
+   "lines": [
+    93,
+    94
+   ],
+   "fingerprint": "a9a2fbb3294fef47"
+  },
+  {
+   "pointer": "django/core/signing.py:Signer.unsign_object",
+   "line": 117,
+   "sentence": "`Signer.unsign_object` calls `unsign` first, passing a maximum age on to a `TimestampSigner`, and only then looks for the `\".\"`, decodes the base64 and decompresses: nothing unverified is ever decompressed (`django/core/signing.py:Signer.unsign_object`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.unsign_object",
+   "kind": "function",
+   "lines": [
+    281,
+    292
+   ],
+   "fingerprint": "fd7f57a070980a0f"
+  },
+  {
+   "pointer": "django/core/signing.py:JSONSerializer",
+   "line": 119,
+   "sentence": "`JSONSerializer` writes JSON with no space after a comma or a colon and encodes it as Latin-1 (`django/core/signing.py:JSONSerializer`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "JSONSerializer",
+   "kind": "class",
+   "lines": [
+    159,
+    169
+   ],
+   "fingerprint": "24d127572fd7c4cc"
+  },
+  {
+   "pointer": "docs/topics/signing.txt",
+   "line": 121,
+   "sentence": "The default serializer is JSON so that even a stolen `SECRET_KEY` does not let an attacker run commands on the server, as forged data read with the pickle format could (`docs/topics/signing.txt`).",
+   "tree": "django",
+   "path": "docs/topics/signing.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    255
+   ],
+   "fingerprint": "ad28ada77794e265"
+  },
+  {
+   "pointer": "django/core/signing.py:dumps",
+   "line": 125,
+   "sentence": "`dumps` makes a `TimestampSigner` from its key and salt and returns its `Signer.sign_object` of the value; `loads` makes one from its key, salt and fallback keys and returns its `Signer.unsign_object` of the string (`django/core/signing.py:dumps`, `django/core/signing.py:loads`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "dumps",
+   "kind": "function",
+   "lines": [
+    172,
+    193
+   ],
+   "fingerprint": "0970fa05c223bafa"
+  },
+  {
+   "pointer": "django/core/signing.py:loads",
+   "line": 125,
+   "sentence": "`dumps` makes a `TimestampSigner` from its key and salt and returns its `Signer.sign_object` of the value; `loads` makes one from its key, salt and fallback keys and returns its `Signer.unsign_object` of the string (`django/core/signing.py:dumps`, `django/core/signing.py:loads`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "loads",
+   "kind": "function",
+   "lines": [
+    196,
+    215
+   ],
+   "fingerprint": "b6b1110f798ed56f"
+  },
+  {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase.encode",
-   "line": 94,
-   "sentence": "`SessionBase.decode` reads it with `loads` and no maximum age; on a `BadSignature` it logs the warning `\"Session data corrupted\"` to `\"django.security.SuspiciousSession\"`, and on any failure returns an empty session (`django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/sessions/backends/base.py:SessionBase.decode`).",
+   "line": 125,
+   "sentence": "Within Django the sessions call them, for a session's data and, in the backend that keeps the session in its cookie, for the session key ([The session store: `SessionBase`](../auth/sessions.md), [The session backends](../auth/session-backends.md)) (`django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/sessions/backends/signed_cookies.py:SessionStore._get_session_key`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
    "symbol": "SessionBase.encode",
@@ -260,46 +316,60 @@
    "fingerprint": "ab7326d27aa3e74a"
   },
   {
-   "pointer": "django/contrib/sessions/backends/base.py:SessionBase.decode",
-   "line": 94,
-   "sentence": "`SessionBase.decode` reads it with `loads` and no maximum age; on a `BadSignature` it logs the warning `\"Session data corrupted\"` to `\"django.security.SuspiciousSession\"`, and on any failure returns an empty session (`django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/sessions/backends/base.py:SessionBase.decode`).",
-   "tree": "django",
-   "path": "django/contrib/sessions/backends/base.py",
-   "symbol": "SessionBase.decode",
-   "kind": "function",
-   "lines": [
-    136,
-    148
-   ],
-   "fingerprint": "2f52ba0c47ea3596"
-  },
-  {
-   "pointer": "django/contrib/sessions/backends/signed_cookies.py:SessionStore",
-   "line": 96,
-   "sentence": "In the backend that keeps the whole session in the cookie, the session key is itself the string `dumps` makes of the session, compressed, with the salt `\"django.contrib.sessions.backends.signed_cookies\"` (`django/contrib/sessions/backends/signed_cookies.py:SessionStore`).",
+   "pointer": "django/contrib/sessions/backends/signed_cookies.py:SessionStore._get_session_key",
+   "line": 125,
+   "sentence": "Within Django the sessions call them, for a session's data and, in the backend that keeps the session in its cookie, for the session key ([The session store: `SessionBase`](../auth/sessions.md), [The session backends](../auth/session-backends.md)) (`django/contrib/sessions/backends/base.py:SessionBase.encode`, `django/contrib/sessions/backends/signed_cookies.py:SessionStore._get_session_key`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/signed_cookies.py",
-   "symbol": "SessionStore",
-   "kind": "class",
-   "lines": [
-    5,
-    103
-   ],
-   "fingerprint": "6af52f8e898c58f4"
-  },
-  {
-   "pointer": "django/contrib/messages/storage/cookie.py:CookieStorage.__init__",
-   "line": 98,
-   "sentence": "The messages' `CookieStorage` signs through `get_cookie_signer` with the salt `\"django.contrib.messages\"`, using `sign_object` with compression and `unsign_object` with no maximum age (`django/contrib/messages/storage/cookie.py:CookieStorage.__init__`).",
-   "tree": "django",
-   "path": "django/contrib/messages/storage/cookie.py",
-   "symbol": "CookieStorage.__init__",
+   "symbol": "SessionStore._get_session_key",
    "kind": "function",
    "lines": [
-    90,
-    92
+    85,
+    95
    ],
-   "fingerprint": "7b188ce8d1b52ec1"
+   "fingerprint": "90d48f06dc77e803"
+  },
+  {
+   "pointer": "docs/topics/signing.txt",
+   "line": 127,
+   "sentence": "A salt is a namespace: a string signed under one does not verify under another, so a value the site signed for one use cannot be passed to code that checks for another (`docs/topics/signing.txt`).",
+   "tree": "django",
+   "path": "docs/topics/signing.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    255
+   ],
+   "fingerprint": "ad28ada77794e265"
+  },
+  {
+   "pointer": "django/core/signing.py:dumps",
+   "line": 127,
+   "sentence": "Leaving the salt of `dumps` at its default, or sharing one salt between different parts of an application without good cause, is for that reason a security risk (`django/core/signing.py:dumps`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "dumps",
+   "kind": "function",
+   "lines": [
+    172,
+    193
+   ],
+   "fingerprint": "0970fa05c223bafa"
+  },
+  {
+   "pointer": "django/core/signing.py:get_cookie_signer",
+   "line": 141,
+   "sentence": "`get_cookie_signer` makes the signer for cookies (`django/core/signing.py:get_cookie_signer`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "get_cookie_signer",
+   "kind": "function",
+   "lines": [
+    150,
+    156
+   ],
+   "fingerprint": "3162cc89a1bdf525"
   }
  ]
 }
