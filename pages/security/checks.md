@@ -14,7 +14,7 @@ The package's modules are imported by `django/core/checks/__init__.py`, so their
 
 The three, `check_csp_settings`, `check_csp_nonce_context_processor` and `check_csrf_failure_view`, run with the ordinary checks, `--deploy` or not. Each looks for a fault on any machine: a policy that is not a dictionary, a nonce no template is given, a failure view that cannot be imported or called (`django/core/checks/security/csrf.py:check_csrf_failure_view`).
 
-The harbour office's settings, as [Security](../security.md) gives them with a long `SECRET_KEY` added, pass those three. Under `--deploy`, limited to this tag, a run gave three warnings:
+The harbour office's settings ([Security](../security.md)), with `ALLOWED_HOSTS` naming harbour.example and a long `SECRET_KEY`, pass those three. Under `--deploy`, limited to this tag, a run gave three warnings:
 
 ```text
 $ python manage.py check --deploy --tag security

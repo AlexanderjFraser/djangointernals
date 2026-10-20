@@ -1,0 +1,1113 @@
+Django 6.2 in development, at the commit 4fab678a0739d54401ccee7eb587553657c9f76e, and the harbour office's site
+at harbour.example, as the docstring gives it; the clock at 2026-10-12 09:00:00 UTC
+
+GET https://harbour.example/berths/, no cookie: the four middleware, in and out
+    GET https://harbour.example/berths/, the browser sending nothing but the request
+    WSGIHandler.__call__(environ, start_response)
+      MiddlewareMixin.__call__(request), on SecurityMiddleware
+        SecurityMiddleware.process_request(request)  ->  None
+        MiddlewareMixin.__call__(request), on CsrfViewMiddleware
+          CsrfViewMiddleware.process_request(request)
+            CsrfViewMiddleware._get_secret(request)  ->  None
+            -> None; request.META holds no CSRF_COOKIE
+          MiddlewareMixin.__call__(request), on XFrameOptionsMiddleware, which has no process_request
+            MiddlewareMixin.__call__(request), on ContentSecurityPolicyMiddleware
+              ContentSecurityPolicyMiddleware.process_request(request)  ->  None; request._csp_nonce is a LazyNonce, not drawn
+              BaseHandler._get_response(request)
+                BaseHandler.load_middleware, building the chain, kept the process_view of CsrfViewMiddleware only: SecurityMiddleware, XFrameOptionsMiddleware and ContentSecurityPolicyMiddleware have none
+                CsrfViewMiddleware.process_view(request, berths, (), {}), for a 'GET'
+                  CsrfViewMiddleware._accept(request)
+                  -> None
+                berths(request)
+                  the context processor csrf(request)  ->  {'csrf_token': a SimpleLazyObject, not yet evaluated}
+                  the context processor csp(request)  ->  {'csp_nonce': a LazyNonce, not drawn}
+                  CsrfTokenNode.render(context), for {% csrf_token %}
+                    get_token(request)  ->  the token 'qC06hQYpUrzu6iBMs6eFz7FOVz6VEyC7DmtGWAEhP24NHq7mXsrNaudIfDkzL8y3'; request.META now holds CSRF_COOKIE 'nUDKPUQ25LFtLiGKFwniLxI4ueoOhK66', CSRF_COOKIE_NEEDS_UPDATE True
+                  nonce_attr(context), for {% csp_nonce_attr %}
+                    generate_nonce()  ->  'WgGtjgT-tnPCZAmsOjekWQ'
+                    -> 'nonce="WgGtjgT-tnPCZAmsOjekWQ"'
+                  -> an HttpResponse, status 200
+              ContentSecurityPolicyMiddleware.process_response(request, response)
+                build_policy(SECURE_CSP, a LazyNonce, drawn: 'WgGtjgT-tnPCZAmsOjekWQ')  ->  "default-src 'self'; script-src 'self' 'nonce-WgGtjgT-tnPCZAmsOjekWQ'"
+                -> the response, Content-Security-Policy added
+            XFrameOptionsMiddleware.process_response(request, response)
+              XFrameOptionsMiddleware.get_xframe_options_value(request, response)  ->  'DENY'
+              -> the response, X-Frame-Options added
+          CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'nUDKPUQ25LFtLiGKFwniLxI4ueoOhK66', CSRF_COOKIE_NEEDS_UPDATE True
+            CsrfViewMiddleware._set_csrf_cookie(request, response)
+            -> the response, Vary added, the cookie csrftoken set
+        SecurityMiddleware.process_response(request, response)  ->  the response, Strict-Transport-Security added, X-Content-Type-Options added, Referrer-Policy added, Cross-Origin-Opener-Policy added
+      start_response("200 OK", headers), the headers being:
+        Content-Type: text/html; charset=utf-8
+        Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-WgGtjgT-tnPCZAmsOjekWQ'
+        X-Frame-Options: DENY
+        Vary: Cookie
+        Strict-Transport-Security: max-age=3600
+        X-Content-Type-Options: nosniff
+        Referrer-Policy: same-origin
+        Cross-Origin-Opener-Policy: same-origin
+        Set-Cookie: csrftoken=nUDKPUQ25LFtLiGKFwniLxI4ueoOhK66; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+    the server sends the body, 289 bytes; its lines with 'csrfmiddlewaretoken' or 'nonce':
+      <input type="hidden" name="csrfmiddlewaretoken" value="qC06hQYpUrzu6iBMs6eFz7FOVz6VEyC7DmtGWAEhP24NHq7mXsrNaudIfDkzL8y3">
+      <script nonce="WgGtjgT-tnPCZAmsOjekWQ">document.forms[0].ship.focus()</script>
+
+POST https://harbour.example/berths/, form and cookie as the page left them: accepted
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT and a page whose form holds the token 6FGoX8Tg88XY4TaLOL0v6UXFDe1g6HMdY82ArdSkSbZ2S5WwJkU9sLOPXbhBS44W
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT; Origin: https://harbour.example; the form csrfmiddlewaretoken=6FGoX8Tg88XY4TaLOL0v6UXFDe1g6HMdY82ArdSkSbZ2S5WwJkU9sLOPXbhBS44W, ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT'), 32 characters
+        -> '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT'
+      -> None; request.META holds CSRF_COOKIE '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware.process_view(request, berths, (), {}), for a 'POST'
+      CsrfViewMiddleware._origin_verified(request), the Origin 'https://harbour.example'  ->  True
+      CsrfViewMiddleware._check_token(request)
+        CsrfViewMiddleware._get_secret(request)
+          _check_token_format('2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT'), 32 characters
+          -> '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT'
+        _check_token_format('6FGoX8Tg88XY4TaLOL0v6UXFDe1g6HMdY82ArdSkSbZ2S5WwJkU9sLOPXbhBS44W'), 64 characters
+        _does_token_match('6FGoX8Tg88XY4TaLOL0v6UXFDe1g6HMdY82ArdSkSbZ2S5WwJkU9sLOPXbhBS44W', '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT')
+          _unmask_cipher_token('6FGoX8Tg88XY4TaLOL0v6UXFDe1g6HMdY82ArdSkSbZ2S5WwJkU9sLOPXbhBS44W')  ->  '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT'
+          constant_time_compare('2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT', '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT')  ->  True
+          -> True
+        -> None
+      CsrfViewMiddleware._accept(request)
+      -> None
+    berths(request)  ->  an HttpResponse, status 200
+    ContentSecurityPolicyMiddleware.process_response(request, response)
+      build_policy(SECURE_CSP, a LazyNonce, not drawn)  ->  "default-src 'self'; script-src 'self'"
+      -> the response, Content-Security-Policy added
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE '2DwmEf9eUdceYmWV5J4Ow11ku7qvWxsT', no CSRF_COOKIE_NEEDS_UPDATE  ->  the response, unchanged
+    start_response("200 OK", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self'
+      no Vary
+      no Set-Cookie
+    the server sends the body: 'Berth requested.'
+
+POST https://harbour.example/berths/, no token: refused, and the failure view
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=SWEQqS7DG7hYtBdVhvpQRYXJGaCfdMll and a page whose form holds the token hrb6Ktvm9n9tvkVRy4EbtmMznM686qtDZdFM0bsPFkghOLYCFpTRaaz8TMyd92EO
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=SWEQqS7DG7hYtBdVhvpQRYXJGaCfdMll; Origin: https://harbour.example; the form ship=Endeavour
+    BaseHandler.get_response(request)
+      CsrfViewMiddleware.process_request(request)
+        CsrfViewMiddleware._get_secret(request)  ->  'SWEQqS7DG7hYtBdVhvpQRYXJGaCfdMll'
+        -> None; request.META holds CSRF_COOKIE 'SWEQqS7DG7hYtBdVhvpQRYXJGaCfdMll', no CSRF_COOKIE_NEEDS_UPDATE
+      CsrfViewMiddleware.process_view(request, berths, (), {}), for a 'POST'
+        CsrfViewMiddleware._origin_verified(request), the Origin 'https://harbour.example'  ->  True
+        CsrfViewMiddleware._check_token(request)
+          CsrfViewMiddleware._get_secret(request)  ->  'SWEQqS7DG7hYtBdVhvpQRYXJGaCfdMll'
+          RejectRequest('CSRF token missing.')
+          raises RejectRequest
+        CsrfViewMiddleware._reject(request, 'CSRF token missing.')
+          _get_failure_view()
+            get_callable('django.views.csrf.csrf_failure')  ->  the function django.views.csrf.csrf_failure
+            -> the function django.views.csrf.csrf_failure
+          csrf_failure(request, reason='CSRF token missing.')
+            csp(request), called by csrf_failure  ->  {'csp_nonce': a LazyNonce, not drawn}
+            get_template('403_csrf.html')  raises TemplateDoesNotExist
+            Engine.from_string(the text of django/views/templates/csrf_403.html)
+            nonce_attr(context), for {% csp_nonce_attr %}
+              generate_nonce()  ->  'SFWHX0PmviNLKDg9bdZhrQ'
+              -> 'nonce="SFWHX0PmviNLKDg9bdZhrQ"'
+            -> an HttpResponseForbidden, status 403
+          log_response('Forbidden (%s): %s', ...) to django.security.csrf, the response not yet logged
+            log, WARNING to django.security.csrf: Forbidden (CSRF token missing.): /berths/
+          -> an HttpResponseForbidden, status 403
+        -> an HttpResponseForbidden, status 403
+      ContentSecurityPolicyMiddleware.process_response(request, response)
+        build_policy(SECURE_CSP, a LazyNonce, drawn: 'SFWHX0PmviNLKDg9bdZhrQ')  ->  "default-src 'self'; script-src 'self' 'nonce-SFWHX0PmviNLKDg9bdZhrQ'"
+        -> the response, Content-Security-Policy added
+      log_response('%s: %s', ...) to django.request, the response already marked as logged
+    start_response("403 Forbidden", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-SFWHX0PmviNLKDg9bdZhrQ'
+      no Set-Cookie
+    the server sends the body, 1280 bytes; its lines with 'nonce' or '<h1>' or '<p>':
+      <style nonce="SFWHX0PmviNLKDg9bdZhrQ">
+      <h1>Forbidden <span>(403)</span></h1>
+      <p>CSRF verification failed. Request aborted.</p>
+      <p><small>More information is available with DEBUG=True.</small></p>
+
+POST https://harbour.example/berths/, Origin https://evil.example: refused
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=ynjuSNxxDy1vhPispfg38pCydPnFidEo and a page whose form holds the token 4efuug3f3QuXpj93IWYN75h0pJn6zwp6sroOcTqCweliwYhlX14G5kJosoABHzTk
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=ynjuSNxxDy1vhPispfg38pCydPnFidEo; Origin: https://evil.example; the form csrfmiddlewaretoken=4efuug3f3QuXpj93IWYN75h0pJn6zwp6sroOcTqCweliwYhlX14G5kJosoABHzTk, ship=Endeavour
+    BaseHandler.get_response(request)
+      CsrfViewMiddleware.process_request(request)
+        CsrfViewMiddleware._get_secret(request)  ->  'ynjuSNxxDy1vhPispfg38pCydPnFidEo'
+        -> None; request.META holds CSRF_COOKIE 'ynjuSNxxDy1vhPispfg38pCydPnFidEo', no CSRF_COOKIE_NEEDS_UPDATE
+      CsrfViewMiddleware.process_view(request, berths, (), {}), for a 'POST'
+        CsrfViewMiddleware._origin_verified(request), the Origin 'https://evil.example'  ->  False
+        CsrfViewMiddleware._reject(request, 'Origin checking failed - https://evil.example does not match any trusted origins.')
+          log_response('Forbidden (%s): %s', ...) to django.security.csrf, the response not yet logged
+            log, WARNING to django.security.csrf: Forbidden (Origin checking failed - https://evil.example does not match any trusted origins.): /berths/
+          -> an HttpResponseForbidden, status 403
+        -> an HttpResponseForbidden, status 403
+      log_response('%s: %s', ...) to django.request, the response already marked as logged
+    start_response("403 Forbidden", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-FQ7X7GUdiNj093NEHmj7Nw'
+    the server sends the body, 1280 bytes; its lines with 'nonce' or '<p>':
+      <style nonce="FQ7X7GUdiNj093NEHmj7Nw">
+      <p>CSRF verification failed. Request aborted.</p>
+      <p><small>More information is available with DEBUG=True.</small></p>
+
+POST https://harbour.example/berths/, neither Origin nor Referer: refused
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=qLYxAAQgvs49EGrYZ6YQYDBny4n0GIst and a page whose form holds the token vOq2yM5qiSSL3uYwiI418ynn53oubfolLpepYcLwDaMKx0fk7ESHW1OAtXBkHNGE
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=qLYxAAQgvs49EGrYZ6YQYDBny4n0GIst; the form csrfmiddlewaretoken=vOq2yM5qiSSL3uYwiI418ynn53oubfolLpepYcLwDaMKx0fk7ESHW1OAtXBkHNGE, ship=Endeavour
+    BaseHandler.get_response(request)
+      CsrfViewMiddleware.process_request(request)
+        CsrfViewMiddleware._get_secret(request)  ->  'qLYxAAQgvs49EGrYZ6YQYDBny4n0GIst'
+        -> None; request.META holds CSRF_COOKIE 'qLYxAAQgvs49EGrYZ6YQYDBny4n0GIst', no CSRF_COOKIE_NEEDS_UPDATE
+      CsrfViewMiddleware.process_view(request, berths, (), {}), for a 'POST'
+        CsrfViewMiddleware._check_referer(request), the Referer None
+          RejectRequest('Referer checking failed - no Referer.')
+          raises RejectRequest
+        CsrfViewMiddleware._reject(request, 'Referer checking failed - no Referer.')
+          log_response('Forbidden (%s): %s', ...) to django.security.csrf, the response not yet logged
+            log, WARNING to django.security.csrf: Forbidden (Referer checking failed - no Referer.): /berths/
+          -> an HttpResponseForbidden, status 403
+        -> an HttpResponseForbidden, status 403
+      log_response('%s: %s', ...) to django.request, the response already marked as logged
+    start_response("403 Forbidden", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-h5aWm_iMZ4hmnFYBpCTJQQ'
+    the server sends the body, 2128 bytes; its lines with 'nonce' or '<p>':
+      <style nonce="h5aWm_iMZ4hmnFYBpCTJQQ">
+      <p>CSRF verification failed. Request aborted.</p>
+      <p>You are seeing this message because this HTTPS site requires a “Referer header” to be sent by your web browser, but none was sent. This header is required for security reasons, to ensure that your browser is not being hijacked by third parties.</p>
+      <p>If you have configured your browser to disable “Referer” headers, please re-enable them, at least for this site, or for HTTPS connections, or for “same-origin” requests.</p>
+      <p>If you are using the &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt; tag or including the “Referrer-Policy: no-referrer” header, please remove them. The CSRF protection requires the “Referer” header to do strict referer checking. If you’re concerned about privacy, use alternatives like &lt;a rel=&quot;noreferrer&quot; …&gt; for links to third-party sites.</p>
+      <p><small>More information is available with DEBUG=True.</small></p>
+
+POST https://harbour.example/berths/, no cookie, the browser having forgotten it: refused
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=1ivHIwtRV3HbTTrls2SwDMdQaWAdHSF2 and a page whose form holds the token 0tWRrNemUlNmHTjovB2JPq8lwcnUha4TRBhoZ9x3FeknqCAzNtK5i2b1wYNXOSzL
+    the browser forgets its cookie, and keeps the page
+    POST https://harbour.example/berths/, the browser sending Origin: https://harbour.example; the form csrfmiddlewaretoken=0tWRrNemUlNmHTjovB2JPq8lwcnUha4TRBhoZ9x3FeknqCAzNtK5i2b1wYNXOSzL, ship=Endeavour
+    BaseHandler.get_response(request)
+      CsrfViewMiddleware.process_request(request)
+        CsrfViewMiddleware._get_secret(request)  ->  None
+        -> None; request.META holds no CSRF_COOKIE
+      CsrfViewMiddleware.process_view(request, berths, (), {}), for a 'POST'
+        CsrfViewMiddleware._origin_verified(request), the Origin 'https://harbour.example'  ->  True
+        CsrfViewMiddleware._check_token(request)
+          CsrfViewMiddleware._get_secret(request)  ->  None
+          RejectRequest('CSRF cookie not set.')
+          raises RejectRequest
+        CsrfViewMiddleware._reject(request, 'CSRF cookie not set.')
+          log_response('Forbidden (%s): %s', ...) to django.security.csrf, the response not yet logged
+            log, WARNING to django.security.csrf: Forbidden (CSRF cookie not set.): /berths/
+          -> an HttpResponseForbidden, status 403
+        -> an HttpResponseForbidden, status 403
+      log_response('%s: %s', ...) to django.request, the response already marked as logged
+    start_response("403 Forbidden", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce--zDG3dBWLQowfI0soX9pAQ'
+      no Set-Cookie
+    the server sends the body, 1643 bytes; its lines with 'nonce' or '<p>':
+      <style nonce="-zDG3dBWLQowfI0soX9pAQ">
+      <p>CSRF verification failed. Request aborted.</p>
+      <p>You are seeing this message because this site requires a CSRF cookie when submitting forms. This cookie is required for security reasons, to ensure that your browser is not being hijacked by third parties.</p>
+      <p>If you have configured your browser to disable cookies, please re-enable them, at least for this site, or for “same-origin” requests.</p>
+      <p><small>More information is available with DEBUG=True.</small></p>
+
+GET http://harbour.example/berths/?ship=Endeavour, over plain HTTP: the redirect, and nothing inside SecurityMiddleware runs
+    GET http://harbour.example/berths/?ship=Endeavour, the browser sending nothing but the request
+    WSGIHandler.__call__(environ, start_response)
+      MiddlewareMixin.__call__(request), on SecurityMiddleware
+        SecurityMiddleware.process_request(request)
+          HttpRequest.is_secure()  ->  False
+          HttpRequest.get_host(), the Host 'harbour.example'  ->  'harbour.example'
+          HttpRequest.get_full_path()  ->  '/berths/?ship=Endeavour'
+          -> an HttpResponsePermanentRedirect, status 301, Location 'https://harbour.example/berths/?ship=Endeavour'
+        SecurityMiddleware.process_response(request, response)
+          HttpRequest.is_secure()  ->  False
+          -> the response, X-Content-Type-Options added, Referrer-Policy added, Cross-Origin-Opener-Policy added
+      start_response("301 Moved Permanently", headers), the headers being:
+        Content-Type: text/html; charset=utf-8
+        Location: https://harbour.example/berths/?ship=Endeavour
+        X-Content-Type-Options: nosniff
+        Referrer-Policy: same-origin
+        Cross-Origin-Opener-Policy: same-origin
+
+GET http://evil.example/berths/, the browser's Host evil.example: a 400, and no redirect
+    GET http://evil.example/berths/, the browser sending nothing but the request
+    BaseHandler.get_response(request)
+      MiddlewareMixin.__call__(request), on SecurityMiddleware
+        SecurityMiddleware.process_request(request)
+          HttpRequest.is_secure()  ->  False
+          HttpRequest.get_host(), the Host 'evil.example'  raises DisallowedHost
+      response_for_exception(request, DisallowedHost)
+        get_exception_response(request, resolver, 400, DisallowedHost)  ->  an HttpResponseBadRequest, status 400
+        log_response("Invalid HTTP_HOST header: 'evil.example'. You may need to add 'evil.example' to ALLOWED_HOSTS.", ...) to django.security.DisallowedHost, the response not yet logged
+          log, ERROR to django.security.DisallowedHost: Invalid HTTP_HOST header: 'evil.example'. You may need to add 'evil.example' to ALLOWED_HOSTS.
+        -> an HttpResponseBadRequest, status 400
+      log_response('%s: %s', ...) to django.request, the response already marked as logged
+    start_response("400 Bad Request", headers), the headers being:
+      Content-Type: text/html; charset=utf-8
+    the server sends the body: '\n<!doctype html>\n<html lang="en">\n<head>\n  <title>Bad Request (400)</title>\n</head>\n<body>\n  <h1>Bad Request (400)</h1><p></p>\n</body>\n</html>\n'
+
+SECURE_REDIRECT_EXEMPT = [r'^health/$'], in a handler built under it: which paths, asked for over plain HTTP, are exempt
+    GET http://harbour.example/health/, the browser sending nothing but the request
+    SecurityMiddleware.process_request(request), the path it searches 'health/'  ->  None
+    log_response('%s: %s', ...) to django.request, the response not yet logged
+      log, WARNING to django.request: Not Found: /health/
+    start_response("404 Not Found", headers)
+      no Location
+    GET http://harbour.example/x/health/, the browser sending nothing but the request
+    SecurityMiddleware.process_request(request), the path it searches 'x/health/'  ->  an HttpResponsePermanentRedirect, status 301, Location 'https://harbour.example/x/health/'
+    start_response("301 Moved Permanently", headers)
+      Location: https://harbour.example/x/health/
+    GET http://harbour.example/healthy/, the browser sending nothing but the request
+    SecurityMiddleware.process_request(request), the path it searches 'healthy/'  ->  an HttpResponsePermanentRedirect, status 301, Location 'https://harbour.example/healthy/'
+    start_response("301 Moved Permanently", headers)
+      Location: https://harbour.example/healthy/
+
+SECURE_REDIRECT_EXEMPT = [r'^/health/$'], in a handler built under it: which paths, asked for over plain HTTP, are exempt
+    GET http://harbour.example/health/, the browser sending nothing but the request
+    SecurityMiddleware.process_request(request), the path it searches 'health/'  ->  an HttpResponsePermanentRedirect, status 301, Location 'https://harbour.example/health/'
+    start_response("301 Moved Permanently", headers)
+      Location: https://harbour.example/health/
+
+get_token: one secret, two masks, over two GETs of https://harbour.example/berths/ a day apart
+    GET https://harbour.example/berths/, the browser sending nothing but the request
+    get_token(request)
+      _add_new_csrf_cookie(request)
+        _get_new_csrf_string()  ->  'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl'
+        -> 'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl'
+      _mask_cipher_secret('Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl')
+        _get_new_csrf_string()  ->  'ZXFPaDbxyWpP0nBMEUVVsqFISmqZ3uLe'
+        -> 'ZXFPaDbxyWpP0nBMEUVVsqFISmqZ3uLeLXAmXd1pW4iWdyOY0kdkk0PcTmgJJ8mp'
+      -> the token 'ZXFPaDbxyWpP0nBMEUVVsqFISmqZ3uLeLXAmXd1pW4iWdyOY0kdkk0PcTmgJJ8mp'; request.META now holds CSRF_COOKIE 'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl', CSRF_COOKIE_NEEDS_UPDATE True
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+    the server sends the body, 289 bytes; its lines with 'csrfmiddlewaretoken':
+      <input type="hidden" name="csrfmiddlewaretoken" value="ZXFPaDbxyWpP0nBMEUVVsqFISmqZ3uLeLXAmXd1pW4iWdyOY0kdkk0PcTmgJJ8mp">
+    the clock moves on a day, by the script's hand
+    GET https://harbour.example/berths/, the browser sending Cookie: csrftoken=Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl
+    get_token(request)
+      _mask_cipher_secret('Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl')
+        _get_new_csrf_string()  ->  'W62ZAgGzrFZWbZD7VNRgdDEMVXuDyLTd'
+        -> 'W62ZAgGzrFZWbZD7VNRgdDEMVXuDyLTdI6XwnQwrPNS3oaQjhd9F5dOgWXknepuo'
+      -> the token 'W62ZAgGzrFZWbZD7VNRgdDEMVXuDyLTdI6XwnQwrPNS3oaQjhd9F5dOgWXknepuo'; request.META now holds CSRF_COOKIE 'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl', CSRF_COOKIE_NEEDS_UPDATE True
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl; expires=Tue, 12 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+    the server sends the body, 289 bytes; its lines with 'csrfmiddlewaretoken':
+      <input type="hidden" name="csrfmiddlewaretoken" value="W62ZAgGzrFZWbZD7VNRgdDEMVXuDyLTdI6XwnQwrPNS3oaQjhd9F5dOgWXknepuo">
+    first and second are the tokens of the two pages, secret the cookie's value
+    secret  ->  'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl'
+    first[:32]  ->  'ZXFPaDbxyWpP0nBMEUVVsqFISmqZ3uLe'
+    first[32:]  ->  'LXAmXd1pW4iWdyOY0kdkk0PcTmgJJ8mp'
+    second[:32]  ->  'W62ZAgGzrFZWbZD7VNRgdDEMVXuDyLTd'
+    second[32:]  ->  'I6XwnQwrPNS3oaQjhd9F5dOgWXknepuo'
+    [CSRF_ALLOWED_CHARS.index(c) for c in secret[:3]]  ->  [48, 0, 57]
+    [CSRF_ALLOWED_CHARS.index(c) for c in first[:3]]  ->  [51, 49, 31]
+    [CSRF_ALLOWED_CHARS.index(c) for c in first[32:35]]  ->  [37, 49, 26]
+    _unmask_cipher_token(first)  ->  'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl'
+    _unmask_cipher_token(second)  ->  'Wa5HXK02yi3hnlnmwAsz2KkEba0UQOLl'
+    _unmask_cipher_token(first) == _unmask_cipher_token(second) == secret  ->  True
+
+Signer.sign and Signer.unsign: the key signs, and unsign checks with the key
+    signer = Signer(salt="harbour.berths")
+      Signer.__init__(salt='harbour.berths')  ->  its key the harbour's key, its fallback keys none, its salt 'harbour.berths'
+    signed = signer.sign("Endeavour")
+      Signer.sign('Endeavour')
+        Signer.signature('Endeavour'), no key given, so the key, the harbour's key
+          base64_hmac('harbour.berthssigner', 'Endeavour', the harbour's key, 'sha256')
+            salted_hmac('harbour.berthssigner', 'Endeavour', the harbour's key, algorithm='sha256')
+            -> 'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+          -> 'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+        -> 'Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+    signer.unsign(signed)
+      Signer.unsign('Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')
+        Signer.signature('Endeavour'), the key, the harbour's key  ->  'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+        constant_time_compare('LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o', 'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')  ->  True
+        -> 'Endeavour'
+
+Signer.unsign after SECRET_KEY is changed: a signer made before keeps its keys, one made after has the new
+    signer = Signer(salt="harbour.berths"); signed = signer.sign("Endeavour")
+      Signer.__init__(salt='harbour.berths')  ->  its key the harbour's key, its fallback keys none, its salt 'harbour.berths'
+      Signer.sign('Endeavour')
+        Signer.signature('Endeavour'), no key given, so the key, the harbour's key  ->  'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+        -> 'Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    signer.unsign(signed)
+      Signer.unsign('Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')
+        Signer.signature('Endeavour'), the key, the harbour's key  ->  'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+        constant_time_compare('LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o', 'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')  ->  True
+        -> 'Endeavour'
+    Signer(salt="harbour.berths").unsign(signed)
+      Signer.__init__(salt='harbour.berths')  ->  its key the new key, its fallback keys none, its salt 'harbour.berths'
+      Signer.unsign('Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')
+        Signer.signature('Endeavour'), the key, the new key  ->  'RcArs-ivDzmXhdrLfINNYy-d1ShFxI8tbA-bZ0r_mNE'
+        constant_time_compare('LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o', 'RcArs-ivDzmXhdrLfINNYy-d1ShFxI8tbA-bZ0r_mNE')  ->  False
+        raises BadSignature
+      raises BadSignature: Signature "LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o" does not match
+    changed.disable()
+
+Signer.unsign with the old key in SECRET_KEY_FALLBACKS: the key, then the fallback key
+    signed = Signer(salt="harbour.berths").sign("Endeavour")
+      Signer.__init__(salt='harbour.berths')  ->  its key the harbour's key, its fallback keys none, its salt 'harbour.berths'
+      Signer.sign('Endeavour')
+        Signer.signature('Endeavour'), no key given, so the key, the harbour's key  ->  'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+        -> 'Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    rotated = Signer(salt="harbour.berths")
+      Signer.__init__(salt='harbour.berths')  ->  its key the new key, its fallback keys the harbour's key, its salt 'harbour.berths'
+    rotated.unsign(signed)
+      Signer.unsign('Endeavour:LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')
+        Signer.signature('Endeavour'), the key, the new key  ->  'RcArs-ivDzmXhdrLfINNYy-d1ShFxI8tbA-bZ0r_mNE'
+        constant_time_compare('LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o', 'RcArs-ivDzmXhdrLfINNYy-d1ShFxI8tbA-bZ0r_mNE')  ->  False
+        Signer.signature('Endeavour'), the fallback key, the harbour's key  ->  'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o'
+        constant_time_compare('LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o', 'LPnFToX8POawEehjq3oPfj-e16IswWUxtoMceqq-F1o')  ->  True
+        -> 'Endeavour'
+    resigned = rotated.sign("Endeavour")
+      Signer.sign('Endeavour')
+        Signer.signature('Endeavour'), no key given, so the key, the new key  ->  'RcArs-ivDzmXhdrLfINNYy-d1ShFxI8tbA-bZ0r_mNE'
+        -> 'Endeavour:RcArs-ivDzmXhdrLfINNYy-d1ShFxI8tbA-bZ0r_mNE'
+    resigned == signed  ->  False
+    changed.disable()
+
+login rotates the CSRF secret, in an interpreter of its own, with django.contrib.auth, contenttypes and sessions installed, sessions in the database, and SessionMiddleware and AuthenticationMiddleware in the chain: a form rendered before the login is refused after it
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=Vj1n59c23B3ktaWiWcXg9ik4i4WzMOhZ and a page whose form holds the token PDleWQaGozDCVKrotaHUu1XCmhueviREAMcrRPcyh0wMeKdwfcu0t97wubgD7WYt
+    beforehand, unrecorded, GET https://harbour.example/accounts/login/ gave the browser the cookie csrftoken=Vj1n59c23B3ktaWiWcXg9ik4i4WzMOhZ and a page whose form holds the token jNfIDecCHuZKlklt1FaSNlg4EZLJ41OZ4W6VydeuAVSUEk7BNHXYMtqYMTx8GFVO
+    POST https://harbour.example/accounts/login/, the browser sending Cookie: csrftoken=Vj1n59c23B3ktaWiWcXg9ik4i4WzMOhZ; Origin: https://harbour.example; the form csrfmiddlewaretoken=jNfIDecCHuZKlklt1FaSNlg4EZLJ41OZ4W6VydeuAVSUEk7BNHXYMtqYMTx8GFVO, username=harbourmaster
+    log_in(request)
+      login(request, the User 'harbourmaster')
+        SessionBase.cycle_key()
+        rotate_token(request)
+          _add_new_csrf_cookie(request)
+            _get_new_csrf_string()  ->  'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf'
+            -> 'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf'
+          -> None; request.META now holds CSRF_COOKIE 'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf', CSRF_COOKIE_NEEDS_UPDATE True
+      -> an HttpResponse, status 200
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf', CSRF_COOKIE_NEEDS_UPDATE True  ->  the response, Vary added, the cookie csrftoken set
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+      Set-Cookie: sessionid=0mh9u203aj956nv71pfihbl9shsn8ax0; expires=Mon, 26 Oct 2026 09:00:00 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax
+    the server sends the body: 'Logged in.'
+    the browser goes back to the berths page it was given before the login, as after the back button, and posts its form
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf; sessionid=0mh9u203aj956nv71pfihbl9shsn8ax0; Origin: https://harbour.example; the form csrfmiddlewaretoken=PDleWQaGozDCVKrotaHUu1XCmhueviREAMcrRPcyh0wMeKdwfcu0t97wubgD7WYt, ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)  ->  'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf'
+      -> None; request.META holds CSRF_COOKIE 'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)  ->  'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf'
+      _does_token_match('PDleWQaGozDCVKrotaHUu1XCmhueviREAMcrRPcyh0wMeKdwfcu0t97wubgD7WYt', 'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf')
+        _unmask_cipher_token('PDleWQaGozDCVKrotaHUu1XCmhueviREAMcrRPcyh0wMeKdwfcu0t97wubgD7WYt')  ->  'Vj1n59c23B3ktaWiWcXg9ik4i4WzMOhZ'
+        constant_time_compare('Vj1n59c23B3ktaWiWcXg9ik4i4WzMOhZ', 'O5GCOpxuI0YRsKaAC8FUwKZVNE0DmYqf')  ->  False
+        -> False
+      CsrfViewMiddleware._bad_token_message('incorrect', 'POST')  ->  'CSRF token from POST incorrect.'
+      raises RejectRequest
+    CsrfViewMiddleware._reject(request, 'CSRF token from POST incorrect.')
+      log_response('Forbidden (%s): %s', ...) to django.security.csrf, the response not yet logged
+        log, WARNING to django.security.csrf: Forbidden (CSRF token from POST incorrect.): /berths/
+      -> an HttpResponseForbidden, status 403
+    log_response('%s: %s', ...) to django.request, the response already marked as logged
+    start_response("403 Forbidden", headers)
+
+dumps and loads: the berth signed under the salt "harbour.berths", read under it and under another
+    s = signing.dumps({"berth": 4, "ship": "Endeavour"}, salt="harbour.berths")
+      dumps({'berth': 4, 'ship': 'Endeavour'}, salt='harbour.berths')
+        Signer.__init__(salt='harbour.berths')  (a TimestampSigner)  ->  its key the harbour's key, its fallback keys none, its salt 'harbour.berths'
+        Signer.sign_object({'berth': 4, 'ship': 'Endeavour'}, compress=False)
+          TimestampSigner.sign('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9')
+            TimestampSigner.timestamp()  ->  '1xGBt2'
+            Signer.sign('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2')
+              Signer.signature('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2'), no key given, so the key, the harbour's key
+                base64_hmac('harbour.berthssigner', 'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2', the harbour's key, 'sha256')  ->  '47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+                -> '47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+              -> 'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+            -> 'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+          -> 'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+        -> 'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+    s  ->  'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+    signing.b64_decode(s.split(":")[0].encode())  ->  b'{"berth":4,"ship":"Endeavour"}'
+    signing.b62_decode(s.split(":")[1])  ->  1791795600
+    datetime.datetime.fromtimestamp(signing.b62_decode(s.split(":")[1]), datetime.UTC).isoformat()  ->  '2026-10-12T09:00:00+00:00'
+    signing.loads(s, salt="harbour.berths")  ->  {'berth': 4, 'ship': 'Endeavour'}
+    signing.loads(s, salt="harbour.invoices")  ->  raises BadSignature: Signature "47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s" does not match
+    signing.loads(s)  ->  raises BadSignature: Signature "47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s" does not match
+
+loads two hours after dumps, the clock moved on by the script's hand: the maximum age
+    s = signing.dumps({"berth": 4, "ship": "Endeavour"}, salt="harbour.berths")
+    the clock moves on two hours, by the script's hand
+    signing.loads(s, salt="harbour.berths", max_age=3600)
+      TimestampSigner.unsign('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s', max_age=3600)  raises SignatureExpired
+      raises SignatureExpired: Signature age 7200.0 > 3600 seconds
+    signing.loads(s, salt="harbour.berths", max_age=timedelta(hours=1))
+      TimestampSigner.unsign('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s', max_age=datetime.timedelta(seconds=3600))  raises SignatureExpired
+      raises SignatureExpired: Signature age 7200.0 > 3600.0 seconds
+    signing.loads(s, salt="harbour.berths", max_age=timedelta(hours=3))
+      TimestampSigner.unsign('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s', max_age=datetime.timedelta(seconds=10800))  ->  'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9'
+    signing.loads(s, salt="harbour.berths")
+      TimestampSigner.unsign('eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s', max_age=None)  ->  'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9'
+
+loads of the berth with its JSON changed to berth 5, two hours on: refused as forged, not as old
+    s = signing.dumps({"berth": 4, "ship": "Endeavour"}, salt="harbour.berths")
+    the clock moves on two hours, by the script's hand
+    forged = signing.b64_encode(b'{"berth":5,"ship":"Endeavour"}').decode() + s[s.index(":"):]
+    forged  ->  'eyJiZXJ0aCI6NSwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s'
+    signing.loads(forged, salt="harbour.berths", max_age=3600)
+      TimestampSigner.unsign('eyJiZXJ0aCI6NSwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s', max_age=3600)
+        Signer.unsign('eyJiZXJ0aCI6NSwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2:47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s')
+          Signer.signature('eyJiZXJ0aCI6NSwic2hpcCI6IkVuZGVhdm91ciJ9:1xGBt2'), the key, the harbour's key  ->  'YSbF_VgjbtGF5doByH7gSvy-a2-aj4n6kr9Paz5vDUo'
+          constant_time_compare('47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s', 'YSbF_VgjbtGF5doByH7gSvy-a2-aj4n6kr9Paz5vDUo')  ->  False
+          raises BadSignature
+      raises BadSignature: Signature "47wJSFtm65vWL2pHocxqabmba8NeN5ousKdlcRR2x9s" does not match
+
+Signer.sign_object with compress=True: the berth kept as it is, eight berths compressed
+    signer = Signer(salt="harbour.berths")
+    eight = {"berths": [{"berth": n, "ship": "Endeavour"} for n in range(8)]}
+    small = signer.sign_object({"berth": 4, "ship": "Endeavour"}, compress=True)
+      Signer.sign_object({'berth': 4, 'ship': 'Endeavour'}, compress=True)  ->  'eyJiZXJ0aCI6NCwic2hpcCI6IkVuZGVhdm91ciJ9:cDQ7bTnR5T05SM5naitmugeh6jjDhcOzN2-0VgH_7PI'
+    large = signer.sign_object(eight, compress=True)
+      Signer.sign_object(a dict of 260 bytes as JSON, compress=True)  ->  '.eJyrVkpKLSrJKFayiq6GMJWsDHSUijMyC5SslFzzUlITy_JLi5RqdeDShviljfBLG-OXNsEvbYpf2gy_tDk26dhaAMzmVjc:rpfiHek7sNRaUm8dv_zP7OOCJKMfIAKwpjSvpr4Q3zc'
+    len(signer.sign_object(eight))  ->  391
+    len(large)  ->  140
+    large[:4]  ->  '.eJy'
+    signer.unsign_object(large) == eight  ->  True
+
+Signer(sep=...): of nine separators, which Signer.__init__ refuses
+    Signer(sep='^').sep  ->  raises ValueError: Unsafe Signer separator: '^' (cannot be empty or consist of only A-z0-9-_=)
+    Signer(sep='[').sep  ->  raises ValueError: Unsafe Signer separator: '[' (cannot be empty or consist of only A-z0-9-_=)
+    Signer(sep=']').sep  ->  raises ValueError: Unsafe Signer separator: ']' (cannot be empty or consist of only A-z0-9-_=)
+    Signer(sep='\\').sep  ->  raises ValueError: Unsafe Signer separator: '\\' (cannot be empty or consist of only A-z0-9-_=)
+    Signer(sep='`').sep  ->  raises ValueError: Unsafe Signer separator: '`' (cannot be empty or consist of only A-z0-9-_=)
+    Signer(sep='_').sep  ->  raises ValueError: Unsafe Signer separator: '_' (cannot be empty or consist of only A-z0-9-_=)
+    Signer(sep='/').sep  ->  '/'
+    Signer(sep='.').sep  ->  '.'
+    Signer(sep='').sep  ->  raises ValueError: Unsafe Signer separator: '' (cannot be empty or consist of only A-z0-9-_=)
+
+POST https://harbour.example/berths/, other sites' Origins, under CSRF_TRUSTED_ORIGINS = ['https://*.harbour.example', 'https://pay.example'], with a handler built and used under it
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=51S2OoGkpInvEqyV04BbblBIlPNKT1z9 and a page whose form holds the token jwMYSJ6ba5ZIncQTr5Vs4aT47DlLq5S4enuQwXClpDc3RseEhZmt5lkCiiYl9Wh3
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=51S2OoGkpInvEqyV04BbblBIlPNKT1z9; Origin: https://pilots.harbour.example; the form csrfmiddlewaretoken=jwMYSJ6ba5ZIncQTr5Vs4aT47DlLq5S4enuQwXClpDc3RseEhZmt5lkCiiYl9Wh3, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'https://pilots.harbour.example'
+      HttpRequest.get_host(), the Host 'harbour.example'
+        is_same_domain('harbour.example', 'harbour.example')  ->  True
+        -> 'harbour.example'
+      CsrfViewMiddleware.allowed_origins_exact, the body of the cached_property  ->  {'https://pay.example'}
+      CsrfViewMiddleware.allowed_origin_subdomains, the body of the cached_property  ->  defaultdict {'https': ['.harbour.example']}
+      is_same_domain('pilots.harbour.example', '.harbour.example')  ->  True
+      -> True
+    start_response("200 OK", headers)
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=51S2OoGkpInvEqyV04BbblBIlPNKT1z9; Origin: http://pilots.harbour.example; the form csrfmiddlewaretoken=jwMYSJ6ba5ZIncQTr5Vs4aT47DlLq5S4enuQwXClpDc3RseEhZmt5lkCiiYl9Wh3, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'http://pilots.harbour.example'
+      HttpRequest.get_host(), the Host 'harbour.example'
+        is_same_domain('harbour.example', 'harbour.example')  ->  True
+        -> 'harbour.example'
+      -> False
+    log, WARNING to django.security.csrf: Forbidden (Origin checking failed - http://pilots.harbour.example does not match any trusted origins.): /berths/
+    start_response("403 Forbidden", headers)
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=51S2OoGkpInvEqyV04BbblBIlPNKT1z9; Origin: https://a.pay.example; the form csrfmiddlewaretoken=jwMYSJ6ba5ZIncQTr5Vs4aT47DlLq5S4enuQwXClpDc3RseEhZmt5lkCiiYl9Wh3, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'https://a.pay.example'
+      HttpRequest.get_host(), the Host 'harbour.example'
+        is_same_domain('harbour.example', 'harbour.example')  ->  True
+        -> 'harbour.example'
+      is_same_domain('a.pay.example', '.harbour.example')  ->  False
+      -> False
+    log, WARNING to django.security.csrf: Forbidden (Origin checking failed - https://a.pay.example does not match any trusted origins.): /berths/
+    start_response("403 Forbidden", headers)
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=51S2OoGkpInvEqyV04BbblBIlPNKT1z9; Origin: https://pay.example; the form csrfmiddlewaretoken=jwMYSJ6ba5ZIncQTr5Vs4aT47DlLq5S4enuQwXClpDc3RseEhZmt5lkCiiYl9Wh3, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'https://pay.example'
+      HttpRequest.get_host(), the Host 'harbour.example'
+        is_same_domain('harbour.example', 'harbour.example')  ->  True
+        -> 'harbour.example'
+      -> True
+    start_response("200 OK", headers)
+
+POST https://harbour.example/berths/, a Referer and no Origin, under CSRF_TRUSTED_ORIGINS = ['https://*.harbour.example', 'https://pay.example'], with a handler built and used under it
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=1dKFbZYNIgnjQ6DfRBbauuWUJ5eB8kmz and a page whose form holds the token 31LBfFw02BsUL5BV9qLURX1ZBIIEvpKDU4l6gukDAHF3r140QRMUbhNJaDM5tzW2
+    POST https://harbour.example/berths/, the browser sending Referer: https://harbour.example/berths/; Cookie: csrftoken=1dKFbZYNIgnjQ6DfRBbauuWUJ5eB8kmz; the form csrfmiddlewaretoken=31LBfFw02BsUL5BV9qLURX1ZBIIEvpKDU4l6gukDAHF3r140QRMUbhNJaDM5tzW2, ship=Endeavour
+    CsrfViewMiddleware._check_referer(request), the Referer 'https://harbour.example/berths/'
+      CsrfViewMiddleware.csrf_trusted_origins_hosts, the body of the cached_property  ->  ['.harbour.example', 'pay.example']
+      is_same_domain('harbour.example', '.harbour.example')  ->  True
+      -> None
+    start_response("200 OK", headers)
+    POST https://harbour.example/berths/, the browser sending Referer: https://harbour.example:8443/berths/; Cookie: csrftoken=1dKFbZYNIgnjQ6DfRBbauuWUJ5eB8kmz; the form csrfmiddlewaretoken=31LBfFw02BsUL5BV9qLURX1ZBIIEvpKDU4l6gukDAHF3r140QRMUbhNJaDM5tzW2, ship=Endeavour
+    CsrfViewMiddleware._check_referer(request), the Referer 'https://harbour.example:8443/berths/'
+      is_same_domain('harbour.example:8443', '.harbour.example')  ->  False
+      is_same_domain('harbour.example:8443', 'pay.example')  ->  False
+      HttpRequest.get_host(), the Host 'harbour.example'
+        is_same_domain('harbour.example', 'harbour.example')  ->  True
+        -> 'harbour.example'
+      is_same_domain('harbour.example:8443', 'harbour.example')  ->  False
+      raises RejectRequest
+    log, WARNING to django.security.csrf: Forbidden (Referer checking failed - https://harbour.example:8443/berths/ does not match any trusted origins.): /berths/
+    start_response("403 Forbidden", headers)
+    POST https://harbour.example/berths/, the browser sending Referer: http://harbour.example/berths/; Cookie: csrftoken=1dKFbZYNIgnjQ6DfRBbauuWUJ5eB8kmz; the form csrfmiddlewaretoken=31LBfFw02BsUL5BV9qLURX1ZBIIEvpKDU4l6gukDAHF3r140QRMUbhNJaDM5tzW2, ship=Endeavour
+    CsrfViewMiddleware._check_referer(request), the Referer 'http://harbour.example/berths/'  raises RejectRequest
+    log, WARNING to django.security.csrf: Forbidden (Referer checking failed - Referer is insecure while host is secure.): /berths/
+    start_response("403 Forbidden", headers)
+    POST https://harbour.example/berths/, the browser sending Referer: https://pilots.harbour.example/berths/; Cookie: csrftoken=1dKFbZYNIgnjQ6DfRBbauuWUJ5eB8kmz; the form csrfmiddlewaretoken=31LBfFw02BsUL5BV9qLURX1ZBIIEvpKDU4l6gukDAHF3r140QRMUbhNJaDM5tzW2, ship=Endeavour
+    CsrfViewMiddleware._check_referer(request), the Referer 'https://pilots.harbour.example/berths/'
+      is_same_domain('pilots.harbour.example', '.harbour.example')  ->  True
+      -> None
+    start_response("200 OK", headers)
+
+CSRF_TRUSTED_ORIGINS changed after a chain was built, the browser posting with Origin https://pay.example: that chain keeps its first reading, a chain built after reads the new
+    before = WSGIHandler()
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=cNVfsVUQjzg759ll5oiwRhHo65gzoChG and a page whose form holds the token jItDASvRe23Cx2a4iwIx9p395aIgtq19lleISDfxnr9zs1lfdKQTQwAn15OFHS8F
+    the browser posts, from now on, with Origin: https://pay.example
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=cNVfsVUQjzg759ll5oiwRhHo65gzoChG; Origin: https://pay.example; the form csrfmiddlewaretoken=jItDASvRe23Cx2a4iwIx9p395aIgtq19lleISDfxnr9zs1lfdKQTQwAn15OFHS8F, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'https://pay.example'
+      CsrfViewMiddleware.allowed_origins_exact, the body of the cached_property  ->  set()
+      CsrfViewMiddleware.allowed_origin_subdomains, the body of the cached_property  ->  defaultdict {}
+      -> False
+    log, WARNING to django.security.csrf: Forbidden (Origin checking failed - https://pay.example does not match any trusted origins.): /berths/
+    start_response("403 Forbidden", headers)
+    changed = override_settings(CSRF_TRUSTED_ORIGINS=["https://pay.example"]); changed.enable()
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=cNVfsVUQjzg759ll5oiwRhHo65gzoChG; Origin: https://pay.example; the form csrfmiddlewaretoken=jItDASvRe23Cx2a4iwIx9p395aIgtq19lleISDfxnr9zs1lfdKQTQwAn15OFHS8F, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'https://pay.example'  ->  False
+    log, WARNING to django.security.csrf: Forbidden (Origin checking failed - https://pay.example does not match any trusted origins.): /berths/
+    start_response("403 Forbidden", headers)
+    after = WSGIHandler()
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=cNVfsVUQjzg759ll5oiwRhHo65gzoChG; Origin: https://pay.example; the form csrfmiddlewaretoken=jItDASvRe23Cx2a4iwIx9p395aIgtq19lleISDfxnr9zs1lfdKQTQwAn15OFHS8F, ship=Endeavour
+    CsrfViewMiddleware._origin_verified(request), the Origin 'https://pay.example'
+      CsrfViewMiddleware.allowed_origins_exact, the body of the cached_property  ->  {'https://pay.example'}
+      -> True
+    start_response("200 OK", headers)
+    changed.disable()
+
+POST https://harbour.example/berths/, the cookie "short", set by the script: refused; the 403 sets a new cookie, and the next page's token is accepted
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=6RXJEk4oAXdSxXTP6FyESrmjXe88lc6v and a page whose form holds the token l9TyMkGo8l8vswLn432lV25BVQgLUX7ahQG7guACy8bdPju20yqPDjhKIUeJ5Z3v
+    the script sets the browser's cookie csrftoken to "short"; the browser keeps the page
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=short; Origin: https://harbour.example; the form csrfmiddlewaretoken=l9TyMkGo8l8vswLn432lV25BVQgLUX7ahQG7guACy8bdPju20yqPDjhKIUeJ5Z3v, ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('short'), 5 characters  raises InvalidTokenFormat
+      _add_new_csrf_cookie(request)  ->  'O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP'
+      -> None; request.META holds CSRF_COOKIE 'O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP', CSRF_COOKIE_NEEDS_UPDATE True
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('short'), 5 characters  raises InvalidTokenFormat
+      RejectRequest('CSRF cookie has incorrect length.')
+      raises RejectRequest
+    CsrfViewMiddleware._reject(request, 'CSRF cookie has incorrect length.')
+      log, WARNING to django.security.csrf: Forbidden (CSRF cookie has incorrect length.): /berths/
+      -> an HttpResponseForbidden, status 403
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP', CSRF_COOKIE_NEEDS_UPDATE True  ->  the response, Vary added, the cookie csrftoken set
+    start_response("403 Forbidden", headers)
+      Set-Cookie: csrftoken=O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+    GET https://harbour.example/berths/, the browser sending Cookie: csrftoken=O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=O138ZjQ2oUYYwj3rCNIvMi07le0iM2dP; Origin: https://harbour.example; the form csrfmiddlewaretoken=usfEDjok9bPOnhtYHwKJjWntyjzWaYBo8j8Css4cnVDCJqmf99i4V4dqJnp4MQE3, ship=Endeavour
+    start_response("200 OK", headers)
+    the server sends the body: 'Berth requested.'
+
+POST https://harbour.example/berths/, a cookie of 64 characters, a secret masked as an older Django set it, cookie and token made by the script: accepted and no cookie set; the next page sets the 32
+    secret = _get_new_csrf_string()
+    browser.cookies["csrftoken"] = _mask_cipher_secret(secret)
+    token = _mask_cipher_secret(secret)
+    the browser's form holds that token, as the older Django's page gave it
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=EZtxTeXJp8PrNMTWhiAgJ9MIKEfMKjoIhSaCIx6fzZJnxl2FVeUxTneFD0JXKC5d; Origin: https://harbour.example; the form csrfmiddlewaretoken=EmFmXAxWaTRigCkkieOkuOeABbmBYjPahfmrMTGskKLe0bt3Wa8BE2GxuxQMYCwF, ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _unmask_cipher_token('EZtxTeXJp8PrNMTWhiAgJ9MIKEfMKjoIhSaCIx6fzZJnxl2FVeUxTneFD0JXKC5d')  ->  'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+        -> 'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+      -> None; request.META holds CSRF_COOKIE 'N3RfZtjGk146UJjTO6urkoC73wElatRF', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)
+        _unmask_cipher_token('EZtxTeXJp8PrNMTWhiAgJ9MIKEfMKjoIhSaCIx6fzZJnxl2FVeUxTneFD0JXKC5d')  ->  'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+        -> 'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+      _does_token_match('EmFmXAxWaTRigCkkieOkuOeABbmBYjPahfmrMTGskKLe0bt3Wa8BE2GxuxQMYCwF', 'N3RfZtjGk146UJjTO6urkoC73wElatRF')
+        _unmask_cipher_token('EmFmXAxWaTRigCkkieOkuOeABbmBYjPahfmrMTGskKLe0bt3Wa8BE2GxuxQMYCwF')  ->  'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+        -> True
+      -> None
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'N3RfZtjGk146UJjTO6urkoC73wElatRF', no CSRF_COOKIE_NEEDS_UPDATE  ->  the response, unchanged
+    start_response("200 OK", headers)
+      no Set-Cookie
+    the server sends the body: 'Berth requested.'
+    GET https://harbour.example/berths/, the browser sending Cookie: csrftoken=EZtxTeXJp8PrNMTWhiAgJ9MIKEfMKjoIhSaCIx6fzZJnxl2FVeUxTneFD0JXKC5d
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _unmask_cipher_token('EZtxTeXJp8PrNMTWhiAgJ9MIKEfMKjoIhSaCIx6fzZJnxl2FVeUxTneFD0JXKC5d')  ->  'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+        -> 'N3RfZtjGk146UJjTO6urkoC73wElatRF'
+      -> None; request.META holds CSRF_COOKIE 'N3RfZtjGk146UJjTO6urkoC73wElatRF', no CSRF_COOKIE_NEEDS_UPDATE
+    get_token(request)  ->  the token 'n9UW8qT1VgolDk5uoNtzhAZddunZ7gRu02B1XJ2x57ihnTed2JNQrOra6QRa7zyZ'; request.META now holds CSRF_COOKIE 'N3RfZtjGk146UJjTO6urkoC73wElatRF', CSRF_COOKIE_NEEDS_UPDATE True
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'N3RfZtjGk146UJjTO6urkoC73wElatRF', CSRF_COOKIE_NEEDS_UPDATE True  ->  the response, Vary added, the cookie csrftoken set
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=N3RfZtjGk146UJjTO6urkoC73wElatRF; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+
+POST https://harbour.example/berths/, the token in X-CSRFToken and not in the form
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ and a page whose form holds the token 7znPWogMk3eJmjttSvecwI0g0tM4Hjw8I9ndB4dz3foIZfL4pauTDvku6onQBsdH
+    X-CSRFToken carries the cookie's value
+    POST https://harbour.example/berths/, the browser sending X-CSRFToken: LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ; Cookie: csrftoken=LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ; Origin: https://harbour.example; the form ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+        -> 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'
+      -> None; request.META holds CSRF_COOKIE 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+        -> 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'
+      _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+      _does_token_match('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ', 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ')  ->  True
+      -> None
+    start_response("200 OK", headers)
+    X-CSRFToken carries the page's token
+    POST https://harbour.example/berths/, the browser sending X-CSRFToken: 7znPWogMk3eJmjttSvecwI0g0tM4Hjw8I9ndB4dz3foIZfL4pauTDvku6onQBsdH; Cookie: csrftoken=LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ; Origin: https://harbour.example; the form ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+        -> 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'
+      -> None; request.META holds CSRF_COOKIE 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+        -> 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'
+      _check_token_format('7znPWogMk3eJmjttSvecwI0g0tM4Hjw8I9ndB4dz3foIZfL4pauTDvku6onQBsdH'), 64 characters
+      _does_token_match('7znPWogMk3eJmjttSvecwI0g0tM4Hjw8I9ndB4dz3foIZfL4pauTDvku6onQBsdH', 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ')  ->  True
+      -> None
+    start_response("200 OK", headers)
+    X-CSRFToken carries a malformed token
+    POST https://harbour.example/berths/, the browser sending X-CSRFToken: short; Cookie: csrftoken=LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ; Origin: https://harbour.example; the form ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+        -> 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'
+      -> None; request.META holds CSRF_COOKIE 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)
+        _check_token_format('LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'), 32 characters
+        -> 'LKayPQ7XTmk9N6sLHPqRhXuog5LW4jRJ'
+      _check_token_format('short'), 5 characters  raises InvalidTokenFormat
+      CsrfViewMiddleware._bad_token_message('has incorrect length', 'HTTP_X_CSRFTOKEN')  ->  "CSRF token from the 'X-Csrftoken' HTTP header has incorrect length."
+      raises RejectRequest
+    CsrfViewMiddleware._reject(request, "CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.")
+      log, WARNING to django.security.csrf: Forbidden (CSRF token from the 'X-Csrftoken' HTTP header has incorrect length.): /berths/
+      -> an HttpResponseForbidden, status 403
+    start_response("403 Forbidden", headers)
+
+PUT https://harbour.example/berths/ with the page's token in a form-encoded body, the browser sending Origin as for a POST: refused
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=VaAwatjtcX2ZqfyhUmEWW60UWMz1QZ6K and a page whose form holds the token qOmRCAgLZ10HFzROGhyR0EmzxXQMv79SbOMdCTp41OSwVEfVqt2DMAcjjzfDbW5s
+    PUT https://harbour.example/berths/, the browser sending Origin: https://harbour.example; Cookie: csrftoken=VaAwatjtcX2ZqfyhUmEWW60UWMz1QZ6K; the body 'csrfmiddlewaretoken=qOmRCAgLZ10HFzROGhyR0EmzxXQMv79SbOMdCTp41OSwVEfVqt2DMAcjjzfDbW5s&ship=Endeavour', application/x-www-form-urlencoded
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)  ->  'VaAwatjtcX2ZqfyhUmEWW60UWMz1QZ6K'
+      -> None; request.META holds CSRF_COOKIE 'VaAwatjtcX2ZqfyhUmEWW60UWMz1QZ6K', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._check_token(request)
+      CsrfViewMiddleware._get_secret(request)  ->  'VaAwatjtcX2ZqfyhUmEWW60UWMz1QZ6K'
+      RejectRequest('CSRF token missing.')
+      raises RejectRequest
+    CsrfViewMiddleware._reject(request, 'CSRF token missing.')
+      log, WARNING to django.security.csrf: Forbidden (CSRF token missing.): /berths/
+      -> an HttpResponseForbidden, status 403
+    start_response("403 Forbidden", headers)
+
+GET https://harbour.example/protected/, a view under csrf_protect, through the harbour's chain: two instances of CsrfViewMiddleware, and the cookie set once
+    GET https://harbour.example/protected/, the browser sending nothing but the request
+    CsrfViewMiddleware.process_request(request)  (the chain's)  ->  None; request.META holds no CSRF_COOKIE
+    CsrfViewMiddleware.process_view(request, protected, (), {}), for a 'GET'  (the chain's)
+      CsrfViewMiddleware._accept(request)  (the chain's)
+      -> None
+    CsrfViewMiddleware.process_request(request)  (the decorator's)  ->  None; request.META holds no CSRF_COOKIE
+    CsrfViewMiddleware.process_view(request, protected, (), {}), for a 'GET'  (the decorator's)  ->  None
+    protected(request)
+      get_token(request)  ->  the token 'QVOqkMoRJKtIQoaijivteMfNncSxd4DwWQCCn3vMlR5GqTG3ktsjHv2HwmGwzSCT'; request.META now holds CSRF_COOKIE 'g5Ymdrh5MhM8KFGVbl70DTX4jkY9wY9x', CSRF_COOKIE_NEEDS_UPDATE True
+      -> an HttpResponse, status 200
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'g5Ymdrh5MhM8KFGVbl70DTX4jkY9wY9x', CSRF_COOKIE_NEEDS_UPDATE True  (the decorator's)
+      CsrfViewMiddleware._set_csrf_cookie(request, response)  (the decorator's)
+      -> the response, Vary added, the cookie csrftoken set
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'g5Ymdrh5MhM8KFGVbl70DTX4jkY9wY9x', CSRF_COOKIE_NEEDS_UPDATE False  (the chain's)  ->  the response, unchanged
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=g5Ymdrh5MhM8KFGVbl70DTX4jkY9wY9x; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+
+GET https://harbour.example/protected/, with a handler built with RotatesOnTheWayOut, the script's, after CsrfViewMiddleware in MIDDLEWARE: rotate_token after the decorator's process_response, and the chain's sends the new secret
+    GET https://harbour.example/protected/, the browser sending nothing but the request
+    CsrfViewMiddleware.process_request(request)  (the chain's)  ->  None; request.META holds no CSRF_COOKIE
+    CsrfViewMiddleware.process_view(request, protected, (), {}), for a 'GET'  (the chain's)
+      CsrfViewMiddleware._accept(request)  (the chain's)
+      -> None
+    CsrfViewMiddleware.process_request(request)  (the decorator's)  ->  None; request.META holds no CSRF_COOKIE
+    CsrfViewMiddleware.process_view(request, protected, (), {}), for a 'GET'  (the decorator's)  ->  None
+    protected(request)
+      get_token(request)  ->  the token 'o9JnAvxlqBfbNNhpi77y6dRfopCtzvOiebu32RhDb8De7M3LQXeA4nbk4glNElG6'; request.META now holds CSRF_COOKIE '0cVQCwUsVHydu9WwI0hc8kufQ1Tuf02Y', CSRF_COOKIE_NEEDS_UPDATE True
+      -> an HttpResponse, status 200
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE '0cVQCwUsVHydu9WwI0hc8kufQ1Tuf02Y', CSRF_COOKIE_NEEDS_UPDATE True  (the decorator's)
+      CsrfViewMiddleware._set_csrf_cookie(request, response)  (the decorator's)
+      -> the response, Vary added, the cookie csrftoken set
+    RotatesOnTheWayOut.process_response(request, response)
+      rotate_token(request)  ->  None; request.META now holds CSRF_COOKIE 'l3dWO2jxrs0uVbImrPpWOds5HhyU4epq', CSRF_COOKIE_NEEDS_UPDATE True
+      -> the response, unchanged
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'l3dWO2jxrs0uVbImrPpWOds5HhyU4epq', CSRF_COOKIE_NEEDS_UPDATE True  (the chain's)
+      CsrfViewMiddleware._set_csrf_cookie(request, response)  (the chain's)
+      -> the response, the cookie csrftoken set
+    start_response("200 OK", headers)
+      Set-Cookie: csrftoken=l3dWO2jxrs0uVbImrPpWOds5HhyU4epq; expires=Mon, 11 Oct 2027 09:00:00 GMT; Max-Age=31449600; Path=/; SameSite=Lax
+
+CSRF_USE_SESSIONS = True, sessions in signed cookies: two GETs of https://harbour.example/berths/ and a POST, with a handler built under CSRF_USE_SESSIONS = True, SessionMiddleware before CsrfViewMiddleware, and SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+    GET https://harbour.example/berths/, the browser sending nothing but the request
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)  ->  None
+      -> None; request.META holds no CSRF_COOKIE
+    get_token(request)  ->  the token 'RkUeRkrgZFDJlElsk8JDkLVyRs9BxWvPvcqXyKJDWxBh9tS9c4dZCpcpry1pX45z'; request.META now holds CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', CSRF_COOKIE_NEEDS_UPDATE True
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', CSRF_COOKIE_NEEDS_UPDATE True
+      CsrfViewMiddleware._set_csrf_cookie(request, response)  ->  the session holds 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU' under '_csrftoken', the session modified True
+      -> the response, unchanged
+    SessionMiddleware.process_response(request, response), the session accessed True, modified True  ->  the response, Vary added, the cookie sessionid set
+    start_response("200 OK", headers)
+      Vary: Cookie
+      Set-Cookie: sessionid=eyJfY3NyZnRva2VuIjoiTzJHVFJBc3g3MjhJWVpIUjI2RXdzT3IxS2cyWUFpS1UifQ:1xGBt2:Kl82XBOCDDQM4oPuTIRtgAjBqPReNaMwEUH7Bd7Sc6A; expires=Mon, 26 Oct 2026 09:00:00 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax
+    GET https://harbour.example/berths/, the browser sending Cookie: sessionid=eyJfY3NyZnRva2VuIjoiTzJHVFJBc3g3MjhJWVpIUjI2RXdzT3IxS2cyWUFpS1UifQ:1xGBt2:Kl82XBOCDDQM4oPuTIRtgAjBqPReNaMwEUH7Bd7Sc6A
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)  ->  'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU'
+      -> None; request.META holds CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', no CSRF_COOKIE_NEEDS_UPDATE
+    get_token(request)  ->  the token 'lHkoXGwS9loRiyPxx6vN2DYMLED88IztZzQ7E6Of6dmp6nmep2Z9khfDlKvWyQ9d'; request.META now holds CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', CSRF_COOKIE_NEEDS_UPDATE True
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', CSRF_COOKIE_NEEDS_UPDATE True
+      CsrfViewMiddleware._set_csrf_cookie(request, response)  ->  the session holds 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU' under '_csrftoken', the session modified False
+      -> the response, unchanged
+    SessionMiddleware.process_response(request, response), the session accessed True, modified False  ->  the response, Vary added
+    start_response("200 OK", headers)
+      Vary: Cookie
+      no Set-Cookie
+    POST https://harbour.example/berths/, the browser sending Cookie: sessionid=eyJfY3NyZnRva2VuIjoiTzJHVFJBc3g3MjhJWVpIUjI2RXdzT3IxS2cyWUFpS1UifQ:1xGBt2:Kl82XBOCDDQM4oPuTIRtgAjBqPReNaMwEUH7Bd7Sc6A; Origin: https://harbour.example; the form csrfmiddlewaretoken=lHkoXGwS9loRiyPxx6vN2DYMLED88IztZzQ7E6Of6dmp6nmep2Z9khfDlKvWyQ9d, ship=Endeavour
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)  ->  'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU'
+      -> None; request.META holds CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', no CSRF_COOKIE_NEEDS_UPDATE
+    CsrfViewMiddleware._get_secret(request)  ->  'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU'
+    CsrfViewMiddleware.process_response(request, response), request.META holding CSRF_COOKIE 'O2GTRAsx728IYZHR26EwsOr1Kg2YAiKU', no CSRF_COOKIE_NEEDS_UPDATE  ->  the response, unchanged
+    SessionMiddleware.process_response(request, response), the session accessed True, modified False  ->  the response, Vary added
+    start_response("200 OK", headers)
+      Vary: Cookie
+      no Set-Cookie
+    the server sends the body: 'Berth requested.'
+
+CSRF_USE_SESSIONS = True without SessionMiddleware: GET https://harbour.example/berths/, with a handler built under that setting and the harbour's MIDDLEWARE
+    GET https://harbour.example/berths/, the browser sending nothing but the request
+    CsrfViewMiddleware.process_request(request)
+      CsrfViewMiddleware._get_secret(request)  raises ImproperlyConfigured
+    response_for_exception(request, ImproperlyConfigured)
+      signal got_request_exception, for ImproperlyConfigured
+      handle_uncaught_exception(request, resolver, exc_info)
+        CsrfViewMiddleware.process_request(request)  (on an instance of _EnsureCsrfToken, the class of requires_csrf_token)
+          CsrfViewMiddleware._get_secret(request)  (on an instance of _EnsureCsrfToken, the class of requires_csrf_token)  raises ImproperlyConfigured
+    response_for_exception(request, ImproperlyConfigured)
+      signal got_request_exception, for ImproperlyConfigured
+      handle_uncaught_exception(request, resolver, exc_info)
+        CsrfViewMiddleware.process_request(request)  (on an instance of _EnsureCsrfToken, the class of requires_csrf_token)
+          CsrfViewMiddleware._get_secret(request)  (on an instance of _EnsureCsrfToken, the class of requires_csrf_token)  raises ImproperlyConfigured
+    the handler raises ImproperlyConfigured to the server: CSRF_USE_SESSIONS is enabled, but request.session is not set. SessionMiddleware must appear before CsrfViewMiddleware in MIDDLEWARE.
+
+Settings changed after a chain was built: SecurityMiddleware keeps what it read when the chain was built, XFrameOptionsMiddleware reads X_FRAME_OPTIONS at each response
+    before = WSGIHandler()
+      SecurityMiddleware.__init__(get_response)  ->  sts_seconds 3600, sts_preload False, referrer_policy 'same-origin', redirect_exempt []
+    GET https://harbour.example/berths/ through the handler before, the browser sending nothing but the request
+    XFrameOptionsMiddleware.get_xframe_options_value(request, response)  ->  'DENY'
+    start_response("200 OK", headers)
+      X-Frame-Options: DENY
+      Strict-Transport-Security: max-age=3600
+      Referrer-Policy: same-origin
+    changed = override_settings(SECURE_HSTS_PRELOAD=True, SECURE_REFERRER_POLICY='no-referrer, strict-origin-when-cross-origin', X_FRAME_OPTIONS='sameorigin'); changed.enable()
+    after = WSGIHandler()
+      SecurityMiddleware.__init__(get_response)  ->  sts_seconds 3600, sts_preload True, referrer_policy 'no-referrer, strict-origin-when-cross-origin', redirect_exempt []
+    GET https://harbour.example/berths/ through the handler before, the browser sending nothing but the request
+    XFrameOptionsMiddleware.get_xframe_options_value(request, response)  ->  'SAMEORIGIN'
+    start_response("200 OK", headers)
+      X-Frame-Options: SAMEORIGIN
+      Strict-Transport-Security: max-age=3600
+      Referrer-Policy: same-origin
+    GET https://harbour.example/berths/ through the handler after, the browser sending nothing but the request
+    XFrameOptionsMiddleware.get_xframe_options_value(request, response)  ->  'SAMEORIGIN'
+    start_response("200 OK", headers)
+      X-Frame-Options: SAMEORIGIN
+      Strict-Transport-Security: max-age=3600; preload
+      Referrer-Policy: no-referrer,strict-origin-when-cross-origin
+    changed.disable()
+
+GET https://harbour.example/tides/ and /chart/: views under xframe_options_exempt and xframe_options_sameorigin
+    GET https://harbour.example/tides/, the browser sending nothing but the request
+    the wrapper xframe_options_exempt made, around tides  ->  an HttpResponse, status 200, its xframe_options_exempt True
+    XFrameOptionsMiddleware.process_response(request, response)  ->  the response, unchanged
+    start_response("200 OK", headers)
+      no X-Frame-Options
+    GET https://harbour.example/chart/, the browser sending nothing but the request
+    the wrapper xframe_options_sameorigin made, around chart  ->  an HttpResponse, status 200, its X-Frame-Options 'SAMEORIGIN'
+    XFrameOptionsMiddleware.process_response(request, response)  ->  the response, unchanged
+    start_response("200 OK", headers)
+      X-Frame-Options: SAMEORIGIN
+
+GET https://harbour.example/chart/, /notice/ and /tides/: csp_override with a policy, csp_override({}), and a header the view sets itself
+    GET https://harbour.example/chart/, the browser sending nothing but the request
+    the wrapper csp_override made, around chart, the policy {'default-src': ["'self'"], 'img-src': ["'self'", 'https://tiles.harbour.example']}  ->  an HttpResponse, status 200, its _csp_config {'default-src': ["'self'"], 'img-src': ["'self'", 'https://tiles.harbour.example']}
+    ContentSecurityPolicyMiddleware.process_response(request, response)
+      build_policy(the policy {'default-src': ["'self'"], 'img-src': ["'self'", 'https://tiles.harbour.example']}, a LazyNonce, not drawn)  ->  "default-src 'self'; img-src 'self' https://tiles.harbour.example"
+      -> the response, Content-Security-Policy added
+    start_response("200 OK", headers)
+      Content-Security-Policy: default-src 'self'; img-src 'self' https://tiles.harbour.example
+    GET https://harbour.example/notice/, the browser sending nothing but the request
+    the wrapper csp_override made, around notice, the policy {}  ->  an HttpResponse, status 200, its _csp_config {}
+    ContentSecurityPolicyMiddleware.process_response(request, response)  ->  the response, unchanged
+    start_response("200 OK", headers)
+      no Content-Security-Policy
+    GET https://harbour.example/tides/, the browser sending nothing but the request
+    tides(request)  ->  an HttpResponse, status 200, its Content-Security-Policy "default-src 'none'"
+    ContentSecurityPolicyMiddleware.process_response(request, response)  ->  the response, unchanged
+    start_response("200 OK", headers)
+      Content-Security-Policy: default-src 'none'
+
+GET https://harbour.example/notices/7/, a view under csp_override({}) that raises Http404: answered under the site's policy
+    GET https://harbour.example/notices/7/, the browser sending nothing but the request
+    the wrapper csp_override made, around notice, the policy {}
+      notice(request, number=7)  raises Http404
+    response_for_exception(request, Http404)
+      get_exception_response(request, resolver, 404, Http404)  ->  an HttpResponseNotFound, status 404
+      -> an HttpResponseNotFound, status 404
+    ContentSecurityPolicyMiddleware.process_response(request, response)
+      build_policy(SECURE_CSP, a LazyNonce, not drawn)  ->  "default-src 'self'; script-src 'self'"
+      -> the response, Content-Security-Policy added
+    log_response('%s: %s', ...) to django.request, the response not yet logged
+      log, WARNING to django.request: Not Found: /notices/7/
+    start_response("404 Not Found", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self'
+
+{% csp_nonce_attr %} over a fresh request's LazyNonce: the tag draws the nonce
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/"))
+    ContentSecurityPolicyMiddleware(lambda request: None).process_request(request)
+    nonce = request._csp_nonce
+    bool(nonce)  ->  False
+    html = engines["django"].from_string("<script {% csp_nonce_attr %}></script>").render(request=request)
+      the context processor csp(request)  ->  {'csp_nonce': a LazyNonce, not drawn}
+      nonce_attr(context), for {% csp_nonce_attr %}
+        generate_nonce()  ->  'duwISKfMrQaVNBKBD0iseQ'
+        -> 'nonce="duwISKfMrQaVNBKBD0iseQ"'
+    html  ->  '<script nonce="duwISKfMrQaVNBKBD0iseQ"></script>'
+    bool(nonce)  ->  True
+    engines["django"].from_string("<script {% csp_nonce_attr %}></script>").render()  ->  '<script ></script>'
+
+build_policy over a fuller policy than the harbour's, before and after the nonce is read
+    config = {"default-src": [CSP.SELF], "img-src": {CSP.SELF, "https://tiles.harbour.example", "data:"}, "script-src": [CSP.SELF, CSP.NONCE], "style-src": [CSP.NONCE], "frame-src": None, "upgrade-insecure-requests": True}
+    nonce = LazyNonce()
+    bool(nonce)  ->  False
+    build_policy(config, nonce)  ->  "default-src 'self'; img-src 'self' data: https://tiles.harbour.example; script-src 'self'; upgrade-insecure-requests"
+    str(nonce)  ->  'tTsW5NGJ55id-GPawe_arw'
+    bool(nonce)  ->  True
+    build_policy(config, nonce)  ->  "default-src 'self'; img-src 'self' data: https://tiles.harbour.example; script-src 'self' 'nonce-tTsW5NGJ55id-GPawe_arw'; style-src 'nonce-tTsW5NGJ55id-GPawe_arw'; upgrade-insecure-requests"
+    build_policy(config)  ->  "default-src 'self'; img-src 'self' data: https://tiles.harbour.example; script-src 'self'; upgrade-insecure-requests"
+
+POST https://harbour.example/berths/ refused, with TEMPLATES given a 403_csrf.html of the project's, the form with no token: what csrf_failure renders it with
+    the project's 403_csrf.html: 'reason=[{{ reason }}] no_cookie=[{{ no_cookie }}] csp_nonce=[{{ csp_nonce }}]\n'
+    beforehand, unrecorded, GET https://harbour.example/berths/ gave the browser the cookie csrftoken=27h96aGPrKgn2mjEhpYzDdQ7E1Vho2Oj and a page whose form holds the token tZCxQ5KJnfw1dNyISK6nURDsckoPEP88lWJwM5goEPCe5ZHcZZUMnUjpGb9WSHMh
+    POST https://harbour.example/berths/, the browser sending Cookie: csrftoken=27h96aGPrKgn2mjEhpYzDdQ7E1Vho2Oj; Origin: https://harbour.example; the form ship=Endeavour
+    csrf_failure(request, reason='CSRF token missing.')
+      csp(request), called by csrf_failure  ->  {'csp_nonce': a LazyNonce, not drawn}
+      get_template('403_csrf.html')
+      the context processor csp(request)  ->  {'csp_nonce': a LazyNonce, not drawn}
+      generate_nonce()  ->  'LhA7rSFVmrsgX3V1JfqygQ'
+      -> an HttpResponseForbidden, status 403
+    log, WARNING to django.security.csrf: Forbidden (CSRF token missing.): /berths/
+    start_response("403 Forbidden", headers)
+      Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-LhA7rSFVmrsgX3V1JfqygQ'
+    the server sends the body: 'reason=[] no_cookie=[] csp_nonce=[LhA7rSFVmrsgX3V1JfqygQ]\n'
+
+loads after a key change: with no fallback, and with the old key as the fallback
+    s = signing.dumps({"berth": 4}, salt="harbour.berths")
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    signing.loads(s, salt="harbour.berths")  ->  raises BadSignature: Signature "kpo00qC9gwUlINuCIzI6Fj7aLnwACHdNT1j9-wCACxo" does not match
+    changed.disable()
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    signing.loads(s, salt="harbour.berths")  ->  {'berth': 4}
+    changed.disable()
+
+get_signed_cookie after a key change: with no fallback, and with the old key as the fallback
+    response = HttpResponse(); response.set_signed_cookie("berth", "4", salt="harbour")
+    response.cookies["berth"].value  ->  '4:1xGBt2:e_F8ML1XJU5ZwUCo5eOWH2kEEuoIA1kczoQYKH0RF-Y'
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/", headers={"Cookie": "berth=" + response.cookies["berth"].value}))
+    request.get_signed_cookie("berth", salt="harbour")  ->  '4'
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    request.get_signed_cookie("berth", salt="harbour")
+      _unsign_cookie('4:1xGBt2:e_F8ML1XJU5ZwUCo5eOWH2kEEuoIA1kczoQYKH0RF-Y', cookie_name='berth', salt='harbour')
+        get_cookie_signer(salt='django.http.cookies.v2:7:harbourberth')
+        Signer.unsign('4:1xGBt2:e_F8ML1XJU5ZwUCo5eOWH2kEEuoIA1kczoQYKH0RF-Y')  raises BadSignature
+      raises BadSignature: Signature "e_F8ML1XJU5ZwUCo5eOWH2kEEuoIA1kczoQYKH0RF-Y" does not match
+    request.get_signed_cookie("berth", default=None, salt="harbour")  ->  None
+    changed.disable()
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    request.get_signed_cookie("berth", salt="harbour")  ->  '4'
+    changed.disable()
+
+CookieStorage's messages cookie after a key change: with no fallback, and with the old key as the fallback
+    storage = CookieStorage(WSGIRequest(environ("GET", "https://harbour.example/berths/")))
+    storage.add(constants.INFO, "Berth 4 is yours."); response = HttpResponse(); storage.update(response)
+    cookie = "messages=" + response.cookies["messages"].value
+    cookie  ->  'messages=W1siX19qc29uX21lc3NhZ2UiLDAsMjAsIkJlcnRoIDQgaXMgeW91cnMuIiwiIl1d:1xGBt2:lb2psS0afPhx2HjnwqSswzw-FKTQ-OHk2-xmsyJqoWU'
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    storage = CookieStorage(WSGIRequest(environ("GET", "https://harbour.example/berths/", headers={"Cookie": cookie})))
+    len(storage)  ->  0
+    storage.used  ->  True
+    response = HttpResponse(); storage.update(response)
+    response.cookies["messages"].OutputString()  ->  'messages=""; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/; SameSite=Lax'
+    changed.disable()
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    storage = CookieStorage(WSGIRequest(environ("GET", "https://harbour.example/berths/", headers={"Cookie": cookie})))
+    list(storage)  ->  [Message(level=20, message='Berth 4 is yours.')]
+    changed.disable()
+
+salted_hmac: one value under two salts, an algorithm hashlib lacks, and none
+    salted_hmac("harbour.invoices", "invoice 112", algorithm="sha256").hexdigest()  ->  '64145cd7b8dfa6a130c4c046574fd0d4a7b638e1257a6e7536fc540afec793a0'
+    salted_hmac("harbour.berths", "invoice 112", algorithm="sha256").hexdigest()  ->  'b2b68731c91bdd1e4a097074341035c2be5f32f4e1fd53e2798c027f27235890'
+    salted_hmac("harbour.berths", "invoice 112", algorithm="sha257")  ->  raises InvalidAlgorithm: 'sha257' is not an algorithm accepted by the hashlib module.
+    salted_hmac("harbour.berths", "invoice 112").hexdigest()  ->  '138072d59f954434eac2033ea9b0cf0cbeebb161'
+      Python warns: RemovedInDjango2028Warning: The default argument for algorithm in salted_hmac() will change from 'sha1' to 'sha256' in Django 2028. Pass an explicit algorithm to silence this warning. It is attributed to this line of the script's.
+    signing.base64_hmac("harbour.berths", "invoice 112", HARBOUR_KEY)  ->  'E4By1Z-VRDTqwgM-qbDPDL7rsWE'
+      Python warns: RemovedInDjango2028Warning: The default argument for algorithm in base64_hmac() will change from 'sha1' to 'sha256' in Django 2028. Pass an explicit algorithm to silence this warning. It is attributed to this line of the script's.
+
+A database session's data after a key change: with no fallback, and with the old key as the fallback; in an interpreter of its own, with django.contrib.auth, contenttypes and sessions installed, sessions in the database, and SessionMiddleware and AuthenticationMiddleware in the chain
+    store = SessionStore(); store["berth"] = 4; store.save(); key = store.session_key
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    SessionStore(key).load()
+      SessionStore.load()
+        SessionBase.decode(the stored string)
+          loads('eyJiZXJ0aCI6NH0:1xGBt2:AfYLQ0Waei1r46B7bWUrgPGt6ROFWfjwucxKoVYU920', salt='django.contrib.sessions.SessionStore')  raises BadSignature
+          log, WARNING to django.security.SuspiciousSession: Session data corrupted
+          -> {}
+        -> {}
+    changed.disable()
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    SessionStore(key).load()
+      SessionStore.load()
+        SessionBase.decode(the stored string)
+          loads('eyJiZXJ0aCI6NH0:1xGBt2:AfYLQ0Waei1r46B7bWUrgPGt6ROFWfjwucxKoVYU920', salt='django.contrib.sessions.SessionStore')  ->  {'berth': 4}
+          -> {'berth': 4}
+        -> {'berth': 4}
+    changed.disable()
+
+get_user over a database session after a key change: with no fallback, and with the old key as the fallback; in an interpreter of its own, with django.contrib.auth, contenttypes and sessions installed, sessions in the database, and SessionMiddleware and AuthenticationMiddleware in the chain, the session the database backend's
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = SessionStore()
+    login(request, User.objects.get(username="harbourmaster")); request.session.save(); key = request.session.session_key
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = SessionStore(key)
+    user = get_user(request)
+      get_user(request)
+        SessionBase.decode(the stored string)
+          log, WARNING to django.security.SuspiciousSession: Session data corrupted
+          -> {}
+        -> an AnonymousUser
+    user  ->  an AnonymousUser
+    request.session.session_key == key  ->  True
+    "_auth_user_id" in request.session  ->  False
+    changed.disable()
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = SessionStore()
+    login(request, User.objects.get(username="harbourmaster")); request.session.save(); key = request.session.session_key
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = SessionStore(key)
+    user = get_user(request)
+      get_user(request)
+        SessionBase.decode(the stored string)  ->  {'_auth_user_id': '1', '_auth_user_backend': 'django.contrib.auth.backends.ModelBackend', '_auth_user_hash': '3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e'}
+        AbstractBaseUser._get_session_auth_hash()  ->  '88b46a30d95068d95774f215dc6aef674d12da3fb74c98def05f521134bba23e'
+        constant_time_compare('3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e', '88b46a30d95068d95774f215dc6aef674d12da3fb74c98def05f521134bba23e')  ->  False
+        AbstractBaseUser._get_session_auth_hash(secret=the harbour's key)  ->  '3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e'
+        constant_time_compare('3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e', '3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e')  ->  True
+        SessionBase.cycle_key()
+        -> the User 'harbourmaster'
+    user  ->  the User 'harbourmaster'
+    request.session.session_key == key  ->  False
+    "_auth_user_id" in request.session  ->  True
+    changed.disable()
+
+get_user over a cached session after a key change: with no fallback, and with the old key as the fallback; in an interpreter of its own, with django.contrib.auth, contenttypes and sessions installed, sessions in the database, and SessionMiddleware and AuthenticationMiddleware in the chain, the session the cache backend's, made by the script's hand whatever SESSION_ENGINE says, over the default local-memory cache
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = CacheStore()
+    login(request, User.objects.get(username="harbourmaster")); request.session.save(); key = request.session.session_key
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = CacheStore(key)
+    user = get_user(request)
+      get_user(request)
+        AbstractBaseUser._get_session_auth_hash()  ->  '88b46a30d95068d95774f215dc6aef674d12da3fb74c98def05f521134bba23e'
+        constant_time_compare('3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e', '88b46a30d95068d95774f215dc6aef674d12da3fb74c98def05f521134bba23e')  ->  False
+        SessionBase.flush()
+        -> an AnonymousUser
+    user  ->  an AnonymousUser
+    request.session.session_key == key  ->  False
+    "_auth_user_id" in request.session  ->  False
+    changed.disable()
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = CacheStore()
+    login(request, User.objects.get(username="harbourmaster")); request.session.save(); key = request.session.session_key
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    request = WSGIRequest(environ("GET", "https://harbour.example/berths/")); request.session = CacheStore(key)
+    user = get_user(request)
+      get_user(request)
+        AbstractBaseUser._get_session_auth_hash()  ->  '88b46a30d95068d95774f215dc6aef674d12da3fb74c98def05f521134bba23e'
+        constant_time_compare('3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e', '88b46a30d95068d95774f215dc6aef674d12da3fb74c98def05f521134bba23e')  ->  False
+        AbstractBaseUser._get_session_auth_hash(secret=the harbour's key)  ->  '3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e'
+        constant_time_compare('3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e', '3ea68678ad255f2432b97d878b62dfd7f5ff1d98fcbf35f8c3344b2ebfc9841e')  ->  True
+        SessionBase.cycle_key()
+        -> the User 'harbourmaster'
+    user  ->  the User 'harbourmaster'
+    request.session.session_key == key  ->  False
+    "_auth_user_id" in request.session  ->  True
+    changed.disable()
+
+PasswordResetTokenGenerator.check_token after a key change: with no fallback, and with the old key as the fallback; in an interpreter of its own, with django.contrib.auth, contenttypes and sessions installed, sessions in the database, and SessionMiddleware and AuthenticationMiddleware in the chain
+    user = User.objects.get(username="harbourmaster"); token = default_token_generator.make_token(user)
+    default_token_generator.check_token(user, token)  ->  True
+    changed = override_settings(SECRET_KEY=NEW_KEY); changed.enable()
+    checked = default_token_generator.check_token(user, token)
+      PasswordResetTokenGenerator.check_token(user, token)
+        PasswordResetTokenGenerator._make_token_with_timestamp(user, timestamp, the new key)
+        -> False
+    checked  ->  False
+    changed.disable()
+    changed = override_settings(SECRET_KEY=NEW_KEY, SECRET_KEY_FALLBACKS=[HARBOUR_KEY]); changed.enable()
+    checked = default_token_generator.check_token(user, token)
+      PasswordResetTokenGenerator.check_token(user, token)
+        PasswordResetTokenGenerator._make_token_with_timestamp(user, timestamp, the new key)
+        PasswordResetTokenGenerator._make_token_with_timestamp(user, timestamp, the harbour's key)
+        -> True
+    checked  ->  True
+    changed.disable()
+
+check --deploy --tag security, under the harbour's settings
+    $ python manage.py check --deploy --tag security
+    stderr | System check identified some issues:
+    stderr |
+    stderr | WARNINGS:
+    stderr | ?: (security.W005) You have not set the SECURE_HSTS_INCLUDE_SUBDOMAINS setting to True. Without this, your site is potentially vulnerable to attack via an insecure connection to a subdomain. Only set this to True if you are certain that all subdomains of your domain should be served exclusively via SSL.
+    stderr | ?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+    stderr | ?: (security.W021) You have not set the SECURE_HSTS_PRELOAD setting to True. Without this, your site cannot be submitted to the browser preload list.
+    stderr |
+    stderr | System check identified 3 issues (0 silenced).
+
+SECURE_HSTS_SECONDS = 0: check --deploy --tag security
+    $ python manage.py check --deploy --tag security
+    stderr | System check identified some issues:
+    stderr |
+    stderr | WARNINGS:
+    stderr | ?: (security.W004) You have not set a value for the SECURE_HSTS_SECONDS setting. If your entire site is served only over SSL, you may want to consider setting a value and enabling HTTP Strict Transport Security. Be sure to read the documentation first; enabling HSTS carelessly can cause serious, irreversible problems.
+    stderr | ?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+    stderr |
+    stderr | System check identified 2 issues (0 silenced).
+
+CSRF_COOKIE_SECURE = 1: check --deploy --tag security
+    $ python manage.py check --deploy --tag security
+    stderr | System check identified some issues:
+    stderr |
+    stderr | WARNINGS:
+    stderr | ?: (security.W005) You have not set the SECURE_HSTS_INCLUDE_SUBDOMAINS setting to True. Without this, your site is potentially vulnerable to attack via an insecure connection to a subdomain. Only set this to True if you are certain that all subdomains of your domain should be served exclusively via SSL.
+    stderr | ?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+    stderr | ?: (security.W021) You have not set the SECURE_HSTS_PRELOAD setting to True. Without this, your site cannot be submitted to the browser preload list.
+    stderr |
+    stderr | System check identified 3 issues (0 silenced).
+
+MIDDLEWARE with "__main__.OfficeSecurityMiddleware", a subclass of SecurityMiddleware, in its place: check --deploy --tag security
+    $ python manage.py check --deploy --tag security
+    stderr | System check identified some issues:
+    stderr |
+    stderr | WARNINGS:
+    stderr | ?: (security.W001) You do not have 'django.middleware.security.SecurityMiddleware' in your MIDDLEWARE so the SECURE_HSTS_SECONDS, SECURE_CONTENT_TYPE_NOSNIFF, SECURE_REFERRER_POLICY, SECURE_CROSS_ORIGIN_OPENER_POLICY, and SECURE_SSL_REDIRECT settings will have no effect.
+    stderr | ?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+    stderr |
+    stderr | System check identified 2 issues (0 silenced).
+
+CSRF_FAILURE_VIEW = "django.views.csrf.no_such_view", a module that imports and lacks the name: check --deploy --tag security
+    $ python manage.py check --deploy --tag security
+    CheckRegistry.run_checks(...)
+      check_csrf_failure_view(app_configs)
+        get_callable('django.views.csrf.no_such_view')  raises ViewDoesNotExist
+    call_command raises ViewDoesNotExist, its message being:
+      | Could not import 'django.views.csrf.no_such_view'. View does not exist in module django.views.csrf.
+
+SECURE_CSP = "default-src 'self'", a string: check --tag security, without --deploy
+    $ python manage.py check --tag security
+    call_command raises SystemCheckError, its message being:
+      | SystemCheckError: System check identified some issues:
+      |
+      | ERRORS:
+      | ?: (security.E026) The Content Security Policy setting 'SECURE_CSP' must be a dictionary (got "default-src 'self'" instead).
+      |
+      | System check identified 1 issue (0 silenced).
+

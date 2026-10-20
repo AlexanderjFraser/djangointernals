@@ -36,7 +36,7 @@ The method is not looked at, and no URL has been resolved yet, so a path with no
 
 The exemptions are matched with a search, not from the start, against the path with its leading slashes taken off. So `r"^health/$"` exempts /health/ but not /x/health/ or /healthy/, `r"^/health/$"` can never match, and `r"health"` exempts every path that contains the word.
 
-`MiddlewareMixin.__call__` passes the redirect to the same middleware's `process_response`, so it leaves with this middleware's headers, though without Strict-Transport-Security, since the request was not secure; the middleware inside it never run ([Security](../security.md) shows such a response) (`django/middleware/__init__.py:MiddlewareMixin.__call__`).
+`MiddlewareMixin.__call__` passes the redirect to the same middleware's `process_response`, so it leaves with this middleware's headers, though without Strict-Transport-Security, since the request was not secure; the middleware inside it never run (`django/middleware/__init__.py:MiddlewareMixin.__call__`).
 
 ## The headers on the way out
 

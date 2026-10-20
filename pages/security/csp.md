@@ -63,7 +63,7 @@ What the subclass changes is truth. A `SimpleLazyObject` asked whether it is tru
 
 `ContentSecurityPolicyMiddleware.process_response` writes the two headers. For each it takes the policy a decorator stored on the response, as `"_csp_config"` or `"_csp_ro_config"`, and otherwise the setting; it tests for the attribute against a sentinel of its own, not for a true value, so an empty dictionary stored there is used. An empty policy adds nothing, and nor does one whose header the response already has, whatever the case of its name; the comment gives the reason, that a view may set its own. Otherwise the header is `build_policy` of the policy and the request's nonce, the same nonce for both headers (`django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response`).
 
-This runs on the way out, after the view has rendered its template, so by then the nonce has been made or not; the run on [Security](../security.md) shows a response of each kind.
+This runs on the way out, after the view has rendered its template, so by then the nonce has been made or not.
 
 ## A policy for one view: `csp_override`
 
