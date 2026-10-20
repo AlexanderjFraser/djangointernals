@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 Django is extended at its **extension points**: places where it calls code that need not be its own, named in a setting, handed to a registry or found by a convention. Most are a dotted path in a setting, which `import_string` turns into a class; Django makes an object of it and keeps it for a process, a request, a thread or an asynchronous context, or makes one at each use. Three matter most: the applications a project is made of, the middleware every request passes through, and the backends behind its database, cache, files and mail.
 
-A setting holds a name, not the object, which puts the import off until the object is first wanted. The settings module is imported when a setting is first read, and a module it imported may read the settings in turn: the translation functions read them, so Django's defaults, `django.conf.global_settings`, define a do-nothing one (`django/utils/translation/__init__.py:Trans.__getattr__`, `django/conf/global_settings.py:gettext_noop`). [What Django is](../introduction.md#a-project-names-its-parts) shows a new project's names.
+A setting holds a name, not the object, which puts the import off until the object is first wanted. The settings module is imported when a setting is first read, and a module it imported may read the settings in turn: the translation functions read them, so Django's defaults, `django.conf.global_settings`, define a do-nothing one ([The settings object](../startup/settings.md#djangoconfglobal_settings-the-defaults)) (`django/utils/translation/__init__.py:Trans.__getattr__`, `django/conf/global_settings.py:gettext_noop`). [What Django is](../introduction.md#a-project-names-its-parts) shows a new project's names.
 
 ## The pattern
 
@@ -39,11 +39,11 @@ What the object must be: most points have a base class that Django's own impleme
 
 And how long it lives, which is whatever holds it: an object made at import, the request, a `cached_property` or a `functools` cache on what builds it, a `Local` with a value for each thread or asynchronous context, or nothing, so that each use makes a new one.
 
-> **Trap.** An object built from a setting does not see the setting change. `override_settings`, which changes settings for a test, reaches `CACHES` because a receiver of `setting_changed` discards the caches (`django/test/signals.py:clear_cache_handlers`), but not `DEFAULT_EXCEPTION_REPORTER_FILTER` once its filter is made (`django/views/debug.py:get_default_exception_reporter_filter`).
+> **Trap.** An object built from a setting does not see the setting change. `override_settings`, which changes settings for a test ([Overriding settings](../startup/overrides.md)), reaches `CACHES` because a receiver of `setting_changed` discards the caches (`django/test/signals.py:clear_cache_handlers`), but not `DEFAULT_EXCEPTION_REPORTER_FILTER` once its filter is made (`django/views/debug.py:get_default_exception_reporter_filter`).
 
 ## The installed applications
 
-Each entry of `INSTALLED_APPS` is the path of a package or of an `AppConfig` subclass. `AppConfig.create` imports a package with `importlib.import_module`, taking the configuration class from its submodule called apps where it finds one, and anything else with `import_string`; the class must subclass `AppConfig` (`django/apps/config.py:AppConfig.create`). `Apps.populate` makes the configurations once a process, keeps them in the app registry, imports each application's models module, and last calls each `AppConfig.ready` once, the place for an application's startup code (`django/apps/registry.py:Apps.populate`).
+Each entry of `INSTALLED_APPS` is the path of a package or of an `AppConfig` subclass. `AppConfig.create` imports a package with `importlib.import_module`, taking the configuration class from its submodule called apps where it finds one, and anything else with `import_string`; the class must subclass `AppConfig` (`django/apps/config.py:AppConfig.create`). `Apps.populate` makes the configurations, keeps them in the app registry, imports each application's models module, and last calls each `AppConfig.ready`, the place for an application's startup code (`django/apps/registry.py:Apps.populate`). It does so once a process, and again each time `Apps.set_installed_apps` remakes the registry, as a test's override of `INSTALLED_APPS` does ([Overriding settings](../startup/overrides.md)) (`django/apps/registry.py:Apps.set_installed_apps`).
 
 Django also looks inside each installed application by name: for its template tags, commands, migrations and translations with no setting, and for its templates and static files where the settings ask (`django/db/migrations/loader.py:MigrationLoader.migrations_module`; [Settings, apps and startup](../startup.md)).
 
@@ -81,7 +81,7 @@ Other settings name code, each loaded by `import_string` unless the loader says 
 | `FILE_UPLOAD_HANDLERS`: each a `FileUploadHandler` ([Requests and responses](../http.md)) | once a request | `django/http/request.py:HttpRequest._initialize_handlers` |
 | `FORM_RENDERER`: a `BaseRenderer` ([Forms](../forms.md)) | once a process | `django/forms/renderers.py:get_default_renderer` |
 | `FORMAT_MODULE_PATH`: packages of format modules by locale ([Internationalization and time zones](../i18n.md)) | once a language | by module: `django/utils/formats.py:iter_format_modules` |
-| `LOGGING_CONFIG`: a function, given `LOGGING` ([Settings, apps and startup](../startup.md)) | once, by `django.setup`; called only if `LOGGING` is not empty | `django/utils/log.py:configure_logging` |
+| `LOGGING_CONFIG`: a function, given `LOGGING` ([Logging](../startup/logging.md)) | once a `django.setup`; called only if `LOGGING` is not empty | `django/utils/log.py:configure_logging` |
 | `MESSAGE_STORAGE`: a `BaseStorage` ([Authentication, sessions and messages](../auth.md)) | once a request | `django/contrib/messages/storage/__init__.py:default_storage` |
 | `MIGRATION_MODULES`: an application's migrations package ([Migrations](../migrations.md)) | once a loader | by module: `django/db/migrations/loader.py:MigrationLoader.load_disk` |
 | `PASSWORD_HASHERS`: each a `BasePasswordHasher` ([Authentication, sessions and messages](../auth.md)) | once a process | `django/contrib/auth/hashers.py:get_hashers` |

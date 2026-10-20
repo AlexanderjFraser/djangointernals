@@ -27,7 +27,7 @@ Starting empty is what lets any module, Django's or a project's, import the two 
 `django.setup` is the function that takes a process from the one state to the other, from having imported Django to being able to use it (`django/__init__.py:setup`).
 
 1. It configures logging, from `settings.LOGGING_CONFIG` and `settings.LOGGING`. Reading the first of these is a read of a setting, and where the settings are still empty, this is the moment the settings module is imported.
-2. It sets the script prefix to `"/"` or to `settings.FORCE_SCRIPT_NAME`, unless its caller asks it not to, as a server's does. The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`).
+2. It sets the script prefix to `"/"` or to `settings.FORCE_SCRIPT_NAME`, unless its caller asks it not to, as a server's does. The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`). Under a server it is set for every request, to `FORCE_SCRIPT_NAME` or else to what the server says the site is mounted under (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).
 3. It calls `Apps.populate` with `settings.INSTALLED_APPS`.
 
 The figure sets the three statements between the two objects: the first reaches across to the settings, and the third runs the registry's phases, each over every application and each ending in a flag.
@@ -53,7 +53,7 @@ imported on the first read or write    reads settings.LOGGING_CONFIG
 
 *The three statements of `django.setup`: the first imports the settings module where the settings are still empty, and the third populates the app registry.*
 
-Each statement is preceded by the reads of the settings it passes, and the very first of them, a read of `LOGGING_CONFIG`, is what imports the settings module: `import library.settings` stands nested under it. The project, library, installs three applications with one model each.
+Each statement is preceded by the reads of the settings it passes, and `import library.settings` stands nested under the first. The project, library, installs three applications with one model each.
 
 ```text recording=startup
 django.setup() in a new process
@@ -80,7 +80,7 @@ django.setup() in a new process
 2. **Each application's `models` module is imported.** Nobody hands the models to the registry: each registers itself, as the last act of its own class statement, so importing the module is enough. When every application has had its turn, `Apps.models_ready` becomes true, and the registry can be asked for a model.
 3. **Each application's `AppConfig.ready` is called.** This is the place for startup work, such as connecting signal receivers, once every models module is imported. When all have returned, `Apps.ready` becomes true.
 
-The phases are the reason for two rules a project otherwise meets as errors, and for `ready`. Nothing imported during the first phase can define a model, not even a model of an application whose configuration is already made, because a model's class statement asks the registry which application it belongs to, and the registry will not say until every entry has its configuration (`django/apps/registry.py:Apps.get_containing_app_config`). A models module cannot fetch another application's model with `Apps.get_model` while the second phase runs, unless it asks not to wait. And `ready` exists because it is the first moment at which everything is in place. [Populating the app registry](startup/populate.md) follows each phase and what the registry answers during it.
+The phases are the reason for two rules a project otherwise meets as errors, and for `ready`. Nothing imported during the first phase can define a model, not even a model of an application whose configuration is already made, because a model's class statement asks the registry which application it belongs to, and the registry will not say until every entry has its configuration (`django/apps/registry.py:Apps.get_containing_app_config`). A models module cannot fetch another application's model with `Apps.get_model` while the second phase runs, unless it passes `require_ready=False`, and then `get_model` imports that application's models module itself if its turn has not yet come (`django/apps/registry.py:Apps.get_model`). And `ready` exists because it is the first moment at which everything is in place. [Populating the app registry](startup/populate.md) follows each phase and what the registry answers during it.
 
 > **History.** Before Django 1.7 a singleton called the app cache dealt with both installed applications and models, and many APIs took an application's models module to stand for the application. 1.7 refactored it into the app registry, in which an application has a configuration object of its own, with a `ready` method, and Django began to import every application's configuration and models as soon as it started, "through a deterministic and straightforward process" that the release notes expected to make import loops easier to diagnose. From then on a script that relied on `"DJANGO_SETTINGS_MODULE"` had to call `django.setup` itself, or meet `AppRegistryNotReady` (`docs/releases/1.7.txt`).
 

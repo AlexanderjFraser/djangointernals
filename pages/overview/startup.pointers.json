@@ -120,23 +120,9 @@
    "fingerprint": "fd7eca125afabf3c"
   },
   {
-   "pointer": "django/conf/__init__.py:LazySettings",
-   "line": 45,
-   "sentence": "The docstring of `LazySettings` names both: the user can configure the settings by hand before using them, and otherwise Django uses the module that `\"DJANGO_SETTINGS_MODULE\"` names (`django/conf/__init__.py:LazySettings`).",
-   "tree": "django",
-   "path": "django/conf/__init__.py",
-   "symbol": "LazySettings",
-   "kind": "class",
-   "lines": [
-    86,
-    239
-   ],
-   "fingerprint": "f21a38b4aa0d750e"
-  },
-  {
    "pointer": "django/conf/__init__.py:LazySettings.configure",
-   "line": 45,
-   "sentence": "Configuring by hand must come first: `LazySettings.configure` raises `RuntimeError` once the settings are loaded (`django/conf/__init__.py:LazySettings.configure`).",
+   "line": 43,
+   "sentence": "Being lazy, the proxy also lets a process configure the settings by hand, with no module, provided it does so before they are loaded (`django/conf/__init__.py:LazySettings.configure`); [The settings object](../startup/settings.md) has the proxy in full.",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings.configure",
@@ -149,7 +135,7 @@
   },
   {
    "pointer": "django/apps/registry.py:Apps.populate",
-   "line": 49,
+   "line": 47,
    "sentence": "It holds a lock, returns at once when it has already run, raises if it is entered again while running, and runs three phases over `settings.INSTALLED_APPS` in order (`django/apps/registry.py:Apps.populate`).",
    "tree": "django",
    "path": "django/apps/registry.py",
@@ -163,7 +149,7 @@
   },
   {
    "pointer": "django/apps/config.py:AppConfig.create",
-   "line": 70,
+   "line": 68,
    "sentence": "`AppConfig.create` imports the entry's module and looks in its `apps` submodule, if it has one, for the `AppConfig` subclass to use; a dotted path to a configuration class is accepted too (`django/apps/config.py:AppConfig.create`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -177,22 +163,8 @@
    "fingerprint": "908a15da2135b37a"
   },
   {
-   "pointer": "django/apps/registry.py:Apps.populate",
-   "line": 70,
-   "sentence": "An application's label is its key in `Apps.app_configs`, and a label taken twice makes `Apps.populate` raise `ImproperlyConfigured` (`django/apps/registry.py:Apps.populate`).",
-   "tree": "django",
-   "path": "django/apps/registry.py",
-   "symbol": "Apps.populate",
-   "kind": "function",
-   "lines": [
-    61,
-    127
-   ],
-   "fingerprint": "32f7c6ad9925afa8"
-  },
-  {
    "pointer": "django/apps/config.py:AppConfig.import_models",
-   "line": 71,
+   "line": 69,
    "sentence": "`AppConfig.import_models` imports the application's `models` module if it has one (`django/apps/config.py:AppConfig.import_models`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -206,7 +178,7 @@
   },
   {
    "pointer": "django/db/models/base.py:ModelBase.__new__",
-   "line": 71,
+   "line": 69,
    "sentence": "Importing it runs each model's class statement, where the metaclass, `ModelBase`, builds the class and its `_meta` and registers it if it is not abstract (`django/db/models/base.py:ModelBase.__new__`); [`ModelBase`: a class statement becomes a model](../models/metaclass.md) tells each step.",
    "tree": "django",
    "path": "django/db/models/base.py",
@@ -220,7 +192,7 @@
   },
   {
    "pointer": "django/apps/registry.py:Apps.register_model",
-   "line": 71,
+   "line": 69,
    "sentence": "`Apps.register_model` files the class under its application label and lower-case name, the key `Apps.get_model` answers to (`django/apps/registry.py:Apps.register_model`).",
    "tree": "django",
    "path": "django/apps/registry.py",
@@ -234,8 +206,8 @@
   },
   {
    "pointer": "django/db/models/fields/related.py:ManyToManyField.contribute_to_class",
-   "line": 71,
-   "sentence": "The through table a many-to-many field makes for itself, such as auth's Group_permissions, is a model made while its own model's fields are set up, so it is registered before the model that declares the field (`django/db/models/fields/related.py:ManyToManyField.contribute_to_class`).",
+   "line": 69,
+   "sentence": "The through table a many-to-many field makes for itself, such as auth's Group_permissions, is a model made while the fields of the model that declares it are set up, so it is registered before that model (`django/db/models/fields/related.py:ManyToManyField.contribute_to_class`).",
    "tree": "django",
    "path": "django/db/models/fields/related.py",
    "symbol": "ManyToManyField.contribute_to_class",
@@ -247,8 +219,22 @@
    "fingerprint": "6493db9b68aa52a7"
   },
   {
+   "pointer": "django/apps/registry.py:Apps.get_model",
+   "line": 69,
+   "sentence": "After this phase `Apps.models_ready` is true, and `Apps.get_model` answers; asked before, it raises `AppRegistryNotReady` by default, even for a model already registered ([Populating the app registry](../startup/populate.md#what-the-registry-answers-phase-by-phase)) (`django/apps/registry.py:Apps.get_model`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.get_model",
+   "kind": "function",
+   "lines": [
+    188,
+    213
+   ],
+   "fingerprint": "bc409748c76018b2"
+  },
+  {
    "pointer": "django/apps/config.py:AppConfig.ready",
-   "line": 72,
+   "line": 70,
    "sentence": "`AppConfig.ready` is the hook for work that needs every model to exist (`django/apps/config.py:AppConfig.ready`).",
    "tree": "django",
    "path": "django/apps/config.py",
@@ -262,7 +248,7 @@
   },
   {
    "pointer": "django/contrib/admin/apps.py:AdminConfig.ready",
-   "line": 72,
+   "line": 70,
    "sentence": "In the admin, `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
    "tree": "django",
    "path": "django/contrib/admin/apps.py",
@@ -276,7 +262,7 @@
   },
   {
    "pointer": "django/utils/module_loading.py:autodiscover_modules",
-   "line": 72,
+   "line": 70,
    "sentence": "In the admin, `AdminConfig.ready` calls `autodiscover`, which imports the `admin` module of every installed application so that their `ModelAdmin` registrations run (`django/contrib/admin/apps.py:AdminConfig.ready`, `django/utils/module_loading.py:autodiscover_modules`).",
    "tree": "django",
    "path": "django/utils/module_loading.py",
@@ -289,22 +275,8 @@
    "fingerprint": "c4422a6ab6f89528"
   },
   {
-   "pointer": "django/apps/registry.py:Apps.get_model",
-   "line": 74,
-   "sentence": "A models module that calls `Apps.get_model` while it is being imported gets `AppRegistryNotReady`, `\"Models aren't loaded yet.\"`, even for a model registered earlier in the same phase: by default the method answers only once the phase is over and `Apps.models_ready` is set (`django/apps/registry.py:Apps.get_model`).",
-   "tree": "django",
-   "path": "django/apps/registry.py",
-   "symbol": "Apps.get_model",
-   "kind": "function",
-   "lines": [
-    188,
-    213
-   ],
-   "fingerprint": "bc409748c76018b2"
-  },
-  {
    "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__init__",
-   "line": 78,
+   "line": 74,
    "sentence": "With the registry ready, `get_wsgi_application` returns a `WSGIHandler`, whose constructor ends by calling `BaseHandler.load_middleware` (`django/core/handlers/wsgi.py:WSGIHandler.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
@@ -318,7 +290,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 78,
+   "line": 74,
    "sentence": "So `SecurityMiddleware`, first in the setting and made last, is the outermost layer, and `XFrameOptionsMiddleware`, made first, the innermost (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -332,7 +304,7 @@
   },
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.__init__",
-   "line": 80,
+   "line": 76,
    "sentence": "`SecurityMiddleware` reads settings into attributes when it is made and never reads them again, and `SessionMiddleware` imports the session engine that `settings.SESSION_ENGINE` names and keeps its session store class (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
    "tree": "django",
    "path": "django/middleware/security.py",
@@ -346,7 +318,7 @@
   },
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.__init__",
-   "line": 80,
+   "line": 76,
    "sentence": "`SecurityMiddleware` reads settings into attributes when it is made and never reads them again, and `SessionMiddleware` imports the session engine that `settings.SESSION_ENGINE` names and keeps its session store class (`django/middleware/security.py:SecurityMiddleware.__init__`, `django/contrib/sessions/middleware.py:SessionMiddleware.__init__`).",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
@@ -359,52 +331,8 @@
    "fingerprint": "729defcd673f0b25"
   },
   {
-   "pointer": "django/core/management/commands/runserver.py:Command.inner_run",
-   "line": 86,
-   "sentence": "Under the development server the URLconf and the template engines are made before the first request, by the system checks the runserver command runs, unless skipped, before it serves: the check of the URL configuration imports the URLconf, and the check of the templates makes every engine (`django/core/management/commands/runserver.py:Command.inner_run`, `django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`).",
-   "tree": "django",
-   "path": "django/core/management/commands/runserver.py",
-   "symbol": "Command.inner_run",
-   "kind": "function",
-   "lines": [
-    121,
-    170
-   ],
-   "fingerprint": "be42ca880195cc70"
-  },
-  {
-   "pointer": "django/core/checks/urls.py:check_url_config",
-   "line": 86,
-   "sentence": "Under the development server the URLconf and the template engines are made before the first request, by the system checks the runserver command runs, unless skipped, before it serves: the check of the URL configuration imports the URLconf, and the check of the templates makes every engine (`django/core/management/commands/runserver.py:Command.inner_run`, `django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`).",
-   "tree": "django",
-   "path": "django/core/checks/urls.py",
-   "symbol": "check_url_config",
-   "kind": "function",
-   "lines": [
-    10,
-    17
-   ],
-   "at": 11,
-   "fingerprint": "d65f1e8ee080de99"
-  },
-  {
-   "pointer": "django/core/checks/templates.py:check_templates",
-   "line": 86,
-   "sentence": "Under the development server the URLconf and the template engines are made before the first request, by the system checks the runserver command runs, unless skipped, before it serves: the check of the URL configuration imports the URLconf, and the check of the templates makes every engine (`django/core/management/commands/runserver.py:Command.inner_run`, `django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`).",
-   "tree": "django",
-   "path": "django/core/checks/templates.py",
-   "symbol": "check_templates",
-   "kind": "function",
-   "lines": [
-    4,
-    12
-   ],
-   "at": 5,
-   "fingerprint": "44fa45b45642667f"
-  },
-  {
    "pointer": "django/conf/__init__.py:LazySettings.__getattr__",
-   "line": 92,
+   "line": 84,
    "sentence": "| the settings, loaded on their first use and kept value by value | before the first request | `django/conf/__init__.py:LazySettings.__getattr__` |",
    "tree": "django",
    "path": "django/conf/__init__.py",
@@ -418,7 +346,7 @@
   },
   {
    "pointer": "django/apps/registry.py:Apps.populate",
-   "line": 93,
+   "line": 85,
    "sentence": "| the app registry, every model class and its `_meta` | before the first request | `django/apps/registry.py:Apps.populate` |",
    "tree": "django",
    "path": "django/apps/registry.py",
@@ -432,7 +360,7 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
-   "line": 94,
+   "line": 86,
    "sentence": "| the handler and the middleware chain, each middleware made once | before the first request | `django/core/handlers/base.py:BaseHandler.load_middleware` |",
    "tree": "django",
    "path": "django/core/handlers/base.py",
@@ -446,7 +374,7 @@
   },
   {
    "pointer": "django/urls/resolvers.py:_get_cached_resolver",
-   "line": 95,
+   "line": 87,
    "sentence": "| the root resolver, and the URLconf it imports | by the first request that needs it | `django/urls/resolvers.py:_get_cached_resolver` |",
    "tree": "django",
    "path": "django/urls/resolvers.py",
@@ -461,7 +389,7 @@
   },
   {
    "pointer": "django/template/utils.py:EngineHandler.__getitem__",
-   "line": 96,
+   "line": 88,
    "sentence": "| the template engines, their loaders, their tag libraries and their context processors | by the first request that needs them | `django/template/utils.py:EngineHandler.__getitem__` |",
    "tree": "django",
    "path": "django/template/utils.py",
@@ -475,7 +403,7 @@
   },
   {
    "pointer": "django/template/loaders/cached.py:Loader.get_template",
-   "line": 97,
+   "line": 89,
    "sentence": "| each template the cached loader finds, compiled | by the first request that needs it | `django/template/loaders/cached.py:Loader.get_template` |",
    "tree": "django",
    "path": "django/template/loaders/cached.py",
@@ -489,7 +417,7 @@
   },
   {
    "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
-   "line": 98,
+   "line": 90,
    "sentence": "| the database connection, which by default is not kept: it is closed when the request ends unless `\"CONN_MAX_AGE\"` gives it a longer life | by a request that needs it | `django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete` |",
    "tree": "django",
    "path": "django/db/backends/base/base.py",
@@ -500,6 +428,50 @@
     616
    ],
    "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/core/management/commands/runserver.py:Command.inner_run",
+   "line": 92,
+   "sentence": "Before it serves, the runserver command runs the system checks, unless told to skip them: the check of the URL configuration imports the URLconf, and the check of the templates makes every engine (`django/core/management/commands/runserver.py:Command.inner_run`, `django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`).",
+   "tree": "django",
+   "path": "django/core/management/commands/runserver.py",
+   "symbol": "Command.inner_run",
+   "kind": "function",
+   "lines": [
+    121,
+    170
+   ],
+   "fingerprint": "be42ca880195cc70"
+  },
+  {
+   "pointer": "django/core/checks/urls.py:check_url_config",
+   "line": 92,
+   "sentence": "Before it serves, the runserver command runs the system checks, unless told to skip them: the check of the URL configuration imports the URLconf, and the check of the templates makes every engine (`django/core/management/commands/runserver.py:Command.inner_run`, `django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`).",
+   "tree": "django",
+   "path": "django/core/checks/urls.py",
+   "symbol": "check_url_config",
+   "kind": "function",
+   "lines": [
+    10,
+    17
+   ],
+   "at": 11,
+   "fingerprint": "d65f1e8ee080de99"
+  },
+  {
+   "pointer": "django/core/checks/templates.py:check_templates",
+   "line": 92,
+   "sentence": "Before it serves, the runserver command runs the system checks, unless told to skip them: the check of the URL configuration imports the URLconf, and the check of the templates makes every engine (`django/core/management/commands/runserver.py:Command.inner_run`, `django/core/checks/urls.py:check_url_config`, `django/core/checks/templates.py:check_templates`).",
+   "tree": "django",
+   "path": "django/core/checks/templates.py",
+   "symbol": "check_templates",
+   "kind": "function",
+   "lines": [
+    4,
+    12
+   ],
+   "at": 5,
+   "fingerprint": "44fa45b45642667f"
   }
  ]
 }

@@ -2,7 +2,6 @@
  "generated": {
   "tool": "tools/pointers.py",
   "trees": {
-   "deps": "f5492c9fdf242f3da463f662e385f0555e203403",
    "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
   }
  },
@@ -39,7 +38,7 @@
   {
    "pointer": "django/urls/base.py:set_script_prefix",
    "line": 11,
-   "sentence": "The script prefix and the URLconf are both kept for the current thread: the URLconf is `settings.ROOT_URLCONF`, and the prefix is the part of the path the server mounted Django under, with a slash at its end, here `\"/\"` alone; every URL that `reverse` builds begins with it (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:set_urlconf`).",
+   "sentence": "The script prefix and the URLconf are both kept for the current thread: the URLconf is `settings.ROOT_URLCONF`, and the prefix is the part of the path the server mounted Django under, with a slash at its end, here `\"/\"` alone, since this request's environ gives no script name, the empty one becomes the prefix, and `set_script_prefix` puts the slash on its end; every URL that `reverse` builds begins with it (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:set_urlconf`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "set_script_prefix",
@@ -53,7 +52,7 @@
   {
    "pointer": "django/urls/base.py:set_urlconf",
    "line": 11,
-   "sentence": "The script prefix and the URLconf are both kept for the current thread: the URLconf is `settings.ROOT_URLCONF`, and the prefix is the part of the path the server mounted Django under, with a slash at its end, here `\"/\"` alone; every URL that `reverse` builds begins with it (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:set_urlconf`).",
+   "sentence": "The script prefix and the URLconf are both kept for the current thread: the URLconf is `settings.ROOT_URLCONF`, and the prefix is the part of the path the server mounted Django under, with a slash at its end, here `\"/\"` alone, since this request's environ gives no script name, the empty one becomes the prefix, and `set_script_prefix` puts the slash on its end; every URL that `reverse` builds begins with it (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:set_urlconf`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "set_urlconf",
@@ -94,8 +93,8 @@
   },
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest.__init__",
-   "line": 30,
-   "sentence": "It wraps the server's input stream in a `LimitedStream` that will not read past the declared content length, and parses nothing else (`django/core/handlers/wsgi.py:WSGIRequest.__init__`).",
+   "line": 28,
+   "sentence": "[Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md) tells what the constructor sets, and [The body: `body`, `POST` and `FILES`](../http/body.md) what may be read after what (`django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/wsgi.py:WSGIRequest.COOKIES`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest.__init__",
@@ -107,24 +106,9 @@
    "fingerprint": "39da82012b104293"
   },
   {
-   "pointer": "django/core/handlers/wsgi.py:WSGIRequest.GET",
-   "line": 32,
-   "sentence": "`WSGIRequest.GET` parses the query string and `WSGIRequest.COOKIES` the `\"Cookie\"` header, each the first time it is read (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/wsgi.py:WSGIRequest.COOKIES`).",
-   "tree": "django",
-   "path": "django/core/handlers/wsgi.py",
-   "symbol": "WSGIRequest.GET",
-   "kind": "function",
-   "lines": [
-    85,
-    89
-   ],
-   "at": 86,
-   "fingerprint": "44516bf042f7a841"
-  },
-  {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest.COOKIES",
-   "line": 32,
-   "sentence": "`WSGIRequest.GET` parses the query string and `WSGIRequest.COOKIES` the `\"Cookie\"` header, each the first time it is read (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/wsgi.py:WSGIRequest.COOKIES`).",
+   "line": 28,
+   "sentence": "[Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md) tells what the constructor sets, and [The body: `body`, `POST` and `FILES`](../http/body.md) what may be read after what (`django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/wsgi.py:WSGIRequest.COOKIES`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest.COOKIES",
@@ -137,22 +121,8 @@
    "fingerprint": "ac08d7e3735160b8"
   },
   {
-   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
-   "line": 32,
-   "sentence": "`WSGIRequest.POST` and `WSGIRequest.FILES` both come from one method, which reads the body only for a `\"POST\"` of one of the two form types, and otherwise leaves both empty (`django/http/request.py:HttpRequest._load_post_and_files`).",
-   "tree": "django",
-   "path": "django/http/request.py",
-   "symbol": "HttpRequest._load_post_and_files",
-   "kind": "function",
-   "lines": [
-    448,
-    492
-   ],
-   "fingerprint": "4704737f25783bd6"
-  },
-  {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
-   "line": 36,
+   "line": 32,
    "sentence": "Each is built on `MiddlewareMixin`, so each layer's call is `MiddlewareMixin.__call__`: it runs the class's `process_request` if it has one, calls the layer inside unless that returned a response, and runs the class's `process_response`, if any, on what comes back (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
    "tree": "django",
    "path": "django/middleware/__init__.py",
@@ -165,36 +135,22 @@
    "fingerprint": "1c249bc0b063a1d2"
   },
   {
-   "pointer": "deps:final/0005-improved-middleware.rst",
-   "line": 51,
-   "sentence": "Django 1.10 shipped the new style \"to solve the lack of strict request/response layering\" (`deps:final/0005-improved-middleware.rst`, `docs/releases/1.10.txt`).",
-   "tree": "deps",
-   "path": "final/0005-improved-middleware.rst",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    451
-   ],
-   "fingerprint": "e7df143e13b0a5b2"
-  },
-  {
-   "pointer": "docs/releases/1.10.txt",
-   "line": 51,
-   "sentence": "Django 1.10 shipped the new style \"to solve the lack of strict request/response layering\" (`deps:final/0005-improved-middleware.rst`, `docs/releases/1.10.txt`).",
+   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "line": 32,
+   "sentence": "Another hook, `process_view`, is run not by the layer but by the handler, at the centre, once the view is known ([The URL is resolved and the view is called](view.md)) (`django/core/handlers/base.py:BaseHandler._get_response`).",
    "tree": "django",
-   "path": "docs/releases/1.10.txt",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler._get_response",
+   "kind": "function",
    "lines": [
-    1,
-    1383
+    176,
+    228
    ],
-   "fingerprint": "d491274bfc61d8d9"
+   "fingerprint": "8a7faacfec18a9da"
   },
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
-   "line": 71,
+   "line": 65,
    "sentence": "**`SecurityMiddleware`** would answer this request, which is not secure, with a permanent redirect to HTTPS if `settings.SECURE_SSL_REDIRECT` were true, which by default it is not; its work is on the way out (`django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/security.py",
@@ -208,7 +164,7 @@
   },
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_request",
-   "line": 73,
+   "line": 67,
    "sentence": "It sets `HttpRequest.session` to a new session store for that key (`django/contrib/sessions/middleware.py:SessionMiddleware.process_request`).",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
@@ -222,7 +178,7 @@
   },
   {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase.__init__",
-   "line": 73,
+   "line": 67,
    "sentence": "The store does not touch the database: it keeps the key, and the session's data is loaded the first time anything reads it (`django/contrib/sessions/backends/base.py:SessionBase.__init__`, `django/contrib/sessions/backends/base.py:SessionBase._get_session`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
@@ -236,7 +192,7 @@
   },
   {
    "pointer": "django/contrib/sessions/backends/base.py:SessionBase._get_session",
-   "line": 73,
+   "line": 67,
    "sentence": "The store does not touch the database: it keeps the key, and the session's data is loaded the first time anything reads it (`django/contrib/sessions/backends/base.py:SessionBase.__init__`, `django/contrib/sessions/backends/base.py:SessionBase._get_session`).",
    "tree": "django",
    "path": "django/contrib/sessions/backends/base.py",
@@ -250,7 +206,7 @@
   },
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
-   "line": 75,
+   "line": 69,
    "sentence": "A host that is not allowed raises `DisallowedHost`, a `SuspiciousOperation`, which the `convert_exception_to_response` wrapper around this layer turns into a 400 response (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
@@ -264,7 +220,7 @@
   },
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.process_request",
-   "line": 75,
+   "line": 69,
    "sentence": "When `settings.PREPEND_WWW` is set, it redirects a host without `\"www.\"` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/http/request.py:HttpRequest.get_host`).",
    "tree": "django",
    "path": "django/middleware/common.py",
@@ -278,7 +234,7 @@
   },
   {
    "pointer": "django/http/request.py:HttpRequest.get_host",
-   "line": 75,
+   "line": 69,
    "sentence": "When `settings.PREPEND_WWW` is set, it redirects a host without `\"www.\"` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/http/request.py:HttpRequest.get_host`).",
    "tree": "django",
    "path": "django/http/request.py",
@@ -292,8 +248,8 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_request",
-   "line": 77,
-   "sentence": "**`CsrfViewMiddleware`** reads the CSRF cookie, if the request carries one, and puts the secret it holds into `HttpRequest.META` under `\"CSRF_COOKIE\"` for the rest of the request to use (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._get_secret`).",
+   "line": 71,
+   "sentence": "**`CsrfViewMiddleware`** reads the CSRF cookie, if the request carries one, and puts the secret a well-formed cookie holds into `HttpRequest.META` under `\"CSRF_COOKIE\"` for the rest of the request to use (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._get_secret`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware.process_request",
@@ -306,8 +262,8 @@
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._get_secret",
-   "line": 77,
-   "sentence": "**`CsrfViewMiddleware`** reads the CSRF cookie, if the request carries one, and puts the secret it holds into `HttpRequest.META` under `\"CSRF_COOKIE\"` for the rest of the request to use (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._get_secret`).",
+   "line": 71,
+   "sentence": "**`CsrfViewMiddleware`** reads the CSRF cookie, if the request carries one, and puts the secret a well-formed cookie holds into `HttpRequest.META` under `\"CSRF_COOKIE\"` for the rest of the request to use (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._get_secret`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._get_secret",
@@ -320,7 +276,7 @@
   },
   {
    "pointer": "django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request",
-   "line": 79,
+   "line": 73,
    "sentence": "It sets `HttpRequest.user` to a `SimpleLazyObject` around a function that will find the user, and `HttpRequest.auser` to its asynchronous twin (`django/contrib/auth/middleware.py:AuthenticationMiddleware.process_request`).",
    "tree": "django",
    "path": "django/contrib/auth/middleware.py",
@@ -334,7 +290,7 @@
   },
   {
    "pointer": "django/contrib/auth/__init__.py:get_user",
-   "line": 79,
+   "line": 73,
    "sentence": "Nothing is looked up until the lazy object is first used: then `django.contrib.auth.get_user` takes the user's id and backend from the session and asks that backend for the user, which is a query (`django/contrib/auth/__init__.py:get_user`).",
    "tree": "django",
    "path": "django/contrib/auth/__init__.py",
@@ -348,7 +304,7 @@
   },
   {
    "pointer": "django/contrib/messages/middleware.py:MessageMiddleware.process_request",
-   "line": 81,
+   "line": 75,
    "sentence": "The default is `FallbackStorage`, which keeps messages in a cookie and falls back to the session for what does not fit, as [Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md) tells (`django/contrib/messages/middleware.py:MessageMiddleware.process_request`, `django/contrib/messages/storage/fallback.py:FallbackStorage`).",
    "tree": "django",
    "path": "django/contrib/messages/middleware.py",
@@ -362,7 +318,7 @@
   },
   {
    "pointer": "django/contrib/messages/storage/fallback.py:FallbackStorage",
-   "line": 81,
+   "line": 75,
    "sentence": "The default is `FallbackStorage`, which keeps messages in a cookie and falls back to the session for what does not fit, as [Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md) tells (`django/contrib/messages/middleware.py:MessageMiddleware.process_request`, `django/contrib/messages/storage/fallback.py:FallbackStorage`).",
    "tree": "django",
    "path": "django/contrib/messages/storage/fallback.py",
