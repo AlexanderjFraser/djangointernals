@@ -10,7 +10,7 @@
   {
    "pointer": "django/shortcuts.py",
    "line": 7,
-   "sentence": "The functions of `django/shortcuts.py`: `render`, which renders a template into a response; `resolve_url`, which turns an object, a pattern's name or a URL into a URL, and `redirect`, which makes a redirect response to it; and `get_object_or_404` and `get_list_or_404`, each with an asynchronous twin, which run a query and raise `Http404` when it finds nothing.",
+   "sentence": "The shortcuts are the functions of `django/shortcuts.py`: `render` renders a template into a response, `redirect` makes a redirect to the URL that `resolve_url` finds for an object, a pattern's name or a URL, and `get_object_or_404` and `get_list_or_404`, each with an asynchronous twin, run a query and raise `Http404` when it finds nothing.",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": null,
@@ -108,7 +108,7 @@
   {
    "pointer": "django/shortcuts.py:redirect",
    "line": 30,
-   "sentence": "It leaves working out the target to `resolve_url`, and chooses the response class: `HttpResponsePermanentRedirect` if `permanent` is true and `HttpResponseRedirect` if not, with `preserve_request` and `max_length` passed to it untouched (`django/shortcuts.py:redirect`).",
+   "sentence": "It leaves working out the target to `resolve_url`, and chooses the response class: `HttpResponsePermanentRedirect` if `permanent` is true and `HttpResponseRedirect` if not, with `preserve_request` and `max_length`, the longest `\"Location\"` the class will accept, passed to it untouched (`django/shortcuts.py:redirect`).",
    "tree": "django",
    "path": "django/shortcuts.py",
    "symbol": "redirect",
@@ -118,34 +118,6 @@
     63
    ],
    "fingerprint": "03a41b7a0966245a"
-  },
-  {
-   "pointer": "django/urls/base.py:reverse",
-   "line": 32,
-   "sentence": "The last line is a target refused before any response is made: `reverse` reads the colon in `\"javascript:alert(1)\"` as the end of a namespace's name and raises `NoReverseMatch`, which `resolve_url` lets pass because the string holds neither a slash nor a dot (the fourth of its steps below), so the string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).",
-   "tree": "django",
-   "path": "django/urls/base.py",
-   "symbol": "reverse",
-   "kind": "function",
-   "lines": [
-    28,
-    108
-   ],
-   "fingerprint": "e83750a3b0d32038"
-  },
-  {
-   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
-   "line": 32,
-   "sentence": "The last line is a target refused before any response is made: `reverse` reads the colon in `\"javascript:alert(1)\"` as the end of a namespace's name and raises `NoReverseMatch`, which `resolve_url` lets pass because the string holds neither a slash nor a dot (the fourth of its steps below), so the string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).",
-   "tree": "django",
-   "path": "django/http/response.py",
-   "symbol": "HttpResponseRedirectBase.__init__",
-   "kind": "function",
-   "lines": [
-    642,
-    662
-   ],
-   "fingerprint": "d24c129d406f5945"
   },
   {
    "pointer": "django/shortcuts.py:resolve_url",
@@ -160,6 +132,34 @@
     211
    ],
    "fingerprint": "d9062979fcc6170c"
+  },
+  {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 75,
+   "sentence": "The string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
+   "line": 75,
+   "sentence": "The string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseRedirectBase.__init__",
+   "kind": "function",
+   "lines": [
+    642,
+    662
+   ],
+   "fingerprint": "d24c129d406f5945"
   },
   {
    "pointer": "django/shortcuts.py:resolve_url",
@@ -206,7 +206,7 @@
   {
    "pointer": "django/views/generic/detail.py:SingleObjectMixin.get_object",
    "line": 83,
-   "sentence": "The generic views do not call it: `SingleObjectMixin.get_object` makes the same translation itself, with a message of its own ([The generic views](generic.md#detailview-one-object)) (`django/views/generic/detail.py:SingleObjectMixin.get_object`).",
+   "sentence": "The generic views do not call it: `SingleObjectMixin.get_object` makes the same translation itself, with a message of its own ([`DetailView` and `ListView`](display.md#detailview-one-object)) (`django/views/generic/detail.py:SingleObjectMixin.get_object`).",
    "tree": "django",
    "path": "django/views/generic/detail.py",
    "symbol": "SingleObjectMixin.get_object",

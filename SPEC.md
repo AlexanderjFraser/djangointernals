@@ -175,6 +175,10 @@ A code span holds a name of the source, a pointer, or code.
   parameter, a local variable, the made-up names of an example. An
   attribute is written on its class or bare (`WSGIRequest.GET`, `GET`),
   not on a variable that holds an instance.
+- **An example's own names are set in italics** where the prose names them
+  (the decorator *bare*, the view *till*), so that a name that is also a
+  word is not read as one: "the wrapper bare makes copies nothing" stops a
+  reader, and "the wrapper *bare* makes copies nothing" does not.
 - **An HTTP header's name of one word is a literal**, `"Host"`,
   `"Cookie"`, as is a method, `"POST"`. A name with a hyphen cannot be
   taken for a name of the source and is written plain: `Content-Type`.

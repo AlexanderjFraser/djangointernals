@@ -67,7 +67,7 @@
   {
    "pointer": "django/views/generic/base.py:View.dispatch",
    "line": 100,
-   "sentence": "A request whose method is not in `View.http_method_names`, or for which the instance has no method of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
+   "sentence": "A request whose method is not in `View.http_method_names`, or for which the instance has no attribute of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.dispatch",
@@ -81,7 +81,7 @@
   {
    "pointer": "django/views/generic/base.py:View.http_method_not_allowed",
    "line": 100,
-   "sentence": "A request whose method is not in `View.http_method_names`, or for which the instance has no method of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
+   "sentence": "A request whose method is not in `View.http_method_names`, or for which the instance has no attribute of that name, is answered with a 405 listing the methods it does answer (`django/views/generic/base.py:View.dispatch`, `django/views/generic/base.py:View.http_method_not_allowed`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.http_method_not_allowed",
@@ -137,7 +137,7 @@
   {
    "pointer": "django/utils/decorators.py:method_decorator",
    "line": 110,
-   "sentence": "It applies the decorator anew at every call, so a decorator made from a middleware class makes a middleware for every request ([Decorating a class: `method_decorator`](views/method-decorator.md)) (`django/utils/decorators.py:method_decorator`).",
+   "sentence": "It applies the decorator anew at every call, so a decorator made from a middleware class makes a middleware for every request ([Decorating a class: `method_decorator`](views/method-decorator.md)) (`django/utils/decorators.py:method_decorator`, `django/utils/decorators.py:_multi_decorate`).",
    "tree": "django",
    "path": "django/utils/decorators.py",
    "symbol": "method_decorator",
@@ -149,9 +149,23 @@
    "fingerprint": "12fa0dc64130e07c"
   },
   {
+   "pointer": "django/utils/decorators.py:_multi_decorate",
+   "line": 110,
+   "sentence": "It applies the decorator anew at every call, so a decorator made from a middleware class makes a middleware for every request ([Decorating a class: `method_decorator`](views/method-decorator.md)) (`django/utils/decorators.py:method_decorator`, `django/utils/decorators.py:_multi_decorate`).",
+   "tree": "django",
+   "path": "django/utils/decorators.py",
+   "symbol": "_multi_decorate",
+   "kind": "function",
+   "lines": [
+    26,
+    58
+   ],
+   "fingerprint": "96434dac8ddc6429"
+  },
+  {
    "pointer": "django/views/generic/detail.py:BaseDetailView.get",
    "line": 114,
-   "sentence": "ArticleDetail names a model and inherits everything else from `DetailView`, whose `get` is a handler method with its decisions taken out and made methods of their own: `get_object` finds the article from the slug the path captured, `get_context_data` builds the template's context, and `render_to_response` makes the response, with a template name made from the app's label and the model's name when the class names none (`django/views/generic/detail.py:BaseDetailView.get`).",
+   "sentence": "*ArticleDetail* names a model and inherits everything else from `DetailView`, whose `get` is a handler method with its decisions taken out and made methods of their own: `get_object` finds the article from the slug the path captured, `get_context_data` builds the template's context, and `render_to_response` makes the response, with a template name made from the app's label and the model's name when the class names none ([`DetailView` and `ListView`](views/display.md)) (`django/views/generic/detail.py:BaseDetailView.get`).",
    "tree": "django",
    "path": "django/views/generic/detail.py",
    "symbol": "BaseDetailView.get",
@@ -165,7 +179,7 @@
   {
    "pointer": "django/views/defaults.py",
    "line": 122,
-   "sentence": "For each of the four statuses it may choose, 404, 500, 400 and 403, it has an **error view**: the one the URLconf names (`handler404` and its three kin), or else Django's default from `django/views/defaults.py`, called with the request and, for every status but 500, the exception ([The error views](views/errors.md)).",
+   "sentence": "For each of the four statuses it may choose, 404, 500, 400 and 403, it has an **error view**: the one the root URLconf names (`handler404` and its three kin), or else Django's default from `django/views/defaults.py`, called with the request and, for every status but 500, the exception ([The error views](views/errors.md)).",
    "tree": "django",
    "path": "django/views/defaults.py",
    "symbol": null,
@@ -179,7 +193,7 @@
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
    "line": 122,
-   "sentence": "With `settings.DEBUG` on, an `Http404`, an exception the handler does not recognise, and a `BadRequest` or `SuspiciousOperation` are answered with a **debug page** instead, while a `PermissionDenied` still goes to its error view (`django/core/handlers/exception.py:response_for_exception`).",
+   "sentence": "With `settings.DEBUG` on, a **debug page** ordinarily answers in place of the 404 and 500 views, and of the 400 view but for a `MultiPartParserError` ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/handlers/exception.py:handle_uncaught_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -191,9 +205,38 @@
    "fingerprint": "a7418f0de8e640e0"
   },
   {
+   "pointer": "django/core/handlers/exception.py:handle_uncaught_exception",
+   "line": 122,
+   "sentence": "With `settings.DEBUG` on, a **debug page** ordinarily answers in place of the 404 and 500 views, and of the 400 view but for a `MultiPartParserError` ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/handlers/exception.py:handle_uncaught_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "handle_uncaught_exception",
+   "kind": "function",
+   "lines": [
+    174,
+    187
+   ],
+   "fingerprint": "9c3f3109bfe0801c"
+  },
+  {
+   "pointer": "django/views/debug.py:technical_404_response",
+   "line": 124,
+   "sentence": "The debug page for an `Http404` ordinarily shows the patterns the resolver tried (`django/views/debug.py:technical_404_response`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "technical_404_response",
+   "kind": "function",
+   "lines": [
+    607,
+    668
+   ],
+   "at": 609,
+   "fingerprint": "b34c50c9868ef6a8"
+  },
+  {
    "pointer": "django/views/debug.py:ExceptionReporter",
    "line": 124,
-   "sentence": "The same reporter writes the report that `AdminEmailHandler` mails to a site's administrators ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).",
+   "sentence": "A reporter also writes the report, as text, that `AdminEmailHandler` mails to a site's administrators ([What an error report hides](views/report-filter.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "ExceptionReporter",
@@ -207,7 +250,7 @@
   {
    "pointer": "django/utils/log.py:AdminEmailHandler.emit",
    "line": 124,
-   "sentence": "The same reporter writes the report that `AdminEmailHandler` mails to a site's administrators ([The debug pages and `ExceptionReporter`](views/debug.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).",
+   "sentence": "A reporter also writes the report, as text, that `AdminEmailHandler` mails to a site's administrators ([What an error report hides](views/report-filter.md)) (`django/views/debug.py:ExceptionReporter`, `django/utils/log.py:AdminEmailHandler.emit`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "AdminEmailHandler.emit",
@@ -221,7 +264,7 @@
   {
    "pointer": "django/views/static.py:serve",
    "line": 126,
-   "sentence": "`django.views.static.serve` answers a request with a file from a directory; `django.conf.urls.static.static` routes a prefix to it only while `settings.DEBUG` is on, and the static files app's own view calls it ([The static file view](views/static-files.md)) (`django/views/static.py:serve`).",
+   "sentence": "`django.views.static.serve` answers a request with a file from a directory; `django.conf.urls.static.static` routes a prefix to it only if `settings.DEBUG` is on when the URLconf is imported, and the static files app's own view calls it ([The static file view](views/static-files.md)) (`django/views/static.py:serve`).",
    "tree": "django",
    "path": "django/views/static.py",
    "symbol": "serve",

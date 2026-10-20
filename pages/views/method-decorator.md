@@ -4,40 +4,21 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # Decorating a class: `method_decorator`
 
-`method_decorator` puts a decorator written for view functions on a method of a class, most often `View.dispatch`. It applies the decorator anew at every call, to a partial of the method bound to the request's instance, and once as the class is made, to a stand-in, so that the decorator's marks are on the method before any call; `View.as_view` then carries the marks of `dispatch` to the function a URLconf holds.
+`method_decorator` lets a decorator written for view functions stand on a method of a class, most often `View.dispatch`, through which one decorator covers every handler method of a class-based view.
 
-A wrapper such as the one `require_http_methods` makes takes the request as its first argument, and uses it. A method's first argument is the instance. So a decorator whose wrapper uses the request cannot be written above a handler method as it stands, and `method_decorator` exists to adapt it (`django/utils/decorators.py:method_decorator`).
+A wrapper such as the one `require_http_methods` makes takes the request as its first argument, and uses it. A method's first argument is the instance. So a decorator whose wrapper uses the request cannot be written above a handler method as it stands, and `method_decorator` exists to adapt it (`django/utils/decorators.py:method_decorator`). `never_cache` and `cache_control` catch the mistake when the method is first called: the wrapper of each tests that its first argument has a `META` attribute, as a request does, and raises a `TypeError` that recommends `method_decorator` when it has none (`django/views/decorators/cache.py:_check_request`).
 
-It can be used in either of two ways. Applied to a method in a class body, it returns a replacement for that method. Applied to a class, with the name of a method, it sets the replacement on the class under that name and returns the class; a name that is no attribute of the class is a `ValueError`. For an inherited method such as `dispatch` the second form gives the subclass an attribute of its own and leaves the base class as it was.
+`method_decorator` can be used in either of two ways. Applied to a method in a class body, it returns a replacement for that method. Applied to a class, with the name of a method, it sets the replacement on the class under that name and returns the class; a name that is no attribute of the class is a `ValueError`. For an inherited method such as `dispatch` the second form gives the subclass an attribute of its own and leaves the base class as it was.
 
 ## At every call, and once for the marks
 
-The replacement is made by `_multi_decorate`, and it does not apply the decorator to the method when the class is made. A decorator of functions expects something with a view's signature, without `self`, and when the class is made there is no instance to bind. So the replacement applies the decorator at each call: it binds the original method to the instance, wraps the bound method in a `functools.partial`, applies the decorator to that, and calls the wrapper it gets back. On `dispatch` it does so where `dispatch` would run, inside the function `as_view` returned, after `View.setup` (`django/utils/decorators.py:_multi_decorate`, `django/views/generic/base.py:View.as_view`).
+The replacement is made by `_multi_decorate`, and it does not apply the decorator to the method when the class is made. A decorator of functions expects something with a view's signature, without `self`, and when the class is made there is no instance to bind. So the replacement applies the decorator at each call: it binds the original method to the instance, wraps the bound method in a `functools.partial`, applies the decorator to that, and calls the wrapper it gets back. On `dispatch` it does so where `dispatch` would run, inside the function `View.as_view` returned, after `View.setup` (`django/utils/decorators.py:_multi_decorate`, `django/views/generic/base.py:View.as_view`).
 
-> **Why.** At the call the bound method is wrapped in a `functools.partial` before the decorator sees it. The comment where that is done gives the reason: new attributes cannot be set on a bound method object, only on a function. A partial takes them: those `functools.wraps` sets on it there, the method's name among them, and any the decorator sets on what it is given (`django/utils/decorators.py:_multi_decorate`).
+> **Why.** At the call the bound method is wrapped in a `functools.partial` before the decorator sees it. The comment where that is done gives the reason: new attributes cannot be set on a bound method object, only on a function. A partial is an object that takes attributes, so `functools.wraps` can give it the method's name, docstring and attributes, and the decorator can set its own on it (`django/utils/decorators.py:_multi_decorate`).
 
-A mark, though, has to be on the method before any call is made. So `_multi_decorate` also applies each decorator once, when the class is made, to a stand-in, a function that does nothing, and copies whatever attributes the stand-in comes back with onto the replacement (`django/utils/decorators.py:_update_method_wrapper`).
+A mark, though, an attribute set for some other code to find, has to be on the method before any call is made. So `_multi_decorate` also applies each decorator once, when the class is made, to a stand-in, a function that does nothing, and copies whatever attributes the stand-in comes back with onto the replacement (`django/utils/decorators.py:_update_method_wrapper`).
 
-The figure sets the two moments side by side for the Gazette's decorator announced on the `dispatch` of its class Births. Look for the decorator applied in both: to the stand-in once, for its marks, and to the partial at every request, for the call.
-
-```text figure=method-decorator
-method_decorator(announced, name="dispatch") on the class Births
-
-once, as the module that defines Births is imported      at every request, in the place of dispatch,
-                                                         inside the function as_view returned, after View.setup
-
-method_decorator(announced, name="dispatch")
-_multi_decorate: makes the replacement for dispatch      the wrapper method_decorator made
-  _update_method_wrapper                                   View.dispatch, bound to the instance, in a partial
-    announced applied to a stand-in                        announced applied to the partial
-    its attributes copied onto the replacement             the wrapper announced made, called
-the replacement set on Births as dispatch                    View.dispatch(request)
-                                                               Births.get(request)
-```
-
-*`method_decorator` putting announced on the `dispatch` of Births: on the left what runs once, as the class is made, and on the right what runs at every request, in the place of `dispatch`. A line indented under another runs inside it; the accent marks the two applications of announced.*
-
-Births has the decorator announced on its `dispatch`, and announced says when it is applied, and to what, and when its wrapper is called:
+The Gazette's class *Births* has the decorator *announced* on its `dispatch`, and the decorator says, as it runs, when it is applied, to what, and when its wrapper is called:
 
 ```python
 # gazette/stamp.py, and the class in gazette/views.py
@@ -59,7 +40,26 @@ class Births(View):
         return HttpResponse("births, marriages and deaths")
 ```
 
-As the module that defines Births is imported, announced is applied once, to the stand-in, under `_update_method_wrapper`:
+The figure sets the two moments side by side, the import on the left and a request on the right. Look for *announced* applied in both: to the stand-in once, for its marks, and to the partial at every request, for the call.
+
+```text figure=method-decorator
+method_decorator(announced, name="dispatch") on the class Births
+
+once, as the module that defines Births is imported  |  at every request, in the place of dispatch,
+                                                     |  inside the function as_view returned, after View.setup
+                                                     |
+method_decorator(announced, name="dispatch")         |
+_multi_decorate: makes the replacement for dispatch  |  the wrapper method_decorator made
+  _update_method_wrapper                             |    View.dispatch, bound to the instance, in a partial
+    announced applied to a stand-in                  |    announced applied to the partial
+    its attributes copied onto the replacement       |    the wrapper announced made, called
+the replacement set on Births as dispatch            |      View.dispatch(request)
+                                                     |        Births.get(request)
+```
+
+*`method_decorator` putting a decorator on a class's `dispatch`: on the left what runs once, as the class is made, and on the right what runs at every request, in the place of `dispatch`. A line indented under another runs inside it; the accent marks the decorator's two applications.*
+
+As the module that defines *Births* is imported, *announced* is applied once, to the stand-in, a function defined inside `_update_method_wrapper`:
 
 ```text recording=views
 The URLconf is imported: each as_view() is called once; the decorators made from a middleware, and method_decorator, as they run
@@ -71,7 +71,7 @@ The URLconf is imported: each as_view() is called once; the decorators made from
             ...
 ```
 
-At a request it is applied again, inside the call, to a partial around the bound `dispatch` of this request's instance, and only then is its wrapper called:
+At a request, *announced* is applied again, to the partial, before its wrapper is called, and both happen inside the wrapper `method_decorator` made:
 
 ```text recording=views
 GET /births/, twice: a decorator on dispatch is applied again at every call
@@ -104,7 +104,7 @@ class TipsMarkedOnPost(View):
         return HttpResponse("thank you")
 ```
 
-The function `as_view` makes from Tips, the one a URLconf holds, carries `"csrf_exempt"`; the one made from TipsMarkedOnPost does not, though its `post` has the mark:
+The function `as_view` makes from *Tips*, the one a URLconf holds, carries `"csrf_exempt"`; the one made from *TipsMarkedOnPost* does not, though its `post` has the mark:
 
 ```text recording=views
 views.Tips.as_view().csrf_exempt  ->  True
@@ -127,4 +127,4 @@ POST /tips/ and POST /tips/marked/ with CsrfViewMiddleware installed and no toke
 
 ## A list of decorators
 
-Given a list of decorators, `_multi_decorate` applies them from the last to the first, so that the first in the list is outermost, as if they had been written one above another in that order (`django/utils/decorators.py:_multi_decorate`). Of two decorators that the Gazette gives a class's `dispatch` in one list, the one listed second is applied first, to its stand-in at import and to the partial at each request, and the one listed first is then applied, at a request, to the other's wrapper, so that its own is the first called. `LoginView` is decorated so: one `method_decorator`, on the class with `name="dispatch"`, gives its `dispatch` `login_not_required`, `sensitive_post_parameters()`, `csrf_protect` and `never_cache`, outermost first. Only `login_not_required` leaves a mark, `"login_required"` set false, and `as_view` copies it onto the function it returns (`django/contrib/auth/views.py:LoginView`, `django/contrib/auth/decorators.py:login_not_required`).
+Given a list of decorators, `_multi_decorate` applies them from the last to the first, so that the first in the list is outermost, as if they had been written one above another in that order (`django/utils/decorators.py:_multi_decorate`). `LoginView` is decorated so: one `method_decorator`, on the class with `name="dispatch"`, gives its `dispatch` `login_not_required`, `sensitive_post_parameters()`, `csrf_protect` and `never_cache`, outermost first. Only `login_not_required` leaves a mark, `"login_required"` set false, and `as_view` copies it onto the function it returns (`django/contrib/auth/views.py:LoginView`, `django/contrib/auth/decorators.py:login_not_required`).

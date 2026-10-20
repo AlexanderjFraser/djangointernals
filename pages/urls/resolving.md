@@ -186,7 +186,7 @@ What a Resolver404 carries: the path that was left, and each chain of entries tr
     resolve('east/rooms/12/') raises Resolver404 with {'path': 'east/rooms/12/'}
 ```
 
-Outside the resolvers `"tried"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page)) (`django/views/debug.py:technical_404_response`).
+Outside the resolvers `"tried"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page-technical_404_response)) (`django/views/debug.py:technical_404_response`).
 
 ## The resolver's other callers
 

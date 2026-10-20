@@ -4,11 +4,11 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # A middleware as a decorator
 
-Several of Django's view decorators are a middleware class applied to one view: an instance of the class is made for the decorated view, and a wrapper calls the instance's hooks around the view. `csrf_protect`, `requires_csrf_token`, `ensure_csrf_cookie`, `gzip_page` and `conditional_page` are made by `decorator_from_middleware`, and `cache_page` by `decorator_from_middleware_with_args`, its variant that takes arguments.
+Several of Django's view decorators are a middleware class applied to one view: an instance of the class is made for the decorated view, and a wrapper calls the instance's hooks around the view. `csrf_protect` is one, made by `decorator_from_middleware`, and `cache_page` another, made by `decorator_from_middleware_with_args` because it takes arguments.
 
-A middleware acts on every request a site serves. Sometimes the same behaviour is wanted for one view only: the page cache for the one expensive page, the CSRF check for the one form on a site that does not install the middleware. For these, Django does not write the behaviour twice. `decorator_from_middleware` takes the middleware class and returns a decorator, and the decorator runs the middleware's own methods around a single view. It and its variant both hand the class to `make_middleware_decorator`, which does the work (`django/utils/decorators.py:decorator_from_middleware`, `django/utils/decorators.py:make_middleware_decorator`).
+A middleware acts on every request a site serves. Sometimes the same behaviour is wanted for one view only: the page cache for the one expensive page, the CSRF check for the one form on a site that does not install the middleware. For these, Django does not write the behaviour twice. `decorator_from_middleware` takes the middleware class and returns a decorator, and the decorator runs the middleware's own methods around a single view. It and `decorator_from_middleware_with_args` both hand the class to `make_middleware_decorator`, which does the work (`django/utils/decorators.py:decorator_from_middleware`, `django/utils/decorators.py:make_middleware_decorator`).
 
-The result behaves like the middleware in most respects and unlike it in a few. A middleware in the chain is outside the URL resolver, the other middleware's `process_view` hooks, and the handler's rendering of template responses. The decorator's wrapper is inside all of them, called once `BaseHandler._get_response` has resolved the path (`django/core/handlers/base.py:BaseHandler._get_response`).
+The result behaves like the middleware in most respects and unlike it in a few. A middleware in the chain is outside the URL resolver, the other middleware's `process_view` hooks, and the handler's rendering of template responses. When the path resolves to the decorated view, its wrapper is inside all of them (`django/core/handlers/base.py:BaseHandler._get_response`).
 
 The figure follows one request for such a view, on a site whose chain holds a middleware as well, from the outside in. The wrapper is a box inside `BaseHandler._get_response`, below the chain's `process_view` hooks, and only for a template response does a hook of its middleware run outside it.
 
@@ -36,7 +36,7 @@ a middleware of the chain            process_response
 
 ## The decorators made this way
 
-`csrf_protect`, `requires_csrf_token`, `ensure_csrf_cookie`, `gzip_page` and `conditional_page` are each made by a single statement of their module: `decorator_from_middleware` applied to a class, and the result bound to a name. The statements after it give each but `conditional_page` a docstring, and the three for CSRF a name of their own as well (`django/views/decorators/csrf.py`, `django/views/decorators/gzip.py`, `django/views/decorators/http.py`). `cache_page` is a function, described below.
+`csrf_protect`, `requires_csrf_token`, `ensure_csrf_cookie`, `gzip_page` and `conditional_page` are each made by a single statement of their module: `decorator_from_middleware` applied to a class, and the result bound to a name (`django/views/decorators/csrf.py`, `django/views/decorators/gzip.py`, `django/views/decorators/http.py`). `cache_page` is a function, described below.
 
 | decorator | made from | what it adds to the one view |
 |---|---|---|
@@ -49,7 +49,7 @@ a middleware of the chain            process_response
 
 *The decorators in `django/views/decorators/` that are a middleware class applied to one view.*
 
-The two classes with an underscore are subclasses of `CsrfViewMiddleware` kept beside the decorators that use them. Both replace `CsrfViewMiddleware._reject` with a method that returns `None`, so that a failed check is not an answer, and `_EnsureCsrfCookie` adds a call of `get_token`, which is what makes the middleware's `process_response` set the cookie (`django/views/decorators/csrf.py:_EnsureCsrfToken`, `django/views/decorators/csrf.py:_EnsureCsrfCookie`). Django's four default error views carry `requires_csrf_token` ([The error views](errors.md)) (`django/views/defaults.py`).
+The two classes with an underscore are subclasses of `CsrfViewMiddleware` kept beside the decorators that use them. Both replace `CsrfViewMiddleware._reject` with a method that returns `None`, so that a failed check is not an answer, and `_EnsureCsrfCookie` adds a call of `get_token`, which is what makes the middleware's `process_response` send the secret back (`django/views/decorators/csrf.py:_EnsureCsrfToken`, `django/views/decorators/csrf.py:_EnsureCsrfCookie`). Django's four default error views carry `requires_csrf_token` ([The error views](errors.md)) (`django/views/defaults.py`).
 
 Applied to the Gazette's front page, a plain function, the three for CSRF differ where the table says: in whether a `"POST"` without a token is refused, and in whether a page that never used the token gets the cookie.
 
@@ -64,13 +64,15 @@ The decorators Django makes from its own middleware
     ...
 ```
 
-`cache_page` takes arguments, and is made by the variant that passes them on. `decorator_from_middleware_with_args` returns a function whose arguments are given to the middleware's constructor after the view, and `cache_page` is a small function that calls it with the timeout, the alias and the prefix under the names `CacheMiddleware.__init__` expects (`django/views/decorators/cache.py:cache_page`). What the cache then does with a request and a response is the subject of [The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md), and the CSRF check that of [The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md).
+On a site whose chain installs `CsrfViewMiddleware` as well, using `csrf_protect` is, in its docstring's words, "harmless and efficient" (`django/views/decorators/csrf.py`). The chain's middleware checks the request first, in its `process_view`, and refuses a `"POST"` without a valid token before the decorator's wrapper is called ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`). A request it accepts it marks as checked, and the decorator's instance then checks nothing again; its `process_response`, the first of the two to run, sends the secret back where it is due, as when the view has used the token, and leaves the chain's `process_response` nothing to send ([The CSRF secret and its token](../security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).
+
+`cache_page` takes arguments, and is made by the variant that passes them on. `decorator_from_middleware_with_args` returns a function whose arguments are given to the middleware's constructor after the view, and `cache_page` is a small function that calls it with the timeout, the alias and the prefix under the names `CacheMiddleware.__init__` expects (`django/views/decorators/cache.py:cache_page`). What the cache then does with a request and a response is the subject of [The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md).
 
 ## One instance for each view
 
 A decorator made from a middleware class, applied to a view, calls the class with the view as its first argument. A middleware's first argument is the callable it is to wrap, `get_response`, so the instance believes the view is the rest of the chain (`django/utils/decorators.py:make_middleware_decorator`).
 
-The Gazette has a middleware, Stamp, that has all five hooks and does nothing in any of them but say that it was called, and a decorator made from it:
+The Gazette has a middleware, *Stamp*, that has all five hooks and does nothing in any of them but say that it was called, and a decorator made from it:
 
 ```python
 # gazette/stamp.py
@@ -125,7 +127,7 @@ GET /notices/: a view decorated with a middleware
         ...
 ```
 
-Either of the first two hooks may answer, and the wrapper then returns that response at once. Shut, a Stamp whose `process_request` answers the request itself, ends a request for the view it decorates before `process_view` and the view are reached, and nothing of Shut's runs after it:
+Either of the first two hooks may answer, and the wrapper then returns that response at once. The middleware *Shut*, a *Stamp* whose `process_request` answers the request itself, ends a request for the view it decorates before `process_view` and the view are reached, and nothing of *Shut*'s runs after it:
 
 ```text recording=views
 GET /notices/shut/: the middleware's process_request answers
@@ -136,7 +138,7 @@ GET /notices/shut/: the middleware's process_request answers
         ...
 ```
 
-An exception from the view goes to `process_exception`, and the wrapper returns the hook's response if it gives one. If it gives none, the wrapper raises the exception again, and the exception carries on out to the handler, which makes a response of it ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:convert_exception_to_response`). When the Gazette's lost notices raise, `process_exception` is the last of Stamp's hooks to run:
+An exception from the view goes to `process_exception`, and the wrapper returns the hook's response if it gives one. If it gives none, the wrapper raises the exception again, and the exception carries on out to the handler, which makes a response of it ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:convert_exception_to_response`). When the Gazette's lost notices raise, `process_exception` is the last of *Stamp*'s hooks to run:
 
 ```text recording=views
 GET /notices/lost/: the decorated view raises
@@ -151,7 +153,17 @@ GET /notices/lost/: the decorated view raises
       ...
 ```
 
-> **Trap.** A middleware made into a decorator does not run as it does in the chain. Its `process_request` runs once the URL has been resolved, an instant before its `process_view`, where in the chain it runs before the resolver: the two hooks no longer differ in time, though only `process_view` is given the view and its arguments. A response from `process_request`, `process_view` or `process_exception` never reaches `process_response`, as in the chain it would. And when the view raises and `process_exception` gives no response, `process_response` is not called at all. In the chain the same middleware's `process_response` would have been given the error response, which `convert_exception_to_response` makes at the centre's boundary, inside every middleware; the wrapper stands inside that boundary, and sees only the exception (`django/utils/decorators.py:make_middleware_decorator`, `django/core/handlers/exception.py:convert_exception_to_response`).
+A middleware called by this wrapper differs from the same middleware in the chain in when its first hook runs and in which answers reach its `process_response` (`django/middleware/__init__.py:MiddlewareMixin.__call__`, `django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/exception.py:convert_exception_to_response`, `django/utils/decorators.py:make_middleware_decorator`).
+
+| where they differ | in the chain | as a decorator |
+|---|---|---|
+| when `process_request` runs | before the path is resolved, as the request comes in through the chain | for the resolved view, once the chain's `process_view` hooks have run, just before the middleware's own `process_view` |
+| an answer from `process_request` or `process_view` | goes out through the middleware's `process_response` | is returned at once, and `process_response` is not called |
+| an exception from the view | goes to the `process_exception` hooks, and their answer, or else the error response `convert_exception_to_response` makes of it inside every middleware, goes out through `process_response` | goes to the middleware's `process_exception`; its answer is returned at once, and without one the exception leaves the wrapper; `process_response` is not called |
+
+*One middleware's hooks in the chain, and in the wrapper of a decorator made from it.*
+
+> **Trap.** As a decorator, a middleware cannot leave to its `process_response` the finishing of what its `process_request` began, as it can in the chain: an answer from its own hooks, or an exception from the view, leaves the wrapper without a call of `process_response` (`django/utils/decorators.py:make_middleware_decorator`).
 
 ## A template response is finished later
 
@@ -181,7 +193,7 @@ Between the wrapper's return and the render, the handler runs the chain's own `p
 
 For a view that is a coroutine function the wrapper is a coroutine function too, and awaits the view. The hooks are a different matter. They are ordinary methods, and the wrapper calls them directly, as the synchronous wrapper does, with no `sync_to_async` between. Those the wrapper calls run wherever it is running (`django/utils/decorators.py:make_middleware_decorator`).
 
-Requested through an `ASGIHandler`, the wrapper around the Gazette's notices from the wire, an `async def` function, is awaited on the event loop, and Stamp's hooks run there with it. Each line's tag names its thread, `[loop]` the event loop's and `[worker]` any other:
+Requested through an `ASGIHandler`, the wrapper around the Gazette's notices from the wire, an `async def` function, is awaited on the event loop, and *Stamp*'s hooks run there with it. Each line's tag names its thread, `[loop]` the event loop's and `[worker]` any other:
 
 ```text recording=views
 GET /notices/wire/ through an ASGIHandler, with ROOT_URLCONF = 'gazette.desk' for this block: the decorator made from Stamp around an async def view
@@ -200,7 +212,7 @@ Through the same handler, a view that is not a coroutine function gets an ordina
 
 ## On a method: a middleware for every request
 
-One instance for each decorated view is the arrangement when the decorator is applied to a function. `method_decorator` changes it. It applies its decorator again at every call, to a partial of the method bound to the instance that serves the request ([Decorating a class: `method_decorator`](method-decorator.md)), and to apply a decorator of this kind is to construct a middleware. The Gazette's crossword view is a class given stamped on its `dispatch` by `method_decorator`, and every request for it constructs a Stamp of its own, inside the wrapper that `method_decorator` made, around a partial of the bound `dispatch`:
+Put on a method by `method_decorator`, a decorator made from a middleware makes a middleware for every request, since `method_decorator` applies its decorator again at every call ([Decorating a class: `method_decorator`](method-decorator.md)) (`django/utils/decorators.py:_multi_decorate`). The Gazette's class *Crossword* has the decorator *stamped* put on its `dispatch` in this way, and every request for it constructs a *Stamp* of its own, inside the wrapper that `method_decorator` made, around a partial of the bound `dispatch`:
 
 ```text recording=views
 GET /crossword/, twice: method_decorator applies its decorator again at every call
@@ -211,8 +223,4 @@ GET /crossword/, twice: method_decorator applies its decorator again at every ca
             ...
 ```
 
-The instance serves that request and no other. One more is made when the class is defined, around the stand-in that `method_decorator` decorates so that it can copy the decorator's marks (`django/utils/decorators.py:_update_method_wrapper`). Some of Django's class-based views are decorated in this way: `LoginView` has `csrf_protect` among the decorators that `method_decorator` puts on its `dispatch`, so each request to a login page constructs a `CsrfViewMiddleware` (`django/contrib/auth/views.py:LoginView`).
-
-## `csrf_protect` and `CsrfViewMiddleware` together
-
-`csrf_protect` can be used on a site that also installs `CsrfViewMiddleware`, and using both is harmless and efficient (`django/views/decorators/csrf.py`). For a `"POST"` with a valid token, the chain's instance checks the token in its `process_view` and marks the request accepted; the decorator's `process_view` then returns at once, and the decorator's `process_response`, the first of the two to run, sets the cookie the view asked for, so that the chain's sets nothing. A `"POST"` without a token is refused by the chain's instance with a 403, and the decorator's wrapper is never called. How the request is marked, and how the cookie is kept from being set twice, are the middleware's ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md), [The CSRF secret and its token](../security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware.process_view`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).
+Some of Django's class-based views are decorated in this way: `LoginView` has `csrf_protect` among the decorators that `method_decorator` puts on its `dispatch`, so each request to a login page constructs a `CsrfViewMiddleware` (`django/contrib/auth/views.py:LoginView`).

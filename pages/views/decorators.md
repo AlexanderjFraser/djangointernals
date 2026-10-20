@@ -4,17 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # View decorators
 
-The decorators of `django/views/decorators/`, such as `require_http_methods`, `never_cache` and `csrf_exempt`: the wrappers they put around a view, acting before the call or after it, the marks some leave for other code to read, and how `condition` answers a request without calling the view.
+A view decorator ordinarily puts a wrapper in the view's place, which may act before the view is called, after it returns, or instead of calling it; some decorators leave a mark on the view, the response or the request for other code to read. Most of Django's own are in `django/views/decorators/`, among them `require_http_methods`, `never_cache`, `condition` and `csrf_exempt`.
 
-A view decorator takes a view and returns what goes into the URLconf in its place. That is all the word means, and the handler knows nothing about it: by the time a request arrives, a decorator written above a function ran long ago, when the module that defines the view was imported, and what is left is a function. Django's decorators differ in what that function does. Some call the view and act before the call or after it. Some change nothing about the call and exist to be noticed by other code. And one group is made mechanically from middleware classes, which [A middleware as a decorator](middleware-decorators.md) takes up; how any of them is put on a method of a class is [Decorating a class: `method_decorator`](method-decorator.md).
-
-## One wrapper, written twice
-
-Each decorator whose wrapper is written in `django/views/decorators/`, all but `sensitive_variables`, defines that wrapper twice, once with `def` and once with `async def`, picks one by asking whether the view is a coroutine function, and passes it through `functools.wraps` (`django/views/decorators/cache.py:never_cache`). The choice is made when the decorator is applied, not at each call of the wrapper, and it keeps a coroutine function a coroutine function, which the handler depends on ([Asynchronous views](async.md#what-a-decorator-has-to-keep)). The decorators made from a middleware class are defined in the directory too, but get their two wrappers from `make_middleware_decorator`, which is written to the same pattern (`django/utils/decorators.py:make_middleware_decorator`).
-
-`functools.wraps` copies the view's name, module and docstring onto the wrapper, copies the view's attributes over the wrapper's own, and leaves the view itself reachable as `__wrapped__`. The copied attributes matter most: they carry every mark an inner decorator set out to the function that the URLconf will hold ([What the handler asks of a view](callable.md#what-other-code-reads-from-a-view)).
-
-A decorator that takes settings is one level deeper: `require_http_methods`, `vary_on_headers`, `cache_control` and `condition` are functions that return a decorator, and are written with parentheses and arguments. The ones Django supplies ready-made, such as `require_GET` and `vary_on_cookie`, are the result of such a call kept under a name (`django/views/decorators/http.py:require_GET`).
+A view decorator takes a view and returns what goes into the URLconf in its place. That is all the word means, and the handler knows nothing about it: by the time a request arrives, a decorator written above a function ran long ago, when the module that defines the view was imported, and what is left is a function. One group of Django's decorators is made mechanically from middleware classes, which [A middleware as a decorator](middleware-decorators.md) takes up; how a decorator is put on a method of a class is [Decorating a class: `method_decorator`](method-decorator.md).
 
 ## Before the view, and after
 
@@ -28,6 +20,8 @@ The Gazette's masthead has three decorators, and between them they show both pla
 def masthead(request):
     return HttpResponse("The Gazette")
 ```
+
+A decorator that takes arguments is one level deeper: `require_http_methods`, `vary_on_headers` and `cache_control` are functions that return a decorator, and are written with parentheses and arguments. `require_GET` and `vary_on_cookie` are the result of such a call kept under a name, so the wrappers they put around the masthead are made by `require_http_methods` and `vary_on_headers` (`django/views/decorators/http.py:require_GET`, `django/views/decorators/vary.py:vary_on_cookie`, `django/views/decorators/cache.py:cache_control`).
 
 `require_GET`, written first, makes the outermost wrapper, which acts before it calls inwards; the wrappers of `never_cache` and `vary_on_cookie` act after, on the response as it comes back out, the innermost first:
 
@@ -61,9 +55,11 @@ POST /masthead/: the outermost wrapper answers, and nothing inside it runs
 
 > **Trap.** `require_http_methods` compares the request's method with its list as written, and the handlers' requests hold the method in upper case, so a list in lower case refuses every request: under `require_http_methods(["get"])` a `"GET"` gets a 405. The docstring asks for the methods in upper case, and nothing converts the list (`django/views/decorators/http.py:require_http_methods`, `django/core/handlers/wsgi.py:WSGIRequest.__init__`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).
 
-The masthead's other two wrappers each call inwards, take the response that comes back, and edit its headers before returning it. `vary_on_headers` hands the response to `patch_vary_headers` with the names it was given, and `never_cache` to `add_never_cache_headers`; `cache_control` hands its keyword arguments to `patch_cache_control`. What each of those functions writes, and how it merges with a header already there, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md) (`django/views/decorators/vary.py:vary_on_headers`, `django/views/decorators/cache.py:never_cache`, `django/views/decorators/cache.py:cache_control`).
+The masthead's other two wrappers each call inwards, take the response that comes back, and edit its headers before returning it; what they write, and how it merges with a header already there, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md) (`django/views/decorators/vary.py:vary_on_headers`, `django/views/decorators/cache.py:never_cache`).
 
-Since each decorator wraps what the one under it returned, the order of writing is the order of the wrappers: the first above a view is outermost, so it is the first to act before the view and the last to act after it, on a response the inner ones have already edited. A wrapper that answers by itself leaves everything under it unrun, so a decorator under one that may answer in the view's place, as `condition` may with a 304, sets nothing on that answer. Written under `condition`, `vary_on_cookie` runs only when the view does; written over it, it patches the 304 as well ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#under-the-condition-decorator)) (`django/views/decorators/http.py:condition`).
+Each of the three wrappers is written twice in its decorator, once with `def` and once with `async def`. The decorator picks one when it is applied, by whether the view is a coroutine function, so that the wrapper around a coroutine view is a coroutine function too, as the handler's test requires ([Asynchronous views](async.md#what-a-decorator-has-to-keep)). The one picked is passed through `functools.wraps`, which copies the view's name, docstring and attributes onto it, so that a mark set by a decorator further in reaches the function the URLconf holds ([What the handler asks of a view](callable.md#what-other-code-reads-from-a-view)) (`django/views/decorators/cache.py:never_cache`).
+
+A decorator written under one that may answer without calling inwards sets nothing on that answer. `condition` is one: it may answer with a 304, so `vary_on_cookie` written under it runs only when the view does, and written over it patches the 304 as well ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#under-the-condition-decorator)) (`django/views/decorators/http.py:condition`).
 
 The view decorators of the directory not made from a middleware class each change the request or the response before the view, after it, at both times, or never:
 
@@ -71,9 +67,9 @@ The view decorators of the directory not made from a middleware class each chang
 |---|---|---|
 | `require_http_methods`, and `require_GET`, `require_POST`, `require_safe` made from it | before | answers 405 itself unless the request's method is in its list; `require_safe` allows `"GET"` and `"HEAD"` |
 | `condition`, and `etag`, `last_modified` made from it | before and after | may answer 304 or 412 itself; may add `"ETag"` and Last-Modified to the response |
-| `never_cache` | after | `add_never_cache_headers` |
-| `cache_control` | after | `patch_cache_control` with its keyword arguments |
-| `vary_on_headers`, and `vary_on_cookie` made from it | after | `patch_vary_headers` with its names |
+| `never_cache` | after | adds the headers that forbid caching, Cache-Control and, where there is none, `"Expires"`, with `add_never_cache_headers` |
+| `cache_control` | after | merges the directives given as its keyword arguments into Cache-Control, with `patch_cache_control` |
+| `vary_on_headers`, and `vary_on_cookie` made from it | after | adds the names it is given to the `"Vary"` header, with `patch_vary_headers` |
 | `xframe_options_deny`, `xframe_options_sameorigin` | after | set X-Frame-Options unless the response has one |
 | `xframe_options_exempt` | after | marks the response |
 | `csp_override`, `csp_report_only_override` | after | mark the response |
@@ -82,7 +78,7 @@ The view decorators of the directory not made from a middleware class each chang
 
 *The view decorators of `django/views/decorators/` that are not made from a middleware, by when each changes the request or the response. The wrappers of `csrf_exempt` and `no_append_slash` run at every request and do nothing but call the view.*
 
-`sensitive_variables`, in the same directory, is not for views in particular. It can decorate any function, and what it records is read by the exception reporter ([The debug pages and `ExceptionReporter`](debug.md#sensitive_variables-and-sensitive_post_parameters)).
+`sensitive_variables`, in the same directory, is not for views in particular, and what it records is read by the exception reporter ([What an error report hides](report-filter.md#sensitive_variables-and-sensitive_post_parameters)).
 
 ## `condition`: answering before the view runs
 
@@ -114,7 +110,9 @@ GET /edition/ with If-None-Match: "edition-7"
     the server sends the body: ''
 ```
 
-After the view, or in its place, the wrapper sets `"ETag"` and Last-Modified on the response, each only if the response lacks it and only for a `"GET"` or a `"HEAD"`. How `get_conditional_response` compares the versions, the 412 it gives a request that would replace a version other than the current one, and how the wrapper quotes a tag and reads a time without a time zone, are told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md), with `ConditionalGetMiddleware`, which makes the same decision for a `"GET"` from the finished response, and so only after the view has done its work.
+After the view, or in its place, the wrapper sets `"ETag"` and Last-Modified on the response, each only if the response lacks it and only for a `"GET"` or a `"HEAD"`. How `get_conditional_response` compares the versions, and when it answers with a 412, is told in [Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#get_conditional_response).
+
+`ConditionalGetMiddleware` makes the same decision for a `"GET"`, but from the finished response, and so only after the view has done its work (`django/middleware/http.py:ConditionalGetMiddleware.process_response`).
 
 ## Marks
 
@@ -130,18 +128,8 @@ hasattr(views.front, "csrf_exempt")  ->  False
 ...
 ```
 
-> **Why.** Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, "decorators are nicer if they don't have side effects" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`). `login_not_required`, in `django/contrib/auth/decorators.py`, takes the other course: it sets its attribute on the view it is given and returns that same view (`django/contrib/auth/decorators.py:login_not_required`).
-
-The marks are not all read at the same moment. `CsrfViewMiddleware.process_view` reads `"csrf_exempt"` and `BaseHandler.make_view_atomic` reads `"_non_atomic_requests"`, both from the view the handler is about to call. `"should_append_slash"` is read by `CommonMiddleware.should_redirect_with_slash`, which resolves the path with a slash added to find the view it would lead to, and is called from that middleware's `process_request` and `process_response` ([What the handler asks of a view](callable.md#what-other-code-reads-from-a-view)) (`django/middleware/common.py:CommonMiddleware.should_redirect_with_slash`).
+> **Why.** Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, "decorators are nicer if they don't have side effects" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).
 
 **On the response.** `xframe_options_exempt` calls the view and sets `"xframe_options_exempt"`, true, on the response, which `XFrameOptionsMiddleware.process_response` tests before it adds its header. `csp_override` and `csp_report_only_override` each store a policy on the response, which `ContentSecurityPolicyMiddleware.process_response` uses in place of the one in the settings (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:_make_csp_decorator`).
 
-**On the request.** `sensitive_post_parameters` sets an attribute of its own name on the request each time the view is called, holding the names of the posted fields that an error report must not show, `("password",)` for `sensitive_post_parameters("password")`, or `"__ALL__"` for `sensitive_post_parameters()` (`django/views/decorators/debug.py:sensitive_post_parameters`). How a report reads it is told in [The debug pages and `ExceptionReporter`](debug.md#sensitive_variables-and-sensitive_post_parameters).
-
-`never_cache` and `cache_control` guard against being used on a method, where the first argument would be the view's instance and not a request: they test that their first argument has a `META` attribute, and `sensitive_post_parameters` tests that it is an `HttpRequest`. Each raises a `TypeError` that recommends `method_decorator`. `sensitive_variables` and `sensitive_post_parameters` refuse another slip, with a message of their own: they must be called, even with no arguments, and refuse to be handed a function directly.
-
-```text recording=views
-...
-never_cache(views.front)('not a request')  ->  raises TypeError: never_cache didn't receive an HttpRequest. If you are decorating a classmethod, be sure to use @method_decorator.
-sensitive_variables(views.front)  ->  raises TypeError: sensitive_variables() must be called to use it as a decorator, e.g., use @sensitive_variables(), not @sensitive_variables.
-```
+**On the request.** `sensitive_post_parameters` marks the request, each time the view is called, with the posted fields an error report is not to show ([What an error report hides](report-filter.md#sensitive_variables-and-sensitive_post_parameters)) (`django/views/decorators/debug.py:sensitive_post_parameters`).

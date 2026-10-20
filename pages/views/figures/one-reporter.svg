@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 817 345">
+  <!-- the caller with settings.DEBUG on -->
+  <rect class="box" x="0.5" y="0.5" width="396" height="68" rx="4"/>
+  <text class="name" x="12" y="21">technical_500_response</text>
+  <text class="quiet" x="200" y="21">with <tspan class="name">settings.DEBUG</tspan> on</text>
+  <text class="quiet" x="12" y="39">called by the handler, for the response</text>
+  <text class="name" x="12" y="57">ExceptionReporter(request, ..., is_email=False)</text>
+
+  <!-- the caller with settings.DEBUG off -->
+  <rect class="box" x="420.5" y="0.5" width="396" height="68" rx="4"/>
+  <text class="name" x="432" y="21">AdminEmailHandler.emit</text>
+  <text class="quiet" x="620" y="21">with <tspan class="name">settings.DEBUG</tspan> off</text>
+  <text class="quiet" x="432" y="39">called by the logging, for a record of ERROR or above</text>
+  <text class="name" x="432" y="57">ExceptionReporter(request, ..., is_email=True)</text>
+
+  <!-- each caller makes a reporter -->
+  <path class="line" d="M198.5 68.5 V98.5"/>
+  <polygon class="head" points="198.5,108.5 193.5,98.5 203.5,98.5"/>
+  <path class="line" d="M618.5 68.5 V98.5"/>
+  <polygon class="head" points="618.5,108.5 613.5,98.5 623.5,98.5"/>
+
+  <!-- the reporter, of one class for both -->
+  <rect class="mark-box" x="116.5" y="108.5" width="584" height="128" rx="4"/>
+  <text class="name" x="128" y="130">ExceptionReporter</text>
+  <text class="quiet" x="277" y="130">made with the request, and the exception's type, value and traceback</text>
+
+  <!-- the filter, between the reporter and what it reads -->
+  <rect class="ground" x="128.5" y="154.5" width="236" height="32" rx="4"/>
+  <text class="name" x="140" y="175">SafeExceptionReporterFilter</text>
+  <text class="quiet" x="381" y="157">between it and the settings,</text>
+  <text class="quiet" x="381" y="175">the request's META, cookies and POST,</text>
+  <text class="quiet" x="381" y="193">and each frame's variables</text>
+
+  <!-- get_traceback_data and its dictionary -->
+  <text class="name" x="128" y="222">ExceptionReporter.get_traceback_data</text>
+  <path class="line" d="M419 217.5 H439"/>
+  <polygon class="head" points="449,217.5 439,212.5 439,222.5"/>
+  <text x="459" y="222">a dictionary</text>
+
+  <!-- both templates render it -->
+  <path class="line" d="M198.5 236.5 V266.5"/>
+  <polygon class="head" points="198.5,276.5 193.5,266.5 203.5,266.5"/>
+  <path class="line" d="M618.5 236.5 V266.5"/>
+  <polygon class="head" points="618.5,276.5 613.5,266.5 623.5,266.5"/>
+
+  <!-- the HTML template -->
+  <rect class="box" x="0.5" y="276.5" width="396" height="68" rx="4"/>
+  <text class="name" x="12" y="298">technical_500.html</text>
+  <text class="quiet" x="168" y="298">rendered by <tspan class="name">get_traceback_html</tspan></text>
+  <text x="12" y="316">the page, for a client that prefers HTML;</text>
+  <text x="12" y="334">the mail's HTML alternative, with <tspan class="name">include_html</tspan></text>
+
+  <!-- the text template -->
+  <rect class="box" x="420.5" y="276.5" width="396" height="68" rx="4"/>
+  <text class="name" x="432" y="298">technical_500.txt</text>
+  <text class="quiet" x="588" y="298">rendered by <tspan class="name">get_traceback_text</tspan></text>
+  <text x="432" y="316">the page, for any other client;</text>
+  <text x="432" y="334">in the mail; no frame's variables</text>
+</svg>

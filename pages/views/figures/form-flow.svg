@@ -1,47 +1,74 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 646 236">
-  <!-- GET -->
-  <text class="strong" x="0" y="27">GET</text>
-  <path class="line" d="M38 22 H52"/>
-  <polygon class="head" points="62,22 52,17 52,27"/>
-  <rect class="box" x="66" y="0.5" width="196" height="44" rx="4"/>
-  <text class="name" x="78" y="19">get_form</text>
-  <text class="quiet small" x="78" y="36">a form with no data: not bound</text>
-  <path class="line" d="M262 22 H290"/>
-  <polygon class="head" points="300,22 290,17 290,27"/>
-  <rect class="ground" x="304" y="0.5" width="341" height="44" rx="4"/>
-  <text class="strong" x="316" y="19">200</text>
-  <text class="quiet small" x="316" y="36">the page, with the empty form</text>
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 860 438">
+  <!-- GET: the request, the handler and what it calls, and the page it answers with -->
+  <text class="strong" x="16" y="96" text-anchor="middle">GET</text>
+  <path class="line" d="M36 91.5 H56"/>
+  <polygon class="head" points="66,91.5 56,86.5 56,96.5"/>
+  <rect class="ground" x="66.5" y="0.5" width="580" height="160" rx="4"/>
+  <text class="name strong" x="78" y="22">ProcessFormView.get</text>
+  <rect class="ground" x="78.5" y="34.5" width="224" height="114" rx="4"/>
+  <text class="name" x="90" y="56">get_context_data</text>
+  <rect class="box" x="90.5" y="68.5" width="200" height="68" rx="4"/>
+  <text class="name" x="102" y="90">get_form</text>
+  <text class="quiet small" x="102" y="108">a form with no data:</text>
+  <text class="quiet small" x="102" y="126">not bound</text>
+  <path class="line" d="M302.5 91.5 H460.5"/>
+  <polygon class="head" points="470.5,91.5 460.5,86.5 460.5,96.5"/>
+  <rect class="box" x="470.5" y="75.5" width="164" height="32" rx="4"/>
+  <text class="name" x="482" y="96">render_to_response</text>
+  <path class="line" d="M634.5 91.5 H668.5"/>
+  <polygon class="head" points="678.5,91.5 668.5,86.5 668.5,96.5"/>
+  <rect class="ground" x="678.5" y="66.5" width="180" height="50" rx="4"/>
+  <text class="strong" x="690" y="87">200</text>
+  <text class="quiet small" x="690" y="105">the page, with the form</text>
 
-  <!-- between the two requests -->
-  <path class="line dashed" d="M16 36 V84"/>
-  <polygon class="head" points="16,94 11,84 21,84"/>
-  <text class="quiet small" x="30" y="72">the reader fills the form in, and the browser posts it</text>
+  <!-- from the page to the first POST -->
+  <text class="quiet small" x="30" y="184">the reader fills the form in, and the browser posts it</text>
+  <path class="line dashed" d="M768.5 116.5 V196 H16 V268"/>
+  <polygon class="head" points="16,278 11,268 21,268"/>
 
-  <!-- POST -->
-  <text class="strong" x="0" y="123">POST</text>
-  <path class="line" d="M44 118 H52"/>
-  <polygon class="head" points="62,118 52,113 52,123"/>
-  <rect class="box" x="66" y="96" width="196" height="44" rx="4"/>
-  <text class="name" x="78" y="115">get_form</text>
-  <text class="quiet small" x="78" y="132">POST and FILES in it: bound</text>
-  <path class="line" d="M262 118 H290"/>
-  <polygon class="head" points="300,118 290,113 290,123"/>
-  <rect class="mark-box" x="304" y="96" width="96" height="44" rx="4"/>
-  <text class="name" x="318" y="123">is_valid</text>
+  <!-- POST: the request, the handler, the form, the question, and the two ways out -->
+  <text class="strong" x="16" y="293" text-anchor="middle">POST</text>
+  <path class="line" d="M36 288.5 H56"/>
+  <polygon class="head" points="66,288.5 56,283.5 56,293.5"/>
+  <rect class="ground" x="66.5" y="220.5" width="580" height="180" rx="4"/>
+  <text class="name strong" x="78" y="242">ProcessFormView.post</text>
+  <rect class="box" x="90.5" y="254.5" width="200" height="68" rx="4"/>
+  <text class="name" x="102" y="276">get_form</text>
+  <text class="quiet small" x="102" y="294">a form holding <tspan class="name">request.POST</tspan></text>
+  <text class="quiet small" x="102" y="312">and <tspan class="name">request.FILES</tspan>: bound</text>
+  <path class="line" d="M290.5 288.5 H328.5"/>
+  <polygon class="head" points="338.5,288.5 328.5,283.5 328.5,293.5"/>
+  <rect class="mark-box" x="338.5" y="272.5" width="96" height="32" rx="4"/>
+  <text class="name" x="386.5" y="293" text-anchor="middle">is_valid</text>
 
-  <!-- no -->
-  <path class="line" d="M400 118 H428"/>
-  <polygon class="head" points="438,118 428,113 428,123"/>
-  <text class="small" x="408" y="110">no</text>
-  <rect class="ground" x="442" y="96" width="203" height="44" rx="4"/>
-  <text class="name" x="454" y="115">form_invalid</text>
-  <text class="quiet small" x="454" y="132">200, the page again, with errors</text>
+  <!-- yes: the way on -->
+  <path class="line" d="M434.5 288.5 H460.5"/>
+  <polygon class="head" points="470.5,288.5 460.5,283.5 460.5,293.5"/>
+  <text class="small" x="441" y="281">yes</text>
+  <rect class="box" x="470.5" y="272.5" width="164" height="32" rx="4"/>
+  <text class="name" x="482" y="293">form_valid</text>
+  <path class="line" d="M634.5 288.5 H668.5"/>
+  <polygon class="head" points="678.5,288.5 668.5,283.5 668.5,293.5"/>
+  <rect class="ground" x="678.5" y="254.5" width="180" height="68" rx="4"/>
+  <text class="strong" x="690" y="276">302</text>
+  <text class="quiet small" x="690" y="294">to the address</text>
+  <text class="quiet small" x="690" y="312"><tspan class="name">get_success_url</tspan> gives</text>
 
-  <!-- yes -->
-  <path class="line" d="M352 140 V172"/>
-  <polygon class="head" points="352,182 347,172 357,172"/>
-  <text class="small" x="362" y="164">yes</text>
-  <rect class="ground" x="304" y="186" width="341" height="44" rx="4"/>
-  <text class="name" x="316" y="205">form_valid</text>
-  <text class="quiet small" x="316" y="222">302, to the address get_success_url gives</text>
+  <!-- no: the way back -->
+  <path class="line" d="M386.5 304.5 V372.5 H460.5"/>
+  <polygon class="head" points="470.5,372.5 460.5,367.5 460.5,377.5"/>
+  <text class="small" x="395" y="343">no</text>
+  <rect class="box" x="470.5" y="356.5" width="164" height="32" rx="4"/>
+  <text class="name" x="482" y="377">form_invalid</text>
+  <path class="line" d="M634.5 372.5 H668.5"/>
+  <polygon class="head" points="678.5,372.5 668.5,367.5 668.5,377.5"/>
+  <rect class="ground" x="678.5" y="338.5" width="180" height="68" rx="4"/>
+  <text class="strong" x="690" y="360">200</text>
+  <text class="quiet small" x="690" y="378">the page again, the form with</text>
+  <text class="quiet small" x="690" y="396">its errors and what was typed</text>
+
+  <!-- from the page again to the next POST -->
+  <text class="quiet small" x="30" y="424">the reader corrects it, and the browser posts it again: back to POST</text>
+  <path class="line dashed" d="M768.5 406.5 V436 H16 V309"/>
+  <polygon class="head" points="16,299 11,309 21,309"/>
 </svg>

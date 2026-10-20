@@ -4,7 +4,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # `View.as_view` and dispatch
 
-`View.as_view` makes a view class into the callable a URLconf holds: a function that, at each request, makes an instance of the class, calls `View.setup` to store the request on it, and calls `View.dispatch`, which calls the handler method named for the request's HTTP method. A method that is not in `View.http_method_names`, or that the instance has no attribute for, is answered by `View.http_method_not_allowed` with a 405.
+`View.as_view` makes a view class into the callable a URLconf holds: a function that, at each request, makes an instance of the class, calls `View.setup` to store the request on it, and calls `View.dispatch`, which calls the handler method named for the request's HTTP method.
 
 `View` is the base class of the generic views and of every view made with `as_view`, and it is small: it dispatches by HTTP method and makes a few checks (`django/views/generic/base.py:View`). None of the templates, the querysets or the forms of the generic views is in `View`: they are in the mixins and the base views that are combined with it. What `View` itself deals with is a mismatch. The handler wants one callable that serves every request, and `as_view` gives it one that makes an instance for each, so that each request has state of its own and a handler method may keep what it likes on `self` (`docs/ref/class-based-views/index.txt`).
 
@@ -58,7 +58,7 @@ import gazette.urls
   ...
 ```
 
-`as_view` is a `classonlymethod`, a `classmethod` that raises `AttributeError` when it is looked up on an instance, so it can be called on the class and on nothing else (`django/utils/decorators.py:classonlymethod`). It checks its arguments before it makes anything, and strictly. An argument whose name is in the class's `http_method_names` is refused: were it accepted, `View.__init__` would set it on each instance, over the handler method of that name. So is any name that is not already an attribute of the class, and a misspelt name therefore raises `TypeError` as the URLconf is imported (`django/views/generic/base.py:View.as_view`). Each `TypeError` names the class and the argument, and the method looked up on an instance is refused by `classonlymethod`:
+`as_view` is a `classonlymethod`, a `classmethod` that raises `AttributeError` when it is looked up on an instance, so it can be called on the class and on nothing else (`django/utils/decorators.py:classonlymethod`). It checks its arguments before it makes anything, and refuses two kinds with a `TypeError`. It refuses a name in the class's `View.http_method_names`, which `View.__init__` would otherwise set on each instance over the handler method of that name. It refuses any name that is not already an attribute of the class, so a misspelt name raises as the URLconf is imported (`django/views/generic/base.py:View.as_view`). Each `TypeError` names the class and the argument, and the method looked up on an instance is refused by `classonlymethod`:
 
 ```text recording=views
 ...
@@ -74,7 +74,7 @@ Having made the function, `as_view` dresses it. It sets two attributes that say 
 
 ## What the function does for each request
 
-The function that `as_view` returns does the same at every call. It makes an instance of the class with the arguments `as_view` was given, calls `setup` on the instance, makes sure that `setup` left the request there, and returns what the instance's `dispatch` returns (`django/views/generic/base.py:View.as_view`). Requested twice, the colophon is two calls of one function, and each begins with a new Colophon before `setup` and `dispatch` are called on it:
+The function that `as_view` returns does the same at every call. It makes an instance of the class with the arguments `as_view` was given, calls `setup` on the instance, makes sure that `setup` left the request there, and returns what the instance's `dispatch` returns. It holds the instance only in a local variable, so once it has returned, the function no longer holds the instance (`django/views/generic/base.py:View.as_view`). Requested twice, the colophon is two calls of one function, and each begins with a new *Colophon* before `setup` and `dispatch` are called on it:
 
 ```text recording=views
 GET /colophon/, twice: a class-based view is a function that makes an instance for each request
@@ -103,11 +103,9 @@ GET /colophon/large/: the arguments given to as_view() are given to each instanc
 
 > **Trap.** The arguments given to `as_view` are captured as the URLconf is imported, and every instance the function makes is given the very same objects: a dictionary passed to `as_view` is one dictionary shared by every request the pattern serves, and a request that changes it changes it for the requests that follow. The same is true of anything written as a class attribute. Django's documentation warns against passing a list, a dictionary or any other mutable object to a view for that reason (`docs/ref/class-based-views/index.txt`). What belongs to one request is what a method assigns on `self` (`django/views/generic/base.py:View.as_view`).
 
-The function holds the instance only in a local variable and returns only what `dispatch` returned, so once it has returned a response, neither the function nor the handler holds the instance (`django/views/generic/base.py:View.as_view`). After that it is kept only by what else refers to it: anything a handler method has handed `self` to, or the response, since a `TemplateResponse` from a generic view has the view in its context under the name `"view"` (`django/views/generic/base.py:ContextMixin.get_context_data`).
-
 ## `View.setup`
 
-`View.setup` puts the request, the positional arguments and the keyword arguments on the instance as `View.request`, `View.args` and `View.kwargs`. Other methods read them from there: a generic view's `get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`).
+`View.setup` puts the request, the positional arguments and the keyword arguments on the instance as `View.request`, `View.args` and `View.kwargs`. Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`).
 
 It does one more thing first. If the instance has a `get` and no `head`, it sets `head` to be the `get` method, so a `"HEAD"` is dispatched like any other method and runs the same code as a `"GET"`. Under `View.dispatch` the colophon's `"HEAD"` runs its `get`, and the response the handler returns still has its body:
 
@@ -137,12 +135,12 @@ OPTIONS /colophon/: answered by View.options
 ...
           View.options(request)
             View._allowed_methods  ->  ['GET', 'HEAD', 'OPTIONS']
-            View.view_is_async  ->  False
+            ...
             -> an HttpResponse, status 200, Allow 'GET, HEAD, OPTIONS'
             ...
 ```
 
-A method is turned away for either of two reasons, and the answer is the same: the instance has no attribute of that name, or the name is outside the list. `dispatch` then calls `View.http_method_not_allowed`, which logs a warning to `"django.request"` and returns an `HttpResponseNotAllowed`, a 405 with the same `"Allow"` header (`django/views/generic/base.py:View.http_method_not_allowed`). The colophon defines no handler method for `"PUT"`, so the request is logged and refused:
+A method is turned away for either of two reasons, and the answer is the same: the instance has no attribute of that name, or the name is outside the list, as `"PROPFIND"` is. `dispatch` then calls `View.http_method_not_allowed`, which logs a warning to `"django.request"` and returns an `HttpResponseNotAllowed`, a 405 with the same `"Allow"` header, from inside a coroutine if `View.view_is_async` finds the class asynchronous, as `View.options` does ([Asynchronous views](async.md#a-class-whose-handler-methods-are-coroutines)) (`django/views/generic/base.py:View.http_method_not_allowed`). The colophon defines no handler method for `"PUT"`, so the request is logged and refused:
 
 ```text recording=views
 PUT /colophon/: the class has no method of that name
@@ -155,12 +153,12 @@ PUT /colophon/: the class has no method of that name
             ...
 ```
 
-Both `View.options` and `View.http_method_not_allowed` ask `View.view_is_async`, so that a class whose handler methods are coroutine functions gets its response inside a coroutine ([Asynchronous views](async.md#a-class-whose-handler-methods-are-coroutines)). A request for `"PROPFIND"`, a method that is not in the list at all, gets the same 405 with the same header. A class narrows what it accepts by assigning a shorter `http_method_names`. A method the class does define is then unreachable if its name is not in the list, because `dispatch` tests the list before it looks at the instance.
+A class narrows what it accepts by assigning a shorter `http_method_names`. A handler method the class defines is then unreachable if its name is not in the list, because `dispatch` tests the list before it looks at the instance (`django/views/generic/base.py:View.dispatch`).
 
 ## Why so much is hung on `dispatch`
 
-Every request for a class-based view passes through `setup` and then `dispatch`, whatever its method, and `dispatch` is the one whose return value is the response. That makes it the place to put whatever must happen for the view as a whole.
+Every request for a class-based view passes through `setup` and then `dispatch`, whatever its method, and `dispatch` is the one whose return value the function returns. That makes it the place to put whatever must happen for the view as a whole.
 
-A decorator written for function views, applied to `dispatch` through `method_decorator`, covers every handler method at once ([Decorating a class: `method_decorator`](method-decorator.md)) (`django/utils/decorators.py:method_decorator`). Django's own `LoginView` is decorated so: its four decorators are one `method_decorator` given a list, on the class, with `name="dispatch"` (`django/contrib/auth/views.py:LoginView`).
+A decorator written for function views, applied to `dispatch` through `method_decorator`, covers every handler method at once, which is how Django's own `LoginView` is decorated ([Decorating a class: `method_decorator`](method-decorator.md)) (`django/utils/decorators.py:method_decorator`, `django/contrib/auth/views.py:LoginView`).
 
 A mixin that decides whether the request may proceed overrides `dispatch`, makes its test, and calls `super().dispatch` only if the test passes, as `LoginRequiredMixin` does, answering a user who is not logged in through `AccessMixin.handle_no_permission` ([Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](../auth/requiring-login.md#the-mixins-and-accessmixinhandle_no_permission)) (`django/contrib/auth/mixins.py:LoginRequiredMixin.dispatch`). Such a mixin has to stand before the view class among the bases, so that its `dispatch` is found before `View.dispatch`.

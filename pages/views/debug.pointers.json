@@ -8,22 +8,78 @@
  "document": "debug.md",
  "pointers": [
   {
-   "pointer": "django/views/debug.py",
-   "line": 7,
-   "sentence": "The code of `django/views/debug.py`: `technical_500_response`, the page shown for an uncaught exception when `settings.DEBUG` is on, and `technical_404_response`, the page for an `Http404`.",
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 36,
+   "sentence": "`response_for_exception` passes any exception it does not recognise to `handle_uncaught_exception`, which returns what `technical_500_response` makes unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is on, and it calls the same function directly, with a status of 400, for a `BadRequest` or a `SuspiciousOperation` ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
-   "path": "django/views/debug.py",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
    "lines": [
-    1,
-    683
+    64,
+    160
    ],
-   "fingerprint": "9f5ffe7cba2932b5"
+   "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/utils/log.py:DEFAULT_LOGGING",
+   "line": 38,
+   "sentence": "The logging system asks, and under Django's default logging configuration only when `settings.DEBUG` is off: the configuration gives the logger `\"django\"` an `AdminEmailHandler` for records of level ERROR and above, behind a filter that passes them only while the setting is off ([Logging](../startup/logging.md#adminemailhandler-error-email-is-a-log-handler)) (`django/utils/log.py:DEFAULT_LOGGING`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "DEFAULT_LOGGING",
+   "kind": "assignment",
+   "lines": [
+    21,
+    67
+   ],
+   "fingerprint": "aa267b411bf152bf"
+  },
+  {
+   "pointer": "django/utils/log.py:AdminEmailHandler.emit",
+   "line": 38,
+   "sentence": "For each record it mails, the handler makes a reporter as for an email, with `is_email=True`, puts the text report in the message, and adds the HTML report as an alternative body if it was made with `include_html=True` (`django/utils/log.py:AdminEmailHandler.emit`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.emit",
+   "kind": "function",
+   "lines": [
+    123,
+    164
+   ],
+   "fingerprint": "2bcdbf9a329cd643"
+  },
+  {
+   "pointer": "django/core/mail/handler.py:MailersHandler.create_connection",
+   "line": 40,
+   "sentence": "With `settings.DEBUG` off, `ADMINS` set, and `MAILERS`, the setting that names a project's mail backends, set to one that keeps each message in memory, a request for the Gazette's failing view shows the mail made inside the logging call (`django/core/mail/handler.py:MailersHandler.create_connection`, `django/core/mail/backends/locmem.py:EmailBackend`).",
+   "tree": "django",
+   "path": "django/core/mail/handler.py",
+   "symbol": "MailersHandler.create_connection",
+   "kind": "function",
+   "lines": [
+    44,
+    78
+   ],
+   "fingerprint": "7066895b5458f351"
+  },
+  {
+   "pointer": "django/core/mail/backends/locmem.py:EmailBackend",
+   "line": 40,
+   "sentence": "With `settings.DEBUG` off, `ADMINS` set, and `MAILERS`, the setting that names a project's mail backends, set to one that keeps each message in memory, a request for the Gazette's failing view shows the mail made inside the logging call (`django/core/mail/handler.py:MailersHandler.create_connection`, `django/core/mail/backends/locmem.py:EmailBackend`).",
+   "tree": "django",
+   "path": "django/core/mail/backends/locmem.py",
+   "symbol": "EmailBackend",
+   "kind": "class",
+   "lines": [
+    11,
+    37
+   ],
+   "fingerprint": "5ee2794a86ddf81f"
   },
   {
    "pointer": "django/views/debug.py:technical_500_response",
-   "line": 62,
+   "line": 59,
    "sentence": "It makes a reporter, asks it for one of two renderings, and wraps the result in a response with the status it was given (`django/views/debug.py:technical_500_response`).",
    "tree": "django",
    "path": "django/views/debug.py",
@@ -37,8 +93,36 @@
    "fingerprint": "952bd3c881d36383"
   },
   {
+   "pointer": "django/views/debug.py:get_exception_reporter_class",
+   "line": 101,
+   "sentence": "So a project can replace the reporter for the whole site, and a middleware can replace it for one request's debug page (`django/views/debug.py:get_exception_reporter_class`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "get_exception_reporter_class",
+   "kind": "function",
+   "lines": [
+    93,
+    99
+   ],
+   "fingerprint": "5b306ba293321980"
+  },
+  {
+   "pointer": "django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response",
+   "line": 116,
+   "sentence": "An empty policy means that `ContentSecurityPolicyMiddleware` adds no header, so the debug page is exempt from the site's Content Security Policy (`django/middleware/csp.py:ContentSecurityPolicyMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/csp.py",
+   "symbol": "ContentSecurityPolicyMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    16,
+    35
+   ],
+   "fingerprint": "90a7f2d15640a6b6"
+  },
+  {
    "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_data",
-   "line": 83,
+   "line": 120,
    "sentence": "`ExceptionReporter.get_traceback_data` turns them into one dictionary, which is the context for both templates (`django/views/debug.py:ExceptionReporter.get_traceback_data`).",
    "tree": "django",
    "path": "django/views/debug.py",
@@ -52,7 +136,7 @@
   },
   {
    "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_frames",
-   "line": 85,
+   "line": 122,
    "sentence": "It collects the whole chain, stopping with a warning if the chain loops back on itself, and then reports the frames oldest exception first (`django/views/debug.py:ExceptionReporter.get_traceback_frames`).",
    "tree": "django",
    "path": "django/views/debug.py",
@@ -66,7 +150,7 @@
   },
   {
    "pointer": "django/views/debug.py:ExceptionReporter.get_exception_traceback_frames",
-   "line": 99,
+   "line": 136,
    "sentence": "And there is a type, `\"django\"` for a frame whose module's name begins with `django.` and `\"user\"` for any other, which the HTML page puts on the frame as a class, so that the two can be styled apart (`django/views/debug.py:ExceptionReporter.get_exception_traceback_frames`).",
    "tree": "django",
    "path": "django/views/debug.py",
@@ -80,7 +164,7 @@
   },
   {
    "pointer": "django/views/debug.py:ExceptionReporter._get_raw_insecure_uri",
-   "line": 103,
+   "line": 138,
    "sentence": "The address is built without the usual validation of the `\"Host\"` header: a request with a host the site does not allow would raise if asked for its host in the ordinary way ([Headers, host and scheme](../http/headers.md)) (`django/views/debug.py:ExceptionReporter._get_raw_insecure_uri`).",
    "tree": "django",
    "path": "django/views/debug.py",
@@ -93,8 +177,22 @@
    "fingerprint": "3c43390c3d53c525"
   },
   {
+   "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_data",
+   "line": 138,
+   "sentence": "The user is included as text, inside a `try`, since asking for the user can itself fail when the database is the thing that is down (`django/views/debug.py:ExceptionReporter.get_traceback_data`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "ExceptionReporter.get_traceback_data",
+   "kind": "function",
+   "lines": [
+    344,
+    424
+   ],
+   "fingerprint": "7447aa53cf3a8a11"
+  },
+  {
    "pointer": "django/views/templates/technical_500.html",
-   "line": 113,
+   "line": 148,
    "sentence": "`ExceptionReporter.get_traceback_html` and `ExceptionReporter.get_traceback_text` render the dictionary with `django/views/templates/technical_500.html` and `django/views/templates/technical_500.txt`.",
    "tree": "django",
    "path": "django/views/templates/technical_500.html",
@@ -108,7 +206,7 @@
   },
   {
    "pointer": "django/views/templates/technical_500.txt",
-   "line": 113,
+   "line": 148,
    "sentence": "`ExceptionReporter.get_traceback_html` and `ExceptionReporter.get_traceback_text` render the dictionary with `django/views/templates/technical_500.html` and `django/views/templates/technical_500.txt`.",
    "tree": "django",
    "path": "django/views/templates/technical_500.txt",
@@ -121,9 +219,23 @@
    "fingerprint": "6f48a113f152ed8b"
   },
   {
+   "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_html",
+   "line": 148,
+   "sentence": "At each call the reporter opens the file itself and gives the text to `DEBUG_ENGINE`, an `Engine` made in this module for nothing else (`django/views/debug.py:ExceptionReporter.get_traceback_html`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "ExceptionReporter.get_traceback_html",
+   "kind": "function",
+   "lines": [
+    426,
+    431
+   ],
+   "fingerprint": "70b973daf32ece77"
+  },
+  {
    "pointer": "django/views/debug.py:DEBUG_ENGINE",
-   "line": 113,
-   "sentence": "The comment on it says why: the error templates must render whatever the project's `TEMPLATES` setting says, and are read directly from the filesystem so that the error handler works even if the template loader is broken (`django/views/debug.py:DEBUG_ENGINE`).",
+   "line": 150,
+   "sentence": "The error templates have an engine of their own so that they render however the project has set `TEMPLATES`, and they are read from the filesystem directly, in the words of the comment above `DEBUG_ENGINE`, \"so that the error handler works even if the template loader is broken\" (`django/views/debug.py:DEBUG_ENGINE`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "DEBUG_ENGINE",
@@ -135,93 +247,22 @@
    "fingerprint": "c64095f71cbe722f"
   },
   {
-   "pointer": "django/views/debug.py:get_default_exception_reporter_filter",
-   "line": 140,
-   "sentence": "A reporter gets its filter from `get_exception_reporter_filter`: an attribute named `\"exception_reporter_filter\"` on the request, or else the site's default, an instance of the class named by `settings.DEFAULT_EXCEPTION_REPORTER_FILTER`, made once for the process and kept (`django/views/debug.py:get_default_exception_reporter_filter`).",
+   "pointer": "django/views/templates/technical_500.html",
+   "line": 152,
+   "sentence": "A reporter made for an email also leaves out of the HTML the source lines around each frame, and the page's script (`django/views/templates/technical_500.html`).",
    "tree": "django",
-   "path": "django/views/debug.py",
-   "symbol": "get_default_exception_reporter_filter",
-   "kind": "function",
-   "lines": [
-    82,
-    85
-   ],
-   "at": 83,
-   "fingerprint": "643729e36f6b3fa8"
-  },
-  {
-   "pointer": "django/views/debug.py:SafeExceptionReporterFilter.cleanse_setting",
-   "line": 144,
-   "sentence": "A dictionary is cleansed key by key, to any depth, and the items of a list or a tuple are gone through for dictionaries inside them (`django/views/debug.py:SafeExceptionReporterFilter.cleanse_setting`).",
-   "tree": "django",
-   "path": "django/views/debug.py",
-   "symbol": "SafeExceptionReporterFilter.cleanse_setting",
-   "kind": "function",
-   "lines": [
-    123,
-    150
-   ],
-   "fingerprint": "9814b75b1ecd4ae2"
-  },
-  {
-   "pointer": "django/views/debug.py:SafeExceptionReporterFilter.get_cleansed_multivaluedict",
-   "line": 200,
-   "sentence": "Its docstring names the case it was written for: an exception raised by a lookup of a missing key in `POST`, whose frame holds the whole of it (`django/views/debug.py:SafeExceptionReporterFilter.get_cleansed_multivaluedict`).",
-   "tree": "django",
-   "path": "django/views/debug.py",
-   "symbol": "SafeExceptionReporterFilter.get_cleansed_multivaluedict",
-   "kind": "function",
-   "lines": [
-    199,
-    210
-   ],
-   "fingerprint": "b6b83977b84f8454"
-  },
-  {
-   "pointer": "django/views/debug.py:SafeExceptionReporterFilter.get_traceback_frame_variables",
-   "line": 202,
-   "sentence": "When the filter is given a frame, it walks from that frame up through its callers looking for a frame of that name, and reads the names from the function object in that frame's locals (`django/views/debug.py:SafeExceptionReporterFilter.get_traceback_frame_variables`).",
-   "tree": "django",
-   "path": "django/views/debug.py",
-   "symbol": "SafeExceptionReporterFilter.get_traceback_frame_variables",
-   "kind": "function",
-   "lines": [
-    239,
-    307
-   ],
-   "fingerprint": "973075bf8ee04b4c"
-  },
-  {
-   "pointer": "django/views/decorators/debug.py:sensitive_variables",
-   "line": 206,
-   "sentence": "It records the names in a module-level dictionary, keyed by the file and first line of the function, and returns the function unchanged; the filter looks a coroutine's frame up in the dictionary by the same key (`django/views/decorators/debug.py:sensitive_variables`).",
-   "tree": "django",
-   "path": "django/views/decorators/debug.py",
-   "symbol": "sensitive_variables",
-   "kind": "function",
-   "lines": [
-    10,
-    78
-   ],
-   "fingerprint": "d081e997241cdefd"
-  },
-  {
-   "pointer": "django/contrib/auth/__init__.py",
-   "line": 208,
-   "sentence": "`authenticate` in `django/contrib/auth/__init__.py` is decorated with `sensitive_variables(\"credentials\")`, and `LoginView` has `sensitive_post_parameters()` among the decorators on its `dispatch`, which hides every posted field.",
-   "tree": "django",
-   "path": "django/contrib/auth/__init__.py",
+   "path": "django/views/templates/technical_500.html",
    "symbol": null,
    "kind": "file",
    "lines": [
     1,
-    408
+    502
    ],
-   "fingerprint": "a4eda00e2c4e2917"
+   "fingerprint": "a25accbfce3eab7e"
   },
   {
    "pointer": "django/views/debug.py:technical_404_response",
-   "line": 212,
+   "line": 158,
    "sentence": "It makes no reporter: it shows what the resolver tried (`django/views/debug.py:technical_404_response`).",
    "tree": "django",
    "path": "django/views/debug.py",

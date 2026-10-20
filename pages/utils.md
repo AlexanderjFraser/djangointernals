@@ -131,7 +131,7 @@ Two of the module's helpers decide how a deprecated feature warns. `warn_about_e
 | `django/utils/cache.py` | cache headers and conditional requests | [Cache headers and conditional requests: `django/utils/cache.py`](services/http-caching.md) |
 | `django/utils/connection.py` | handlers of backends by alias | [Connections by alias: `DATABASES` and `ConnectionHandler`](backends/connections.md) |
 | `django/utils/deconstruct.py` | `deconstructible`, by which a migration can write an object | [Serializing values: `serializer_factory` and `deconstruct`](migrations/serializer.md) |
-| `django/utils/decorators.py` | `method_decorator` and middleware as decorators | [View decorators](views/decorators.md), [A middleware as a decorator](views/middleware-decorators.md) |
+| `django/utils/decorators.py` | `method_decorator` and middleware as decorators | [View decorators](views/decorators.md), [Decorating a class: `method_decorator`](views/method-decorator.md), [A middleware as a decorator](views/middleware-decorators.md) |
 | `django/utils/log.py` | the logging configuration and its handlers | [Logging](startup/logging.md) |
 | `django/utils/autoreload.py` | the development server's reloader | [The autoreloader](commands/autoreload.md) |
 | `django/utils/termcolors.py` | a command's coloured output | [Running a command: `BaseCommand`](commands/running.md) |

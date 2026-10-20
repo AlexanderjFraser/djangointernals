@@ -52,7 +52,7 @@
   {
    "pointer": "django/views/generic/base.py:View.as_view",
    "line": 61,
-   "sentence": "So is any name that is not already an attribute of the class, and a misspelt name therefore raises `TypeError` as the URLconf is imported (`django/views/generic/base.py:View.as_view`).",
+   "sentence": "It refuses any name that is not already an attribute of the class, so a misspelt name raises as the URLconf is imported (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.as_view",
@@ -97,7 +97,7 @@
   {
    "pointer": "django/views/generic/base.py:View.as_view",
    "line": 77,
-   "sentence": "It makes an instance of the class with the arguments `as_view` was given, calls `setup` on the instance, makes sure that `setup` left the request there, and returns what the instance's `dispatch` returns (`django/views/generic/base.py:View.as_view`).",
+   "sentence": "It holds the instance only in a local variable, so once it has returned, the function no longer holds the instance (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.as_view",
@@ -139,38 +139,9 @@
    "fingerprint": "2cb7c2fdb4ae4ca3"
   },
   {
-   "pointer": "django/views/generic/base.py:View.as_view",
-   "line": 106,
-   "sentence": "The function holds the instance only in a local variable and returns only what `dispatch` returned, so once it has returned a response, neither the function nor the handler holds the instance (`django/views/generic/base.py:View.as_view`).",
-   "tree": "django",
-   "path": "django/views/generic/base.py",
-   "symbol": "View.as_view",
-   "kind": "function",
-   "lines": [
-    81,
-    124
-   ],
-   "at": 82,
-   "fingerprint": "2cb7c2fdb4ae4ca3"
-  },
-  {
-   "pointer": "django/views/generic/base.py:ContextMixin.get_context_data",
-   "line": 106,
-   "sentence": "After that it is kept only by what else refers to it: anything a handler method has handed `self` to, or the response, since a `TemplateResponse` from a generic view has the view in its context under the name `\"view\"` (`django/views/generic/base.py:ContextMixin.get_context_data`).",
-   "tree": "django",
-   "path": "django/views/generic/base.py",
-   "symbol": "ContextMixin.get_context_data",
-   "kind": "function",
-   "lines": [
-    30,
-    34
-   ],
-   "fingerprint": "9e193bf5203e3337"
-  },
-  {
    "pointer": "django/views/generic/base.py:View.setup",
-   "line": 110,
-   "sentence": "Other methods read them from there: a generic view's `get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`).",
+   "line": 108,
+   "sentence": "Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.setup",
@@ -183,7 +154,7 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.as_view",
-   "line": 125,
+   "line": 123,
    "sentence": "Between `setup` and `dispatch` the function checks that the instance has a `request`, and if it has none, raises an `AttributeError` that asks whether `setup` was overridden without a call to `super()` (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
@@ -198,7 +169,7 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.setup",
-   "line": 127,
+   "line": 125,
    "sentence": "Its docstring gives its purpose as to \"initialize attributes shared by all view methods\" (`django/views/generic/base.py:View.setup`), and the release that added it, Django 2.2, says that it \"allows mixins to set up instance attributes for reuse in child classes\" (`docs/releases/2.2.txt`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
@@ -212,7 +183,7 @@
   },
   {
    "pointer": "docs/releases/2.2.txt",
-   "line": 127,
+   "line": 125,
    "sentence": "Its docstring gives its purpose as to \"initialize attributes shared by all view methods\" (`django/views/generic/base.py:View.setup`), and the release that added it, Django 2.2, says that it \"allows mixins to set up instance attributes for reuse in child classes\" (`docs/releases/2.2.txt`).",
    "tree": "django",
    "path": "docs/releases/2.2.txt",
@@ -226,7 +197,7 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.dispatch",
-   "line": 131,
+   "line": 129,
    "sentence": "In every other case it is `View.http_method_not_allowed` (`django/views/generic/base.py:View.dispatch`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
@@ -240,7 +211,7 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.options",
-   "line": 133,
+   "line": 131,
    "sentence": "`\"HEAD\"` found the one `setup` added, and `\"OPTIONS\"` finds `View.options`, which `View` supplies for every class: an empty 200 response with an `\"Allow\"` header and a `Content-Length` of zero (`django/views/generic/base.py:View.options`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
@@ -254,8 +225,8 @@
   },
   {
    "pointer": "django/views/generic/base.py:View.http_method_not_allowed",
-   "line": 145,
-   "sentence": "`dispatch` then calls `View.http_method_not_allowed`, which logs a warning to `\"django.request\"` and returns an `HttpResponseNotAllowed`, a 405 with the same `\"Allow\"` header (`django/views/generic/base.py:View.http_method_not_allowed`).",
+   "line": 143,
+   "sentence": "`dispatch` then calls `View.http_method_not_allowed`, which logs a warning to `\"django.request\"` and returns an `HttpResponseNotAllowed`, a 405 with the same `\"Allow\"` header, from inside a coroutine if `View.view_is_async` finds the class asynchronous, as `View.options` does ([Asynchronous views](async.md#a-class-whose-handler-methods-are-coroutines)) (`django/views/generic/base.py:View.http_method_not_allowed`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.http_method_not_allowed",
@@ -267,9 +238,23 @@
    "fingerprint": "32c36fc71d62a654"
   },
   {
+   "pointer": "django/views/generic/base.py:View.dispatch",
+   "line": 156,
+   "sentence": "A handler method the class defines is then unreachable if its name is not in the list, because `dispatch` tests the list before it looks at the instance (`django/views/generic/base.py:View.dispatch`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.dispatch",
+   "kind": "function",
+   "lines": [
+    134,
+    143
+   ],
+   "fingerprint": "1e0c863ad43bafb0"
+  },
+  {
    "pointer": "django/utils/decorators.py:method_decorator",
-   "line": 164,
-   "sentence": "A decorator written for function views, applied to `dispatch` through `method_decorator`, covers every handler method at once ([Decorating a class: `method_decorator`](method-decorator.md)) (`django/utils/decorators.py:method_decorator`).",
+   "line": 162,
+   "sentence": "A decorator written for function views, applied to `dispatch` through `method_decorator`, covers every handler method at once, which is how Django's own `LoginView` is decorated ([Decorating a class: `method_decorator`](method-decorator.md)) (`django/utils/decorators.py:method_decorator`, `django/contrib/auth/views.py:LoginView`).",
    "tree": "django",
    "path": "django/utils/decorators.py",
    "symbol": "method_decorator",
@@ -282,8 +267,8 @@
   },
   {
    "pointer": "django/contrib/auth/views.py:LoginView",
-   "line": 164,
-   "sentence": "Django's own `LoginView` is decorated so: its four decorators are one `method_decorator` given a list, on the class, with `name=\"dispatch\"` (`django/contrib/auth/views.py:LoginView`).",
+   "line": 162,
+   "sentence": "A decorator written for function views, applied to `dispatch` through `method_decorator`, covers every handler method at once, which is how Django's own `LoginView` is decorated ([Decorating a class: `method_decorator`](method-decorator.md)) (`django/utils/decorators.py:method_decorator`, `django/contrib/auth/views.py:LoginView`).",
    "tree": "django",
    "path": "django/contrib/auth/views.py",
    "symbol": "LoginView",
@@ -297,7 +282,7 @@
   },
   {
    "pointer": "django/contrib/auth/mixins.py:LoginRequiredMixin.dispatch",
-   "line": 166,
+   "line": 164,
    "sentence": "A mixin that decides whether the request may proceed overrides `dispatch`, makes its test, and calls `super().dispatch` only if the test passes, as `LoginRequiredMixin` does, answering a user who is not logged in through `AccessMixin.handle_no_permission` ([Requiring a login: `login_required`, `permission_required` and `LoginRequiredMiddleware`](../auth/requiring-login.md#the-mixins-and-accessmixinhandle_no_permission)) (`django/contrib/auth/mixins.py:LoginRequiredMixin.dispatch`).",
    "tree": "django",
    "path": "django/contrib/auth/mixins.py",

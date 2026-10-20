@@ -10,7 +10,7 @@
   {
    "pointer": "docs/intro/tutorial04.txt",
    "line": 9,
-   "sentence": "When it passes, the view does what the form was for and answers with a redirect, which in the words of Django's tutorial prevents data from being posted twice (`docs/intro/tutorial04.txt`).",
+   "sentence": "When it passes, the view does what the form was for and answers with a redirect, which keeps the data from being posted twice if the reader presses the Back button (`docs/intro/tutorial04.txt`).",
    "tree": "django",
    "path": "docs/intro/tutorial04.txt",
    "symbol": null,
@@ -23,7 +23,7 @@
   },
   {
    "pointer": "django/views/generic/edit.py:ProcessFormView",
-   "line": 22,
+   "line": 25,
    "sentence": "Its `put` calls `post` (`django/views/generic/edit.py:ProcessFormView`).",
    "tree": "django",
    "path": "django/views/generic/edit.py",
@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/views/generic/edit.py:FormMixin",
-   "line": 115,
+   "line": 127,
    "sentence": "The arguments come from `get_form_kwargs`, and the class, unless the caller passes one, from `get_form_class`; both methods can be replaced (`django/views/generic/edit.py:FormMixin`).",
    "tree": "django",
    "path": "django/views/generic/edit.py",
@@ -50,8 +50,50 @@
    "fingerprint": "49a18d4a4f456b2b"
   },
   {
+   "pointer": "django/views/generic/edit.py:ProcessFormView.put",
+   "line": 131,
+   "sentence": "Sent the body of a letter the form accepts with the method `\"PUT\"`, the Gazette's page binds its form to a `QueryDict` with no keys, and `form_invalid` answers 200, asking for both fields (`django/views/generic/edit.py:ProcessFormView.put`, `django/http/request.py:HttpRequest._load_post_and_files`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "ProcessFormView.put",
+   "kind": "function",
+   "lines": [
+    157,
+    158
+   ],
+   "fingerprint": "00a47fe4fe74c3ea"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
+   "line": 131,
+   "sentence": "Sent the body of a letter the form accepts with the method `\"PUT\"`, the Gazette's page binds its form to a `QueryDict` with no keys, and `form_invalid` answers 200, asking for both fields (`django/views/generic/edit.py:ProcessFormView.put`, `django/http/request.py:HttpRequest._load_post_and_files`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._load_post_and_files",
+   "kind": "function",
+   "lines": [
+    448,
+    492
+   ],
+   "fingerprint": "4704737f25783bd6"
+  },
+  {
+   "pointer": "django/views/generic/edit.py:FormMixin.get_success_url",
+   "line": 135,
+   "sentence": "`get_success_url` passes the attribute through `str` because it may be lazy: a class attribute is evaluated when the views module is imported, too early for `reverse`, so a success URL given by a pattern's name is written with `reverse_lazy` ([Reversing a name](../urls/reversing.md#reverse_lazy)) (`django/views/generic/edit.py:FormMixin.get_success_url`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "FormMixin.get_success_url",
+   "kind": "function",
+   "lines": [
+    55,
+    59
+   ],
+   "fingerprint": "844eb2f39de5b552"
+  },
+  {
    "pointer": "django/views/generic/edit.py:ModelFormMixin",
-   "line": 127,
+   "line": 139,
    "sentence": "`ModelFormMixin` inherits from both `FormMixin` and `SingleObjectMixin`, and adds to the first what the second knows: which model, and which object (`django/views/generic/edit.py:ModelFormMixin`).",
    "tree": "django",
    "path": "django/views/generic/edit.py",
@@ -64,8 +106,134 @@
    "fingerprint": "f30e2985edde4464"
   },
   {
+   "pointer": "django/views/generic/edit.py:ModelFormMixin.get_form_class",
+   "line": 141,
+   "sentence": "The factory makes a new class at each call, so a view that relies on it builds a form class for every request (`django/views/generic/edit.py:ModelFormMixin.get_form_class`, `django/forms/models.py:modelform_factory`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "ModelFormMixin.get_form_class",
+   "kind": "function",
+   "lines": [
+    81,
+    108
+   ],
+   "fingerprint": "5a72b0d75bc88a51"
+  },
+  {
+   "pointer": "django/forms/models.py:modelform_factory",
+   "line": 141,
+   "sentence": "The factory makes a new class at each call, so a view that relies on it builds a form class for every request (`django/views/generic/edit.py:ModelFormMixin.get_form_class`, `django/forms/models.py:modelform_factory`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "modelform_factory",
+   "kind": "function",
+   "lines": [
+    589,
+    675
+   ],
+   "fingerprint": "950757c31ffba22b"
+  },
+  {
+   "pointer": "django/views/generic/edit.py:ModelFormMixin.get_form_kwargs",
+   "line": 143,
+   "sentence": "**The object** reaches the form as `\"instance\"`, which `ModelFormMixin.get_form_kwargs` adds to what `FormMixin` supplied whenever the view has an attribute `object` (`django/views/generic/edit.py:ModelFormMixin.get_form_kwargs`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "ModelFormMixin.get_form_kwargs",
+   "kind": "function",
+   "lines": [
+    110,
+    115
+   ],
+   "fingerprint": "756696b5f48a5d36"
+  },
+  {
+   "pointer": "django/views/generic/edit.py:BaseCreateView",
+   "line": 143,
+   "sentence": "The two base views differ only in what they put there before the cycle starts (`django/views/generic/edit.py:BaseCreateView`, `django/views/generic/edit.py:BaseUpdateView`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "BaseCreateView",
+   "kind": "class",
+   "lines": [
+    169,
+    182
+   ],
+   "fingerprint": "c24adfd51a55e6bd"
+  },
+  {
+   "pointer": "django/views/generic/edit.py:BaseUpdateView",
+   "line": 143,
+   "sentence": "The two base views differ only in what they put there before the cycle starts (`django/views/generic/edit.py:BaseCreateView`, `django/views/generic/edit.py:BaseUpdateView`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "BaseUpdateView",
+   "kind": "class",
+   "lines": [
+    193,
+    206
+   ],
+   "fingerprint": "24e8de1c01c33650"
+  },
+  {
+   "pointer": "django/views/generic/edit.py:ModelFormMixin.get_success_url",
+   "line": 145,
+   "sentence": "Without one, the object's own `get_absolute_url` is called (`django/views/generic/edit.py:ModelFormMixin.get_success_url`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "ModelFormMixin.get_success_url",
+   "kind": "function",
+   "lines": [
+    117,
+    129
+   ],
+   "fingerprint": "171b514a4750914d"
+  },
+  {
+   "pointer": "django/forms/models.py:BaseModelForm.validate_unique",
+   "line": 191,
+   "sentence": "Here validation sends a query because an article's slug is unique: it checks that no other article has the slug before `save` inserts the row (`django/forms/models.py:BaseModelForm.validate_unique`, `django/db/models/base.py:Model._perform_unique_checks`).",
+   "tree": "django",
+   "path": "django/forms/models.py",
+   "symbol": "BaseModelForm.validate_unique",
+   "kind": "function",
+   "lines": [
+    515,
+    524
+   ],
+   "fingerprint": "eed5c1ee16e0a912"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model._perform_unique_checks",
+   "line": 191,
+   "sentence": "Here validation sends a query because an article's slug is unique: it checks that no other article has the slug before `save` inserts the row (`django/forms/models.py:BaseModelForm.validate_unique`, `django/db/models/base.py:Model._perform_unique_checks`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model._perform_unique_checks",
+   "kind": "function",
+   "lines": [
+    1552,
+    1606
+   ],
+   "fingerprint": "f6c8a7399b25634c"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:SingleObjectTemplateResponseMixin.get_template_names",
+   "line": 210,
+   "sentence": "Both views get their template name from `SingleObjectTemplateResponseMixin` with a suffix of `\"_form\"`, so one template serves for making an article and for changing it (`django/views/generic/detail.py:SingleObjectTemplateResponseMixin.get_template_names`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectTemplateResponseMixin.get_template_names",
+   "kind": "function",
+   "lines": [
+    121,
+    181
+   ],
+   "fingerprint": "df814f3664b169d2"
+  },
+  {
    "pointer": "django/views/generic/edit.py:BaseDeleteView",
-   "line": 201,
+   "line": 214,
    "sentence": "`BaseDeleteView` builds it from three parents, `DeletionMixin`, `FormMixin` and `BaseDetailView`, without `ProcessFormView`, and sets `form_class` to `Form`, a form with no fields, which is valid whenever it is bound (`django/views/generic/edit.py:BaseDeleteView`).",
    "tree": "django",
    "path": "django/views/generic/edit.py",
@@ -78,9 +246,23 @@
    "fingerprint": "554a6828c19765b4"
   },
   {
+   "pointer": "django/views/generic/edit.py:DeletionMixin.get_success_url",
+   "line": 258,
+   "sentence": "There is no falling back to `get_absolute_url` here: a view without a `success_url` raises `ImproperlyConfigured` (`django/views/generic/edit.py:DeletionMixin.get_success_url`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "DeletionMixin.get_success_url",
+   "kind": "function",
+   "lines": [
+    234,
+    238
+   ],
+   "fingerprint": "8ebe8f7a41c66638"
+  },
+  {
    "pointer": "docs/releases/4.0.txt",
-   "line": 255,
-   "sentence": "Before that the deleting was done in `delete`, and the notes say to move any custom logic from there to `form_valid`, or to a helper method the two share (`docs/releases/4.0.txt`).",
+   "line": 260,
+   "sentence": "The deleting moved to `form_valid`, and the release notes asked for any logic a project had written in `delete` to move there too, or to a helper method the two share (`docs/releases/4.0.txt`, `django/views/generic/edit.py:DeletionMixin.post`).",
    "tree": "django",
    "path": "docs/releases/4.0.txt",
    "symbol": null,
@@ -92,9 +274,23 @@
    "fingerprint": "75c28734cc7b3883"
   },
   {
+   "pointer": "django/views/generic/edit.py:DeletionMixin.post",
+   "line": 260,
+   "sentence": "The deleting moved to `form_valid`, and the release notes asked for any logic a project had written in `delete` to move there too, or to a helper method the two share (`docs/releases/4.0.txt`, `django/views/generic/edit.py:DeletionMixin.post`).",
+   "tree": "django",
+   "path": "django/views/generic/edit.py",
+   "symbol": "DeletionMixin.post",
+   "kind": "function",
+   "lines": [
+    231,
+    232
+   ],
+   "fingerprint": "093931b43d962aee"
+  },
+  {
    "pointer": "django/views/generic/edit.py:DeletionMixin.delete",
-   "line": 276,
-   "sentence": "`DeletionMixin.delete` finds the object, deletes it and redirects, so a confirmation form guards the `\"POST\"` and not the `\"DELETE\"` (`django/views/generic/edit.py:DeletionMixin.delete`).",
+   "line": 278,
+   "sentence": "A `\"DELETE\"` never reaches it: `DeletionMixin.delete` deletes without making a form, so a `form_class` that asks for a box to be ticked is never consulted (`django/views/generic/edit.py:DeletionMixin.delete`, `django/views/generic/base.py:View.dispatch`).",
    "tree": "django",
    "path": "django/views/generic/edit.py",
    "symbol": "DeletionMixin.delete",
@@ -104,6 +300,20 @@
     228
    ],
    "fingerprint": "bf5dfbef9e50ea03"
+  },
+  {
+   "pointer": "django/views/generic/base.py:View.dispatch",
+   "line": 278,
+   "sentence": "A `\"DELETE\"` never reaches it: `DeletionMixin.delete` deletes without making a form, so a `form_class` that asks for a box to be ticked is never consulted (`django/views/generic/edit.py:DeletionMixin.delete`, `django/views/generic/base.py:View.dispatch`).",
+   "tree": "django",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.dispatch",
+   "kind": "function",
+   "lines": [
+    134,
+    143
+   ],
+   "fingerprint": "1e0c863ad43bafb0"
   }
  ]
 }

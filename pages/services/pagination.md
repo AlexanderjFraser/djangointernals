@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 How `Paginator` cuts a list or a queryset into numbered pages: the count, orphans, the check of a page number, the slice and the `Page`; and its asynchronous twins, `AsyncPaginator` and `AsyncPage`.
 
-A paginator is given a whole list and a page size, and must find any page's objects without loading the list. A count and a slice suffice, and on a queryset each is one query: a count, and a SELECT with a LIMIT and, past the first page, an OFFSET. What the two paginators share is in `BasePaginator` (`django/core/paginator.py:BasePaginator`). `ListView` makes one when it is given a page size ([The generic views](../views/generic.md)).
+A paginator is given a whole list and a page size, and must find any page's objects without loading the list. A count and a slice suffice, and on a queryset each is one query: a count, and a SELECT with a LIMIT and, past the first page, an OFFSET. What the two paginators share is in `BasePaginator` (`django/core/paginator.py:BasePaginator`). `ListView` makes one when it is given a page size ([`DetailView` and `ListView`](../views/display.md#listview-many-objects-and-pages-of-them)).
 
 ## Making a paginator
 

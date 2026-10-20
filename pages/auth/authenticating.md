@@ -22,7 +22,7 @@ Each backend left is called in turn, and its answer decides:
 - **`None`.** The next backend is asked.
 - **`PermissionDenied`.** The loop stops; the comment says the user should not be allowed in at all.
 
-When the loop ends without a user, by `PermissionDenied` or by running out of backends, `authenticate` sends `user_login_failed` and returns `None`. The sender is the module's name, `"django.contrib.auth"`; the receiver gets the request, and the credentials with `_clean_credentials` having masked the value of every key containing api, token, key, secret, password or signature, a list its docstring calls not comprehensive (`django/contrib/auth/__init__.py:_clean_credentials`). Both functions are decorated with `sensitive_variables("credentials")`, which marks the dictionary for the error reporter to hide ([The debug pages and `ExceptionReporter`](../views/debug.md#sensitive_variables-and-sensitive_post_parameters)).
+When the loop ends without a user, by `PermissionDenied` or by running out of backends, `authenticate` sends `user_login_failed` and returns `None`. The sender is the module's name, `"django.contrib.auth"`; the receiver gets the request, and the credentials with `_clean_credentials` having masked the value of every key containing api, token, key, secret, password or signature, a list its docstring calls not comprehensive (`django/contrib/auth/__init__.py:_clean_credentials`). Both functions are decorated with `sensitive_variables("credentials")`, which marks the dictionary for the error reporter to hide ([What an error report hides](../views/report-filter.md#sensitive_variables-and-sensitive_post_parameters)).
 
 The harbour office suspends a clerk by name, in a backend of its own put ahead of `ModelBackend`:
 
