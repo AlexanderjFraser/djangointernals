@@ -80,7 +80,7 @@
   {
    "pointer": "django/conf/project_template/manage.py-tpl",
    "line": 26,
-   "sentence": "The three entry files that `django-admin startproject` writes each begin by setting it, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
+   "sentence": "The three entry files that `django-admin startproject` writes each set it before they start Django, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
    "tree": "django",
    "path": "django/conf/project_template/manage.py-tpl",
    "symbol": null,
@@ -94,7 +94,7 @@
   {
    "pointer": "django/conf/project_template/project_name/wsgi.py-tpl",
    "line": 26,
-   "sentence": "The three entry files that `django-admin startproject` writes each begin by setting it, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
+   "sentence": "The three entry files that `django-admin startproject` writes each set it before they start Django, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
    "tree": "django",
    "path": "django/conf/project_template/project_name/wsgi.py-tpl",
    "symbol": null,
@@ -108,7 +108,7 @@
   {
    "pointer": "django/conf/project_template/project_name/asgi.py-tpl",
    "line": 26,
-   "sentence": "The three entry files that `django-admin startproject` writes each begin by setting it, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
+   "sentence": "The three entry files that `django-admin startproject` writes each set it before they start Django, and each uses `os.environ.setdefault`, so a value already in the environment wins over the one written in the file (`django/conf/project_template/manage.py-tpl`, `django/conf/project_template/project_name/wsgi.py-tpl`, `django/conf/project_template/project_name/asgi.py-tpl`).",
    "tree": "django",
    "path": "django/conf/project_template/project_name/asgi.py-tpl",
    "symbol": null,
@@ -176,6 +176,20 @@
    "fingerprint": "cc47513ec3bc5a49"
   },
   {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 50,
+   "sentence": "Its constructor builds the middleware chain, which imports every middleware class and instantiates it, and some middleware modules import models, so the registry has to be ready first (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
    "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
    "line": 54,
    "sentence": "`manage.py` and `django-admin` both end in `ManagementUtility.execute`, which calls `django.setup` before it has found the command's class (`django/core/management/__init__.py:ManagementUtility.execute`).",
@@ -206,7 +220,7 @@
   {
    "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
    "line": 60,
-   "sentence": "**Why.** The runserver command is picked out by its name on the command line, not by an attribute of its class, because the class has not been found yet: \"The hardcoded condition is a code smell but we can't rely on a flag on the command class because we haven't located it yet.\" The failure is set aside because the child will report it: \"The exception will be raised later in the child process started by the autoreloader. Pretend it didn't happen by loading an empty list of applications.\" (`django/core/management/__init__.py:ManagementUtility.execute`)",
+   "sentence": "The failure is set aside, and the registry made to look populated with no applications, because the exception will be raised later, in the child process the reloader starts (`django/core/management/__init__.py:ManagementUtility.execute`).",
    "tree": "django",
    "path": "django/core/management/__init__.py",
    "symbol": "ManagementUtility.execute",
@@ -249,7 +263,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.__init__",
    "line": 93,
-   "sentence": "Replacing `Apps.all_models` with an empty dictionary goes against the comment in `Apps.__init__`, which says the map is \"never overridden or reset\" (`django/apps/registry.py:Apps.__init__`); [The registry and its models](registry.md) gives the comment's reason.",
+   "sentence": "Replacing `Apps.all_models` with an empty dictionary goes against the comment in `Apps.__init__`, which says the map is never replaced or reset (`django/apps/registry.py:Apps.__init__`); [The registry and its models](registry.md) gives the comment's reason.",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.__init__",
@@ -305,7 +319,7 @@
   {
    "pointer": "django/conf/__init__.py:LazySettings.configure",
    "line": 114,
-   "sentence": "Called with no `INSTALLED_APPS`, it leaves the default, an empty list, and `django.setup` populates the registry with nothing, which is enough for the parts of Django that need settings and no models (`django/conf/__init__.py:LazySettings.configure`).",
+   "sentence": "Called with no `INSTALLED_APPS`, it leaves the default, an empty list, and `django.setup` populates the registry with nothing, which is enough for the parts of Django that need settings and no installed application (`django/conf/__init__.py:LazySettings.configure`).",
    "tree": "django",
    "path": "django/conf/__init__.py",
    "symbol": "LazySettings.configure",
@@ -333,7 +347,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.populate",
    "line": 118,
-   "sentence": "The second call finds the registry ready, and `Apps.populate` returns at once (`django/apps/registry.py:Apps.populate`), but it configures logging again, and under a project's `LOGGING` that leaves out `\"disable_existing_loggers\"` a logger obtained between the two calls can be disabled ([Logging](logging.md)).",
+   "sentence": "The second call finds the registry ready, and `Apps.populate` returns at once (`django/apps/registry.py:Apps.populate`), but it ordinarily configures logging again, and under a project's `LOGGING` that leaves out `\"disable_existing_loggers\"` a logger obtained between the two calls can be disabled ([Logging](logging.md)).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.populate",

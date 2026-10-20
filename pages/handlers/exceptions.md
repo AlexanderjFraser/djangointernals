@@ -31,7 +31,7 @@ past A's boundary, to the server:
 
 ## The wrapper around every layer
 
-`convert_exception_to_response` takes a callable and returns a function that calls it inside a `try` and, if it raises an `Exception`, returns what `response_for_exception` makes of the request and the exception (`django/core/handlers/exception.py:convert_exception_to_response`). `BaseHandler.load_middleware` applies it to the centre and to every middleware as it builds the chain (`django/core/handlers/base.py:BaseHandler.load_middleware`). Around a coroutine function the wrapper is a coroutine too, and runs `response_for_exception` in a thread through `sync_to_async`, since that function is synchronous throughout.
+`convert_exception_to_response` takes a callable and returns a function that calls it inside a `try` and, if it raises an `Exception`, returns what `response_for_exception` makes of the request and the exception (`django/core/handlers/exception.py:convert_exception_to_response`). `BaseHandler.load_middleware` applies it to the centre and to every middleware as it builds the chain (`django/core/handlers/base.py:BaseHandler.load_middleware`). Around a coroutine function the wrapper is a coroutine function too, and runs `response_for_exception` in a thread through `sync_to_async`, since that function is synchronous throughout.
 
 When B's `process_request` raises, look for what is missing after it: C, the centre, and B's own `process_response`. Only A's runs, handed a 500:
 
@@ -62,7 +62,7 @@ WSGI, GET /plain/: C.process_response raises RuntimeError
 
 B and A are not skipped: each does its work on the way out, on the 500 the wrapper around C made in place of the view's 200.
 
-> **Why.** A wrapper on every layer spares each middleware from handling what the layers inside it raise. The docstring of `convert_exception_to_response` says it is applied to all middleware so that "the next middleware in the stack can rely on getting a response instead of an exception", and DEP 5, which brought in `settings.MIDDLEWARE`, that a middleware "should always get back a response" (`django/core/handlers/exception.py:convert_exception_to_response`, `deps:final/0005-improved-middleware.rst`). Had the chain been wrapped once, at the outside, the layers outside the one that raised would have lost their work on the way out.
+> **Why.** A wrapper on every layer spares each middleware from handling what the layers inside it raise: a middleware is meant to get a response from the layer inside it, not an exception, as DEP 5, which brought in `settings.MIDDLEWARE`, laid down (`django/core/handlers/exception.py:convert_exception_to_response`, `deps:final/0005-improved-middleware.rst`). Had the chain been wrapped once, at the outside, the layers outside the one that raised would have lost their work on the way out.
 
 ## Two chances for a view's exception
 
@@ -95,9 +95,7 @@ WSGI, GET /broken/: the view raises ValueError
     ...
 ```
 
-The hooks see only what a view, or the rendering of a template response, raises; anything else raised in the chain goes directly to a wrapper.
-
-> **History.** Under MIDDLEWARE_CLASSES, which Django 1.10 deprecated for `settings.MIDDLEWARE`, the `process_exception` hooks were also offered what a middleware's `process_request` raised. DEP 5's stricter layering confined them to what the view raises, or a `TemplateResponse`'s `render`, and made a middleware's exception a response at once (`deps:final/0005-improved-middleware.rst`, `docs/releases/1.10.txt`).
+The hooks see only what a view, or the rendering of a template response, raises; anything else raised in the chain goes directly to a wrapper (`django/core/handlers/base.py:BaseHandler._get_response`).
 
 ## Which exception becomes which response
 
@@ -114,7 +112,7 @@ The hooks see only what a view, or the rendering of a template response, raises;
 
 *What `response_for_exception` returns, by the class of the exception.*
 
-The status in the last column is the one Django's own error views return; it is the error view's to set ([The error views](../views/errors.md#a-custom-error-view-handler404-and-its-kin)). Three of the suspicious operations, `RequestDataTooBig`, `TooManyFieldsSent` and `TooManyFilesSent`, enforce the limits on the request's data ([The body: `body`, `POST` and `FILES`](../http/body.md#the-limits)). For these `response_for_exception` first calls `HttpRequest._mark_post_parse_error`, which gives the request an empty `POST` and an empty `FILES`, so that the error view or the debug page can read them without parsing the data again and raising the same exception (`django/http/request.py:HttpRequest._mark_post_parse_error`).
+The status in the last column is the one Django's own error views return, and ordinarily the debug pages ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page-technical_404_response)); a replacement may set another ([The error views](../views/errors.md#a-custom-error-view-handler404-and-its-kin)). Three of the suspicious operations, `RequestDataTooBig`, `TooManyFieldsSent` and `TooManyFilesSent`, enforce the limits on the request's data ([The body: `body`, `POST` and `FILES`](../http/body.md#the-limits)). For these `response_for_exception` first calls `HttpRequest._mark_post_parse_error`, which gives the request an empty `POST` and an empty `FILES`, so that the error view or the debug page can read them without parsing the data again and raising the same exception (`django/http/request.py:HttpRequest._mark_post_parse_error`).
 
 Besides choosing, `response_for_exception` announces an exception it does not recognise, logs, and renders a template response. The announcement is `got_request_exception`, sent before `handle_uncaught_exception` is called; a recognised exception sends nothing, unless the error view that answers it raises. `response_for_exception` logs the response through `log_response`, with the exception attached, for every class but `Http404`, and a response is logged once ([Logging](../startup/logging.md#log_response-a-response-is-logged-once)) (`django/utils/log.py:log_response`). A `SuspiciousOperation` goes to a logger of its own, at the error level: one under `"django.security"` named for its class, so that security events can be routed apart from request errors. An error view's template response, if not yet rendered, never passes the centre's rendering step, so `response_for_exception` renders it.
 

@@ -40,7 +40,7 @@
   {
    "pointer": "django/test/client.py:ClientHandler.__call__",
    "line": 13,
-   "sentence": "The test client's handlers, `ClientHandler` and `AsyncClientHandler`, build their chain instead at their first request, when they find the attribute that holds it still `None` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`).",
+   "sentence": "The test client's handlers, `ClientHandler` and `AsyncClientHandler`, build their chain instead at their first request, when they find the attribute that holds it still `None` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`, `django/test/client.py:AsyncClientHandler.__call__`).",
    "tree": "django",
    "path": "django/test/client.py",
    "symbol": "ClientHandler.__call__",
@@ -50,6 +50,20 @@
     210
    ],
    "fingerprint": "3a378c0ad831b908"
+  },
+  {
+   "pointer": "django/test/client.py:AsyncClientHandler.__call__",
+   "line": 13,
+   "sentence": "The test client's handlers, `ClientHandler` and `AsyncClientHandler`, build their chain instead at their first request, when they find the attribute that holds it still `None` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`, `django/test/client.py:AsyncClientHandler.__call__`).",
+   "tree": "django",
+   "path": "django/test/client.py",
+   "symbol": "AsyncClientHandler.__call__",
+   "kind": "function",
+   "lines": [
+    220,
+    262
+   ],
+   "fingerprint": "76b9d7a0dc4636d2"
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
@@ -68,7 +82,7 @@
   {
    "pointer": "django/core/exceptions.py:MiddlewareNotUsed",
    "line": 46,
-   "sentence": "None of the middleware Django ships does so: the exception exists for the middleware a project writes (`django/core/exceptions.py:MiddlewareNotUsed`).",
+   "sentence": "Raising `MiddlewareNotUsed` lets a middleware take itself out according to configuration, and none of the middleware Django ships does so (`django/core/exceptions.py:MiddlewareNotUsed`).",
    "tree": "django",
    "path": "django/core/exceptions.py",
    "symbol": "MiddlewareNotUsed",
@@ -81,8 +95,22 @@
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
+   "line": 62,
+   "sentence": "It runs through the setting backwards, and it puts each `process_view` at the front of its list and each of the other two at the end of theirs (`django/core/handlers/base.py:BaseHandler.load_middleware`).",
+   "tree": "django",
+   "path": "django/core/handlers/base.py",
+   "symbol": "BaseHandler.load_middleware",
+   "kind": "function",
+   "lines": [
+    27,
+    104
+   ],
+   "fingerprint": "430bac571d4dc266"
+  },
+  {
+   "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
    "line": 75,
-   "sentence": "Every `process_exception` hook is filed synchronous: \"The exception-handling stack is still always synchronous for now, so adapt that way,\" says the comment at that line (`django/core/handlers/base.py:BaseHandler.load_middleware`), and filing a coroutine function synchronous, `BaseHandler.adapt_method_mode` wraps it in `async_to_sync` ([Sync and async in one chain](async.md)) (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
+   "sentence": "Every `process_exception` hook is filed synchronous, the handling of exceptions being still synchronous throughout (`django/core/handlers/base.py:BaseHandler.load_middleware`), and filing a coroutine function synchronous, `BaseHandler.adapt_method_mode` wraps it in `async_to_sync` ([Sync and async in one chain](async.md)) (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.load_middleware",
@@ -96,7 +124,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.adapt_method_mode",
    "line": 75,
-   "sentence": "Every `process_exception` hook is filed synchronous: \"The exception-handling stack is still always synchronous for now, so adapt that way,\" says the comment at that line (`django/core/handlers/base.py:BaseHandler.load_middleware`), and filing a coroutine function synchronous, `BaseHandler.adapt_method_mode` wraps it in `async_to_sync` ([Sync and async in one chain](async.md)) (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
+   "sentence": "Every `process_exception` hook is filed synchronous, the handling of exceptions being still synchronous throughout (`django/core/handlers/base.py:BaseHandler.load_middleware`), and filing a coroutine function synchronous, `BaseHandler.adapt_method_mode` wraps it in `async_to_sync` ([Sync and async in one chain](async.md)) (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.adapt_method_mode",

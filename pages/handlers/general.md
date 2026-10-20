@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The general-purpose middleware serve any request and response, whatever the project: `CommonMiddleware` refuses unwanted user agents and redirects an address that lacks the slash of `settings.APPEND_SLASH` or the www. of `settings.PREPEND_WWW`, `GZipMiddleware` compresses the response, and `BrokenLinkEmailsMiddleware` tells the managers about a broken link. Where each stands in `settings.MIDDLEWARE` is part of what it does.
 
-A layer sees the response as the layers inside it have made it ([Handlers and middleware](../handlers.md#the-chain-is-an-onion)), and the documentation places each of the three (`docs/ref/middleware.txt`, `docs/howto/error-reporting.txt`). `CommonMiddleware` sets the Content-Length a response lacks: it stands outside any layer that may change the response, and a layer outside it that changes the body must reset the length, as `GZipMiddleware` does. `GZipMiddleware` changes the body: it stands outside all that reads or changes it, and inside `UpdateCacheMiddleware`, which stores the response under the headers its `"Vary"` names ([The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md)). `BrokenLinkEmailsMiddleware` reports the 404 it is handed: it stands outside every layer that turns a 404 into something else.
+A layer sees the response as the layers inside it have made it ([Handlers and middleware](../handlers.md#the-chain-is-an-onion)), and the documentation places each of the three (`docs/ref/middleware.txt`, `docs/howto/error-reporting.txt`). `CommonMiddleware` sets the Content-Length a response not streamed lacks: it stands outside any layer that may change the response, and a layer outside it that changes the body must reset the length, as `GZipMiddleware` does. `GZipMiddleware` changes the body: it stands outside all that reads or changes it, and inside `UpdateCacheMiddleware`, which stores the response under the headers its `"Vary"` names ([The page cache: `UpdateCacheMiddleware`, `FetchFromCacheMiddleware` and `cache_page`](../services/page-cache.md)). `BrokenLinkEmailsMiddleware` reports the 404 it is handed: it stands outside every layer that turns a 404 into something else.
 
 `ConditionalGetMiddleware`, the class of `django/middleware/http.py`, can answer a conditional `"GET"` with a 304 ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#conditionalgetmiddleware)); the figure has it among the layers that place the three:
 
@@ -22,7 +22,7 @@ UpdateCacheMiddleware: stores the response under the headers "Vary" names
             the centre: the resolver's 404, or a view's Http404
 ```
 
-*The three, accented, at their documented places: beside each layer, what it does to a response on the way out; in brackets, what places each.*
+*The three, accented, in an order the documentation allows: beside each layer, what it does to a response on the way out; in brackets, what places each.*
 
 In the blocks below, A, B and C are middleware that only write down what they are handed: A stands outside the middleware a block is about, and B or C inside it.
 
@@ -46,9 +46,9 @@ WSGI, GET /plain: CommonMiddleware turns the 404 that C saw into a redirect
     ...
 ```
 
-> **Why.** Checking for a slash means resolving the path, which a comment in `CommonMiddleware.process_request` says may be somewhat expensive. On the way out only a request that has already ended in a 404 pays for it, and the way in makes it only when a redirect for `settings.PREPEND_WWW` is being sent anyway; made there always, it would resolve every path without a slash before the handler did (`django/middleware/common.py:CommonMiddleware.process_request`).
+> **Why.** Checking for a slash means resolving the path, which may be somewhat costly. On the way out only a request that has already ended in a 404 pays for it, and the way in makes it only when a redirect for `settings.PREPEND_WWW` is being sent anyway; made there always, it would resolve every path without a slash before the handler did (`django/middleware/common.py:CommonMiddleware.process_request`).
 
-`CommonMiddleware.get_full_path_with_slash` builds the address from the full path and query string, with two guards. Under `settings.DEBUG` a `"DELETE"`, `"POST"`, `"PUT"` or `"PATCH"`, whose data a redirect cannot carry, raises `RuntimeError` instead, which A receives as a 500. A leading `"//"` becomes `"/%2F"` through `escape_leading_slashes`, lest a browser take the `"Location"` for another host's (CVE-2018-14574, `docs/releases/1.11.15.txt`; `django/middleware/common.py:CommonMiddleware.get_full_path_with_slash`, `django/utils/http.py:escape_leading_slashes`).
+`CommonMiddleware.get_full_path_with_slash` builds the address from the full path, with two guards. Under `settings.DEBUG` a `"DELETE"`, `"POST"`, `"PUT"` or `"PATCH"`, whose data the redirect cannot carry, raises `RuntimeError` instead, which A receives as a 500. A leading `"//"` becomes `"/%2F"` through `escape_leading_slashes`, lest a browser take the `"Location"` for another host's (CVE-2018-14574, `docs/releases/1.11.15.txt`; `django/middleware/common.py:CommonMiddleware.get_full_path_with_slash`, `django/utils/http.py:escape_leading_slashes`).
 
 Then a response that is not streaming and lacks a Content-Length is given its body's length; a stream gets none (`django/middleware/common.py:CommonMiddleware.process_response`).
 
@@ -105,4 +105,4 @@ With `BrokenLinkEmailsMiddleware` outside `CommonMiddleware`, handed the 301, it
 
 > **History.** The report was once `CommonMiddleware`'s; Django 1.6 moved it into `BrokenLinkEmailsMiddleware` for what its release notes call intractable ordering problems with `LocaleMiddleware` (`docs/releases/1.6.txt`). As two classes they can stand apart, as documented: the report outside `LocaleMiddleware`, and `CommonMiddleware` inside it.
 
-> **Changed in 6.1.** With `MAILERS` defined, `BrokenLinkEmailsMiddleware.send_mail` drops `fail_silently=True` and passes over only `MailerDoesNotExist`: a failing mailer's error leaves `process_response`, and the wrapper makes the 404 a 500 (`docs/howto/mailers-migration.txt`).
+> **Changed in 6.1.** With `MAILERS` defined, `BrokenLinkEmailsMiddleware.send_mail` drops `fail_silently=True` and passes over only `MailerDoesNotExist`: a failing mailer's error leaves `process_response`, and the wrapper makes the 404 a 500 (`docs/releases/6.1.txt`, `django/middleware/common.py:BrokenLinkEmailsMiddleware.send_mail`).

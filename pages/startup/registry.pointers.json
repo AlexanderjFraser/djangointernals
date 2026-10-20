@@ -38,7 +38,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.__init__",
    "line": 19,
-   "sentence": "A model is filed there as its module is imported, and an import cannot safely be replayed: it \"could reexecute initialization code\" (`django/apps/registry.py:Apps.__init__`, `django/apps/registry.py:Apps.set_installed_apps`).",
+   "sentence": "A model is filed there as its module is imported, and an import cannot safely be replayed, since it could run initialization code again (`django/apps/registry.py:Apps.__init__`, `django/apps/registry.py:Apps.set_installed_apps`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.__init__",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.set_installed_apps",
    "line": 19,
-   "sentence": "A model is filed there as its module is imported, and an import cannot safely be replayed: it \"could reexecute initialization code\" (`django/apps/registry.py:Apps.__init__`, `django/apps/registry.py:Apps.set_installed_apps`).",
+   "sentence": "A model is filed there as its module is imported, and an import cannot safely be replayed, since it could run initialization code again (`django/apps/registry.py:Apps.__init__`, `django/apps/registry.py:Apps.set_installed_apps`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.set_installed_apps",
@@ -122,7 +122,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.get_containing_app_config",
    "line": 52,
-   "sentence": "It gives the registry the dotted name of the module the class is being defined in, and `Apps.get_containing_app_config` returns the installed application whose name is a prefix of it; where applications are nested and several match, the one with the longest name (`django/apps/registry.py:Apps.get_containing_app_config`).",
+   "sentence": "It gives the registry the dotted name of the module the class is being defined in, and `Apps.get_containing_app_config` returns the installed application whose package contains it; where applications are nested and several match, the one with the longest name (`django/apps/registry.py:Apps.get_containing_app_config`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.get_containing_app_config",
@@ -136,7 +136,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.check_apps_ready",
    "line": 54,
-   "sentence": "`get_containing_app_config` first calls `Apps.check_apps_ready`, which raises `AppRegistryNotReady` until every entry of `INSTALLED_APPS` has its configuration, and the class statement makes the call whatever its `Meta` says (`django/apps/registry.py:Apps.check_apps_ready`).",
+   "sentence": "`get_containing_app_config` first calls `Apps.check_apps_ready`, which, where there are settings to read, raises `AppRegistryNotReady` until every entry of `INSTALLED_APPS` has its configuration, and the class statement makes the call whatever its `Meta` says (`django/apps/registry.py:Apps.check_apps_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.check_apps_ready",
@@ -176,9 +176,23 @@
    "fingerprint": "388e8927cc3d867f"
   },
   {
+   "pointer": "django/apps/registry.py:Apps.lazy_model_operation",
+   "line": 66,
+   "sentence": "When no pair is left, the function is called with the classes (`django/apps/registry.py:Apps.lazy_model_operation`, `django/apps/registry.py:Apps.do_pending_operations`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.lazy_model_operation",
+   "kind": "function",
+   "lines": [
+    388,
+    426
+   ],
+   "fingerprint": "388e8927cc3d867f"
+  },
+  {
    "pointer": "django/apps/registry.py:Apps.do_pending_operations",
    "line": 66,
-   "sentence": "When no pair is left, the function is called with the classes (`django/apps/registry.py:Apps.do_pending_operations`).",
+   "sentence": "When no pair is left, the function is called with the classes (`django/apps/registry.py:Apps.lazy_model_operation`, `django/apps/registry.py:Apps.do_pending_operations`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.do_pending_operations",
@@ -248,7 +262,7 @@
   {
    "pointer": "django/core/checks/model_checks.py:_check_lazy_references",
    "line": 106,
-   "sentence": "The mistake is reported by the system checks, which go through what is still waiting in `_pending_operations` and, for a relation, name the field and say whether the application is missing or only the model ([The model checks](../models/checks.md#check_lazy_references)) (`django/core/checks/model_checks.py:_check_lazy_references`).",
+   "sentence": "The mistake is reported by the system checks, one of which goes through what is still waiting in `_pending_operations` and, for a relation, names the field and says whether the application is missing or only the model ([The model checks](../models/checks.md#check_lazy_references)) (`django/core/checks/model_checks.py:_check_lazy_references`).",
    "tree": "django",
    "path": "django/core/checks/model_checks.py",
    "symbol": "_check_lazy_references",
@@ -318,7 +332,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.clear_cache",
    "line": 114,
-   "sentence": "Once the registry is ready, it also goes to every model of an installed application, unless swapped out, and expires the caches on its `_meta`, the lists of fields and relations that each model computes on demand and keeps (`django/apps/registry.py:Apps.clear_cache`, `django/db/models/options.py:Options._expire_cache`).",
+   "sentence": "Once the registry is ready, it also goes to every model of an installed application, unless swapped out, and expires the caches on its `_meta`, among them the lists of fields and relations that each model computes on demand and keeps (`django/apps/registry.py:Apps.clear_cache`, `django/db/models/options.py:Options._expire_cache`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.clear_cache",
@@ -332,7 +346,7 @@
   {
    "pointer": "django/db/models/options.py:Options._expire_cache",
    "line": 114,
-   "sentence": "Once the registry is ready, it also goes to every model of an installed application, unless swapped out, and expires the caches on its `_meta`, the lists of fields and relations that each model computes on demand and keeps (`django/apps/registry.py:Apps.clear_cache`, `django/db/models/options.py:Options._expire_cache`).",
+   "sentence": "Once the registry is ready, it also goes to every model of an installed application, unless swapped out, and expires the caches on its `_meta`, among them the lists of fields and relations that each model computes on demand and keeps (`django/apps/registry.py:Apps.clear_cache`, `django/db/models/options.py:Options._expire_cache`).",
    "tree": "django",
    "path": "django/db/models/options.py",
    "symbol": "Options._expire_cache",
@@ -346,7 +360,7 @@
   {
    "pointer": "django/db/models/options.py:Options._populate_directed_relation_graph",
    "line": 116,
-   "sentence": "Its reverse relations are a fact about every other model, and `Options` works them out for all models at once, the first time any model is asked, by going through `Apps.get_models` and collecting every field that points somewhere (`django/db/models/options.py:Options._populate_directed_relation_graph`).",
+   "sentence": "Its reverse relations are a fact about every other model, and `Options` works them out for all models at once, the first time any model is asked, by going through `Apps.get_models` and collecting every field that points to a class (`django/db/models/options.py:Options._populate_directed_relation_graph`).",
    "tree": "django",
    "path": "django/db/models/options.py",
    "symbol": "Options._populate_directed_relation_graph",
@@ -360,7 +374,7 @@
   {
    "pointer": "django/db/models/options.py:Options.get_field",
    "line": 118,
-   "sentence": "Asked before `models_ready` for a name that is not one of the model's own fields, `Options.get_field` raises `FieldDoesNotExist` rather than compute the reverse relations: \"If the app registry is not ready, reverse fields are unavailable\" (`django/db/models/options.py:Options.get_field`).",
+   "sentence": "Asked before `models_ready` for a name that is not one of the model's own fields, `Options.get_field` raises `FieldDoesNotExist` rather than compute the reverse relations, which are unavailable until then (`django/db/models/options.py:Options.get_field`).",
    "tree": "django",
    "path": "django/db/models/options.py",
    "symbol": "Options.get_field",
@@ -374,7 +388,7 @@
   {
    "pointer": "docs/ref/applications.txt",
    "line": 118,
-   "sentence": "A model that `get_model` returns with `require_ready=False` \"may not be fully functional (reverse accessors may be missing, for example) until the app registry is fully populated\" (`docs/ref/applications.txt`).",
+   "sentence": "A model that `get_model` returns with `require_ready=False` may lack reverse accessors until the registry is fully populated (`docs/ref/applications.txt`).",
    "tree": "django",
    "path": "docs/ref/applications.txt",
    "symbol": null,

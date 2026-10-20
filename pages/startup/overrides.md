@@ -4,19 +4,19 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # Overriding settings
 
-`override_settings` changes a setting in a process that has already started: it wraps the current settings in a `UserSettingsHolder`, and sends the signal `setting_changed` so that whatever was built from the old value can be thrown away. `Apps.set_installed_apps` does the same for the app registry.
+`override_settings` changes a setting in a process that has already started: it wraps the current settings in a `UserSettingsHolder`, and sends the signal `setting_changed` so that whatever was built from the old value can be discarded or redone. For `INSTALLED_APPS`, `Apps.set_installed_apps` repopulates the app registry.
 
-Once `django.setup` has returned, Django treats the settings as constants of the process ([Settings, apps and startup](../startup.md#settings-and-the-registry-are-constants-of-the-process)), and its documentation asks an application not to alter them at runtime (`docs/topics/settings.txt`). A test does. One test wants debug mode on, the next wants a different cache, a third wants an application installed that the project does not have. The machinery for this lives partly in `django/conf/`, where the settings objects are built to be stacked, and partly in `django/test/`, which does the stacking.
+Once `django.setup` has returned, Django treats the settings as constants of the process ([Settings, apps and startup](../startup.md#settings-and-the-registry-are-constants-of-the-process)), and its documentation asks an application not to alter them at runtime (`docs/topics/settings.txt`). A test does. One test wants debug mode on, the next wants a different cache, a third wants an application installed that the project does not have. `django/conf/` builds the settings objects to be stacked, and `django/test/` stacks them.
 
 ## Why assigning is not enough
 
 A value read from the settings can end up in three places, and an assignment to `settings` reaches only the first.
 
-The first is the proxy's own cache of values, which `LazySettings.__setattr__` keeps correct: it drops the kept value for the name being assigned ([The settings object](settings.md#writes-go-through-the-proxy-too)).
+The first is the proxy's own cache of values, which `LazySettings.__setattr__` keeps correct: it drops the kept value for the name being assigned ([The settings object](settings.md#writes-go-through-the-proxy-too); `django/conf/__init__.py:LazySettings.__setattr__`).
 
-The second is every object that was built from a setting and then kept, the template engines among them. The default time zone is computed from `TIME_ZONE` once. The list of password hashers is built from `PASSWORD_HASHERS` once. A file storage given no location works one out from `MEDIA_ROOT` the first time it is asked and remembers it. None of these looks at the setting again (`django/template/utils.py:EngineHandler.templates`, `django/utils/timezone.py:get_default_timezone`, `django/contrib/auth/hashers.py:get_hashers`, `django/core/files/storage/filesystem.py:FileSystemStorage.base_location`).
+The second is every object that was built from a setting and then kept, the template engines among them. The default time zone is computed from `TIME_ZONE` once. The list of password hashers is built from `PASSWORD_HASHERS` once. A `FileSystemStorage` given no location works one out from `MEDIA_ROOT` the first time it is asked and remembers it. None of these looks at the setting again (`django/template/utils.py:EngineHandler.templates`, `django/utils/timezone.py:get_default_timezone`, `django/contrib/auth/hashers.py:get_hashers`, `django/core/files/storage/filesystem.py:FileSystemStorage.base_location`).
 
-Not every reader is like that. The handler reads `settings.ROOT_URLCONF` afresh for each request, and an assignment to it is seen by the next one (`django/core/handlers/base.py:BaseHandler.get_response`). Which settings are which can only be learned from the code that reads them.
+Not every reader is like that. The handler reads `settings.ROOT_URLCONF` afresh for each request, and an assignment to it is seen by the next one (`django/core/handlers/base.py:BaseHandler.get_response`). Which settings are which is learned from the code that reads them.
 
 The third is outside Python altogether: where the platform's `time` module has the function `"tzset"`, loading a settings module put `TIME_ZONE` into the process's environment and had the C library read it (`django/conf/__init__.py:Settings.__init__`).
 
@@ -24,7 +24,7 @@ Changing a setting properly therefore means telling everything in the second and
 
 ## `override_settings`: entering and leaving
 
-`override_settings` is used around a block of code, as a context manager or a decorator ([Settings for one test: `override_settings` and `TestContextDecorator`](../testing/test-decorators.md)). On the way in it does three things, in `override_settings.enable` (`django/test/utils.py:override_settings.enable`).
+`override_settings` is used around a block of code, as a context manager or a decorator ([Settings for one test: `override_settings` and `TestContextDecorator`](../testing/test-decorators.md)). On the way in `override_settings.enable` does three things, four for `INSTALLED_APPS` (`django/test/utils.py:override_settings.enable`).
 
 1. It makes a `UserSettingsHolder` whose `default_settings` is the object the proxy wraps now, and sets each overridden name on the holder.
 2. It makes the holder the proxy's wrapped object. Assigning `_wrapped` clears every value kept on the proxy.
@@ -126,17 +126,17 @@ Inside both overrides: a read falls through the holders until one has the name
 
 ## The receivers of `setting_changed`
 
-`setting_changed` is an ordinary signal, defined beside the three signals of the request cycle, `request_started`, `request_finished` and `got_request_exception` (`django/core/signals.py`). Each receiver is called for every setting that changes, looks at the name, and returns unless it is one the receiver cares about. Most of them live in one file, `django/test/signals.py`.
+`setting_changed` is an ordinary signal, defined beside the three signals of the request cycle, `request_started`, `request_finished` and `got_request_exception` (`django/core/signals.py`). Each receiver is called whatever the setting, looks at the name, and returns unless it is one the receiver cares about. Most of them live in one file, `django/test/signals.py`.
 
 | setting | what its receiver discards or redoes |
 |---|---|
-| `"CACHES"` | closes the caches and resets the handler that makes cache connections |
+| `"CACHES"` | closes this thread's caches and resets the handler that makes cache connections |
 | `"DATABASE_ROUTERS"` | the list of router instances |
 | `"TEMPLATES"`, `"DEBUG"`, `"INSTALLED_APPS"` | the template engines, the default `Engine`, and the default form renderer |
 | `"INSTALLED_APPS"` | also the static files finders, the table of management commands, the applications' template directories and the translation catalogs |
 | `"ROOT_URLCONF"` | the URL caches, the resolver kept for each URLconf among them, and any URLconf set for the thread |
 | `"TIME_ZONE"` | the cached default time zone and, where there is `"tzset"`, the environment variable `"TZ"`, which the C library is made to read again |
-| `"TIME_ZONE"`, `"USE_TZ"` | the time zone of each database connection that has been made |
+| `"TIME_ZONE"`, `"USE_TZ"` | the time zone of each of this thread's database connections |
 | `"LANGUAGES"`, `"LANGUAGE_CODE"`, `"LOCALE_PATHS"` | the default and active translations; for the first and the last, the catalogs too |
 | a format setting, `"USE_THOUSAND_SEPARATOR"` | the cache of localized formats |
 | `"STORAGES"`, `"STATIC_ROOT"`, `"STATIC_URL"` | the storage handler, and the lazy default and static files storages |
@@ -154,7 +154,7 @@ Others are connected by the code that owns what they discard, among them the pas
 
 Two things about these lists matter more than their entries.
 
-**Most receivers arrive with the test framework.** The receivers in `django/test/signals.py` are connected when that module is imported, and it is imported with `django.test`. The project library installs none of Django's contrib applications, and when its `django.setup` returned one receiver was connected, the translation machinery's; a project with the messages application has that application's too. Every other receiver in the process came with the import of `django.test`.
+**Most receivers arrive with the test framework.** The receivers in `django/test/signals.py` are connected when that module is imported, and it is imported with `django.test`. The project *library* installs none of Django's contrib applications, and when its `django.setup` returned one receiver was connected, the translation machinery's; a project with the auth and messages applications has theirs too. Every other receiver in the process came with the import of `django.test`.
 
 ```text recording=startup
 The receivers of setting_changed in this process, in the order they were connected
@@ -173,7 +173,7 @@ A serving process has no reason to import `django.test`, and nothing in it would
 
 ## `INSTALLED_APPS`: the registry is populated again
 
-`INSTALLED_APPS` is the one setting whose override changes the app registry, and `override_settings.enable` handles it first, before it touches the settings, so that a list that cannot be loaded leaves the settings as they were (`django/test/utils.py:override_settings.enable`).
+`INSTALLED_APPS` is the one setting whose override refills the app registry, and `override_settings.enable` handles it first, before it touches the settings, so that a list that cannot be loaded leaves the settings as they were (`django/test/utils.py:override_settings.enable`).
 
 `Apps.set_installed_apps` requires a registry that is ready. It pushes the current dictionary of application configurations onto a stack, `Apps.stored_app_configs`, empties the registry's view of what is installed, sets its three flags and `Apps.loading` back to false, and calls `Apps.populate` with the new list, so that all three phases run again ([Populating the app registry](populate.md)) (`django/apps/registry.py:Apps.set_installed_apps`); on leaving, `Apps.unset_installed_apps` pops the stack, sets the flags true again, and runs no phase (`django/apps/registry.py:Apps.unset_installed_apps`). `Apps.set_available_apps`, which a `TransactionTestCase` with `available_apps` uses, only narrows the installed applications to a subset, importing nothing and calling no `ready` ([Emptying the tables after each test: `TransactionTestCase`](../testing/transaction-test-case.md#fewer-applications-available_apps)) (`django/apps/registry.py:Apps.set_available_apps`).
 
@@ -197,11 +197,11 @@ INSTALLED_APPS is overridden for a block
 
 The models modules are already imported, so `AppConfig.import_models` finds them in `sys.modules`, and `Apps.set_installed_apps` leaves the registry's record of model classes, `Apps.all_models`, as it was. A model of an application that an override removes is still in `all_models`, and is no longer returned by `Apps.get_models`, which goes through the installed applications. An override can still add models, when it installs an application whose models module was never imported, and they stay in `all_models` after `Apps.unset_installed_apps` ([The registry and its models](registry.md#two-maps-appsapp_configs-and-appsall_models)) (`django/apps/registry.py:Apps.set_installed_apps`).
 
-New `AppConfig` objects are made for every entry, and every `ready` method runs again, on its new configuration.
+New `AppConfig` objects are made for every entry, and every `ready` method runs on its new configuration.
 
 > **Trap.** A `ready` that connects a method of its configuration connects it again under the override, bound to the new configuration, and a send inside the override calls it twice. `Signal.connect` adds a receiver only if its key is not already there, and a bound method's key is made from its object as well as its function, so the method of the new configuration is a receiver of its own; a function defined at a module's top level, or a dispatch uid, gives the same key each time (`django/dispatch/dispatcher.py:_make_id`, `django/dispatch/dispatcher.py:Signal.connect`).
 
-The project's notices application connects three receivers to a signal of its own, book_returned, in its `ready`: send_notice, a function of its signals module; count_return, a method of its configuration; and remind, a function defined inside `ready`. Inside an override that installs it again, the list has a line of count_return for each configuration and one of send_notice.
+The project's *notices* application connects three receivers to a signal of its own, *book_returned*, in its `ready`: *send_notice*, a function of its signals module; *count_return*, a method of its configuration; and *remind*, a function defined inside `ready`. Inside an override that installs it again, the list has a line of *count_return* for each configuration and one of *send_notice*.
 
 ```text recording=startup
 The same ready run again by override_settings(INSTALLED_APPS=[...]), and what book_returned keeps inside the block and after it
@@ -227,4 +227,4 @@ The same ready run again by override_settings(INSTALLED_APPS=[...]), and what bo
     the receivers a send would call: 2
 ```
 
-Once the override is left and nothing holds the second configuration, its method is dead, and a send calls two receivers again. remind is dead from the start: a receiver is held by a weak reference unless it is connected otherwise, and nothing holds remind once `ready` has returned ([Signals: `Signal`, receivers and sending](../services/signals.md#connecting-a-receiver-signalconnect)).
+Once the override is left and nothing holds the second configuration, its method is dead, and a send calls two receivers again. *remind* is dead from the start: a receiver is held by a weak reference unless it is connected otherwise, and nothing holds *remind* once `ready` has returned ([Signals: `Signal`, receivers and sending](../services/signals.md#connecting-a-receiver-signalconnect)).

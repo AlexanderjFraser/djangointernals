@@ -6,9 +6,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `WSGIHandler` and `ASGIHandler`, made by `get_wsgi_application` and `get_asgi_application`, each turn a server's call into a request, run the middleware chain and hand the response back. `ASGIHandler.handle` works in phases, one listening for the client to leave.
 
-A server imports the project's `wsgi.py` or `asgi.py`, which makes the handler by calling one of the two functions; each runs `django.setup` first (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`). A serving process therefore makes its handler once, as the server starts, and making it builds the chain ([Building the middleware chain](chain.md)).
+A server imports the project's `wsgi.py` or `asgi.py`, which makes the handler by calling one of the two functions; each runs `django.setup` first (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`). A serving process therefore makes its handler once, as it imports the module, and making it builds the chain ([Building the middleware chain](chain.md)).
 
-Other handlers are built on `BaseHandler`: the test client's `ClientHandler` and `AsyncClientHandler`, which run the whole chain and none of `WSGIHandler.__call__` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)), and `StaticFilesHandler` and `FSFilesHandler`, which serve static files, the second media files too, for the development server and live-server tests ([Serving static files: `StaticFilesHandler` and the development server](../contrib/serving-static.md), [A server in a thread: `LiveServerTestCase`](../testing/live-server.md#static-and-media-files-fsfileshandler)).
+Other handlers are built on `BaseHandler`: the test client's `ClientHandler` and `AsyncClientHandler`, which run the whole chain and no part of `WSGIHandler` or `ASGIHandler` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)), and `StaticFilesHandler` and `FSFilesHandler`, which serve static files, the second media files too, for the development server and live-server tests ([Serving static files: `StaticFilesHandler` and the development server](../contrib/serving-static.md), [A server in a thread: `LiveServerTestCase`](../testing/live-server.md#static-and-media-files-fsfileshandler)).
 
 ## A WSGI request
 
@@ -20,25 +20,25 @@ For a response that streams a file, when the environ holds the server's file wra
 
 `BaseHandler.get_response` is a thin shell around the chain's call (`django/core/handlers/base.py:BaseHandler.get_response`). Before it, it sets the current URLconf to `settings.ROOT_URLCONF` ([The script prefix, the current URLconf and the caches](../urls/state.md#the-current-urlconf)). After it, it adds the request's `close`, which closes its uploaded files, to the response's closers, the functions the response's `close` calls, and passes a response of 400 or above to `log_response` (`django/utils/log.py:log_response`). `BaseHandler.get_response_async` is the same shell for the asynchronous path.
 
-> **Why.** By the docstring of `BaseHandler.get_response_async`, one asynchronous `get_response` for everything, WSGI included, is too slow, and a separate path avoids the context switch (`django/core/handlers/base.py:BaseHandler.get_response_async`): under WSGI no event loop is running, and `async_to_sync` then runs a coroutine on a new loop in a new thread while the calling thread waits (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).
+> **Why.** One asynchronous `get_response` for everything, WSGI included, is too slow, and a separate path avoids the context switch (`django/core/handlers/base.py:BaseHandler.get_response_async`): under WSGI no event loop is running, and `async_to_sync` then runs a coroutine on a new loop in a new thread while the calling thread waits (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).
 
 ## Who ends the request
 
-The WSGI handler returns before the request is over: the server still has to iterate the response for the body, and then calls its `close`. `HttpResponseBase.close` runs every closer registered on the response, the request's among them, and then sends `request_finished` (`django/http/response.py:HttpResponseBase.close`). So the signal that ends a request fires after the last of the body is handed to the server, for a streaming response perhaps long after the view returned.
+The WSGI handler returns before the request is over: the server still has to iterate the response for the body, and then calls its `close`. `HttpResponseBase.close` runs every closer registered on the response, the request's among them, and then sends `request_finished` (`django/http/response.py:HttpResponseBase.close`). So the signal that ends a request fires once the server is done with the body, for a streaming response perhaps long after the view returned.
 
-Django hangs its per-request housekeeping on signals, not on the handler.
+Much of Django's per-request housekeeping hangs on signals.
 
 | signal | sent | Django's own receivers |
 |---|---|---|
 | `request_started` | by the handler, before the request object is made | `reset_queries` empties each database connection's query log; `close_old_connections` closes connections that are unusable or past their age |
-| `request_finished` | by `HttpResponseBase.close`; under ASGI by the handler itself, when the client left before the handler had a response | `close_old_connections` again; `close_caches`; `reset_urlconf`, which clears a URLconf override; and the development server's reloader, when it watches files with Watchman |
+| `request_finished` | by `HttpResponseBase.close`; under ASGI by the handler itself, when the client left while the chain ran; none if an exception escapes the handler first | `close_old_connections` again; `close_caches`; `reset_urlconf`, which clears a URLconf override; and the development server's reloader, when it watches files with Watchman |
 | `got_request_exception` | by `response_for_exception` and `get_exception_response`, when an exception is to become a 500 or, under `settings.DEBUG_PROPAGATE_EXCEPTIONS`, to be raised on | none in a serving process; the test client listens, to hand the exception to the test |
 
 *The three signals of the request cycle, defined in `django/core/signals.py`.*
 
 ## An ASGI request
 
-An ASGI server calls its application once for each request, with the scope, a dictionary, and two awaitable callables that receive and send messages. `ASGIHandler.__call__` accepts only a scope of the type `"http"` and runs `ASGIHandler.handle` inside asgiref's `ThreadSensitiveContext`, which gives the request's synchronous code a thread of its own ([Sync and async in one chain](async.md#one-thread-per-request)) (`django/core/handlers/asgi.py:ASGIHandler.__call__`).
+An ASGI server calls its application once for each request, with the scope, a dictionary, and two awaitable callables that receive and send messages. `ASGIHandler.__call__` accepts only a scope of the type `"http"` and runs `ASGIHandler.handle` inside asgiref's `ThreadSensitiveContext`, which gives the request's thread-sensitive code a thread of its own ([Sync and async in one chain](async.md#one-thread-per-request)) (`django/core/handlers/asgi.py:ASGIHandler.__call__`).
 
 `ASGIHandler.handle` works in phases (`django/core/handlers/asgi.py:ASGIHandler.handle`). `ASGIHandler.read_body` receives the whole body into a temporary file, and only then does `handle` send `request_started` and make the `ASGIRequest`. It then starts the listener `ASGIHandler.listen_for_disconnect` as the one task of an `asyncio.TaskGroup`, to wait for the client to go, and in its own task runs the chain and `ASGIHandler.send_response` ([Streaming and file responses](../http/streaming.md#under-asgi) has the sending).
 

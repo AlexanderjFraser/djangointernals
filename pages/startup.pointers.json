@@ -80,7 +80,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.populate",
    "line": 23,
-   "sentence": "It stays empty until `Apps.populate` is called with the list of applications, and until then it refuses most questions with the exception `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).",
+   "sentence": "It stays empty until `Apps.populate` is called with the list of applications, and until then, where settings can be read, it refuses most questions with `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.populate",
@@ -94,7 +94,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.check_apps_ready",
    "line": 23,
-   "sentence": "It stays empty until `Apps.populate` is called with the list of applications, and until then it refuses most questions with the exception `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).",
+   "sentence": "It stays empty until `Apps.populate` is called with the list of applications, and until then, where settings can be read, it refuses most questions with `AppRegistryNotReady` (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.check_apps_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.check_apps_ready",
@@ -122,7 +122,7 @@
   {
    "pointer": "django/urls/base.py:set_script_prefix",
    "line": 30,
-   "sentence": "The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`).",
+   "sentence": "The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:reverse`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "set_script_prefix",
@@ -134,9 +134,23 @@
    "fingerprint": "40b5e4374d595bce"
   },
   {
+   "pointer": "django/urls/base.py:reverse",
+   "line": 30,
+   "sentence": "The script prefix is the part of a URL's path that belongs to the server's mount point, which the URLs Django generates have to begin with (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:reverse`).",
+   "tree": "django",
+   "path": "django/urls/base.py",
+   "symbol": "reverse",
+   "kind": "function",
+   "lines": [
+    28,
+    108
+   ],
+   "fingerprint": "e83750a3b0d32038"
+  },
+  {
    "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
    "line": 30,
-   "sentence": "Under a server it is set for every request, to `FORCE_SCRIPT_NAME` or else to what the server says the site is mounted under (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "sentence": "Under a server it is set for each request served, to `FORCE_SCRIPT_NAME` or else to what the server says the site is mounted under (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIHandler.__call__",
@@ -150,7 +164,7 @@
   {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.handle",
    "line": 30,
-   "sentence": "Under a server it is set for every request, to `FORCE_SCRIPT_NAME` or else to what the server says the site is mounted under (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
+   "sentence": "Under a server it is set for each request served, to `FORCE_SCRIPT_NAME` or else to what the server says the site is mounted under (`django/core/handlers/wsgi.py:WSGIHandler.__call__`, `django/core/handlers/asgi.py:ASGIHandler.handle`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.handle",
@@ -206,7 +220,7 @@
   {
    "pointer": "django/core/wsgi.py:get_wsgi_application",
    "line": 89,
-   "sentence": "Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`).",
+   "sentence": "Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
    "tree": "django",
    "path": "django/core/wsgi.py",
    "symbol": "get_wsgi_application",
@@ -216,6 +230,20 @@
     13
    ],
    "fingerprint": "db32b08cd1f96afc"
+  },
+  {
+   "pointer": "django/core/asgi.py:get_asgi_application",
+   "line": 89,
+   "sentence": "Under a server it is `get_wsgi_application` or `get_asgi_application`, which the project's `wsgi.py` or `asgi.py` calls as the server imports it; each calls `django.setup` and then makes the handler, the object the server will call with every request (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).",
+   "tree": "django",
+   "path": "django/core/asgi.py",
+   "symbol": "get_asgi_application",
+   "kind": "function",
+   "lines": [
+    5,
+    13
+   ],
+   "fingerprint": "03951811c2123fc0"
   },
   {
    "pointer": "django/core/management/__init__.py:ManagementUtility.execute",
@@ -234,7 +262,7 @@
   {
    "pointer": "django/utils/log.py:configure_logging",
    "line": 91,
-   "sentence": "A call after one that succeeded finds the registry ready, and `Apps.populate` returns at once; but logging is configured again, which can disable loggers made between the two calls (`django/utils/log.py:configure_logging`).",
+   "sentence": "A call after one that succeeded finds the registry ready, and `Apps.populate` returns at once; but logging is ordinarily configured again, which under a project's `LOGGING` can disable loggers made between the two calls (`django/utils/log.py:configure_logging`; [Logging](startup/logging.md)).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "configure_logging",

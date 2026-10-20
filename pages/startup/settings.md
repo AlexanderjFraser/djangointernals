@@ -12,7 +12,7 @@ A project's settings are an ordinary Python module, but no part of Django can im
 
 `LazySettings` is a `LazyObject`, Django's general lazy proxy, which holds what it stands for in `LazyObject._wrapped`, the marker `empty` until a subclass's `_setup` method puts something there ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md)) (`django/utils/functional.py:LazyObject`). `LazySettings._setup`, which `LazySettings.__getattr__` calls when a setting is read and nothing is wrapped, reads the environment variable `"DJANGO_SETTINGS_MODULE"`. If the variable is unset or empty it raises `ImproperlyConfigured`, with a message that names the setting that was being read; otherwise it makes a `Settings` from the module's name and wraps it (`django/conf/__init__.py:LazySettings._setup`).
 
-In the recording's project, library, three applications named loans, catalogue and members, the first two reads of `settings.DEBUG` each begin in `LazyObject.__getattribute__`, through which every attribute read of a lazy object passes ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md#two-ways-in-__getattr__-and-the-special-methods)). Under the first, `_setup` makes a `Settings`, whose constructor imports the settings module, and assigns it to `_wrapped` through `LazySettings.__setattr__`: that assignment is how the loaded settings are put in place. The second read goes no further than `LazyObject.__getattribute__`.
+In the recording's project, *library*, which installs *loans*, *catalogue* and *members*, the first two reads of `settings.DEBUG` each begin in `LazyObject.__getattribute__`, through which every attribute read of a lazy object passes ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md#two-ways-in-__getattr__-and-the-special-methods)). Under the first, `_setup` makes a `Settings`, whose constructor imports the settings module, and assigns it to `_wrapped` through `LazySettings.__setattr__`: that assignment is how the loaded settings are put in place. The second read goes no further than `LazyObject.__getattribute__`.
 
 ```text recording=startup
 ...
@@ -28,14 +28,14 @@ settings.DEBUG, the first read of any setting
 settings.DEBUG, again
   LazyObject.__getattribute__("DEBUG")
   -> False
-  ...
+...
 ```
 
 Three things follow from loading on the first read.
 
-Whoever reads first, loads, and it need not be `django.setup`: a module that reads a setting at its top level loads the settings as it is imported.
+Whoever reads or writes first, loads, and it need not be `django.setup`: a module that reads a setting at its top level loads the settings as it is imported.
 
-An error in the settings module surfaces at that first read, wherever it is. If loading fails, nothing is wrapped, so the proxy is still empty and the next read tries again from the beginning.
+An error in the settings module surfaces at that first read or write, wherever it is. If loading fails, nothing is wrapped, so the proxy is still empty and the next read tries again from the beginning.
 
 And code that may run before there are settings can ask without loading them: the property `LazySettings.configured` is true when something is wrapped, and reading it loads nothing (`django/conf/__init__.py:LazySettings.configured`). `Signal.connect`, run as modules are imported, tests it before it reads `settings.DEBUG` to decide whether to validate the receiver (`django/dispatch/dispatcher.py:Signal.connect`).
 
@@ -61,11 +61,11 @@ A name is a setting if it is written in upper case, and nothing else is tested. 
 
 An `ImportError` for the settings module itself becomes `ImproperlyConfigured`; any other, such as one raised by an import inside the module, passes through unchanged. Five settings must each be a list or a tuple, or `ImproperlyConfigured` is raised: `"ALLOWED_HOSTS"`, `"INSTALLED_APPS"`, `"LOCALE_PATHS"`, `"SECRET_KEY_FALLBACKS"` and `"TEMPLATE_DIRS"`, which 1.10 removed as a setting and the constructor tests still (`docs/releases/1.10.txt`). The settings 6.1 deprecated that the module defines are each warned about with `RemovedInDjango2028Warning`, and a deprecated email setting defined beside `MAILERS` is refused instead (`django/conf/__init__.py:_check_email_settings_conflicts`).
 
-> **Changed in 6.1.** `MAILERS` is new in 6.1, and the settings it replaces, `EMAIL_BACKEND` and those beside it, are deprecated from then on. The settings module that `django-admin startproject` writes defines `MAILERS` (`django/conf/project_template/project_name/settings.py-tpl`).
+> **Changed in 6.1.** `MAILERS` is new in 6.1, and the settings it replaces, `EMAIL_BACKEND` and the others of `DEPRECATED_EMAIL_SETTINGS`, are deprecated from then on (`django/conf/__init__.py:DEPRECATED_EMAIL_SETTINGS`). The settings module that `django-admin startproject` writes defines `MAILERS` (`django/conf/project_template/project_name/settings.py-tpl`).
 
-Last, the constructor moves the time zone into the process. Where the platform's `time` module has the function `"tzset"`, and `TIME_ZONE` is set, it raises `ValueError` for a zone `zoneinfo.ZoneInfo` cannot find, puts the name in the environment variable `"TZ"`, and calls that function. From then on the C library's local time is in the project's zone, and so is everything in the process that takes its local time from there and not from Django: `datetime.datetime.now` called with no zone, and the times a `logging.Formatter` writes into log lines.
+Last, the constructor moves the time zone into the process. Where the platform's `time` module has the function `"tzset"`, and `TIME_ZONE` is not empty, it raises `ValueError` for a zone `zoneinfo.ZoneInfo` cannot find, puts the name in the environment variable `"TZ"`, and calls that function. From then on the C library's local time is in that zone, and so is everything in the process that takes its local time from there and not from Django: `datetime.datetime.now` called with no zone, and the times a `logging.Formatter` writes into log lines.
 
-> **Why.** The move is made only where `time` has `"tzset"`, and the comment at that line says why by its ticket: "See ticket #2315 for why we don't do this unconditionally (breaks Windows)" (`django/conf/__init__.py:Settings.__init__`). Windows has no such function, and there the process's time zone is left alone.
+> **Why.** The move is made only where `time` has `"tzset"`, because, made everywhere, it breaks Windows, which has no such function (ticket 2315); there the process's time zone is left alone (`django/conf/__init__.py:Settings.__init__`, `docs/ref/settings.txt`).
 
 ## `django.conf.global_settings`, the defaults
 
@@ -92,9 +92,9 @@ settings.DEBUG
   -> what it wraps, one of
        a Settings                  every default of global_settings, with the settings module's
                                    upper-case names set over them: one flat object
-       a UserSettingsHolder        the names set on it; any other name not deleted is asked of the object
-                                   behind it, its default_settings: global_settings by default, or the
-                                   object wrapped before an override
+       a UserSettingsHolder        the names set on it; any other upper-case name not deleted is asked of
+                                   the object behind it, its default_settings: global_settings by default,
+                                   or the object wrapped before an override
 ```
 
 *A read of a setting. A read that finds a value kept on the proxy ends there; any other goes through to the wrapped object and keeps on the proxy what it returns.*
@@ -157,11 +157,11 @@ No settings module: settings.configure
     settings.configure(DEBUG=False), a second time
       LazySettings.configure
       -> raises RuntimeError: Settings already configured.
-      ...
+    ...
 ```
 
 Settings can be configured once. `configure` raises `RuntimeError` when anything is already wrapped, and a loaded settings module counts: in a process where `"DJANGO_SETTINGS_MODULE"` is set, `configure` has to come before every read or write.
 
 Configuring by hand skips two of the things `Settings.__init__` does besides copying: the list-or-tuple check is not made, and the process's time zone is not set from `TIME_ZONE`. A deprecated email setting given beside `MAILERS` is refused all the same (`django/conf/__init__.py:LazySettings.configure`).
 
-Django calls `configure` itself in one place, for the commands that have to run where no project exists yet ([Who calls `django.setup`](callers.md#commands-that-configure-for-themselves)).
+Django calls `configure` itself in one place, for the commands that may run where no project exists yet ([Who calls `django.setup`](callers.md#commands-that-configure-for-themselves)).

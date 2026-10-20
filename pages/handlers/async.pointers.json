@@ -117,7 +117,7 @@
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.async_capable",
    "line": 23,
-   "sentence": "So under ASGI they now run synchronously, where they used to run in the mixin's async mode (`django/middleware/common.py:CommonMiddleware.async_capable`).",
+   "sentence": "So under ASGI they now run synchronously, where before they could run in the mixin's async mode (`django/middleware/common.py:CommonMiddleware.async_capable`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.async_capable",
@@ -201,7 +201,7 @@
   {
    "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
    "line": 102,
-   "sentence": "Under synchronous middleware it is inside their call, waiting in `async_to_sync` for the centre; in async mode it is idle in its executor from the last `process_request` to the first `process_response`, and the second pays in switching (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "sentence": "Under synchronous middleware it is inside their call, waiting in `async_to_sync` for the centre; in async mode it is idle in its executor, and the second pays in switching (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",
    "symbol": "SyncToAsync.__call__",
@@ -215,7 +215,7 @@
   {
    "pointer": "docs/releases/6.2.txt",
    "line": 104,
-   "sentence": "Its release notes allow that for high in-process concurrency over I/O that is not the ORM's, \"where no thread is otherwise held\", the switching may be preferable to \"pinning a thread per request\" (`docs/releases/6.2.txt`).",
+   "sentence": "6.2 turned `async_capable` off to avoid the repeated switching in `MiddlewareMixin.__acall__` (`docs/releases/6.2.txt`).",
    "tree": "django",
    "path": "docs/releases/6.2.txt",
    "symbol": null,
@@ -225,20 +225,6 @@
     432
    ],
    "fingerprint": "e1d5d9202432f6d1"
-  },
-  {
-   "pointer": "docs/topics/async.txt",
-   "line": 104,
-   "sentence": "The documentation says that with synchronous middleware around an async view Django will \"hold the sync thread open for middleware exception propagation\" (`docs/topics/async.txt`).",
-   "tree": "django",
-   "path": "docs/topics/async.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    437
-   ],
-   "fingerprint": "491be9ad7b5f2a72"
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.load_middleware",
@@ -285,7 +271,7 @@
   {
    "pointer": "docs/topics/async.txt",
    "line": 108,
-   "sentence": "It can still await several things at once, but it occupies two threads where a synchronous view would occupy one; as the documentation says, \"you will not get the benefits of an async stack\" (`docs/topics/async.txt`).",
+   "sentence": "It can still await several things at once, but it occupies two threads where a synchronous view would occupy one (`docs/topics/async.txt`).",
    "tree": "django",
    "path": "docs/topics/async.txt",
    "symbol": null,
@@ -313,7 +299,7 @@
   {
    "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
    "line": 129,
-   "sentence": "The thread is made at a request's first thread-sensitive crossing, the one for `request_started`, and lasts until the request ends: every request that gets that far has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
+   "sentence": "The thread is made at a request's first thread-sensitive crossing, the one for `request_started`, and lasts until the request ends: every request that gets that far has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`, `asgiref:asgiref/sync.py:ThreadSensitiveContext.__aexit__`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",
    "symbol": "SyncToAsync.__call__",
@@ -323,6 +309,20 @@
     549
    ],
    "fingerprint": "6be21e12b059ba25"
+  },
+  {
+   "pointer": "asgiref:asgiref/sync.py:ThreadSensitiveContext.__aexit__",
+   "line": 129,
+   "sentence": "The thread is made at a request's first thread-sensitive crossing, the one for `request_started`, and lasts until the request ends: every request that gets that far has a thread of its own, whatever its middleware and its view (`asgiref:asgiref/sync.py:SyncToAsync.__call__`, `asgiref:asgiref/sync.py:ThreadSensitiveContext.__aexit__`).",
+   "tree": "asgiref",
+   "path": "asgiref/sync.py",
+   "symbol": "ThreadSensitiveContext.__aexit__",
+   "kind": "function",
+   "lines": [
+    141,
+    164
+   ],
+   "fingerprint": "e20776a36bae59b6"
   },
   {
    "pointer": "django/db/utils.py:ConnectionHandler.thread_critical",

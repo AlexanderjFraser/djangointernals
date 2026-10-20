@@ -6,11 +6,11 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `BaseHandler.load_middleware` turns the list in `settings.MIDDLEWARE` into one callable, the middleware chain: the order it works in, what it asks of a middleware, and the three lists of hooks it fills on the way. The two best-known hooks, `process_request` and `process_response`, are not among them: they are `MiddlewareMixin`'s.
 
-Each entry of `settings.MIDDLEWARE` is the dotted path of a **factory**: something that is given the next layer inwards and returns the middleware itself, a callable that takes a request and returns a response. A class whose `__init__` accepts the inner layer and which defines `__call__` is the usual form, and by convention the argument is called `get_response`. A function that returns a function serves as well.
+Each entry of `settings.MIDDLEWARE` is the dotted path of a **factory**: something that is called with the chain inside it and returns the middleware itself, a callable that takes a request and returns a response. A class whose `__init__` accepts that chain and which defines `__call__` is the usual form, and by convention the argument is called `get_response`. A function that returns a function serves as well.
 
 ## When the chain is built
 
-`WSGIHandler.__init__` and `ASGIHandler.__init__` each end by calling `load_middleware` on the handler being made, the second with `is_async=True` (`django/core/handlers/wsgi.py:WSGIHandler.__init__`, `django/core/handlers/asgi.py:ASGIHandler.__init__`). A serving process makes its handler once, so its chain is built once, as the server starts, and that is when each factory runs. A middleware's `__init__` is startup code: what it reads from the settings it reads then, and it is not called again for any request. The test client's handlers, `ClientHandler` and `AsyncClientHandler`, build their chain instead at their first request, when they find the attribute that holds it still `None` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`).
+`WSGIHandler.__init__` and `ASGIHandler.__init__` each end by calling `load_middleware` on the handler being made, the second with `is_async=True` (`django/core/handlers/wsgi.py:WSGIHandler.__init__`, `django/core/handlers/asgi.py:ASGIHandler.__init__`). A serving process makes its handler once, as it loads the application, so its chain is built once, and that is when each factory runs. A middleware's `__init__` is startup code: what it reads from the settings it reads then, and it is not called again for any request. The test client's handlers, `ClientHandler` and `AsyncClientHandler`, build their chain instead at their first request, when they find the attribute that holds it still `None` ([The test client: `Client` and `ClientHandler`](../testing/client.md#the-servers-part-clienthandler__call)) (`django/test/client.py:ClientHandler.__call__`, `django/test/client.py:AsyncClientHandler.__call__`).
 
 ## From the centre outwards
 
@@ -35,7 +35,7 @@ Making a WSGIHandler builds the chain, last middleware first
     A(get_response)    get_response is the wrapper around B
 ```
 
-The third step can end otherwise. A factory may decline: if it raises `MiddlewareNotUsed`, the loop goes on to the next path and the chain so far stays as it was. The layer is simply absent: with `MIDDLEWARE = [A, Unused, C]`, where Unused declines, the next factory, A, is given the wrapper around C.
+The third step can end otherwise. A factory may decline: if it raises `MiddlewareNotUsed`, the loop goes on to the next path and the chain so far stays as it was. The layer is simply absent: with `MIDDLEWARE = [A, Unused, C]`, where *Unused* declines, the next factory, A, is given the wrapper around C.
 
 ```text recording=handlers
 MIDDLEWARE = [A, Unused, C], where Unused raises MiddlewareNotUsed: it is left out of the chain
@@ -43,7 +43,7 @@ MIDDLEWARE = [A, Unused, C], where Unused raises MiddlewareNotUsed: it is left o
     A(get_response)    get_response is the wrapper around C
 ```
 
-Raising `MiddlewareNotUsed` is the way for a middleware to take itself out according to configuration. None of the middleware Django ships does so: the exception exists for the middleware a project writes (`django/core/exceptions.py:MiddlewareNotUsed`).
+Raising `MiddlewareNotUsed` lets a middleware take itself out according to configuration, and none of the middleware Django ships does so (`django/core/exceptions.py:MiddlewareNotUsed`).
 
 A factory must return something. If it returns `None`, `load_middleware` raises `ImproperlyConfigured`, with a message that names the factory.
 
@@ -54,12 +54,12 @@ Besides being a layer of the chain, a middleware may define any of three methods
 | a middleware's method | kept in | called |
 |---|---|---|
 | `process_view` | `BaseHandler._view_middleware` | before the view, with the view and its arguments |
-| `process_template_response` | `BaseHandler._template_response_middleware` | after the view, when the response can still be rendered |
+| `process_template_response` | `BaseHandler._template_response_middleware` | after the view, or a `process_view` hook that answers, when the response has a callable `render` |
 | `process_exception` | `BaseHandler._exception_middleware` | when the view, or the rendering of a template response, raises an exception |
 
 *The three lists a handler keeps beside the chain. The centre of the chain is what calls them, and [The centre of the chain](view.md) says when.*
 
-The orders fall out of the loop. It runs through the setting backwards, and it puts each `process_view` at the front of its list and each of the other two at the end of theirs. So a handler made with `MIDDLEWARE = [A, B, C]` keeps its `process_view` hooks in the setting's order, and the other two in reverse.
+The orders fall out of the loop. It runs through the setting backwards, and it puts each `process_view` at the front of its list and each of the other two at the end of theirs (`django/core/handlers/base.py:BaseHandler.load_middleware`). So a handler made with `MIDDLEWARE = [A, B, C]` keeps its `process_view` hooks in the setting's order, and the other two in reverse.
 
 ```text recording=handlers
 The three lists of hooks, as the handler keeps them
@@ -72,7 +72,7 @@ The result agrees with the onion: a hook that runs before the view runs outermos
 
 The `process_view` and `process_template_response` hooks are adapted to the handler's own mode as they are filed, so that the centre can call them directly.
 
-> **Trap.** The handler never awaits an `async def process_exception`, in either mode. Every `process_exception` hook is filed synchronous: "The exception-handling stack is still always synchronous for now, so adapt that way," says the comment at that line (`django/core/handlers/base.py:BaseHandler.load_middleware`), and filing a coroutine function synchronous, `BaseHandler.adapt_method_mode` wraps it in `async_to_sync` ([Sync and async in one chain](async.md)) (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`). Under ASGI the centre calls the hooks from a thread, through `sync_to_async`, and an async hook is sent back to the event loop to run while that thread waits, a trip a synchronous hook does not make (`django/core/handlers/base.py:BaseHandler._get_response_async`). Under WSGI, unless a layer runs asynchronously, each call of the hook starts an event loop in a new thread (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).
+> **Trap.** The handler never awaits an `async def process_exception`, in either mode. Every `process_exception` hook is filed synchronous, the handling of exceptions being still synchronous throughout (`django/core/handlers/base.py:BaseHandler.load_middleware`), and filing a coroutine function synchronous, `BaseHandler.adapt_method_mode` wraps it in `async_to_sync` ([Sync and async in one chain](async.md)) (`django/core/handlers/base.py:BaseHandler.adapt_method_mode`). Under ASGI the centre calls the hooks from a thread, through `sync_to_async`, and an async hook is sent back to the event loop to run while that thread waits, a trip a synchronous hook does not make (`django/core/handlers/base.py:BaseHandler._get_response_async`). Under WSGI, unless a layer runs asynchronously, each call of the hook starts an event loop in a new thread (`asgiref:asgiref/sync.py:AsyncToSync.__call__`).
 
 ## The hooks of `MiddlewareMixin`
 
@@ -92,4 +92,4 @@ WSGI, GET /plain/: B.process_request returns a response
     ...
 ```
 
-> **History.** Before 1.10 the layers were not strict. A response that one middleware's `process_request` returned still passed through the `process_response` of every middleware, those that never saw the request included, so a middleware's `process_response` could not count on its own `process_request` having run. DEP 5 made the layers strict, like an onion: each factory is called with the layer inside it, and a response returned early goes back out through the middleware listed before it, never through those listed after. Django 1.10 shipped the new style, in a new setting, `MIDDLEWARE`, "to solve the lack of strict request/response layering" of the old (`docs/releases/1.10.txt`). To carry the old hooks over, DEP 5 offered a mixin, `MiddlewareMixin`, "to ease providing the existing built-in middleware in both new-style and old-style forms, and to ease similar conversions of third-party middleware" (`deps:final/0005-improved-middleware.rst`).
+> **History.** Before 1.10 the layers were not strict. A response that one middleware's `process_request` returned still passed through the `process_response` of every middleware, those that never saw the request included, so a middleware's `process_response` could not count on its own `process_request` having run. DEP 5 made the layers strict, like an onion: each factory is called with the chain inside it, and a response returned early goes back out through the middleware listed before it, never through those listed after. Django 1.10 shipped the new style, in a new setting, `MIDDLEWARE`, "to solve the lack of strict request/response layering" of the old (`docs/releases/1.10.txt`). To carry the old hooks over, DEP 5 offered a mixin, `MiddlewareMixin`, "to ease providing the existing built-in middleware in both new-style and old-style forms, and to ease similar conversions of third-party middleware" (`deps:final/0005-improved-middleware.rst`).

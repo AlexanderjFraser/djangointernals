@@ -37,6 +37,20 @@
   },
   {
    "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
+   "line": 35,
+   "sentence": "The response goes out through that layer's own way out and the layers outside it, never those inside (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
+   "tree": "django",
+   "path": "django/middleware/__init__.py",
+   "symbol": "MiddlewareMixin.__call__",
+   "kind": "function",
+   "lines": [
+    35,
+    45
+   ],
+   "fingerprint": "1c249bc0b063a1d2"
+  },
+  {
+   "pointer": "django/middleware/__init__.py:MiddlewareMixin.__call__",
    "line": 61,
    "sentence": "The `process_request` hooks run outermost first and the `process_response` hooks innermost first, yet the handler calls neither: `MiddlewareMixin`, the base class nearly all of Django's middleware use, calls them when its layer is called, one before it calls the layer inside and the other on what comes back ([Building the middleware chain](handlers/chain.md)) (`django/middleware/__init__.py:MiddlewareMixin.__call__`).",
    "tree": "django",
@@ -66,7 +80,7 @@
   {
    "pointer": "django/http/response.py:HttpResponseBase.close",
    "line": 61,
-   "sentence": "And the request ends after the handler has returned: the server closes the response, and closing it sends `request_finished` ([The two entry points](handlers/entry.md#who-ends-the-request)) (`django/http/response.py:HttpResponseBase.close`).",
+   "sentence": "And under WSGI the request ends after the handler has returned: the server closes the response, which sends `request_finished` ([The two entry points](handlers/entry.md#who-ends-the-request)) (`django/http/response.py:HttpResponseBase.close`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "HttpResponseBase.close",
@@ -90,6 +104,20 @@
     104
    ],
    "fingerprint": "430bac571d4dc266"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:response_for_exception",
+   "line": 67,
+   "sentence": "As the chain is built, each layer is wrapped in `convert_exception_to_response`, which catches an exception from the layer and returns a response in its place, chosen by the exception's class: with Django's own error views, ordinarily a 404 for `Http404`, a 403 for `PermissionDenied`, a 400 for a bad request, and a 500 for anything it does not recognise (`django/core/handlers/exception.py:response_for_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "response_for_exception",
+   "kind": "function",
+   "lines": [
+    64,
+    160
+   ],
+   "fingerprint": "a7418f0de8e640e0"
   },
   {
    "pointer": "django/core/handlers/base.py:BaseHandler._get_response",

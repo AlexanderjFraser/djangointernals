@@ -49,7 +49,7 @@ Then, for a response that passed:
 
 `DomainNameValidator` refuses a value with a newline in it (CVE-2026-53878; 5.2.16, 6.0.7). Its pattern ends at `"\Z"`, where `"$"` would match before a final newline (`django/core/validators.py:DomainNameValidator.__init__`; [Validators: `django/core/validators.py`](../forms/validators.md)). A newline let through could inject a header into a response, though `HttpResponse` refuses one in a header (`django/http/response.py:ResponseHeaders._convert_to_charset`).
 
-A control character logged raw can forge a line or drive a terminal. Since 5.2.2 and 5.1.10 `log_response` escapes every string argument with the `"unicode_escape"` codec (CVE-2025-48432). At this commit `log_response` leaves the escaping to `log_message` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).
+A control character logged raw can forge a line or drive a terminal. Since 5.2.2 and 5.1.10 `log_response` escapes each string among the arguments formatted into its message, though not the message itself, with the `"unicode_escape"` codec (CVE-2025-48432). At this commit `log_response` leaves the escaping to `log_message` (`django/utils/log.py:log_message`; [Logging](../startup/logging.md)).
 
 The development server's own line went unescaped until 6.0. Since then `WSGIRequestHandler.log_message` hands its arguments to `log_message`, and no 6.0 note says so (`django/core/servers/basehttp.py:WSGIRequestHandler.log_message`; [The development server](../commands/runserver.md)). For a request line holding the escape character, 5.2.17's `"\x1b"` is the character itself, which a terminal obeys, and the later releases' `"\\x1b"` four characters:
 

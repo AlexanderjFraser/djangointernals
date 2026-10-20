@@ -49,7 +49,7 @@ Django also looks inside each installed application by name: for its template ta
 
 ## The middleware
 
-Each entry of `MIDDLEWARE` is the dotted path of a **factory**, most often the middleware's class: `BaseHandler.load_middleware` imports it and calls it once with the layer inside it, and what it returns is the middleware, called for each request (`django/core/handlers/base.py:BaseHandler.load_middleware`). No base class is asked for, `MiddlewareMixin` being a convenience: the factory must return something other than `None` and may raise `MiddlewareNotUsed` to be left out. A server's handler runs the factories when it is made, once a process ([Building the middleware chain](../handlers/chain.md)).
+Each entry of `MIDDLEWARE` is the dotted path of a **factory**, most often the middleware's class: `BaseHandler.load_middleware` imports it and calls it once with the wrapped layer inside it, and what it returns is the middleware, called for each request (`django/core/handlers/base.py:BaseHandler.load_middleware`). No base class is asked for, `MiddlewareMixin` being a convenience: the factory must return something other than `None` and may raise `MiddlewareNotUsed` to be left out. A server's handler runs the factories when it is made, once a process ([Building the middleware chain](../handlers/chain.md)).
 
 > **Why.** DEP 5, a Django Enhancement Proposal, rejected a middleware that is a function of the request and the next layer: it left no place for setup done once or for disabling, and Django would have built a chain of closures for each request, where a factory's is built once (`deps:final/0005-improved-middleware.rst`).
 
@@ -81,7 +81,7 @@ Other settings name code, each loaded by `import_string` unless the loader says 
 | `FILE_UPLOAD_HANDLERS`: each a `FileUploadHandler` ([Requests and responses](../http.md)) | once a request | `django/http/request.py:HttpRequest._initialize_handlers` |
 | `FORM_RENDERER`: a `BaseRenderer` ([Forms](../forms.md)) | once a process | `django/forms/renderers.py:get_default_renderer` |
 | `FORMAT_MODULE_PATH`: packages of format modules by locale ([Internationalization and time zones](../i18n.md)) | once a language | by module: `django/utils/formats.py:iter_format_modules` |
-| `LOGGING_CONFIG`: a function, given `LOGGING` ([Logging](../startup/logging.md)) | once a `django.setup`; called only if `LOGGING` is not empty | `django/utils/log.py:configure_logging` |
+| `LOGGING_CONFIG`: a function, given `LOGGING` ([Logging](../startup/logging.md)) | once a `django.setup`, and again when an override changes it or `LOGGING`; called only if `LOGGING` is not empty | `django/utils/log.py:configure_logging` |
 | `MESSAGE_STORAGE`: a `BaseStorage` ([Authentication, sessions and messages](../auth.md)) | once a request | `django/contrib/messages/storage/__init__.py:default_storage` |
 | `MIGRATION_MODULES`: an application's migrations package ([Migrations](../migrations.md)) | once a loader | by module: `django/db/migrations/loader.py:MigrationLoader.load_disk` |
 | `PASSWORD_HASHERS`: each a `BasePasswordHasher` ([Authentication, sessions and messages](../auth.md)) | once a process | `django/contrib/auth/hashers.py:get_hashers` |

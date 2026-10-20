@@ -10,7 +10,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
    "line": 9,
-   "sentence": "The innermost layer of the chain is not a middleware but a method of the handler: in its docstring's words, everything that happens inside the request and response middleware (`django/core/handlers/base.py:BaseHandler._get_response`).",
+   "sentence": "The innermost layer of the chain is not a middleware but a method of the handler (`django/core/handlers/base.py:BaseHandler._get_response`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler._get_response",
@@ -64,9 +64,23 @@
    "fingerprint": "8a7faacfec18a9da"
   },
   {
+   "pointer": "docs/ref/request-response.txt",
+   "line": 68,
+   "sentence": "A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for; `process_view` runs after, just before the view is called, and is handed the view itself (`docs/ref/request-response.txt`, `docs/topics/http/middleware.txt`).",
+   "tree": "django",
+   "path": "docs/ref/request-response.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1502
+   ],
+   "fingerprint": "b33496c155d07e2c"
+  },
+  {
    "pointer": "docs/topics/http/middleware.txt",
    "line": 68,
-   "sentence": "A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for; `process_view` runs after, just before the view is called, and is handed the view itself (`docs/topics/http/middleware.txt`).",
+   "sentence": "A middleware's `process_request` runs before the handler has resolved the URL, and is not told which view the request is for; `process_view` runs after, just before the view is called, and is handed the view itself (`docs/ref/request-response.txt`, `docs/topics/http/middleware.txt`).",
    "tree": "django",
    "path": "docs/topics/http/middleware.txt",
    "symbol": null,
@@ -94,7 +108,7 @@
   {
    "pointer": "django/core/handlers/base.py:BaseHandler.make_view_atomic",
    "line": 72,
-   "sentence": "Before the call, `BaseHandler.make_view_atomic` wraps the view in `django.db.transaction.atomic` for each database whose settings have `\"ATOMIC_REQUESTS\"` true, unless the view was marked to be left out, as [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#atomic_requests-and-non_atomic_requests) shows; an async view it refuses with `RuntimeError` instead of wrapping it (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
+   "sentence": "Before the call, `BaseHandler.make_view_atomic` wraps the view in `django.db.transaction.atomic` for each database whose settings have `\"ATOMIC_REQUESTS\"` true, unless the view was marked to be left out for it, as [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#atomic_requests-and-non_atomic_requests) shows; an async view it refuses with `RuntimeError` instead of wrapping it (`django/core/handlers/base.py:BaseHandler.make_view_atomic`).",
    "tree": "django",
    "path": "django/core/handlers/base.py",
    "symbol": "BaseHandler.make_view_atomic",
@@ -220,7 +234,7 @@
   {
    "pointer": "docs/topics/http/middleware.txt",
    "line": 119,
-   "sentence": "The documentation asks a hook to return a response with a `render` method (`docs/topics/http/middleware.txt`), but nothing checks: `render` is called on whatever the last hook returned.",
+   "sentence": "The documentation asks a hook to return a response with a `render` method (`docs/topics/http/middleware.txt`), but nothing checks: `render` is called on any response the last hook returned.",
    "tree": "django",
    "path": "docs/topics/http/middleware.txt",
    "symbol": null,

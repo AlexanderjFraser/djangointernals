@@ -24,7 +24,7 @@
   {
    "pointer": "django/conf/",
    "line": 9,
-   "sentence": "The machinery for this lives partly in `django/conf/`, where the settings objects are built to be stacked, and partly in `django/test/`, which does the stacking.",
+   "sentence": "`django/conf/` builds the settings objects to be stacked, and `django/test/` stacks them.",
    "tree": "django",
    "path": "django/conf/",
    "symbol": null,
@@ -34,12 +34,26 @@
   {
    "pointer": "django/test/",
    "line": 9,
-   "sentence": "The machinery for this lives partly in `django/conf/`, where the settings objects are built to be stacked, and partly in `django/test/`, which does the stacking.",
+   "sentence": "`django/conf/` builds the settings objects to be stacked, and `django/test/` stacks them.",
    "tree": "django",
    "path": "django/test/",
    "symbol": null,
    "kind": "directory",
    "fingerprint": "4f6c0380aff7ea28"
+  },
+  {
+   "pointer": "django/conf/__init__.py:LazySettings.__setattr__",
+   "line": 15,
+   "sentence": "The first is the proxy's own cache of values, which `LazySettings.__setattr__` keeps correct: it drops the kept value for the name being assigned ([The settings object](settings.md#writes-go-through-the-proxy-too); `django/conf/__init__.py:LazySettings.__setattr__`).",
+   "tree": "django",
+   "path": "django/conf/__init__.py",
+   "symbol": "LazySettings.__setattr__",
+   "kind": "function",
+   "lines": [
+    148,
+    181
+   ],
+   "fingerprint": "e5b5c43bb4fbb547"
   },
   {
    "pointer": "django/template/utils.py:EngineHandler.templates",
@@ -132,7 +146,7 @@
   {
    "pointer": "django/test/utils.py:override_settings.enable",
    "line": 27,
-   "sentence": "On the way in it does three things, in `override_settings.enable` (`django/test/utils.py:override_settings.enable`).",
+   "sentence": "On the way in `override_settings.enable` does three things, four for `INSTALLED_APPS` (`django/test/utils.py:override_settings.enable`).",
    "tree": "django",
    "path": "django/test/utils.py",
    "symbol": "override_settings.enable",
@@ -384,7 +398,7 @@
   {
    "pointer": "django/test/utils.py:override_settings.enable",
    "line": 176,
-   "sentence": "`INSTALLED_APPS` is the one setting whose override changes the app registry, and `override_settings.enable` handles it first, before it touches the settings, so that a list that cannot be loaded leaves the settings as they were (`django/test/utils.py:override_settings.enable`).",
+   "sentence": "`INSTALLED_APPS` is the one setting whose override refills the app registry, and `override_settings.enable` handles it first, before it touches the settings, so that a list that cannot be loaded leaves the settings as they were (`django/test/utils.py:override_settings.enable`).",
    "tree": "django",
    "path": "django/test/utils.py",
    "symbol": "override_settings.enable",

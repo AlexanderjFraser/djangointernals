@@ -10,7 +10,7 @@
   {
    "pointer": "django/utils/log.py",
    "line": 9,
-   "sentence": "All of it is in `django/utils/log.py`.",
+   "sentence": "All of it but the call in `django.setup` is in `django/utils/log.py`.",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": null,
@@ -66,7 +66,7 @@
   {
    "pointer": "django/utils/log.py:ServerFormatter.format",
    "line": 27,
-   "sentence": "The handler's formatter, `ServerFormatter`, colours each line by the status code the server attached to the record (`django/utils/log.py:ServerFormatter.format`).",
+   "sentence": "The handler's formatter, `ServerFormatter`, colours a line by the status code the server attached to its record, where the terminal supports colour (`django/utils/log.py:ServerFormatter.format`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "ServerFormatter.format",
@@ -108,7 +108,7 @@
   {
    "pointer": "docs/topics/logging.txt",
    "line": 117,
-   "sentence": "The documentation warns of it: a disabled logger \"will silently discard anything logged to it, not even propagating entries to a parent logger\" (`docs/topics/logging.txt`).",
+   "sentence": "A project's `LOGGING` that leaves out `\"disable_existing_loggers\"` and names none of Django's loggers turns off those already made, the error mail with them, as the documentation warns (`docs/topics/logging.txt`).",
    "tree": "django",
    "path": "docs/topics/logging.txt",
    "symbol": null,
@@ -152,7 +152,7 @@
   {
    "pointer": "django/utils/log.py:log_response",
    "line": 154,
-   "sentence": "It calls `log_response`, which hands the message and the response's status to `log_message`, then marks the response as logged; for a response that is already marked it returns at once (`django/utils/log.py:log_response`).",
+   "sentence": "The request path seldom writes to a logger itself: it calls `log_response`, which hands the message and the response's status to `log_message`, then marks the response as logged; for a response that is already marked it returns at once (`django/utils/log.py:log_response`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_response",
@@ -166,7 +166,7 @@
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
    "line": 156,
-   "sentence": "When an exception of any kind but `Http404` becomes a response, the code that catches it logs the response there, with the exception attached so that the record carries a traceback (`django/core/handlers/exception.py:response_for_exception`).",
+   "sentence": "When `response_for_exception` turns an exception of any kind but `Http404` into a response, it logs the response there, with the exception attached so that the record carries a traceback (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -208,7 +208,7 @@
   {
    "pointer": "django/utils/log.py:log_message",
    "line": 178,
-   "sentence": "Before it logs, it escapes every string argument so that control characters, a line break among them, are written as escape sequences (`django/utils/log.py:log_message`).",
+   "sentence": "Before it logs, it escapes every string argument after the message so that control characters, a line break among them, are written as escape sequences (`django/utils/log.py:log_message`).",
    "tree": "django",
    "path": "django/utils/log.py",
    "symbol": "log_message",

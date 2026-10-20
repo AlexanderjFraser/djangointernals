@@ -210,7 +210,7 @@ The last statement of `_prepare` sends `class_prepared`, with the class as sende
 
 ## Into the registry
 
-The last thing `ModelBase.__new__` does before it returns the class is give it to the registry named in its options, which is the global one unless `Meta` said otherwise. `Apps.register_model` stores the class under its app's label and its own name in lower case, and then does two things for the rest of the system (`django/apps/registry.py:Apps.register_model`).
+The last thing `ModelBase.__new__` does before it returns the class is give it to the registry named in its options, which is the global one unless `Meta` said otherwise or a test's `isolate_apps` has put another in its place (`django/test/utils.py:isolate_apps`). `Apps.register_model` stores the class under its app's label and its own name in lower case, and then does two things for the rest of the system (`django/apps/registry.py:Apps.register_model`).
 
 It calls every function that was waiting for this class. Functions come to be waiting through `Apps.lazy_model_operation`, which a relation uses to say: call this when these models exist (`django/apps/registry.py:Apps.lazy_model_operation`, `django/apps/registry.py:Apps.do_pending_operations`). The method takes a function and a list of models. It peels the first model off the list and calls itself with the rest once that model is registered, so in the recording it appears nested in itself, and a call of it with no model left is the function being run. This is the registration of Sailor:
 

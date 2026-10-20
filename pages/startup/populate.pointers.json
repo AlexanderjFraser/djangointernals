@@ -10,7 +10,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.populate",
    "line": 32,
-   "sentence": "`Apps.populate` is written to be called more than once and to do its work once (`django/apps/registry.py:Apps.populate`).",
+   "sentence": "`Apps.populate` is written to be called more than once and to do its work once, unless `Apps.set_installed_apps` resets the registry (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.set_installed_apps`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.populate",
@@ -20,6 +20,20 @@
     127
    ],
    "fingerprint": "32f7c6ad9925afa8"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.set_installed_apps",
+   "line": 32,
+   "sentence": "`Apps.populate` is written to be called more than once and to do its work once, unless `Apps.set_installed_apps` resets the registry (`django/apps/registry.py:Apps.populate`, `django/apps/registry.py:Apps.set_installed_apps`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.set_installed_apps",
+   "kind": "function",
+   "lines": [
+    339,
+    362
+   ],
+   "fingerprint": "2d6e863f3aafad98"
   },
   {
    "pointer": "django/__init__.py:setup",
@@ -81,7 +95,7 @@
   {
    "pointer": "django/apps/config.py:AppConfig.__init__",
    "line": 97,
-   "sentence": "`AppConfig.__init__` then fixes the facts about the application that the rest of Django reads (`django/apps/config.py:AppConfig.__init__`).",
+   "sentence": "`AppConfig.__init__` fixes the facts about the application that the rest of Django reads (`django/apps/config.py:AppConfig.__init__`).",
    "tree": "django",
    "path": "django/apps/config.py",
    "symbol": "AppConfig.__init__",
@@ -93,9 +107,37 @@
    "fingerprint": "04990c5f8a8a943c"
   },
   {
+   "pointer": "django/apps/config.py:AppConfig._path_from_module",
+   "line": 110,
+   "sentence": "A namespace package spread over several directories has no single one, and `AppConfig._path_from_module` raises `ImproperlyConfigured` for it, asking for a configuration class that states `path` (`django/apps/config.py:AppConfig._path_from_module`).",
+   "tree": "django",
+   "path": "django/apps/config.py",
+   "symbol": "AppConfig._path_from_module",
+   "kind": "function",
+   "lines": [
+    71,
+    97
+   ],
+   "fingerprint": "9c0622cf75915ce9"
+  },
+  {
+   "pointer": "django/apps/registry.py:Apps.populate",
+   "line": 112,
+   "sentence": "Then `Apps.apps_ready` is set (`django/apps/registry.py:Apps.populate`).",
+   "tree": "django",
+   "path": "django/apps/registry.py",
+   "symbol": "Apps.populate",
+   "kind": "function",
+   "lines": [
+    61,
+    127
+   ],
+   "fingerprint": "32f7c6ad9925afa8"
+  },
+  {
    "pointer": "django/db/models/base.py:ModelBase.__new__",
    "line": 114,
-   "sentence": "A model's class statement asks the registry which application its module belongs to (`django/db/models/base.py:ModelBase.__new__`), and `Apps.get_containing_app_config` will not answer before `apps_ready` (`django/apps/registry.py:Apps.get_containing_app_config`; [The registry and its models](registry.md)).",
+   "sentence": "A model's class statement asks the registry which application its module belongs to (`django/db/models/base.py:ModelBase.__new__`), and `Apps.get_containing_app_config` will not answer before `apps_ready` (`django/apps/registry.py:Apps.get_containing_app_config`; [The registry and its models](registry.md#a-model-class-registers-itself)).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "ModelBase.__new__",
@@ -109,7 +151,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.get_containing_app_config",
    "line": 114,
-   "sentence": "A model's class statement asks the registry which application its module belongs to (`django/db/models/base.py:ModelBase.__new__`), and `Apps.get_containing_app_config` will not answer before `apps_ready` (`django/apps/registry.py:Apps.get_containing_app_config`; [The registry and its models](registry.md)).",
+   "sentence": "A model's class statement asks the registry which application its module belongs to (`django/db/models/base.py:ModelBase.__new__`), and `Apps.get_containing_app_config` will not answer before `apps_ready` (`django/apps/registry.py:Apps.get_containing_app_config`; [The registry and its models](registry.md#a-model-class-registers-itself)).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.get_containing_app_config",
@@ -205,23 +247,9 @@
    "fingerprint": "d38521c72f9b64b1"
   },
   {
-   "pointer": "django/contrib/admin/apps.py",
-   "line": 163,
-   "sentence": "Each of these needs something the earlier phases could not give: a model class from another application, or simply a place to run once everything is importable (`django/contrib/admin/apps.py`, `django/contrib/messages/apps.py`).",
-   "tree": "django",
-   "path": "django/contrib/admin/apps.py",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    27
-   ],
-   "fingerprint": "04e8ae940e2db1bd"
-  },
-  {
    "pointer": "django/contrib/messages/apps.py",
-   "line": 163,
-   "sentence": "Each of these needs something the earlier phases could not give: a model class from another application, or simply a place to run once everything is importable (`django/contrib/admin/apps.py`, `django/contrib/messages/apps.py`).",
+   "line": 153,
+   "sentence": "What some of Django's own applications do there shows the range (`django/contrib/messages/apps.py`).",
    "tree": "django",
    "path": "django/contrib/messages/apps.py",
    "symbol": null,
@@ -231,6 +259,20 @@
     19
    ],
    "fingerprint": "5bf9f26b49735d80"
+  },
+  {
+   "pointer": "django/contrib/admin/apps.py",
+   "line": 163,
+   "sentence": "Two of these need something the earlier phases could not give: a model class from another application, or simply a place to run once everything is importable (`django/contrib/admin/apps.py`).",
+   "tree": "django",
+   "path": "django/contrib/admin/apps.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    27
+   ],
+   "fingerprint": "04e8ae940e2db1bd"
   },
   {
    "pointer": "django/contrib/auth/apps.py:AuthConfig.ready",
@@ -249,7 +291,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.check_apps_ready",
    "line": 167,
-   "sentence": "The registry's methods test them, and a question asked too early is refused with `AppRegistryNotReady` and not answered wrongly from a half-filled registry (`django/apps/registry.py:Apps.check_apps_ready`, `django/apps/registry.py:Apps.check_models_ready`).",
+   "sentence": "All the registry's lookups but one test the first two, and refuse a question asked too early with `AppRegistryNotReady` rather than answer it wrongly from a half-filled registry (`django/apps/registry.py:Apps.check_apps_ready`, `django/apps/registry.py:Apps.check_models_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.check_apps_ready",
@@ -263,7 +305,7 @@
   {
    "pointer": "django/apps/registry.py:Apps.check_models_ready",
    "line": 167,
-   "sentence": "The registry's methods test them, and a question asked too early is refused with `AppRegistryNotReady` and not answered wrongly from a half-filled registry (`django/apps/registry.py:Apps.check_apps_ready`, `django/apps/registry.py:Apps.check_models_ready`).",
+   "sentence": "All the registry's lookups but one test the first two, and refuse a question asked too early with `AppRegistryNotReady` rather than answer it wrongly from a half-filled registry (`django/apps/registry.py:Apps.check_apps_ready`, `django/apps/registry.py:Apps.check_models_ready`).",
    "tree": "django",
    "path": "django/apps/registry.py",
    "symbol": "Apps.check_models_ready",
