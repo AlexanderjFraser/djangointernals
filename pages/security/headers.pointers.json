@@ -50,9 +50,23 @@
    "fingerprint": "1dfcdb5f099f50d2"
   },
   {
+   "pointer": "django/http/response.py:HttpResponseRedirectBase.__init__",
+   "line": 15,
+   "sentence": "The answer is a 301, an `HttpResponsePermanentRedirect`, to `\"https://\"`, the host, and `HttpRequest.get_full_path`, which keeps the query string; an address longer than `MAX_URL_REDIRECT_LENGTH` makes the redirect raise `DisallowedRedirect` instead (`django/http/response.py:HttpResponseRedirectBase.__init__`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseRedirectBase.__init__",
+   "kind": "function",
+   "lines": [
+    642,
+    662
+   ],
+   "fingerprint": "d24c129d406f5945"
+  },
+  {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
    "line": 15,
-   "sentence": "The host is `SECURE_SSL_HOST` if it names one, and otherwise `HttpRequest.get_host`, which raises `DisallowedHost` for a host outside `ALLOWED_HOSTS` (`django/middleware/security.py:SecurityMiddleware.process_request`).",
+   "sentence": "The host is `SECURE_SSL_HOST` if it names one, and otherwise `HttpRequest.get_host`, which raises `DisallowedHost` for a host it does not allow, ordinarily one outside `ALLOWED_HOSTS` ([Headers, host and scheme](../http/headers.md#the-host)) (`django/middleware/security.py:SecurityMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/security.py",
    "symbol": "SecurityMiddleware.process_request",
@@ -136,7 +150,7 @@
   {
    "pointer": "docs/ref/middleware.txt",
    "line": 42,
-   "sentence": "`\"; includeSubDomains\"` follows if `SECURE_HSTS_INCLUDE_SUBDOMAINS` is true, and extends the refusal to the host's subdomains; `\"; preload\"` follows if `SECURE_HSTS_PRELOAD` is, and without it the site cannot be submitted to the browser preload list (`docs/ref/middleware.txt`).",
+   "sentence": "`\"; includeSubDomains\"` follows if `SECURE_HSTS_INCLUDE_SUBDOMAINS` is true, and extends the refusal to the host's subdomains; `\"; preload\"` follows if `SECURE_HSTS_PRELOAD` is, and without it the site cannot be submitted to the browser preload list (`docs/ref/middleware.txt`, `docs/ref/checks.txt`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -146,6 +160,20 @@
     727
    ],
    "fingerprint": "1dfcdb5f099f50d2"
+  },
+  {
+   "pointer": "docs/ref/checks.txt",
+   "line": 42,
+   "sentence": "`\"; includeSubDomains\"` follows if `SECURE_HSTS_INCLUDE_SUBDOMAINS` is true, and extends the refusal to the host's subdomains; `\"; preload\"` follows if `SECURE_HSTS_PRELOAD` is, and without it the site cannot be submitted to the browser preload list (`docs/ref/middleware.txt`, `docs/ref/checks.txt`).",
+   "tree": "django",
+   "path": "docs/ref/checks.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1008
+   ],
+   "fingerprint": "bf616eb17add5caf"
   },
   {
    "pointer": "docs/ref/middleware.txt",
@@ -192,7 +220,7 @@
   {
    "pointer": "docs/ref/middleware.txt",
    "line": 50,
-   "sentence": "At `\"same-origin\"`, it asks the browser to keep the site's top-level windows apart from other sites' windows, so that a popup of another site opened from one of them gets no reference back to it: a defence in depth against cross-origin attacks such as Spectre (`docs/ref/middleware.txt`).",
+   "sentence": "At `\"same-origin\"`, it asks the browser to keep the site's top-level windows apart from other origins' windows, so that a popup of another origin opened from one of them gets no reference back to it: a defence in depth against cross-origin attacks such as Spectre (`docs/ref/middleware.txt`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -234,7 +262,7 @@
   {
    "pointer": "django/middleware/clickjacking.py:XFrameOptionsMiddleware",
    "line": 71,
-   "sentence": "X-Frame-Options says whether a browser may show the response inside a frame: `\"DENY\"` in none, `\"SAMEORIGIN\"` only in a page of the same site (`django/middleware/clickjacking.py:XFrameOptionsMiddleware`).",
+   "sentence": "X-Frame-Options says whether a browser may show the response inside a frame: `\"DENY\"` in none, `\"SAMEORIGIN\"` only in a page of the same origin (`django/middleware/clickjacking.py:XFrameOptionsMiddleware`).",
    "tree": "django",
    "path": "django/middleware/clickjacking.py",
    "symbol": "XFrameOptionsMiddleware",

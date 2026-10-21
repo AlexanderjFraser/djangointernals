@@ -95,7 +95,7 @@
   {
    "pointer": "django/views/debug.py:CallableSettingWrapper",
    "line": 58,
-   "sentence": "It is wrapped in a `CallableSettingWrapper`, an object whose only behaviour is to have the same `repr`, so that the debug page does not call the setting, as a template does with a callable it is asked to print, and so that a callable that forbids setting attributes does not break the page (`django/views/debug.py:CallableSettingWrapper`).",
+   "sentence": "It is wrapped in a `CallableSettingWrapper`, an object whose only behaviour is to have the same `repr`, so that the debug page does not call the setting, as a template does with a callable it is asked to print (`django/views/debug.py:CallableSettingWrapper`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "CallableSettingWrapper",
@@ -137,7 +137,7 @@
   {
    "pointer": "django/views/debug.py:SafeExceptionReporterFilter.is_active",
    "line": 64,
-   "sentence": "The docstring of `is_active` gives the reason: the filter \"is to add safety in production environments\", and with the setting on \"your site is not safe anyway\" (`django/views/debug.py:SafeExceptionReporterFilter.is_active`).",
+   "sentence": "A developer who decorates a view and makes it fail finds the marked value on the debug page, as though the decorator had not worked, and the page shows what the production site's reports will not (`django/views/debug.py:SafeExceptionReporterFilter.is_active`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "SafeExceptionReporterFilter.is_active",
@@ -207,7 +207,7 @@
   {
    "pointer": "django/views/decorators/debug.py:sensitive_variables",
    "line": 103,
-   "sentence": "It records the names in a module-level dictionary, keyed by the file and first line of the function, and returns the function unchanged; the filter looks a coroutine's frame up in the dictionary by the same key (`django/views/decorators/debug.py:sensitive_variables`).",
+   "sentence": "It records the names in a module-level dictionary, keyed by the file and first line of the function, or, where it has a `__wrapped__`, of the innermost function that chain leads to, and returns the function unchanged; the filter looks a coroutine's frame up in the dictionary by the same key (`django/views/decorators/debug.py:sensitive_variables`).",
    "tree": "django",
    "path": "django/views/decorators/debug.py",
    "symbol": "sensitive_variables",
@@ -221,7 +221,7 @@
   {
    "pointer": "django/views/debug.py:SafeExceptionReporterFilter.get_traceback_frame_variables",
    "line": 105,
-   "sentence": "Coroutines, in the words of the comment in the filter, do not have a proper `\"f_back\"`, the link from a frame to its caller that the walk follows; so the names of a coroutine function are kept where the filter can find them from the frame's own code, its file and its first line (`django/views/debug.py:SafeExceptionReporterFilter.get_traceback_frame_variables`).",
+   "sentence": "In the traceback a report is made from, the frame of a coroutine that is not running has `None` for its `\"f_back\"`, the link from a frame to its caller that the walk follows; so the names of a coroutine function are kept where the filter can find them from the frame's own code, its file and its first line (`django/views/debug.py:SafeExceptionReporterFilter.get_traceback_frame_variables`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "SafeExceptionReporterFilter.get_traceback_frame_variables",

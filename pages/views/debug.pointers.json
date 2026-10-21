@@ -10,7 +10,7 @@
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
    "line": 36,
-   "sentence": "`response_for_exception` passes any exception it does not recognise to `handle_uncaught_exception`, which returns what `technical_500_response` makes unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is on, and it calls the same function directly, with a status of 400, for a `BadRequest` or a `SuspiciousOperation` ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:response_for_exception`).",
+   "sentence": "`response_for_exception` passes any exception it does not recognise to `handle_uncaught_exception`, which returns what `technical_500_response` makes unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is on, and it calls the same function directly, with a status of 400, for a `BadRequest` or a `SuspiciousOperation` ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/handlers/exception.py:handle_uncaught_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -20,6 +20,20 @@
     160
    ],
    "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/core/handlers/exception.py:handle_uncaught_exception",
+   "line": 36,
+   "sentence": "`response_for_exception` passes any exception it does not recognise to `handle_uncaught_exception`, which returns what `technical_500_response` makes unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is on, and it calls the same function directly, with a status of 400, for a `BadRequest` or a `SuspiciousOperation` ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/handlers/exception.py:handle_uncaught_exception`).",
+   "tree": "django",
+   "path": "django/core/handlers/exception.py",
+   "symbol": "handle_uncaught_exception",
+   "kind": "function",
+   "lines": [
+    174,
+    187
+   ],
+   "fingerprint": "9c3f3109bfe0801c"
   },
   {
    "pointer": "django/utils/log.py:DEFAULT_LOGGING",
@@ -121,6 +135,20 @@
    "fingerprint": "90a7f2d15640a6b6"
   },
   {
+   "pointer": "django/utils/log.py:AdminEmailHandler.emit",
+   "line": 120,
+   "sentence": "A reporter is made with the request, which may be `None`, and ordinarily the three values that `sys.exc_info()` returns, the exception's type, value and traceback; for a log record that carries no exception, `AdminEmailHandler` gives it the record's message as the value, with no type or traceback (`django/utils/log.py:AdminEmailHandler.emit`).",
+   "tree": "django",
+   "path": "django/utils/log.py",
+   "symbol": "AdminEmailHandler.emit",
+   "kind": "function",
+   "lines": [
+    123,
+    164
+   ],
+   "fingerprint": "2bcdbf9a329cd643"
+  },
+  {
    "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_data",
    "line": 120,
    "sentence": "`ExceptionReporter.get_traceback_data` turns them into one dictionary, which is the context for both templates (`django/views/debug.py:ExceptionReporter.get_traceback_data`).",
@@ -151,7 +179,7 @@
   {
    "pointer": "django/views/debug.py:ExceptionReporter.get_exception_traceback_frames",
    "line": 136,
-   "sentence": "And there is a type, `\"django\"` for a frame whose module's name begins with `django.` and `\"user\"` for any other, which the HTML page puts on the frame as a class, so that the two can be styled apart (`django/views/debug.py:ExceptionReporter.get_exception_traceback_frames`).",
+   "sentence": "And there is a type, `\"django\"` for a frame whose module's name begins with `\"django.\"` and `\"user\"` for any other, which the HTML page puts on the frame as a class, so that the two can be styled apart (`django/views/debug.py:ExceptionReporter.get_exception_traceback_frames`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "ExceptionReporter.get_exception_traceback_frames",
@@ -180,6 +208,34 @@
    "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_data",
    "line": 138,
    "sentence": "The user is included as text, inside a `try`, since asking for the user can itself fail when the database is the thing that is down (`django/views/debug.py:ExceptionReporter.get_traceback_data`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "ExceptionReporter.get_traceback_data",
+   "kind": "function",
+   "lines": [
+    344,
+    424
+   ],
+   "fingerprint": "7447aa53cf3a8a11"
+  },
+  {
+   "pointer": "django/views/debug.py:get_caller",
+   "line": 142,
+   "sentence": "**The view** is named by `get_caller`, from the request's `ResolverMatch` when there is one and by resolving the request's `path` when there is not, a path that under a script prefix may begin with the prefix, and so resolve to no view, or to another ([What the handler asks of a view](callable.md#how-a-view-is-named)) (`django/views/debug.py:get_caller`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "get_caller",
+   "kind": "function",
+   "lines": [
+    102,
+    109
+   ],
+   "fingerprint": "1a73f15623a40cc6"
+  },
+  {
+   "pointer": "django/views/debug.py:ExceptionReporter.get_traceback_data",
+   "line": 144,
+   "sentence": "And for a `UnicodeEncodeError` or a `UnicodeDecodeError` the HTML report adds a hint, the text around the place that could not be encoded or decoded (`django/views/debug.py:ExceptionReporter.get_traceback_data`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "ExceptionReporter.get_traceback_data",
@@ -235,7 +291,7 @@
   {
    "pointer": "django/views/debug.py:DEBUG_ENGINE",
    "line": 150,
-   "sentence": "The error templates have an engine of their own so that they render however the project has set `TEMPLATES`, and they are read from the filesystem directly, in the words of the comment above `DEBUG_ENGINE`, \"so that the error handler works even if the template loader is broken\" (`django/views/debug.py:DEBUG_ENGINE`).",
+   "sentence": "The error templates have an engine of their own so that they render however the project has set `TEMPLATES`, and they are read from their files directly so that no template loader takes part, and a broken one cannot stop the report (`django/views/debug.py:DEBUG_ENGINE`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "DEBUG_ENGINE",

@@ -14,7 +14,7 @@ A wrapper such as the one `require_http_methods` makes takes the request as its 
 
 The replacement is made by `_multi_decorate`, and it does not apply the decorator to the method when the class is made. A decorator of functions expects something with a view's signature, without `self`, and when the class is made there is no instance to bind. So the replacement applies the decorator at each call: it binds the original method to the instance, wraps the bound method in a `functools.partial`, applies the decorator to that, and calls the wrapper it gets back. On `dispatch` it does so where `dispatch` would run, inside the function `View.as_view` returned, after `View.setup` (`django/utils/decorators.py:_multi_decorate`, `django/views/generic/base.py:View.as_view`).
 
-> **Why.** At the call the bound method is wrapped in a `functools.partial` before the decorator sees it. The comment where that is done gives the reason: new attributes cannot be set on a bound method object, only on a function. A partial is an object that takes attributes, so `functools.wraps` can give it the method's name, docstring and attributes, and the decorator can set its own on it (`django/utils/decorators.py:_multi_decorate`).
+> **Why.** At the call the bound method is wrapped in a `functools.partial` before the decorator sees it. A bound method object refuses a new attribute and a partial takes one, so `functools.wraps` can give the partial the method's name, docstring and attributes, and the decorator can set its own on it (`django/utils/decorators.py:_multi_decorate`).
 
 A mark, though, an attribute set for some other code to find, has to be on the method before any call is made. So `_multi_decorate` also applies each decorator once, when the class is made, to a stand-in, a function that does nothing, and copies whatever attributes the stand-in comes back with onto the replacement (`django/utils/decorators.py:_update_method_wrapper`).
 
@@ -88,7 +88,7 @@ A second request does all of it again. For a decorator that merely wraps, the co
 
 ## What `as_view` carries to the URLconf
 
-`as_view` then finishes the job for one method. It copies what decorators left on `dispatch` onto the function it returns, so a mark on `dispatch` reaches the URLconf and a mark on `post` stays on `post`, where no middleware looks (`django/views/generic/base.py:View.as_view`). Two of the Gazette's classes differ in nothing else:
+`as_view` then finishes the job for one method. It copies what decorators left on `dispatch` onto the function it returns, so a mark on `dispatch` reaches the URLconf and a mark on `post` stays on `post`, where none of Django's middleware looks (`django/views/generic/base.py:View.as_view`). Two of the Gazette's classes differ in nothing else:
 
 ```python
 # gazette/views.py
@@ -127,4 +127,4 @@ POST /tips/ and POST /tips/marked/ with CsrfViewMiddleware installed and no toke
 
 ## A list of decorators
 
-Given a list of decorators, `_multi_decorate` applies them from the last to the first, so that the first in the list is outermost, as if they had been written one above another in that order (`django/utils/decorators.py:_multi_decorate`). `LoginView` is decorated so: one `method_decorator`, on the class with `name="dispatch"`, gives its `dispatch` `login_not_required`, `sensitive_post_parameters()`, `csrf_protect` and `never_cache`, outermost first. Only `login_not_required` leaves a mark, `"login_required"` set false, and `as_view` copies it onto the function it returns (`django/contrib/auth/views.py:LoginView`, `django/contrib/auth/decorators.py:login_not_required`).
+Given a list of decorators, `_multi_decorate` applies them from the last to the first, so that the first in the list is outermost, as if they had been written one above another in that order (`django/utils/decorators.py:_multi_decorate`). `LoginView` is decorated so: one `method_decorator`, on the class with `name="dispatch"`, gives its `dispatch` `login_not_required`, `sensitive_post_parameters()`, `csrf_protect` and `never_cache`, outermost first. Only `login_not_required` leaves a mark on the method, `"login_required"` set false, and `as_view` copies it onto the function it returns (`django/contrib/auth/views.py:LoginView`, `django/contrib/auth/decorators.py:login_not_required`).

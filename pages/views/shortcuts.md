@@ -8,7 +8,7 @@ The shortcuts are the functions of `django/shortcuts.py`: `render` renders a tem
 
 A view sits between parts of Django that are kept apart. `render_to_string`, in the template loader, returns a string and is given no response. The ORM returns objects, or raises its own exceptions, and has no notion of a status code. A view is where they meet, and the same few lines join them in view after view. The shortcuts are those lines given names (`django/shortcuts.py`).
 
-> **Why.** The parts are kept apart on purpose. Django's design philosophies name loose coupling and tight cohesion as "a fundamental goal of Django's stack": its layers "shouldn't 'know' about each other unless absolutely necessary" (`docs/misc/design-philosophies.txt`). The shortcuts relax that rule knowingly. The module's docstring calls them helpers that span multiple levels of MVC, and says that they "introduce controlled coupling for convenience's sake" (`django/shortcuts.py`).
+> **Why.** The parts are kept apart on purpose: loose coupling is one of Django's design philosophies, under which its layers should know of each other only where they must (`docs/misc/design-philosophies.txt`). The shortcuts relax that rule knowingly, for convenience (`django/shortcuts.py`).
 
 ## `render`
 
@@ -47,7 +47,7 @@ redirect(): the response it makes
 1. An object with a `get_absolute_url` method is asked for its URL. Any other arguments are ignored.
 2. A string that begins `"./"` or `"../"` is returned as it is: a relative URL.
 3. Anything else is given to `reverse`, with the remaining arguments as the pattern's arguments. A pattern's name is resolved here, and so is a view function, which `reverse` also accepts.
-4. If `reverse` raises `NoReverseMatch`, a string that contains a slash or a dot is returned as it is, on the grounds that it looks like a URL. Without either, or when the argument was a callable, the exception is raised again.
+4. If `reverse` raises `NoReverseMatch`, a string that contains a slash or a dot is returned as it is, on the grounds that it looks like a URL. For a string without either, or a callable, the exception is raised again.
 
 A lazy string, such as `reverse_lazy` returns, is turned into text before the second step.
 
@@ -72,7 +72,7 @@ resolve_url(): an object, a name, or a URL
     resolve_url(views.nothing, 7)  ->  raises NoReverseMatch
 ```
 
-The order has consequences. A URL written out in full is not recognised as one: it is first tried as a pattern's name, fails, and is returned because of its slashes, so a redirect to a literal path that does not begin `"./"` or `"../"` pays for one failed `reverse`. The same order refuses the `redirect` block's `"javascript:alert(1)"`. `reverse` reads its colon as the end of a namespace's name and raises `NoReverseMatch`, and `resolve_url` raises that exception again at its fourth step, since the string holds neither a slash nor a dot. The string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).
+The order has consequences. A URL written out in full is not recognised as one: it is first tried as a pattern's name, fails, and is returned only if it holds a slash or a dot, so a redirect to a literal path that does not begin `"./"` or `"../"` pays for one failed `reverse`. The same order refuses the `redirect` block's `"javascript:alert(1)"`. `reverse` reads its colon as the end of a namespace's name and raises `NoReverseMatch`, and `resolve_url` raises that exception again at its fourth step, since the string holds neither a slash nor a dot. The string never reaches the response class, whose test of the scheme would have refused it (`django/urls/base.py:reverse`, `django/http/response.py:HttpResponseRedirectBase.__init__`).
 
 > **Trap.** A misspelt name is not always reported. If it holds a slash or a dot, `resolve_url` returns it as it stands, as it returns `"gazette.example"` and `"no such/name"` above, so `redirect` given a misspelt name with a dot and no namespace raises nothing and sends the client to the name as a relative URL (`django/shortcuts.py:resolve_url`).
 
@@ -101,7 +101,7 @@ get_object_or_404() and get_list_or_404()
     type(get_list_or_404(Article.objects.order_by("slug"), published__month=3)).__name__  ->  'list'
 ```
 
-> **Trap.** `get_object_or_404` catches `Model.DoesNotExist` and nothing else. A query that matches several objects raises `MultipleObjectsReturned`, as the search for a headline containing "cat" does above, and the handler, which does not recognise that exception, makes a 500 of it ([How an exception becomes a response](../handlers/exceptions.md#which-exception-becomes-which-response)) (`django/shortcuts.py:get_object_or_404`, `django/core/handlers/exception.py:response_for_exception`).
+> **Trap.** `get_object_or_404` catches `Model.DoesNotExist` and nothing else. A query that matches several objects raises `MultipleObjectsReturned`, as the search for a headline containing "cat" does above, and the handler, which does not recognise that exception, ordinarily makes a 500 of it ([How an exception becomes a response](../handlers/exceptions.md#which-exception-becomes-which-response)) (`django/shortcuts.py:get_object_or_404`, `django/core/handlers/exception.py:response_for_exception`).
 
 `get_list_or_404` calls `filter` in place of `get`, and has to find out whether anything came back. It does so by making a list of the whole result, and it returns the list. The caller gets every row in memory and no queryset to refine (`django/shortcuts.py:get_list_or_404`).
 

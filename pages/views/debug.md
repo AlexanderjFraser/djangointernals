@@ -19,7 +19,7 @@ technical_500_response                                  AdminEmailHandler.emit
   ExceptionReporter(request, ..., is_email=False)        ExceptionReporter(request, ..., is_email=True)
 
                         ExceptionReporter
-                          made with the request, and the exception's type, value and traceback
+                          made with the request, and an exception or a log record's message
                           SafeExceptionReporterFilter, between it and the settings,
                             the request's META, cookies and POST, and each frame's variables
                           ExceptionReporter.get_traceback_data  ->  a dictionary
@@ -33,7 +33,7 @@ technical_500.html, rendered by get_traceback_html      technical_500.txt, rende
 
 ## Who asks for a report
 
-The handler asks, when `settings.DEBUG` is on. `response_for_exception` passes any exception it does not recognise to `handle_uncaught_exception`, which returns what `technical_500_response` makes unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is on, and it calls the same function directly, with a status of 400, for a `BadRequest` or a `SuspiciousOperation` ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:response_for_exception`).
+The handler asks, when `settings.DEBUG` is on. `response_for_exception` passes any exception it does not recognise to `handle_uncaught_exception`, which returns what `technical_500_response` makes unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is on, and it calls the same function directly, with a status of 400, for a `BadRequest` or a `SuspiciousOperation` ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:response_for_exception`, `django/core/handlers/exception.py:handle_uncaught_exception`).
 
 The logging system asks, and under Django's default logging configuration only when `settings.DEBUG` is off: the configuration gives the logger `"django"` an `AdminEmailHandler` for records of level ERROR and above, behind a filter that passes them only while the setting is off ([Logging](../startup/logging.md#adminemailhandler-error-email-is-a-log-handler)) (`django/utils/log.py:DEFAULT_LOGGING`). For each record it mails, the handler makes a reporter as for an email, with `is_email=True`, puts the text report in the message, and adds the HTML report as an alternative body if it was made with `include_html=True` (`django/utils/log.py:AdminEmailHandler.emit`).
 
@@ -68,7 +68,7 @@ def missing(request, year):
     raise LookupError(f"no edition for {year}")
 ```
 
-Requested with `settings.DEBUG` on by a client that asks for HTML, it is answered by `technical_500_response`, which makes the reporter, and the reporter its filter, before it asks the request which rendering it prefers. Only then is the template read and the dictionary built, each frame's variables passing through a filter that is not active, as it never is while `settings.DEBUG` is on ([What an error report hides](report-filter.md#the-filter-safeexceptionreporterfilter)).
+Requested with `settings.DEBUG` on by a client that asks for HTML, it is answered by `technical_500_response`, which makes the reporter, and the reporter its filter, before it asks the request which rendering it prefers. Only then is the template read and the dictionary built, each frame's variables passing through a filter that is not active, as `SafeExceptionReporterFilter` never is while `settings.DEBUG` is on ([What an error report hides](report-filter.md#the-filter-safeexceptionreporterfilter)).
 
 ```text recording=views
 GET /editions/1790/ with DEBUG = True and Accept: text/html
@@ -100,7 +100,7 @@ GET /editions/1790/ with DEBUG = True and Accept: text/html
 
 The reporter's class is looked up for each call by `get_exception_reporter_class`: an attribute named `"exception_reporter_class"` on the request if there is one, and otherwise the class that `settings.DEFAULT_EXCEPTION_REPORTER` names. So a project can replace the reporter for the whole site, and a middleware can replace it for one request's debug page (`django/views/debug.py:get_exception_reporter_class`).
 
-The rendering depends on the client. The function asks the request which of `"text/html"` and `"text/plain"` it prefers, and sends the HTML page only when the answer is the first. A browser gets the page, as does a client that names no preference. A client that asked for JSON or for plain text gets the text rendering.
+The rendering depends on the client. The function asks the request which of `"text/html"` and `"text/plain"` it prefers, and sends the HTML page only when the answer is the first. A browser gets the page, as does a client that names no preference. A client that asked only for JSON, or that prefers plain text, gets the text rendering.
 
 ```text recording=views
 technical_500_response: HTML or plain text, by the request's Accept header
@@ -117,7 +117,7 @@ The function carries two decorators, `csp_override` and `csp_report_only_overrid
 
 ## What `ExceptionReporter` gathers
 
-A reporter is made with the request, which may be `None`, and the three values that `sys.exc_info()` returns, the exception's type, value and traceback. `ExceptionReporter.get_traceback_data` turns them into one dictionary, which is the context for both templates (`django/views/debug.py:ExceptionReporter.get_traceback_data`).
+A reporter is made with the request, which may be `None`, and ordinarily the three values that `sys.exc_info()` returns, the exception's type, value and traceback; for a log record that carries no exception, `AdminEmailHandler` gives it the record's message as the value, with no type or traceback (`django/utils/log.py:AdminEmailHandler.emit`). `ExceptionReporter.get_traceback_data` turns them into one dictionary, which is the context for both templates (`django/views/debug.py:ExceptionReporter.get_traceback_data`).
 
 **The frames** are the bulk of it. `ExceptionReporter.get_traceback_frames` begins by following the exception back through its causes: an exception raised from another has a `__cause__`, and one raised while another was being handled has a `__context__`, which counts unless it was suppressed. It collects the whole chain, stopping with a warning if the chain loops back on itself, and then reports the frames oldest exception first (`django/views/debug.py:ExceptionReporter.get_traceback_frames`).
 
@@ -133,21 +133,21 @@ The frames of a report, when one exception was raised from another
       ...
 ```
 
-Besides the file, the function and the line, one frame's dictionary holds the source around the line, up to seven lines before and six after, read through the module's loader when that can supply source and from the file otherwise. There is the line of carets that goes under the failing expression, made from the columns the expression occupies. There are the frame's local variables, each passed through the filter. And there is a type, `"django"` for a frame whose module's name begins with `django.` and `"user"` for any other, which the HTML page puts on the frame as a class, so that the two can be styled apart (`django/views/debug.py:ExceptionReporter.get_exception_traceback_frames`). A frame with a true local variable named `"__traceback_hide__"` is left out, a convention a few libraries use to hide their internal frames.
+Besides the file, the function and the line, one frame's dictionary holds the source around the line, up to seven lines before and six after, read through the module's loader when that can supply source and from the file otherwise. There is the line of carets that goes under the failing expression, made from the columns the expression occupies. There are the frame's local variables, each passed through the filter. And there is a type, `"django"` for a frame whose module's name begins with `"django."` and `"user"` for any other, which the HTML page puts on the frame as a class, so that the two can be styled apart (`django/views/debug.py:ExceptionReporter.get_exception_traceback_frames`). A frame with a true local variable named `"__traceback_hide__"` is left out, a convention a few libraries use to hide their internal frames.
 
 **The request** contributes its method and address, its `GET` and `FILES` as they are, and three things that come by way of the filter: `POST`, the cookies and `META`. The address is built without the usual validation of the `"Host"` header: a request with a host the site does not allow would raise if asked for its host in the ordinary way ([Headers, host and scheme](../http/headers.md)) (`django/views/debug.py:ExceptionReporter._get_raw_insecure_uri`). The user is included as text, inside a `try`, since asking for the user can itself fail when the database is the thing that is down (`django/views/debug.py:ExceptionReporter.get_traceback_data`).
 
 **The settings** come from the filter as well, and beside them the Python and Django versions, the path, and the time.
 
-**The view** is named by `get_caller`, from the request's `ResolverMatch` when there is one and by resolving the path when there is not ([What the handler asks of a view](callable.md#how-a-view-is-named)).
+**The view** is named by `get_caller`, from the request's `ResolverMatch` when there is one and by resolving the request's `path` when there is not, a path that under a script prefix may begin with the prefix, and so resolve to no view, or to another ([What the handler asks of a view](callable.md#how-a-view-is-named)) (`django/views/debug.py:get_caller`).
 
-Some exceptions get sections of their own. For a `TemplateDoesNotExist` the report lists what each engine says it tried. For an exception raised while a template was being compiled or rendered, the template engine, when its `"debug"` option is on, has attached the template's own source lines to the exception, and the report shows the failing line of the template above the Python traceback ([Template errors and debug information](../templates/debugging.md)). And for a `UnicodeEncodeError` or a `UnicodeDecodeError` the HTML report adds a hint, the text around the place that could not be encoded or decoded.
+Some exceptions get sections of their own. For a `TemplateDoesNotExist` the report lists what each engine says it tried. For an exception raised while a template was being compiled or rendered, the template engine, when its `"debug"` option is on, has attached the template's own source lines to the exception, and the report shows the failing line of the template above the Python traceback ([Template errors and debug information](../templates/debugging.md)). And for a `UnicodeEncodeError` or a `UnicodeDecodeError` the HTML report adds a hint, the text around the place that could not be encoded or decoded (`django/views/debug.py:ExceptionReporter.get_traceback_data`).
 
 ## The two templates and `DEBUG_ENGINE`
 
 `ExceptionReporter.get_traceback_html` and `ExceptionReporter.get_traceback_text` render the dictionary with `django/views/templates/technical_500.html` and `django/views/templates/technical_500.txt`. Neither goes through the project's template system. At each call the reporter opens the file itself and gives the text to `DEBUG_ENGINE`, an `Engine` made in this module for nothing else (`django/views/debug.py:ExceptionReporter.get_traceback_html`).
 
-> **Why.** The error templates have an engine of their own so that they render however the project has set `TEMPLATES`, and they are read from the filesystem directly, in the words of the comment above `DEBUG_ENGINE`, "so that the error handler works even if the template loader is broken" (`django/views/debug.py:DEBUG_ENGINE`).
+> **Why.** The error templates have an engine of their own so that they render however the project has set `TEMPLATES`, and they are read from their files directly so that no template loader takes part, and a broken one cannot stop the report (`django/views/debug.py:DEBUG_ENGINE`).
 
 Only the HTML rendering shows the frames' local variables; the text one has none ([What an error report hides](report-filter.md#the-text-report-and-the-error-email)). A reporter made for an email also leaves out of the HTML the source lines around each frame, and the page's script (`django/views/templates/technical_500.html`).
 

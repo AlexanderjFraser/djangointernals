@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `View.as_view` makes a view class into the callable a URLconf holds: a function that, at each request, makes an instance of the class, calls `View.setup` to store the request on it, and calls `View.dispatch`, which calls the handler method named for the request's HTTP method.
 
-`View` is the base class of the generic views and of every view made with `as_view`, and it is small: it dispatches by HTTP method and makes a few checks (`django/views/generic/base.py:View`). None of the templates, the querysets or the forms of the generic views is in `View`: they are in the mixins and the base views that are combined with it. What `View` itself deals with is a mismatch. The handler wants one callable that serves every request, and `as_view` gives it one that makes an instance for each, so that each request has state of its own and a handler method may keep what it likes on `self` (`docs/ref/class-based-views/index.txt`).
+`View` is the base class of the generic views and of every view made with `as_view`, and it is small: it dispatches by HTTP method and makes a few checks (`django/views/generic/base.py:View`). None of the templates, the querysets or the forms of the generic views is in `View`: they are in the mixins and the base views that are combined with it. What `View` itself deals with is a mismatch. The handler wants one callable that serves every request, and `as_view` gives it one that makes an instance for each, so that each request has state of its own and a handler method may keep what it likes on `self` (`django/views/generic/base.py:View.as_view`).
 
 The examples are the Gazette's colophon, a class with one handler method and one attribute, routed twice:
 
@@ -68,13 +68,13 @@ views.Colophon().as_view  ->  raises AttributeError: This method is available on
 ...
 ```
 
-Having made the function, `as_view` dresses it. It sets two attributes that say where the function came from, `"view_class"` and `"view_initkwargs"`, and copies onto it the class's docstring and module and the annotations of `dispatch`, but not the class's name. And it copies onto the function every attribute that `dispatch` carries, which is how a mark left by a decorator on that method reaches the object the middleware will look at ([Decorating a class: `method_decorator`](method-decorator.md)). If `View.view_is_async` finds the class's handler methods to be coroutine functions, the function is marked as one too ([Asynchronous views](async.md#a-class-whose-handler-methods-are-coroutines)) (`django/views/generic/base.py:View.as_view`).
+Having made the function, `as_view` dresses it. It sets two attributes that say where the function came from, `"view_class"` and `"view_initkwargs"`, and copies onto it the class's docstring and module and the annotations of `dispatch`, but not the class's name. And it copies onto the function the attributes added to `dispatch`, which is how a mark left by a decorator on that method reaches the object the middleware will look at ([Decorating a class: `method_decorator`](method-decorator.md)). If `View.view_is_async` finds the class's handler methods to be coroutine functions, the function is marked as one too ([Asynchronous views](async.md#a-class-whose-handler-methods-are-coroutines)) (`django/views/generic/base.py:View.as_view`).
 
-> **Why.** The function is called `"view"` whatever class it was made from, and its qualified name is `"View.as_view.<locals>.view"`. `as_view` leaves the two names alone on purpose: they "are intentionally left unchanged as view_class should be used to robustly determine the name of the view instead", says the comment there (`django/views/generic/base.py:View.as_view`). Code that reads the function's own name gets `"view"`, as the handler's message does when a class-based view returns `None` ([What the handler asks of a view](callable.md#what-a-view-may-return)).
+> **Why.** The function is called `"view"` whatever class it was made from, and its qualified name is `"View.as_view.<locals>.view"`. `as_view` leaves the two names alone and records the class in `"view_class"`, and where `ResolverMatch` keeps a dotted path for a view it reads the class from there in the function's place (`django/views/generic/base.py:View.as_view`, `django/urls/resolvers.py:ResolverMatch.__init__`). Code that reads the function's own name gets `"view"`, as the handler's message does when a class-based view returns `None` ([What the handler asks of a view](callable.md#what-a-view-may-return)).
 
 ## What the function does for each request
 
-The function that `as_view` returns does the same at every call. It makes an instance of the class with the arguments `as_view` was given, calls `setup` on the instance, makes sure that `setup` left the request there, and returns what the instance's `dispatch` returns. It holds the instance only in a local variable, so once it has returned, the function no longer holds the instance (`django/views/generic/base.py:View.as_view`). Requested twice, the colophon is two calls of one function, and each begins with a new *Colophon* before `setup` and `dispatch` are called on it:
+The function that `as_view` returns does the same at every call. It makes an instance of the class with the arguments `as_view` was given, calls `setup` on the instance, checks that the instance has a `request`, and returns what the instance's `dispatch` returns. It holds the instance only in a local variable, so once it has returned, the function no longer holds the instance (`django/views/generic/base.py:View.as_view`). Requested twice, the colophon is two calls of one function, and each begins with a new *Colophon* before `setup` and `dispatch` are called on it:
 
 ```text recording=views
 GET /colophon/, twice: a class-based view is a function that makes an instance for each request
@@ -105,7 +105,7 @@ GET /colophon/large/: the arguments given to as_view() are given to each instanc
 
 ## `View.setup`
 
-`View.setup` puts the request, the positional arguments and the keyword arguments on the instance as `View.request`, `View.args` and `View.kwargs`. Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`).
+`View.setup` puts the request, the positional arguments and the keyword arguments on the instance as `View.request`, `View.args` and `View.kwargs`. Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`, `django/views/generic/detail.py:SingleObjectMixin.get_object`).
 
 It does one more thing first. If the instance has a `get` and no `head`, it sets `head` to be the `get` method, so a `"HEAD"` is dispatched like any other method and runs the same code as a `"GET"`. Under `View.dispatch` the colophon's `"HEAD"` runs its `get`, and the response the handler returns still has its body:
 
@@ -120,9 +120,9 @@ HEAD /colophon/: a class with get and no head
 
 Leaving the body out of what is sent is the server's work ([The response object](../http/response.md#the-body-of-an-httpresponse)).
 
-A class that prepares something for all of its handler methods overrides `setup`, calls `super().setup` and sets its own attributes. Between `setup` and `dispatch` the function checks that the instance has a `request`, and if it has none, raises an `AttributeError` that asks whether `setup` was overridden without a call to `super()` (`django/views/generic/base.py:View.as_view`).
+A class may prepare something for all of its handler methods by overriding `setup`, calling `super().setup` and setting its own attributes. Between `setup` and `dispatch` the function checks that the instance has a `request`, and if it has none, raises an `AttributeError` that asks whether `setup` was overridden without a call to `super()` (`django/views/generic/base.py:View.as_view`).
 
-> **Why.** `setup` is a hook of its own so that a class can prepare, before `dispatch` runs, what all of its handler methods share. Its docstring gives its purpose as to "initialize attributes shared by all view methods" (`django/views/generic/base.py:View.setup`), and the release that added it, Django 2.2, says that it "allows mixins to set up instance attributes for reuse in child classes" (`docs/releases/2.2.txt`).
+> **Why.** `setup` is a hook of its own so that a class can prepare, before `dispatch` runs, what all of its handler methods share: the function calls it on each new instance, with the request and its arguments, before it calls `dispatch` (`django/views/generic/base.py:View.as_view`).
 
 ## `View.dispatch`
 

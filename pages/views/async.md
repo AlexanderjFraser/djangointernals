@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 A view may be a coroutine function, and the handler finds out by asking `inspect.iscoroutinefunction` of whatever the URLconf holds. `View.as_view` and every decorator around an asynchronous view must therefore make or keep it a coroutine function, by `async def` or by `inspect.markcoroutinefunction`.
 
-Django serves requests through a synchronous handler and an asynchronous one, and either can call either kind of view. What it must know beforehand is which kind it has, because the two are called differently: a function is called and returns a response, and a coroutine function is called, returns a coroutine, and the coroutine has to be awaited before there is a response. A coroutine function called like a function raises nothing at the call. It hands back a coroutine object where a response was wanted.
+Django serves requests through a synchronous handler and an asynchronous one, and either can call either kind of view. What it must know beforehand is which kind it has, because the two are called differently: a function is called and returns a response, and a coroutine function is called, returns a coroutine, and the coroutine has to be awaited before there is a response. A function written with `async def` and called like a function raises nothing from its body at the call. It hands back a coroutine object where a response was wanted.
 
 The Gazette has a wire service written both ways, and one class that is a mistake:
 
@@ -33,7 +33,7 @@ class Muddle(View):
 
 `BaseHandler._get_response` and its asynchronous twin both put one question to the view before calling it: `inspect.iscoroutinefunction`. The synchronous handler wraps a coroutine function in `async_to_sync` and then calls it as a function. The asynchronous handler wraps anything that is not a coroutine function in `sync_to_async`, so that it runs in a thread, and awaits the result either way (`django/core/handlers/base.py:BaseHandler._get_response`, `django/core/handlers/base.py:BaseHandler._get_response_async`). Which thread runs what, and what each crossing costs, is told in [Sync and async in one chain](../handlers/async.md).
 
-The test is made on the object in the URLconf, before it is called, and never on what it returns. It is true of a function written with `async def`, and of any callable that has been marked with `inspect.markcoroutinefunction`. For a view to be treated as asynchronous, then, the outermost callable, after every decorator and after `as_view`, has to pass the test. Of the Gazette's views the `async def` function passes, and a function that `as_view` returned passes when its class says it is asynchronous, through `View.view_is_async`:
+The test is made on the object in the URLconf, before it is called, and never on what it returns. It is true of a function written with `async def`, and of a function that has been marked with `inspect.markcoroutinefunction`. For a view to be treated as asynchronous, then, the outermost callable, after every decorator and after `as_view`, has to pass the test. Of the Gazette's views the `async def` function passes, and a function that `as_view` returned passes when its class says it is asynchronous, through `View.view_is_async`:
 
 ```text recording=views
 iscoroutinefunction(views.front)  ->  False
@@ -141,7 +141,7 @@ That a function was written with `async def` is a flag of its compiled code, and
 
 ## When the test is fooled
 
-Two of the Gazette's addresses serve an asynchronous view from inside the wrapper that the decorator *counted* makes: the function `as_view` returned for the class *Wire*, and the `async def` function. For the second, a synchronous handler asks its question of the wrapper and is told it has an ordinary function. It calls the wrapper, and what comes back is the coroutine the view made. The first is served; the second ends in a `ValueError` from `BaseHandler.check_response` and a 500, though the same handler serves the Gazette's unwrapped `async def` function without complaint:
+Two of the Gazette's addresses serve an asynchronous view from inside the wrapper that the decorator *counted* makes: the function `as_view` returned for the class *Wire*, and the `async def` function *wire_counted*. For the second, a synchronous handler asks its question of the wrapper and is told it has an ordinary function. It calls the wrapper, and what comes back is the coroutine the view made. The first is served; the second ends in a `ValueError` from `BaseHandler.check_response` and a 500, though the same handler serves the Gazette's unwrapped `async def` function without complaint:
 
 ```text recording=views
 Views that are coroutine functions, requested through a WSGIHandler

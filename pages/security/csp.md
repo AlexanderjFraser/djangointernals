@@ -6,13 +6,13 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 A content security policy is a header that tells the browser where a page may load scripts, styles and the rest from, as a defence against script injected into the page. Where a project sets a policy, `ContentSecurityPolicyMiddleware` writes Content-Security-Policy, which the browser enforces, from `SECURE_CSP`, and Content-Security-Policy-Report-Only, whose breaches it only reports, from `SECURE_CSP_REPORT_ONLY`. The **nonce**, a random value new for each request and named in the policy, lets the page's own inline scripts and styles run; it is a `LazyNonce`, made only when something reads it, as `{% csp_nonce_attr %}` does.
 
-A policy that allows scripts only from the site itself also refuses every inline `<script>`, the site's own included. The nonce is how a page names the inline elements it means: the policy lists it as `'nonce-…'`, and the browser runs an inline script or style only if its `"nonce"` attribute matches (`docs/ref/csp.txt`). Django writes each header from a dictionary, puts the nonce in the template's context, and names it in the header only if something has read it.
+A policy that allows scripts only from the site itself also refuses every inline `<script>`, the site's own included. The nonce is how a page names the inline elements it means: the policy lists it as `'nonce-…'`, and the browser runs an inline script or style only if its `"nonce"` attribute matches (`docs/ref/csp.txt`). Django writes each header from a dictionary, gives a template the nonce through a context processor, and names it in the header only if something has read it.
 
 > **New in 6.0.** Django had no content security policy before 6.0, which brought the middleware, the two settings, the `csp` context processor and the decorators (`docs/releases/6.0.txt`). `{% csp_nonce_attr %}` and the nonce on the elements of Django's own templates came in 6.1 (`docs/releases/6.1.txt`). [What changed in security: Content Security Policy and signing](../changes/security.md) tells both.
 
 ## The settings and the `CSP` constants
 
-`SECURE_CSP` and `SECURE_CSP_REPORT_ONLY` are each a dictionary from a directive (`"script-src"`) to the sources it allows, and each defaults to an empty dictionary, which adds no header (`django/conf/global_settings.py`). A value that is neither `None` nor a dictionary is refused by `"security.E026"`, on every check ([The security checks](checks.md)) (`django/core/checks/security/base.py:check_csp_settings`).
+`SECURE_CSP` and `SECURE_CSP_REPORT_ONLY` are each a dictionary from a directive (`"script-src"`) to the sources it allows, and each defaults to an empty dictionary, which adds no header (`django/conf/global_settings.py`). A value that is neither `None` nor a dictionary is refused by `"security.E026"`, with or without `--deploy` ([The security checks](checks.md)) (`django/core/checks/security/base.py:check_csp_settings`).
 
 A source is a string as the header spells it, and the specification's keywords carry single quotes: `'self'`, `'none'`. `CSP` is a string enumeration of the common ones, `CSP.SELF` being `"'self'"`, for type checking, autocompletion and protection against a typo, missing quotes or quotes of the wrong kind. Each member equals its value, so a raw string works as well. Two members are the header names, `CSP.HEADER_ENFORCE` and `CSP.HEADER_REPORT_ONLY`. And `CSP.NONCE`, `"<CSP_NONCE_SENTINEL>"`, is Django's own: a placeholder that stands in a directive's list for the nonce until the header is written (`django/utils/csp.py:CSP`).
 
@@ -23,8 +23,8 @@ A source is a string as the header spells it, and the specification's keywords c
 - `None` or `False`: the directive is left out.
 - `True`: the directive is written alone, for one that takes no sources (`"upgrade-insecure-requests"`).
 - a list or a tuple: its items, in order.
-- a set: its items sorted, so that the header is the same from one request to the next, for the sake of caching.
-- anything else: a single source.
+- a set: its items sorted, so that the header is the same from one request to the next.
+- a string: a single source.
 
 Then the placeholder. Where a directive's list holds `CSP.NONCE` and the nonce is true, the placeholder becomes `'nonce-…'` with the value in it; where it is false or not given, the placeholder is removed. A directive left with no sources is left out altogether. In the first call below, made before the nonce is read, `"style-src"`, which holds only the placeholder, is dropped and `"script-src"` keeps `'self'` alone; in the second both name the nonce; the last, given no nonce, writes what the first did; and the set given for `"img-src"` comes out sorted each time.
 
@@ -46,15 +46,13 @@ The nonce must be new for every response, and many never use it: a redirect, a p
 
 What the subclass changes is truth. A `SimpleLazyObject` asked whether it is true makes its object to find out. `LazyNonce.__bool__` answers instead whether the value has been made, and makes nothing (`django/utils/csp.py:LazyNonce`). That is the test `build_policy` applies, so the header names a nonce only if something in the request read it.
 
-> **Why.** `LazyNonce.__bool__` makes nothing for the sake of third-party libraries that support CSP without requiring it: such a library can test a request's nonce and leave it undrawn (`django/utils/csp.py:LazyNonce`).
-
 ## The nonce in templates
 
 The `csp` context processor adds `"csp_nonce"` to the context, the request's nonce or `None` (`django/template/context_processors.py:csp`) ([The context: `Context`, `RequestContext` and context processors](../templates/context.md)). `{% csp_nonce_attr %}` writes `nonce="…"` from it, or nothing; given a form's `Media`, the stylesheets and scripts the form requires, it writes their elements, the nonce, when there is one, on all but those given as ready HTML (`django/utils/csp.py:nonce_attr`) ([The built-in tags](../templates/tags.md), [Form assets: `Media`](../forms/media.md)). The tag asks only whether the context holds a nonce, not whether it has been made, so it draws the nonce itself as it writes it.
 
-Django's own templates carry the tag on their `<script>`, `<style>` and `<link>` elements, all but the debug pages (`django/contrib/admin/templates/`, `django/views/templates/csrf_403.html`). The CSRF failure page, which `csrf_failure` renders with an `Engine` of its own, is given the nonce by the view itself ([The CSRF check: `CsrfViewMiddleware.process_view`](csrf-check.md)) (`django/views/csrf.py:csrf_failure`).
+Django's own templates carry the tag on their `<script>`, `<style>` and `<link>` elements, all but the debug pages (`django/contrib/admin/templates/`, `django/views/templates/csrf_403.html`). The built-in CSRF failure page, which `csrf_failure` renders with an `Engine` of its own, is given the nonce by the view itself ([The CSRF check: `CsrfViewMiddleware.process_view`](csrf-check.md)) (`django/views/csrf.py:csrf_failure`).
 
-Without the processor a template's context holds the nonce only where other code puts it, and unless other code reads it the header names none; `"security.W027"` warns of that only where no template engine lists it ([The security checks](checks.md)).
+Without the processor a template's context holds the nonce only where other code puts it, and unless other code reads it the header names none; `"security.W027"` warns of that only where no template engine lists it ([The security checks](checks.md)) (`django/core/checks/security/base.py:check_csp_nonce_context_processor`).
 
 ## `ContentSecurityPolicyMiddleware`
 

@@ -6,13 +6,13 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The security checks are the system checks in `django/core/checks/security/`, tagged `"security"`: functions that read the settings and report one that is unsafe on a public site or cannot work, from `settings.DEBUG` left on to a `SECRET_KEY` that startproject made. Most are deployment checks, which run only when the check command is given `--deploy`.
 
-A setting that is right on a developer's machine is often wrong on a public server: debugging on, cookies sent over plain HTTP, no Strict-Transport-Security. A check of such a setting would warn on a developer's machine, and so waits for a run that asks for it; a check of a setting that cannot work on any machine does not wait. Each check reads settings, and one also imports the view a setting names.
+A setting that is right on a developer's machine is often wrong on a public server: debugging on, cookies sent over plain HTTP, no Strict-Transport-Security. A check of such a setting would warn on a developer's machine, and so waits for a run that asks for it. Each check reads settings, and one also imports the view a setting names.
 
 ## The deployment checks and the three others
 
 The security checks are registered when `django.core.checks` imports the modules that define them, each with `Tags.security`, and all but three with `deploy=True` as well, which files them among the deployment checks that only the check command given `--deploy` runs ([The system checks](../commands/checks.md)) (`django/core/checks/__init__.py`, `django/core/checks/registry.py:CheckRegistry.register`).
 
-The three others run with or without `--deploy`, since each looks for a setting that cannot work on any machine. `check_csp_settings` gives `"security.E026"` for a policy that is not a dictionary, such as `SECURE_CSP = "default-src 'self'"`, and an error is by default enough for `BaseCommand.check` to raise `SystemCheckError`, with the report as its message (`django/core/checks/security/base.py:check_csp_settings`, `django/core/management/base.py:BaseCommand.check`).
+The three others run with or without `--deploy`. `check_csp_settings` gives `"security.E026"` for a policy that is not a dictionary, such as `SECURE_CSP = "default-src 'self'"`, and an error is by default enough for `BaseCommand.check` to raise `SystemCheckError`, with the report as its message (`django/core/checks/security/base.py:check_csp_settings`, `django/core/management/base.py:BaseCommand.check`).
 
 `check_csp_nonce_context_processor`, with `ContentSecurityPolicyMiddleware` installed, looks through each policy's values for `CSP.NONCE`, and through `TEMPLATES` for an entry whose `"OPTIONS"` give `"django.template.context_processors.csp"` among their `"context_processors"`. That processor puts the nonce in a template's context, and `{% csp_nonce_attr %}` writes none where the context has none ([Content Security Policy and the nonce](csp.md)) (`django/core/checks/security/base.py:check_csp_nonce_context_processor`, `django/template/context_processors.py:csp`, `django/utils/csp.py:nonce_attr`).
 
@@ -68,7 +68,7 @@ Every message the security checks give has an identifier, and the table lists th
 
 ## The rule for a key
 
-`_check_secret_key` accepts a key of at least 50 characters, with at least 5 different ones, that does not begin with `"django-insecure-"`. `check_secret_key` applies it to `SECRET_KEY`, and warns of an empty key too, since reading one raises `ImproperlyConfigured`; `check_secret_key_fallbacks` applies it to each of `SECRET_KEY_FALLBACKS`, naming its index (`django/core/checks/security/base.py:_check_secret_key`, `django/conf/__init__.py:LazySettings.__getattr__`).
+`_check_secret_key` accepts a key of at least 50 characters, with at least 5 different ones, that does not begin with `"django-insecure-"`. `check_secret_key` applies it to `SECRET_KEY`, and warns of an empty key too, since reading one raises `ImproperlyConfigured`; `check_secret_key_fallbacks` applies it to each of `SECRET_KEY_FALLBACKS`, naming its index (`django/core/checks/security/base.py:_check_secret_key`, `django/core/checks/security/base.py:check_secret_key`, `django/conf/__init__.py:LazySettings.__getattr__`, `django/core/checks/security/base.py:check_secret_key_fallbacks`).
 
 The prefix marks a key that startproject wrote: the command puts the checks' own constant, `SECRET_KEY_INSECURE_PREFIX`, before 50 random characters, and the key fails on the prefix alone ([Secret keys and `django.utils.crypto`](keys.md)) (`django/core/management/commands/startproject.py:Command.handle`).
 
@@ -76,4 +76,4 @@ The prefix marks a key that startproject wrote: the command puts the checks' own
 
 The session checks have three warnings each: two name what the check found, the application in `INSTALLED_APPS` or `SessionMiddleware` in `MIDDLEWARE`, and the third, given in their place when both are found, names neither (`django/core/checks/security/sessions.py:check_session_cookie_secure`, `django/core/checks/security/sessions.py:check_session_cookie_httponly`). `SESSION_COOKIE_HTTPONLY` is true by default, so left alone the two settings give only the secure flag's warning.
 
-`"security.W016"` is silent when `CSRF_USE_SESSIONS` is true. The CSRF secret is then kept in the session ([The CSRF secret and its token](csrf-token.md)), whose cookie the session checks cover (`django/core/checks/security/csrf.py:check_csrf_cookie_secure`).
+`"security.W016"` is silent when `CSRF_USE_SESSIONS` is true. The CSRF secret is then kept in the session ([The CSRF secret and its token](csrf-token.md)), whose cookie the session checks cover when they find the application or `SessionMiddleware` (`django/core/checks/security/csrf.py:check_csrf_cookie_secure`).

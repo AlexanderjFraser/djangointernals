@@ -94,7 +94,7 @@
   {
    "pointer": "django/template/defaulttags.py:CsrfTokenNode.render",
    "line": 21,
-   "sentence": "For a browser that has none, the secret is made as the template renders, when `{% csrf_token %}` reads the token to write it into the hidden input `\"csrfmiddlewaretoken\"`, not on the way in ([The built-in tags](../templates/tags.md)) (`django/template/defaulttags.py:CsrfTokenNode.render`).",
+   "sentence": "For a browser that has none, on the harbour's page the secret is made as the template renders, when `{% csrf_token %}` reads the token to write it into the hidden input `\"csrfmiddlewaretoken\"`, not on the way in ([The built-in tags](../templates/tags.md)) (`django/template/defaulttags.py:CsrfTokenNode.render`).",
    "tree": "django",
    "path": "django/template/defaulttags.py",
    "symbol": "CsrfTokenNode.render",
@@ -150,7 +150,7 @@
   {
    "pointer": "docs/ref/csrf.txt",
    "line": 55,
-   "sentence": "A token scrambled differently in every response gives it nothing to recover, and since only the secret, not the token, is compared with the cookie's, every token made from one secret is accepted (`docs/ref/csrf.txt`, `docs/ref/middleware.txt`).",
+   "sentence": "A token scrambled differently in every response gives it nothing to recover, and since only the secret, not the token, is compared with the cookie's or the session's, every token made from one secret is accepted (`docs/ref/csrf.txt`, `docs/ref/middleware.txt`).",
    "tree": "django",
    "path": "docs/ref/csrf.txt",
    "symbol": null,
@@ -164,7 +164,7 @@
   {
    "pointer": "docs/ref/middleware.txt",
    "line": 55,
-   "sentence": "A token scrambled differently in every response gives it nothing to recover, and since only the secret, not the token, is compared with the cookie's, every token made from one secret is accepted (`docs/ref/csrf.txt`, `docs/ref/middleware.txt`).",
+   "sentence": "A token scrambled differently in every response gives it nothing to recover, and since only the secret, not the token, is compared with the cookie's or the session's, every token made from one secret is accepted (`docs/ref/csrf.txt`, `docs/ref/middleware.txt`).",
    "tree": "django",
    "path": "docs/ref/middleware.txt",
    "symbol": null,
@@ -192,7 +192,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_request",
    "line": 61,
-   "sentence": "A malformed one is replaced with a new secret, flagged, so that the response carries a good cookie whatever becomes of the request (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`).",
+   "sentence": "A malformed one is replaced with a new secret, flagged, so the response carries a good cookie even when the request is refused (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware.process_request",
@@ -290,7 +290,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie",
    "line": 69,
-   "sentence": "Unless [`CSRF_USE_SESSIONS`](#csrf_use_sessions) puts the secret in the session, `_set_csrf_cookie` sets the cookie with the secret and these settings, then adds `\"Cookie\"` to `\"Vary\"`, since the content varies with the cookie (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`):",
+   "sentence": "Unless [`CSRF_USE_SESSIONS`](#csrf_use_sessions) puts the secret in the session, `_set_csrf_cookie` sets the cookie with the secret and these settings, then adds `\"Cookie\"` to `\"Vary\"`, since the content may vary with the cookie (`django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`):",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._set_csrf_cookie",
@@ -332,7 +332,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_response",
    "line": 101,
-   "sentence": "Each instance reads the flag afresh, so a secret replaced between the two, by a middleware whose `process_response` runs between them, still reaches the browser (`django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "sentence": "Each instance reads the flag afresh, so a secret replaced between the two, by a middleware whose `process_response` runs between them, is still sent back (`django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware.process_response",
@@ -346,7 +346,7 @@
   {
    "pointer": "django/middleware/csrf.py:rotate_token",
    "line": 105,
-   "sentence": "`rotate_token` replaces the request's secret with a new one, flagged, so the response carries it and every token made from the old secret stops matching (`django/middleware/csrf.py:rotate_token`).",
+   "sentence": "`rotate_token` replaces the request's secret with a new one, flagged, and `CsrfViewMiddleware.process_response` sends back, or stores in the session, the secret the request holds when it runs; while the browser's cookie or the session holds the new secret, no token made from the old one matches (`django/middleware/csrf.py:rotate_token`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "rotate_token",
@@ -356,6 +356,20 @@
     122
    ],
    "fingerprint": "d5407023d5039d1e"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_response",
+   "line": 105,
+   "sentence": "`rotate_token` replaces the request's secret with a new one, flagged, and `CsrfViewMiddleware.process_response` sends back, or stores in the session, the secret the request holds when it runs; while the browser's cookie or the session holds the new secret, no token made from the old one matches (`django/middleware/csrf.py:rotate_token`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_response",
+   "kind": "function",
+   "lines": [
+    474,
+    486
+   ],
+   "fingerprint": "d5d6e46ffe74bc00"
   },
   {
    "pointer": "django/contrib/auth/__init__.py:login",
@@ -374,7 +388,7 @@
   {
    "pointer": "docs/ref/csrf.txt",
    "line": 136,
-   "sentence": "Such a page has to be loaded again to carry a token of the new secret, and a login in one tab leaves the forms already open in the others just as stale (`docs/ref/csrf.txt`).",
+   "sentence": "Such a page has to be loaded again to carry a token of the new secret, and once a login in one tab has stored a new secret, the forms already open in the others are just as stale (`docs/ref/csrf.txt`).",
    "tree": "django",
    "path": "docs/ref/csrf.txt",
    "symbol": null,
@@ -388,7 +402,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._get_secret",
    "line": 140,
-   "sentence": "`_set_csrf_cookie` sets no cookie: it stores the secret in the session only when the session holds a different value, and leaves `\"Vary\"` to `SessionMiddleware`, which adds `\"Cookie\"` whenever the session was read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
+   "sentence": "`CsrfViewMiddleware._set_csrf_cookie` sets no cookie: it stores the secret in the session only when the session holds a different value, and leaves `\"Vary\"` to `SessionMiddleware`, which adds `\"Cookie\"` whenever the session was read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._get_secret",
@@ -402,7 +416,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie",
    "line": 140,
-   "sentence": "`_set_csrf_cookie` sets no cookie: it stores the secret in the session only when the session holds a different value, and leaves `\"Vary\"` to `SessionMiddleware`, which adds `\"Cookie\"` whenever the session was read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
+   "sentence": "`CsrfViewMiddleware._set_csrf_cookie` sets no cookie: it stores the secret in the session only when the session holds a different value, and leaves `\"Vary\"` to `SessionMiddleware`, which adds `\"Cookie\"` whenever the session was read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._set_csrf_cookie",
@@ -416,7 +430,7 @@
   {
    "pointer": "django/contrib/sessions/middleware.py:SessionMiddleware.process_response",
    "line": 140,
-   "sentence": "`_set_csrf_cookie` sets no cookie: it stores the secret in the session only when the session holds a different value, and leaves `\"Vary\"` to `SessionMiddleware`, which adds `\"Cookie\"` whenever the session was read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
+   "sentence": "`CsrfViewMiddleware._set_csrf_cookie` sets no cookie: it stores the secret in the session only when the session holds a different value, and leaves `\"Vary\"` to `SessionMiddleware`, which adds `\"Cookie\"` whenever the session was read (`django/middleware/csrf.py:CsrfViewMiddleware._get_secret`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/sessions/middleware.py:SessionMiddleware.process_response`).",
    "tree": "django",
    "path": "django/contrib/sessions/middleware.py",
    "symbol": "SessionMiddleware.process_response",
@@ -430,7 +444,7 @@
   {
    "pointer": "docs/ref/csrf.txt",
    "line": 142,
-   "sentence": "The cookie is safe, and the default by design: a secret tied to no session lets a site protect the forms of anonymous visitors, who have none, as on a pastebin (`docs/ref/csrf.txt`).",
+   "sentence": "The cookie is the default by design: a secret tied to no session lets a site protect the forms of anonymous visitors without giving each of them a session, as on a pastebin (`docs/ref/csrf.txt`).",
    "tree": "django",
    "path": "docs/ref/csrf.txt",
    "symbol": null,
@@ -458,7 +472,7 @@
   {
    "pointer": "django/views/decorators/csrf.py:_EnsureCsrfToken",
    "line": 144,
-   "sentence": "That view, `server_error`, is under `requires_csrf_token`, a decorator that, like `csrf_protect`, runs an instance of the middleware around its view, so that the view's template can have a token, but refuses nothing (`django/views/decorators/csrf.py:_EnsureCsrfToken`).",
+   "sentence": "That view, `server_error`, is under `requires_csrf_token`, a decorator that, like `csrf_protect`, runs an instance of the middleware around its view but refuses nothing (`django/views/decorators/csrf.py:_EnsureCsrfToken`).",
    "tree": "django",
    "path": "django/views/decorators/csrf.py",
    "symbol": "_EnsureCsrfToken",

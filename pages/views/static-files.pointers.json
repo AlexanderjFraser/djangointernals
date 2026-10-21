@@ -10,7 +10,7 @@
   {
    "pointer": "django/views/static.py",
    "line": 11,
-   "sentence": "Its module's docstring says in capitals what the view is not for: its views and functions \"are only to be used during development, and SHOULD NOT be used in a production setting\" (`django/views/static.py`).",
+   "sentence": "Its module's docstring says that its views are for development and, in capitals, not for a production setting, and the reference says the same of this view (`django/views/static.py`, `docs/ref/views.txt`).",
    "tree": "django",
    "path": "django/views/static.py",
    "symbol": null,
@@ -24,7 +24,7 @@
   {
    "pointer": "docs/ref/views.txt",
    "line": 11,
-   "sentence": "The reference gives the reason, that the view \"is not hardened for production use\" (`docs/ref/views.txt`), and the static files app's documentation says of that app's view, which ends in this one, that it is \"grossly inefficient and probably insecure\" (`docs/ref/contrib/staticfiles.txt`).",
+   "sentence": "Its module's docstring says that its views are for development and, in capitals, not for a production setting, and the reference says the same of this view (`django/views/static.py`, `docs/ref/views.txt`).",
    "tree": "django",
    "path": "docs/ref/views.txt",
    "symbol": null,
@@ -36,18 +36,18 @@
    "fingerprint": "695756c920a56341"
   },
   {
-   "pointer": "docs/ref/contrib/staticfiles.txt",
+   "pointer": "django/views/static.py:serve",
    "line": 11,
-   "sentence": "The reference gives the reason, that the view \"is not hardened for production use\" (`docs/ref/views.txt`), and the static files app's documentation says of that app's view, which ends in this one, that it is \"grossly inefficient and probably insecure\" (`docs/ref/contrib/staticfiles.txt`).",
+   "sentence": "What the code shows is the cost: every file the view sends is opened and sent by the Python process that runs it (`django/views/static.py:serve`).",
    "tree": "django",
-   "path": "docs/ref/contrib/staticfiles.txt",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/views/static.py",
+   "symbol": "serve",
+   "kind": "function",
    "lines": [
-    1,
-    561
+    28,
+    64
    ],
-   "fingerprint": "d908cf56f9481805"
+   "fingerprint": "d1fc8ba04f085844"
   },
   {
    "pointer": "django/views/static.py:serve",
@@ -66,7 +66,7 @@
   {
    "pointer": "django/utils/_os.py:safe_join",
    "line": 17,
-   "sentence": "A path that would climb out makes it raise `SuspiciousFileOperation`, a `SuspiciousOperation`, which `response_for_exception` answers with a 400 (`django/utils/_os.py:safe_join`).",
+   "sentence": "A path that would climb out makes it raise `SuspiciousFileOperation`, a `SuspiciousOperation`, which, when a URLconf routed the request to the view, `response_for_exception` ordinarily answers with a 400 (`django/utils/_os.py:safe_join`).",
    "tree": "django",
    "path": "django/utils/_os.py",
    "symbol": "safe_join",
@@ -80,7 +80,7 @@
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
    "line": 17,
-   "sentence": "Under `settings.DEBUG`, which is when `django.conf.urls.static.static` routes a prefix to the view at all, that 400 is the debug page that `technical_500_response` makes ([How an exception becomes a response](../handlers/exceptions.md#which-exception-becomes-which-response)) (`django/core/handlers/exception.py:response_for_exception`).",
+   "sentence": "Under `settings.DEBUG`, which `django.conf.urls.static.static` requires, as the URLconf is imported, to route a prefix to the view at all, that 400 is the debug page that `technical_500_response` makes ([How an exception becomes a response](../handlers/exceptions.md#which-exception-becomes-which-response)) (`django/core/handlers/exception.py:response_for_exception`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -108,7 +108,7 @@
   {
    "pointer": "django/views/static.py:was_modified_since",
    "line": 46,
-   "sentence": "The file's time is cut to whole seconds before it is compared with the header's, which `parse_http_date` returns as whole seconds (`django/views/static.py:was_modified_since`).",
+   "sentence": "The file's time is cut to whole seconds before it is compared with the header's, which `parse_http_date` returns as whole seconds (`django/views/static.py:was_modified_since`, `django/utils/http.py:parse_http_date`).",
    "tree": "django",
    "path": "django/views/static.py",
    "symbol": "was_modified_since",
@@ -118,6 +118,20 @@
     122
    ],
    "fingerprint": "39df193c0b011b17"
+  },
+  {
+   "pointer": "django/utils/http.py:parse_http_date",
+   "line": 46,
+   "sentence": "The file's time is cut to whole seconds before it is compared with the header's, which `parse_http_date` returns as whole seconds (`django/views/static.py:was_modified_since`, `django/utils/http.py:parse_http_date`).",
+   "tree": "django",
+   "path": "django/utils/http.py",
+   "symbol": "parse_http_date",
+   "kind": "function",
+   "lines": [
+    100,
+    137
+   ],
+   "fingerprint": "f187b4a0a0a46039"
   },
   {
    "pointer": "django/views/templates/",
@@ -146,7 +160,7 @@
   {
    "pointer": "django/views/templates/directory_index.html",
    "line": 66,
-   "sentence": "The index of the document root leaves out the file named `\".proofs\"`, and each index holds `\"../\"`, the built-in template's own link to the directory above (`django/views/templates/directory_index.html`).",
+   "sentence": "The index of the document root leaves out the file named `\".proofs\"`, and both indexes hold `\"../\"`, the built-in template's own link to the directory above (`django/views/templates/directory_index.html`).",
    "tree": "django",
    "path": "django/views/templates/directory_index.html",
    "symbol": null,
@@ -240,6 +254,34 @@
     40
    ],
    "fingerprint": "50ebeb12aadaf297"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler",
+   "line": 96,
+   "sentence": "Its runserver puts `StaticFilesHandler` in front of the project's handler, while `settings.DEBUG` is on unless told otherwise, and that handler does the same for the paths under `settings.STATIC_URL`, with no pattern in the URLconf (`django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler`, `django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.serve`, [Serving static files: `StaticFilesHandler` and the development server](../contrib/serving-static.md)).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/management/commands/runserver.py",
+   "symbol": "Command.get_handler",
+   "kind": "function",
+   "lines": [
+    26,
+    36
+   ],
+   "fingerprint": "d3277a000ed4a018"
+  },
+  {
+   "pointer": "django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.serve",
+   "line": 96,
+   "sentence": "Its runserver puts `StaticFilesHandler` in front of the project's handler, while `settings.DEBUG` is on unless told otherwise, and that handler does the same for the paths under `settings.STATIC_URL`, with no pattern in the URLconf (`django/contrib/staticfiles/management/commands/runserver.py:Command.get_handler`, `django/contrib/staticfiles/handlers.py:StaticFilesHandlerMixin.serve`, [Serving static files: `StaticFilesHandler` and the development server](../contrib/serving-static.md)).",
+   "tree": "django",
+   "path": "django/contrib/staticfiles/handlers.py",
+   "symbol": "StaticFilesHandlerMixin.serve",
+   "kind": "function",
+   "lines": [
+    48,
+    50
+   ],
+   "fingerprint": "09df00e372a42627"
   },
   {
    "pointer": "django/test/testcases.py:FSFilesHandler.serve",

@@ -257,7 +257,7 @@ A server is not in the table. `get_wsgi_application` starts Django and makes a h
 
 ## The deployment checks
 
-The functions in `deployment_checks` look for settings that are reasonable while developing and wrong in production: debugging left on, no allowed hosts, cookies not marked secure, the security middleware absent. Run by default they would complain about every development setup, so nothing runs them but the check command with `--deploy`. Most are the security checks, which belong to [The security checks](../security/checks.md).
+Most of the functions in `deployment_checks` look for settings that are reasonable while developing and wrong in production: debugging left on, no allowed hosts, cookies not marked secure, the security middleware absent. Nothing runs them but the check command with `--deploy`. Most are the security checks, which belong to [The security checks](../security/checks.md).
 
 ```text recording=commands
 python manage.py check --deploy, for this project

@@ -28,7 +28,7 @@ Its main callers differ in what they do with a refusal:
 
 - `FileSystemStorage.path`, through which the other methods find a file, lets it reach the caller (`django/core/files/storage/filesystem.py:FileSystemStorage.path`, [File storage: `Storage`, `FileSystemStorage` and `storages`](../services/storage.md)).
 - The filesystem template loader, and the application directories loader that inherits from it, pass over a directory the name escapes, since the name may lie inside another (`django/template/loaders/filesystem.py:Loader.get_template_sources`, [Finding a template: `Engine` and the loaders](../templates/loaders.md)).
-- The static file view lets it go, and the handler answers with a 400 (`django/views/static.py:serve`, [The static file view](../views/static-files.md)).
+- The static file view lets it go, and when a URLconf routed the request to the view, the handler ordinarily answers with a 400 (`django/views/static.py:serve`, [The static file view](../views/static-files.md)).
 - `TemplateCommand.download` uses it to give a downloaded template a better name, which may come from the server's Content-Disposition header, and lets a refusal end the command (`django/core/management/templates.py:TemplateCommand.download`).
 
 ## `makedirs` and `safe_makedirs`

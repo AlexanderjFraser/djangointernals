@@ -22,18 +22,19 @@
    "fingerprint": "bbd082422e2dcf68"
   },
   {
-   "pointer": "docs/ref/class-based-views/index.txt",
+   "pointer": "django/views/generic/base.py:View.as_view",
    "line": 9,
-   "sentence": "The handler wants one callable that serves every request, and `as_view` gives it one that makes an instance for each, so that each request has state of its own and a handler method may keep what it likes on `self` (`docs/ref/class-based-views/index.txt`).",
+   "sentence": "The handler wants one callable that serves every request, and `as_view` gives it one that makes an instance for each, so that each request has state of its own and a handler method may keep what it likes on `self` (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
-   "path": "docs/ref/class-based-views/index.txt",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/views/generic/base.py",
+   "symbol": "View.as_view",
+   "kind": "function",
    "lines": [
-    1,
-    62
+    81,
+    124
    ],
-   "fingerprint": "6893893787ba8209"
+   "at": 82,
+   "fingerprint": "2cb7c2fdb4ae4ca3"
   },
   {
    "pointer": "django/utils/decorators.py:classonlymethod",
@@ -82,7 +83,7 @@
   {
    "pointer": "django/views/generic/base.py:View.as_view",
    "line": 73,
-   "sentence": "`as_view` leaves the two names alone on purpose: they \"are intentionally left unchanged as view_class should be used to robustly determine the name of the view instead\", says the comment there (`django/views/generic/base.py:View.as_view`).",
+   "sentence": "`as_view` leaves the two names alone and records the class in `\"view_class\"`, and where `ResolverMatch` keeps a dotted path for a view it reads the class from there in the function's place (`django/views/generic/base.py:View.as_view`, `django/urls/resolvers.py:ResolverMatch.__init__`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.as_view",
@@ -93,6 +94,20 @@
    ],
    "at": 82,
    "fingerprint": "2cb7c2fdb4ae4ca3"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:ResolverMatch.__init__",
+   "line": 73,
+   "sentence": "`as_view` leaves the two names alone and records the class in `\"view_class\"`, and where `ResolverMatch` keeps a dotted path for a view it reads the class from there in the function's place (`django/views/generic/base.py:View.as_view`, `django/urls/resolvers.py:ResolverMatch.__init__`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "ResolverMatch.__init__",
+   "kind": "function",
+   "lines": [
+    36,
+    75
+   ],
+   "fingerprint": "8525996a49dbb6a6"
   },
   {
    "pointer": "django/views/generic/base.py:View.as_view",
@@ -141,7 +156,7 @@
   {
    "pointer": "django/views/generic/base.py:View.setup",
    "line": 108,
-   "sentence": "Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`).",
+   "sentence": "Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`, `django/views/generic/detail.py:SingleObjectMixin.get_object`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
    "symbol": "View.setup",
@@ -151,6 +166,20 @@
     132
    ],
    "fingerprint": "0187931454eb2eb5"
+  },
+  {
+   "pointer": "django/views/generic/detail.py:SingleObjectMixin.get_object",
+   "line": 108,
+   "sentence": "Other methods read them from there: `SingleObjectMixin.get_object` reads the slug from `kwargs` without being passed it (`django/views/generic/base.py:View.setup`, `django/views/generic/detail.py:SingleObjectMixin.get_object`).",
+   "tree": "django",
+   "path": "django/views/generic/detail.py",
+   "symbol": "SingleObjectMixin.get_object",
+   "kind": "function",
+   "lines": [
+    21,
+    59
+   ],
+   "fingerprint": "b9ab23efb58a66f9"
   },
   {
    "pointer": "django/views/generic/base.py:View.as_view",
@@ -168,32 +197,19 @@
    "fingerprint": "2cb7c2fdb4ae4ca3"
   },
   {
-   "pointer": "django/views/generic/base.py:View.setup",
+   "pointer": "django/views/generic/base.py:View.as_view",
    "line": 125,
-   "sentence": "Its docstring gives its purpose as to \"initialize attributes shared by all view methods\" (`django/views/generic/base.py:View.setup`), and the release that added it, Django 2.2, says that it \"allows mixins to set up instance attributes for reuse in child classes\" (`docs/releases/2.2.txt`).",
+   "sentence": "`setup` is a hook of its own so that a class can prepare, before `dispatch` runs, what all of its handler methods share: the function calls it on each new instance, with the request and its arguments, before it calls `dispatch` (`django/views/generic/base.py:View.as_view`).",
    "tree": "django",
    "path": "django/views/generic/base.py",
-   "symbol": "View.setup",
+   "symbol": "View.as_view",
    "kind": "function",
    "lines": [
-    126,
-    132
+    81,
+    124
    ],
-   "fingerprint": "0187931454eb2eb5"
-  },
-  {
-   "pointer": "docs/releases/2.2.txt",
-   "line": 125,
-   "sentence": "Its docstring gives its purpose as to \"initialize attributes shared by all view methods\" (`django/views/generic/base.py:View.setup`), and the release that added it, Django 2.2, says that it \"allows mixins to set up instance attributes for reuse in child classes\" (`docs/releases/2.2.txt`).",
-   "tree": "django",
-   "path": "docs/releases/2.2.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    533
-   ],
-   "fingerprint": "528358e200072377"
+   "at": 82,
+   "fingerprint": "2cb7c2fdb4ae4ca3"
   },
   {
    "pointer": "django/views/generic/base.py:View.dispatch",

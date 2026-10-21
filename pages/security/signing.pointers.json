@@ -148,9 +148,23 @@
    "fingerprint": "3162cc89a1bdf525"
   },
   {
+   "pointer": "django/core/signing.py:TimestampSigner.timestamp",
+   "line": 73,
+   "sentence": "`TimestampSigner.timestamp` is the current time in whole seconds since the epoch, written in base 62 by `b62_encode`, with the digits and letters of `BASE62_ALPHABET` (`django/core/signing.py:TimestampSigner.timestamp`, `django/core/signing.py:b62_encode`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "TimestampSigner.timestamp",
+   "kind": "function",
+   "lines": [
+    296,
+    297
+   ],
+   "fingerprint": "bb7305908a4f1351"
+  },
+  {
    "pointer": "django/core/signing.py:b62_encode",
    "line": 73,
-   "sentence": "`TimestampSigner.timestamp` is the current time in whole seconds since the epoch, written in base 62 by `b62_encode`, with the digits and letters of `BASE62_ALPHABET` (`django/core/signing.py:b62_encode`).",
+   "sentence": "`TimestampSigner.timestamp` is the current time in whole seconds since the epoch, written in base 62 by `b62_encode`, with the digits and letters of `BASE62_ALPHABET` (`django/core/signing.py:TimestampSigner.timestamp`, `django/core/signing.py:b62_encode`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "b62_encode",
@@ -260,9 +274,23 @@
    "fingerprint": "24d127572fd7c4cc"
   },
   {
+   "pointer": "django/core/signing.py:JSONSerializer.loads",
+   "line": 121,
+   "sentence": "The default serializer is JSON so that even a stolen `SECRET_KEY` does not let an attacker run commands on the server when the data it forges is read, as forged data read with the pickle format could (`django/core/signing.py:JSONSerializer.loads`, `docs/topics/signing.txt`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "JSONSerializer.loads",
+   "kind": "function",
+   "lines": [
+    168,
+    169
+   ],
+   "fingerprint": "adb5a77c696427e2"
+  },
+  {
    "pointer": "docs/topics/signing.txt",
    "line": 121,
-   "sentence": "The default serializer is JSON so that even a stolen `SECRET_KEY` does not let an attacker run commands on the server, as forged data read with the pickle format could (`docs/topics/signing.txt`).",
+   "sentence": "The default serializer is JSON so that even a stolen `SECRET_KEY` does not let an attacker run commands on the server when the data it forges is read, as forged data read with the pickle format could (`django/core/signing.py:JSONSerializer.loads`, `docs/topics/signing.txt`).",
    "tree": "django",
    "path": "docs/topics/signing.txt",
    "symbol": null,
@@ -330,9 +358,23 @@
    "fingerprint": "90d48f06dc77e803"
   },
   {
+   "pointer": "django/core/signing.py:Signer.signature",
+   "line": 127,
+   "sentence": "A salt is a namespace: a string signed under one does not verify under another, so a value the site signed for one use cannot be passed to code that checks for another (`django/core/signing.py:Signer.signature`, `docs/topics/signing.txt`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.signature",
+   "kind": "function",
+   "lines": [
+    240,
+    242
+   ],
+   "fingerprint": "055285e51d6c7144"
+  },
+  {
    "pointer": "docs/topics/signing.txt",
    "line": 127,
-   "sentence": "A salt is a namespace: a string signed under one does not verify under another, so a value the site signed for one use cannot be passed to code that checks for another (`docs/topics/signing.txt`).",
+   "sentence": "A salt is a namespace: a string signed under one does not verify under another, so a value the site signed for one use cannot be passed to code that checks for another (`django/core/signing.py:Signer.signature`, `docs/topics/signing.txt`).",
    "tree": "django",
    "path": "docs/topics/signing.txt",
    "symbol": null,
@@ -360,7 +402,7 @@
   {
    "pointer": "django/core/signing.py:get_cookie_signer",
    "line": 141,
-   "sentence": "`get_cookie_signer` makes the signer for cookies (`django/core/signing.py:get_cookie_signer`).",
+   "sentence": "`get_cookie_signer` makes a signer for cookies (`django/core/signing.py:get_cookie_signer`).",
    "tree": "django",
    "path": "django/core/signing.py",
    "symbol": "get_cookie_signer",
@@ -370,6 +412,62 @@
     156
    ],
    "fingerprint": "3162cc89a1bdf525"
+  },
+  {
+   "pointer": "django/http/response.py:HttpResponseBase.set_signed_cookie",
+   "line": 141,
+   "sentence": "The signed cookies of `HttpResponseBase.set_signed_cookie` use it with a salt that `_cookie_signer_salt` makes from the cookie's name and the caller's salt, and are read through `_unsign_cookie` ([Cookies](../http/cookies.md)) (`django/http/response.py:HttpResponseBase.set_signed_cookie`, `django/core/signing.py:_unsign_cookie`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.set_signed_cookie",
+   "kind": "function",
+   "lines": [
+    291,
+    295
+   ],
+   "fingerprint": "3b10957ad13bb4fd"
+  },
+  {
+   "pointer": "django/core/signing.py:_unsign_cookie",
+   "line": 141,
+   "sentence": "The signed cookies of `HttpResponseBase.set_signed_cookie` use it with a salt that `_cookie_signer_salt` makes from the cookie's name and the caller's salt, and are read through `_unsign_cookie` ([Cookies](../http/cookies.md)) (`django/http/response.py:HttpResponseBase.set_signed_cookie`, `django/core/signing.py:_unsign_cookie`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "_unsign_cookie",
+   "kind": "function",
+   "lines": [
+    133,
+    147
+   ],
+   "fingerprint": "0d65ea5849dceb3a"
+  },
+  {
+   "pointer": "django/core/signing.py:get_cookie_signer",
+   "line": 143,
+   "sentence": "None of Django's own callers reads two values with one signer; code that keeps the signer `get_cookie_signer` returns and reads with it again does (`django/core/signing.py:get_cookie_signer`, `django/core/signing.py:Signer.unsign`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "get_cookie_signer",
+   "kind": "function",
+   "lines": [
+    150,
+    156
+   ],
+   "fingerprint": "3162cc89a1bdf525"
+  },
+  {
+   "pointer": "django/core/signing.py:Signer.unsign",
+   "line": 143,
+   "sentence": "None of Django's own callers reads two values with one signer; code that keeps the signer `get_cookie_signer` returns and reads with it again does (`django/core/signing.py:get_cookie_signer`, `django/core/signing.py:Signer.unsign`).",
+   "tree": "django",
+   "path": "django/core/signing.py",
+   "symbol": "Signer.unsign",
+   "kind": "function",
+   "lines": [
+    247,
+    254
+   ],
+   "fingerprint": "47eef6ac66b5ee46"
   }
  ]
 }

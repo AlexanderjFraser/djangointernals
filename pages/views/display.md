@@ -66,7 +66,7 @@ GET /articles/ferry-timetable/: a DetailView
 
 **The object.** `SingleObjectMixin.get_object` starts from a queryset and narrows it with what the path captured. It reads two keyword arguments from `View.kwargs`, named by the attributes `SingleObjectMixin.pk_url_kwarg` and `SingleObjectMixin.slug_url_kwarg`, which are `"pk"` and `"slug"`. With a primary key it filters on that, and ignores a slug unless `query_pk_and_slug` is true, in which case it filters on both. With only a slug it filters on the field that `get_slug_field` names. With neither it raises `AttributeError`, whose message says the view must be called with one or the other in the URLconf (`django/views/generic/detail.py:SingleObjectMixin.get_object`).
 
-Then it calls `get` on what is left. The `LIMIT 21` in the query is that method's own doing, not the view's (`django/db/models/query.py:QuerySet.get`). An object that does not exist raises the model's `Model.DoesNotExist`, and `get_object` raises `Http404` in its place, which the handler turns into a 404 ([How an exception becomes a response](../handlers/exceptions.md)):
+Then it calls `get` on what is left. The `LIMIT 21` in the query is that method's own doing, not the view's (`django/db/models/query.py:QuerySet.get`). An object that does not exist raises the model's `Model.DoesNotExist`, and `get_object` raises `Http404` in its place, which the handler ordinarily turns into a 404 ([How an exception becomes a response](../handlers/exceptions.md)):
 
 ```text recording=views
 GET /articles/no-such-article/: the DetailView finds no object
@@ -79,13 +79,13 @@ GET /articles/no-such-article/: the DetailView finds no object
     ...
 ```
 
-**The queryset.** `SingleObjectMixin.get_queryset` returns the `queryset` attribute if the class set one, and otherwise everything the `model` attribute's default manager has ([Managers](../models/managers.md)); with neither it raises `ImproperlyConfigured`. In both cases what it returns is the result of `all()`, a new queryset (`django/views/generic/detail.py:SingleObjectMixin.get_queryset`).
+**The queryset.** `SingleObjectMixin.get_queryset` returns the `queryset` attribute if one is set, and otherwise everything the `model` attribute's default manager has ([Managers](../models/managers.md)); with neither it raises `ImproperlyConfigured`. In both cases what it returns is the result of `all()`, a new queryset (`django/views/generic/detail.py:SingleObjectMixin.get_queryset`).
 
-> **Trap.** A `queryset` written as a class attribute is one object, shared by every request the process serves. `get_queryset` gives each request a copy of it, made by `all()`, but code that evaluates the attribute itself, by iterating it or taking its length, fills the shared object's cache of rows, and every later request that evaluates it gets those rows in place of a query (`docs/ref/class-based-views/mixins-single-object.txt`, `django/db/models/query.py:QuerySet._fetch_all`).
+> **Trap.** A `queryset` written as a class attribute is one object, shared by every request the process serves with that view. `get_queryset` gives each request a copy of it, made by `all()`, but code that evaluates the attribute itself, by iterating it or taking its length, fills the shared object's cache of rows, and every later request that evaluates it gets those rows in place of a query (`docs/ref/class-based-views/mixins-single-object.txt`, `django/db/models/query.py:QuerySet._fetch_all`).
 
 **The context.** `SingleObjectMixin.get_context_data` puts the view's object, when it has one, in as `"object"`, and a second time under the name `get_context_object_name` returns, when it returns one: `context_object_name` if set, and otherwise, for a model instance, the model's name in lower case. So the Gazette's template can say `"article"` where a template written for any model would say `"object"` (`django/views/generic/detail.py:SingleObjectMixin.get_context_data`).
 
-**The template.** With no `template_name`, `SingleObjectTemplateResponseMixin.get_template_names` builds a list. If `template_name_field` is set, the value of that field on the object goes first: the object names its own template. Then comes a name made from the object's model, or from the view's `model` when the object is not a model instance: the app label as a directory, and the model's name with `template_name_suffix`, which is `"_detail"`. If nothing could be built it raises `ImproperlyConfigured` again, with a message that lists what would have helped (`django/views/generic/detail.py:SingleObjectTemplateResponseMixin.get_template_names`).
+**The template.** With no `template_name`, `SingleObjectTemplateResponseMixin.get_template_names` builds a list. If `template_name_field` is set, the value of that field on the object, when it has one, goes first: the object names its own template. Then comes a name made from the object's model, or from the view's `model` when the object is not a model instance: the app label as a directory, and the model's name with `template_name_suffix`, which is `"_detail"`. If nothing could be built it raises `ImproperlyConfigured` again, with a message that lists what would have helped (`django/views/generic/detail.py:SingleObjectTemplateResponseMixin.get_template_names`).
 
 ## `ListView`: many objects, and pages of them
 
@@ -142,6 +142,6 @@ GET /articles/?page=9: a page the list does not have
     ...
 ```
 
-**An empty list.** By default an empty list is rendered like any other. With `allow_empty` false, `BaseListView.get` raises `Http404` for one, and takes care how it finds out: when the view paginates and the list is a queryset, it asks `exists`, a cheap query, where otherwise it tests the list for truth, which loads a queryset whole (`django/views/generic/list.py:BaseListView.get`).
+**An empty list.** By default an empty list is rendered like any other. With `allow_empty` false, `BaseListView.get` raises `Http404` for one, and takes care how it finds out: when `get_paginate_by` gives anything but `None` and the list is a queryset, it asks `exists`, a cheap query, where otherwise it tests the list for truth, which loads a queryset whole (`django/views/generic/list.py:BaseListView.get`).
 
 **The template.** `MultipleObjectTemplateResponseMixin.get_template_names` takes `template_name` if there is one and then, when the list has a model, adds a name built from it with the suffix `"_list"`. Unlike the detail view's, this one adds the generated name even when `template_name` was given, so the given name is tried first and the generated one stands behind it (`django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names`).

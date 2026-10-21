@@ -144,18 +144,18 @@
    "fingerprint": "0574f7e9abb0f171"
   },
   {
-   "pointer": "django/views/decorators/csrf.py",
+   "pointer": "django/views/decorators/csrf.py:csrf_protect",
    "line": 67,
-   "sentence": "On a site whose chain installs `CsrfViewMiddleware` as well, using `csrf_protect` is, in its docstring's words, \"harmless and efficient\" (`django/views/decorators/csrf.py`).",
+   "sentence": "On a site whose chain installs `CsrfViewMiddleware` as well, a view under `csrf_protect` has two instances of the middleware around it, the chain's and its own (`django/views/decorators/csrf.py:csrf_protect`).",
    "tree": "django",
    "path": "django/views/decorators/csrf.py",
-   "symbol": null,
-   "kind": "file",
+   "symbol": "csrf_protect",
+   "kind": "assignment",
    "lines": [
-    1,
-    68
+    7,
+    7
    ],
-   "fingerprint": "30ef373ed1b043db"
+   "fingerprint": "22478d67be80430f"
   },
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
@@ -174,7 +174,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._accept",
    "line": 67,
-   "sentence": "A request it accepts it marks as checked, and the decorator's instance then checks nothing again; its `process_response`, the first of the two to run, sends the secret back where it is due, as when the view has used the token, and leaves the chain's `process_response` nothing to send ([The CSRF secret and its token](../security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "sentence": "A request it accepts it marks as checked, and the decorator's instance then checks nothing again; its `process_response`, which runs before the chain's, sends the secret back where it is due, as when the view has used the token, and clears the request's `\"CSRF_COOKIE_NEEDS_UPDATE\"`, so that the chain's `process_response` sends nothing unless something between the two sets it again ([The CSRF secret and its token](../security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware._accept",
@@ -188,7 +188,7 @@
   {
    "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_response",
    "line": 67,
-   "sentence": "A request it accepts it marks as checked, and the decorator's instance then checks nothing again; its `process_response`, the first of the two to run, sends the secret back where it is due, as when the view has used the token, and leaves the chain's `process_response` nothing to send ([The CSRF secret and its token](../security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
+   "sentence": "A request it accepts it marks as checked, and the decorator's instance then checks nothing again; its `process_response`, which runs before the chain's, sends the secret back where it is due, as when the view has used the token, and clears the request's `\"CSRF_COOKIE_NEEDS_UPDATE\"`, so that the chain's `process_response` sends nothing unless something between the two sets it again ([The CSRF secret and its token](../security/csrf-token.md)) (`django/middleware/csrf.py:CsrfViewMiddleware._accept`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
    "tree": "django",
    "path": "django/middleware/csrf.py",
    "symbol": "CsrfViewMiddleware.process_response",
@@ -258,7 +258,7 @@
   {
    "pointer": "django/core/handlers/exception.py:convert_exception_to_response",
    "line": 141,
-   "sentence": "If it gives none, the wrapper raises the exception again, and the exception carries on out to the handler, which makes a response of it ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:convert_exception_to_response`).",
+   "sentence": "If it gives none, the wrapper raises the exception again, and the exception carries on out to the handler, which ordinarily makes a response of it ([How an exception becomes a response](../handlers/exceptions.md)) (`django/core/handlers/exception.py:convert_exception_to_response`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "convert_exception_to_response",
@@ -398,7 +398,7 @@
   {
    "pointer": "django/utils/decorators.py:make_middleware_decorator",
    "line": 190,
-   "sentence": "`process_response` is put off until the template has been rendered, as the comment above the callback says (`django/utils/decorators.py:make_middleware_decorator`).",
+   "sentence": "`process_response` is put off until the template has been rendered (`django/utils/decorators.py:make_middleware_decorator`).",
    "tree": "django",
    "path": "django/utils/decorators.py",
    "symbol": "make_middleware_decorator",
@@ -489,7 +489,7 @@
   {
    "pointer": "django/utils/asyncio.py:async_unsafe",
    "line": 211,
-   "sentence": "A hook that reaches the database fails outright, since Django refuses a query from a thread whose event loop is running: `cache_page` with the database cache, or `csrf_protect` reading the request's session from the database under `settings.CSRF_USE_SESSIONS`, raises `SynchronousOnlyOperation`, and the client gets a 500 (`django/utils/asyncio.py:async_unsafe`).",
+   "sentence": "A hook that reaches the database fails outright, since Django refuses a query from a thread whose event loop is running, unless the environment variable `\"DJANGO_ALLOW_ASYNC_UNSAFE\"` is set: `cache_page` with the database cache, or `csrf_protect` reading the request's session from the database under `settings.CSRF_USE_SESSIONS`, raises `SynchronousOnlyOperation`, and the client gets a 500 (`django/utils/asyncio.py:async_unsafe`).",
    "tree": "django",
    "path": "django/utils/asyncio.py",
    "symbol": "async_unsafe",

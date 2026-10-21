@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 A view decorator ordinarily puts a wrapper in the view's place, which may act before the view is called, after it returns, or instead of calling it; some decorators leave a mark on the view, the response or the request for other code to read. Most of Django's own are in `django/views/decorators/`, among them `require_http_methods`, `never_cache`, `condition` and `csrf_exempt`.
 
-A view decorator takes a view and returns what goes into the URLconf in its place. That is all the word means, and the handler knows nothing about it: by the time a request arrives, a decorator written above a function ran long ago, when the module that defines the view was imported, and what is left is a function. One group of Django's decorators is made mechanically from middleware classes, which [A middleware as a decorator](middleware-decorators.md) takes up; how a decorator is put on a method of a class is [Decorating a class: `method_decorator`](method-decorator.md).
+A view decorator takes a view and returns what goes into the URLconf in its place. That is all the word means: by the time the handler calls a view, a decorator written above a function has already run, when the module that defines the view was imported, and what is left is what it returned. One group of Django's decorators is made mechanically from middleware classes, which [A middleware as a decorator](middleware-decorators.md) takes up; how a decorator is put on a method of a class is [Decorating a class: `method_decorator`](method-decorator.md).
 
 ## Before the view, and after
 
@@ -61,9 +61,9 @@ Each of the three wrappers is written twice in its decorator, once with `def` an
 
 A decorator written under one that may answer without calling inwards sets nothing on that answer. `condition` is one: it may answer with a 304, so `vary_on_cookie` written under it runs only when the view does, and written over it patches the 304 as well ([Cache headers and conditional requests: `django/utils/cache.py`](../services/http-caching.md#under-the-condition-decorator)) (`django/views/decorators/http.py:condition`).
 
-The view decorators of the directory not made from a middleware class each change the request or the response before the view, after it, at both times, or never:
+The view decorators of the directory not made from a middleware class each act on the request or the response before the view, after it, at both times, or never:
 
-| decorator | when it changes anything | what it does |
+| decorator | when it acts | what it does |
 |---|---|---|
 | `require_http_methods`, and `require_GET`, `require_POST`, `require_safe` made from it | before | answers 405 itself unless the request's method is in its list; `require_safe` allows `"GET"` and `"HEAD"` |
 | `condition`, and `etag`, `last_modified` made from it | before and after | may answer 304 or 412 itself; may add `"ETag"` and Last-Modified to the response |
@@ -76,13 +76,13 @@ The view decorators of the directory not made from a middleware class each chang
 | `sensitive_post_parameters` | before | marks the request |
 | `csrf_exempt`, `no_append_slash` | never | mark the view |
 
-*The view decorators of `django/views/decorators/` that are not made from a middleware, by when each changes the request or the response. The wrappers of `csrf_exempt` and `no_append_slash` run at every request and do nothing but call the view.*
+*The view decorators of `django/views/decorators/` that are not made from a middleware, by when each acts on the request or the response. The wrappers of `csrf_exempt` and `no_append_slash` run at every request and do nothing but call the view.*
 
 `sensitive_variables`, in the same directory, is not for views in particular, and what it records is read by the exception reporter ([What an error report hides](report-filter.md#sensitive_variables-and-sensitive_post_parameters)).
 
 ## `condition`: answering before the view runs
 
-Of the decorators in the table, `condition` is the one that can answer a request the view would have served, without calling the view. It is given one or two functions that work out, from the request and the view's own arguments, the `"ETag"` of what the view would return or the time it last changed. Its wrapper calls those first and passes the results to `get_conditional_response`, with the headers the client sent. If the client already holds the current version and the request is a `"GET"` or a `"HEAD"`, the answer is a 304 and the view is never called (`django/views/decorators/http.py:condition`).
+Of the decorators in the table, `condition` is the one that can answer with a 304 or a 412, without calling the view, a request the view would have served. It is given one or two functions that work out, from the request and the view's own arguments, the `"ETag"` of what the view would return or the time it last changed. Its wrapper calls those first and passes the results to `get_conditional_response`, with the headers the client sent. If the client already holds the current version and the request is a `"GET"` or a `"HEAD"`, the answer is a 304 and the view is never called (`django/views/decorators/http.py:condition`).
 
 For its view of today's edition, the Gazette has a function that returns the edition's tag.
 
@@ -118,7 +118,7 @@ After the view, or in its place, the wrapper sets `"ETag"` and Last-Modified on 
 
 A mark is an attribute set for some other code to find. The decorators leave them on the view, on the response, or on the request.
 
-**On the view.** `csrf_exempt` and `no_append_slash` return a wrapper that does nothing but call the view, and set an attribute on the wrapper, `"csrf_exempt"` or `"should_append_slash"` (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`). `non_atomic_requests`, in `django/db/transaction.py`, marks its wrapper in the same way, with `"_non_atomic_requests"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`). The view that was decorated is untouched: `csrf_exempt` around the Gazette's front-page view, a function with no decorators, gives a new function that carries the mark, and leaves the view without one.
+**On the view.** `csrf_exempt` and `no_append_slash` return a wrapper that does nothing but call the view, and set an attribute on the wrapper, `"csrf_exempt"` or `"should_append_slash"` (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`). `non_atomic_requests`, in `django/db/transaction.py`, marks a wrapper too, with `"_non_atomic_requests"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`). The view that was decorated is untouched: `csrf_exempt` around the Gazette's front-page view, a function with no decorators, gives a new function that carries the mark, and leaves the view without one.
 
 ```text recording=views
 ...
@@ -128,7 +128,7 @@ hasattr(views.front, "csrf_exempt")  ->  False
 ...
 ```
 
-> **Why.** Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, "decorators are nicer if they don't have side effects" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).
+> **Why.** Marking a new function leaves the one it was given as it was, so a function routed at one address inside `csrf_exempt` and at another without it is checked at the second; setting the attribute on the function itself would exempt it at both (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`, `django/middleware/csrf.py:CsrfViewMiddleware.process_view`).
 
 **On the response.** `xframe_options_exempt` calls the view and sets `"xframe_options_exempt"`, true, on the response, which `XFrameOptionsMiddleware.process_response` tests before it adds its header. `csp_override` and `csp_report_only_override` each store a policy on the response, which `ContentSecurityPolicyMiddleware.process_response` uses in place of the one in the settings (`django/views/decorators/clickjacking.py:xframe_options_exempt`, `django/views/decorators/csp.py:_make_csp_decorator`).
 

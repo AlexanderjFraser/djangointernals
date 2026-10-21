@@ -30,7 +30,7 @@ The **response mixin** is the half that supplies that method, by turning a conte
 
 *Three generic views, by where their parts are declared. The form views and the date views are assembled in the same way.*
 
-Each line gives a view's classes in the order Python searches them for a method, its two halves one after the other, the response half first, and all three end in `ContextMixin` and `View`:
+Each line gives a view's classes in the order Python searches them for a method, without the `object` that comes last in every one; its two halves stand one after the other, the response half first, and all three end in `ContextMixin` and `View`:
 
 ```text recording=views
 TemplateView  ->  TemplateView > TemplateResponseMixin > ContextMixin > View
@@ -44,11 +44,11 @@ ListView  ->  ListView > MultipleObjectTemplateResponseMixin > TemplateResponseM
 
 `ContextMixin` and `TemplateResponseMixin` are in each of those three lists, one for each half.
 
-`ContextMixin.get_context_data` is where every context ends up. It takes keyword arguments and returns them as the context, having added to them. It adds the view itself under the name `"view"`, unless a value of that name was passed. And it lays the view's `extra_context` over the top, when that attribute is not `None` (`django/views/generic/base.py:ContextMixin.get_context_data`).
+`ContextMixin.get_context_data` is where every generic view's context ends up. It takes keyword arguments and returns them as the context, having added to them. It adds the view itself under the name `"view"`, unless a value of that name was passed. And it lays the view's `extra_context` over the top, when that attribute is not `None` (`django/views/generic/base.py:ContextMixin.get_context_data`).
 
-The other mixins of `django/views/generic/` that declare a `get_context_data`, `SingleObjectMixin`, `MultipleObjectMixin` and `FormMixin`, keep to one convention: each adds what it contributes, lets a keyword argument it received, but for `MultipleObjectMixin`'s `object_list`, take the place of its own value of the same name, and passes the result to `super().get_context_data`. So a value passed in by the caller wins over a mixin's own, and `extra_context`, applied last of all in `ContextMixin`, wins over both.
+The other mixins of `django/views/generic/` that declare a `get_context_data`, `SingleObjectMixin`, `MultipleObjectMixin` and `FormMixin`, keep to one convention: each adds what it contributes, lets a keyword argument it received, but for `MultipleObjectMixin`'s `object_list`, take the place of its own value of the same name, and passes the result to `super().get_context_data`. So a value passed in by the caller wins over a mixin's own, and `extra_context`, applied last of all in `ContextMixin`, wins over both (`django/views/generic/detail.py:SingleObjectMixin.get_context_data`, `django/views/generic/list.py:MultipleObjectMixin.get_context_data`, `django/views/generic/edit.py:FormMixin.get_context_data`).
 
-`TemplateResponseMixin.render_to_response` makes the response. It calls `get_template_names`, and gives the result to `response_class`, which is `TemplateResponse` unless set otherwise, with the request, the context, and the view's `template_engine` and `content_type` (`django/views/generic/base.py:TemplateResponseMixin`). What it passes is a list of names, not a template. The response tries the names in order when it is rendered, and uses the first that exists, which is what lets a view offer a specific name and a general one behind it.
+`TemplateResponseMixin.render_to_response` makes the response. It calls `get_template_names`, and gives the result to `response_class`, which is `TemplateResponse` unless set otherwise, with the request, the context, and the view's `template_engine` and `content_type` (`django/views/generic/base.py:TemplateResponseMixin`). What it passes is a list of names, not a template. The response tries the names in order when it is rendered, and uses the first that exists, which is what lets a view offer a specific name and a general one behind it (`django/template/loader.py:select_template`).
 
 In this mixin `get_template_names` is as simple as it can be: a list holding `template_name`, or an `ImproperlyConfigured` when that is `None`. The response mixins of the detail and list views start by calling it, and treat that exception as an ordinary answer meaning that no name was given ([`DetailView` and `ListView`](display.md)).
 

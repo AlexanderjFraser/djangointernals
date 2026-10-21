@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The date views `YearArchiveView`, `MonthArchiveView`, `WeekArchiveView` and `DayArchiveView` read a date from the URL, turn it into an interval on the model's date field, ask the database for what falls inside it, and find the periods on either side. A `MonthArchiveView` does it all in its `get_dated_items`, taking the field's name from `date_field` and leaving out what is dated after the present unless `allow_future` is set.
 
-A site that publishes things by date wants an archive: a page for a year that lists its months, a page for a month that lists what appeared in it, a page for a day, and on each a link to the period before and the period after. The pages differ in the size of the period. Each has to do the same things. It reads a date out of the URL. It turns the date into an interval with a beginning and an end. It asks the database for the objects whose date falls inside. And it works out what else the page needs: the smaller periods within this one that have anything in them, and the neighbours worth linking to.
+A site that publishes things by date wants an archive: a page for a year that lists its months, a page for a month that lists what appeared in it, a page for a day, and on each a link to the period before and the period after. The pages differ in the size of the period. Each has to do the same things. It reads a date out of the URL. It turns the date into an interval with a beginning and an end. It asks the database for the objects whose date falls inside. And it works out what else the page needs: the smaller periods within a year or a month that have anything in them, and the neighbours worth linking to.
 
 Of the seven date views ([The seven date views](date-views.md)), six are built on the same mixins as the list view, `MultipleObjectMixin` and `MultipleObjectTemplateResponseMixin` ([`DetailView` and `ListView`](display.md#listview-many-objects-and-pages-of-them)). The seventh shows one object and is built on the detail view's.
 
@@ -14,7 +14,7 @@ Of the seven date views ([The seven date views](date-views.md)), six are built o
 
 A mixin for each unit, `YearMixin`, `MonthMixin`, `WeekMixin` and `DayMixin`, knows how to read that unit from a request and how to step from one period to the next, in attributes and methods named for its unit. Each has a format, the `strptime` directive the unit is written in, and a method that finds the value: in an attribute of the view, then among the path's keyword arguments, then in the query string, with an `Http404` if it finds none. Two more give, for a date, the first day of its period and of the next (`django/views/generic/dates.py:MonthMixin`).
 
-`DateMixin` knows about the model's field. `date_field` names it, and must be set. `allow_future` says whether objects dated after the present moment are shown, and is false unless set. And `DateMixin.uses_datetime_field` reports whether the field is a `models.DateTimeField`, which decides how the lookups on the field are written (`django/views/generic/dates.py:DateMixin`).
+`DateMixin` knows about the model's field. `date_field` names it, and must be set. `allow_future` says whether a list includes objects dated after the present moment, and is false unless set. And `DateMixin.uses_datetime_field` reports whether the field is a `models.DateTimeField`, which decides how the lookups on the field are written (`django/views/generic/dates.py:DateMixin`).
 
 `BaseDateListView` joins `DateMixin` to `MultipleObjectMixin` and supplies the one handler method all six list-shaped date views share. Its `get` calls `get_dated_items`, which each view declares for itself and which returns three things: a list of dates or `None`, the objects, and a dictionary of extra context. The three go into `get_context_data`, and the context into `render_to_response` (`django/views/generic/dates.py:BaseDateListView`).
 
@@ -93,7 +93,7 @@ GET /archive/2026/13/: a month that is not one
     ...
 ```
 
-**An interval.** The month runs from its first day to the first day of the next month, which `_get_next_month` supplies. The end is excluded: the lookups are a greater-than-or-equal on the start and a strict less-than on the end. Every period of the date views is defined so, as start date <= item date < next start date (`django/views/generic/dates.py:MonthMixin._get_next_month`).
+**An interval.** The month runs from its first day to the first day of the next month, which `_get_next_month` supplies. The end is excluded: the lookups are a greater-than-or-equal on the start and a strict less-than on the end. Every period of the date views is defined so, as start date <= item date < next start date (`django/views/generic/dates.py:BaseMonthArchiveView.get_dated_items`, `django/views/generic/dates.py:MonthMixin._get_next_month`).
 
 The field here is a `models.DateTimeField`, so `DateMixin._make_date_lookup_arg` turns each boundary from a date into a datetime at midnight, and, with time zone support on, into midnight in the current time zone. `DateMixin.uses_datetime_field` is worked out at the first boundary and kept for the rest of the request (`django/views/generic/dates.py:DateMixin.uses_datetime_field`), and each boundary comes back as midnight with its offset:
 
@@ -109,9 +109,9 @@ DateMixin._make_date_lookup_arg(2026-04-01)  ->  2026-04-01 00:00+00:00
 ...
 ```
 
-> **Why.** The boundaries are midnight in the current time zone so that, in the words of the method's docstring, "displayed items are consistent with the URL": an article published late on 31 March in the current time zone belongs to March whatever its timestamp is in UTC ([Time zones](../i18n/time-zones.md)) (`django/views/generic/dates.py:DateMixin._make_date_lookup_arg`).
+> **Why.** The boundaries are midnight in the current time zone so that what a page lists agrees with the period its URL names: an article published late on 31 March in the current time zone belongs to March whatever its timestamp is in UTC ([Time zones](../i18n/time-zones.md)) (`django/views/generic/dates.py:DateMixin._make_date_lookup_arg`).
 
-**A query.** `BaseDateListView.get_dated_queryset` applies the interval to the view's queryset, adds one condition the URL does not give, an upper bound at the present moment, and then tests whether anything is left (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`). The queryset it starts from is already ordered newest first, by `BaseDateListView.get_ordering`, and `get_paginate_by` is asked only to choose how the result will be tested. The query has three parameters, the month's two boundaries and the present moment, 10 April 2026 at 09:00 by the recording's clock:
+**A query.** `BaseDateListView.get_dated_queryset` applies the interval to the view's queryset and, with the defaults, adds one condition the URL does not give, an upper bound at the present moment, and then tests whether anything is left (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`). The queryset it starts from is already ordered newest first, by `BaseDateListView.get_ordering`, and `get_paginate_by` is asked only to choose how the result will be tested. The query has three parameters, the month's two boundaries and the present moment, 10 April 2026 at 09:00 by the recording's clock:
 
 ```text recording=views
 ...
@@ -145,7 +145,7 @@ GET /archive/2025/12/: a month with no articles
     ...
 ```
 
-**The dates inside.** `BaseDateListView.get_date_list` makes the list of smaller periods that have something in them: here, the days of the month on which an article appeared. It calls the queryset's `datetimes` or `dates` with a unit from `date_list_period`, which is `"year"` in `BaseDateListView`, `"month"` in the year's view and `"day"` in the month's. The views for a week, a day and today make no such list. The list is a second query, a `SELECT DISTINCT` over the same interval, with each date cut to its day:
+**The dates inside.** `BaseDateListView.get_date_list` makes the list of smaller periods that have something in them: here, the days of the month on which an article appeared. It calls the queryset's `datetimes` or `dates` with a unit from `date_list_period`, which is `"year"` in `BaseDateListView`, `"month"` in the year's view and `"day"` in the month's. The views for a week, a day and today make no such list. The list is a second query, a `SELECT DISTINCT` over the same interval, with each date cut to its day (`django/views/generic/dates.py:BaseDateListView.get_date_list`):
 
 ```text recording=views
 ...

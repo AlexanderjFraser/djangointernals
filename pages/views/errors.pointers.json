@@ -78,32 +78,32 @@
    "fingerprint": "2f64f0fb6a379ab2"
   },
   {
-   "pointer": "django/core/handlers/base.py:BaseHandler._get_response",
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_request",
    "line": 36,
-   "sentence": "An error view can be called for a request that `CsrfViewMiddleware.process_view` never saw: a path that matches no pattern raises before any `process_view` hook runs (`django/core/handlers/base.py:BaseHandler._get_response`).",
+   "sentence": "The decorator runs the middleware's `process_request` and `process_response` around the view itself, so that a template rendered with the request gets a token made from the secret kept for the browser, and `process_response` keeps that secret for the browser once the token has been used (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
    "tree": "django",
-   "path": "django/core/handlers/base.py",
-   "symbol": "BaseHandler._get_response",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_request",
    "kind": "function",
    "lines": [
-    176,
-    228
+    403,
+    414
    ],
-   "fingerprint": "8a7faacfec18a9da"
+   "fingerprint": "9a23147aa7799b8a"
   },
   {
-   "pointer": "django/views/defaults.py",
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_response",
    "line": 36,
-   "sentence": "The comment above the four views gives that as the reason for the decorator, in case a template needs `{% csrf_token %}` (`django/views/defaults.py`).",
+   "sentence": "The decorator runs the middleware's `process_request` and `process_response` around the view itself, so that a template rendered with the request gets a token made from the secret kept for the browser, and `process_response` keeps that secret for the browser once the token has been used (`django/middleware/csrf.py:CsrfViewMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware.process_response`).",
    "tree": "django",
-   "path": "django/views/defaults.py",
-   "symbol": null,
-   "kind": "file",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_response",
+   "kind": "function",
    "lines": [
-    1,
-    150
+    474,
+    486
    ],
-   "fingerprint": "0574f7e9abb0f171"
+   "fingerprint": "d5d6e46ffe74bc00"
   },
   {
    "pointer": "django/views/defaults.py:server_error",
@@ -224,7 +224,7 @@
   {
    "pointer": "django/views/defaults.py:page_not_found",
    "line": 81,
-   "sentence": "`bad_request` passes nothing of the exception, as the comment above its last line says, \"to not disclose any sensitive information\" (`django/views/defaults.py:page_not_found`, `django/views/defaults.py:bad_request`).",
+   "sentence": "`bad_request` passes nothing of the exception, whose text can hold what the server keeps to itself: a `SuspiciousFileOperation` from `safe_join` names the directory on the server that a path should have stayed inside (`django/views/defaults.py:page_not_found`, `django/views/defaults.py:bad_request`, `django/utils/_os.py:safe_join`).",
    "tree": "django",
    "path": "django/views/defaults.py",
    "symbol": "page_not_found",
@@ -239,7 +239,7 @@
   {
    "pointer": "django/views/defaults.py:bad_request",
    "line": 81,
-   "sentence": "`bad_request` passes nothing of the exception, as the comment above its last line says, \"to not disclose any sensitive information\" (`django/views/defaults.py:page_not_found`, `django/views/defaults.py:bad_request`).",
+   "sentence": "`bad_request` passes nothing of the exception, whose text can hold what the server keeps to itself: a `SuspiciousFileOperation` from `safe_join` names the directory on the server that a path should have stayed inside (`django/views/defaults.py:page_not_found`, `django/views/defaults.py:bad_request`, `django/utils/_os.py:safe_join`).",
    "tree": "django",
    "path": "django/views/defaults.py",
    "symbol": "bad_request",
@@ -250,6 +250,20 @@
    ],
    "at": 103,
    "fingerprint": "0af2c72abaf320c2"
+  },
+  {
+   "pointer": "django/utils/_os.py:safe_join",
+   "line": 81,
+   "sentence": "`bad_request` passes nothing of the exception, whose text can hold what the server keeps to itself: a `SuspiciousFileOperation` from `safe_join` names the directory on the server that a path should have stayed inside (`django/views/defaults.py:page_not_found`, `django/views/defaults.py:bad_request`, `django/utils/_os.py:safe_join`).",
+   "tree": "django",
+   "path": "django/utils/_os.py",
+   "symbol": "safe_join",
+   "kind": "function",
+   "lines": [
+    65,
+    92
+   ],
+   "fingerprint": "825ec30e9dd3bee8"
   },
   {
    "pointer": "django/views/defaults.py:server_error",

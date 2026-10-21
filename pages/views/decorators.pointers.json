@@ -202,7 +202,7 @@
   {
    "pointer": "django/views/decorators/",
    "line": 79,
-   "sentence": "*The view decorators of `django/views/decorators/` that are not made from a middleware, by when each changes the request or the response.",
+   "sentence": "*The view decorators of `django/views/decorators/` that are not made from a middleware, by when each acts on the request or the response.",
    "tree": "django",
    "path": "django/views/decorators/",
    "symbol": null,
@@ -282,7 +282,7 @@
   {
    "pointer": "django/db/transaction.py",
    "line": 121,
-   "sentence": "`non_atomic_requests`, in `django/db/transaction.py`, marks its wrapper in the same way, with `\"_non_atomic_requests\"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`).",
+   "sentence": "`non_atomic_requests`, in `django/db/transaction.py`, marks a wrapper too, with `\"_non_atomic_requests\"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`).",
    "tree": "django",
    "path": "django/db/transaction.py",
    "symbol": null,
@@ -296,7 +296,7 @@
   {
    "pointer": "django/db/transaction.py:_non_atomic_requests",
    "line": 121,
-   "sentence": "`non_atomic_requests`, in `django/db/transaction.py`, marks its wrapper in the same way, with `\"_non_atomic_requests\"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`).",
+   "sentence": "`non_atomic_requests`, in `django/db/transaction.py`, marks a wrapper too, with `\"_non_atomic_requests\"`, a set of database aliases, which a second use of the decorator copies with its own added (`django/db/transaction.py:_non_atomic_requests`).",
    "tree": "django",
    "path": "django/db/transaction.py",
    "symbol": "_non_atomic_requests",
@@ -310,7 +310,7 @@
   {
    "pointer": "django/views/decorators/csrf.py:csrf_exempt",
    "line": 131,
-   "sentence": "Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, \"decorators are nicer if they don't have side effects\" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
+   "sentence": "Marking a new function leaves the one it was given as it was, so a function routed at one address inside `csrf_exempt` and at another without it is checked at the second; setting the attribute on the function itself would exempt it at both (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`, `django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
    "tree": "django",
    "path": "django/views/decorators/csrf.py",
    "symbol": "csrf_exempt",
@@ -324,7 +324,7 @@
   {
    "pointer": "django/views/decorators/common.py:no_append_slash",
    "line": 131,
-   "sentence": "Setting the attribute on the view itself would work as well, and the comment at the head of `csrf_exempt` and of `no_append_slash` says so; each returns a new function because, in that comment's words, \"decorators are nicer if they don't have side effects\" (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`).",
+   "sentence": "Marking a new function leaves the one it was given as it was, so a function routed at one address inside `csrf_exempt` and at another without it is checked at the second; setting the attribute on the function itself would exempt it at both (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`, `django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
    "tree": "django",
    "path": "django/views/decorators/common.py",
    "symbol": "no_append_slash",
@@ -334,6 +334,20 @@
     26
    ],
    "fingerprint": "2bdc24ff96e43016"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware.process_view",
+   "line": 131,
+   "sentence": "Marking a new function leaves the one it was given as it was, so a function routed at one address inside `csrf_exempt` and at another without it is checked at the second; setting the attribute on the function itself would exempt it at both (`django/views/decorators/csrf.py:csrf_exempt`, `django/views/decorators/common.py:no_append_slash`, `django/middleware/csrf.py:CsrfViewMiddleware.process_view`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware.process_view",
+   "kind": "function",
+   "lines": [
+    416,
+    472
+   ],
+   "fingerprint": "105c7f59f625c860"
   },
   {
    "pointer": "django/views/decorators/clickjacking.py:xframe_options_exempt",

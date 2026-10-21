@@ -10,7 +10,7 @@
   {
    "pointer": "django/views/generic/dates.py:MonthArchiveView",
    "line": 9,
-   "sentence": "Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`).",
+   "sentence": "Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`, `django/views/generic/dates.py:BaseDateDetailView`).",
    "tree": "django",
    "path": "django/views/generic/dates.py",
    "symbol": "MonthArchiveView",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/views/generic/dates.py:DateDetailView",
    "line": 9,
-   "sentence": "Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`).",
+   "sentence": "Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`, `django/views/generic/dates.py:BaseDateDetailView`).",
    "tree": "django",
    "path": "django/views/generic/dates.py",
    "symbol": "DateDetailView",
@@ -36,9 +36,23 @@
    "fingerprint": "3495dd86460c9992"
   },
   {
+   "pointer": "django/views/generic/dates.py:BaseDateDetailView",
+   "line": 9,
+   "sentence": "Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`, `django/views/generic/dates.py:BaseDateDetailView`).",
+   "tree": "django",
+   "path": "django/views/generic/dates.py",
+   "symbol": "BaseDateDetailView",
+   "kind": "class",
+   "lines": [
+    652,
+    695
+   ],
+   "fingerprint": "9055960602d96253"
+  },
+  {
    "pointer": "django/views/generic/dates.py:BaseArchiveIndexView",
    "line": 51,
-   "sentence": "Its list is everything up to the present, under the context name `\"latest\"`, and its `date_list` is the years, in descending order (`django/views/generic/dates.py:BaseArchiveIndexView`).",
+   "sentence": "Its list is everything up to the present unless `allow_future` is true, under the context name `\"latest\"`, and its `date_list` is the years, in descending order (`django/views/generic/dates.py:BaseArchiveIndexView`, `django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).",
    "tree": "django",
    "path": "django/views/generic/dates.py",
    "symbol": "BaseArchiveIndexView",
@@ -50,9 +64,23 @@
    "fingerprint": "12aceca12c5f639b"
   },
   {
+   "pointer": "django/views/generic/dates.py:BaseDateListView.get_dated_queryset",
+   "line": 51,
+   "sentence": "Its list is everything up to the present unless `allow_future` is true, under the context name `\"latest\"`, and its `date_list` is the years, in descending order (`django/views/generic/dates.py:BaseArchiveIndexView`, `django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).",
+   "tree": "django",
+   "path": "django/views/generic/dates.py",
+   "symbol": "BaseDateListView.get_dated_queryset",
+   "kind": "function",
+   "lines": [
+    332,
+    359
+   ],
+   "fingerprint": "ddc74a6dc2635a2d"
+  },
+  {
    "pointer": "django/views/generic/dates.py:BaseYearArchiveView.get_dated_items",
    "line": 53,
-   "sentence": "Its `get_dated_items` replaces the queryset with an empty one made by `none()`, still a queryset because the parent classes inspect it to find out about the model (`django/views/generic/dates.py:BaseYearArchiveView.get_dated_items`).",
+   "sentence": "Its `get_dated_items` replaces the queryset with an empty one made by `none()`, still a queryset because the parent classes inspect it to find out about the model (`django/views/generic/dates.py:BaseYearArchiveView.get_dated_items`, `django/views/generic/list.py:MultipleObjectMixin.get_context_object_name`, `django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names`).",
    "tree": "django",
    "path": "django/views/generic/dates.py",
    "symbol": "BaseYearArchiveView.get_dated_items",
@@ -64,9 +92,37 @@
    "fingerprint": "48591c11c05abc26"
   },
   {
+   "pointer": "django/views/generic/list.py:MultipleObjectMixin.get_context_object_name",
+   "line": 53,
+   "sentence": "Its `get_dated_items` replaces the queryset with an empty one made by `none()`, still a queryset because the parent classes inspect it to find out about the model (`django/views/generic/dates.py:BaseYearArchiveView.get_dated_items`, `django/views/generic/list.py:MultipleObjectMixin.get_context_object_name`, `django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectMixin.get_context_object_name",
+   "kind": "function",
+   "lines": [
+    113,
+    120
+   ],
+   "fingerprint": "48c2246ac67e3e8a"
+  },
+  {
+   "pointer": "django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names",
+   "line": 53,
+   "sentence": "Its `get_dated_items` replaces the queryset with an empty one made by `none()`, still a queryset because the parent classes inspect it to find out about the model (`django/views/generic/dates.py:BaseYearArchiveView.get_dated_items`, `django/views/generic/list.py:MultipleObjectMixin.get_context_object_name`, `django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectTemplateResponseMixin.get_template_names",
+   "kind": "function",
+   "lines": [
+    187,
+    217
+   ],
+   "fingerprint": "a774e640ef8842e7"
+  },
+  {
    "pointer": "django/views/generic/dates.py:BaseDateListView.get_dated_queryset",
    "line": 69,
-   "sentence": "With pagination it asks with `exists` instead, a cheap query that its comment prefers to loading the unpaginated queryset into memory (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).",
+   "sentence": "With `allow_empty` false, as it is in the date views unless set, and no pagination, `get_dated_queryset` finds out whether the year is empty by testing the queryset itself, which loads every row it matches into memory, and `get_dated_items` then throws them away (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).",
    "tree": "django",
    "path": "django/views/generic/dates.py",
    "symbol": "BaseDateListView.get_dated_queryset",
@@ -76,6 +132,20 @@
     359
    ],
    "fingerprint": "ddc74a6dc2635a2d"
+  },
+  {
+   "pointer": "django/views/generic/list.py:MultipleObjectMixin.paginate_queryset",
+   "line": 69,
+   "sentence": "Pagination, under which the test asks `exists` instead, does not help such a view: `MultipleObjectMixin.paginate_queryset` pages the empty list with `allow_empty_first_page` set from `allow_empty`, so there is no first page, and even a year with articles is a 404, \"Invalid page (1)\" (`django/views/generic/list.py:MultipleObjectMixin.paginate_queryset`).",
+   "tree": "django",
+   "path": "django/views/generic/list.py",
+   "symbol": "MultipleObjectMixin.paginate_queryset",
+   "kind": "function",
+   "lines": [
+    53,
+    79
+   ],
+   "fingerprint": "45ab798c27d627a8"
   },
   {
    "pointer": "django/views/generic/dates.py:BaseWeekArchiveView.get_dated_items",

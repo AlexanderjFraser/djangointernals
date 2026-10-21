@@ -85,7 +85,7 @@ GET /admin/office/manifest/M_2F26_5F7/change/   200  "Change manifest"
 
 ## `"current_app"`, and two sites
 
-The admin's templates link with `{% url %}` and names in the namespace `"admin"`, leaving the instance to the current application. The admin's views set the request's `"current_app"` to the site's name before rendering, and `URLNode.render` passes it to `reverse` ([Namespaces](../urls/namespaces.md#where-the-current-application-comes-from)) (`django/template/defaulttags.py:URLNode.render`); where the admin reverses in Python, it passes the site's name itself, except in `LogEntry.get_admin_url`, which passes none (`django/contrib/admin/models.py:LogEntry.get_admin_url`).
+The admin's templates link with `{% url %}` and names in the namespace `"admin"`, leaving the instance to the current application. The admin's views set the request's `"current_app"` to the site's name before rendering most of their pages, and `URLNode.render` passes it to `reverse` ([Namespaces](../urls/namespaces.md#where-the-current-application-comes-from)) (`django/template/defaulttags.py:URLNode.render`); where the admin reverses in Python, it passes the site's name itself, except in `LogEntry.get_admin_url`, which passes none (`django/contrib/admin/models.py:LogEntry.get_admin_url`).
 
 So a project can mount a second site. `AdminSite(name="office")` has its own registry, and so its own model admins, patterns, login page and instance namespace. With Ship alone registered on it, at office/:
 

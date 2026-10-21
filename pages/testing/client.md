@@ -118,7 +118,7 @@ Destroying test database for alias 'default'...
 6. It sets `HttpResponseBase.wsgi_request`.
 7. It closes the response, which sends `request_finished`, `close_old_connections` again off. A streaming response is closed instead by a wrapper of its content, an async one's by an async wrapper, once that has been read through (`django/test/client.py:closing_iterator_wrapper`, `django/test/client.py:aclosing_iterator_wrapper`).
 
-Unlike `WSGIHandler.__call__` ([The two entry points](../handlers/entry.md)), it sets no script prefix: under a client given `SCRIPT_NAME="/app"`, the request's path begins "/app/", and `reverse` in the view still returns "/ships/".
+Unlike `WSGIHandler.__call__` ([The two entry points](../handlers/entry.md)), it sets no script prefix: under a `Client` given `SCRIPT_NAME="/app"`, the request's path begins "/app/", and `reverse` in the view still returns "/ships/".
 
 ## What the response carries
 

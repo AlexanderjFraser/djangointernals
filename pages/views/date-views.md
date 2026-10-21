@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 Django has seven date views: six for the periods an archive shows, from everything up to the present (`ArchiveIndexView`) down to a single day, and one, `DateDetailView`, for an object found by its date. They differ in what they read from the URL and put in the context, and in a few particulars, such as `YearArchiveView`'s `make_object_list` and the clock `TodayArchiveView` reads.
 
-How a date view reads its date, turns it into an interval and finds the periods on either side is told in [The date views: a date, an interval and its neighbours](dates.md), with a `MonthArchiveView`. Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`).
+How a date view reads its date, turns it into an interval and finds the periods on either side is told in [The date views: a date, an interval and its neighbours](dates.md), with a `MonthArchiveView`. Six of the seven are list views, each a base view joined to `MultipleObjectTemplateResponseMixin` with a template suffix of its own; `DateDetailView` is built from `BaseDetailView` and the detail view's response mixin (`django/views/generic/dates.py:MonthArchiveView`, `django/views/generic/dates.py:DateDetailView`, `django/views/generic/dates.py:BaseDateDetailView`).
 
 | view | reads from the URL | `date_list` | template suffix |
 |---|---|---|---|
@@ -24,7 +24,7 @@ How a date view reads its date, turns it into an interval and finds the periods 
 
 Besides the list and `date_list`, the views for a year, a month, a week and a day put into the context the first day of their own period and of the neighbours they found. The index adds nothing, and `DateDetailView` has only its object.
 
-Each line below is the context one of Django's classes makes for the Gazette's articles, with no other attributes set but those in braces: an article is named by its slug, a month is written as the default `"%b"` reads it, and the keys of the view, of pagination and under the model's name are left out. The index's list is there twice, as `object_list` and as `"latest"`.
+Each line below is the context one of Django's classes makes for the Gazette's articles and their date field, *published*, with no other attributes set but those in braces: an article is named by its slug, a month is written as the default `"%b"` reads it, and the keys of the view, of pagination and under the model's name are left out. The index's list is there twice, as `object_list` and as `"latest"`.
 
 Look for the neighbours. Under the defaults each is found by a query: 14 March's are the 3rd and the 28th, and for the week of 8 March the next week is that of the 22nd, since the week of the 15th has no article. With `allow_empty` true they are found by the calendar: 15 March, a day with no article and so, under the defaults, a 404, has the 14th and the 16th. The last two lines ask for May, whose one article is dated after the recording's clock: it is listed only by a view with `allow_future` true.
 
@@ -48,9 +48,9 @@ The date views: what each puts in the context, for the model Article and its fie
 
 ## `ArchiveIndexView` and `YearArchiveView`
 
-`ArchiveIndexView` has no interval. Its list is everything up to the present, under the context name `"latest"`, and its `date_list` is the years, in descending order (`django/views/generic/dates.py:BaseArchiveIndexView`).
+`ArchiveIndexView` has no interval. Its list is everything up to the present unless `allow_future` is true, under the context name `"latest"`, and its `date_list` is the years, in descending order (`django/views/generic/dates.py:BaseArchiveIndexView`, `django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).
 
-`YearArchiveView` shows no objects unless `make_object_list` is true: a year's page is a list of months. Its `get_dated_items` replaces the queryset with an empty one made by `none()`, still a queryset because the parent classes inspect it to find out about the model (`django/views/generic/dates.py:BaseYearArchiveView.get_dated_items`). In the request for 2026, the year's query runs under `get_dated_queryset`, which applies the interval to the queryset, and `get_make_object_list` answers after it:
+`YearArchiveView` shows no objects unless `make_object_list` is true: a year's page is a list of months. Its `get_dated_items` replaces the queryset with an empty one made by `none()`, still a queryset because the parent classes inspect it to find out about the model (`django/views/generic/dates.py:BaseYearArchiveView.get_dated_items`, `django/views/generic/list.py:MultipleObjectMixin.get_context_object_name`, `django/views/generic/list.py:MultipleObjectTemplateResponseMixin.get_template_names`). In the request for 2026, the year's query runs under `get_dated_queryset`, which applies the interval to the queryset, and `get_make_object_list` answers after it:
 
 ```text recording=views
 GET /archive/2026/: a YearArchiveView, which lists months and, unless told to, no articles
@@ -66,7 +66,7 @@ GET /archive/2026/: a YearArchiveView, which lists months and, unless told to, n
               ...
 ```
 
-> **Trap.** By default, a `YearArchiveView` that shows no objects fetches them all the same. With `allow_empty` false, as it is in the date views unless set, and no pagination, `get_dated_queryset` finds out whether the year is empty by testing the queryset itself, which loads every row of the year into memory, and `get_dated_items` then throws them away. With pagination it asks with `exists` instead, a cheap query that its comment prefers to loading the unpaginated queryset into memory (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`).
+> **Trap.** By default, a `YearArchiveView` that shows no objects fetches them all the same. With `allow_empty` false, as it is in the date views unless set, and no pagination, `get_dated_queryset` finds out whether the year is empty by testing the queryset itself, which loads every row it matches into memory, and `get_dated_items` then throws them away (`django/views/generic/dates.py:BaseDateListView.get_dated_queryset`). Pagination, under which the test asks `exists` instead, does not help such a view: `MultipleObjectMixin.paginate_queryset` pages the empty list with `allow_empty_first_page` set from `allow_empty`, so there is no first page, and even a year with articles is a 404, "Invalid page (1)" (`django/views/generic/list.py:MultipleObjectMixin.paginate_queryset`).
 
 ## `WeekArchiveView` and `week_format`
 
