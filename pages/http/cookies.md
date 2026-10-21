@@ -4,9 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # Cookies
 
-Cookies come in on a request and go out on a response: `parse_cookie` reads the `"Cookie"` header into `COOKIES`, `set_cookie` and `delete_cookie` fill the response's `SimpleCookie`, each entry of which leaves as a Set-Cookie header of its own, and `set_signed_cookie` and `get_signed_cookie` add a signature a client cannot forge.
+Cookies come in on a request and go out on a response: `parse_cookie` reads the `"Cookie"` header into `COOKIES`, `set_cookie` and `delete_cookie` fill the response's `SimpleCookie`, each entry of which leaves as a Set-Cookie header of its own, and `set_signed_cookie` and `get_signed_cookie` sign a value and check the signature.
 
-A cookie travels in two forms. A server sets one with a name, a value and a handful of attributes that tell the browser how long to keep it and when to send it back, and each cookie needs a header to itself. A browser returns only names and values, with the attributes gone, in one `"Cookie"` header, or under HTTP/2 possibly in several, which an `ASGIRequest` joins into one (`django/core/handlers/asgi.py:ASGIRequest.__init__`). Django keeps the two forms in two unrelated structures: a request has a plain dictionary of strings, and a response has a collection of entries that each carry their attributes.
+A cookie travels in two forms. A server sets one with a name, a value and a handful of attributes, most telling the browser how long to keep it and when to send it back, and each cookie needs a header to itself. A browser returns only names and values, with the attributes gone, in one `"Cookie"` header, or under HTTP/2 possibly in several, which an `ASGIRequest` joins into one (`django/core/handlers/asgi.py:ASGIRequest.__init__`). Django keeps the two forms in two unrelated structures: a request has a plain dictionary of strings, and a response has a collection of entries that each carry their attributes.
 
 The figure follows two cookies out and back, and what to see in it is what does not return: the attributes.
 
@@ -72,11 +72,11 @@ A cookie's lifetime is given to `set_cookie` by two arguments: expires, a `datet
 
 *What `HttpResponseBase.set_cookie` writes for a cookie's lifetime, by its arguments expires and max_age; a max_age is written in whole seconds.*
 
-> **Why.** The date computed to go with a Max-Age is for clients that require `"expires"`, and the comment where it is computed names the one it has in mind: "IE requires expires, so set it if hasn't been already" (`django/http/response.py:HttpResponseBase.set_cookie`).
+> **Why.** The date computed from a Max-Age is for Internet Explorer, which requires `"expires"` (`django/http/response.py:HttpResponseBase.set_cookie`).
 
-The SameSite value is the only attribute Django itself checks: it must be `"lax"`, `"strict"` or `"none"`, in any case of letters. A name that cannot be a cookie's name is refused by `SimpleCookie`, with its own `http.cookies.CookieError`.
+SameSite is the only attribute whose value Django itself checks: it must be `"lax"`, `"strict"` or `"none"`, in any case of letters. A name that cannot be a cookie's name is refused by `SimpleCookie`, with its own `http.cookies.CookieError`.
 
-There is no operation in HTTP that deletes a cookie. `HttpResponseBase.delete_cookie` sets the cookie again with an empty value, an age of zero and an expiry date in 1970, and the browser discards it. Of the two deletions below, the second is of a cookie whose name begins with `"__Host-"`, and its line ends in Secure, which the call did not ask for.
+There is no operation in HTTP that deletes a cookie. `HttpResponseBase.delete_cookie` sets the cookie again with an empty value, an age of zero and an expiry date in 1970, and the browser discards it if the path and domain match. Of the two deletions below, the second is of a cookie whose name begins with `"__Host-"`, and its line ends in Secure, which the call did not ask for.
 
 ```text recording=http
 ...
@@ -118,10 +118,10 @@ Signing does not hide anything: it makes a change detectable. The part after the
 
 The signature covers more than the value. The signer is made with a **salt**, a string mixed into the key, and the salt for a cookie is a fixed prefix, the length of the salt the caller passed, that salt, and the cookie's name, in that order. That is why the same signed value is refused under another cookie's name, and refused when read without the salt it was written with: a value signed for one purpose cannot be replayed for another (`django/core/signing.py:_cookie_signer_salt`).
 
-A default passed to `get_signed_cookie` is returned in place of each of the three exceptions: the method catches the `KeyError` of a missing cookie and any `BadSignature`, of which `SignatureExpired` is a subclass (`django/http/request.py:HttpRequest.get_signed_cookie`). The timestamp is always written, and checked only when the reader passes a maximum age.
+A default passed to `get_signed_cookie` is returned in place of each of the three exceptions: the method catches the `KeyError` of a missing cookie and any `BadSignature`, of which `SignatureExpired` is a subclass (`django/http/request.py:HttpRequest.get_signed_cookie`). `TimestampSigner` writes the timestamp on every value, and checks it only when the reader passes a maximum age (`django/core/signing.py:TimestampSigner.sign`, `django/core/signing.py:TimestampSigner.unsign`).
 
 > **Changed in 6.0.6, 5.2.15 and 6.1.** The salt used to be the cookie's name followed by the caller's salt, with nothing between, so that two different pairs could produce the same string and a value signed for one cookie could verify for another. The security releases 6.0.6 and 5.2.15 introduced the present form, while still accepting cookies signed the old way. Since 6.1 those are refused unless `settings.SIGNED_COOKIE_LEGACY_SALT_FALLBACK` is true, in which case a value that fails the new check, for a reason other than age, is tried against the old one. The setting is transitional: it is false by default, and setting it at all warns with `RemovedInDjango2028Warning` (`django/core/signing.py:_unsign_cookie`, `django/conf/__init__.py:Settings.__init__`).
 
 ## The cookies Django sets
 
-The cookies a Django site sets are mostly set by middleware on the way out: the session's by `SessionMiddleware`, the CSRF token's by `CsrfViewMiddleware`, and the messages framework's by its storage. The first two call `set_cookie` with attributes taken from settings of their own, and the messages cookie borrows the session cookie's domain and its Secure, HttpOnly and SameSite settings ([`SessionMiddleware`: the cookie and the save](../auth/session-middleware.md), [Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md), [The CSRF secret and its token](../security/csrf-token.md)) (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie`).
+The cookies a Django site sets are mostly set by middleware on the way out: the session's by `SessionMiddleware`, the CSRF secret's by `CsrfViewMiddleware`, and the messages framework's by its storage. The first two call `set_cookie` with most attributes taken from settings of their own, and the messages cookie borrows the session cookie's domain and its Secure, HttpOnly and SameSite settings ([`SessionMiddleware`: the cookie and the save](../auth/session-middleware.md), [Message storage: `CookieStorage`, `SessionStorage` and `FallbackStorage`](../auth/message-storage.md), [The CSRF secret and its token](../security/csrf-token.md)) (`django/contrib/sessions/middleware.py:SessionMiddleware.process_response`, `django/middleware/csrf.py:CsrfViewMiddleware._set_csrf_cookie`, `django/contrib/messages/storage/cookie.py:CookieStorage._update_cookie`).

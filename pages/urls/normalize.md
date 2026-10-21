@@ -4,9 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # `normalize`, and the patterns that cannot be reversed
 
-`normalize`, a function of `django.utils.regex_helper`, reads a pattern's regular expression into the strings with gaps that `reverse` fills in, and what it cannot read can make a pattern that serves its paths fail to reverse, with `NoReverseMatch` or with a `ValueError`.
+`normalize`, a function of `django.utils.regex_helper`, reads a pattern's regular expression into the strings with gaps that `reverse` fills in, and what it cannot read can make a pattern that serves its paths fail to reverse.
 
-Why should a pattern that serves every path meant for it refuse to reverse, or keep every other name of its URLconf from reversing? Because `reverse` never runs a regular expression backwards. When the tables for reversing are built, `normalize` reads each pattern's expression from left to right, and keeps what a text the expression matches would have to contain. What it returns are the pattern's **forms**, a list of pairs, each a string that Python's `%` operator fills in from a dictionary and the names of the parameters it has gaps for ([Reversing a name](reversing.md#the-tables)) (`django/utils/regex_helper.py:normalize`).
+Why should a pattern that serves every path meant for it refuse to reverse, or keep every other name of its URLconf from reversing? Because `reverse` never runs a regular expression backwards. When the tables for reversing are built, `normalize` reads each pattern's expression from left to right, and keeps what a text the expression matches would have to contain, one character standing for each class. What it returns are the pattern's **forms**, a list of pairs, each a string that Python's `%` operator fills in from a dictionary and the names of the parameters it has gaps for ([Reversing a name](reversing.md#the-tables)) (`django/utils/regex_helper.py:normalize`).
 
 The museum's plan pattern has an optional part with a group inside it, and the figure follows `normalize` through it: at the optional part the reading forks, and each branch ends as one form.
 
@@ -30,24 +30,24 @@ the forms, one for each way
 
 ## `normalize`: from an expression to its forms
 
-`normalize` meets the constructs of an expression one at a time, and each gives it a piece of text, a gap, a fork, nothing, or the end of the reading (`django/utils/regex_helper.py:normalize`):
+`normalize` meets the constructs of an expression one at a time, and each gives it a piece of text, a gap, a fork, nothing, the end of the reading, or an error (`django/utils/regex_helper.py:normalize`):
 
 | what the expression holds | what `normalize` makes of it |
 |---|---|
 | literal text, and a character escaped to mean itself, as the plan pattern's `\.` | the text as it stands, an escaped character without its backslash, but read as unescaped just after a greedy quantifier |
 | an anchor: `^`, `\A`, `\Z`, `\b`, `\B` | nothing |
 | an unescaped `$` | the end of the reading: nothing after it is read |
-| a named group, `(?P<name>…)` | a gap, `%(name)s`, and a parameter of that name; what is inside the group is skipped by counting brackets, so neither the expression a converter supplies nor an alternation there is read |
+| a named group, `(?P<name>…)` | a gap, `%(name)s`, and a parameter of that name; what is inside the group is skipped by counting parentheses, so neither the expression a converter supplies nor an alternation there is read |
 | an unnamed group, `(…)` | a gap, `%(_0)s`, then `%(_1)s` and so on, with a parameter of that name; its inside skipped in the same way |
 | a reference back to a named group, `(?P=name)` | a second gap for the same parameter, which is listed once |
 | a group that does not capture, `(?:…)` | what is inside it, read in place, and taken whole by a quantifier |
 | a quantifier, and something optional that holds a capturing group | the fewest repetitions the quantifier allows: none for `*` and `?`, one for `+`, the lower bound for braces, and `ValueError` for braces without one, `{,3}`; where that is none and what it repeats is or holds a capturing group not made optional within it, the reading forks two ways, one without it and one with it once |
-| a class, `\d`, `\w`, a dot | one character in its place: the first after the class's opening bracket, so `"[^/]"` gives `^`; `"0"` for `\d`, `"x"` for `\w`; a dot for a dot |
+| a class, `\d`, `\w`, a dot | one character in its place: the first after the class's opening bracket, so `"[^/]"` gives `"^"`; `"0"` for `\d`, `"x"` for `\w`; a dot for a dot |
 | a lookahead or a lookbehind | nothing, with what is inside it |
 | an alternation, a `\|` not inside a capturing group or a lookaround | the end of the reading, and one empty form for the whole expression |
 | any other construct that begins `(?`, a flag such as `(?i)` among them | `ValueError` |
 
-*The constructs of a regular expression, and what `normalize` makes of each.*
+*Constructs of a regular expression, and what `normalize` makes of each.*
 
 For a route written with `path` the reading is simple. The expression `_route_to_regex` made of it is a `^`, escaped literal text, named groups and, for a pattern, a closing `\Z`, so there is one form, the route with each parameter replaced by a gap ([Routes, regular expressions and converters](patterns.md#a-route-is-expanded-into-a-regular-expression)). The rest of the table is for expressions written for `re_path`. The expressions below have a line for every row but the lookaround's, and several of them give what their writer did not mean:
 
@@ -76,9 +76,9 @@ Read against the table, `"files/..aaa"` is three rows at once: the dot of `.+` k
 
 A pattern can serve its paths and still defeat `normalize`, and how much is lost depends on where the failure happens.
 
-> **Why.** `normalize` was never meant to read every regular expression. "This is not, and is not intended to be, a complete reg-exp decompiler. It should be good enough for a large class of URLS, however," says the docstring of its module (`django/utils/regex_helper.py`).
+> **Why.** `normalize` is not meant to read every regular expression, only enough of them for a large class of URLs (`django/utils/regex_helper.py`).
 
-Small URLconfs each hold a plain pattern, about, beside one that serves its path and defeats `normalize`, the last of them only through an include, under a namespace, of a URLconf whose one pattern sets a flag; look at what becomes of about beside each:
+Small URLconfs each hold a plain pattern, *about*, beside one that serves its path and cannot be reversed, the last of them only through an include, under a namespace, of a URLconf whose one pattern sets a flag; look at what becomes of *about* beside each:
 
 ```text recording=urls
 Patterns that resolve and cannot be reversed, and how far the failure reaches
@@ -102,13 +102,13 @@ Where each of the three fails decides what is lost.
 
 | what the pattern holds | where reversing fails | what is lost |
 |---|---|---|
-| an alternation `normalize` reads, as in ALTERNATIVES | `normalize` gives one empty form, which fills in to the script prefix alone, and the lift's expression refuses that | that name, with `NoReverseMatch` |
+| an alternation `normalize` reads, as in ALTERNATIVES | `normalize` gives one empty form, which fills in to the script prefix alone, and *lift*'s expression refuses that | that name, with `NoReverseMatch` |
 | a literal `%`, as in PERCENT, whose pattern was written with `path` | the form keeps the `%`, and Python's `%` operator tries to read it as a gap when the form is filled in | that name, here with `ValueError` |
-| a construct `normalize` raises for: a group that sets a flag, as in FLAGGED, or a quantifier written `{,3}` | inside `URLResolver._populate`, so the tables are never finished | every name of the URLconf |
+| a construct `normalize` raises for, such as a group that sets a flag, as in FLAGGED, or a quantifier written `{,3}` | inside `URLResolver._populate`, so the tables are never finished | every name of the URLconf |
 
 *Three ways a pattern that resolves can fail to reverse, by the URLconfs of the recording above.*
 
-> **Trap.** A failure in `_populate` does not stay in its URLconf. `_populate` of a resolver runs `_populate` of every resolver among its entries, whatever their namespaces, so the `ValueError` passes up through every include above the pattern, and every URLconf that includes the pattern's URLconf loses its names too, as INCLUDING loses about. The unfinished tables are dropped, so each later `reverse` with the URLconf tries again and fails again (`django/urls/resolvers.py:URLResolver._populate`). An expression that does not compile breaks every name in the same way, with `ImproperlyConfigured` ([Routes, regular expressions and converters](patterns.md#when-a-matchers-expression-is-compiled)).
+> **Trap.** A failure in `_populate` does not stay in its URLconf. `_populate` of a resolver runs `_populate` of every resolver among its entries, whatever their namespaces, so the `ValueError` passes up through every include above the pattern, and every URLconf that includes the pattern's URLconf loses its names too, as INCLUDING loses *about*. The unfinished tables are dropped, so each later `reverse` with the URLconf tries again and fails again (`django/urls/resolvers.py:URLResolver._populate`). An expression that does not compile breaks every name in the same way ([Routes, regular expressions and converters](patterns.md#when-a-matchers-expression-is-compiled)).
 
 Mixing named and unnamed groups in one expression is a trap of another kind. Resolving passes the view only the named one ([Routes, regular expressions and converters](patterns.md#which-groups-become-arguments)). `normalize` makes a gap of each, the unnamed one under the name `"_0"`, so the name can be reversed with a positional argument for each group and not with the keyword argument the view receives:
 

@@ -23,7 +23,7 @@ A handler is a subclass of `FileUploadHandler`. The parser calls the methods bel
 
 *The methods `MultiPartParser` calls on an upload handler.*
 
-A handler can also refuse, by raising from `new_file` or `receive_data_chunk`. `SkipFile` drops that file: the parser reads the rest of the part, throws it away, and goes on with the parts after it. `StopUpload` abandons the upload: the parser keeps what it has parsed and stops, and then reads the rest of the body and throws it away, unless the exception was made with `connection_reset=True`, in which case it leaves the rest unread, which a browser shows as a reset connection. Neither reaches the view as an exception (`django/http/multipartparser.py:MultiPartParser._parse`, `django/core/files/uploadhandler.py:StopUpload.__init__`).
+A handler can also refuse, by raising from `new_file` or `receive_data_chunk`. `SkipFile` drops that file: the parser reads the rest of the part, throws it away, and goes on with the parts after it. `StopUpload` abandons the upload: the parser keeps what it has parsed and stops, and then reads the rest of the body and throws it away, unless the exception was made with `connection_reset=True`, in which case it leaves the rest unread. Neither reaches the view as an exception (`django/http/multipartparser.py:MultiPartParser._parse`, `django/core/files/uploadhandler.py:StopUpload.__init__`).
 
 The chapter's recording raised each exception from an upload handler of its own, put first, for the second of two files in a form of 200,462 bytes: a field, a note of 29 bytes, a scan of 200,000 bytes, and a second field. Compare the rows on the field that follows the scan, on the note, and on how much of the body is read.
 
@@ -41,9 +41,9 @@ The chapter's recording raised each exception from an upload handler of its own,
 
 ## Memory or disk
 
-The two handlers Django installs divide files between memory and disk, and they divide them by the request. `MemoryFileUploadHandler` decides once, in `handle_raw_input`, whether it will take part: it sets its `activated` flag to whether the body is no larger than `settings.FILE_UPLOAD_MAX_MEMORY_SIZE`, 2,621,440 bytes by default (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`). The setting has the same default as `settings.DATA_UPLOAD_MAX_MEMORY_SIZE` and a different job: that one refuses a body read whole, or a form's fields, and this one chooses where a file is kept.
+The two handlers Django installs divide files between memory and disk, and they divide them by the request. `MemoryFileUploadHandler` decides once, in `handle_raw_input`, whether it will keep the files: it sets its `activated` flag to whether the body is no larger than `settings.FILE_UPLOAD_MAX_MEMORY_SIZE`, 2,621,440 bytes by default (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`). The setting has the same default as `settings.DATA_UPLOAD_MAX_MEMORY_SIZE` and a different job: that one refuses a body read whole, or a form's fields, and this one chooses between memory and disk.
 
-> **Why.** For the body's size the handler prefers a measurement to the header. If the stream can seek, as an `ASGIRequest`'s can and a body already read into memory can, it seeks to the end and uses the true size; a `WSGIRequest`'s cannot, and there it uses the Content-Length. The comments in `MemoryFileUploadHandler.handle_raw_input` say why: the header "can be absent or understated", for example under ASGI with a chunked transfer encoding, while on WSGI "the stream enforces this value so it is trustworthy". The measurement came with 6.0.5 and 5.2.14, for CVE-2026-5766 (`docs/releases/6.0.5.txt`).
+> **Why.** For the body's size the handler prefers a measurement to the header. If the stream can seek, as an `ASGIRequest`'s can under `ASGIHandler` and a body already read into memory can, it seeks to the end and uses the true size; a `WSGIRequest`'s cannot, and there it uses the Content-Length, past which its stream reads nothing. An `ASGIRequest`'s stream holds the whole body whatever the header says, and until 6.0.5 and 5.2.14 one whose header understated a large body as small had its files kept in memory (CVE-2026-5766) (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`, `django/core/handlers/wsgi.py:LimitedStream.read`, `django/core/handlers/asgi.py:ASGIHandler.read_body`, `docs/releases/6.0.5.txt`).
 
 Activated, the handler takes each file whole and tells the handler behind it nothing of it: its `new_file` raises `StopFutureHandlers`, its `receive_data_chunk` keeps each chunk in memory and returns `None`, and its `file_complete` returns an `InMemoryUploadedFile`. Not activated, it hands each chunk on unchanged and returns no file, and `TemporaryFileUploadHandler` writes the chunks to a temporary file and returns a `TemporaryUploadedFile` (`django/core/files/uploadhandler.py:MemoryFileUploadHandler`). In the figure, read each row across, as a chunk goes.
 
@@ -89,13 +89,13 @@ The same form with a second file of 3,000,000 bytes: the body, 3000395 bytes, is
                   ...
 ```
 
-> **Trap.** `MemoryFileUploadHandler` measures the body, not the file. The note of 29 bytes went to disk with the scan because it arrived in a large request: a file is kept in memory only when the whole body is small enough (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).
+> **Trap.** `MemoryFileUploadHandler` goes by the body, not the file. The note of 29 bytes went to disk with the scan because it arrived in a large request: a file is kept in memory only when the whole body is small enough (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).
 
 ## The temporary file
 
 `TemporaryFileUploadHandler` is the fallback and has no conditions. Its `new_file` makes a `TemporaryUploadedFile`, which opens a named temporary file in `settings.FILE_UPLOAD_TEMP_DIR`, or the system's temporary directory when that is `None`. Each chunk is written to it, and `file_complete` rewinds it and returns it (`django/core/files/uploadhandler.py:TemporaryFileUploadHandler`, `django/core/files/uploadedfile.py:TemporaryUploadedFile`).
 
-The temporary file lasts as long as the request: it is deleted when it is closed, and it is closed with the response ([Streaming and file responses](streaming.md#closing)). At the end of the request that posted the note and the scan, their two temporary files are on disk until the server calls `close`, and gone after it:
+The temporary file ordinarily lasts as long as the request: it is deleted when it is closed, and it is closed with the response ([Streaming and file responses](streaming.md#closing)). At the end of the request that posted the note and the scan, their two temporary files are on disk until the server calls `close`, and gone after it:
 
 ```text recording=http
 ...

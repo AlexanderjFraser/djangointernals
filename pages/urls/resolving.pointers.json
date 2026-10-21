@@ -10,7 +10,7 @@
   {
    "pointer": "django/urls/base.py:resolve",
    "line": 9,
-   "sentence": "`is_valid_path` returns what `resolve` returns, the match, with `False` in place of the exception (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
+   "sentence": "`is_valid_path` returns what `resolve` returns, the match, with `False` in place of a `Resolver404` (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "resolve",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/urls/base.py:is_valid_path",
    "line": 9,
-   "sentence": "`is_valid_path` returns what `resolve` returns, the match, with `False` in place of the exception (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
+   "sentence": "`is_valid_path` returns what `resolve` returns, the match, with `False` in place of a `Resolver404` (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "is_valid_path",
@@ -38,7 +38,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:get_path_info",
    "line": 11,
-   "sentence": "It is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with its percent escapes as the server left them, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "sentence": "For the handler it is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with the percent escapes the server left in it, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "get_path_info",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.__init__",
    "line": 11,
-   "sentence": "It is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with its percent escapes as the server left them, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
+   "sentence": "For the handler it is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with the percent escapes the server left in it, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest.__init__",
@@ -149,20 +149,6 @@
    "fingerprint": "0e0ffd0f7d120d77"
   },
   {
-   "pointer": "docs/topics/http/urls.txt",
-   "line": 111,
-   "sentence": "An extra argument given to `include` is not passed to each line of the included URLconf as if it had been written there, though the documentation calls the two forms \"functionally identical\" (`docs/topics/http/urls.txt`).",
-   "tree": "django",
-   "path": "docs/topics/http/urls.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    911
-   ],
-   "fingerprint": "c8a70d51a406e67d"
-  },
-  {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve",
    "line": 111,
    "sentence": "In the first case `ResolverMatch.extra_kwargs` still reports `{'room': 1}`, a value the view was not given (`django/urls/resolvers.py:URLResolver.resolve`).",
@@ -179,7 +165,7 @@
   {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve",
    "line": 115,
-   "sentence": "The comment beside the test in `URLResolver.resolve` speaks of named groups only, but the dictionary it tests holds the extra arguments too (`django/urls/resolvers.py:URLResolver.resolve`).",
+   "sentence": "A resolver drops the positional arguments its own expression captured wherever there is a keyword argument at its level or below, and an extra argument counts as one: only the positional arguments from below are passed up (`django/urls/resolvers.py:URLResolver.resolve`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver.resolve",
@@ -219,9 +205,23 @@
    "fingerprint": "df4893b47d5285a9"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 172,
+   "sentence": "An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:URLResolver._extend_tried`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
+  },
+  {
    "pointer": "django/urls/resolvers.py:URLResolver._extend_tried",
    "line": 172,
-   "sentence": "An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver._extend_tried`).",
+   "sentence": "An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:URLResolver._extend_tried`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver._extend_tried",
@@ -236,7 +236,7 @@
   {
    "pointer": "django/views/debug.py:technical_404_response",
    "line": 189,
-   "sentence": "Outside the resolvers `\"tried\"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page-technical_404_response)) (`django/views/debug.py:technical_404_response`).",
+   "sentence": "Outside the resolvers `\"tried\"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` ordinarily shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page-technical_404_response)) (`django/views/debug.py:technical_404_response`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "technical_404_response",

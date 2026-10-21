@@ -66,7 +66,7 @@
   {
    "pointer": "django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input",
    "line": 44,
-   "sentence": "`MemoryFileUploadHandler` decides once, in `handle_raw_input`, whether it will take part: it sets its `activated` flag to whether the body is no larger than `settings.FILE_UPLOAD_MAX_MEMORY_SIZE`, 2,621,440 bytes by default (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).",
+   "sentence": "`MemoryFileUploadHandler` decides once, in `handle_raw_input`, whether it will keep the files: it sets its `activated` flag to whether the body is no larger than `settings.FILE_UPLOAD_MAX_MEMORY_SIZE`, 2,621,440 bytes by default (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`).",
    "tree": "django",
    "path": "django/core/files/uploadhandler.py",
    "symbol": "MemoryFileUploadHandler.handle_raw_input",
@@ -78,9 +78,51 @@
    "fingerprint": "7cc8fefef717d342"
   },
   {
+   "pointer": "django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input",
+   "line": 46,
+   "sentence": "An `ASGIRequest`'s stream holds the whole body whatever the header says, and until 6.0.5 and 5.2.14 one whose header understated a large body as small had its files kept in memory (CVE-2026-5766) (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`, `django/core/handlers/wsgi.py:LimitedStream.read`, `django/core/handlers/asgi.py:ASGIHandler.read_body`, `docs/releases/6.0.5.txt`).",
+   "tree": "django",
+   "path": "django/core/files/uploadhandler.py",
+   "symbol": "MemoryFileUploadHandler.handle_raw_input",
+   "kind": "function",
+   "lines": [
+    199,
+    223
+   ],
+   "fingerprint": "7cc8fefef717d342"
+  },
+  {
+   "pointer": "django/core/handlers/wsgi.py:LimitedStream.read",
+   "line": 46,
+   "sentence": "An `ASGIRequest`'s stream holds the whole body whatever the header says, and until 6.0.5 and 5.2.14 one whose header understated a large body as small had its files kept in memory (CVE-2026-5766) (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`, `django/core/handlers/wsgi.py:LimitedStream.read`, `django/core/handlers/asgi.py:ASGIHandler.read_body`, `docs/releases/6.0.5.txt`).",
+   "tree": "django",
+   "path": "django/core/handlers/wsgi.py",
+   "symbol": "LimitedStream.read",
+   "kind": "function",
+   "lines": [
+    29,
+    40
+   ],
+   "fingerprint": "91724857207aef22"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIHandler.read_body",
+   "line": 46,
+   "sentence": "An `ASGIRequest`'s stream holds the whole body whatever the header says, and until 6.0.5 and 5.2.14 one whose header understated a large body as small had its files kept in memory (CVE-2026-5766) (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`, `django/core/handlers/wsgi.py:LimitedStream.read`, `django/core/handlers/asgi.py:ASGIHandler.read_body`, `docs/releases/6.0.5.txt`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIHandler.read_body",
+   "kind": "function",
+   "lines": [
+    239,
+    267
+   ],
+   "fingerprint": "8c1984707322f62e"
+  },
+  {
    "pointer": "docs/releases/6.0.5.txt",
    "line": 46,
-   "sentence": "The measurement came with 6.0.5 and 5.2.14, for CVE-2026-5766 (`docs/releases/6.0.5.txt`).",
+   "sentence": "An `ASGIRequest`'s stream holds the whole body whatever the header says, and until 6.0.5 and 5.2.14 one whose header understated a large body as small had its files kept in memory (CVE-2026-5766) (`django/core/files/uploadhandler.py:MemoryFileUploadHandler.handle_raw_input`, `django/core/handlers/wsgi.py:LimitedStream.read`, `django/core/handlers/asgi.py:ASGIHandler.read_body`, `docs/releases/6.0.5.txt`).",
    "tree": "django",
    "path": "docs/releases/6.0.5.txt",
    "symbol": null,

@@ -10,7 +10,7 @@
   {
    "pointer": "django/urls/resolvers.py:URLPattern",
    "line": 9,
-   "sentence": "It holds a **matcher** as its `pattern`, and asks the matcher (`django/urls/resolvers.py:URLPattern`).",
+   "sentence": "It holds a **matcher** as its `pattern`, and asks the matcher (`django/urls/resolvers.py:URLPattern`, `django/urls/resolvers.py:URLResolver.resolve`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLPattern",
@@ -20,6 +20,20 @@
     502
    ],
    "fingerprint": "e41ae1d356fbe34b"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 9,
+   "sentence": "It holds a **matcher** as its `pattern`, and asks the matcher (`django/urls/resolvers.py:URLPattern`, `django/urls/resolvers.py:URLResolver.resolve`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
   },
   {
    "pointer": "django/urls/resolvers.py:_route_to_regex",
@@ -39,7 +53,7 @@
   {
    "pointer": "django/urls/resolvers.py:RoutePattern.__init__",
    "line": 49,
-   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include under a plain one, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).",
+   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "RoutePattern.__init__",
@@ -53,7 +67,7 @@
   {
    "pointer": "django/urls/resolvers.py:_route_to_regex",
    "line": 49,
-   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include under a plain one, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).",
+   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "_route_to_regex",
@@ -68,7 +82,7 @@
   {
    "pointer": "django/urls/resolvers.py:URLResolver._populate",
    "line": 49,
-   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include under a plain one, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).",
+   "sentence": "The matcher keeps the dictionary of converters the cache returns, not a copy of it, so matchers made from one route for the same kind of entry while its expansion is cached share one dictionary between them, and what `URLResolver._populate` writes into it in place, for a namespaced include, reaches them all ([Namespaces](namespaces.md#get_ns_resolver-a-resolver-made-for-the-namespace)) (`django/urls/resolvers.py:RoutePattern.__init__`, `django/urls/resolvers.py:_route_to_regex`, `django/urls/resolvers.py:URLResolver._populate`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver._populate",
@@ -96,7 +110,7 @@
   {
    "pointer": "django/urls/resolvers.py:RoutePattern.match",
    "line": 104,
-   "sentence": "**Why.** \"Only use regex overhead if there are converters,\" says the comment above that test (`django/urls/resolvers.py:RoutePattern.match`).",
+   "sentence": "A route without parameters is plain text, and comparing it with the text spares the cost of running an expression (`django/urls/resolvers.py:RoutePattern.match`); so resolving never compiles the expression of a `RoutePattern` without converters, as [When a matcher's expression is compiled](#when-a-matchers-expression-is-compiled) shows.",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "RoutePattern.match",
@@ -138,7 +152,7 @@
   {
    "pointer": "django/urls/converters.py:DEFAULT_CONVERTERS",
    "line": 165,
-   "sentence": "A converter is written as a class, but Django uses a single instance of it: the one `register_converter` made, or for a default the one its module made as it was imported (`django/urls/converters.py:DEFAULT_CONVERTERS`).",
+   "sentence": "A converter is written as a class, but Django uses a single instance of it under each name: the one `register_converter` made, or for a default the one its module made as it was imported (`django/urls/converters.py:DEFAULT_CONVERTERS`).",
    "tree": "django",
    "path": "django/urls/converters.py",
    "symbol": "DEFAULT_CONVERTERS",
@@ -150,19 +164,19 @@
    "fingerprint": "1cb44202aa052dd3"
   },
   {
-   "pointer": "django/urls/converters.py:get_converters",
+   "pointer": "django/urls/resolvers.py:_route_to_regex",
    "line": 165,
-   "sentence": "`_route_to_regex` puts that instance into the converters of every route that names it, so it serves every route, in every thread, for the life of the process (`django/urls/converters.py:get_converters`).",
+   "sentence": "`_route_to_regex` puts that instance into the converters of every route that names it, so it serves every route, in every thread, for the life of the process (`django/urls/resolvers.py:_route_to_regex`).",
    "tree": "django",
-   "path": "django/urls/converters.py",
-   "symbol": "get_converters",
+   "path": "django/urls/resolvers.py",
+   "symbol": "_route_to_regex",
    "kind": "function",
    "lines": [
-    66,
-    68
+    250,
+    291
    ],
-   "at": 67,
-   "fingerprint": "59abcecc9d29e7e8"
+   "at": 251,
+   "fingerprint": "80dd04506d4cb5aa"
   },
   {
    "pointer": "django/urls/resolvers.py:RegexPattern.match",

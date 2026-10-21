@@ -10,7 +10,7 @@
   {
    "pointer": "django/http/request.py:HttpHeaders",
    "line": 39,
-   "sentence": "Each key is turned back into a header's usual spelling, underscores to hyphens and each word capitalised (`django/http/request.py:HttpHeaders`, `django/http/request.py:HttpHeaders.parse_header_name`).",
+   "sentence": "Each key is turned back into a header's name, underscores to hyphens and each word capitalised (`django/http/request.py:HttpHeaders`, `django/http/request.py:HttpHeaders.parse_header_name`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpHeaders",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/http/request.py:HttpHeaders.parse_header_name",
    "line": 39,
-   "sentence": "Each key is turned back into a header's usual spelling, underscores to hyphens and each word capitalised (`django/http/request.py:HttpHeaders`, `django/http/request.py:HttpHeaders.parse_header_name`).",
+   "sentence": "Each key is turned back into a header's name, underscores to hyphens and each word capitalised (`django/http/request.py:HttpHeaders`, `django/http/request.py:HttpHeaders.parse_header_name`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpHeaders.parse_header_name",
@@ -125,7 +125,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest.get_port",
    "line": 51,
-   "sentence": "A request with neither gets the server's own name from `\"SERVER_NAME\"`, with the port added when it is not the usual one for the scheme: `HttpRequest.get_port`'s answer, which is the `X-Forwarded-Port` header when `settings.USE_X_FORWARDED_PORT` is true and the request has one, and `\"SERVER_PORT\"` otherwise (`django/http/request.py:HttpRequest.get_port`).",
+   "sentence": "A request with neither gets the server's own name from `\"SERVER_NAME\"`, with the port added when it is not the usual one for the scheme: `HttpRequest.get_port`'s answer, which is the X-Forwarded-Port header when `settings.USE_X_FORWARDED_PORT` is true and the request has one, and `\"SERVER_PORT\"` otherwise (`django/http/request.py:HttpRequest.get_port`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.get_port",
@@ -139,7 +139,7 @@
   {
    "pointer": "django/http/request.py:split_domain_port",
    "line": 53,
-   "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host exactly (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
+   "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "split_domain_port",
@@ -153,7 +153,7 @@
   {
    "pointer": "django/http/request.py:validate_host",
    "line": 53,
-   "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host exactly (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
+   "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "validate_host",
@@ -167,7 +167,7 @@
   {
    "pointer": "django/utils/http.py:is_same_domain",
    "line": 53,
-   "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host exactly (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
+   "sentence": "`validate_host` compares what is left with each pattern in the setting: `\"*\"` matches anything, a pattern that begins with a dot matches that domain and every subdomain of it, and any other pattern must be the host (`django/http/request.py:split_domain_port`, `django/http/request.py:validate_host`, `django/utils/http.py:is_same_domain`).",
    "tree": "django",
    "path": "django/utils/http.py",
    "symbol": "is_same_domain",
@@ -223,7 +223,7 @@
   {
    "pointer": "django/middleware/common.py:CommonMiddleware.process_request",
    "line": 82,
-   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), and `SecurityMiddleware.process_request`, listed before it, calls it when it redirects a request made over plain HTTP to HTTPS and `SECURE_SSL_HOST` is not set (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`).",
+   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), `SecurityMiddleware.process_request`, listed before it, when it redirects to HTTPS with no `SECURE_SSL_HOST`, and `CsrfViewMiddleware` on some requests whose method is not safe, catching the `DisallowedHost` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._origin_verified`, `django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
    "tree": "django",
    "path": "django/middleware/common.py",
    "symbol": "CommonMiddleware.process_request",
@@ -237,7 +237,7 @@
   {
    "pointer": "django/middleware/security.py:SecurityMiddleware.process_request",
    "line": 82,
-   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), and `SecurityMiddleware.process_request`, listed before it, calls it when it redirects a request made over plain HTTP to HTTPS and `SECURE_SSL_HOST` is not set (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`).",
+   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), `SecurityMiddleware.process_request`, listed before it, when it redirects to HTTPS with no `SECURE_SSL_HOST`, and `CsrfViewMiddleware` on some requests whose method is not safe, catching the `DisallowedHost` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._origin_verified`, `django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
    "tree": "django",
    "path": "django/middleware/security.py",
    "symbol": "SecurityMiddleware.process_request",
@@ -247,6 +247,34 @@
     33
    ],
    "fingerprint": "9a87791cf038990b"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._origin_verified",
+   "line": 82,
+   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), `SecurityMiddleware.process_request`, listed before it, when it redirects to HTTPS with no `SECURE_SSL_HOST`, and `CsrfViewMiddleware` on some requests whose method is not safe, catching the `DisallowedHost` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._origin_verified`, `django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._origin_verified",
+   "kind": "function",
+   "lines": [
+    273,
+    297
+   ],
+   "fingerprint": "786af7d51aeebb16"
+  },
+  {
+   "pointer": "django/middleware/csrf.py:CsrfViewMiddleware._check_referer",
+   "line": 82,
+   "sentence": "Of the middleware that `django-admin startproject` writes, `CommonMiddleware.process_request` calls it for every request that gets past its check of `settings.DISALLOWED_USER_AGENTS` ([The general-purpose middleware](../handlers/general.md#commonmiddleware-on-the-way-in)), `SecurityMiddleware.process_request`, listed before it, when it redirects to HTTPS with no `SECURE_SSL_HOST`, and `CsrfViewMiddleware` on some requests whose method is not safe, catching the `DisallowedHost` (`django/middleware/common.py:CommonMiddleware.process_request`, `django/middleware/security.py:SecurityMiddleware.process_request`, `django/middleware/csrf.py:CsrfViewMiddleware._origin_verified`, `django/middleware/csrf.py:CsrfViewMiddleware._check_referer`).",
+   "tree": "django",
+   "path": "django/middleware/csrf.py",
+   "symbol": "CsrfViewMiddleware._check_referer",
+   "kind": "function",
+   "lines": [
+    299,
+    342
+   ],
+   "fingerprint": "8c2234832e93c32f"
   },
   {
    "pointer": "django/http/request.py:HttpRequest.get_host",
@@ -265,7 +293,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest.scheme",
    "line": 88,
-   "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`).",
+   "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`, `django/core/handlers/asgi.py:ASGIRequest._get_scheme`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.scheme",
@@ -280,7 +308,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest._get_scheme",
    "line": 88,
-   "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`).",
+   "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`, `django/core/handlers/asgi.py:ASGIRequest._get_scheme`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest._get_scheme",
@@ -290,6 +318,20 @@
     83
    ],
    "fingerprint": "226a0cb6c30bd4b8"
+  },
+  {
+   "pointer": "django/core/handlers/asgi.py:ASGIRequest._get_scheme",
+   "line": 88,
+   "sentence": "Behind a proxy that ends TLS that is the wrong answer, since the connection from the proxy is plain HTTP when the client's was not (`django/http/request.py:HttpRequest.scheme`, `django/core/handlers/wsgi.py:WSGIRequest._get_scheme`, `django/core/handlers/asgi.py:ASGIRequest._get_scheme`).",
+   "tree": "django",
+   "path": "django/core/handlers/asgi.py",
+   "symbol": "ASGIRequest._get_scheme",
+   "kind": "function",
+   "lines": [
+    122,
+    123
+   ],
+   "fingerprint": "2cf29fc848ca19ee"
   },
   {
    "pointer": "django/utils/cache.py:_generate_cache_key",
@@ -378,9 +420,24 @@
    "fingerprint": "f8b4f2c5ff28d14a"
   },
   {
+   "pointer": "django/http/request.py:HttpRequest.accepted_types_by_precedence",
+   "line": 132,
+   "sentence": "`HttpRequest.accepted_types_by_precedence` is the same list sorted the other way, by how specific an item is first and by its weight second, and `HttpRequest.accepted_type` returns the first item of it that matches a given type (`django/http/request.py:HttpRequest.accepted_types_by_precedence`, `django/http/request.py:HttpRequest.accepted_type`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.accepted_types_by_precedence",
+   "kind": "function",
+   "lines": [
+    109,
+    119
+   ],
+   "at": 110,
+   "fingerprint": "0b567ef2a94df203"
+  },
+  {
    "pointer": "django/http/request.py:HttpRequest.accepted_type",
    "line": 132,
-   "sentence": "`HttpRequest.accepted_types_by_precedence` is the same list sorted the other way, by how specific an item is first and by its weight second, and `HttpRequest.accepted_type` returns the first item of it that matches a given type (`django/http/request.py:HttpRequest.accepted_type`).",
+   "sentence": "`HttpRequest.accepted_types_by_precedence` is the same list sorted the other way, by how specific an item is first and by its weight second, and `HttpRequest.accepted_type` returns the first item of it that matches a given type (`django/http/request.py:HttpRequest.accepted_types_by_precedence`, `django/http/request.py:HttpRequest.accepted_type`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.accepted_type",
@@ -408,7 +465,7 @@
   {
    "pointer": "docs/releases/5.2.txt",
    "line": 150,
-   "sentence": "`get_preferred_type` was added in that release, and `accepted_types` has been sorted by the client's preference since then (`docs/releases/5.2.txt`).",
+   "sentence": "`get_preferred_type` was added in that release, and `accepted_types` sorted by preference; the request has kept both orders since 5.2.4 (`docs/releases/5.2.txt`, `docs/releases/5.2.4.txt`).",
    "tree": "django",
    "path": "docs/releases/5.2.txt",
    "symbol": null,
@@ -418,6 +475,20 @@
     495
    ],
    "fingerprint": "56a4c82a284e4c7a"
+  },
+  {
+   "pointer": "docs/releases/5.2.4.txt",
+   "line": 150,
+   "sentence": "`get_preferred_type` was added in that release, and `accepted_types` sorted by preference; the request has kept both orders since 5.2.4 (`docs/releases/5.2.txt`, `docs/releases/5.2.4.txt`).",
+   "tree": "django",
+   "path": "docs/releases/5.2.4.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    23
+   ],
+   "fingerprint": "35a6126000b4a841"
   }
  ]
 }

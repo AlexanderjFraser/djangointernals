@@ -24,7 +24,7 @@ What `_populate` does with an entry depends on what the entry is.
 
 A pattern becomes one candidate. `normalize` turns the pattern's regular expression into forms ([`normalize`, and the patterns that cannot be reversed](normalize.md)), and the candidate is filed under the view and, when the pattern has a name, under the name as well.
 
-A resolver is first told to populate itself. If it has no application namespace, everything in its tables is then lifted into the tables of the resolver that holds it. Each of its candidates is filed again in the upper table under the same key, with the include's regular expression put in front of its own, its forms made afresh from the longer expression, and the include's extra arguments and converters merged with its own; where both give an extra argument of the same name, the include's is kept here (`django/urls/resolvers.py:URLResolver._populate`), though the view is called with the pattern's ([Resolving a path](resolving.md#how-the-arguments-are-merged)). The include's namespaces and applications are lifted the same way. A plain `include` thus disappears: the names under it can be reversed from above.
+A resolver is first told to populate itself. If it has no application namespace, everything in its tables is then lifted into the tables of the resolver that holds it. Each of its candidates is filed again in the upper table under the same key, with the include's regular expression put in front of its own, its forms made afresh from the longer expression, and the include's extra arguments and converters merged with its own; where both give an extra argument of the same name, the include's is kept here (`django/urls/resolvers.py:URLResolver._populate`), though the view is called with the pattern's ([Resolving a path](resolving.md#how-the-arguments-are-merged)). The include's namespaces and applications are lifted too, the namespaces with its expression in front. A plain `include` thus disappears: the names under it can be reversed from above.
 
 If the resolver has an application namespace, none of that happens. It is filed whole, under its instance namespace in `namespace_dict` with the regular expression of its route, and in `app_dict` among the instances of its application, and its names stay in its own tables ([Namespaces](namespaces.md)).
 
@@ -54,7 +54,7 @@ west/   is filed in the same way, and before east/
 each candidate is also filed under its view, so reverse_dict has the function tickets as a key too
 ```
 
-*How the museum's tree is read into tables. The entries stand at the left, a resolver's own entries inside its box, and at the right the table each is filed in.*
+*How the museum's tree is read into tables. The entries stand at the left, a resolver's own patterns inside its box, and at the right the table each is filed in.*
 
 What else a candidate holds, the figure leaves out. In the root resolver's table as `_populate` left it, the lifted name shop has `"shop/"` in front of both its form and its expression, and the two candidates for tickets stand the month's first:
 
@@ -125,7 +125,7 @@ Two patterns with one name, told apart by their extra arguments
     reverse("feed", urlconf=FEEDS, kwargs={"kind": "json"})  ->  raises NoReverseMatch
 ```
 
-> **Trap.** The documentation allows an extra argument to have the name of a parameter its route captures, and the extra argument then replaces the capture (`docs/topics/http/urls.txt`). `reverse` neither requires such a parameter nor holds it to the extra argument's value: a call that gives it fits with any value, and a call by keyword that leaves it out fits too, since the extra arguments' names are not compared, but then nothing fills its gap, and `reverse` raises `KeyError`, not `NoReverseMatch` (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`).
+> **Trap.** The documentation allows an extra argument to have the name of a parameter its route captures, and the extra argument then replaces the capture (`docs/topics/http/urls.txt`). `reverse` neither holds such a parameter to the extra argument's value nor, by keyword, requires it: a call that gives it fits with any value, and one by keyword that leaves it out fits too, since the extra arguments' names are not compared, but then nothing fills its gap, and `reverse` raises `KeyError`, not `NoReverseMatch` (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`).
 
 In a URLconf with such a clash at each level, an include of `"<slug:wing>/"` given wing as `"annexe"` around a pattern `"rooms/<int:room>/"` given room as 1, `"/east/rooms/12/"` resolves to the annexe and room 1, the east wing and room 12 reverse to it, and the room given alone raises:
 
@@ -153,11 +153,11 @@ reverse(): the path is escaped once it has been checked
       reverse("notes", urlconf=NOTES, kwargs={"name": "tea%20towel"})  ->  raises NoReverseMatch
 ```
 
-> **Why.** The check is made on the unescaped text because that is what the resolver is matched against: "WSGI provides decoded URLs, without %xx escapes, and the URL resolver operates on such URLs," says the comment above it (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`). Whether a path arrives decoded is up to the server: neither the request nor the resolver decodes it ([Resolving a path](resolving.md)).
+> **Why.** The check is made on the unescaped text because that is the text the resolver matches: a WSGI server is meant to decode a path's escapes before Django is given it (`django/urls/resolvers.py:URLResolver._reverse_with_prefix`). Whether it does is up to the server: neither the request nor the resolver decodes them ([Resolving a path](resolving.md)).
 
 ## The query string and the fragment
 
-`reverse` takes two keyword-only arguments for what follows a path. The query may be a dictionary, whose values may be lists, or a `QueryDict`. It is encoded, and added after a question mark if the encoding is not empty. The fragment is added after a `#` as it is given, without escaping, whenever it is not `None`, so an empty one leaves a bare `#`.
+`reverse` takes two keyword-only arguments for what follows a path. The query may be a `QueryDict`, or a dictionary or a list of pairs whose values may be lists. It is encoded, and added after a question mark if the encoding is not empty. The fragment is added after a `#` as it is given, without escaping, whenever it is not `None`, so an empty one leaves a bare `#`.
 
 ```text recording=urls
 reverse(): a query string and a fragment

@@ -38,7 +38,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest.read",
    "line": 15,
-   "sentence": "An `OSError` from the stream is raised again as `UnreadablePostError`, which is an `OSError` too, so that code which reads a form can tell a failed read from any other failure (`django/http/request.py:HttpRequest.read`, `django/http/request.py:UnreadablePostError`).",
+   "sentence": "An `OSError` from the stream is raised again as `UnreadablePostError`, which is an `OSError` too (`django/http/request.py:HttpRequest.read`, `django/http/request.py:UnreadablePostError`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest.read",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/http/request.py:UnreadablePostError",
    "line": 15,
-   "sentence": "An `OSError` from the stream is raised again as `UnreadablePostError`, which is an `OSError` too, so that code which reads a form can tell a failed read from any other failure (`django/http/request.py:HttpRequest.read`, `django/http/request.py:UnreadablePostError`).",
+   "sentence": "An `OSError` from the stream is raised again as `UnreadablePostError`, which is an `OSError` too (`django/http/request.py:HttpRequest.read`, `django/http/request.py:UnreadablePostError`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "UnreadablePostError",
@@ -81,7 +81,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest._get_post",
    "line": 30,
-   "sentence": "Each is a property that looks for its stored value, `_post` or `_files`, and when it is missing calls `HttpRequest._load_post_and_files`, which sets both before it returns (`django/core/handlers/wsgi.py:WSGIRequest._get_post`, `django/core/handlers/wsgi.py:WSGIRequest.FILES`).",
+   "sentence": "Each is a property of `WSGIRequest` and `ASGIRequest` that looks for its stored value, `_post` or `_files`, and when it is missing calls `HttpRequest._load_post_and_files`, which sets both before it returns (`django/core/handlers/wsgi.py:WSGIRequest._get_post`, `django/core/handlers/wsgi.py:WSGIRequest.FILES`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest._get_post",
@@ -95,7 +95,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest.FILES",
    "line": 30,
-   "sentence": "Each is a property that looks for its stored value, `_post` or `_files`, and when it is missing calls `HttpRequest._load_post_and_files`, which sets both before it returns (`django/core/handlers/wsgi.py:WSGIRequest._get_post`, `django/core/handlers/wsgi.py:WSGIRequest.FILES`).",
+   "sentence": "Each is a property of `WSGIRequest` and `ASGIRequest` that looks for its stored value, `_post` or `_files`, and when it is missing calls `HttpRequest._load_post_and_files`, which sets both before it returns (`django/core/handlers/wsgi.py:WSGIRequest._get_post`, `django/core/handlers/wsgi.py:WSGIRequest.FILES`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest.FILES",
@@ -110,7 +110,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
    "line": 30,
-   "sentence": "What that method does depends on the method and the content type, tested in this order (`django/http/request.py:HttpRequest._load_post_and_files`):",
+   "sentence": "What that method does depends on the method, the stream and the content type, tested in this order (`django/http/request.py:HttpRequest._load_post_and_files`):",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._load_post_and_files",
@@ -124,7 +124,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
    "line": 46,
-   "sentence": "A form of the ordinary kind must be UTF-8: the comment beside the check says that by RFC 1866 this content type has no charset and should always be treated as UTF-8 (`django/http/request.py:HttpRequest._load_post_and_files`).",
+   "sentence": "A form of the ordinary kind must be UTF-8 (`django/http/request.py:HttpRequest._load_post_and_files`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._load_post_and_files",
@@ -306,7 +306,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
    "line": 155,
-   "sentence": "The comments beside both calls give this reason (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`).",
+   "sentence": "Whatever builds the error response, an error view or the debug page, may read `POST`, and with nothing stored that read could start the parse again and raise the same exception from inside the error handling (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`, `django/views/debug.py:SafeExceptionReporterFilter.get_post_parameters`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._load_post_and_files",
@@ -320,7 +320,7 @@
   {
    "pointer": "django/core/handlers/exception.py:response_for_exception",
    "line": 155,
-   "sentence": "The comments beside both calls give this reason (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`).",
+   "sentence": "Whatever builds the error response, an error view or the debug page, may read `POST`, and with nothing stored that read could start the parse again and raise the same exception from inside the error handling (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`, `django/views/debug.py:SafeExceptionReporterFilter.get_post_parameters`).",
    "tree": "django",
    "path": "django/core/handlers/exception.py",
    "symbol": "response_for_exception",
@@ -330,6 +330,20 @@
     160
    ],
    "fingerprint": "a7418f0de8e640e0"
+  },
+  {
+   "pointer": "django/views/debug.py:SafeExceptionReporterFilter.get_post_parameters",
+   "line": 155,
+   "sentence": "Whatever builds the error response, an error view or the debug page, may read `POST`, and with nothing stored that read could start the parse again and raise the same exception from inside the error handling (`django/http/request.py:HttpRequest._load_post_and_files`, `django/core/handlers/exception.py:response_for_exception`, `django/views/debug.py:SafeExceptionReporterFilter.get_post_parameters`).",
+   "tree": "django",
+   "path": "django/views/debug.py",
+   "symbol": "SafeExceptionReporterFilter.get_post_parameters",
+   "kind": "function",
+   "lines": [
+    212,
+    222
+   ],
+   "fingerprint": "16f9c9bef9f8ffa4"
   }
  ]
 }

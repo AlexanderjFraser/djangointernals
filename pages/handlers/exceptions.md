@@ -164,3 +164,5 @@ WSGI, GET /broken/: the view raises ValueError, and the 500 error view raises to
 ```
 
 The error view ran four times: once for the centre, once for each middleware.
+
+The debug page can fail too, on the request's data. Under `settings.DEBUG` it reads `GET` and `POST` for its tables, and in two of the cases where the exception was raised by a read of one of them (a query string over the field limit read through `GET`, an ordinary form in a charset other than UTF-8 read through `POST`), the page's read raises it again, and it leaves the handler (`django/views/debug.py:ExceptionReporter.get_traceback_data`).

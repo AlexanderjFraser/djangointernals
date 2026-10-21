@@ -6,13 +6,13 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `URLResolver.resolve` finds the view for a path by searching a URLconf's tree, depth first and in the order its entries are written, and returns a `ResolverMatch`: the view, the arguments gathered for it from every level, and a record of how the match was found. A path that matches nothing raises `Resolver404`. The handler keeps the match as `HttpRequest.resolver_match`, and the function `resolve` and `is_valid_path` ask the same question for any other caller.
 
-Everything that resolves a path ends in one method, `URLResolver.resolve`, called on a root resolver. `BaseHandler.resolve_request` calls it with `HttpRequest.path_info`, for each request that reaches the centre of the middleware chain ([Handlers and middleware](../handlers.md)). The function `resolve` calls it for anyone else: it takes a path and, optionally, a URLconf, and without one it uses the current URLconf of the thread or task it is called in, or failing that the root one. `is_valid_path` returns what `resolve` returns, the match, with `False` in place of the exception (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).
+Everything that resolves a path ends in one method, `URLResolver.resolve`, called on a root resolver. `BaseHandler.resolve_request` calls it with `HttpRequest.path_info`, for each request that reaches the centre of the middleware chain ([Handlers and middleware](../handlers.md)). The function `resolve` calls it for anyone else: it takes a path and, optionally, a URLconf, and without one it uses the current URLconf of the thread or task it is called in, or failing that the root one. `is_valid_path` returns what `resolve` returns, the match, with `False` in place of a `Resolver404` (`django/urls/base.py:resolve`, `django/urls/base.py:is_valid_path`).
 
-What is resolved is a path and nothing more: no host, no method, no query string. It is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with its percent escapes as the server left them, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`). Python's wsgiref server, on which Django's development server is built, decodes them into `"PATH_INFO"`, and from `"/files/maps/ground%20floor.pdf"` the museum's pattern for files captures `"maps/ground floor.pdf"`; behind a server that leaves the escape, it captures `"maps/ground%20floor.pdf"` (`django/core/servers/basehttp.py:WSGIRequestHandler.get_environ`).
+What is resolved is a path and nothing more: no host, no method, no query string. For the handler it is the request's `path_info`, the path without the script prefix ([Making the request: `WSGIRequest` and `ASGIRequest`](../http/request.md)), with the percent escapes the server left in it, since neither the request nor the resolver decodes them (`django/core/handlers/wsgi.py:get_path_info`, `django/core/handlers/asgi.py:ASGIRequest.__init__`). Python's wsgiref server, on which Django's development server is built, decodes them into `"PATH_INFO"`, and from `"/files/maps/ground%20floor.pdf"` the museum's pattern for files captures `"maps/ground floor.pdf"`; behind a server that leaves the escape, it captures `"maps/ground%20floor.pdf"` (`django/core/servers/basehttp.py:WSGIRequestHandler.get_environ`).
 
 ## The order of the search
 
-`URLResolver.resolve` is the same method at every level of the tree, the root included. It first asks its own matcher, the object that matches its route or its expression ([Routes, regular expressions and converters](patterns.md)), about the path. If the matcher refuses, the method raises `Resolver404` and is done. If it accepts, it has returned what is left of the path and what it captured, and the method goes through `URLResolver.url_patterns` in order, calling `resolve` on each entry with what is left. An entry is a pattern, whose `URLPattern.resolve` returns a match or `None`, or another resolver, whose `resolve` is this same method one level down. The first entry to produce a match ends the search (`django/urls/resolvers.py:URLResolver.resolve`).
+`URLResolver.resolve` is the same method at every level of the tree, the root included. It first asks its own matcher, the object that matches its route, its expression or its language prefix ([Routes, regular expressions and converters](patterns.md)), about the path. If the matcher refuses, the method raises `Resolver404` and is done. If it accepts, it has returned what is left of the path and what it captured, and the method goes through `URLResolver.url_patterns` in order, calling `resolve` on each entry with what is left. An entry is a pattern, whose `URLPattern.resolve` returns a match or `None`, or another resolver, whose `resolve` is this same method one level down. The first entry to produce a match ends the search (`django/urls/resolvers.py:URLResolver.resolve`).
 
 A resolver that is an entry of another says no by raising: its `resolve` raises `Resolver404` when its own matcher refuses and when none of its entries matches, and the resolver above catches the exception, notes what was tried, and moves to its next entry. So getting into an include does not commit the search to it.
 
@@ -89,10 +89,10 @@ GET /tickets/2026/13/: a converter refuses, and nothing else matches
 
 A match is found at a pattern and returned through every resolver above it, and each level adds what it knows. Where two levels have a keyword argument of the same name, the one applied later replaces the earlier, in this order:
 
-1. what a resolver's own route captured;
+1. what a resolver's own matcher captured;
 2. the extra arguments given where that resolver was included, its `URLResolver.default_kwargs`;
 3. the same two for each resolver further down, in turn;
-4. what the pattern's route captured;
+4. what the pattern's matcher captured;
 5. the pattern's own extra arguments, its `URLPattern.default_args` (`django/urls/resolvers.py:URLPattern.__init__`).
 
 So an extra argument beats a captured one of the same name at its own level, and anything further down beats anything further up. `URLPattern.resolve` applies the last two steps as it makes the first `ResolverMatch`; each resolver on the way up makes a new match, starting from its own two and laying the match from below over them. The root resolver, whose matcher captures nothing and which is given no extra arguments, adds none (`django/urls/resolvers.py:URLPattern.resolve`, `django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:_get_cached_resolver`).
@@ -108,11 +108,11 @@ Arguments from several levels: which one the view gets
       ...
 ```
 
-> **Trap.** An extra argument given to `include` is not passed to each line of the included URLconf as if it had been written there, though the documentation calls the two forms "functionally identical" (`docs/topics/http/urls.txt`). Written on the line, an extra argument beats the pattern's capture of the same name; given to the include, it is laid under everything that comes up from below, and the capture beats it. With `{"room": 1}` given to an include whose pattern captures the room, `"/east/rooms/12/"` gives the view room 12; with the same dictionary given to the pattern's line instead, room 1. In the first case `ResolverMatch.extra_kwargs` still reports `{'room': 1}`, a value the view was not given (`django/urls/resolvers.py:URLResolver.resolve`).
+> **Trap.** An extra argument given to an include is not passed to each line of the included URLconf as if it had been written there. Written on the line, an extra argument beats the pattern's capture of the same name; given to the include, it is laid under everything that comes up from below, and the capture beats it. With `{"room": 1}` given to an include whose pattern captures the room, `"/east/rooms/12/"` gives the view room 12; with the same dictionary given to the pattern's line instead, room 1. In the first case `ResolverMatch.extra_kwargs` still reports `{'room': 1}`, a value the view was not given (`django/urls/resolvers.py:URLResolver.resolve`).
 
-Positional arguments, which only a `re_path` with unnamed groups produces, are passed up as they are.
+Positional arguments, which only a `re_path` with unnamed groups produces, are passed up from below as they are.
 
-> **Trap.** A resolver drops the positional arguments its own route captured wherever there is a keyword argument at its level or below, and an extra argument counts as one: only the positional arguments from below are passed up. The comment beside the test in `URLResolver.resolve` speaks of named groups only, but the dictionary it tests holds the extra arguments too (`django/urls/resolvers.py:URLResolver.resolve`).
+> **Trap.** A resolver drops the positional arguments its own expression captured wherever there is a keyword argument at its level or below, and an extra argument counts as one: only the positional arguments from below are passed up (`django/urls/resolvers.py:URLResolver.resolve`).
 
 Each resolver also puts its application namespace and its instance namespace at the front of the lists the match carries, and builds up the route one level late: a resolver puts in front the route of the resolver below it that matched, not its own, so the root's own `"^/"` never enters the route. At the end of the walk of `"/east/rooms/12/"` through the museum's URLconf, the east wing's resolver has already added its namespace and its wing, while the route is still the pattern's; only the root puts `"east/"` in front.
 
@@ -158,18 +158,18 @@ For these attributes the value does not show the rule it was made by.
 |---|---|
 | `ResolverMatch.route` | the text of each entry on the way down, end to end: a route or a regular expression as written, a language prefix or a translated string as it reads at the moment; the `^` that begins an expression is kept only at the front of the whole |
 | `ResolverMatch.app_names`, `ResolverMatch.namespaces` | the application namespaces and the instance namespaces of the resolvers on the way down, outermost first, empty ones left out |
-| `ResolverMatch.view_name` | the instance namespaces and the pattern's name joined with colons, which is how a name is written for `reverse`; where the pattern has no name, the view's dotted name stands in its place |
+| `ResolverMatch.view_name` | the instance namespaces and the pattern's name joined with colons, which is how a name is written for `reverse`; where the pattern has no name, the dotted name of the view or of its class stands in its place |
 | `ResolverMatch.extra_kwargs` | the extra arguments, from the pattern and from every include above it |
 
 *The attributes of a `ResolverMatch` whose values do not show how they are made.*
 
-`ResolverMatch.captured_kwargs` holds only what the matched pattern's own route captured, so it and the extra arguments need not add up to `ResolverMatch.kwargs`: the room number is in `kwargs` and in neither of the others, because an include's route captured it.
+`ResolverMatch.captured_kwargs` holds only what the matched pattern's own matcher captured, so it and the extra arguments need not add up to `ResolverMatch.kwargs`: the room number is in `kwargs` and in neither of the others, because an include's route captured it.
 
 The handler unpacks a match as if it were a tuple of three: `ResolverMatch.__getitem__` serves the view, the positional arguments and the keyword arguments by index. `BaseHandler.resolve_request` keeps the match on the request, as `HttpRequest.resolver_match`, where the middleware's `process_view` hooks and the view can read it, and a template through the request in its context (`django/core/handlers/base.py:BaseHandler.resolve_request`).
 
 ## What a `Resolver404` carries
 
-A `Resolver404` is made with one argument, a dictionary. A resolver whose own matcher refused puts in only `"path"`, the text it was given. A resolver whose entries all failed puts in `"path"`, the text that was left for them, and `"tried"`: a list of chains, each a list that starts with one of this resolver's entries and leads down to the pattern or the resolver that said no. An entry that is a pattern, or a resolver whose own matcher refused, adds one chain holding itself alone. An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver._extend_tried`).
+A `Resolver404` is made with one argument, a dictionary. A resolver whose own matcher refused puts in only `"path"`, the text it was given. A resolver whose entries all failed puts in `"path"`, the text that was left for them, and `"tried"`: a list of chains, each a list that starts with one of this resolver's entries and leads down to the pattern or the resolver that said no. An entry that is a pattern, or a resolver whose own matcher refused, adds one chain holding itself alone. An entry that is a resolver whose list failed adds each chain it reported, with itself put at the front (`django/urls/resolvers.py:URLResolver.resolve`, `django/urls/resolvers.py:URLResolver._extend_tried`).
 
 Look for the east wing's entry, which the first path got into and failed in: that one entry of the root gave three chains of two links. The second path has no leading slash, so the root's own matcher refused it and nothing was tried.
 
@@ -186,7 +186,7 @@ What a Resolver404 carries: the path that was left, and each chain of entries tr
     resolve('east/rooms/12/') raises Resolver404 with {'path': 'east/rooms/12/'}
 ```
 
-Outside the resolvers `"tried"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page-technical_404_response)) (`django/views/debug.py:technical_404_response`).
+Outside the resolvers `"tried"` has one reader in Django, the debug page: under `settings.DEBUG`, `technical_404_response` ordinarily shows each chain as a line, taking the list from the request's match when a view raised `Http404` after its path had matched ([The debug pages and `ExceptionReporter`](../views/debug.md#the-404-page-technical_404_response)) (`django/views/debug.py:technical_404_response`).
 
 ## The resolver's other callers
 

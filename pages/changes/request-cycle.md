@@ -82,7 +82,7 @@ Passing `safe=` any value but `None` now warns, since the argument goes in Djang
 
 ## The multipart parser's Base64
 
-Since 6.1 the multipart parser is strict about a part whose Content-Transfer-Encoding is `"base64"`. Before 6.1 it decoded such a part leniently: invalid data "could be silently ignored or result in empty values", the 6.1 notes say (`docs/releases/6.1.txt`). `MultiPartParser.parse` now decodes with `validate=True`, which refuses any character outside the Base64 alphabet (`django/http/multipartparser.py:MultiPartParser.parse`; [Multipart parsing: `MultiPartParser`](../http/multipart.md)).
+Since 6.1 the multipart parser is strict about a part whose Content-Transfer-Encoding is `"base64"`. Before 6.1 it decoded such a part leniently: invalid data "could be silently ignored or result in empty values", the 6.1 notes say (`docs/releases/6.1.txt`). `MultiPartParser._parse` now decodes with `validate=True`, which refuses any character outside the Base64 alphabet (`django/http/multipartparser.py:MultiPartParser._parse`; [Multipart parsing: `MultiPartParser`](../http/multipart.md)).
 
 A file's data has an exclamation mark inside it, and the `b'Monday'` of 5.2.17 and 6.0.8 is the mark dropped without a word:
 
@@ -106,7 +106,7 @@ request.POST["body"]: a multipart field sent as base64 over two lines, "TW9u" an
     this commit  'TW9u\r\nZGF5'
 ```
 
-> **Trap.** Nothing warns or fails. Since 6.1 a field whose Base64 is written in lines, as MIME writes it, arrives undecoded, while the same data in a file still decodes (`django/http/multipartparser.py:MultiPartParser.parse`).
+> **Trap.** Nothing warns or fails. Since 6.1 a field whose Base64 is written in lines, as MIME writes it, arrives undecoded, while the same data in a file still decodes (`django/http/multipartparser.py:MultiPartParser._parse`).
 
 ## The smaller changes
 

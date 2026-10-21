@@ -10,7 +10,7 @@
   {
    "pointer": "django/utils/datastructures.py:MultiValueDict",
    "line": 13,
-   "sentence": "The last value, not the first, is the one a subscript returns, so where a client repeats a parameter the later one wins (`django/utils/datastructures.py:MultiValueDict`, `django/utils/datastructures.py:MultiValueDict.__getitem__`).",
+   "sentence": "A subscript, `MultiValueDict.get`, `MultiValueDict.items` and `MultiValueDict.values` all give the last value of a key, so where a client repeats a parameter the later one wins; `MultiValueDict.getlist` and `MultiValueDict.lists` give the whole list (`django/utils/datastructures.py:MultiValueDict`, `django/utils/datastructures.py:MultiValueDict.__getitem__`).",
    "tree": "django",
    "path": "django/utils/datastructures.py",
    "symbol": "MultiValueDict",
@@ -24,7 +24,7 @@
   {
    "pointer": "django/utils/datastructures.py:MultiValueDict.__getitem__",
    "line": 13,
-   "sentence": "The last value, not the first, is the one a subscript returns, so where a client repeats a parameter the later one wins (`django/utils/datastructures.py:MultiValueDict`, `django/utils/datastructures.py:MultiValueDict.__getitem__`).",
+   "sentence": "A subscript, `MultiValueDict.get`, `MultiValueDict.items` and `MultiValueDict.values` all give the last value of a key, so where a client repeats a parameter the later one wins; `MultiValueDict.getlist` and `MultiValueDict.lists` give the whole list (`django/utils/datastructures.py:MultiValueDict`, `django/utils/datastructures.py:MultiValueDict.__getitem__`).",
    "tree": "django",
    "path": "django/utils/datastructures.py",
    "symbol": "MultiValueDict.__getitem__",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/http/request.py:QueryDict.__init__",
    "line": 38,
-   "sentence": "The comments beside the two attempts give the reason: a query string \"normally contains URL-encoded data, a subset of ASCII\", \"but some user agents are misbehaving\" and send bytes outside it (`django/http/request.py:QueryDict.__init__`).",
+   "sentence": "A query string is ordinarily URL-encoded, and so ASCII, but some user agents misbehave and send bytes outside it (`django/http/request.py:QueryDict.__init__`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "QueryDict.__init__",
@@ -66,7 +66,7 @@
   {
    "pointer": "django/http/request.py:QueryDict.urlencode",
    "line": 51,
-   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, in order: inside Django, `reverse` uses it for a `query` given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
+   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, key by key: among its callers in Django, `reverse` uses it for a query given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "QueryDict.urlencode",
@@ -80,7 +80,7 @@
   {
    "pointer": "django/urls/base.py:reverse",
    "line": 51,
-   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, in order: inside Django, `reverse` uses it for a `query` given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
+   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, key by key: among its callers in Django, `reverse` uses it for a query given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
    "tree": "django",
    "path": "django/urls/base.py",
    "symbol": "reverse",
@@ -94,7 +94,7 @@
   {
    "pointer": "django/template/defaulttags.py:querystring",
    "line": 51,
-   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, in order: inside Django, `reverse` uses it for a `query` given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
+   "sentence": "`QueryDict.urlencode` goes the other way and writes the dictionary as a query string, every value of every key, key by key: among its callers in Django, `reverse` uses it for a query given as a `QueryDict`, and the `querystring` template tag for the parameters it has merged (`django/http/request.py:QueryDict.urlencode`, `django/urls/base.py:reverse`, `django/template/defaulttags.py:querystring`).",
    "tree": "django",
    "path": "django/template/defaulttags.py",
    "symbol": "querystring",
@@ -179,7 +179,7 @@
   {
    "pointer": "django/http/request.py:QueryDict",
    "line": 71,
-   "sentence": "`dict` supplies it, neither `MultiValueDict` nor `QueryDict` overrides it, and it stores what it is given without calling any guarded method: in the recording above, the dictionary called frozen gained a key and stayed immutable (`django/http/request.py:QueryDict`).",
+   "sentence": "`dict` supplies it, neither `MultiValueDict` nor `QueryDict` overrides it, and it stores what it is given without calling any guarded method: in the recording above, *frozen* gained a key and stayed immutable (`django/http/request.py:QueryDict`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "QueryDict",
@@ -193,7 +193,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIRequest.GET",
    "line": 75,
-   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`, `django/http/request.py:HttpRequest._mark_post_parse_error`, `django/http/request.py:HttpRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIRequest.GET",
@@ -208,7 +208,7 @@
   {
    "pointer": "django/core/handlers/asgi.py:ASGIRequest.GET",
    "line": 75,
-   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`, `django/http/request.py:HttpRequest._mark_post_parse_error`, `django/http/request.py:HttpRequest.__init__`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIRequest.GET",
@@ -223,7 +223,7 @@
   {
    "pointer": "django/http/request.py:HttpRequest._load_post_and_files",
    "line": 75,
-   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`, `django/http/request.py:HttpRequest._mark_post_parse_error`, `django/http/request.py:HttpRequest.__init__`).",
    "tree": "django",
    "path": "django/http/request.py",
    "symbol": "HttpRequest._load_post_and_files",
@@ -237,7 +237,7 @@
   {
    "pointer": "django/http/multipartparser.py:MultiPartParser._parse",
    "line": 75,
-   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`).",
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`, `django/http/request.py:HttpRequest._mark_post_parse_error`, `django/http/request.py:HttpRequest.__init__`).",
    "tree": "django",
    "path": "django/http/multipartparser.py",
    "symbol": "MultiPartParser._parse",
@@ -247,6 +247,34 @@
     371
    ],
    "fingerprint": "f8b9b47b9d0bccd2"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest._mark_post_parse_error",
+   "line": 75,
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`, `django/http/request.py:HttpRequest._mark_post_parse_error`, `django/http/request.py:HttpRequest.__init__`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest._mark_post_parse_error",
+   "kind": "function",
+   "lines": [
+    444,
+    446
+   ],
+   "fingerprint": "f18d52b10ae48bbb"
+  },
+  {
+   "pointer": "django/http/request.py:HttpRequest.__init__",
+   "line": 75,
+   "sentence": "Who makes a `QueryDict` decides what it parses, with which encoding, and whether it may be changed (`django/core/handlers/wsgi.py:WSGIRequest.GET`, `django/core/handlers/asgi.py:ASGIRequest.GET`, `django/http/request.py:HttpRequest._load_post_and_files`, `django/http/multipartparser.py:MultiPartParser._parse`, `django/http/request.py:HttpRequest._mark_post_parse_error`, `django/http/request.py:HttpRequest.__init__`).",
+   "tree": "django",
+   "path": "django/http/request.py",
+   "symbol": "HttpRequest.__init__",
+   "kind": "function",
+   "lines": [
+    62,
+    78
+   ],
+   "fingerprint": "66490bb3d64d542b"
   }
  ]
 }

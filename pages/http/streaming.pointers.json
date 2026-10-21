@@ -127,9 +127,23 @@
    "fingerprint": "1ee2857c05fabfbd"
   },
   {
+   "pointer": "django/http/response.py:HttpResponseBase.close",
+   "line": 74,
+   "sentence": "`request_finished` is sent by the response's `close`, which the server calls after the last piece, so the request's resources are still held while the body streams (`django/http/response.py:HttpResponseBase.close`).",
+   "tree": "django",
+   "path": "django/http/response.py",
+   "symbol": "HttpResponseBase.close",
+   "kind": "function",
+   "lines": [
+    339,
+    348
+   ],
+   "fingerprint": "7689c4f13ba32ef4"
+  },
+  {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.send_response",
    "line": 93,
-   "sentence": "An ASGI handler sends the response itself, as messages: `ASGIHandler.send_response` sends the status and headers in one, and then the body, an `HttpResponse`'s cut into messages of at most `ASGIHandler.chunk_size`, 65,536 bytes (`django/core/handlers/asgi.py:ASGIHandler.send_response`).",
+   "sentence": "An ASGI handler sends the response itself, as messages: `ASGIHandler.send_response` sends the status and headers in one, and then the body, in messages of at most `ASGIHandler.chunk_size`, 65,536 bytes (`django/core/handlers/asgi.py:ASGIHandler.send_response`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.send_response",
@@ -143,7 +157,7 @@
   {
    "pointer": "django/http/response.py:StreamingHttpResponse.__aiter__",
    "line": 95,
-   "sentence": "A synchronous one cannot be run on the event loop without stopping every other request while it works, so `__aiter__` hands it to a thread, which runs it to its end and collects what it yields into a list; only then are the parts sent, with a warning (`django/http/response.py:StreamingHttpResponse.__aiter__`).",
+   "sentence": "A synchronous one cannot be run on the event loop without stopping every other request while it works, so `__aiter__` warns and hands it to a thread, which runs it to its end and collects what it yields into a list; only then are the parts sent (`django/http/response.py:StreamingHttpResponse.__aiter__`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "StreamingHttpResponse.__aiter__",
@@ -155,23 +169,9 @@
    "fingerprint": "bf6c44a5585bb099"
   },
   {
-   "pointer": "docs/ref/request-response.txt",
-   "line": 129,
-   "sentence": "The reference gives the reason the kinds must match: under WSGI the response is iterated synchronously and under ASGI asynchronously, and consuming an iterator of the wrong kind \"defeats the purpose of using a StreamingHttpResponse at all\" (`docs/ref/request-response.txt`, `django/http/response.py:StreamingHttpResponse.__iter__`).",
-   "tree": "django",
-   "path": "docs/ref/request-response.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    1502
-   ],
-   "fingerprint": "b33496c155d07e2c"
-  },
-  {
    "pointer": "django/http/response.py:StreamingHttpResponse.__iter__",
    "line": 129,
-   "sentence": "The reference gives the reason the kinds must match: under WSGI the response is iterated synchronously and under ASGI asynchronously, and consuming an iterator of the wrong kind \"defeats the purpose of using a StreamingHttpResponse at all\" (`docs/ref/request-response.txt`, `django/http/response.py:StreamingHttpResponse.__iter__`).",
+   "sentence": "Under ASGI that is a synchronous iterator; under WSGI it is an asynchronous one, which `StreamingHttpResponse.__iter__` runs to its end through `async_to_sync`, with the matching warning (`django/http/response.py:StreamingHttpResponse.__iter__`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "StreamingHttpResponse.__iter__",
@@ -241,7 +241,7 @@
   {
    "pointer": "django/http/response.py:FileResponse.set_headers",
    "line": 174,
-   "sentence": "A name that Python recognises as a compressed file, such as `\"report.csv.gz\"`, is given the compressed file's own type, here `\"application/gzip\"`, and no Content-Encoding: by the comment at that line, the encoding is left unset so that a browser does not uncompress the file (`django/http/response.py:FileResponse.set_headers`).",
+   "sentence": "A name that Python recognises as a compressed file, such as `\"report.csv.gz\"`, is given the compressed file's own type, here `\"application/gzip\"`, and no Content-Encoding, so that a browser does not uncompress the file (`django/http/response.py:FileResponse.set_headers`).",
    "tree": "django",
    "path": "django/http/response.py",
    "symbol": "FileResponse.set_headers",
@@ -283,7 +283,7 @@
   {
    "pointer": "django/core/handlers/wsgi.py:WSGIHandler.__call__",
    "line": 196,
-   "sentence": "Without the replacement nothing would close the response: the request's uploaded files would stay open, and `request_finished` would never be sent (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
+   "sentence": "A server that uses the wrapper calls `close` on the wrapper and not on the response, and without the replacement nothing would close the response: the request's uploaded files would stay open, and `request_finished` would never be sent (`django/core/handlers/wsgi.py:WSGIHandler.__call__`).",
    "tree": "django",
    "path": "django/core/handlers/wsgi.py",
    "symbol": "WSGIHandler.__call__",
@@ -297,7 +297,7 @@
   {
    "pointer": "django/core/handlers/asgi.py:ASGIHandler.run_get_response",
    "line": 198,
-   "sentence": "`ASGIHandler.run_get_response` raises the response's block size to the handler's chunk size, and the file is read to its end in a thread and held in memory before any of it is sent (`django/core/handlers/asgi.py:ASGIHandler.run_get_response`).",
+   "sentence": "`ASGIHandler.run_get_response` sets the response's block size to the handler's chunk size, and the file is read to its end in a thread and held in memory before any of it is sent (`django/core/handlers/asgi.py:ASGIHandler.run_get_response`).",
    "tree": "django",
    "path": "django/core/handlers/asgi.py",
    "symbol": "ASGIHandler.run_get_response",

@@ -31,7 +31,7 @@ A management command's `--settings` option writes the same variable later, and u
 
 A WSGI or ASGI server is pointed at a module of the project and imports it. The module calls `get_wsgi_application` or `get_asgi_application`, and each of those is two lines: call `django.setup` with `set_prefix=False`, and return a new handler (`django/core/wsgi.py:get_wsgi_application`, `django/core/asgi.py:get_asgi_application`).
 
-The argument tells `django.setup` to leave the script prefix alone, because under a server the handler sets it for each request, from `settings.FORCE_SCRIPT_NAME` or else from what the server passes with the request (`django/core/handlers/wsgi.py:WSGIHandler.__call__`). Look for what is missing after `configure_logging`: a command's call reads `settings.FORCE_SCRIPT_NAME` there and calls `set_script_prefix`, and here the read of `settings.INSTALLED_APPS` follows at once.
+The argument tells `django.setup` to leave the script prefix alone, because under a server the handler sets it for each request, ordinarily from `settings.FORCE_SCRIPT_NAME` or else from what the server passes with the request ([The script prefix, the current URLconf and the caches](../urls/state.md#the-script-prefix)) (`django/core/handlers/wsgi.py:WSGIHandler.__call__`). Look for what is missing after `configure_logging`: a command's call reads `settings.FORCE_SCRIPT_NAME` there and calls `set_script_prefix`, and here the read of `settings.INSTALLED_APPS` follows at once.
 
 ```text recording=startup
 get_wsgi_application() in a new process: django.setup(set_prefix=False), then the handler

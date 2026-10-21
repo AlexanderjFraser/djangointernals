@@ -4,9 +4,9 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 # The script prefix, the current URLconf and the caches
 
-The URL system keeps two values for the thread or task serving a request, the script prefix and the current URLconf, and keeps the resolvers and compiled expressions it works out from a URLconf for the whole process. `django.urls.get_script_prefix` and `get_urlconf` read the two values, and `clear_url_caches` empties some of the process's caches.
+The URL system keeps two values for the thread or task serving a request, the script prefix and the current URLconf, and keeps the resolvers and compiled expressions it works out from a URLconf for the process. `django.urls.get_script_prefix` and `get_urlconf` read the two values, and `clear_url_caches` empties some of the process's caches.
 
-`resolve` and `reverse` are called with very little: a path, or a name and some arguments. What else they need they find in state that something set earlier, and that state has two lifetimes. Some of it belongs to the request being served, and is kept apart for each thread, since a server's threads serve different requests at once. The rest is derived from the URLconf, is not made for any one request, and is kept for the life of the process.
+`resolve` and `reverse` are called with very little: a path, or a name and some arguments. What else they need they find in state that something set earlier, and that state has two lifetimes. Some of it belongs to the request being served, and is kept apart for each thread, since a server's threads serve different requests at once. The rest is derived from the URLconf, is not made for any one request, and is kept for the process.
 
 The figure follows the two values through one request on a server's thread, from where each is set. Only the current URLconf ends with the request.
 
@@ -43,7 +43,7 @@ A request is not all that sets them. The table adds what else does, what clears 
 
 ## The script prefix
 
-A site is not always served from the root of its host. A server may mount a Django project under some path, `"/museum"`, and Django is then to route only the remainder of each request's path. Under WSGI the server hands over the two parts separately, the mounted part as `"SCRIPT_NAME"`. Under ASGI it hands over the whole path with the mounted part beside it, as the root path, and `ASGIRequest` takes the one off the front of the other. Either way the request's `path_info` is the remainder, and a URLconf is written as if the site stood at the root. But a path that `reverse` returns is sent to a browser, and has to carry the mounted part in front or the link will lead outside the project.
+A site is not always served from the root of its host. A server may mount a Django project under some path, `"/museum"`, and Django is then to route only the remainder of each request's path. Under WSGI the server hands over the two parts separately, the mounted part as `"SCRIPT_NAME"`. Under ASGI it hands over the whole path with the mounted part beside it, as the root path, and `ASGIRequest` takes the one off the front of the other (`django/core/handlers/asgi.py:ASGIRequest.__init__`). Either way the request's `path_info` is the remainder, and a URLconf is written as if the site stood at the root. But a path that `reverse` returns is sent to a browser, and has to carry the mounted part in front or the link will lead outside the project.
 
 That part is the **script prefix**. It is kept in a module-level object, `_prefixes`, by `set_script_prefix`, which adds a final slash if there is none, and read by `get_script_prefix` (`django/urls/base.py:set_script_prefix`, `django/urls/base.py:get_script_prefix`).
 
@@ -74,7 +74,7 @@ GET /museum/east/rooms/12/, where the server's SCRIPT_NAME is /museum: what the 
       get_script_prefix()  ->  '/'
 ```
 
-> **Trap.** The script prefix outlives its request. `_prefixes` keeps it for each thread, as the comment above it says, and nothing at the end of a request unsets it: once the response is closed the thread still reads `"/museum/"`, and a `reverse` made there, outside any request, puts that in front where a thread with no prefix would put `"/"`. `clear_script_prefix` would unset it, and nothing in Django calls it (`django/urls/base.py:_prefixes`, `django/urls/base.py:clear_script_prefix`). Under ASGI it is the same: the coroutine that awaited the handler still reads `"/museum/"` afterwards. A server's next request on the thread is not harmed, since its handler sets the prefix again before it makes the request object; code that runs on the thread after a request, and reverses with no request of its own, is.
+> **Trap.** The script prefix outlives its request. `_prefixes` keeps it for each thread, and nothing at the end of a request unsets it: once the response is closed the thread still reads `"/museum/"`, and a `reverse` made there, outside any request, puts that in front where a thread with no prefix would put `"/"`. `clear_script_prefix` would unset it, and nothing in Django calls it (`django/urls/base.py:_prefixes`, `django/urls/base.py:clear_script_prefix`). Under ASGI it is the same: the coroutine that awaited the handler still reads `"/museum/"` afterwards. A server's next request on the thread is not harmed, since its handler sets the prefix again before it makes the request object; code that runs on the thread after a request, and reverses with no request of its own, is.
 
 `settings.FORCE_SCRIPT_NAME`, when it is set, takes the server's place. With it set to `"/exhibits"` and a WSGI server saying `"/museum"`, the prefix is `"/exhibits/"`, and the view's `path` and the path it reverses begin with it (`django/core/handlers/wsgi.py:get_script_name`).
 
@@ -88,7 +88,7 @@ The **current URLconf** is kept the same way, in `_urlconfs`, by `set_urlconf`, 
 
 For each request, `BaseHandler.get_response`, or `BaseHandler.get_response_async`, sets it to `settings.ROOT_URLCONF` before it calls the middleware chain, and when the response is closed, `reset_urlconf`, a receiver of `request_finished` that the handler's module connects, unsets it (`django/core/handlers/base.py:BaseHandler.get_response`, `django/core/handlers/base.py:reset_urlconf`).
 
-The value exists so that one request can be routed by another URLconf. A middleware sets an attribute named `"urlconf"` on the request, and when the request reaches the centre of the middleware chain ([Handlers and middleware](../handlers.md)) `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`). A middleware that gives a request for the members' host the members' URLconf, which has a pattern named renew and none named tickets, shows where the change happens: watch the current URLconf the middleware reads just after setting the attribute, and what the view can reverse.
+The value exists so that one request can be routed by another URLconf. A middleware sets an attribute named `"urlconf"` on the request, and when the request reaches the centre of the middleware chain ([Handlers and middleware](../handlers.md)) `BaseHandler.resolve_request` finds the attribute, makes that URLconf the current one, and resolves with its resolver (`django/core/handlers/base.py:BaseHandler.resolve_request`). A middleware that gives a request for the members' host the members' URLconf, which has a pattern named *renew* and none named *tickets*, shows where the change happens: watch the current URLconf the middleware reads just after setting the attribute, and what the view can reverse.
 
 ```text recording=urls
 GET / for the host members.museum.example: a middleware sets request.urlconf
@@ -110,7 +110,7 @@ GET / for the host members.museum.example: a middleware sets request.urlconf
               ...
 ```
 
-> **Trap.** Setting the attribute changes nothing at once. The documentation says the URLconf it names "will be used as the root URLconf for the current request", but until `resolve_request` runs, at the centre of the chain, the current URLconf is still `ROOT_URLCONF`: a `reverse` in the middleware that set it, or in a middleware inside it on the request's way in, finds the root URLconf's names. The `process_view` hooks are called after `resolve_request`, and find the new one (`docs/ref/request-response.txt`, `django/core/handlers/base.py:BaseHandler._get_response`).
+> **Trap.** Setting the attribute changes nothing at once. Until `resolve_request` runs, at the centre of the chain, the current URLconf is still `ROOT_URLCONF`: a `reverse` in the middleware that set it, or in a middleware inside it on the request's way in, finds the root URLconf's names. The `process_view` hooks are called after `resolve_request`, and find the new one (`django/core/handlers/base.py:BaseHandler._get_response`).
 
 Because `resolve_request` makes the URLconf current, and does not merely resolve with it, the rest of the request agrees with it: the view reverses by the members' names, and had it raised, with `settings.DEBUG` off, the error view would have been looked for in the members' URLconf module, since the handler asks for the resolver of the current URLconf when it needs one ([From a URLconf to a tree](urlconf.md#what-else-a-urlconf-module-may-hold)) (`django/core/handlers/exception.py:response_for_exception`).
 
@@ -135,15 +135,15 @@ The `Local` keeps a value with the asynchronous context it was set in, and asgir
 
 ## For the process: resolvers and compiled expressions
 
-What is worked out from the URLconf is kept in these places.
+Most of what is worked out from the URLconf is kept in these places.
 
 | what is kept | where | until |
 |---|---|---|
 | the root resolver of each URLconf | `functools.cache` on `_get_cached_resolver`, by the value it was asked for ([From a URLconf to a tree](urlconf.md#the-root-resolver)) | `clear_url_caches` |
-| the resolver made for reversing inside a namespace, for each expression that leads to one | `functools.cache` on `get_ns_resolver` | `clear_url_caches` |
+| the resolver made for reversing inside a namespace | `functools.cache` on `get_ns_resolver`, by the arguments it was given | `clear_url_caches` |
 | each view or error view imported from a dotted name | `functools.cache` on `get_callable` | `clear_url_caches` |
 | a resolver's module and its list of entries | `URLResolver.urlconf_module` and `URLResolver.url_patterns`, each kept on the resolver once it has been computed | the resolver is discarded |
-| a resolver's tables for reversing, filled once for each language ([Language prefixes and translated routes](i18n.md#tables-for-each-language)) | three dictionaries on the resolver | the resolver is discarded |
+| a resolver's tables for reversing, filled for each language ([Language prefixes and translated routes](i18n.md#tables-for-each-language)) | three dictionaries on the resolver | the resolver is discarded |
 | the compiled expression of a `RoutePattern` or a `RegexPattern` | on the matcher; a `LocalePrefixPattern` keeps none, and calls `re.compile` at every read | the matcher is discarded |
 | the expression each route expands to | `functools.lru_cache` on `_route_to_regex`, which holds 128 results | `register_converter`, or newer routes push it out |
 | the dictionary of converters | `functools.cache` on `get_converters` | `register_converter` |

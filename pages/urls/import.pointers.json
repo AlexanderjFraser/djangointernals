@@ -25,7 +25,7 @@
   {
    "pointer": "django/urls/conf.py:include",
    "line": 38,
-   "sentence": "`include` imports a module it is given by name before it returns, so each included module is imported in the middle of the root's own import, at the first `include` that names it, and an `include` that names a module already imported runs none of its code again (`django/urls/conf.py:include`).",
+   "sentence": "`include` imports a module it is given by name before it returns, so each such module is imported in the middle of the root's own import, at the first `include` that names it, and an `include` that names a module already imported runs none of its code again (`django/urls/conf.py:include`).",
    "tree": "django",
    "path": "django/urls/conf.py",
    "symbol": "include",
@@ -39,7 +39,7 @@
   {
    "pointer": "django/urls/resolvers.py:get_resolver",
    "line": 38,
-   "sentence": "Asked for again, `get_resolver` returns the same resolver from its cache, with its list already on it, and nothing is imported or built a second time (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
+   "sentence": "Asked for again, `get_resolver` returns the same resolver from its cache, with its list already on it, and nothing is imported or built again (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "get_resolver",
@@ -53,7 +53,7 @@
   {
    "pointer": "django/urls/resolvers.py:_get_cached_resolver",
    "line": 38,
-   "sentence": "Asked for again, `get_resolver` returns the same resolver from its cache, with its list already on it, and nothing is imported or built a second time (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
+   "sentence": "Asked for again, `get_resolver` returns the same resolver from its cache, with its list already on it, and nothing is imported or built again (`django/urls/resolvers.py:get_resolver`, `django/urls/resolvers.py:_get_cached_resolver`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "_get_cached_resolver",
@@ -80,9 +80,23 @@
    "fingerprint": "db32b08cd1f96afc"
   },
   {
+   "pointer": "django/urls/resolvers.py:URLResolver.resolve",
+   "line": 68,
+   "sentence": "`URLResolver.resolve` reads `URLResolver.url_patterns` for the first path that reaches it, unless something in the request has needed the URLconf sooner: `LocaleMiddleware.process_request`, for one, has `url_patterns` read to learn whether the URLconf has a language prefix ([Language prefixes and translated routes](i18n.md)), and when an exception raised in a middleware is to be answered by an error view, `URLResolver.resolve_error_handler` reads the URLconf's module to look for one (`django/urls/resolvers.py:URLResolver.resolve`, `django/conf/urls/i18n.py:is_language_prefix_patterns_used`, `django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.resolve",
+   "kind": "function",
+   "lines": [
+    672,
+    719
+   ],
+   "fingerprint": "4ff31b0b1c626919"
+  },
+  {
    "pointer": "django/conf/urls/i18n.py:is_language_prefix_patterns_used",
    "line": 68,
-   "sentence": "`URLResolver.resolve` reads `URLResolver.url_patterns` for the first path that reaches it, unless something in the request has needed the URLconf sooner: `LocaleMiddleware.process_request` has `url_patterns` read to learn whether the URLconf has a language prefix ([Language prefixes and translated routes](i18n.md)), and when an exception raised in a middleware is to be answered by an error view, `URLResolver.resolve_error_handler` reads the URLconf's module to look for one (`django/conf/urls/i18n.py:is_language_prefix_patterns_used`, `django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
+   "sentence": "`URLResolver.resolve` reads `URLResolver.url_patterns` for the first path that reaches it, unless something in the request has needed the URLconf sooner: `LocaleMiddleware.process_request`, for one, has `url_patterns` read to learn whether the URLconf has a language prefix ([Language prefixes and translated routes](i18n.md)), and when an exception raised in a middleware is to be answered by an error view, `URLResolver.resolve_error_handler` reads the URLconf's module to look for one (`django/urls/resolvers.py:URLResolver.resolve`, `django/conf/urls/i18n.py:is_language_prefix_patterns_used`, `django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
    "tree": "django",
    "path": "django/conf/urls/i18n.py",
    "symbol": "is_language_prefix_patterns_used",
@@ -97,7 +111,7 @@
   {
    "pointer": "django/urls/resolvers.py:URLResolver.resolve_error_handler",
    "line": 68,
-   "sentence": "`URLResolver.resolve` reads `URLResolver.url_patterns` for the first path that reaches it, unless something in the request has needed the URLconf sooner: `LocaleMiddleware.process_request` has `url_patterns` read to learn whether the URLconf has a language prefix ([Language prefixes and translated routes](i18n.md)), and when an exception raised in a middleware is to be answered by an error view, `URLResolver.resolve_error_handler` reads the URLconf's module to look for one (`django/conf/urls/i18n.py:is_language_prefix_patterns_used`, `django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
+   "sentence": "`URLResolver.resolve` reads `URLResolver.url_patterns` for the first path that reaches it, unless something in the request has needed the URLconf sooner: `LocaleMiddleware.process_request`, for one, has `url_patterns` read to learn whether the URLconf has a language prefix ([Language prefixes and translated routes](i18n.md)), and when an exception raised in a middleware is to be answered by an error view, `URLResolver.resolve_error_handler` reads the URLconf's module to look for one (`django/urls/resolvers.py:URLResolver.resolve`, `django/conf/urls/i18n.py:is_language_prefix_patterns_used`, `django/urls/resolvers.py:URLResolver.resolve_error_handler`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver.resolve_error_handler",
@@ -210,7 +224,7 @@
   {
    "pointer": "django/views/debug.py:get_caller",
    "line": 93,
-   "sentence": "With `settings.DEBUG` on, the debug page takes the error view's place and fares no better: to name the view that was handling the request it resolves the path, and so tries the import again ([The debug pages and `ExceptionReporter`](../views/debug.md)) (`django/views/debug.py:get_caller`).",
+   "sentence": "With `settings.DEBUG` on, the debug page takes the error view's place and fares no better: to name the view handling the request it resolves the path, and so tries the import again ([The debug pages and `ExceptionReporter`](../views/debug.md)) (`django/views/debug.py:get_caller`).",
    "tree": "django",
    "path": "django/views/debug.py",
    "symbol": "get_caller",
@@ -280,9 +294,38 @@
    "fingerprint": "1fdafd8426b57393"
   },
   {
-   "pointer": "django/urls/resolvers.py:URLResolver.url_patterns",
+   "pointer": "django/urls/resolvers.py:URLResolver._populate",
    "line": 105,
-   "sentence": "A URLconf that calls `reverse` so early fails for every request after the first as well: every later read of `url_patterns`, for a path or for `reverse`, raises the same `ImproperlyConfigured` without trying the import again (`django/urls/resolvers.py:URLResolver.url_patterns`).",
+   "sentence": "Where `reverse` made the first read, the call inside the import finds `URLResolver._populate` already running on its thread and raises, keeping nothing (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver.reverse_dict`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver._populate",
+   "kind": "function",
+   "lines": [
+    547,
+    629
+   ],
+   "fingerprint": "7990db2ae9316bda"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.reverse_dict",
+   "line": 105,
+   "sentence": "Where `reverse` made the first read, the call inside the import finds `URLResolver._populate` already running on its thread and raises, keeping nothing (`django/urls/resolvers.py:URLResolver._populate`, `django/urls/resolvers.py:URLResolver.reverse_dict`).",
+   "tree": "django",
+   "path": "django/urls/resolvers.py",
+   "symbol": "URLResolver.reverse_dict",
+   "kind": "function",
+   "lines": [
+    631,
+    636
+   ],
+   "at": 632,
+   "fingerprint": "e49f37735db8dbd2"
+  },
+  {
+   "pointer": "django/urls/resolvers.py:URLResolver.url_patterns",
+   "line": 107,
+   "sentence": "A URLconf that calls `reverse` so early fails for every request after the first as well: once the module is kept, every read of `url_patterns` raises the same `ImproperlyConfigured` without trying the import again (`django/urls/resolvers.py:URLResolver.url_patterns`).",
    "tree": "django",
    "path": "django/urls/resolvers.py",
    "symbol": "URLResolver.url_patterns",
