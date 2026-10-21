@@ -26,7 +26,7 @@ What an SRID means is the database's to say. `BaseSpatialField.geodetic`, `BaseS
 
 ## On the instance: `SpatialProxy`
 
-`GeometryField.contribute_to_class` puts a `SpatialProxy` on the model class under the field's attname (`django/contrib/gis/db/models/fields.py:GeometryField.contribute_to_class`). It is a `DeferredAttribute` with a `__set__`, so a data descriptor: every assignment goes through it, those of `Model.__init__` included, and every read, which fetches a deferred value through the instance's fetch mode ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).
+`GeometryField.contribute_to_class` puts a `SpatialProxy` on the model class under the field's attname (`django/contrib/gis/db/models/fields.py:GeometryField.contribute_to_class`). It is a `DeferredAttribute` with a `__set__`, so a data descriptor: every assignment goes through it, those of `Model.__init__` included, and every read, which fetches a deferred value through the instance's fetch mode ([Deferred fields and the fetch modes](../instance/fetching.md)).
 
 `SpatialProxy.__set__` checks a value's type and stores it unchanged in the instance's `__dict__`. It takes `None`, a string or a `memoryview` without looking inside, and an object of the field's `geom_class`, any `GEOSGeometry` for `GeometryField` itself, to which it gives the field's SRID if it has none. Anything else raises `TypeError`. `SpatialProxy.__get__` parses a string or a `memoryview` at the first read, with `GEOSGeometry` and the field's `max_geom_collections`, and assigns the result back through `__set__`, so the string is parsed once and its type checked then (`django/contrib/gis/db/models/proxy.py:SpatialProxy`). A mooring made in Python:
 

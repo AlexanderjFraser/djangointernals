@@ -111,7 +111,7 @@ Destroying test database for alias 'default'...
 `ClientHandler` is a `BaseHandler` whose `__call__` takes the environ and returns the response object itself (`django/test/client.py:ClientHandler.__call__`):
 
 1. If `BaseHandler._middleware_chain` is still `None`, it calls `BaseHandler.load_middleware`, which, a comment says, could not be done earlier, the settings not being available. So the chain is built from `MIDDLEWARE` as it is at the client's first request, and kept, as test_chain_is_kept shows ([Building the middleware chain](../handlers/chain.md)).
-2. It sends `request_started` with `close_old_connections` disconnected, so that receiver closes none of the test's connections ([Opening and closing a connection](../backends/lifecycle.md)).
+2. It sends `request_started` with `close_old_connections` disconnected, so that receiver closes none of the test's connections ([Opening and closing a connection](../connections/opening.md)).
 3. It makes a `WSGIRequest` and sets `"_dont_enforce_csrf_checks"` on it, true unless the client enforces the check: a "sneaky little hack", the comment says, probably required for backwards compatibility with external tests of the admin's views ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)).
 4. `BaseHandler.get_response` runs the chain.
 5. `conditional_content_removal` empties the body of a response to a `"HEAD"` and of a 1xx, 204 or 304, as, its docstring says, most web servers do; the headers stay.

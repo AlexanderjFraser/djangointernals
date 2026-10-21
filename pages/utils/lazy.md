@@ -36,7 +36,7 @@ A result class gives the proxy methods, never a base: a lazy value is not a `str
 
 - keeps it: `smart_str` and `smart_bytes` return it as it is ([Text and bytes: `django/utils/encoding.py`](encoding.md)) (`django/utils/encoding.py:smart_str`), and `normalize_choices` returns it as given ([Choices: `normalize_choices` and the choice iterators](choices.md)) (`django/utils/choices.py:normalize_choices`);
 - evaluates it: `iri_to_uri` (`django/utils/encoding.py:iri_to_uri`), `conditional_escape` ([Autoescaping and safe strings](../templates/autoescape.md)), `resolve_url`, whose comment says a lazy value can cause issues in functions such as `urllib.parse.urlparse` (`django/shortcuts.py:resolve_url`), and `Field.get_prep_value`, which calls the proxy's private method by its mangled name (`django/db/models/fields/__init__.py:Field.get_prep_value`);
-- writes its string: `DjangoJSONEncoder` (`django/core/serializers/json.py:DjangoJSONEncoder.default`), and `serializer_factory` for a migration file ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md));
+- writes its string: `DjangoJSONEncoder` (`django/core/serializers/json.py:DjangoJSONEncoder.default`), and `serializer_factory` for a migration file ([Serializing values: `serializer_factory` and `deconstruct`](../makemigrations/serializer.md));
 - counts it as text, testing it beside `str`: a member's label in `ChoicesType.__new__` (`django/db/models/enums.py:ChoicesType.__new__`), a choice's value or label in the check of a field's choices (`django/db/models/fields/__init__.py:Field._choices_is_value`), and an address in the `ADMINS` or `MANAGERS` setting (`django/core/mail/__init__.py:_send_server_message`).
 
 ## Copying and pickling

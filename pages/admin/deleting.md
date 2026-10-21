@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `ModelAdmin.delete_view` serves an object's delete page. Asked with `"GET"`, it shows every row that deleting the object would take with it, found by `ModelAdmin.get_deleted_objects` with `NestedObjects`, a collector that deletes nothing; posted to, it logs the deletion, deletes, and answers.
 
-A delete takes with it the rows that point at its row, or is refused by them, as their relations' `on_delete` says ([Deleting: the `Collector`](../models/deleting.md)). The admin shows the user that reach first, and stops at a row that `PROTECT` or `RESTRICT` guards, or at a row of a registered model the user may not delete. Both are found by running a delete's collection, made to fetch every row, without the delete.
+A delete takes with it the rows that point at its row, or is refused by them, as their relations' `on_delete` says ([Deleting: the `Collector`](../instance/deleting.md)). The admin shows the user that reach first, and stops at a row that `PROTECT` or `RESTRICT` guards, or at a row of a registered model the user may not delete. Both are found by running a delete's collection, made to fetch every row, without the delete.
 
 ## The view
 
@@ -40,7 +40,7 @@ A function defined inside it makes each string, the model's verbose name and the
 
 ## `NestedObjects`
 
-`NestedObjects` is a `Collector` made with `force_collection=True` (`django/contrib/admin/utils.py:NestedObjects`). A forced collector marks nothing for a fast delete, so it fetches every row the delete would take, and it follows a relation with `DB_CASCADE`, whose rows the real delete leaves to the database, so the page names those too ([Deleting: the `Collector`](../models/deleting.md)).
+`NestedObjects` is a `Collector` made with `force_collection=True` (`django/contrib/admin/utils.py:NestedObjects`). A forced collector marks nothing for a fast delete, so it fetches every row the delete would take, and it follows a relation with `DB_CASCADE`, whose rows the real delete leaves to the database, so the page names those too ([Deleting: the `Collector`](../instance/deleting.md)).
 
 `NestedObjects.collect` records an edge to each row it is handed from the object the row was reached from, read off the row through the field that reached it. The rows given at the start are roots, and so are rows reached without such a field: a generic relation's, or a parent's reached by a link with no related name or one ending in `"+"`. Then it calls `Collector.collect`, and catches `ProtectedError` and `RestrictedError` into its set of protected objects (`django/contrib/admin/utils.py:NestedObjects.collect`). A cascade's nested call is this method too, so a `ProtectedError`, raised by the call whose rows a protected relation points at, ends only that call, and the collection goes on; a `RestrictedError` comes only from the outermost call, once everything is collected (`django/db/models/deletion.py:CASCADE`, `django/db/models/deletion.py:Collector.collect`).
 

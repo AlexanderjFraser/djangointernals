@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 844 580">
+  <!-- one call of filter and what it left on the query: the two names walked through the models as
+       paths through stations; under the stations, the alias map they filled, a tree from the base
+       table; under it the where tree, each leaf set under the alias its column is bound to; the vote -->
+  <text class="name strong" x="0" y="14">Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020)</text>
+
+  <!-- the names: each walked from Sailor, a station for each model, an arrow for each relation -->
+  <text class="strong" x="0" y="52">the names</text>
+  <text class="quiet" x="0" y="70">walked through the models by <tspan class="name">names_to_path</tspan></text>
+
+  <text class="name" x="0" y="107">ship__home__name</text>
+  <rect class="ground" x="212.5" y="86.5" width="80" height="32" rx="4"/>
+  <text x="252.5" y="107" text-anchor="middle">Sailor</text>
+  <text class="name" x="342.5" y="95" text-anchor="middle">ship</text>
+  <path class="mark-line" d="M292.5 102.5 H382.5"/>
+  <polygon class="head mark" points="392.5,102.5 382.5,97.5 382.5,107.5"/>
+  <rect class="ground" x="392.5" y="86.5" width="80" height="32" rx="4"/>
+  <text x="432.5" y="107" text-anchor="middle">Ship</text>
+  <text class="name" x="522.5" y="95" text-anchor="middle">home</text>
+  <path class="mark-line" d="M472.5 102.5 H562.5"/>
+  <polygon class="head mark" points="572.5,102.5 562.5,97.5 562.5,107.5"/>
+  <rect class="ground" x="572.5" y="86.5" width="80" height="32" rx="4"/>
+  <text x="612.5" y="107" text-anchor="middle">Port</text>
+  <text class="name" x="660" y="107">.name</text>
+  <text class="quiet" x="724" y="107">nothing left over</text>
+
+  <text class="name" x="0" y="151">signed_on__year__lt</text>
+  <rect class="ground" x="212.5" y="130.5" width="80" height="32" rx="4"/>
+  <text x="252.5" y="151" text-anchor="middle">Sailor</text>
+  <text class="name" x="300" y="151">.signed_on</text>
+  <text x="724" y="151"><tspan class="name">year</tspan>, <tspan class="name">lt</tspan><tspan class="quiet"> left over</tspan></text>
+
+  <!-- the alias map: the base table under Sailor, each join under the model it reaches, hung from the
+       table before it -->
+  <text class="strong" x="0" y="200">the alias map, <tspan class="name strong">Query.alias_map</tspan></text>
+  <text class="quiet" x="0" y="218">a tree from the base table, a count on each entry</text>
+
+  <rect class="box" x="178.5" y="234.5" width="148" height="86" rx="4"/>
+  <text class="name strong" x="190.5" y="255">crew_sailor</text>
+  <text class="quiet" x="190.5" y="273">the base table</text>
+  <path class="line" d="M326.5 277.5 H358.5"/>
+
+  <rect class="mark-box" x="358.5" y="234.5" width="148" height="86" rx="4"/>
+  <text class="name strong" x="370.5" y="255">fleet_ship</text>
+  <text class="name" x="370.5" y="273">INNER JOIN</text>
+  <text x="370.5" y="291">from <tspan class="name">crew_sailor</tspan></text>
+  <text x="370.5" y="309">via <tspan class="name">Sailor.ship</tspan></text>
+  <path class="line" d="M506.5 277.5 H538.5"/>
+
+  <rect class="mark-box" x="538.5" y="234.5" width="148" height="86" rx="4"/>
+  <text class="name strong" x="550.5" y="255">fleet_port</text>
+  <text class="name" x="550.5" y="273">INNER JOIN</text>
+  <text x="550.5" y="291">from <tspan class="name">fleet_ship</tspan></text>
+  <text x="550.5" y="309">via <tspan class="name">Ship.home</tspan></text>
+
+  <!-- the where tree: the AND node holding its two leaves, the Exact first; each leaf's column names an
+       alias, and an arrow goes up from the alias in it to that entry -->
+  <text class="strong" x="0" y="358">the where tree, <tspan class="name strong">Query.where</tspan></text>
+  <text class="quiet" x="0" y="376">its leaves bound to the aliases</text>
+
+  <rect class="box" x="0.5" y="392.5" width="843" height="100" rx="4"/>
+  <text class="name strong" x="12.5" y="425">AND</text>
+
+  <rect class="ground" x="470.5" y="404.5" width="334" height="32" rx="4"/>
+  <text class="name strong" x="482.5" y="425">Exact</text>
+  <text class="name" x="542.5" y="425">Col(fleet_port, name) = 'Bergen'</text>
+
+  <rect class="ground" x="12.5" y="448.5" width="451" height="32" rx="4"/>
+  <text class="name strong" x="24.5" y="469">YearLt</text>
+  <text class="name" x="84.5" y="469">ExtractYear(Col(crew_sailor, signed_on)) &lt; 2020</text>
+
+  <path class="line" d="M612.5 404.5 V330.5"/>
+  <polygon class="head" points="612.5,320.5 607.5,330.5 617.5,330.5"/>
+  <path class="line" d="M252.5 448.5 V330.5"/>
+  <polygon class="head" points="252.5,320.5 247.5,330.5 257.5,330.5"/>
+
+  <!-- the vote, taken as the AND node is finished -->
+  <text class="strong" x="0" y="530">the vote</text>
+  <text class="quiet" x="0" y="548">as the <tspan class="name">AND</tspan> node is finished: <tspan class="name">JoinPromoter</tspan></text>
+  <text x="0" y="572">each child says which joins it needs a row through; <tspan class="name">fleet_ship</tspan> and <tspan class="name">fleet_port</tspan>, <tspan class="name">INNER</tspan> as made, stay <tspan class="name">INNER</tspan></text>
+</svg>

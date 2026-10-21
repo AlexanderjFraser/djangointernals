@@ -56,7 +56,7 @@ Since 6.1 a project may name its email backends by alias in the setting `MAILERS
 
 ## The test databases
 
-6.0 deprecated the argument `serialize=` of `BaseDatabaseCreation.create_test_db`, to go in Django 2028. It also changed the argument's default from true to `None`, which serializes nothing. A `TransactionTestCase` with `TransactionTestCase.serialized_rollback` gets back before each test the rows migrations wrote. The runner's `setup_databases` serializes them once every test database is made (`django/test/utils.py:setup_databases`; [Test databases: `BaseDatabaseCreation`](../backends/creation.md)). A call without the argument shows the old default under 5.2.17 and the new under 6.0.8 and later:
+6.0 deprecated the argument `serialize=` of `BaseDatabaseCreation.create_test_db`, to go in Django 2028. It also changed the argument's default from true to `None`, which serializes nothing. A `TransactionTestCase` with `TransactionTestCase.serialized_rollback` gets back before each test the rows migrations wrote. The runner's `setup_databases` serializes them once every test database is made (`django/test/utils.py:setup_databases`; [Test databases: `BaseDatabaseCreation`](../schema/test-databases.md)). A call without the argument shows the old default under 5.2.17 and the new under 6.0.8 and later:
 
 ```text recording=changes
 connection.creation.create_test_db(verbosity=0): the rows kept for serialized_rollback

@@ -318,135 +318,8 @@
    "fingerprint": "3ab7c89fa94897cd"
   },
   {
-   "pointer": "django/db/models/sql/query.py:Query.add_select_related",
-   "line": 166,
-   "sentence": "`Query.select_related` is `False`, `True`, or a dictionary of names nested at each `\"__\"`, which `Query.add_select_related` builds from the names given to `QuerySet.select_related` (`django/db/models/sql/query.py:Query.add_select_related`).",
-   "tree": "django",
-   "path": "django/db/models/sql/query.py",
-   "symbol": "Query.add_select_related",
-   "kind": "function",
-   "lines": [
-    2457,
-    2471
-   ],
-   "fingerprint": "bc8e3a1938ae2c9f"
-  },
-  {
-   "pointer": "django/db/models/query.py:QuerySet.select_related",
-   "line": 168,
-   "sentence": "Asking for `True`, by calling `select_related` with no arguments, warns with `RemovedInDjango2028Warning` (`django/db/models/query.py:QuerySet.select_related`).",
-   "tree": "django",
-   "path": "django/db/models/query.py",
-   "symbol": "QuerySet.select_related",
-   "kind": "function",
-   "lines": [
-    1832,
-    1862
-   ],
-   "fingerprint": "9458464d1c83ae80"
-  },
-  {
-   "pointer": "docs/releases/6.1.txt",
-   "line": 168,
-   "sentence": "The release notes of 6.1 say that calling it with no arguments to select all non-nullable related fields is deprecated, and that the related fields should be named, or the `FETCH_PEERS` fetch mode used (`docs/releases/6.1.txt`) ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).",
-   "tree": "django",
-   "path": "docs/releases/6.1.txt",
-   "symbol": null,
-   "kind": "file",
-   "lines": [
-    1,
-    760
-   ],
-   "fingerprint": "283b7ce3a441f06c"
-  },
-  {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
-   "line": 170,
-   "sentence": "`SQLCompiler.get_related_selections` fills in the rest of the select list and returns the `klass_info` of each related model (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.get_related_selections",
-   "kind": "function",
-   "lines": [
-    1199,
-    1430
-   ],
-   "fingerprint": "798f338c8c039880"
-  },
-  {
-   "pointer": "django/db/models/query_utils.py:select_related_descend",
-   "line": 172,
-   "sentence": "`select_related_descend` decides whether to follow a field (`django/db/models/query_utils.py:select_related_descend`): not where it is no relation, nor where it is the link to a parent model, which the comment says is always joined; in an unrestricted walk, where the field cannot be null; in a restricted one, where it was named, and with `FieldError` where the mask has entries but not this field, the error that says a field cannot be both deferred and traversed.",
-   "tree": "django",
-   "path": "django/db/models/query_utils.py",
-   "symbol": "select_related_descend",
-   "kind": "function",
-   "lines": [
-    431,
-    466
-   ],
-   "fingerprint": "5558eed7ff66ae8d"
-  },
-  {
-   "pointer": "django/db/models/fields/mixins.py:FieldCacheMixin.set_cached_value",
-   "line": 172,
-   "sentence": "For a field that is followed, the `klass_info` names the related model, the field, `\"reverse\"` as `False` and two setters, the field's `FieldCacheMixin.set_cached_value` and, where the field is unique, the rel's, so that each instance is put in the other's cache (`django/db/models/fields/mixins.py:FieldCacheMixin.set_cached_value`); `Query.setup_joins` joins the related table, `get_default_columns` makes its columns under that alias with the relation's part of the mask, each appended to the list with its position recorded in `\"select_fields\"`, and the method descends.",
-   "tree": "django",
-   "path": "django/db/models/fields/mixins.py",
-   "symbol": "FieldCacheMixin.set_cached_value",
-   "kind": "function",
-   "lines": [
-    30,
-    31
-   ],
-   "fingerprint": "a5218766316f0c4b"
-  },
-  {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
-   "line": 176,
-   "sentence": "Its entry is made as a reverse relation's, with `\"reverse\"` as `True` and the final field of the joins as its `\"field\"`, and its remote setter sets the related instance on the instance as an attribute under the alias, which no field of the model bears (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.get_related_selections",
-   "kind": "function",
-   "lines": [
-    1199,
-    1430
-   ],
-   "fingerprint": "798f338c8c039880"
-  },
-  {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent",
-   "line": 178,
-   "sentence": "`SQLCompiler.get_select_from_parent` is the one step after the walk, a class method that goes down the tree and, for each `klass_info` reached from a parent, puts the parent's positions in front of its own, so that a child's instance can be built from the parent's columns and its own (`django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent`).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.get_select_from_parent",
-   "kind": "function",
-   "lines": [
-    234,
-    239
-   ],
-   "at": 235,
-   "fingerprint": "077fac720933bcd0"
-  },
-  {
-   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments",
-   "line": 218,
-   "sentence": "`SQLCompiler.get_select_for_update_of_arguments` reads the tree too, to find the first selected column of each model a lock's `\"OF\"` names (`django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments`) ([The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md)).",
-   "tree": "django",
-   "path": "django/db/models/sql/compiler.py",
-   "symbol": "SQLCompiler.get_select_for_update_of_arguments",
-   "kind": "function",
-   "lines": [
-    1432,
-    1536
-   ],
-   "fingerprint": "abef0b1b0b2d25ad"
-  },
-  {
    "pointer": "django/db/models/sql/where.py:WhereNode.select_format",
-   "line": 236,
+   "line": 166,
    "sentence": "`WhereNode.output_field` is a boolean field, and its `select_format`, like that of `Exists`, wraps the SQL as `CASE WHEN ... THEN 1 ELSE 0 END` where the features object lacks `supports_boolean_expr_in_select_clause`, which the comment says is Oracle's case; on SQLite the condition stands as it is (`django/db/models/sql/where.py:WhereNode.select_format`, `django/db/models/expressions.py:Exists.select_format`).",
    "tree": "django",
    "path": "django/db/models/sql/where.py",
@@ -460,7 +333,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Exists.select_format",
-   "line": 236,
+   "line": 166,
    "sentence": "`WhereNode.output_field` is a boolean field, and its `select_format`, like that of `Exists`, wraps the SQL as `CASE WHEN ... THEN 1 ELSE 0 END` where the features object lacks `supports_boolean_expr_in_select_clause`, which the comment says is Oracle's case; on SQLite the condition stands as it is (`django/db/models/sql/where.py:WhereNode.select_format`, `django/db/models/expressions.py:Exists.select_format`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",
@@ -474,7 +347,7 @@
   },
   {
    "pointer": "django/db/models/expressions.py:Exists.as_sql",
-   "line": 236,
+   "line": 166,
    "sentence": "A `WhereNode` lets it through, and `get_select` catches it and, since a `WhereNode` has no `empty_result_set_value`, writes the constant `0`; an `Exists` catches it in its own `as_sql` and compiles `Value(False)`, a parameter, where the features object has `supports_boolean_expr_in_select_clause`, and writes `\"1=0\"` otherwise (`django/db/models/expressions.py:Exists.as_sql`).",
    "tree": "django",
    "path": "django/db/models/expressions.py",

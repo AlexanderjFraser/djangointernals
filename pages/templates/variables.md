@@ -50,8 +50,8 @@ If all three fail, it raises `VariableDoesNotExist`, with the part and the objec
 
 After each step, what was found is called if it can be, unless it says otherwise:
 
-- With a true `"do_not_call_in_templates"` it is kept as it is. The related managers set it ([Reading and setting related objects](../models/related-objects.md)).
-- With a true `"alters_data"` it is not called, and the value becomes the engine's `"string_if_invalid"`. Many methods that write carry it, among them `Model.save`, `Model.delete`, `QuerySet.update` and a file field's `FieldFile.save` ([File fields](../models/files.md)).
+- With a true `"do_not_call_in_templates"` it is kept as it is. The related managers set it ([Reading and setting related objects](../relations/related-objects.md)).
+- With a true `"alters_data"` it is not called, and the value becomes the engine's `"string_if_invalid"`. Many methods that write carry it, among them `Model.save`, `Model.delete`, `QuerySet.update` and a file field's `FieldFile.save` ([File fields](../instance/files.md)).
 - Otherwise it is called with no arguments. If that raises `TypeError`, `signature` is asked whether no arguments bind: if not, or if there is no signature, the call was invalid and the value becomes `"string_if_invalid"`; if they do, the error came from inside and is raised again.
 
 The whole lookup is one `try`. An exception the steps above do not handle is logged on `"django.template"` at the debug level, naming the part that failed and the template the render began with; Django's default logging drops that level (`django/utils/log.py:DEFAULT_LOGGING`). An exception with a true `"silent_variable_failure"` then gives `"string_if_invalid"`, and any other goes on up. `ObjectDoesNotExist` sets it, so a `Model.DoesNotExist` raised in a lookup does not break the render (`django/core/exceptions.py:ObjectDoesNotExist`).

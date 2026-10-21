@@ -69,7 +69,7 @@ A **stale content type** is a row whose `ContentType.model_class` is `None`, as 
 
 Where the router allows `ContentType` on the database of `--database`, it clears the manager's cache and reads every row, grouped by application label. A label the app registry lacks is skipped unless `--include-stale-apps` is given; elsewhere, the stale rows are those whose `model_class` is `None`.
 
-Unless `--noinput` is given, it first collects each stale row with a `Collector` made with `force_collection=True`, which fast-deletes nothing and collects what a database-level cascade would remove too, and lists each model found with its number of objects. Only "yes" deletes. Each row is then deleted by `Model.delete`, which cascades as any delete does ([Deleting: the `Collector`](../models/deleting.md)). A note had been attached to tender 1 before Tender was deleted:
+Unless `--noinput` is given, it first collects each stale row with a `Collector` made with `force_collection=True`, which fast-deletes nothing and collects what a database-level cascade would remove too, and lists each model found with its number of objects. Only "yes" deletes. Each row is then deleted by `Model.delete`, which cascades as any delete does ([Deleting: the `Collector`](../instance/deleting.md)). A note had been attached to tender 1 before Tender was deleted:
 
 ```text
 # call_command("remove_stale_contenttypes", verbosity=2), answered no

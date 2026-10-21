@@ -57,19 +57,21 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
-| [11 · From QuerySet to SQL](11-sql.md) | 0 |  | 3 | `django/utils/regex_helper.py` (3) |
-| [12 · Database backends](12-backends.md) | 0 |  | 6 | `django/utils/regex_helper.py` (6) |
-| [14 · Templates](14-templates.md) | 0 |  | 2+1 | `django/utils/regex_helper.py` (2) `django/urls/__init__.py` (1) |
-| [15 · Forms](15-forms.md) | 0 |  | 3 | `django/utils/regex_helper.py` (3) |
-| [16 · Internationalization and time zones](16-i18n.md) | 4 | `django/utils/translation/__init__.py` (3) `django/views/i18n.py` (1) | 7 | `django/utils/regex_helper.py` (4) `django/urls/__init__.py` (2) `django/conf/urls/i18n.py` (1) |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 0 |  | 1 | `django/utils/regex_helper.py` (1) |
-| [18 · The utility layer](18-utils.md) | 10 | `django/core/exceptions.py` (4) `django/utils/functional.py` (3) `django/utils/module_loading.py` (2) `django/utils/datastructures.py` (1) | 4 | `django/utils/regex_helper.py` (4) |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 3 | `django/urls/__init__.py` (3) |
-| [20 · The admin](20-admin.md) | 0 |  | 17+2 | `django/urls/__init__.py` (14) `django/urls/utils.py` (2) `django/utils/regex_helper.py` (2) `django/urls/exceptions.py` (1) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 10 | `django/utils/regex_helper.py` (5) `django/urls/__init__.py` (4) `django/conf/urls/static.py` (1) |
-| [22 · Management commands](22-commands.md) | 2 | `django/core/checks/__init__.py` (1) `django/core/checks/urls.py` (1) | 3+4 | `django/urls/__init__.py` (4) `django/utils/regex_helper.py` (2) `django/urls/utils.py` (1) |
-| [23 · The test framework](23-testing.md) | 0 |  | 4+1 | `django/urls/__init__.py` (3) `django/utils/regex_helper.py` (2) |
+| [13 · Expressions, lookups and functions](13-expressions.md) | 0 |  | 1 | `django/utils/regex_helper.py` (1) |
+| [14 · Building a query](14-query.md) | 0 |  | 1 | `django/utils/regex_helper.py` (1) |
+| [15 · The SQL compiler](15-sql.md) | 0 |  | 1 | `django/utils/regex_helper.py` (1) |
+| [17 · Database backends](17-backends.md) | 0 |  | 6 | `django/utils/regex_helper.py` (6) |
+| [21 · Templates](21-templates.md) | 0 |  | 2+1 | `django/utils/regex_helper.py` (2) `django/urls/__init__.py` (1) |
+| [22 · Forms](22-forms.md) | 0 |  | 3 | `django/utils/regex_helper.py` (3) |
+| [23 · Internationalization and time zones](23-i18n.md) | 4 | `django/utils/translation/__init__.py` (3) `django/views/i18n.py` (1) | 7 | `django/utils/regex_helper.py` (4) `django/urls/__init__.py` (2) `django/conf/urls/i18n.py` (1) |
+| [24 · Caching, files, mail, signals and tasks](24-services.md) | 0 |  | 1 | `django/utils/regex_helper.py` (1) |
+| [25 · The utility layer](25-utils.md) | 10 | `django/core/exceptions.py` (4) `django/utils/functional.py` (3) `django/utils/module_loading.py` (2) `django/utils/datastructures.py` (1) | 4 | `django/utils/regex_helper.py` (4) |
+| [26 · Authentication, sessions and messages](26-auth.md) | 0 |  | 3 | `django/urls/__init__.py` (3) |
+| [27 · The admin](27-admin.md) | 0 |  | 17+2 | `django/urls/__init__.py` (14) `django/urls/utils.py` (2) `django/utils/regex_helper.py` (2) `django/urls/exceptions.py` (1) |
+| [28 · Content types, static files and the other contrib apps](28-contrib.md) | 0 |  | 10 | `django/utils/regex_helper.py` (5) `django/urls/__init__.py` (4) `django/conf/urls/static.py` (1) |
+| [29 · Management commands](29-commands.md) | 2 | `django/core/checks/__init__.py` (1) `django/core/checks/urls.py` (1) | 3+4 | `django/urls/__init__.py` (4) `django/utils/regex_helper.py` (2) `django/urls/utils.py` (1) |
 | [3 · Settings, apps and startup](3-startup.md) | 3 | `django/conf/__init__.py` (3) | 0+2 | `django/urls/__init__.py` (2) |
+| [30 · The test framework](30-testing.md) | 0 |  | 4+1 | `django/urls/__init__.py` (3) `django/utils/regex_helper.py` (2) |
 | [4 · Handlers and middleware](4-handlers.md) | 0 |  | 7 | `django/urls/__init__.py` (5) `django/utils/regex_helper.py` (2) |
 | [5 · Requests and responses](5-http.md) | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) | 4 | `django/utils/regex_helper.py` (4) |
 | [7 · Views](7-views.md) | 2+2 | `django/views/__init__.py` (2) `django/views/defaults.py` (1) `django/views/static.py` (1) | 4 | `django/urls/__init__.py` (3) `django/utils/regex_helper.py` (1) |

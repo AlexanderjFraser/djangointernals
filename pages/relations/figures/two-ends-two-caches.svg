@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 856 609">
+  <!-- the two ends of one relation side by side: Sailor's on the left, Ship's on the right.
+       Above, each class with what the relation left on it; below, an instance of each with its cache,
+       and the ways that cache is filled, row for row across the two -->
+  <text x="0" y="14"><tspan class="strong">One relation, declared on Sailor:</tspan><tspan class="name" dx="8">ship</tspan>, a <tspan class="name">ForeignKey</tspan> to Ship whose far end is called <tspan class="name">"crew"</tspan></text>
+
+  <!-- the class Sailor -->
+  <rect class="box" x="0.5" y="30.5" width="367" height="164" rx="4"/>
+  <text class="strong" x="12" y="52">the class Sailor</text>
+  <text class="name" x="12" y="76">ship_id</text>
+  <text class="quiet" x="12" y="94">a descriptor: the key</text>
+  <text class="name" x="12" y="118">ship</text>
+  <text class="quiet" x="12" y="136">a <tspan class="name">ForwardManyToOneDescriptor</tspan>: the object</text>
+  <rect class="ground" x="12.5" y="150.5" width="343" height="32" rx="4"/>
+  <text x="24" y="172">in <tspan class="name">_meta</tspan>: the field <tspan class="name">ship</tspan>, a <tspan class="name">ForeignKey</tspan></text>
+
+  <!-- the class Ship -->
+  <rect class="box" x="488.5" y="30.5" width="367" height="164" rx="4"/>
+  <text class="strong" x="500" y="52">the class Ship</text>
+  <text class="name" x="500" y="76">crew</text>
+  <text class="quiet" x="500" y="94">a <tspan class="name">ReverseManyToOneDescriptor</tspan>:</text>
+  <text class="quiet" x="500" y="112">a related manager, made at each read</text>
+  <rect class="ground" x="500.5" y="150.5" width="343" height="32" rx="4"/>
+  <text x="512" y="172">in <tspan class="name">_meta</tspan>: its rel, a <tspan class="name">ManyToOneRel</tspan></text>
+
+  <!-- the field and its rel, each the other's remote_field -->
+  <text class="name" x="428" y="158" text-anchor="middle">remote_field</text>
+  <path class="line" d="M365.5 166.5 H490.5"/>
+  <polygon class="head" points="355.5,166.5 365.5,161.5 365.5,171.5"/>
+  <polygon class="head" points="500.5,166.5 490.5,161.5 490.5,171.5"/>
+
+  <!-- an instance of Sailor: its cache, and the four ways that fill it -->
+  <rect class="box" x="0.5" y="218.5" width="367" height="390" rx="4"/>
+  <text class="strong" x="12" y="240">an instance of Sailor</text>
+  <rect class="mark-box" x="44.5" y="254.5" width="311" height="50" rx="4"/>
+  <text class="name" x="56" y="276">_state.fields_cache["ship"]</text>
+  <text class="quiet" x="56" y="294">one Ship</text>
+  <text class="quiet" x="56" y="326">filled by</text>
+
+  <rect class="ground" x="44.5" y="342.5" width="311" height="50" rx="4"/>
+  <text x="56" y="364">assignment</text>
+  <text class="quiet" x="56" y="382"><tspan class="name">sailor.ship = </tspan>a ship</text>
+
+  <rect class="ground" x="44.5" y="404.5" width="311" height="68" rx="4"/>
+  <text x="56" y="426">a read that finds nothing</text>
+  <text class="name" x="56" y="444">FETCH_ONE</text>
+  <text class="quiet" x="156" y="444">one statement</text>
+  <text class="name" x="56" y="462">FETCH_PEERS</text>
+  <text class="quiet" x="156" y="462">may fetch for other sailors too</text>
+
+  <rect class="ground" x="44.5" y="484.5" width="311" height="50" rx="4"/>
+  <text class="name" x="56" y="506">select_related("ship")</text>
+  <text class="quiet" x="56" y="524">the same row, by a join</text>
+
+  <rect class="ground" x="44.5" y="546.5" width="311" height="50" rx="4"/>
+  <text class="name" x="56" y="568">prefetch_related("ship")</text>
+  <text class="quiet" x="56" y="586">a second statement</text>
+
+  <!-- each way into the cache -->
+  <path class="mark-line" d="M44.5 367.5 H22"/>
+  <path class="mark-line" d="M44.5 438.5 H22"/>
+  <path class="mark-line" d="M44.5 509.5 H22"/>
+  <path class="mark-line" d="M44.5 571.5 H22 V279.5 H34.5"/>
+  <polygon class="head mark" points="44.5,279.5 34.5,274.5 34.5,284.5"/>
+
+  <!-- an instance of Ship: its cache, filled by a prefetch alone; a read keeps nothing -->
+  <rect class="box" x="488.5" y="218.5" width="367" height="390" rx="4"/>
+  <text class="strong" x="500" y="240">an instance of Ship</text>
+  <rect class="mark-box" x="532.5" y="254.5" width="311" height="50" rx="4"/>
+  <text class="name" x="544" y="276">_prefetched_objects_cache["crew"]</text>
+  <text class="quiet" x="544" y="294">the ship's sailors</text>
+  <text class="quiet" x="544" y="326">filled by</text>
+
+  <rect class="ground dashed" x="532.5" y="404.5" width="311" height="68" rx="4"/>
+  <text x="544" y="426">a read that finds nothing</text>
+  <text class="quiet" x="544" y="444">nothing is kept: the manager's</text>
+  <text class="quiet" x="544" y="462">queryset sends its own statement</text>
+
+  <rect class="ground" x="532.5" y="546.5" width="311" height="50" rx="4"/>
+  <text class="name" x="544" y="568">prefetch_related("crew")</text>
+  <text class="quiet" x="544" y="586">a second statement, for every ship at once</text>
+
+  <path class="mark-line" d="M532.5 571.5 H510 V279.5 H522.5"/>
+  <polygon class="head mark" points="532.5,279.5 522.5,274.5 522.5,284.5"/>
+</svg>

@@ -81,7 +81,7 @@
   {
    "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit",
    "line": 42,
-   "sentence": "The transaction mode is spent where an atomic block begins: SQLite's outermost block begins with a `\"BEGIN\"` sent through Django's cursor, for the reason [Transactions: autocommit, `atomic` and savepoints](transactions.md) gives, and `DatabaseWrapper._start_transaction_under_autocommit` puts the mode after it (`django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit`):",
+   "sentence": "The transaction mode is spent where an atomic block begins: SQLite's outermost block begins with a `\"BEGIN\"` sent through Django's cursor, for the reason [Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md) gives, and `DatabaseWrapper._start_transaction_under_autocommit` puts the mode after it (`django/db/backends/sqlite3/base.py:DatabaseWrapper._start_transaction_under_autocommit`):",
    "tree": "django",
    "path": "django/db/backends/sqlite3/base.py",
    "symbol": "DatabaseWrapper._start_transaction_under_autocommit",
@@ -263,7 +263,7 @@
   {
    "pointer": "django/db/backends/utils.py:CursorWrapper",
    "line": 123,
-   "sentence": "`DatabaseWrapper.create_cursor` asks the driver's connection for a cursor of the class `SQLiteCursorWrapper`, a subclass of `sqlite3.Cursor`, so the conversion runs beneath Django's `CursorWrapper`, after the execute wrappers have seen the statement in Django's form (`django/db/backends/utils.py:CursorWrapper`) ([Cursors: executing a statement, the query log and execute wrappers](cursors.md)).",
+   "sentence": "`DatabaseWrapper.create_cursor` asks the driver's connection for a cursor of the class `SQLiteCursorWrapper`, a subclass of `sqlite3.Cursor`, so the conversion runs beneath Django's `CursorWrapper`, after the execute wrappers have seen the statement in Django's form (`django/db/backends/utils.py:CursorWrapper`) ([Cursors: executing a statement, the query log and execute wrappers](../connections/cursors.md)).",
    "tree": "django",
    "path": "django/db/backends/utils.py",
    "symbol": "CursorWrapper",
@@ -335,7 +335,7 @@
   {
    "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk",
    "line": 179,
-   "sentence": "SQLite's schema editor writes every foreign key inside its column's definition, with `\"DEFERRABLE INITIALLY DEFERRED\"` at its end ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), so a key is checked when its transaction commits, and the features declare `DatabaseFeatures.can_defer_constraint_checks` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk`, `django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
+   "sentence": "SQLite's schema editor writes every foreign key inside its column's definition, with `\"DEFERRABLE INITIALLY DEFERRED\"` at its end ([The schema editor: `BaseDatabaseSchemaEditor`](../schema/editor.md)), so a key is checked when its transaction commits, and the features declare `DatabaseFeatures.can_defer_constraint_checks` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk`, `django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/schema.py",
    "symbol": "DatabaseSchemaEditor.sql_create_inline_fk",
@@ -349,7 +349,7 @@
   {
    "pointer": "django/db/backends/sqlite3/features.py:DatabaseFeatures",
    "line": 179,
-   "sentence": "SQLite's schema editor writes every foreign key inside its column's definition, with `\"DEFERRABLE INITIALLY DEFERRED\"` at its end ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), so a key is checked when its transaction commits, and the features declare `DatabaseFeatures.can_defer_constraint_checks` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk`, `django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
+   "sentence": "SQLite's schema editor writes every foreign key inside its column's definition, with `\"DEFERRABLE INITIALLY DEFERRED\"` at its end ([The schema editor: `BaseDatabaseSchemaEditor`](../schema/editor.md)), so a key is checked when its transaction commits, and the features declare `DatabaseFeatures.can_defer_constraint_checks` (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.sql_create_inline_fk`, `django/db/backends/sqlite3/features.py:DatabaseFeatures`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/features.py",
    "symbol": "DatabaseFeatures",
@@ -405,7 +405,7 @@
   {
    "pointer": "django/core/management/commands/loaddata.py:Command.handle",
    "line": 193,
-   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](../schema/test-databases.md)).",
    "tree": "django",
    "path": "django/core/management/commands/loaddata.py",
    "symbol": "Command.handle",
@@ -419,7 +419,7 @@
   {
    "pointer": "django/core/management/commands/loaddata.py:Command.loaddata",
    "line": 193,
-   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](../schema/test-databases.md)).",
    "tree": "django",
    "path": "django/core/management/commands/loaddata.py",
    "symbol": "Command.loaddata",
@@ -433,7 +433,7 @@
   {
    "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string",
    "line": 193,
-   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](creation.md)).",
+   "sentence": "The command loaddata and `BaseDatabaseCreation.deserialize_db_from_string` load rows inside `atomic` and then inside `BaseDatabaseWrapper.constraint_checks_disabled`, and call `check_constraints` afterwards (`django/core/management/commands/loaddata.py:Command.handle`, `django/core/management/commands/loaddata.py:Command.loaddata`, `django/db/backends/base/creation.py:BaseDatabaseCreation.deserialize_db_from_string`) ([Test databases: `BaseDatabaseCreation`](../schema/test-databases.md)).",
    "tree": "django",
    "path": "django/db/backends/base/creation.py",
    "symbol": "BaseDatabaseCreation.deserialize_db_from_string",
@@ -532,7 +532,7 @@
   {
    "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor",
    "line": 219,
-   "sentence": "SQLite's schema editor remakes the table where SQLite's `\"ALTER TABLE\"` falls short, as [Altering a column, and SQLite's table remake](alter-field.md) tells (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`).",
+   "sentence": "SQLite's schema editor remakes the table where SQLite's `\"ALTER TABLE\"` falls short, as [Altering a column, and SQLite's table remake](../schema/alter-field.md) tells (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/schema.py",
    "symbol": "DatabaseSchemaEditor",
@@ -546,7 +546,7 @@
   {
    "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.quote_value",
    "line": 221,
-   "sentence": "Defaults go into SQLite's statements as literals ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)), written by `DatabaseSchemaEditor.quote_value`, which passes the value through `sqlite3.adapt`, then writes it by its type, a string in single quotes with each quote doubled and bytes in hexadecimal, and refuses with `ValueError` a type it does not know (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.quote_value`).",
+   "sentence": "Defaults go into SQLite's statements as literals ([The schema editor: `BaseDatabaseSchemaEditor`](../schema/editor.md)), written by `DatabaseSchemaEditor.quote_value`, which passes the value through `sqlite3.adapt`, then writes it by its type, a string in single quotes with each quote doubled and bytes in hexadecimal, and refuses with `ValueError` a type it does not know (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.quote_value`).",
    "tree": "django",
    "path": "django/db/backends/sqlite3/schema.py",
    "symbol": "DatabaseSchemaEditor.quote_value",

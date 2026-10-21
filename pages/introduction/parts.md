@@ -56,7 +56,7 @@ The table gives each part, from the floor up, with the chapter that tells it.
 | `django.core.serializers`: serialization | the ORM | [Caching, files, mail, signals and tasks](../services.md) |
 | `django.tasks`: tasks | the ORM's `TextChoices` | [Caching, files, mail, signals and tasks](../services.md) |
 | `django.core.checks`: the system checks | the database connections, the caches, the mail package | [The system checks](../commands/checks.md) |
-| `django.db`: models, querysets, SQL, backends, migrations | the checks, the files package, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, the forms | [Models and fields](../models.md), [QuerySets](../querysets.md), [From QuerySet to SQL](../sql.md), [Database backends](../backends.md), [Migrations](../migrations.md) |
+| `django.db`: models, querysets, SQL, connections, backends, migrations | the checks, the files package, the validators, the signals, the serializers, `CommandError` and `OutputWrapper`, the forms | the ORM, [Models and fields](../models.md) to [The SQL compiler](../sql.md), and the database, [Connections and transactions](../connections.md) to [Making migrations](../makemigrations.md) |
 | `django.template`: the template engine and its backends, and the libraries of `django.templatetags` | the request and the response, the middleware | [Templates](../templates.md) |
 | `django.forms`: forms, fields, widgets, renderers | the template system, a helper module of the ORM | [Forms](../forms.md) |
 | `django.http`: the request and the response | the upload handlers, `request_finished`, `DjangoJSONEncoder` | [Requests and responses](../http.md) |

@@ -56,26 +56,30 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
-| [10 · QuerySets](10-querysets.md) | 0 |  | 2 | `django/__init__.py` (1) `django/conf/__init__.py` (1) |
-| [11 · From QuerySet to SQL](11-sql.md) | 0 |  | 1 | `django/conf/__init__.py` (1) |
-| [12 · Database backends](12-backends.md) | 0 |  | 15+1 | `django/conf/__init__.py` (12) `django/apps/__init__.py` (3) `django/apps/registry.py` (1) |
-| [13 · Migrations](13-migrations.md) | 0 |  | 14 | `django/conf/__init__.py` (5) `django/apps/__init__.py` (4) `django/apps/registry.py` (4) `django/__init__.py` (1) |
-| [14 · Templates](14-templates.md) | 0 |  | 10+1 | `django/conf/__init__.py` (8) `django/apps/__init__.py` (3) |
-| [15 · Forms](15-forms.md) | 0 |  | 2 | `django/conf/__init__.py` (2) |
-| [16 · Internationalization and time zones](16-i18n.md) | 0 |  | 10+2 | `django/conf/__init__.py` (9) `django/apps/__init__.py` (3) |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 1 | `django/core/mail/__init__.py` (1) | 21+1 | `django/conf/__init__.py` (17) `django/apps/__init__.py` (3) `django/__init__.py` (1) `django/utils/log.py` (1) |
-| [18 · The utility layer](18-utils.md) | 13 | `django/core/exceptions.py` (4) `django/utils/deprecation.py` (2) `django/utils/functional.py` (2) `django/utils/module_loading.py` (2) and 2 more | 2+2 | `django/__init__.py` (2) `django/apps/__init__.py` (1) `django/conf/__init__.py` (1) |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 29 | `django/conf/__init__.py` (22) `django/apps/__init__.py` (7) |
-| [20 · The admin](20-admin.md) | 0 |  | 15 | `django/conf/__init__.py` (8) `django/apps/__init__.py` (7) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 47+2 | `django/apps/__init__.py` (25) `django/conf/__init__.py` (24) |
-| [22 · Management commands](22-commands.md) | 1 | `django/core/management/color.py` (1) | 42+5 | `django/conf/__init__.py` (24) `django/apps/__init__.py` (17) `django/__init__.py` (5) `django/conf/global_settings.py` (1) and 1 more |
-| [23 · The test framework](23-testing.md) | 0 |  | 10 | `django/conf/__init__.py` (4) `django/apps/__init__.py` (3) `django/__init__.py` (1) `django/apps/registry.py` (1) and 1 more |
+| [11 · QuerySets](11-querysets.md) | 0 |  | 2 | `django/__init__.py` (1) `django/conf/__init__.py` (1) |
+| [12 · Relations](12-relations.md) | 0 |  | 2 | `django/apps/__init__.py` (1) `django/conf/__init__.py` (1) |
+| [13 · Expressions, lookups and functions](13-expressions.md) | 0 |  | 1 | `django/conf/__init__.py` (1) |
+| [16 · Connections and transactions](16-connections.md) | 0 |  | 2 | `django/apps/__init__.py` (1) `django/conf/__init__.py` (1) |
+| [17 · Database backends](17-backends.md) | 0 |  | 10 | `django/conf/__init__.py` (9) `django/apps/registry.py` (1) |
+| [18 · Schemas and test databases](18-schema.md) | 0 |  | 3+1 | `django/apps/__init__.py` (2) `django/conf/__init__.py` (2) |
+| [19 · Migrations](19-migrations.md) | 0 |  | 8 | `django/apps/registry.py` (4) `django/apps/__init__.py` (2) `django/conf/__init__.py` (2) |
+| [20 · Making migrations](20-makemigrations.md) | 0 |  | 6 | `django/conf/__init__.py` (3) `django/apps/__init__.py` (2) `django/__init__.py` (1) |
+| [21 · Templates](21-templates.md) | 0 |  | 10+1 | `django/conf/__init__.py` (8) `django/apps/__init__.py` (3) |
+| [22 · Forms](22-forms.md) | 0 |  | 2 | `django/conf/__init__.py` (2) |
+| [23 · Internationalization and time zones](23-i18n.md) | 0 |  | 10+2 | `django/conf/__init__.py` (9) `django/apps/__init__.py` (3) |
+| [24 · Caching, files, mail, signals and tasks](24-services.md) | 1 | `django/core/mail/__init__.py` (1) | 21+1 | `django/conf/__init__.py` (17) `django/apps/__init__.py` (3) `django/__init__.py` (1) `django/utils/log.py` (1) |
+| [25 · The utility layer](25-utils.md) | 13 | `django/core/exceptions.py` (4) `django/utils/deprecation.py` (2) `django/utils/functional.py` (2) `django/utils/module_loading.py` (2) and 2 more | 2+2 | `django/__init__.py` (2) `django/apps/__init__.py` (1) `django/conf/__init__.py` (1) |
+| [26 · Authentication, sessions and messages](26-auth.md) | 0 |  | 29 | `django/conf/__init__.py` (22) `django/apps/__init__.py` (7) |
+| [27 · The admin](27-admin.md) | 0 |  | 15 | `django/conf/__init__.py` (8) `django/apps/__init__.py` (7) |
+| [28 · Content types, static files and the other contrib apps](28-contrib.md) | 0 |  | 47+2 | `django/apps/__init__.py` (25) `django/conf/__init__.py` (24) |
+| [29 · Management commands](29-commands.md) | 1 | `django/core/management/color.py` (1) | 42+5 | `django/conf/__init__.py` (24) `django/apps/__init__.py` (17) `django/__init__.py` (5) `django/conf/global_settings.py` (1) and 1 more |
+| [30 · The test framework](30-testing.md) | 0 |  | 10 | `django/conf/__init__.py` (4) `django/apps/__init__.py` (3) `django/__init__.py` (1) `django/apps/registry.py` (1) and 1 more |
 | [4 · Handlers and middleware](4-handlers.md) | 0 |  | 9 | `django/conf/__init__.py` (5) `django/__init__.py` (2) `django/utils/log.py` (2) |
 | [5 · Requests and responses](5-http.md) | 0 |  | 5 | `django/conf/__init__.py` (5) |
 | [6 · URL routing](6-urls.md) | 0+2 | `django/urls/__init__.py` (2) | 3 | `django/conf/__init__.py` (3) |
 | [7 · Views](7-views.md) | 0 |  | 4+1 | `django/conf/__init__.py` (2) `django/utils/log.py` (2) `django/__init__.py` (1) |
 | [8 · Security](8-security.md) | 0 |  | 8 | `django/conf/__init__.py` (7) `django/utils/log.py` (1) |
-| [9 · Models and fields](9-models.md) | 0 |  | 9+1 | `django/conf/__init__.py` (5) `django/apps/__init__.py` (4) `django/__init__.py` (1) |
+| [9 · Models and fields](9-models.md) | 0 |  | 7+1 | `django/conf/__init__.py` (4) `django/apps/__init__.py` (3) `django/__init__.py` (1) |
 
 ## Files that are not Python
 

@@ -10,7 +10,7 @@
   {
    "pointer": "django/db/models/deletion.py:Collector",
    "line": 9,
-   "sentence": "Where it writes to rows, no save is called: `update` makes no instance of any row, and `delete` hands a clone of the queryset to a `Collector`, which works out what the delete reaches, rows of other models among it, and sends the statements (`django/db/models/deletion.py:Collector`) ([Deleting: the `Collector`](../models/deleting.md)).",
+   "sentence": "Where it writes to rows, no save is called: `update` makes no instance of any row, and `delete` hands a clone of the queryset to a `Collector`, which works out what the delete reaches, rows of other models among it, and sends the statements (`django/db/models/deletion.py:Collector`) ([Deleting: the `Collector`](../instance/deleting.md)).",
    "tree": "django",
    "path": "django/db/models/deletion.py",
    "symbol": "Collector",
@@ -38,7 +38,7 @@
   {
    "pointer": "django/db/models/base.py:ModelState",
    "line": 46,
-   "sentence": "And when the save is done it stores the queryset's fetch mode, `QuerySet._fetch_mode`, in the new instance's state, as `ModelState.fetch_mode` (`django/db/models/base.py:ModelState`) ([Deferred fields and fetch modes in a queryset](deferred.md)).",
+   "sentence": "And when the save is done it stores the queryset's fetch mode, `QuerySet._fetch_mode`, in the new instance's state, as `ModelState.fetch_mode` (`django/db/models/base.py:ModelState`) ([Deferred fields in a queryset: `defer` and `only`](deferred.md)).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "ModelState",
@@ -52,7 +52,7 @@
   {
    "pointer": "django/db/transaction.py:mark_for_rollback_on_error",
    "line": 48,
-   "sentence": "The save ran inside `mark_for_rollback_on_error`, which opens no transaction and, where an exception passes through it inside a block of `atomic`, marks the connection as needing a rollback (`django/db/transaction.py:mark_for_rollback_on_error`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#mark_for_rollback_on_error)).",
+   "sentence": "The save ran inside `mark_for_rollback_on_error`, which opens no transaction and, where an exception passes through it inside a block of `atomic`, marks the connection as needing a rollback (`django/db/transaction.py:mark_for_rollback_on_error`) ([Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md#mark_for_rollback_on_error)).",
    "tree": "django",
    "path": "django/db/transaction.py",
    "symbol": "mark_for_rollback_on_error",
@@ -67,7 +67,7 @@
   {
    "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager.create",
    "line": 50,
-   "sentence": "The manager at the far end of a foreign key does put its own instance among the values, by overriding `create` to add it to the arguments (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager.create`) ([Reading and setting related objects](../models/related-objects.md)).",
+   "sentence": "The manager at the far end of a foreign key does put its own instance among the values, by overriding `create` to add it to the arguments (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager.create`) ([Reading and setting related objects](../relations/related-objects.md)).",
    "tree": "django",
    "path": "django/db/models/fields/related_descriptors.py",
    "symbol": "create_reverse_many_to_one_manager.RelatedManager.create",
@@ -125,7 +125,7 @@
   {
    "pointer": "django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.__set__",
    "line": 62,
-   "sentence": "Assigning at that end of a one-to-one relation sets the key on the other object, and `create` saves the new instance and not that one (`django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.__set__`) ([Reading and setting related objects](../models/related-objects.md)).",
+   "sentence": "Assigning at that end of a one-to-one relation sets the key on the other object, and `create` saves the new instance and not that one (`django/db/models/fields/related_descriptors.py:ReverseOneToOneDescriptor.__set__`) ([Reading and setting related objects](../relations/related-objects.md)).",
    "tree": "django",
    "path": "django/db/models/fields/related_descriptors.py",
    "symbol": "ReverseOneToOneDescriptor.__set__",
@@ -153,7 +153,7 @@
   {
    "pointer": "django/db/transaction.py:Atomic.__enter__",
    "line": 89,
-   "sentence": "`atomic` begins a transaction where none is open, as here, and makes a savepoint inside one that is (`django/db/transaction.py:Atomic.__enter__`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#entering-a-block-atomic__enter)).",
+   "sentence": "`atomic` begins a transaction where none is open, as here, and makes a savepoint inside one that is (`django/db/transaction.py:Atomic.__enter__`) ([Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md#entering-a-block-atomic__enter)).",
    "tree": "django",
    "path": "django/db/transaction.py",
    "symbol": "Atomic.__enter__",
@@ -407,7 +407,7 @@
   {
    "pointer": "django/db/models/sql/subqueries.py:UpdateQuery.add_related_update",
    "line": 235,
-   "sentence": "`add_update_values` keeps such a value apart from the others, with `UpdateQuery.add_related_update` (`django/db/models/sql/subqueries.py:UpdateQuery.add_related_update`), and the update compiler then selects the keys of the rows the queryset matches and sends a statement to the parent's table for those keys ([From QuerySet to SQL](../sql.md)).",
+   "sentence": "`add_update_values` keeps such a value apart from the others, with `UpdateQuery.add_related_update` (`django/db/models/sql/subqueries.py:UpdateQuery.add_related_update`), and the update compiler then selects the keys of the rows the queryset matches and sends a statement to the parent's table for those keys ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)).",
    "tree": "django",
    "path": "django/db/models/sql/subqueries.py",
    "symbol": "UpdateQuery.add_related_update",
@@ -463,7 +463,7 @@
   {
    "pointer": "django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup",
    "line": 243,
-   "sentence": "Where the queryset's conditions need another, the update compiler moves them into a query that selects the keys of the rows, here a subquery of the statement, and the statement updates the rows that have those keys (`django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup`) ([From QuerySet to SQL](../sql.md)):",
+   "sentence": "Where the queryset's conditions need another, the update compiler moves them into a query that selects the keys of the rows, here a subquery of the statement, and the statement updates the rows that have those keys (`django/db/models/sql/compiler.py:SQLUpdateCompiler.pre_sql_setup`) ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)):",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
    "symbol": "SQLUpdateCompiler.pre_sql_setup",
@@ -505,7 +505,7 @@
   {
    "pointer": "django/db/models/base.py:Model._do_update",
    "line": 258,
-   "sentence": "`Model._do_update` calls it on a queryset filtered to the instance's key, with the fields to write, each with its value, and a list of the fields whose new values the save wants back from the statement, the result of an expression for one (`django/db/models/base.py:Model._do_update`) ([Saving an instance](../models/saving.md)).",
+   "sentence": "`Model._do_update` calls it on a queryset filtered to the instance's key, with the fields to write, each with its value, and a list of the fields whose new values the save wants back from the statement, the result of an expression for one (`django/db/models/base.py:Model._do_update`) ([Saving an instance](../instance/saving.md)).",
    "tree": "django",
    "path": "django/db/models/base.py",
    "symbol": "Model._do_update",
@@ -533,7 +533,7 @@
   {
    "pointer": "django/db/models/query.py:QuerySet._insert",
    "line": 264,
-   "sentence": "It builds a new `InsertQuery` for the model, gives it the fields and the instances with `InsertQuery.insert_values`, and returns what the insert compiler returns: the rows of the columns asked back, or an empty list (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/subqueries.py:InsertQuery`) ([From QuerySet to SQL](../sql.md)).",
+   "sentence": "It builds a new `InsertQuery` for the model, gives it the fields and the instances with `InsertQuery.insert_values`, and returns what the insert compiler returns: the rows of the columns asked back, or an empty list (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/subqueries.py:InsertQuery`) ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)).",
    "tree": "django",
    "path": "django/db/models/query.py",
    "symbol": "QuerySet._insert",
@@ -547,7 +547,7 @@
   {
    "pointer": "django/db/models/sql/subqueries.py:InsertQuery",
    "line": 264,
-   "sentence": "It builds a new `InsertQuery` for the model, gives it the fields and the instances with `InsertQuery.insert_values`, and returns what the insert compiler returns: the rows of the columns asked back, or an empty list (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/subqueries.py:InsertQuery`) ([From QuerySet to SQL](../sql.md)).",
+   "sentence": "It builds a new `InsertQuery` for the model, gives it the fields and the instances with `InsertQuery.insert_values`, and returns what the insert compiler returns: the rows of the columns asked back, or an empty list (`django/db/models/query.py:QuerySet._insert`, `django/db/models/sql/subqueries.py:InsertQuery`) ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)).",
    "tree": "django",
    "path": "django/db/models/sql/subqueries.py",
    "symbol": "InsertQuery",

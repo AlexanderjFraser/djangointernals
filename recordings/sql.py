@@ -4,9 +4,10 @@ and how the compiler assembles and runs the statement.
 
     python recordings/sql.py > recordings/sql.txt
 
-The chapter of the book (pages/sql.md and the pages under it) is written against this
+The chapters of the book that quote it (pages/query.md, pages/expressions.md and pages/sql.md,
+with the pages under them) are written against this
 output. It needs only the pinned Django (the project's virtual environment has it) and the
-small project beside it, `harbour/`, which chapters 8 and 9 record over too: a shipping line
+small project beside it, `harbour/`, which the other recordings of the ORM use too: a shipping line
 in three applications, `fleet`, `crew` and `office`. The database is a SQLite file made for
 the run. Run it again after a re-pin: where the output changes, the chapter has to.
 

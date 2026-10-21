@@ -69,7 +69,7 @@ WSGI, GET /plain/: B.process_view returns a response
 
 ## Calling the view
 
-Before the call, `BaseHandler.make_view_atomic` wraps the view in `django.db.transaction.atomic` for each database whose settings have `"ATOMIC_REQUESTS"` true, unless the view was marked to be left out for it, as [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#atomic_requests-and-non_atomic_requests) shows; an async view it refuses with `RuntimeError` instead of wrapping it (`django/core/handlers/base.py:BaseHandler.make_view_atomic`). Then a view that is a coroutine function is wrapped in `async_to_sync`, so that the synchronous handler can call it.
+Before the call, `BaseHandler.make_view_atomic` wraps the view in `django.db.transaction.atomic` for each database whose settings have `"ATOMIC_REQUESTS"` true, unless the view was marked to be left out for it, as [Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md#atomic_requests-and-non_atomic_requests) shows; an async view it refuses with `RuntimeError` instead of wrapping it (`django/core/handlers/base.py:BaseHandler.make_view_atomic`). Then a view that is a coroutine function is wrapped in `async_to_sync`, so that the synchronous handler can call it.
 
 > **Trap.** The transaction is around the view and nothing else: the middleware run outside it, and so does the rendering of a template response, later in this method (`django/core/handlers/base.py:BaseHandler._get_response`). The documentation says so (`docs/topics/db/transactions.txt`).
 

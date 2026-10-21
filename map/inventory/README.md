@@ -35,18 +35,25 @@ Sites by kind: `warn`, passed to a call named `warn` or `warn_explicit`; `passed
 | 5 | [Requests and responses](chapters/5-http.md) | 2 | 4 |
 | 7 | [Views](chapters/7-views.md) | 4 | 0 |
 | 8 | [Security](chapters/8-security.md) | 0 | 7 |
-| 9 | [Models and fields](chapters/9-models.md) | 9 | 9 |
-| 10 | [QuerySets](chapters/10-querysets.md) | 1 | 14 |
-| 11 | [From QuerySet to SQL](chapters/11-sql.md) | 5 | 8 |
-| 12 | [Database backends](chapters/12-backends.md) | 21 | 3 |
-| 13 | [Migrations](chapters/13-migrations.md) | 9 | 0 |
-| 14 | [Templates](chapters/14-templates.md) | 8 | 4 |
-| 15 | [Forms](chapters/15-forms.md) | 15 | 7 |
-| 16 | [Internationalization and time zones](chapters/16-i18n.md) | 4 | 0 |
-| 17 | [Caching, files, mail, signals and tasks](chapters/17-services.md) | 16 | 75 |
-| 18 | [The utility layer](chapters/18-utils.md) | 9 | 12 |
-| 19 | [Authentication, sessions and messages](chapters/19-auth.md) | 13 | 0 |
-| 20 | [The admin](chapters/20-admin.md) | 6 | 22 |
-| 21 | [Content types, static files and the other contrib apps](chapters/21-contrib.md) | 22 | 13 |
-| 22 | [Management commands](chapters/22-commands.md) | 8 | 0 |
-| 23 | [The test framework](chapters/23-testing.md) | 4 | 2 |
+| 9 | [Models and fields](chapters/9-models.md) | 4 | 9 |
+| 10 | [An instance and its row](chapters/10-instance.md) | 2 | 0 |
+| 11 | [QuerySets](chapters/11-querysets.md) | 1 | 14 |
+| 12 | [Relations](chapters/12-relations.md) | 3 | 0 |
+| 13 | [Expressions, lookups and functions](chapters/13-expressions.md) | 1 | 2 |
+| 14 | [Building a query](chapters/14-query.md) | 1 | 4 |
+| 15 | [The SQL compiler](chapters/15-sql.md) | 3 | 2 |
+| 16 | [Connections and transactions](chapters/16-connections.md) | 2 | 1 |
+| 17 | [Database backends](chapters/17-backends.md) | 18 | 0 |
+| 18 | [Schemas and test databases](chapters/18-schema.md) | 1 | 2 |
+| 19 | [Migrations](chapters/19-migrations.md) | 6 | 0 |
+| 20 | [Making migrations](chapters/20-makemigrations.md) | 3 | 0 |
+| 21 | [Templates](chapters/21-templates.md) | 8 | 4 |
+| 22 | [Forms](chapters/22-forms.md) | 15 | 7 |
+| 23 | [Internationalization and time zones](chapters/23-i18n.md) | 4 | 0 |
+| 24 | [Caching, files, mail, signals and tasks](chapters/24-services.md) | 16 | 75 |
+| 25 | [The utility layer](chapters/25-utils.md) | 9 | 12 |
+| 26 | [Authentication, sessions and messages](chapters/26-auth.md) | 13 | 0 |
+| 27 | [The admin](chapters/27-admin.md) | 6 | 22 |
+| 28 | [Content types, static files and the other contrib apps](chapters/28-contrib.md) | 22 | 13 |
+| 29 | [Management commands](chapters/29-commands.md) | 8 | 0 |
+| 30 | [The test framework](chapters/30-testing.md) | 4 | 2 |

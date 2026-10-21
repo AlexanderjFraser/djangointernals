@@ -40,7 +40,7 @@ Traceback (most recent call last):
 django.core.exceptions.ValidationError: ['Ships of 1 ton and more.']
 ```
 
-The codes came from `Field`, from `IntegerField` (`django/forms/fields.py:IntegerField`) and from the argument, in that order. The `MinValueValidator` that `min_value=1` gave the field raised its own message with the code `"min_value"`; the field's replaced it, and the validator's limit filled it in ([Validators: `django/core/validators.py`](validators.md)). A `ValidationError` holds one message with a code and parameters, a list of errors, or a dictionary of lists by name; [Validating an instance](../models/validation.md) describes all three, and a model field's `clean`, which takes the same steps (`django/core/exceptions.py:ValidationError`).
+The codes came from `Field`, from `IntegerField` (`django/forms/fields.py:IntegerField`) and from the argument, in that order. The `MinValueValidator` that `min_value=1` gave the field raised its own message with the code `"min_value"`; the field's replaced it, and the validator's limit filled it in ([Validators: `django/core/validators.py`](validators.md)). A `ValidationError` holds one message with a code and parameters, a list of errors, or a dictionary of lists by name; [Validating an instance](../instance/validation.md) describes all three, and a model field's `clean`, which takes the same steps (`django/core/exceptions.py:ValidationError`).
 
 ## The form's call, and a disabled field
 

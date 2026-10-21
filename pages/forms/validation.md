@@ -62,7 +62,7 @@ Last, whatever was found, runs `BaseForm._post_clean`: a hook that does nothing 
 
 ## `BaseForm.add_error`
 
-`BaseForm.add_error` files every error a form's validation finds, and a `clean` or a view may call it too (`django/forms/forms.py:BaseForm.add_error`); a model formset writes its unique checks' errors into its forms directly ([Model formsets and inline formsets](model-formsets.md)). It takes a field's name or `None`, and an error: a `ValidationError`, or a message, a list or a dictionary of names, which it makes one ([Validating an instance](../models/validation.md#the-error-that-is-raised)).
+`BaseForm.add_error` files every error a form's validation finds, and a `clean` or a view may call it too (`django/forms/forms.py:BaseForm.add_error`); a model formset writes its unique checks' errors into its forms directly ([Model formsets and inline formsets](model-formsets.md)). It takes a field's name or `None`, and an error: a `ValidationError`, or a message, a list or a dictionary of names, which it makes one ([Validating an instance](../instance/validation.md#the-error-that-is-raised)).
 
 An error made from a dictionary carries its own names, and the field must be `None`: given a name too, the method raises `TypeError`. Any other error is filed under the name given, or `"__all__"` for `None` or an empty name. Then, for each name:
 

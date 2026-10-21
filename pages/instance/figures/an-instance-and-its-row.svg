@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 816 424">
+  <!-- the three parties across: the class, one instance, its row -->
+  <text class="strong" x="0" y="14">The class Ship</text>
+  <text class="quiet" x="0" y="32">shared by every instance</text>
+  <text class="strong" x="184" y="14">One instance</text>
+  <text class="quiet" x="184" y="32">the new Ship, its <tspan class="name">__dict__</tspan></text>
+  <text class="strong" x="656" y="14">Its row</text>
+  <text class="quiet" x="656" y="32">in <tspan class="name">"fleet_ship"</tspan></text>
+
+  <!-- the class: the description and the descriptors -->
+  <rect class="box" x="0.5" y="44.5" width="160" height="166" rx="4"/>
+  <rect class="ground" x="12.5" y="56.5" width="136" height="62" rx="4"/>
+  <text class="name" x="24" y="82">_meta</text>
+  <text class="quiet small" x="24" y="102">the description</text>
+  <rect class="ground" x="12.5" y="136.5" width="136" height="62" rx="4"/>
+  <text x="24" y="162">the descriptors</text>
+  <text class="quiet small" x="24" y="182">its fields left there</text>
+
+  <!-- the instance's __dict__: the values under the attnames, and the state beside them, inside it -->
+  <rect class="mark-box" x="184.5" y="44.5" width="448" height="166" rx="4"/>
+  <rect class="ground" x="196.5" y="56.5" width="196" height="142" rx="4"/>
+  <text class="quiet" x="208" y="78">under the attnames</text>
+  <text class="name" x="208" y="102">id</text>
+  <text class="name" x="302" y="102">None</text>
+  <text class="name" x="208" y="122">name</text>
+  <text class="name" x="302" y="122">'Heron'</text>
+  <text class="name" x="208" y="142">tonnage</text>
+  <text class="name" x="302" y="142">300</text>
+  <text class="name" x="208" y="162">home_id</text>
+  <text class="name" x="302" y="162">1</text>
+  <text class="name" x="208" y="182">captain_id</text>
+  <text class="name" x="302" y="182">None</text>
+
+  <rect class="ground" x="404.5" y="56.5" width="216" height="142" rx="4"/>
+  <text x="416" y="78"><tspan class="name">_state</tspan><tspan class="quiet small">  a </tspan><tspan class="name quiet small">ModelState</tspan></text>
+  <text class="name" x="416" y="102">adding</text>
+  <text class="name" x="510" y="102">True</text>
+  <text class="name" x="416" y="122">db</text>
+  <text class="name" x="510" y="122">'default'</text>
+  <text class="name" x="416" y="142">fields_cache</text>
+  <text class="name" x="416" y="162">{'home': &lt;Port: Bergen&gt;}</text>
+
+  <!-- the row: none yet -->
+  <rect class="ground dashed" x="656.5" y="44.5" width="159" height="166" rx="4"/>
+  <text class="quiet" x="736" y="124" text-anchor="middle">none yet: the instance</text>
+  <text class="quiet" x="736" y="142" text-anchor="middle">is being added</text>
+
+  <!-- the crossings: one line each, its columns under the three parties -->
+  <text class="strong" x="0" y="250">Between the instance and its row</text>
+  <rect class="ground" x="0.5" y="262.5" width="815" height="160" rx="4"/>
+  <path class="line" d="M1 294.5 H815 M1 326.5 H815 M1 358.5 H815 M1 390.5 H815"/>
+
+  <text class="name" x="12" y="284">Model.from_db</text>
+  <text x="196" y="284">a fetched row becomes an instance, through <tspan class="name">__init__</tspan></text>
+  <text class="quiet" x="668" y="284">row → instance</text>
+
+  <text x="12" y="316">a read of a value</text>
+  <text x="196" y="316">not in <tspan class="name">__dict__</tspan>: the class's descriptor may fetch it, or raise</text>
+  <text class="name" x="668" y="316">SELECT</text>
+
+  <text class="name" x="12" y="348">Model.save</text>
+  <text x="196" y="348">an <tspan class="name">UPDATE</tspan>, or else an <tspan class="name">INSERT</tspan>; what the insert hands back is set</text>
+  <text x="668" y="348"><tspan class="name">UPDATE</tspan>, <tspan class="name">INSERT</tspan></text>
+
+  <text class="name" x="12" y="380">Model.full_clean</text>
+  <text x="196" y="380">a call of its own: may read, never writes</text>
+  <text class="name" x="668" y="380">SELECT</text>
+
+  <text class="name" x="12" y="412">Model.delete</text>
+  <text x="196" y="412">a <tspan class="name">Collector</tspan> finds what it is to delete, then deletes it all</text>
+  <text x="668" y="412"><tspan class="name">SELECT</tspan>, then <tspan class="name">DELETE</tspan></text>
+</svg>

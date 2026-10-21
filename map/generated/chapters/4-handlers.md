@@ -51,16 +51,16 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
-| [12 · Database backends](12-backends.md) | 1 | `django/db/__init__.py` (1) `django/db/transaction.py` (1) | 1 | `django/core/signals.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 0 |  | 2 | `django/core/signals.py` (1) `django/middleware/__init__.py` (1) |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 4 | `django/utils/cache.py` (2) `django/core/mail/__init__.py` (1) `django/dispatch/__init__.py` (1) | 5 | `django/core/signals.py` (4) `django/middleware/__init__.py` (1) |
-| [18 · The utility layer](18-utils.md) | 9 | `django/core/exceptions.py` (4) `django/utils/functional.py` (2) `django/utils/encoding.py` (1) `django/utils/module_loading.py` (1) and 1 more | 0+1 | `django/middleware/__init__.py` (1) |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 6 | `django/middleware/__init__.py` (3) `django/core/signals.py` (2) `django/core/handlers/asgi.py` (1) |
-| [20 · The admin](20-admin.md) | 0 |  | 1 | `django/middleware/__init__.py` (1) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 7 | `django/middleware/__init__.py` (3) `django/core/handlers/asgi.py` (1) `django/core/handlers/exception.py` (1) `django/core/handlers/wsgi.py` (1) and 1 more |
-| [22 · Management commands](22-commands.md) | 0 |  | 3 | `django/core/handlers/wsgi.py` (1) `django/core/signals.py` (1) `django/core/wsgi.py` (1) |
-| [23 · The test framework](23-testing.md) | 0 |  | 8 | `django/core/signals.py` (4) `django/core/handlers/wsgi.py` (2) `django/core/handlers/asgi.py` (1) `django/core/handlers/base.py` (1) |
+| [16 · Connections and transactions](16-connections.md) | 1 | `django/db/__init__.py` (1) `django/db/transaction.py` (1) | 1 | `django/core/signals.py` (1) |
+| [23 · Internationalization and time zones](23-i18n.md) | 0 |  | 2 | `django/core/signals.py` (1) `django/middleware/__init__.py` (1) |
+| [24 · Caching, files, mail, signals and tasks](24-services.md) | 4 | `django/utils/cache.py` (2) `django/core/mail/__init__.py` (1) `django/dispatch/__init__.py` (1) | 5 | `django/core/signals.py` (4) `django/middleware/__init__.py` (1) |
+| [25 · The utility layer](25-utils.md) | 9 | `django/core/exceptions.py` (4) `django/utils/functional.py` (2) `django/utils/encoding.py` (1) `django/utils/module_loading.py` (1) and 1 more | 0+1 | `django/middleware/__init__.py` (1) |
+| [26 · Authentication, sessions and messages](26-auth.md) | 0 |  | 6 | `django/middleware/__init__.py` (3) `django/core/signals.py` (2) `django/core/handlers/asgi.py` (1) |
+| [27 · The admin](27-admin.md) | 0 |  | 1 | `django/middleware/__init__.py` (1) |
+| [28 · Content types, static files and the other contrib apps](28-contrib.md) | 0 |  | 7 | `django/middleware/__init__.py` (3) `django/core/handlers/asgi.py` (1) `django/core/handlers/exception.py` (1) `django/core/handlers/wsgi.py` (1) and 1 more |
+| [29 · Management commands](29-commands.md) | 0 |  | 3 | `django/core/handlers/wsgi.py` (1) `django/core/signals.py` (1) `django/core/wsgi.py` (1) |
 | [3 · Settings, apps and startup](3-startup.md) | 9 | `django/conf/__init__.py` (5) `django/__init__.py` (2) `django/utils/log.py` (2) | 0 |  |
+| [30 · The test framework](30-testing.md) | 0 |  | 8 | `django/core/signals.py` (4) `django/core/handlers/wsgi.py` (2) `django/core/handlers/asgi.py` (1) `django/core/handlers/base.py` (1) |
 | [5 · Requests and responses](5-http.md) | 7 | `django/http/__init__.py` (4) `django/utils/http.py` (2) `django/http/multipartparser.py` (1) | 1 | `django/core/signals.py` (1) |
 | [6 · URL routing](6-urls.md) | 7 | `django/urls/__init__.py` (5) `django/utils/regex_helper.py` (2) | 0 |  |
 | [7 · Views](7-views.md) | 1 | `django/views/debug.py` (1) | 2 | `django/middleware/gzip.py` (1) `django/middleware/http.py` (1) |

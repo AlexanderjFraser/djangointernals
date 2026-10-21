@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 The type of a field's column is named by the backend, in a dictionary on its connection, `BaseDatabaseWrapper.data_types`, from a field's internal type to a string with `%(name)s` holes or to a function, and `Field.db_type` fills it in from the field (`django/db/models/fields/__init__.py:Field.db_type`).
 
-A model is written once, and its tables may be made on any of four databases that name their types differently: a boolean column is `"bool"` on SQLite and MySQL, `"boolean"` on PostgreSQL and `"NUMBER(1)"` on Oracle. The field knows what it holds and the backend knows the names, and Django keeps the names on the backend as data, in dictionaries keyed by a string the field gives. That string is the field's **internal type**, what `Field.get_internal_type` returns: the name of the field's class in the base class, and the name of a built-in class in a class that wants that class's column ([A field: the base class](../models/fields.md)). So a field class needs no backend's names, and a backend's dictionaries know nothing of a field class but its internal type. The schema editor is the main reader of what the field answers ([The schema editor: `BaseDatabaseSchemaEditor`](schema.md)).
+A model is written once, and its tables may be made on any of four databases that name their types differently: a boolean column is `"bool"` on SQLite and MySQL, `"boolean"` on PostgreSQL and `"NUMBER(1)"` on Oracle. The field knows what it holds and the backend knows the names, and Django keeps the names on the backend as data, in dictionaries keyed by a string the field gives. That string is the field's **internal type**, what `Field.get_internal_type` returns: the name of the field's class in the base class, and the name of a built-in class in a class that wants that class's column ([A field: the base class](../models/fields.md)). So a field class needs no backend's names, and a backend's dictionaries know nothing of a field class but its internal type. The schema editor is the main reader of what the field answers ([The schema editor: `BaseDatabaseSchemaEditor`](../schema/editor.md)).
 
 ## `data_types`: the dictionary on the connection class
 
@@ -35,7 +35,7 @@ models.PositiveIntegerField().db_type(connection)  ->  'integer unsigned'
 
 Because the key is the internal type and not the class, a class that answers with another's name gets that class's column (`django/db/models/fields/__init__.py:CharField.get_internal_type`, `django/db/models/fields/files.py:FileField.get_internal_type`). `EmailField` and `URLField` declare no internal type of their own and answer `"CharField"`, and `ImageField` answers `"FileField"`. `GeneratedField` answers with its output field's internal type and attributes, and so gets the output field's column (`django/db/models/fields/generated.py:GeneratedField.db_parameters`).
 
-The dictionary has other readers. PostgreSQL's insert compiler sends rows as arrays only when the dictionary holds every field's internal type, or, for a relation, that of the field it points at ([Inserts: returned keys, conflicts and batch sizes](inserts.md)), and PostgreSQL's schema editor reads it when it alters a column. Introspection reads columns back the other way, through `BaseDatabaseIntrospection.data_types_reverse` ([Introspection: reading the schema back](introspection.md)).
+The dictionary has other readers. PostgreSQL's insert compiler sends rows as arrays only when the dictionary holds every field's internal type, or, for a relation, that of the field it points at ([Inserts: returned keys, conflicts and batch sizes](inserts.md)), and PostgreSQL's schema editor reads it when it alters a column. Introspection reads columns back the other way, through `BaseDatabaseIntrospection.data_types_reverse` ([Introspection: reading the schema back](../schema/introspection.md)).
 
 ## `db_type`, and what fills the holes
 
@@ -81,7 +81,7 @@ editor.create_model(Buoy)
       -> ('CREATE TABLE "moorings_buoy" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(40) NOT NULL, "port_id" bigint NOT NULL REFERENCES "fleet_port" ("id") DEFERRABLE INITIALLY DEFERRED)', [])
 ```
 
-The key's column, as `column_sql` returned it, ends at `"PRIMARY KEY"`, and `"AUTOINCREMENT"` is the suffix that `table_sql` put after it. The column of the foreign key, `"port_id"`, is `"bigint"`, the `rel_db_type` of the key of Port. How the schema editor builds the rest of the statement is [The schema editor: `BaseDatabaseSchemaEditor`](schema.md)'s.
+The key's column, as `column_sql` returned it, ends at `"PRIMARY KEY"`, and `"AUTOINCREMENT"` is the suffix that `table_sql` put after it. The column of the foreign key, `"port_id"`, is `"bigint"`, the `rel_db_type` of the key of Port. How the schema editor builds the rest of the statement is [The schema editor: `BaseDatabaseSchemaEditor`](../schema/editor.md)'s.
 
 ## MySQL's two properties
 

@@ -9,7 +9,7 @@
  "pointers": [
   {
    "pointer": "django/db/migrations/migration.py:Migration",
-   "line": 75,
+   "line": 77,
    "sentence": "A migration file is a module that defines one class, named `Migration`, a subclass of the class of that name in `django.db.migrations` (`django/db/migrations/migration.py:Migration`).",
    "tree": "django",
    "path": "django/db/migrations/migration.py",
@@ -23,7 +23,7 @@
   },
   {
    "pointer": "django/db/migrations/loader.py:MigrationLoader.load_disk",
-   "line": 75,
+   "line": 77,
    "sentence": "When Django loads the file it makes one instance of the class, giving it the module's name and the application's label (`django/db/migrations/loader.py:MigrationLoader.load_disk`).",
    "tree": "django",
    "path": "django/db/migrations/loader.py",
@@ -37,7 +37,7 @@
   },
   {
    "pointer": "django/db/migrations/operations/base.py:Operation",
-   "line": 77,
+   "line": 79,
    "sentence": "Each entry of `operations` is an **operation**, an instance of a subclass of `Operation` (`django/db/migrations/operations/base.py:Operation`): here two of `CreateModel`, each holding a model's name and its fields.",
    "tree": "django",
    "path": "django/db/migrations/operations/base.py",
@@ -51,7 +51,7 @@
   },
   {
    "pointer": "django/db/migrations/state.py:ProjectState",
-   "line": 85,
+   "line": 87,
    "sentence": "Django's description of the models is the **project state**, a `ProjectState` (`django/db/migrations/state.py:ProjectState`).",
    "tree": "django",
    "path": "django/db/migrations/state.py",
@@ -65,7 +65,7 @@
   },
   {
    "pointer": "django/db/migrations/state.py:ProjectState.apps",
-   "line": 89,
+   "line": 91,
    "sentence": "For them a project state is **rendered**: each model state is made into a model class, a **historical model**, and registered in a registry that belongs to the state, **the state's registry**, apart from the main registry in which the models of the project live (`django/db/migrations/state.py:ProjectState.apps`, `django/db/migrations/state.py:ModelState.render`).",
    "tree": "django",
    "path": "django/db/migrations/state.py",
@@ -80,7 +80,7 @@
   },
   {
    "pointer": "django/db/migrations/state.py:ModelState.render",
-   "line": 89,
+   "line": 91,
    "sentence": "For them a project state is **rendered**: each model state is made into a model class, a **historical model**, and registered in a registry that belongs to the state, **the state's registry**, apart from the main registry in which the models of the project live (`django/db/migrations/state.py:ProjectState.apps`, `django/db/migrations/state.py:ModelState.render`).",
    "tree": "django",
    "path": "django/db/migrations/state.py",
@@ -94,8 +94,8 @@
   },
   {
    "pointer": "django/core/management/commands/makemigrations.py:Command.handle",
-   "line": 135,
-   "sentence": "The check that follows it is a separate matter, that the history recorded in the database is not out of order (`django/core/management/commands/makemigrations.py:Command.handle`).",
+   "line": 118,
+   "sentence": "It orders the operations and cuts them into migrations that depend on one another, and a `MigrationWriter` writes each as a file; it sends a database nothing that changes it (`django/core/management/commands/makemigrations.py:Command.handle`) ([Making migrations](makemigrations.md)).",
    "tree": "django",
    "path": "django/core/management/commands/makemigrations.py",
    "symbol": "Command.handle",
@@ -108,37 +108,9 @@
    "fingerprint": "2f341adcb6f6e802"
   },
   {
-   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes",
-   "line": 137,
-   "sentence": "The **autodetector** is given the two and finds operations that turn the first into the second (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`).",
-   "tree": "django",
-   "path": "django/db/migrations/autodetector.py",
-   "symbol": "MigrationAutodetector._detect_changes",
-   "kind": "function",
-   "lines": [
-    126,
-    224
-   ],
-   "fingerprint": "42477daab850e2e8"
-  },
-  {
-   "pointer": "django/db/migrations/writer.py:MigrationWriter.as_string",
-   "line": 156,
-   "sentence": "The **writer** turns each migration into the text of a module, once for each file; the quote stops at the first (`django/db/migrations/writer.py:MigrationWriter.as_string`).",
-   "tree": "django",
-   "path": "django/db/migrations/writer.py",
-   "symbol": "MigrationWriter.as_string",
-   "kind": "function",
-   "lines": [
-    129,
-    216
-   ],
-   "fingerprint": "b1f35a28754c5503"
-  },
-  {
    "pointer": "django/db/migrations/graph.py:MigrationGraph",
-   "line": 160,
-   "sentence": "The five migrations and their dependencies make the graph, in which an edge runs from a node to each of its **parents**, the migrations it depends on (`django/db/migrations/graph.py:MigrationGraph`).",
+   "line": 122,
+   "sentence": "The five migrations and their dependencies make the **graph**, a **node** for each migration, in which an edge runs from a node to each of its **parents**, the migrations it depends on (`django/db/migrations/graph.py:MigrationGraph`).",
    "tree": "django",
    "path": "django/db/migrations/graph.py",
    "symbol": "MigrationGraph",
@@ -151,7 +123,7 @@
   },
   {
    "pointer": "django/db/migrations/executor.py:MigrationExecutor",
-   "line": 193,
+   "line": 155,
    "sentence": "The **executor**, a `MigrationExecutor`, is made for one connection, and it makes a loader with that connection (`django/db/migrations/executor.py:MigrationExecutor`).",
    "tree": "django",
    "path": "django/db/migrations/executor.py",
@@ -165,7 +137,7 @@
   },
   {
    "pointer": "django/core/management/commands/migrate.py:Command.handle",
-   "line": 193,
+   "line": 155,
    "sentence": "A clone of that state goes to `MigrationExecutor.migrate`, which has the recorder make its table and then carries out the plan (`django/core/management/commands/migrate.py:Command.handle`).",
    "tree": "django",
    "path": "django/core/management/commands/migrate.py",
@@ -180,7 +152,7 @@
   },
   {
    "pointer": "django/db/migrations/migration.py:Migration.apply",
-   "line": 237,
+   "line": 199,
    "sentence": "For each migration the executor opens a schema editor, and `Migration.apply` goes through the operations in order (`django/db/migrations/migration.py:Migration.apply`).",
    "tree": "django",
    "path": "django/db/migrations/migration.py",
@@ -194,7 +166,7 @@
   },
   {
    "pointer": "django/db/migrations/recorder.py:MigrationRecorder",
-   "line": 253,
+   "line": 215,
    "sentence": "A migration is **applied** on a database when the table there has its row, and beside its id a row holds a label, a name and a time, no more (`django/db/migrations/recorder.py:MigrationRecorder`).",
    "tree": "django",
    "path": "django/db/migrations/recorder.py",

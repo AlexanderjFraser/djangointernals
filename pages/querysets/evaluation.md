@@ -31,7 +31,7 @@ for sailor in named: seen(sailor)
   the loop's body runs with <Sailor: Bram>
 ```
 
-The iterable is where the query is run, and how it turns a row into an instance is told in [From rows to instances: `ModelIterable` and `select_related`](iterables.md). What matters here is the order. `SQLCompiler.execute_sql` sent the statement and then read every row from the cursor, a hundred at a call until a call returned none, before it returned; both instances were made; and only then did the loop's body run for the first time (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`). The hundred is `GET_ITERATOR_CHUNK_SIZE`, the number of rows asked of the cursor at once, and has no bearing on how many are fetched in all.
+The iterable is where the query is run, and how it turns a row into an instance is told in [From rows to instances: `ModelIterable`](rows.md). What matters here is the order. `SQLCompiler.execute_sql` sent the statement and then read every row from the cursor, a hundred at a call until a call returned none, before it returned; both instances were made; and only then did the loop's body run for the first time (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`). The hundred is `GET_ITERATOR_CHUNK_SIZE`, the number of rows asked of the cursor at once, and has no bearing on how many are fetched in all.
 
 ## What the cache answers, and what a queryset answers without one
 
@@ -249,9 +249,9 @@ The same loop over the queryset itself: every row is read and every instance mad
     len(everyone._result_cache)  ->  4
 ```
 
-The argument `chunk_size=` of `iterator` is the number of rows asked of the cursor at a call, and it is 2,000 when none is given. A number that is not positive is refused with `ValueError` (`django/db/models/query.py:QuerySet.iterator`). Where the queryset has prefetch lookups the argument is required, and is then also the number of instances for which the lookups are followed at a time ([`prefetch_related`: related objects in a second query](prefetch.md)).
+The argument `chunk_size=` of `iterator` is the number of rows asked of the cursor at a call, and it is 2,000 when none is given. A number that is not positive is refused with `ValueError` (`django/db/models/query.py:QuerySet.iterator`). Where the queryset has prefetch lookups the argument is required, and is then also the number of instances for which the lookups are followed at a time ([`prefetch_related`: related objects in a second query](../relations/prefetch.md)).
 
-In the base class `chunked_cursor` returns an ordinary cursor, and its docstring says what a backend's own may return instead, where the database supports it: a cursor that tries to avoid caching, the server-side cursor that `"DISABLE_SERVER_SIDE_CURSORS"` is named for (`django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor`). The setting is for a connection that cannot use such a cursor, and Django's documentation gives the case of a connection pooler in transaction pooling mode (`docs/ref/databases.txt`). What each backend does is in [Cursors: executing a statement, the query log and execute wrappers](../backends/cursors.md#the-chunked-cursor-chunked_cursor). On a connection with the setting on, `iterator` still makes one instance at a time and keeps none, but `execute_sql` has read every row first, as it does for `_fetch_all`.
+In the base class `chunked_cursor` returns an ordinary cursor, and its docstring says what a backend's own may return instead, where the database supports it: a cursor that tries to avoid caching, the server-side cursor that `"DISABLE_SERVER_SIDE_CURSORS"` is named for (`django/db/backends/base/base.py:BaseDatabaseWrapper.chunked_cursor`). The setting is for a connection that cannot use such a cursor, and Django's documentation gives the case of a connection pooler in transaction pooling mode (`docs/ref/databases.txt`). What each backend does is in [Cursors: executing a statement, the query log and execute wrappers](../connections/cursors.md#the-chunked-cursor-chunked_cursor). On a connection with the setting on, `iterator` still makes one instance at a time and keeps none, but `execute_sql` has read every row first, as it does for `_fetch_all`.
 
 ## `repr`, pickling and copying
 
@@ -309,8 +309,31 @@ A queryset given as a value to another's filter is not evaluated: its query goes
     heavy._result_cache  ->  None
 ```
 
-When the outer queryset's filter is built, the inner one is asked to resolve itself as an expression, and `QuerySet.resolve_expression` hands back a copy of its query, resolved, with the queryset's own alias for a database set on the copy (`django/db/models/query.py:QuerySet.resolve_expression`). The copy is compiled into the outer statement as a subquery, and the inner queryset still has no result cache when the outer one has been evaluated. How a query becomes a subquery is in [From QuerySet to SQL](../sql.md).
+When the outer queryset's filter is built, the inner one is asked to resolve itself as an expression, and `QuerySet.resolve_expression` hands back a copy of its query, resolved, with the queryset's own alias for a database set on the copy (`django/db/models/query.py:QuerySet.resolve_expression`). The copy is compiled into the outer statement as a subquery, and the inner queryset still has no result cache when the outer one has been evaluated. How a query becomes a subquery is in [Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](../query/subqueries.md).
 
 ## What empties the cache
 
 A result cache is a list made at one moment, and nothing ties it to the rows it was made from. A queryset evaluated before a row was changed elsewhere goes on returning what it read. `QuerySet.update`, `QuerySet._update` and `QuerySet.delete`, each of which changes rows through the queryset, also set the cache of the queryset they are called on back to `None` (`django/db/models/query.py:QuerySet.update`, `django/db/models/query.py:QuerySet.delete`) ([Creating, updating and deleting through a queryset](writing.md)). A clone has no cache to begin with, so `QuerySet.all` of an evaluated queryset is one that will send the statement again.
+
+## `iterator` with prefetch lookups
+
+`QuerySet.iterator` keeps no result cache and does not go through `QuerySet._fetch_all`. `QuerySet._iterator` takes instances from the iterable in lists of the chunk size, calls `prefetch_related_objects` on each list with the queryset's lookups, and then yields the instances of the list (`django/db/models/query.py:QuerySet._iterator`).
+
+```text recording=querysets
+for ship in Ship.objects.prefetch_related('crew').iterator(chunk_size=1): seen(ship)
+  QuerySet.prefetch_related('crew')
+  QuerySet.iterator(chunk_size=1)  ->  a generator
+  QuerySet._iterator(use_chunked_fetch=True, chunk_size=1)
+    ModelIterable.__iter__
+      SQL SELECT "fleet_ship"."id", "fleet_ship"."name", "fleet_ship"."tonnage", "fleet_ship"."home_id", "fleet_ship"."captain_id" FROM "fleet_ship" ORDER BY "fleet_ship"."name" ASC
+    prefetch_related_objects(model_instances=[<Ship: Gannet>], 'crew')
+  the loop's body runs with <Ship: Gannet>
+    prefetch_related_objects(model_instances=[<Ship: Petrel>], 'crew')
+  the loop's body runs with <Ship: Petrel>
+```
+
+With a chunk of one, each ship's crew was fetched just before the loop's body ran with the ship. The number given as `chunk_size=` is at once the number of rows asked of the cursor at a call and the number of instances the lookups are followed for at a time. With lookups and no number, `iterator` raises:
+
+```text recording=querysets
+list(Ship.objects.prefetch_related('crew').iterator())  ->  raises ValueError: chunk_size must be provided when using QuerySet.iterator() after prefetch_related().
+```

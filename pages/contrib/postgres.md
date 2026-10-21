@@ -19,7 +19,7 @@ Most of the application is classes to import. Installing it also changes registr
 5. It registers `RangeSerializer` with `MigrationWriter`, so that a migration can hold the driver's range values (`django/contrib/postgres/serializers.py:RangeSerializer`).
 6. It lets `OpClass` wrap an index's expression, between `OrderBy` and `Collate` (`django/db/models/indexes.py:IndexExpression.register_wrappers`; [PostgreSQL indexes and `ExclusionConstraint`](postgres-indexes.md)).
 
-Step 2 reaches only connection objects already made, opened or not (`django/utils/connection.py:BaseConnectionHandler.all`). The default alias's is made as soon as a model without its own `db_table` is defined, which asks it for the longest name its database allows, and all models are imported before any `ready` runs (`django/db/models/options.py:Options.contribute_to_class`). The dictionary updated, `DatabaseIntrospection.data_types_reverse`, is the PostgreSQL backend's class attribute, so one connection found serves all (`django/db/backends/postgresql/introspection.py:DatabaseIntrospection`). The harbour office's run, SQLite by default, ended start-up without the range types ([Introspection: reading the schema back](../backends/introspection.md)).
+Step 2 reaches only connection objects already made, opened or not (`django/utils/connection.py:BaseConnectionHandler.all`). The default alias's is made as soon as a model without its own `db_table` is defined, which asks it for the longest name its database allows, and all models are imported before any `ready` runs (`django/db/models/options.py:Options.contribute_to_class`). The dictionary updated, `DatabaseIntrospection.data_types_reverse`, is the PostgreSQL backend's class attribute, so one connection found serves all (`django/db/backends/postgresql/introspection.py:DatabaseIntrospection`). The harbour office's run, SQLite by default, ended start-up without the range types ([Introspection: reading the schema back](../schema/introspection.md)).
 
 ### `uninstall_if_needed`
 
@@ -47,7 +47,7 @@ both ended                             "search": False
 
 ## The migration operations
 
-Of the operations of `django.contrib.postgres.operations` ([Operations: the base class and its two halves](../migrations/operations.md)), those on extensions and collations leave the project state alone, and ask the router with the application's label and no model ([Routing between databases: `ConnectionRouter`](../backends/routers.md)).
+Of the operations of `django.contrib.postgres.operations` ([Operations: the base class and its two halves](../migrations/operations.md)), those on extensions and collations leave the project state alone, and ask the router with the application's label and no model ([Routing between databases: `ConnectionRouter`](../connections/routers.md)).
 
 ### `CreateExtension`
 
@@ -66,7 +66,7 @@ NotSupportedError: The AddIndexConcurrently operation cannot be executed inside 
 
 ### Collations and constraints not yet valid
 
-`CreateCollation` and `RemoveCollation` hold a name, a locale, a provider (`"libc"` by default) and a deterministic flag. Forwards, each checks the vendor and the router; backwards, the router alone. `CreateCollation.reduce` cancels a `CreateCollation` against a following `RemoveCollation` of the same name, and the optimizer drops both ([The optimizer: `MigrationOptimizer` and `reduce`](../migrations/optimizer.md)). A non-deterministic ICU collation, as handed to PostgreSQL's schema editor (`django/contrib/postgres/operations.py:CollationOperation.create_collation`):
+`CreateCollation` and `RemoveCollation` hold a name, a locale, a provider (`"libc"` by default) and a deterministic flag. Forwards, each checks the vendor and the router; backwards, the router alone. `CreateCollation.reduce` cancels a `CreateCollation` against a following `RemoveCollation` of the same name, and the optimizer drops both ([The optimizer: `MigrationOptimizer` and `reduce`](../makemigrations/optimizer.md)). A non-deterministic ICU collation, as handed to PostgreSQL's schema editor (`django/contrib/postgres/operations.py:CollationOperation.create_collation`):
 
 ```text
 forwards:  CREATE COLLATION "harbour_ci" (locale="und-u-ks-level2", provider="icu", deterministic=false)
@@ -79,7 +79,7 @@ backwards: DROP COLLATION "harbour_ci"
 
 `RandomUUID` writes `"GEN_RANDOM_UUID()"` and `TransactionNow` `"CURRENT_TIMESTAMP"` (`django/contrib/postgres/functions.py`). `ArraySubquery` is a `Subquery` inside `"ARRAY(...)"`, whose output is an `ArrayField` of the inner query's field (`django/contrib/postgres/expressions.py:ArraySubquery`).
 
-The aggregates name a function, and some turn on what it accepts ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](../sql/aggregates.md)). `ArrayAgg` and `JSONBAgg` accept `distinct=True` and `order_by=...`, and give an `ArrayField` of the argument's field and a `JSONField`; `BoolAnd` and `BoolOr` a boolean (`django/contrib/postgres/aggregates/general.py:ArrayAgg`). The statistical aggregates take two expressions, y and x, refuse with `ValueError` unless both are given, and by default give a float, but `RegrCount` an integer (`django/contrib/postgres/aggregates/statistics.py:StatAggregate`).
+The aggregates name a function, and some turn on what it accepts ([Aggregates: `Aggregate` and `Count`](../expressions/aggregates.md)). `ArrayAgg` and `JSONBAgg` accept `distinct=True` and `order_by=...`, and give an `ArrayField` of the argument's field and a `JSONField`; `BoolAnd` and `BoolOr` a boolean (`django/contrib/postgres/aggregates/general.py:ArrayAgg`). The statistical aggregates take two expressions, y and x, refuse with `ValueError` unless both are given, and by default give a float, but `RegrCount` an integer (`django/contrib/postgres/aggregates/statistics.py:StatAggregate`).
 
 | deprecated | since | use instead |
 |---|---|---|

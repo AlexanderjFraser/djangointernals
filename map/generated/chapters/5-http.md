@@ -53,17 +53,17 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
-| [14 · Templates](14-templates.md) | 0 |  | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) |
-| [15 · Forms](15-forms.md) | 0 |  | 1 | `django/utils/http.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 1 | `django/utils/timezone.py` (1) | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 4 | `django/core/files/base.py` (1) `django/core/files/temp.py` (1) `django/core/files/utils.py` (1) `django/core/serializers/json.py` (1) | 3 | `django/utils/http.py` (2) `django/http/__init__.py` (1) |
-| [18 · The utility layer](18-utils.md) | 15 | `django/utils/datastructures.py` (4) `django/core/exceptions.py` (3) `django/utils/encoding.py` (3) `django/utils/functional.py` (2) and 3 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 7 | `django/utils/http.py` (4) `django/http/__init__.py` (3) |
-| [20 · The admin](20-admin.md) | 0 |  | 10 | `django/http/__init__.py` (5) `django/utils/http.py` (4) `django/http/response.py` (1) |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 14 | `django/http/__init__.py` (11) `django/utils/http.py` (2) `django/http/request.py` (1) |
-| [22 · Management commands](22-commands.md) | 0 |  | 1 | `django/utils/http.py` (1) |
-| [23 · The test framework](23-testing.md) | 0 |  | 4+1 | `django/http/__init__.py` (3) `django/http/request.py` (1) `django/utils/http.py` (1) |
+| [21 · Templates](21-templates.md) | 0 |  | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) |
+| [22 · Forms](22-forms.md) | 0 |  | 1 | `django/utils/http.py` (1) |
+| [23 · Internationalization and time zones](23-i18n.md) | 1 | `django/utils/timezone.py` (1) | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) |
+| [24 · Caching, files, mail, signals and tasks](24-services.md) | 4 | `django/core/files/base.py` (1) `django/core/files/temp.py` (1) `django/core/files/utils.py` (1) `django/core/serializers/json.py` (1) | 3 | `django/utils/http.py` (2) `django/http/__init__.py` (1) |
+| [25 · The utility layer](25-utils.md) | 15 | `django/utils/datastructures.py` (4) `django/core/exceptions.py` (3) `django/utils/encoding.py` (3) `django/utils/functional.py` (2) and 3 more | 0 |  |
+| [26 · Authentication, sessions and messages](26-auth.md) | 0 |  | 7 | `django/utils/http.py` (4) `django/http/__init__.py` (3) |
+| [27 · The admin](27-admin.md) | 0 |  | 10 | `django/http/__init__.py` (5) `django/utils/http.py` (4) `django/http/response.py` (1) |
+| [28 · Content types, static files and the other contrib apps](28-contrib.md) | 0 |  | 14 | `django/http/__init__.py` (11) `django/utils/http.py` (2) `django/http/request.py` (1) |
+| [29 · Management commands](29-commands.md) | 0 |  | 1 | `django/utils/http.py` (1) |
 | [3 · Settings, apps and startup](3-startup.md) | 5 | `django/conf/__init__.py` (5) | 0 |  |
+| [30 · The test framework](30-testing.md) | 0 |  | 4+1 | `django/http/__init__.py` (3) `django/http/request.py` (1) `django/utils/http.py` (1) |
 | [4 · Handlers and middleware](4-handlers.md) | 1 | `django/core/signals.py` (1) | 7 | `django/http/__init__.py` (4) `django/utils/http.py` (2) `django/http/multipartparser.py` (1) |
 | [6 · URL routing](6-urls.md) | 4 | `django/utils/regex_helper.py` (4) | 3 | `django/http/__init__.py` (2) `django/utils/http.py` (1) |
 | [7 · Views](7-views.md) | 0 |  | 14 | `django/http/__init__.py` (11) `django/utils/http.py` (3) |

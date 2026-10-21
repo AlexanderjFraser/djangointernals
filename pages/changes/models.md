@@ -28,9 +28,9 @@ tally.count = F("count") + 1; tally.save(); tally.count: a field assigned an exp
     this commit  1
 ```
 
-On MySQL, and on MariaDB after an update, the backend cannot return the columns, so the field is ordinarily deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../models/saving.md#what-comes-back)).
+On MySQL, and on MariaDB after an update, the backend cannot return the columns, so the field is ordinarily deferred to the next read (`django/db/models/base.py:Model._assign_returned_values`; [Saving an instance](../instance/saving.md#what-comes-back)).
 
-Since 6.0 a save's insert, unless raw, calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../models/saving.md#pre_save-and-why-an-insert-calls-it-twice)).
+Since 6.0 a save's insert, unless raw, calls `django.db.models.Field.pre_save` twice for each field it writes, where 5.2.17 called it once (`django/db/models/base.py:Model._save_table`, `django/db/models/sql/compiler.py:SQLInsertCompiler.pre_save_val`; [Saving an instance](../instance/saving.md#pre_save-and-why-an-insert-calls-it-twice)).
 
 ## A delete left to the database: `DB_CASCADE`, `DB_SET_NULL` and `DB_SET_DEFAULT`
 
@@ -57,7 +57,7 @@ DB_CASCADE, since 6.1: the database deletes the mooring
 
 *Read each half down: the steps of one delete in order, beside who carries each out, then what the receiver and the count learn of the mooring.*
 
-The 6.1 notes give the saved fetch as the reason, and the unsent signals as its consequence (`docs/releases/6.1.txt`; [Deleting: the `Collector`](../models/deleting.md)). The checks refuse a chain of keys that mixes the database's actions with the collector's (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).
+The 6.1 notes give the saved fetch as the reason, and the unsent signals as its consequence (`docs/releases/6.1.txt`; [Deleting: the `Collector`](../instance/deleting.md)). The checks refuse a chain of keys that mixes the database's actions with the collector's (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).
 
 > **Trap.** `Collector.delete` sends `post_delete` only for the rows it collected, and counts only what it deletes (`django/db/models/deletion.py:Collector.delete`). Under `DB_CASCADE` the harbour's delete calls no receiver and returns `(1, {'journal.Harbour': 1})`, with the mooring gone too.
 
@@ -65,7 +65,7 @@ The 6.1 notes give the saved fetch as the reason, and the unsent signals as its 
 
 `CompositePrimaryKey` (5.2) is a field without a column, assigned to `pk`, whose value is a tuple (`django/db/models/fields/composite.py:CompositePrimaryKey`). 6.0 let `QuerySet.raw` load such a model ([What changed in querysets](querysets.md)) and a subquery returning one serve more lookups ([What changed in expressions, lookups and the compiler](sql.md)). Since 6.0 the check `"models.E049"` refuses a `ForeignObject` of several `from_fields=` named in an index, a constraint or `Options.unique_together`; 5.2.17 let one pass (`django/db/models/base.py:Model._check_local_fields`).
 
-`Model._is_pk_set` counts a key unset when it is `None` or a tuple with a part unset, and since 6.1 when it holds a `DatabaseDefault` (`django/db/models/base.py:Model._is_pk_set`). Since 6.2 `Model.__eq__` asks it, and an unsaved instance whose key is unset is equal only to itself; before, it compared any key but `None` (`django/db/models/base.py:Model.__eq__`; [An instance and its state](../models/instances.md)).
+`Model._is_pk_set` counts a key unset when it is `None` or a tuple with a part unset, and since 6.1 when it holds a `DatabaseDefault` (`django/db/models/base.py:Model._is_pk_set`). Since 6.2 `Model.__eq__` asks it, and an unsaved instance whose key is unset is equal only to itself; before, it compared any key but `None` (`django/db/models/base.py:Model.__eq__`; [An instance and its state](../instance/state.md)).
 
 So two unsaved instances whose integer key has `db_default=1` are still equal under 6.1.1, and not at this commit; nor are two with a composite key, a part of it unset. Two with the same whole key still are, though the 6.2 notes say unsaved instances with a composite key "no longer compare equal to other instances" (`docs/releases/6.2.txt`).
 
@@ -98,6 +98,6 @@ Since 6.0 a `CheckConstraint` given `check=` raises a `TypeError`: 5.1 had depre
 | `BinaryField` | Since 6.1, Base64 that is not strict raises `ValidationError` | `django/db/models/fields/__init__.py:BinaryField.to_python` |
 | `FileField` | Since 5.1, saving a file with no name raises `FieldError` | `django/db/models/fields/files.py:FileField.pre_save` |
 | `ImageField` | Since 5.0, measured on `post_init` only with a width or height field; since 5.1, not again after a save | `django/db/models/fields/files.py:ImageField.contribute_to_class` |
-| `m2m_changed` | New in 6.1: the argument `raw=`, true when serialized data sets the relation | [Many-to-many relations](../models/many-to-many.md) |
+| `m2m_changed` | New in 6.1: the argument `raw=`, true when serialized data sets the relation | [Many-to-many relations](../relations/many-to-many.md) |
 | get_placeholder of a field | Deprecated in 6.1 for `get_placeholder_sql`; a field class that defines it without `get_placeholder_sql` warns when made | `django/db/models/fields/__init__.py:Field.__init_subclass__` |
 | get_cache_name of `FieldCacheMixin` | Gone in 6.0, deprecated in 5.1 for `FieldCacheMixin.cache_name`, which no longer calls it | `django/db/models/fields/mixins.py:FieldCacheMixin` |

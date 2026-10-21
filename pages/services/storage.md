@@ -14,7 +14,7 @@ Writing the bytes is the easy part of saving a file; the name is the hard part. 
 
 The handler `storages` is a `StorageHandler`. It copies the setting into `StorageHandler.backends` the first time a storage is asked for, and `StorageHandler.__getitem__` makes an alias's storage with `StorageHandler.create_storage` once and keeps it, so the process has one storage for each alias, shared by every thread (`django/core/files/storage/handler.py:StorageHandler`). `create_storage` imports the class and calls it with the `"OPTIONS"` as keyword arguments, ignoring any other key. An alias the setting lacks, or a class that will not import, raises `InvalidStorageError`, an `ImproperlyConfigured`.
 
-`django.core.files.storage.default_storage` is a `DefaultStorage`, a `LazyObject` that looks up the `"default"` alias at first use and stands for it from then on ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md)); a `django.db.models.FileField` given no storage keeps it ([File fields](../models/files.md)) (`django/core/files/storage/__init__.py:DefaultStorage`). A test's override of `STORAGES` empties the handler and the lazy storages ([Overriding settings](../startup/overrides.md)) (`django/test/signals.py:storages_changed`).
+`django.core.files.storage.default_storage` is a `DefaultStorage`, a `LazyObject` that looks up the `"default"` alias at first use and stands for it from then on ([Lazy objects: `LazyObject` and `SimpleLazyObject`](../utils/lazy-objects.md)); a `django.db.models.FileField` given no storage keeps it ([File fields](../instance/files.md)) (`django/core/files/storage/__init__.py:DefaultStorage`). A test's override of `STORAGES` empties the handler and the lazy storages ([Overriding settings](../startup/overrides.md)) (`django/test/signals.py:storages_changed`).
 
 ## `Storage`: the name in the base class, the bytes in the backend
 
@@ -68,7 +68,7 @@ save(long, ..., max_length=60) -> 'manifests/endorsement-of-the-harbour-master-f
 
 ## A clean name: `get_valid_name` and `generate_filename`
 
-`Storage.get_valid_name` calls `get_valid_filename`, which strips the ends, turns spaces into underscores and drops every character but letters and digits of any script, dashes, underscores and dots; a result that is empty, `"."` or `".."` raises `SuspiciousFileOperation` (`django/utils/text.py:get_valid_filename`). `Storage.generate_filename` cleans the last part of a path so, refuses `".."` in its directory, and normalizes it (`django/core/files/storage/base.py:Storage.generate_filename`); a file field calls it on the name its `upload_to` gives ([File fields](../models/files.md)). `save` cleans nothing, as a save to "scans", a second alias of the example's with `"base_url": "/scans"`, shows:
+`Storage.get_valid_name` calls `get_valid_filename`, which strips the ends, turns spaces into underscores and drops every character but letters and digits of any script, dashes, underscores and dots; a result that is empty, `"."` or `".."` raises `SuspiciousFileOperation` (`django/utils/text.py:get_valid_filename`). `Storage.generate_filename` cleans the last part of a path so, refuses `".."` in its directory, and normalizes it (`django/core/files/storage/base.py:Storage.generate_filename`); a file field calls it on the name its `upload_to` gives ([File fields](../instance/files.md)). `save` cleans nothing, as a save to "scans", a second alias of the example's with `"base_url": "/scans"`, shows:
 
 ```text
 get_valid_name("Harbour master's scan (2).txt") -> 'Harbour_masters_scan_2.txt'
@@ -79,7 +79,7 @@ storages["scans"].save("Endeavour 12 Oct.txt", ...) -> 'Endeavour 12 Oct.txt' ; 
 
 The constructor of `FileSystemStorage` stores its arguments and reads no setting (`django/core/files/storage/filesystem.py:FileSystemStorage`). The storage uses cached properties, each the argument or, where that is `None`, a setting read at first use: `FileSystemStorage.location`, `MEDIA_ROOT`, made absolute either way; `FileSystemStorage.base_url`, `MEDIA_URL` (an argument gets a slash at its end); and the two modes, from `FILE_UPLOAD_PERMISSIONS` (`0o644`) and `FILE_UPLOAD_DIRECTORY_PERMISSIONS` (`None`) (`django/conf/global_settings.py`). The constructor connects `StorageSettingsMixin._clear_cached_properties` to `setting_changed`, which drops a property when its setting changes (`django/core/files/storage/mixins.py:StorageSettingsMixin`).
 
-The class is `deconstructible`, as a storage must be for its field to go into a migration (`docs/howto/custom-file-storage.txt`), and the decorator keeps only the arguments given (`django/utils/deconstruct.py:deconstructible`): the example's default storage deconstructs to its class's path and no arguments, naming no directory ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)).
+The class is `deconstructible`, as a storage must be for its field to go into a migration (`docs/howto/custom-file-storage.txt`), and the decorator keeps only the arguments given (`django/utils/deconstruct.py:deconstructible`): the example's default storage deconstructs to its class's path and no arguments, naming no directory ([Serializing values: `serializer_factory` and `deconstruct`](../makemigrations/serializer.md)).
 
 ## `FileSystemStorage._save`
 

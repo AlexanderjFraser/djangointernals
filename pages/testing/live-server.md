@@ -14,7 +14,7 @@ The test client has no socket a browser could reach ([The test client: `Client` 
 
 `LiveServerTestCase.setUpClass` runs its parents' `setUpClass`, which enters the class's settings overrides ([Settings for one test: `override_settings` and `TestContextDecorator`](test-decorators.md)), so the server's handlers read the overridden settings. It appends `allowed_host` to `ALLOWED_HOSTS` with `modify_settings`, entered as a context of the class, and starts the server with `LiveServerTestCase._start_server_thread` (`django/test/testcases.py:LiveServerTestCase.setUpClass`, `django/test/testcases.py:LiveServerTestCase._start_server_thread`):
 
-1. `LiveServerTestCase._make_connections_override` chooses the connections to share, and `BaseDatabaseWrapper.inc_thread_sharing` lets another thread use each ([Opening and closing a connection](../backends/lifecycle.md)).
+1. `LiveServerTestCase._make_connections_override` chooses the connections to share, and `BaseDatabaseWrapper.inc_thread_sharing` lets another thread use each ([Connections by alias: `DATABASES` and `ConnectionHandler`](../connections/aliases.md)).
 2. `LiveServerTestCase._create_server_thread` makes the thread from `server_thread_class`, with the host, the port, `static_handler` and those connections; it is made a daemon and started.
 3. `LiveServerTestCase._terminate_thread` is registered as a class cleanup.
 4. The test's thread waits on `LiveServerThread.is_ready`, a `threading.Event`, and raises the error the thread kept, if any.
@@ -29,7 +29,7 @@ The server is built on the development server's `WSGIServer` and `WSGIRequestHan
 
 ## One connection for two threads
 
-A SQLite test database is in memory unless its `"TEST"` `"NAME"` names a file ([Test databases: `BaseDatabaseCreation`](../backends/creation.md)). `_make_connections_override` takes those of the test thread's connections that are SQLite's to a database in memory (`django/test/testcases.py:LiveServerTestCase._make_connections_override`). The server's threads use those very objects, so they see what the test wrote, committed or not, and their closing does not destroy the database: SQLite's `DatabaseWrapper.close` ignores a close of a database in memory (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`). The documentation warns against the two threads querying through it at once: a test should wait for a page to load before going on (`docs/topics/testing/tools.txt`).
+A SQLite test database is in memory unless its `"TEST"` `"NAME"` names a file ([Test databases: `BaseDatabaseCreation`](../schema/test-databases.md)). `_make_connections_override` takes those of the test thread's connections that are SQLite's to a database in memory (`django/test/testcases.py:LiveServerTestCase._make_connections_override`). The server's threads use those very objects, so they see what the test wrote, committed or not, and their closing does not destroy the database: SQLite's `DatabaseWrapper.close` ignores a close of a database in memory (`django/db/backends/sqlite3/base.py:DatabaseWrapper.close`). The documentation warns against the two threads querying through it at once: a test should wait for a page to load before going on (`docs/topics/testing/tools.txt`).
 
 Any other database is not shared: each thread of the server opens its own connection to the test database, and sees what the test has committed.
 

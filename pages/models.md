@@ -1,18 +1,18 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
 part: The ORM
-contents: metaclass, options, fields, field-types, relations, related-objects, many-to-many, inheritance, managers, instances, saving, deleting, validation, constraints, files, checks
+contents: metaclass, options, fields, field-types, inheritance, managers, constraints, checks
 ---
 
 # Models and fields
 
-A model class is put together while its class statement runs. A metaclass, `ModelBase`, hands the new class to every field in the body; each field enters itself in the class's options object and leaves a descriptor where it stood; and a relation can put an attribute on the class it points at as well. This chapter follows that assembly, and then an instance of the result as it is made, read, saved, validated and deleted.
+A model class is put together while its class statement runs. A metaclass, `ModelBase`, hands the new class to every field in the body; each field enters itself in the class's options object and leaves a descriptor where it stood; and a relation can put an attribute on the class it points at as well.
 
 A model has to be several things at once. It is an ordinary Python class, whose instances a view hands to a template. It is the description of a table: columns and their types, constraints, indexes, enough for a migration to be written from it. It is the vocabulary of queries: a filter on `"home__country"` has to find, from those two words, a join to another table and a column there. And it is one model among many that point at each other, some of them by the name of a class that has not been imported yet.
 
-Django gets all four from one class statement, by taking the statement over. What the body of a model writes is not what the class ends up with. The fields are moved into an object of their own, the class is given attributes its body never mentions, and other classes are given attributes because of it. The first half of this chapter is about that construction: the metaclass, the options object, fields, relations, inheritance and managers. The second half is about one row: the instance, how it is saved and deleted, and how it is validated. The last sections are about what stands beside the fields in a model's description, its constraints and indexes, about the fields that keep a file, and about the checks that read the whole description for mistakes.
+Django gets all four from one class statement, by taking the statement over. What the body of a model writes is not what the class ends up with. The fields are moved into an object of their own, the class is given attributes its body never mentions, and other classes are given attributes because of it. This chapter is about that construction: the metaclass, the options object, the fields, inheritance and managers, then what stands beside the fields in a model's description, its constraints and indexes, and the checks that read the whole description for mistakes. What a relation leaves on its two classes is told in [Relations](relations.md), and an instance of the finished class, as it is made, read, saved, validated and deleted, in [An instance and its row](instance.md).
 
-The examples are the models of a shipping line, in three applications. The fleet has the ports, the ships and their voyages, the crew has the sailors, and the office has the paperwork, which is brought in where a section needs it. Everything recorded in this chapter was recorded from a running Django with these among its models. The listing leaves out their docstrings and three small definitions, the choices of a rank, a queryset class and a manager class, which are shown where they are used.
+The examples are the models of a shipping line, harbour, in three applications. The fleet has the ports, the ships and their voyages; the crew has the sailors, among them the officers, a child of Sailor with a table of its own, and the veterans, a proxy whose manager keeps the sailors who signed on before 2020; and the office has the paperwork: the licence that lets a sailor pilot ships into a port, the manifest of what a voyage carried, the berths of a port, and the logbooks with their lines. Here are the three `models.py` files whole, less their imports and their docstrings; *serials.next_serial*, the default of a manifest's key, is a function of the project's that returns the next of a run of numbers as text, `"M-0001"` and on.
 
 ```python
 # harbour/fleet/models.py
@@ -51,6 +51,17 @@ class Voyage(models.Model):
 
 
 # harbour/crew/models.py
+class Rank(models.TextChoices):
+    MASTER = "master"
+    MATE = "mate", "First mate"
+    ENGINEER = "engineer"
+
+
+class SailorQuerySet(models.QuerySet):
+    def aboard(self, ship):
+        return self.filter(ship=ship)
+
+
 class Sailor(models.Model):
     name = models.CharField(max_length=60)
     ship = models.ForeignKey("fleet.Ship", on_delete=models.CASCADE, related_name="crew")
@@ -67,12 +78,52 @@ class Officer(Sailor):
     rank = models.CharField(max_length=10, choices=Rank)
 
 
+class VeteranManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(signed_on__year__lt=2020)
+
+
 class Veteran(Sailor):
     objects = VeteranManager()
 
     class Meta:
         proxy = True
+
+
+# harbour/office/models.py
+class Licence(models.Model):
+    sailor = models.ForeignKey("crew.Sailor", on_delete=models.CASCADE)
+    port = models.ForeignKey("fleet.Port", on_delete=models.CASCADE)
+    granted = models.DateField()
+
+
+class Manifest(models.Model):
+    serial = models.CharField(max_length=8, primary_key=True, default=serials.next_serial)
+    voyage = models.ForeignKey("fleet.Voyage", on_delete=models.CASCADE)
+    crates = models.PositiveIntegerField()
+    kilos_each = models.PositiveIntegerField()
+    kilos = models.GeneratedField(expression=F("crates") * F("kilos_each"), output_field=models.PositiveIntegerField(), db_persist=True)
+    stamped = models.BooleanField(db_default=False)
+    scan = models.FileField(upload_to="manifests/", blank=True)
+
+
+class Berth(models.Model):
+    pk = models.CompositePrimaryKey("port_id", "number")
+    port = models.ForeignKey("fleet.Port", on_delete=models.CASCADE)
+    number = models.PositiveSmallIntegerField()
+    metres = models.PositiveSmallIntegerField()
+
+
+class Logbook(models.Model):
+    title = models.CharField(max_length=60)
+
+
+class LogEntry(models.Model):
+    book = models.ForeignKey(Logbook, on_delete=models.DB_CASCADE)
+    line = models.CharField(max_length=200)
 ```
+
+Three of the office's models carry a feature the others do not, and each is shown again where a section turns on it: Manifest a key with a default, a column the database computes, a column whose default the database supplies, and a file; Berth a primary key of two columns; and LogEntry a foreign key whose deletions the database carries out itself.
 
 ## A class statement is a program
 
@@ -232,38 +283,11 @@ A `Field` is one column's worth of the description, and it answers for that colu
 
 A field knows three names. `Field.name` is the attribute the body assigned it to, `Field.attname` is the key its value is kept under on an instance, and `Field.column` is the column. For most fields the three are one word. For the foreign key of Ship they are `"home"`, `"home_id"` and `"home_id"`.
 
-A field holds no values. One field object serves every instance of its class, and an instance's values are in the instance's own `__dict__`, under the attnames. The `DeferredAttribute` that a concrete field leaves on the class, where its class does not ask for another descriptor, acts only when the value is missing, and has it fetched; a foreign key's descriptor also acts when a value is assigned, and a file field's at every read ([A field: the base class](models/fields.md)). The classes that make up `django.db.models`' fields differ in the column they ask for and in how they convert a value, and a few differ in kind: a generated column, a primary key of several columns, a file ([The field classes](models/field-types.md), [File fields](models/files.md)).
+A field holds no values. One field object serves every instance of its class, and an instance's values are in the instance's own `__dict__`, under the attnames. The `DeferredAttribute` that a concrete field leaves on the class, where its class does not ask for another descriptor, acts only when the value is missing, and has it fetched; a foreign key's descriptor also acts when a value is assigned, and a file field's at every read ([A field: the base class](models/fields.md)). The classes that make up `django.db.models`' fields differ in the column they ask for and in how they convert a value, and a few differ in kind: a generated column, a primary key of several columns, a file ([The field classes](models/field-types.md), [File fields](instance/files.md)).
 
 ## A relation has two ends
 
-A `ForeignKey` is a field with a column, like any other. What makes it a relation is a second object it carries as `Field.remote_field`: a **rel**, here a `ManyToOneRel`, which is the same relation seen from the model it points at. The rel is what stands in the other model's list of fields, as `"crew"` did above, and it is what names the attribute the other class is given (`django/db/models/fields/__init__.py:Field.__init__`, `django/db/models/fields/reverse_related.py:ForeignObjectRel`).
-
-So a relation is reached from both classes, through descriptors. Reading the field's name on an instance gives the related object, fetched on the first read and kept on the instance afterwards:
-
-```text recording=models
-A sailor's ship is read twice
-    bram.ship is read
-      ForwardManyToOneDescriptor.__get__(<Sailor: Bram>)  (Sailor.ship)
-        FieldCacheMixin.get_cached_value(<Sailor: Bram>)  (Sailor.ship)  raises KeyError
-        FetchOne.fetch(a ForwardManyToOneDescriptor for Sailor.ship, <Sailor: Bram>)
-          ForwardManyToOneDescriptor.fetch_one(<Sailor: Bram>)  (Sailor.ship)
-            ForwardManyToOneDescriptor.get_object(<Sailor: Bram>)  (Sailor.ship)
-              SQL SELECT "fleet_ship"."id", "fleet_ship"."name", "fleet_ship"."tonnage", "fleet_ship"."home_id", "fleet_ship"."captain_id" FROM "fleet_ship" WHERE "fleet_ship"."id" = %s LIMIT 21 with params (1,)
-              -> <Ship: Petrel>
-            FieldCacheMixin.set_cached_value(<Sailor: Bram>, <Ship: Petrel>)  (Sailor.ship)
-        FieldCacheMixin.get_cached_value(<Sailor: Bram>)  (Sailor.ship)  ->  <Ship: Petrel>
-        -> <Ship: Petrel>
-    bram.ship is read again
-      ForwardManyToOneDescriptor.__get__(<Sailor: Bram>)  (Sailor.ship)
-        FieldCacheMixin.get_cached_value(<Sailor: Bram>)  (Sailor.ship)  ->  <Ship: Petrel>
-        -> <Ship: Petrel>
-```
-
-The descriptor does not decide how to fetch. It asks the instance's **fetch mode**, which calls back the descriptor's `fetch_one` for this instance, or its `fetch_many` for the instances that one run of a query made together with this one, or raises `FieldFetchBlocked` (`django/db/models/fetch_modes.py`) ([Reading and setting related objects](models/related-objects.md)).
-
-> **Changed in 6.1.** Fetch modes are new. Before them, reading a related object that had not been fetched always ran one query for that one instance, which is what the default mode, `FETCH_ONE`, still does.
-
-From the other class a foreign key that is not one-to-one is a manager. The attribute `"ships"` of a port is not a list. It is a descriptor that makes, at each read, a manager whose querysets are already filtered to that port's ships (`django/db/models/fields/related_descriptors.py:ReverseManyToOneDescriptor.__get__`). A many-to-many relation has such a manager at its own end and, in the ordinary case, at the other, and no column at either: its rows are in a third table, whose model Django makes itself unless the field names one ([Relations: a field, its rel and the class at the other end](models/relations.md), [Many-to-many relations](models/many-to-many.md)).
+A `ForeignKey` is a field with a column, like any other. What makes it a relation is a second object it carries as `Field.remote_field`: a **rel**, here a `ManyToOneRel`, which is the same relation seen from the model it points at. The rel is what stands in the other model's list of fields, as `"crew"` did above, and it is what names the attribute the other class is given (`django/db/models/fields/__init__.py:Field.__init__`, `django/db/models/fields/reverse_related.py:ForeignObjectRel`). The attributes a relation leaves on its two classes, and the ways an instance reaches the objects at the other end, are [Relations](relations.md)'s.
 
 ## Three kinds of inheritance
 
@@ -273,87 +297,9 @@ A model class can inherit from another in three ways, and the metaclass does a d
 
 The attribute `"objects"` of a class is a descriptor that gives a manager bound to that class (`django/db/models/manager.py:ManagerDescriptor.__get__`). The methods a manager takes from a queryset are not the queryset's own: each is a function of the same name that calls the queryset's method on a new queryset (`django/db/models/manager.py:BaseManager._get_queryset_methods`). A model has a default manager, which is the first of its managers unless its `Meta` names another, and a base manager, through which Django saves and reloads an instance, fetches the object a foreign key points at, and finds the rows a delete must collect. The two need not be the same ([Managers](models/managers.md)).
 
-## An instance is a `__dict__` and a state
+## An instance of the class
 
-Making an instance runs `Model.__init__`, which sets an attribute for each field that has a column and is not generated, from the arguments or from the field's default, and binds a new `ModelState` as `Model._state` (`django/db/models/base.py:Model.__init__`, `django/db/models/base.py:ModelState`). That is all an instance is:
-
-```text recording=models
-What the new Ship holds in its __dict__
-    _state: a ModelState
-    id: None
-    name: 'Heron'
-    tonnage: 300
-    home_id: 1
-    captain_id: None
-    and its _state: adding=True, db='default', fields_cache={'home': <Port: Bergen>}
-```
-
-The values are under attnames, so a foreign key is there as a number. The port itself, having been passed in, is kept in the state's cache of related objects. The state also records whether the instance is being added, which is true until it has been saved or was made from a row, and which database it belongs to.
-
-A row fetched by a query becomes an instance through the same `__init__`, called by `Model.from_db` with the row's values in the order of the model's concrete fields (`django/db/models/base.py:Model.from_db`). A query that fetched only some columns leaves the others out of the `__dict__` altogether, and that absence is the whole of what it means for a field to be **deferred**: reading the attribute finds nothing on the instance, falls through to the descriptor on the class, and the descriptor asks the instance's fetch mode for the value, as a relation's descriptor does ([An instance and its state](models/instances.md)).
-
-## Saving is an update, or else an insert
-
-`Model.save` does not ordinarily ask first whether the row exists; a model whose `Meta` sets `select_on_save`, and a table with nothing to write but its key, are the exceptions. For each table of the model, it decides from what it has in hand. If the primary key is set it tries an `"UPDATE"`, and takes a result that touched a row as success. If that touched nothing, or the key was not set, it inserts. A Ship made with a key that no row has shows both statements:
-
-```text recording=models
-Ship(id=40, name='Skua', tonnage=90, home=leith).save(): a primary key set by hand, and no such row
-    Model.save()  (a Ship)
-      Model._prepare_related_fields_for_save
-      Model.save_base()
-        signal pre_save, sender Ship, raw=False, update_fields=None
-        mark_for_rollback_on_error
-        Model._save_table(cls=Ship)
-          Model._do_update(pk_val=40, values for [name, tonnage, home, captain])
-            SQL UPDATE "fleet_ship" SET "name" = %s, "tonnage" = %s, "home_id" = %s, "captain_id" = %s WHERE "fleet_ship"."id" = %s with params ('Skua', 90, 2, None, 40)
-            -> []
-          Model._do_insert(fields=[id, name, tonnage, home, captain], returning_fields=[id])
-            SQL INSERT INTO "fleet_ship" ("id", "name", "tonnage", "home_id", "captain_id") VALUES (%s, %s, %s, %s, %s) RETURNING "fleet_ship"."id" with params (40, 'Skua', 90, 2, None)
-            -> [(40,)]
-          Model._assign_returned_values((40,), [id])
-          -> updated: False
-        signal post_save, sender Ship, created=True, update_fields=None
-```
-
-The update is skipped when the key is not set, when the instance is being added and its key has a default (unless the save is forced either way, or is the raw save that loads a fixture), and for a child's table when its parent's row has just been inserted. The arguments `force_insert=True`, `force_update=True` and `"update_fields"` each cut the decision short. With `"update_fields"`, or with `force_update=True` for the model's own table, an update that matches no row raises instead of falling back to an insert. In a save that is not raw, each value written goes through its field's `Field.pre_save` on the way, which is where a date that sets itself on saving gets its value (`django/db/models/base.py:Model._save_table`, `django/db/models/fields/__init__.py:Field.pre_save`, `django/db/models/fields/__init__.py:DateField.pre_save`).
-
-A save does not validate. It refuses an instance that was given a related object with no primary key; anything else the instance holds is prepared by its field and sent: a value the field cannot prepare raises there, and one the table will not take is refused by the database ([Saving an instance](models/saving.md)). Validation is a separate call, `Model.full_clean`, which a `ModelForm` makes and `save` does not (`django/db/models/base.py:Model.full_clean`). It cleans the value of each field that has one to clean, which for a foreign key means asking the database whether the row it points at exists, calls `Model.clean`, asks the database whether a value that must be unique is already taken, and then tests the model's constraints against the instance, which for the two of Ship, when their fields passed their own cleaning, is a query each ([Validating an instance](models/validation.md), [Constraints and indexes](models/constraints.md)).
-
-## Deleting is collected first
-
-`Model.delete` deletes nothing until it knows everything that has to go; the only statements it sends before that are the selects that find the rows. It gives the instance to a `Collector`, which follows each foreign key and one-to-one field that points at the instance's model and does what that relation's `on_delete` says: collect the related rows too, refuse, or note that the column is to be set to null (`django/db/models/base.py:Model.delete`, `django/db/models/deletion.py:Collector.collect`). Only then does it delete. Where it can, it first puts the models in an order in which a row reached through a field that cannot be null is deleted before the row it points at, which the source says is for databases that cannot put off checking a foreign key until the transaction ends (`django/db/models/deletion.py:Collector.delete`, `django/db/models/deletion.py:Collector.sort`). Two tables point at a voyage: the one Django made for its ports of call, and that of Manifest, a model of the office with a foreign key to Voyage.
-
-```text recording=models
-A Voyage is deleted, with the rows that point at it
-    autumn.delete()
-      Model.delete()  (a Voyage)
-        Collector.collect([<Voyage: Voyage object (2)>])
-          Collector.can_fast_delete([<Voyage: Voyage object (2)>])  ->  False
-          Collector.add([<Voyage: Voyage object (2)>])  ->  not already collected: [<Voyage: Voyage object (2)>]
-          Collector.can_fast_delete(the class Voyage_calls, from_field=Voyage_calls.voyage)  ->  True
-          Collector.can_fast_delete(the class Manifest, from_field=Manifest.voyage)  ->  True
-          Collector.related_objects(Voyage_calls, [Voyage_calls.voyage], [<Voyage: Voyage object (2)>])  ->  a QuerySet of Voyage_calls, not yet fetched
-          Collector.related_objects(Manifest, [Manifest.voyage], [<Voyage: Voyage object (2)>])  ->  a QuerySet of Manifest, not yet fetched
-        Collector.delete
-          Collector.sort
-          Collector.can_fast_delete(<Voyage: Voyage object (2)>)  ->  False
-          Atomic.__enter__  (savepoint=False)
-            SQL BEGIN
-          QuerySet._raw_delete  (a QuerySet of Voyage_calls, not yet fetched)
-            SQL DELETE FROM "fleet_voyage_calls" WHERE "fleet_voyage_calls"."voyage_id" IN (%s) with params (2,)
-          QuerySet._raw_delete  (a QuerySet of Manifest, not yet fetched)
-            SQL DELETE FROM "office_manifest" WHERE "office_manifest"."voyage_id" IN (%s) with params (2,)
-          DeleteQuery.delete_batch([2])  (Voyage)
-            SQL DELETE FROM "fleet_voyage" WHERE "fleet_voyage"."id" IN (%s) with params (2,)
-          Atomic.__exit__
-            BaseDatabaseWrapper.commit
-          -> (2, {'fleet.Voyage_calls': 1, 'fleet.Voyage': 1})
-        -> (2, {'fleet.Voyage_calls': 1, 'fleet.Voyage': 1})
-```
-
-The two tables that point at a voyage are emptied of its rows with one `"DELETE"` each and nothing fetched. The collector allows itself that when it has no reason to look at the rows: no receiver is connected for the model's delete signals, and deleting them calls for nothing further to be collected. Otherwise it fetches the rows, sends `pre_delete` and `post_delete` for each unless the model is one Django made itself, and deletes them by key (`django/db/models/deletion.py:Collector.collect`, `django/db/models/deletion.py:Collector.can_fast_delete`) ([Deleting: the `Collector`](models/deleting.md)).
-
-> **Changed in 6.1.** `on_delete` may also name an action for the database to take, `DB_CASCADE`, `DB_SET_NULL` or `DB_SET_DEFAULT`. The collector that `Model.delete` makes passes over such a relation, and the rows are dealt with by the foreign key's `ON DELETE` clause.
+The class statement makes a description and a class; a new instance of the class holds little: the values, in its own `__dict__` under the fields' attnames, and a `ModelState` that says whether it is still being added and which database it belongs to (`django/db/models/base.py:Model.__init__`, `django/db/models/base.py:ModelState`). Everything else it seems to have is the class's, found by ordinary attribute lookup: the descriptors the fields left, `_meta`, the methods. How an instance is made from a row, what it does when a value it lacks is read, and how it is saved, validated and deleted are [An instance and its row](instance.md)'s.
 
 ## The checks
 
@@ -363,6 +309,6 @@ Many mistakes in a model raise nothing when its class statement runs. A relation
 
 The app registry is where a model class is entered and where a relation waits for its other class; it and the import of every `models` module are part of start-up ([Settings, apps and startup](startup.md)). The checks are run by the `check` command and before several others ([Management commands](commands.md)).
 
-A manager's methods are a queryset's, and a queryset is what turns rows into instances by calling `Model.from_db` ([QuerySets](querysets.md)). The selects, inserts, updates and deletes in this chapter's recordings are written by the compilers, from a `Query` that reads the model through `_meta`; the lookups and transforms a field registers, the expressions a constraint is made of, and the SQL of an insert and an update belong there ([From QuerySet to SQL](sql.md)). The column type a field gets, the conversion of a value on its way out of a row, and the schema editor that turns a model into a table are the database backend's ([Database backends](backends.md)). What `Field.deconstruct` returns for each field, and a model's options, are what a migration is written from, and migrations make model classes of their own in a registry of their own (`django/db/models/fields/__init__.py:Field.deconstruct`) ([Migrations](migrations.md)).
+An instance and its life against its row are [An instance and its row](instance.md); a manager's methods are a queryset's ([QuerySets](querysets.md)); what a relation adds to two classes, and how related objects are fetched, is [Relations](relations.md). A query reads the model through `_meta` to turn a filter's names into joins ([Building a query](query.md)), with the lookups and transforms a field registers ([Expressions, lookups and functions](expressions.md)), and the statements that a queryset or a save sends in this chapter's recordings are written by the compilers ([The SQL compiler](sql.md)). The column type a field gets and the conversion of a value on its way out of a row are the database backend's ([Database backends](backends.md)), and the schema editor that turns a model into a table is [Schemas and test databases](schema.md)'s. What `Field.deconstruct` returns for each field, and a model's options, are what a migration is written from, and migrations make model classes of their own in a registry of their own (`django/db/models/fields/__init__.py:Field.deconstruct`) ([Migrations](migrations.md), [Making migrations](makemigrations.md)).
 
-`ModelForm` reads `_meta` for its fields and calls `Model.full_clean` ([Model forms: `ModelForm` and `fields_for_model`](forms/model-forms.md)). Signals themselves are in [Signals: `Signal`, receivers and sending](services/signals.md), the storage a file field saves to in [File storage: `Storage`, `FileSystemStorage` and `storages`](services/storage.md), and serialization in [Serialization: `serialize`, `deserialize` and `DeserializedObject`](services/serializers.md). A field that points at any model, by a content type and a key, is in [Generic foreign keys: `GenericForeignKey`](contrib/generic-foreign-key.md), and the model that a setting can swap for another is the user, in [The user model: `AbstractBaseUser`, `User` and `AUTH_USER_MODEL`](auth/user-model.md). The first chapter follows one query from a manager to its rows and back ([A queryset becomes SQL](overview/query.md)).
+`ModelForm` reads `_meta` for its fields and calls `Model.full_clean` ([Model forms: `ModelForm` and `fields_for_model`](forms/model-forms.md)). Signals themselves are in [Signals: `Signal`, receivers and sending](services/signals.md), and serialization in [Serialization: `serialize`, `deserialize` and `DeserializedObject`](services/serializers.md). A field that points at any model, by a content type and a key, is in [Generic foreign keys: `GenericForeignKey`](contrib/generic-foreign-key.md), and the model that a setting can swap for another is the user, in [The user model: `AbstractBaseUser`, `User` and `AUTH_USER_MODEL`](auth/user-model.md). [A queryset becomes SQL](overview/query.md) follows one query from a manager to its rows and back.

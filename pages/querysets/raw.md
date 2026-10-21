@@ -14,7 +14,7 @@ The examples are the shipping line of the chapter's opening page, [QuerySets](..
 
 ## What `raw` returns
 
-`QuerySet.raw` makes a `RawQuerySet` from the statement, the parameters, a dictionary of translations if one is given, and four things of the queryset it was called on: the model, an alias for a database, the fetch mode its instances are to be given ([Deferred fields and fetch modes in a queryset](deferred.md)), and the prefetch lookups ([`prefetch_related`: related objects in a second query](prefetch.md)) (`django/db/models/query.py:QuerySet.raw`). The alias is the one given as `using=...`, and failing that the queryset's own `QuerySet.db` as it is at that moment ([Clones: how a queryset is built](chaining.md)). The queryset's query is not among the four, so a condition already on the queryset, a manager's own filter included, has no part in the statement that is sent. Veteran is a proxy of Sailor whose manager filters every queryset it hands out:
+`QuerySet.raw` makes a `RawQuerySet` from the statement, the parameters, a dictionary of translations if one is given, and four things of the queryset it was called on: the model, an alias for a database, the fetch mode its instances are to be given ([Deferred fields in a queryset: `defer` and `only`](deferred.md)), and the prefetch lookups ([`prefetch_related`: related objects in a second query](../relations/prefetch.md)) (`django/db/models/query.py:QuerySet.raw`). The alias is the one given as `using=...`, and failing that the queryset's own `QuerySet.db` as it is at that moment ([Clones: how a queryset is built](chaining.md)). The queryset's query is not among the four, so a condition already on the queryset, a manager's own filter included, has no part in the statement that is sent. Veteran is a proxy of Sailor whose manager filters every queryset it hands out:
 
 ```python
 # harbour/crew/models.py
@@ -100,7 +100,7 @@ len(names), repr(names)  ->  (1, '<RawQuerySet: SELECT id, name FROM crew_sailor
 
 Asked for its columns before anything else, the raw queryset had the statement run for the names alone, and `len` then had it run again for the rows. The `repr` in the last answer is the text with a parameter that is a string put into it, which stands there with no quotes round it.
 
-The parameters may be a sequence, a mapping, for placeholders written with names, or `None`, which is passed on as it is. Each parameter of a sequence or a mapping is first adapted by the backend's `BaseDatabaseOperations.adapt_unknown_value`, which goes by the Python type of the value alone: a datetime, a date, a time or a `decimal.Decimal` is given to the method of the backend's operations that adapts a value of a field of that kind, and anything else is left as it is (`django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_unknown_value`). How the placeholders and the parameters reach the driver is in [Cursors: executing a statement, the query log and execute wrappers](../backends/cursors.md#placeholders-s-and-names).
+The parameters may be a sequence, a mapping, for placeholders written with names, or `None`, which is passed on as it is. Each parameter of a sequence or a mapping is first adapted by the backend's `BaseDatabaseOperations.adapt_unknown_value`, which goes by the Python type of the value alone: a datetime, a date, a time or a `decimal.Decimal` is given to the method of the backend's operations that adapts a value of a field of that kind, and anything else is left as it is (`django/db/backends/base/operations.py:BaseDatabaseOperations.adapt_unknown_value`). How the placeholders and the parameters reach the driver is in [Cursors: executing a statement, the query log and execute wrappers](../connections/cursors.md#placeholders-s-and-names).
 
 ## Which column is whose
 
@@ -162,7 +162,7 @@ list(Sailor.objects.raw('SELECT name FROM crew_sailor'))  ->  raises FieldDoesNo
 
 The values of a column that matches a field are passed through the converters of the backend and of that field, the functions that turn a value as the driver returned it into the one Python is to have, as a queryset's are; a value in a column that matches none is left as the driver returned it (`django/db/models/sql/compiler.py:SQLCompiler.get_converters`, `django/db/models/sql/compiler.py:SQLCompiler.apply_converters`).
 
-From each row the iterable picks the values at the places that `resolve_model_init_order` gave, and calls `Model.from_db` with the alias, the list of attnames and those values, the raw queryset's fetch mode being bound to the call by `_get_from_db` ([From rows to instances: `ModelIterable` and `select_related`](iterables.md)). Given fewer names than the model has concrete fields, `from_db` leaves the other fields deferred ([An instance and its state](../models/instances.md)). Where the fetch mode tracks peers, the instances that one iteration makes, the instance is added to the list of them and given the list ([Deferred fields and fetch modes in a queryset](deferred.md)). Each column left over is set on the instance with `setattr`, under the column's name. When the iteration ends, however it ends, the iterable closes the cursor of the `RawQuery`.
+From each row the iterable picks the values at the places that `resolve_model_init_order` gave, and calls `Model.from_db` with the alias, the list of attnames and those values, the raw queryset's fetch mode being bound to the call by `_get_from_db` ([From rows to instances: `ModelIterable`](rows.md)). Given fewer names than the model has concrete fields, `from_db` leaves the other fields deferred ([Deferred fields and the fetch modes](../instance/fetching.md)). Where the fetch mode tracks peers, the instances that one iteration makes, the instance is added to the list of them and given the list ([Deferred fields and the fetch modes](../instance/fetching.md)). Each column left over is set on the instance with `setattr`, under the column's name. When the iteration ends, however it ends, the iterable closes the cursor of the `RawQuery`.
 
 ## A composite primary key
 
@@ -216,7 +216,7 @@ Sailor.objects.raw('SELECT * FROM crew_sailor').filter(name='Ada')  ->  raises A
 
 ## Prefetch lookups, copies and the database
 
-`RawQuerySet.prefetch_related` adds prefetch lookups to a copy of the raw queryset, and given `None` alone it empties the list, as a queryset's does (`django/db/models/query.py:RawQuerySet.prefetch_related`). `RawQuerySet._fetch_all` follows them after the list is made, by the same `prefetch_related_objects` ([`prefetch_related`: related objects in a second query](prefetch.md)).
+`RawQuerySet.prefetch_related` adds prefetch lookups to a copy of the raw queryset, and given `None` alone it empties the list, as a queryset's does (`django/db/models/query.py:RawQuerySet.prefetch_related`). `RawQuerySet._fetch_all` follows them after the list is made, by the same `prefetch_related_objects` ([`prefetch_related`: related objects in a second query](../relations/prefetch.md)).
 
 ```text recording=querysets
 [len(s.crew.all()) for s in Ship.objects.raw('SELECT * FROM fleet_ship ORDER BY id').prefetch_related('crew')]  ->  [2, 2]

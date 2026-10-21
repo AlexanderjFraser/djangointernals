@@ -28,13 +28,13 @@ A validator is ordinarily made once, with its module, field class or field, and 
 
 ## Where validators are called
 
-A form field's `Field.run_validators` ([A form field: the base class](fields.md)) and a model field's ([Validating an instance](../models/validation.md)) work alike: they skip an empty value, call every validator of the field, gather all their errors into one `ValidationError`, and put the field's own message in place of a validator's where the field has one for its code (`django/forms/fields.py:Field.run_validators`, `django/db/models/fields/__init__.py:Field.run_validators`).
+A form field's `Field.run_validators` ([A form field: the base class](fields.md)) and a model field's ([Validating an instance](../instance/validation.md)) work alike: they skip an empty value, call every validator of the field, gather all their errors into one `ValidationError`, and put the field's own message in place of a validator's where the field has one for its code (`django/forms/fields.py:Field.run_validators`, `django/db/models/fields/__init__.py:Field.run_validators`).
 
 An empty value is one of the field's `empty_values`, which both base classes copy from `EMPTY_VALUES`: `None`, `""` and an empty list, tuple or dictionary (`django/core/validators.py:EMPTY_VALUES`). Whether a field may be empty is its own question; no validator is asked it.
 
 ## A validator in a migration
 
-Every validator class of the module is decorated with `deconstructible`, whose `deconstruct` returns the arguments an instance was made with, so that a migration can write a model field's validator as a call that makes it again ([Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md)) (`django/utils/deconstruct.py:deconstructible`).
+Every validator class of the module is decorated with `deconstructible`, whose `deconstruct` returns the arguments an instance was made with, so that a migration can write a model field's validator as a call that makes it again ([Serializing values: `serializer_factory` and `deconstruct`](../makemigrations/serializer.md)) (`django/utils/deconstruct.py:deconstructible`).
 
 > **Trap.** Each class has an `__eq__`, which compares only what the class defining it knows: `RegexValidator.__eq__` not a `URLValidator`'s schemes, `BaseValidator.__eq__` not a `StepValueValidator`'s offset, so two with different schemes are equal, as are two given different offsets (`django/core/validators.py:RegexValidator.__eq__`, `django/core/validators.py:BaseValidator.__eq__`). A migration still tells them apart, by their arguments (`django/db/migrations/autodetector.py:MigrationAutodetector.deep_deconstruct`).
 

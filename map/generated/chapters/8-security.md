@@ -54,13 +54,13 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
-| [12 · Database backends](12-backends.md) | 0 |  | 1 | `django/utils/crypto.py` (1) |
-| [14 · Templates](14-templates.md) | 2+1 | `django/template/__init__.py` (1) `django/template/context_processors.py` (1) `django/template/loader.py` (1) `django/utils/html.py` (1) | 5 | `django/middleware/csrf.py` (2) `django/utils/csp.py` (2) `django/middleware/csp.py` (1) |
-| [16 · Internationalization and time zones](16-i18n.md) | 1 | `django/utils/translation/__init__.py` (1) | 0 |  |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 1 | `django/utils/cache.py` (1) | 3 | `django/utils/crypto.py` (3) |
-| [18 · The utility layer](18-utils.md) | 11 | `django/utils/deprecation.py` (2) `django/utils/encoding.py` (2) `django/utils/functional.py` (2) `django/utils/warnings.py` (2) and 3 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 10 | `django/utils/crypto.py` (5) `django/core/signing.py` (4) `django/middleware/csrf.py` (1) |
-| [22 · Management commands](22-commands.md) | 0 |  | 2+1 | `django/middleware/csrf.py` (1) `django/utils/crypto.py` (1) `django/utils/csp.py` (1) |
+| [17 · Database backends](17-backends.md) | 0 |  | 1 | `django/utils/crypto.py` (1) |
+| [21 · Templates](21-templates.md) | 2+1 | `django/template/__init__.py` (1) `django/template/context_processors.py` (1) `django/template/loader.py` (1) `django/utils/html.py` (1) | 5 | `django/middleware/csrf.py` (2) `django/utils/csp.py` (2) `django/middleware/csp.py` (1) |
+| [23 · Internationalization and time zones](23-i18n.md) | 1 | `django/utils/translation/__init__.py` (1) | 0 |  |
+| [24 · Caching, files, mail, signals and tasks](24-services.md) | 1 | `django/utils/cache.py` (1) | 3 | `django/utils/crypto.py` (3) |
+| [25 · The utility layer](25-utils.md) | 11 | `django/utils/deprecation.py` (2) `django/utils/encoding.py` (2) `django/utils/functional.py` (2) `django/utils/warnings.py` (2) and 3 more | 0 |  |
+| [26 · Authentication, sessions and messages](26-auth.md) | 0 |  | 10 | `django/utils/crypto.py` (5) `django/core/signing.py` (4) `django/middleware/csrf.py` (1) |
+| [29 · Management commands](29-commands.md) | 0 |  | 2+1 | `django/middleware/csrf.py` (1) `django/utils/crypto.py` (1) `django/utils/csp.py` (1) |
 | [3 · Settings, apps and startup](3-startup.md) | 8 | `django/conf/__init__.py` (7) `django/utils/log.py` (1) | 0 |  |
 | [4 · Handlers and middleware](4-handlers.md) | 4 | `django/middleware/__init__.py` (4) | 0 |  |
 | [5 · Requests and responses](5-http.md) | 4 | `django/http/__init__.py` (3) `django/utils/http.py` (1) | 2 | `django/core/signing.py` (2) |

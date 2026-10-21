@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 Every `Signal` Django defines, the code that sends it, its sender and its keyword arguments: the request signals, the model signals such as `pre_save` and `m2m_changed`, `post_migrate`, `setting_changed`, `connection_created`, and the login, autoreloader and task signals.
 
-Django's signals are module-level objects: the request signals and `setting_changed` in `django/core/signals.py`; the model signals, `class_prepared`, `pre_migrate` and `post_migrate` in `django/db/models/signals.py`; `connection_created` in `django/db/backends/signals.py`; `template_rendered` in `django/test/signals.py`; the login signals in `django/contrib/auth/signals.py`; the autoreloader's in `django/utils/autoreload.py`; the tasks' in `django/tasks/signals.py`. Django listens to several itself: it closes connections and caches on the request signals, `django.contrib.postgres` registers PostgreSQL's types on `connection_created` ([Opening and closing a connection](../backends/lifecycle.md)), and makes the contrib applications' rows on `post_migrate`.
+Django's signals are module-level objects: the request signals and `setting_changed` in `django/core/signals.py`; the model signals, `class_prepared`, `pre_migrate` and `post_migrate` in `django/db/models/signals.py`; `connection_created` in `django/db/backends/signals.py`; `template_rendered` in `django/test/signals.py`; the login signals in `django/contrib/auth/signals.py`; the autoreloader's in `django/utils/autoreload.py`; the tasks' in `django/tasks/signals.py`. Django listens to several itself: it closes connections and caches on the request signals, `django.contrib.postgres` registers PostgreSQL's types on `connection_created` ([Opening and closing a connection](../connections/opening.md)), and makes the contrib applications' rows on `post_migrate`.
 
 ## Where each signal is sent
 
@@ -49,11 +49,11 @@ Every send of `setting_changed` is in the test framework. `override_settings` se
 
 `class_prepared` is sent at the end of `ModelBase._prepare`, when the class is complete and not yet registered ([`ModelBase`: a class statement becomes a model](../models/metaclass.md)). It is sent for every model that is not abstract, migrations' historical models included: rendering the harbour's project state sent it once for each model.
 
-`Model.__init__` sends `pre_init` before it sets anything and `post_init` at its end, each time it runs, whether or not anything listens, and so for each row a query fetches, which `Model.from_db` makes by calling the class with the row's values as `"args"` ([An instance and its state](../models/instances.md)). `from_db` sets `ModelState.db` and `ModelState.adding` only after the class returns, so to a receiver of `post_init` a fetched instance looks new and from no database (`django/db/models/base.py:Model.from_db`). An unpickled instance, one read from a cache among them, is made without calling the class and sends neither (`django/db/models/base.py:model_unpickle`).
+`Model.__init__` sends `pre_init` before it sets anything and `post_init` at its end, each time it runs, whether or not anything listens, and so for each row a query fetches, which `Model.from_db` makes by calling the class with the row's values as `"args"` ([An instance and its state](../instance/state.md)). `from_db` sets `ModelState.db` and `ModelState.adding` only after the class returns, so to a receiver of `post_init` a fetched instance looks new and from no database (`django/db/models/base.py:Model.from_db`). An unpickled instance, one read from a cache among them, is made without calling the class and sends neither (`django/db/models/base.py:model_unpickle`).
 
 ## Saving: `pre_save` and `post_save`
 
-`Model.save_base` sends `pre_save` before it writes any table and `post_save` after the last, except for a through model Django made ([Saving an instance](../models/saving.md)). `QuerySet.update`, `QuerySet.bulk_create` and `QuerySet.bulk_update` send neither.
+`Model.save_base` sends `pre_save` before it writes any table and `post_save` after the last, except for a through model Django made ([Saving an instance](../instance/saving.md)). `QuerySet.update`, `QuerySet.bulk_create` and `QuerySet.bulk_update` send neither.
 
 Django passes `"raw"` true only from `DeserializedObject.save`, which calls `save_base` itself, past the model's `save`, so that a fixture's rows are written as they stand; since 6.1 it passes `"raw"` to `m2m_changed` too ([Serialization: `serialize`, `deserialize` and `DeserializedObject`](serializers.md)) (`django/core/serializers/base.py:DeserializedObject.save`). Django's reference warns such a receiver not to query or change other rows, since the database may not be consistent yet (`docs/ref/signals.txt`).
 
@@ -63,11 +63,11 @@ The sender is always the instance's own class, a proxy's or a child's. Saving an
 
 ## `m2m_changed`
 
-A many-to-many manager sends `m2m_changed` in pairs around each change, with an `"action"` of `"pre_add"`, `"post_add"`, `"pre_remove"`, `"post_remove"`, `"pre_clear"` or `"post_clear"`; `set` sends those of the changes it makes ([Many-to-many relations](../models/many-to-many.md)). `"pk_set"` is, for an addition, the keys that had no row yet, looked up by a query; for a removal, the keys the caller named, whether a row had them or not; for a clearing, `None`.
+A many-to-many manager sends `m2m_changed` in pairs around each change, with an `"action"` of `"pre_add"`, `"post_add"`, `"pre_remove"`, `"post_remove"`, `"pre_clear"` or `"post_clear"`; `set` sends those of the changes it makes ([Many-to-many relations](../relations/many-to-many.md)). `"pk_set"` is, for an addition, the keys that had no row yet, looked up by a query; for a removal, the keys the caller named, whether a row had them or not; for a clearing, `None`.
 
 ## Deleting: `pre_delete` and `post_delete`
 
-`Collector.delete` sends `pre_delete` for every instance it holds before any row goes, and `post_delete` after each model's rows, inside its transaction; `"origin"` is the instance or queryset whose `delete` was called ([Deleting: the `Collector`](../models/deleting.md)). Rows it deletes without holding them are not announced, and a receiver connected for a model, or for every sender, makes `Collector.can_fast_delete` refuse to delete that model's rows unseen. Nor are rows of a through model Django made, or rows the database deletes for `DB_CASCADE` (`docs/releases/6.1.txt`).
+`Collector.delete` sends `pre_delete` for every instance it holds before any row goes, and `post_delete` after each model's rows, inside its transaction; `"origin"` is the instance or queryset whose `delete` was called ([Deleting: the `Collector`](../instance/deleting.md)). Rows it deletes without holding them are not announced, and a receiver connected for a model, or for every sender, makes `Collector.can_fast_delete` refuse to delete that model's rows unseen. Nor are rows of a through model Django made, or rows the database deletes for `DB_CASCADE` (`docs/releases/6.1.txt`).
 
 ## `pre_migrate` and `post_migrate`
 

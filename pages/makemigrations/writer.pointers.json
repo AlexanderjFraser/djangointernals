@@ -1,0 +1,222 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "writer.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/writer.py:MigrationWriter",
+   "line": 9,
+   "sentence": "Nor does it write the file: it returns a string and a path, and the command that made it writes the one to the other (`django/db/migrations/writer.py:MigrationWriter`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "MigrationWriter",
+   "kind": "class",
+   "lines": [
+    118,
+    302
+   ],
+   "fingerprint": "cdf99c977e5ce934"
+  },
+  {
+   "pointer": "django/db/migrations/serializer.py:Serializer",
+   "line": 59,
+   "sentence": "How a value becomes an expression is in [Serializing values: `serializer_factory` and `deconstruct`](serializer.md): `MigrationWriter.serialize` returns the serializer's answer for a value, its text and the import lines the text needs, and `MigrationWriter.register_serializer` and `MigrationWriter.unregister_serializer` only call `Serializer.register` and `Serializer.unregister` (`django/db/migrations/serializer.py:Serializer`).",
+   "tree": "django",
+   "path": "django/db/migrations/serializer.py",
+   "symbol": "Serializer",
+   "kind": "class",
+   "lines": [
+    360,
+    398
+   ],
+   "fingerprint": "90853195ab63d71b"
+  },
+  {
+   "pointer": "django/db/migrations/writer.py:MigrationWriter.as_string",
+   "line": 63,
+   "sentence": "`as_string` fills the slots of `MIGRATION_TEMPLATE`, whose own text is the class line and the brackets of the two lists (`django/db/migrations/writer.py:MigrationWriter.as_string`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "MigrationWriter.as_string",
+   "kind": "function",
+   "lines": [
+    129,
+    216
+   ],
+   "fingerprint": "b1f35a28754c5503"
+  },
+  {
+   "pointer": "django/db/migrations/migration.py:swappable_dependency",
+   "line": 65,
+   "sentence": "The call is made at each import, so the file never fixes the application the setting names; it returns a `SwappableTuple`, the label of the setting's model with `\"__first__\"`, carrying the setting's value (`django/db/migrations/migration.py:swappable_dependency`).",
+   "tree": "django",
+   "path": "django/db/migrations/migration.py",
+   "symbol": "swappable_dependency",
+   "kind": "function",
+   "lines": [
+    237,
+    239
+   ],
+   "fingerprint": "cd1560c566fe44f8"
+  },
+  {
+   "pointer": "django/db/migrations/writer.py:MigrationWriter.as_string",
+   "line": 90,
+   "sentence": "The import lines are a set of strings, gathered as the operations and the dependencies were written, and `MigrationWriter.as_string` changes the set before it writes it (`django/db/migrations/writer.py:MigrationWriter.as_string`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "MigrationWriter.as_string",
+   "kind": "function",
+   "lines": [
+    129,
+    216
+   ],
+   "fingerprint": "b1f35a28754c5503"
+  },
+  {
+   "pointer": "django/db/migrations/writer.py:OperationWriter",
+   "line": 110,
+   "sentence": "An `OperationWriter` builds one operation's text with `OperationWriter.feed`, which appends a line at the writer's level of indentation (four spaces to a level; by default 2, inside the class and its list), and `OperationWriter.render`, which joins the lines (`django/db/migrations/writer.py:OperationWriter`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "OperationWriter",
+   "kind": "class",
+   "lines": [
+    18,
+    115
+   ],
+   "fingerprint": "878a3a98ea540b0a"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.deconstruct",
+   "line": 110,
+   "sentence": "`OperationWriter.serialize` calls the operation's `Operation.deconstruct`, which returns a name, positional arguments and keyword arguments (`django/db/migrations/operations/base.py:Operation.deconstruct`; [Operations: the base class and its two halves](../migrations/operations.md)), and asks `get_func_args` for the names of the constructor's parameters.",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.deconstruct",
+   "kind": "function",
+   "lines": [
+    66,
+    76
+   ],
+   "fingerprint": "a0564c59b3ae796a"
+  },
+  {
+   "pointer": "django/db/migrations/serializer.py:OperationSerializer",
+   "line": 114,
+   "sentence": "A value whose text has several lines is fed line by line at the writer's level, which is how the operations inside a `SeparateDatabaseAndState` come out indented under it: each is written by an `OperationWriter` of its own that begins at level 0 (`django/db/migrations/serializer.py:OperationSerializer`).",
+   "tree": "django",
+   "path": "django/db/migrations/serializer.py",
+   "symbol": "OperationSerializer",
+   "kind": "class",
+   "lines": [
+    268,
+    275
+   ],
+   "fingerprint": "84f1768693f3afb7"
+  },
+  {
+   "pointer": "django/db/migrations/writer.py:MigrationWriter.basedir",
+   "line": 118,
+   "sentence": "`MigrationWriter.filename` is the migration's name and `.py`, and `MigrationWriter.path` joins it to `basedir`, a property: the directory of the application's migrations package, which may not exist yet (`django/db/migrations/writer.py:MigrationWriter.basedir`).",
+   "tree": "django",
+   "path": "django/db/migrations/writer.py",
+   "symbol": "MigrationWriter.basedir",
+   "kind": "function",
+   "lines": [
+    218,
+    282
+   ],
+   "at": 219,
+   "fingerprint": "98498e4aecb28110"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.write_migration_files",
+   "line": 120,
+   "sentence": "Of the others, a package directly inside the application's own, as the default one is, has its place under `AppConfig.path`, in a directory of its last name: `basedir` returns that path and makes nothing, and makemigrations makes the directory, with its `__init__.py` (`django/core/management/commands/makemigrations.py:Command.write_migration_files`; [The makemigrations command](makemigrations.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.write_migration_files",
+   "kind": "function",
+   "lines": [
+    337,
+    397
+   ],
+   "fingerprint": "5673ec73600eddb7"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.handle_merge",
+   "line": 130,
+   "sentence": "| makemigrations | for each migration it is to write; for a merge (`django/core/management/commands/makemigrations.py:Command.handle_merge`); under `--update`, one more only to read the path of the file it supersedes | under `--update`, once the new file is written, warns and keeps the old one, which it otherwise deletes (`django/core/management/commands/makemigrations.py:Command.write_migration_files`) | under `--update`, left as loaded (`django/core/management/commands/makemigrations.py:Command.write_to_last_migration_files`) |",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.handle_merge",
+   "kind": "function",
+   "lines": [
+    409,
+    518
+   ],
+   "fingerprint": "a38da3ff1f869edb"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.write_migration_files",
+   "line": 130,
+   "sentence": "| makemigrations | for each migration it is to write; for a merge (`django/core/management/commands/makemigrations.py:Command.handle_merge`); under `--update`, one more only to read the path of the file it supersedes | under `--update`, once the new file is written, warns and keeps the old one, which it otherwise deletes (`django/core/management/commands/makemigrations.py:Command.write_migration_files`) | under `--update`, left as loaded (`django/core/management/commands/makemigrations.py:Command.write_to_last_migration_files`) |",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.write_migration_files",
+   "kind": "function",
+   "lines": [
+    337,
+    397
+   ],
+   "fingerprint": "5673ec73600eddb7"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.write_to_last_migration_files",
+   "line": 130,
+   "sentence": "| makemigrations | for each migration it is to write; for a merge (`django/core/management/commands/makemigrations.py:Command.handle_merge`); under `--update`, one more only to read the path of the file it supersedes | under `--update`, once the new file is written, warns and keeps the old one, which it otherwise deletes (`django/core/management/commands/makemigrations.py:Command.write_migration_files`) | under `--update`, left as loaded (`django/core/management/commands/makemigrations.py:Command.write_to_last_migration_files`) |",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.write_to_last_migration_files",
+   "kind": "function",
+   "lines": [
+    266,
+    335
+   ],
+   "fingerprint": "fd2e65cc1a1cc6d2"
+  },
+  {
+   "pointer": "django/core/management/commands/squashmigrations.py:Command.handle",
+   "line": 131,
+   "sentence": "| squashmigrations | for the replacing migration (`django/core/management/commands/squashmigrations.py:Command.handle`) | says so, above verbosity 0 | replaced by `(\"__setting__\", \"AUTH_USER_MODEL\")` where it carries the value of `AUTH_USER_MODEL` |",
+   "tree": "django",
+   "path": "django/core/management/commands/squashmigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    61,
+    239
+   ],
+   "fingerprint": "a22a49f38efb75c3"
+  },
+  {
+   "pointer": "django/core/management/commands/optimizemigration.py:Command.handle",
+   "line": 132,
+   "sentence": "| optimizemigration | for the migration it writes again and, where that needs manual porting, another for the one it writes instead (`django/core/management/commands/optimizemigration.py:Command.handle`) | raises `CommandError` for a migration that itself replaces others; for any other leaves the file alone and writes a migration that replaces it | left as loaded |",
+   "tree": "django",
+   "path": "django/core/management/commands/optimizemigration.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    32,
+    129
+   ],
+   "fingerprint": "1c8bc795ba821cca"
+  }
+ ]
+}

@@ -10,7 +10,7 @@ For a project, a connection opens much as it did, though Oracle's needs oracledb
 
 ## Connection pools: PostgreSQL and Oracle
 
-Since 5.1 PostgreSQL's backend, and since 5.2 Oracle's, can take connections from a pool, made by the `pool` property when an alias's `"OPTIONS"` hold `"pool"` (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`). PostgreSQL's pool needs psycopg 3, and both refuse a `"CONN_MAX_AGE"` other than 0 ([Opening and closing a connection](../backends/lifecycle.md#connection-pools-postgresql-and-oracle)).
+Since 5.1 PostgreSQL's backend, and since 5.2 Oracle's, can take connections from a pool, made by the `pool` property when an alias's `"OPTIONS"` hold `"pool"` (`django/db/backends/postgresql/base.py:DatabaseWrapper.pool`, `django/db/backends/oracle/base.py:DatabaseWrapper.pool`). PostgreSQL's pool needs psycopg 3, and both refuse a `"CONN_MAX_AGE"` other than 0 ([Opening and closing a connection](../connections/opening.md#connection-pools-postgresql-and-oracle)).
 
 ## Opening a connection: SQLite's options, MySQL's character set, Oracle's driver
 
@@ -28,13 +28,13 @@ Since 5.0 integer fields on SQLite are validated as 64-bit integers, "to match t
 
 ## `savepoint`, deprecated for `savepoint_create`
 
-6.1 added `django.db.transaction.savepoint_create` and deprecated `savepoint` for it. The old function now warns and calls the new one (`django/db/transaction.py:savepoint`; [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#savepoints)).
+6.1 added `django.db.transaction.savepoint_create` and deprecated `savepoint` for it. The old function now warns and calls the new one (`django/db/transaction.py:savepoint`; [Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md#savepoints)).
 
 ## The backend API: hooks renamed, removed and added
 
 Three changes to the classes a third-party backend supplies now meet old code in silence.
 
-5.0 deprecated the operations' method field_cast_sql for `BaseDatabaseOperations.lookup_cast`, and 6.0 removed it. `BuiltinLookup.process_lhs` now asks `lookup_cast` alone (`django/db/models/lookups.py:BuiltinLookup.process_lhs`; [Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../sql/lookups.md#builtinlookup-the-operator-from-the-backends-table)). Where a backend's operations override field_cast_sql to cast to text, 5.2.17 applies the override with a warning, and the later releases pass it over in silence:
+5.0 deprecated the operations' method field_cast_sql for `BaseDatabaseOperations.lookup_cast`, and 6.0 removed it. `BuiltinLookup.process_lhs` now asks `lookup_cast` alone (`django/db/models/lookups.py:BuiltinLookup.process_lhs`; [Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](../expressions/lookups.md#builtinlookup-the-operator-from-the-backends-table)). Where a backend's operations override field_cast_sql to cast to text, 5.2.17 applies the override with a warning, and the later releases pass it over in silence:
 
 ```text recording=changes
 a backend's operations that override field_cast_sql: the WHERE clause of Entry.objects.filter(title="Hull")
@@ -64,7 +64,7 @@ The other changes, some of them as silent:
 
 ## What the migration serializer writes
 
-Since 6.0 `ZoneInfoSerializer` writes a `zoneinfo.ZoneInfo`, which 5.2.17 refuses. Since 6.0 too, a keyword argument of a deconstructed call whose name is not an identifier goes into a dictionary after `**` (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed`). 5.2.17 wrote it as it stood, `"x-scale=2"`, which is not Python. Since 5.0 a function under `functools.cache` or `functools.lru_cache` is written by its name (`django/db/migrations/serializer.py:FUNCTION_TYPES`; [Serializing values: `serializer_factory` and `deconstruct`](../migrations/serializer.md#the-registry-in-its-order)).
+Since 6.0 `ZoneInfoSerializer` writes a `zoneinfo.ZoneInfo`, which 5.2.17 refuses. Since 6.0 too, a keyword argument of a deconstructed call whose name is not an identifier goes into a dictionary after `**` (`django/db/migrations/serializer.py:DeconstructibleSerializer.serialize_deconstructed`). 5.2.17 wrote it as it stood, `"x-scale=2"`, which is not Python. Since 5.0 a function under `functools.cache` or `functools.lru_cache` is written by its name (`django/db/migrations/serializer.py:FUNCTION_TYPES`; [Serializing values: `serializer_factory` and `deconstruct`](../makemigrations/serializer.md#the-registry-in-its-order)).
 
 Other changes stand in no release note. Since 6.0 `DeconstructibleSerializer` is the name of what was DeconstructableSerializer, with no alias left. Since 6.1 `GenericAliasSerializer` writes a generic alias such as `list[int]` (`django/db/migrations/serializer.py:GenericAliasSerializer`).
 
@@ -74,10 +74,10 @@ Since 5.1 an operation may have a category, `Operation.category`, a member of `O
 
 ## The autodetector: `AlterConstraint` and unmanaged models
 
-Since 5.2 a constraint changed only in what `BaseConstraint.non_db_attrs` names, `"violation_error_code"` and `"violation_error_message"`, becomes an `AlterConstraint`, which changes the state and nothing in the database (`django/db/migrations/autodetector.py:MigrationAutodetector._constraint_should_be_dropped_and_recreated`; [The autodetector: fields, indexes and constraints](../migrations/autodetector-fields.md#constraints-create_altered_constraints)).
+Since 5.2 a constraint changed only in what `BaseConstraint.non_db_attrs` names, `"violation_error_code"` and `"violation_error_message"`, becomes an `AlterConstraint`, which changes the state and nothing in the database (`django/db/migrations/autodetector.py:MigrationAutodetector._constraint_should_be_dropped_and_recreated`; [The autodetector: fields, indexes and constraints](../makemigrations/autodetector-fields.md#constraints-create_altered_constraints)).
 
-Since 6.2 makemigrations tracks every change to an unmanaged model, so one changed since it was made gets a migration after the upgrade. The autodetector no longer keeps such models apart: a field added to one got no operation under 5.2.17, 6.0.8 and 6.1.1, and now gets an `AddField` (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`). Such an operation changes the state and no table, since `Operation.allow_migrate_model` refuses an unmanaged model (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`; [The autodetector: comparing two project states](../migrations/autodetector.md#detect_changes-the-models-sorted-then-the-generators-in-order)).
+Since 6.2 makemigrations tracks every change to an unmanaged model, so one changed since it was made gets a migration after the upgrade. The autodetector no longer keeps such models apart: a field added to one got no operation under 5.2.17, 6.0.8 and 6.1.1, and now gets an `AddField` (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`). Such an operation changes the state and no table, since `Operation.allow_migrate_model` refuses an unmanaged model (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`; [The autodetector: comparing two project states](../makemigrations/autodetector.md#detect_changes-the-models-sorted-then-the-generators-in-order)).
 
 ## Squashing a squashed migration
 
-Since 6.0 squashmigrations squashes a range that holds a squashed migration, which 5.2.17 refuses with `CommandError`. The new migration's `replaces` names the squashed migration itself, not the migrations it replaced. The loader follows such a chain down to the migrations that replace nothing (`django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys`; [Squashed migrations: `replaces` and the squashmigrations command](../migrations/squashing.md#a-replacing-migration-that-is-replaced)).
+Since 6.0 squashmigrations squashes a range that holds a squashed migration, which 5.2.17 refuses with `CommandError`. The new migration's `replaces` names the squashed migration itself, not the migrations it replaced. The loader follows such a chain down to the migrations that replace nothing (`django/db/migrations/loader.py:MigrationLoader._resolve_replaced_migration_keys`; [Replacing migrations: `replaces`](../migrations/replacing.md#a-replacing-migration-that-is-replaced)).

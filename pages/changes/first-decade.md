@@ -24,7 +24,7 @@ Django 1.0, [released in September 2008](https://www.djangoproject.com/weblog/20
 
 Until 1.2, in 2010, a project had one database, configured by settings such as DATABASE_ENGINE and DATABASE_NAME. 1.2 replaced them with `DATABASES`, connections by alias with one named `"default"` (`docs/releases/1.2.txt`). The change reached custom fields, whose methods could no longer assume the database. Preparing a value was split in two: `Field.get_prep_value` for every database, and `Field.get_db_prep_value`, given the connection and a prepared flag that says whether the first has run. Both keep those signatures (`django/db/models/fields/__init__.py:Field.get_db_prep_value`).
 
-1.3 configured caches "in the same way", by alias in `CACHES` (`docs/releases/1.3.txt`). `ConnectionHandler` and `CacheHandler` are now both subclasses of `BaseConnectionHandler` (`django/utils/connection.py:BaseConnectionHandler`; [Connections by alias: `DATABASES` and `ConnectionHandler`](../backends/connections.md)).
+1.3 configured caches "in the same way", by alias in `CACHES` (`docs/releases/1.3.txt`). `ConnectionHandler` and `CacheHandler` are now both subclasses of `BaseConnectionHandler` (`django/utils/connection.py:BaseConnectionHandler`; [Connections by alias: `DATABASES` and `ConnectionHandler`](../connections/aliases.md)).
 
 ## Views as classes
 
@@ -46,7 +46,7 @@ Until 1.4, in 2012, Django used naive datetimes, "leaving it up to each develope
 
 ## Transactions, made explicit
 
-Until 1.6, in 2013, the database's own autocommit was off by default. Transactions were managed through TransactionMiddleware and decorators such as commit_on_success and commit_manually. 1.6 turned autocommit on by default, which its notes say makes transaction handling more explicit. It deprecated those APIs, which 1.8 removed (`docs/releases/1.6.txt`, `docs/internals/deprecation.txt`). What stands now is `atomic`, a block that commits or rolls back and nests as savepoints (`django/db/transaction.py:Atomic`; [Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md)).
+Until 1.6, in 2013, the database's own autocommit was off by default. Transactions were managed through TransactionMiddleware and decorators such as commit_on_success and commit_manually. 1.6 turned autocommit on by default, which its notes say makes transaction handling more explicit. It deprecated those APIs, which 1.8 removed (`docs/releases/1.6.txt`, `docs/internals/deprecation.txt`). What stands now is `atomic`, a block that commits or rolls back and nests as savepoints (`django/db/transaction.py:Atomic`; [Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md)).
 
 Since 1.1 each of a `TestCase`'s tests had run in a transaction rolled back after it (`docs/releases/1.1.txt`). 1.8 ran them inside two nested `atomic` blocks: one for the class, where `TestCase.setUpTestData` runs, and one for each test (`docs/releases/1.8.txt`, `django/test/testcases.py:TestCase._enter_atomics`; [A transaction around each test: `TestCase`](../testing/test-case.md)).
 
@@ -66,7 +66,7 @@ In 2014 DEP 1 set up a process for proposals, a near-copy of Python's PEP proces
 
 1.1 had added aggregates, `QuerySet.aggregate` and `QuerySet.annotate`, and `F`, a reference to another field (`docs/releases/1.1.txt`). By 2014, as DEP 181 by Anssi Kääriäinen describes, an `F` expression was turned into SQL by a private, global SQLEvaluator that had to know every kind of node. Aggregates were not expressions at all, so two could not be added to each other; annotate took nothing but aggregates (`deps:final/0181-orm-expressions.rst`).
 
-The code keeps the DEP's design. An expression is bound to a query by `BaseExpression.resolve_expression` and writes its SQL with `BaseExpression.as_sql`. An `Aggregate` is a `Func` like any database function, and `F`, as the DEP proposed, is not an expression but resolves to one (`django/db/models/aggregates.py:Aggregate`, `django/db/models/expressions.py:F.resolve_expression`; [Expressions: `resolve_expression` and `as_sql`](../sql/expressions.md)).
+The code keeps the DEP's design. An expression is bound to a query by `BaseExpression.resolve_expression` and writes its SQL with `BaseExpression.as_sql`. An `Aggregate` is a `Func` like any database function, and `F`, as the DEP proposed, is not an expression but resolves to one (`django/db/models/aggregates.py:Aggregate`, `django/db/models/expressions.py:F.resolve_expression`; [Expressions: `resolve_expression` and `as_sql`](../expressions/protocol.md)).
 
 ### Template engines
 

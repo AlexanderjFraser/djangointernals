@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `QuerySet.bulk_create` inserts a list of instances in as few statements as the backend allows, and `QuerySet.bulk_update` writes chosen fields of a list of instances with one call of `QuerySet.update` to a batch. Neither calls `Model.save` for an instance and neither sends the signals of a save.
 
-Saving is done an instance at a time. `Model.save` decides between an update and an insert, sends two signals, writes each table of a model that has parents, and reads back what the database decided ([Saving an instance](../models/saving.md)).
+Saving is done an instance at a time. `Model.save` decides between an update and an insert, sends two signals, writes each table of a model that has parents, and reads back what the database decided ([Saving an instance](../instance/saving.md)).
 
 SQL can do better. One `"INSERT"` can carry many rows, and one `"UPDATE"` can give a column a different value in each of many rows, if the value is written as a `"CASE"` expression over the rows' keys. `bulk_create` builds the first and `bulk_update` the second. What they give up is what a save does for one instance: there is no choice between updating and inserting and no signal, and `bulk_create` writes no second table. And what shapes them is the backend, which differs from one database to the next: in how many parameters a statement may hold, in whether an insert can hand back the rows it made, in whether it can pass over or resolve a conflict with a row that is already there. Much of `bulk_create` is the handling of those differences.
 
@@ -44,7 +44,7 @@ lines = LogEntry.objects.bulk_create([LogEntry(book=log, line='Cast off'), LogEn
 
 One statement inserted three rows and returned three keys, and the method put each key on its instance. The calls under `QuerySet.bulk_create` are the outline of the method (`django/db/models/query.py:QuerySet.bulk_create`). The options about conflicts are checked. The instances are sorted by whether they have a primary key. Each group that has instances in it is handed to `QuerySet._batched_insert`, which cuts it into batches and calls `QuerySet._insert` for each. And what the statements return is set on the instances.
 
-`_insert` makes an `InsertQuery` of the fields and the instances it is given, and runs it ([Creating, updating and deleting through a queryset](writing.md)). How the insert compiler writes several rows of values, a `"RETURNING"` clause or a clause about conflicts into one statement belongs to [From QuerySet to SQL](../sql.md).
+`_insert` makes an `InsertQuery` of the fields and the instances it is given, and runs it ([Creating, updating and deleting through a queryset](writing.md)). How the insert compiler writes several rows of values, a `"RETURNING"` clause or a clause about conflicts into one statement belongs to [INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md).
 
 The last line of the recording asks the three instances what they hold afterwards: each has its key, and a state that says it is no longer being added and names the database it was written to.
 
@@ -139,7 +139,7 @@ and around the batches of one group where it has more than one.
 
 *How `QuerySet.bulk_create` divides its instances: first by whether they have a primary key, each group having its own list of fields, and then into batches, each of which is one call of `QuerySet._insert`.*
 
-For each instance it first calls `Model._prepare_related_fields_for_save`, the check that a save makes too: an instance holding a related object that has no key yet is refused ([Saving an instance](../models/saving.md)).
+For each instance it first calls `Model._prepare_related_fields_for_save`, the check that a save makes too: an instance holding a related object that has no key yet is refused ([Saving an instance](../instance/saving.md)).
 
 ```text recording=querysets
 LogEntry.objects.bulk_create([LogEntry(book=Logbook(title='unsaved'), line='x')])  ->  raises ValueError: bulk_create() prohibited to prevent data loss due to unsaved related object 'book'.
@@ -173,7 +173,7 @@ mixed = Logbook.objects.bulk_create([Logbook(pk=40, title='Rough log'), Logbook(
 [(book.pk, book.title) for book in mixed]  ->  [(40, 'Rough log'), (41, 'Fair log')]
 ```
 
-One logbook was given the key 40 and the other none. The first statement has an `"id"` among its columns and the second has not; both asked for the key back, and the instances came out with 40 and 41. Around the two inserts there is a transaction: `bulk_create` opens a block of `atomic` when both lists have instances in them, and only then. The block is made with `savepoint=False`, so inside a transaction already open it would make no savepoint (`django/db/transaction.py:Atomic.__enter__`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md#entering-a-block-atomic__enter)).
+One logbook was given the key 40 and the other none. The first statement has an `"id"` among its columns and the second has not; both asked for the key back, and the instances came out with 40 and 41. Around the two inserts there is a transaction: `bulk_create` opens a block of `atomic` when both lists have instances in them, and only then. The block is made with `savepoint=False`, so inside a transaction already open it would make no savepoint (`django/db/transaction.py:Atomic.__enter__`) ([Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md#entering-a-block-atomic__enter)).
 
 Before either insert, and inside the block where there is one, comes `QuerySet._handle_order_with_respect_to`, which has something to do only for a model that has an `Options.order_with_respect_to`. Where a save asks the database for an instance's next position with a query of its own, this method asks once for all the instances, and numbers those that have no position (`django/db/models/query.py:QuerySet._handle_order_with_respect_to`).
 
@@ -255,9 +255,9 @@ cargo = Manifest.objects.bulk_create([Manifest(voyage=spring, crates=40, kilos_e
 [(m.serial, m.kilos, m.stamped) for m in cargo]  ->  [('M-0001', 1000, False), ('M-0002', 960, True)]
 ```
 
-Both manifests had a key before the insert, from the function that is the default of `"serial"`, so both were in the first list. The list of fields has no `"kilos"`, which is generated, and the fields to return are that one and `"stamped"`. Each instance was given what came back, and the first of them, which was made with no value for `"stamped"`, now holds `False`. That `False` also stands among the parameters of the statement, which is SQLite's doing: it has no keyword for a default inside a row of values, so the default is written out there ([From QuerySet to SQL](../sql.md)).
+Both manifests had a key before the insert, from the function that is the default of `"serial"`, so both were in the first list. The list of fields has no `"kilos"`, which is generated, and the fields to return are that one and `"stamped"`. Each instance was given what came back, and the first of them, which was made with no value for `"stamped"`, now holds `False`. That `False` also stands among the parameters of the statement, which is SQLite's doing: it has no keyword for a default inside a row of values, so the default is written out there ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](../sql/writing.md)).
 
-Last, the state of each instance is brought up to date: `ModelState.adding` is set to false and `ModelState.db` to the queryset's database (`django/db/models/base.py:ModelState`). For the instances that had a key this is done for every one of them. For those that had none it is done inside the loop that matches returned rows to instances, and so only for an instance that got a row back. The queryset's fetch mode is not among what is set, as it is on the instance that `QuerySet.create` makes ([Deferred fields and fetch modes in a queryset](deferred.md)).
+Last, the state of each instance is brought up to date: `ModelState.adding` is set to false and `ModelState.db` to the queryset's database (`django/db/models/base.py:ModelState`). For the instances that had a key this is done for every one of them. For those that had none it is done inside the loop that matches returned rows to instances, and so only for an instance that got a row back. The queryset's fetch mode is not among what is set, as it is on the instance that `QuerySet.create` makes ([Deferred fields in a queryset: `defer` and `only`](deferred.md)).
 
 ### A conflict ignored, and a conflict resolved
 

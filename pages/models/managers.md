@@ -69,7 +69,7 @@ The manager class already has an attribute of that name. This is why `QuerySet.a
 
 The function carries an attribute `"queryset_only"` that is true. `QuerySet.delete` and its asynchronous twin `QuerySet.adelete` are marked so, and `QuerySet.resolve_expression`. `QuerySet.as_manager` carries the mark too, but as a class method it is not one of the plain functions the loop is given. The source marks `delete` and gives no reason. Django's documentation does: keeping it off the manager is a safety mechanism, so that a call on the manager alone cannot delete every row of a table.
 
-Or it carries no such attribute and its name begins with an underscore. The mark settles the matter either way, so a private method marked false is copied all the same. `QuerySet._insert` and `QuerySet._update` are, and the insert of a save is a call of the first on a manager ([Saving an instance](saving.md)).
+Or it carries no such attribute and its name begins with an underscore. The mark settles the matter either way, so a private method marked false is copied all the same. `QuerySet._insert` and `QuerySet._update` are, and the insert of a save is a call of the first on a manager ([Saving an instance](../instance/saving.md)).
 
 What is copied is not the queryset's function. For each name, a new function is made that takes the manager and any arguments, calls `get_queryset`, looks the name up on the queryset that comes back, and calls what it finds with the arguments. It is passed through `functools.wraps`, so it bears the queryset method's name and docstring, and its qualified name, as the fourth line above shows. A call through it looks like this:
 
@@ -265,7 +265,7 @@ A model says otherwise in its `Meta`, by naming one of its managers as `"default
 
 Django's documentation gives a reason for the rows about a related object: it has to be retrievable even when the default manager would filter it out. For the same reason the documentation tells a project that names a base manager not to filter rows away in it.
 
-The last two rows are of another kind. A related manager is an object of a class made at run time: a subclass of the class of the default manager of the model it gives access to, or of another of that model's managers when it is asked for by that manager's name. It has whatever methods that class has, beside its own, of which `remove` and `clear` are defined only where the foreign key can be null, as the one from Sailor to Ship cannot ([Reading and setting related objects](related-objects.md), [Many-to-many relations](many-to-many.md)):
+The last two rows are of another kind. A related manager is an object of a class made at run time: a subclass of the class of the default manager of the model it gives access to, or of another of that model's managers when it is asked for by that manager's name. It has whatever methods that class has, beside its own, of which `remove` and `clear` are defined only where the foreign key can be null, as the one from Sailor to Ship cannot ([Reading and setting related objects](../relations/related-objects.md), [Many-to-many relations](../relations/many-to-many.md)):
 
 ```text recording=models
 [c.__name__ for c in type(petrel.crew).__mro__]  ->  ['RelatedManager', 'ManagerFromSailorQuerySet', 'Manager', 'BaseManagerFromQuerySet', 'BaseManager', 'AltersData', 'object']
@@ -295,7 +295,7 @@ A row the default manager hides can still be saved, refreshed and reached throug
 
 The related sets do follow the default manager. The `get_queryset` of a related manager starts from its base class's, which is the default manager's, and narrows the result to the one instance. A filter in the first is in a related set fetched that way, which leaves out one asked for by another manager's name and one prefetched with a queryset of the caller's own (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`).
 
-And validation follows it, with a consequence. The unique checks look for an existing row through the default manager of the class the field belongs to. A row that manager hides is not found, the check passes, and the database refuses the duplicate when it is saved ([Validating an instance](validation.md)). Veteran is not such a case, its manager notwithstanding: Veteran has no fields of its own, every unique check on a Veteran belongs to Sailor, and it is Sailor's default manager that is asked.
+And validation follows it, with a consequence. The unique checks look for an existing row through the default manager of the class the field belongs to. A row that manager hides is not found, the check passes, and the database refuses the duplicate when it is saved ([Validating an instance](../instance/validation.md)). Veteran is not such a case, its manager notwithstanding: Veteran has no fields of its own, every unique check on a Veteran belongs to Sailor, and it is Sailor's default manager that is asked.
 
 ## Another database: `db_manager` and the hints
 

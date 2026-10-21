@@ -1,0 +1,179 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "optimizer.md",
+ "pointers": [
+  {
+   "pointer": "django/db/migrations/autodetector.py:MigrationAutodetector._optimize_migrations",
+   "line": 9,
+   "sentence": "The autodetector runs it on each migration it has cut, which puts back into a `CreateModel`, where it can, the relations, indexes and constraints the autodetector wrote as operations apart from it (`django/db/migrations/autodetector.py:MigrationAutodetector._optimize_migrations`; [From operations to migrations: dependencies, order and names](dependencies.md)). squashmigrations runs it, unless given `--no-optimize`, on the operations of all the migrations it replaces (`django/core/management/commands/squashmigrations.py:Command.handle`; [Rewriting migrations: `--update`, squashmigrations and optimizemigration](rewriting.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/autodetector.py",
+   "symbol": "MigrationAutodetector._optimize_migrations",
+   "kind": "function",
+   "lines": [
+    427,
+    443
+   ],
+   "fingerprint": "1ccab263ca8b51a7"
+  },
+  {
+   "pointer": "django/core/management/commands/squashmigrations.py:Command.handle",
+   "line": 9,
+   "sentence": "The autodetector runs it on each migration it has cut, which puts back into a `CreateModel`, where it can, the relations, indexes and constraints the autodetector wrote as operations apart from it (`django/db/migrations/autodetector.py:MigrationAutodetector._optimize_migrations`; [From operations to migrations: dependencies, order and names](dependencies.md)). squashmigrations runs it, unless given `--no-optimize`, on the operations of all the migrations it replaces (`django/core/management/commands/squashmigrations.py:Command.handle`; [Rewriting migrations: `--update`, squashmigrations and optimizemigration](rewriting.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/squashmigrations.py",
+   "symbol": "Command.handle",
+   "kind": "function",
+   "lines": [
+    61,
+    239
+   ],
+   "fingerprint": "a22a49f38efb75c3"
+  },
+  {
+   "pointer": "django/core/management/commands/makemigrations.py:Command.write_to_last_migration_files",
+   "line": 9,
+   "sentence": "`makemigrations --update`, which folds new operations into an application's last migration, runs it on the lengthened list (`django/core/management/commands/makemigrations.py:Command.write_to_last_migration_files`; [Rewriting migrations: `--update`, squashmigrations and optimizemigration](rewriting.md)).",
+   "tree": "django",
+   "path": "django/core/management/commands/makemigrations.py",
+   "symbol": "Command.write_to_last_migration_files",
+   "kind": "function",
+   "lines": [
+    266,
+    335
+   ],
+   "fingerprint": "fd2e65cc1a1cc6d2"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.reduce",
+   "line": 13,
+   "sentence": "The optimizer calls `Operation.reduce` on one operation with another that stands later in the list, and with the label of the list's application, which an operation does not hold (`django/db/migrations/operations/base.py:Operation.reduce`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.reduce",
+   "kind": "function",
+   "lines": [
+    160,
+    170
+   ],
+   "fingerprint": "f84c36679d2ed981"
+  },
+  {
+   "pointer": "django/db/migrations/optimizer.py:MigrationOptimizer.optimize",
+   "line": 42,
+   "sentence": "`MigrationOptimizer.optimize` calls `MigrationOptimizer.optimize_inner` on the list, and again on what that returned, until a call returns a list equal to the one it was given (`django/db/migrations/optimizer.py:MigrationOptimizer.optimize`); its docstring draws the consequence, that a fold must never return a list longer than what it replaces.",
+   "tree": "django",
+   "path": "django/db/migrations/optimizer.py",
+   "symbol": "MigrationOptimizer.optimize",
+   "kind": "function",
+   "lines": [
+    12,
+    38
+   ],
+   "fingerprint": "a291e0a73ff8f197"
+  },
+  {
+   "pointer": "django/db/migrations/optimizer.py:MigrationOptimizer.optimize_inner",
+   "line": 51,
+   "sentence": "In a pass, `optimize_inner` takes each operation in turn and asks it about every operation after it, nearest first (`django/db/migrations/optimizer.py:MigrationOptimizer.optimize_inner`).",
+   "tree": "django",
+   "path": "django/db/migrations/optimizer.py",
+   "symbol": "MigrationOptimizer.optimize_inner",
+   "kind": "function",
+   "lines": [
+    40,
+    69
+   ],
+   "fingerprint": "6975f51261cd2589"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:ModelOperation.reduce",
+   "line": 73,
+   "sentence": "`ModelOperation.reduce` answers with `Operation.reduce`'s list where there is one, and otherwise with `ModelOperation.can_reduce_through`: true exactly when the later operation's `references_model`, asked about this operation's model, says no (`django/db/migrations/operations/models.py:ModelOperation.reduce`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "ModelOperation.reduce",
+   "kind": "function",
+   "lines": [
+    35,
+    38
+   ],
+   "fingerprint": "e30a96492e17d64f"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:CreateModel.reduce",
+   "line": 73,
+   "sentence": "`CreateModel.reduce` has a fold for each of these operations on its own model (`django/db/migrations/operations/models.py:CreateModel.reduce`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "CreateModel.reduce",
+   "kind": "function",
+   "lines": [
+    151,
+    379
+   ],
+   "fingerprint": "28fb37a8ba33d254"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:ModelOptionOperation.reduce",
+   "line": 92,
+   "sentence": "`ModelOptionOperation.reduce`, which the operations that alter a model's options or its managers inherit, answers an operation of its own class on its model, or a `DeleteModel` of it, with a list of the later one alone (`django/db/migrations/operations/models.py:ModelOptionOperation.reduce`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "ModelOptionOperation.reduce",
+   "kind": "function",
+   "lines": [
+    538,
+    544
+   ],
+   "fingerprint": "9457dfd771f66300"
+  },
+  {
+   "pointer": "django/db/migrations/operations/fields.py:FieldOperation.reduce",
+   "line": 96,
+   "sentence": "`FieldOperation.reduce` answers with `Operation.reduce`'s list where there is one, and otherwise with true exactly when the later operation's `references_field`, asked about this operation's field, says no (`django/db/migrations/operations/fields.py:FieldOperation.reduce`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/fields.py",
+   "symbol": "FieldOperation.reduce",
+   "kind": "function",
+   "lines": [
+    77,
+    80
+   ],
+   "fingerprint": "c1c27b382968594f"
+  },
+  {
+   "pointer": "django/db/migrations/operations/models.py:IndexOperation",
+   "line": 104,
+   "sentence": "`IndexOperation`, the base of the operations on indexes and constraints, declares none of `reduce`, `references_model` and `references_field` (`django/db/migrations/operations/models.py:IndexOperation`).",
+   "tree": "django",
+   "path": "django/db/migrations/operations/models.py",
+   "symbol": "IndexOperation",
+   "kind": "class",
+   "lines": [
+    878,
+    883
+   ],
+   "fingerprint": "ad076898121d4ddf"
+  },
+  {
+   "pointer": "django/db/migrations/operations/base.py:Operation.references_model",
+   "line": 106,
+   "sentence": "`Operation.references_model` returns `True` by the rule in its docstring: if in doubt, return true, since a true too many makes the optimizer a little less efficient and a false too many may leave an optimized migration that cannot be used (`django/db/migrations/operations/base.py:Operation.references_model`); `Operation.references_field` falls back on it.",
+   "tree": "django",
+   "path": "django/db/migrations/operations/base.py",
+   "symbol": "Operation.references_model",
+   "kind": "function",
+   "lines": [
+    127,
+    137
+   ],
+   "fingerprint": "0f03b7d49920750c"
+  }
+ ]
+}

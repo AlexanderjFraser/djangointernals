@@ -17,7 +17,7 @@ The code that raises an exception and the code that catches it are often in diff
 | `ObjectNotUpdated` | `Exception` | a model's `Model.NotUpdated`, from a forced update that changed no row (`django/db/models/base.py:Model._save_table`) | it goes up |
 | `FieldDoesNotExist` | `Exception` | `Options.get_field` (`django/db/models/options.py:Options.get_field`) | the code that asked; a query raises `FieldError` instead |
 | `FieldError` | `Exception` | a query's keyword that names no field (`django/db/models/sql/query.py:Query.names_to_path`) | it goes up |
-| `FieldFetchBlocked` | `FieldError` | `FETCH_RAISE`, when a field not loaded is read (`django/db/models/fetch_modes.py:FetchRaise.fetch`) | it goes up ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)) |
+| `FieldFetchBlocked` | `FieldError` | `FETCH_RAISE`, when a field not loaded is read (`django/db/models/fetch_modes.py:FetchRaise.fetch`) | it goes up ([Deferred fields and the fetch modes](../instance/fetching.md)) |
 | `ValidationError` | `Exception` | validators (`django/core/validators.py`) | a form's or a model's errors |
 | `SuspiciousOperation` | `Exception` | its subclasses; markup `strip_tags` gives up on (`django/utils/html.py:strip_tags`) | a 400, logged under `"django.security"` (`django/core/handlers/exception.py:response_for_exception`) |
 | `DisallowedHost` | `SuspiciousOperation` | a host `ALLOWED_HOSTS` refuses (`django/http/request.py:HttpRequest.get_host`) | a 400 |
@@ -38,7 +38,7 @@ The code that raises an exception and the code that catches it are often in diff
 | `FullResultSet` | `Exception` | a condition that matches every row | the compiler writes no `"WHERE"` |
 | `SynchronousOnlyOperation` | `Exception` | `async_unsafe` | it goes up |
 
-*A 400 or a 403 is the handler's answer when the exception leaves a view or a middleware. A cell that says "it goes up" means only that the handler does not name that exception: a caller may catch it, and one that leaves a view or a middleware is a 500, like any the handler does not name, unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is true ([How an exception becomes a response](../handlers/exceptions.md)); the result sets are told in [The where clause: `build_filter`, `add_q` and `WhereNode`](../sql/where.md).*
+*A 400 or a 403 is the handler's answer when the exception leaves a view or a middleware. A cell that says "it goes up" means only that the handler does not name that exception: a caller may catch it, and one that leaves a view or a middleware is a 500, like any the handler does not name, unless `settings.DEBUG_PROPAGATE_EXCEPTIONS` is true ([How an exception becomes a response](../handlers/exceptions.md)); the result sets are told in [What the where tree writes: `WhereNode`](../expressions/where-node.md).*
 
 ## `ValidationError`: one error, a list, or a dictionary
 

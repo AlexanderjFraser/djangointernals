@@ -8,7 +8,7 @@ The model checks are the system checks that read a finished model class for mist
 
 A model is assembled while its class statement runs, and the assembly has few chances to refuse anything ([`ModelBase`: a class statement becomes a model](metaclass.md)). A field is made by a call in the class body, before there is a class for it to belong to: it does not yet know its own name, and it cannot see the other fields. A relation to a model that is never declared raises nothing. It leaves a function with the app registry, to be called when the model appears, and the function goes on waiting. And `ordering`, `unique_together` and the constraints of a `Meta` are stored without being compared with the fields: an `Options.ordering` may name a field the model lacks (`django/db/models/options.py:Options.contribute_to_class`).
 
-So a model with a mistake of this kind in it imports cleanly, and fails later, in a migration or at the first query that reaches the part that is wrong. The checks look in between: after every model has been imported, and before the project is used. Each is a function or a method that runs once the classes are finished, with their options complete and every other model at hand, and returns a list of messages. And none of them looks at a row: whether one ship's tonnage is acceptable is a question for validation, which works on an instance ([Validating an instance](validation.md)).
+So a model with a mistake of this kind in it imports cleanly, and fails later, in a migration or at the first query that reaches the part that is wrong. The checks look in between: after every model has been imported, and before the project is used. Each is a function or a method that runs once the classes are finished, with their options complete and every other model at hand, and returns a list of messages. And none of them looks at a row: whether one ship's tonnage is acceptable is a question for validation, which works on an instance ([Validating an instance](../instance/validation.md)).
 
 A message is a `CheckMessage`, and in the checks this page describes always an `Error` or a `Warning`. It has an id such as `"fields.E300"`, a text, sometimes a hint, and `CheckMessage.obj`, the thing it is about: a field, for one, or a model class. What becomes of the list, and when the checks are run at all, is the framework's affair (`django/core/checks/messages.py:CheckMessage`) ([The system checks](../commands/checks.md)).
 
@@ -33,7 +33,7 @@ As it goes it notes what no single model could judge: the table of each managed 
 
 ### `check_lazy_references`
 
-`check_lazy_references` reads the registry and no model. A relation hands the registry a function to call when its target exists, and until then the registry keeps it in `Apps._pending_operations` under the label and name of the model it is waiting for ([Relations: a field, its rel and the class at the other end](relations.md)). Once every model has been imported, whatever is still in that dictionary is waiting for a model that will not come, and `_check_lazy_references` makes a message of each (`django/core/checks/model_checks.py:_check_lazy_references`).
+`check_lazy_references` reads the registry and no model. A relation hands the registry a function to call when its target exists, and until then the registry keeps it in `Apps._pending_operations` under the label and name of the model it is waiting for ([Relations: a field, its rel and the class at the other end](../relations/fields.md)). Once every model has been imported, whatever is still in that dictionary is waiting for a model that will not come, and `_check_lazy_references` makes a message of each (`django/core/checks/model_checks.py:_check_lazy_references`).
 
 What waits there is not the function that was handed over but that function inside wrappers, which `Apps.lazy_model_operation` adds as it waits for one model after another. Each wrapper keeps what it wraps as an attribute named `"func"`: a `functools.partial` has one, and the registry gives its own wrapper the same. The check follows that attribute inward until it reaches an object that has none, gathering the arguments bound on the way (`django/apps/registry.py:Apps.lazy_model_operation`). What it reaches is the function first handed over, or the function inside it where that was a partial, as a relation's is, and it looks that function's module and name up in a short table.
 
@@ -178,7 +178,7 @@ On a backend whose `BaseDatabaseFeatures.supports_no_precision_decimalfield` is 
 
 **The automatic keys** check that they are primary keys: `AutoFieldMixin` reports an automatic field declared without `primary_key=True`. And being integer fields they inherit a warning from `IntegerField`, for a `max_length` that will be ignored (`django/db/models/fields/__init__.py:AutoFieldMixin._check_primary_key`).
 
-Other classes add their own in the same way. A file field refuses two of its arguments ([File fields](files.md)). A `GeneratedField` asks each database whether it has generated columns of the kind wanted, and also runs the checks of its output field, folding what they return into messages of its own, one for the errors and one for the warnings (`django/db/models/fields/generated.py:GeneratedField.check`).
+Other classes add their own in the same way. A file field refuses two of its arguments ([File fields](../instance/files.md)). A `GeneratedField` asks each database whether it has generated columns of the kind wanted, and also runs the checks of its output field, folding what they return into messages of its own, one for the errors and one for the warnings (`django/db/models/fields/generated.py:GeneratedField.check`).
 
 The last two messages of Wreck are the model's. `"tide"` in the `ordering` is no field, and the condition of the constraint refers to `"fathoms"`, which `CheckConstraint.check` found by handing the names in its condition to `_check_local_fields`.
 
@@ -199,69 +199,6 @@ Wreck.check() with no database named, and with one
 The message missing from the first line is the constraint's, and nothing about that mistake depends on a database.
 
 A model can say what it needs of a database. Where its `Meta` lists a feature in `Options.required_db_features`, a check that would complain of a backend without that feature says nothing. A migration, for its part, passes over such a model on a connection that lacks a feature it requires (`django/db/models/options.py:Options.can_migrate`, `django/db/migrations/operations/base.py:Operation.allow_migrate_model`).
-
-## The relation checks
-
-A relation is declared in one class and takes effect in two, and what `RelatedField.check` and the classes under it add to a field's checks is about the other end. A second model written wrong on purpose, Dive, has mistakes of this kind. Like Wreck, the model it points at, it has the office's label and was declared under `isolate_apps`, so it is in a registry made for the purpose and not in the main one.
-
-```python
-class Dive(models.Model):
-    wreck = models.ForeignKey(Wreck, on_delete=models.SET_NULL)
-    again = models.ForeignKey(Wreck, on_delete=models.CASCADE)
-    chart = models.ForeignKey("office.Nowhere", on_delete=models.DB_CASCADE)
-    id = models.CharField(max_length=5)
-
-    class Meta:
-        app_label = "office"
-```
-
-These are the lines of its check that returned something, and two that did not, and then the messages:
-
-```text recording=models
-Model._check_fields(Dive)
-  AutoFieldMixin.check  (Dive.id)  ->  []
-  ForeignKey.check  (Dive.wreck)  ->  [fields.E304, fields.E320]
-  ForeignKey.check  (Dive.again)  ->  [fields.E304]
-  ForeignKey.check  (Dive.chart)  ->  [fields.E300]
-  CharField.check  (Dive.id)  ->  []
-  -> [fields.E304, fields.E320, fields.E304, fields.E300]
-...
-Model._check_related_fields(Dive)  ->  [models.E050]
-Model._check_id_field(Dive)  ->  [models.E004]
-...
-Model._check_single_primary_key(Dive)  ->  []
-Model._check_unique_together(Dive)  ->  []
-```
-
-```text recording=models
-What Dive.check returned
-    fields.E304, Error, on office.Dive.wreck: Reverse accessor 'Wreck.dive_set' for 'office.Dive.wreck' clashes with reverse accessor for 'office.Dive.again'. Hint: Add or change a related_name argument to the definition for 'office.Dive.wreck' or 'office.Dive.again'.
-    fields.E320, Error, on office.Dive.wreck: Field specifies on_delete=SET_NULL, but cannot be null. Hint: Set null=True argument on the field, or change the on_delete rule.
-    fields.E304, Error, on office.Dive.again: Reverse accessor 'Wreck.dive_set' for 'office.Dive.again' clashes with reverse accessor for 'office.Dive.wreck'. Hint: Add or change a related_name argument to the definition for 'office.Dive.again' or 'office.Dive.wreck'.
-    fields.E300, Error, on office.Dive.chart: Field defines a relation with model 'office.Nowhere', which is either not installed, or is abstract.
-    models.E050, Error, on office.Dive: The model cannot have related fields with both database-level and Python-level on_delete variants.
-    models.E004, Error, on office.Dive: 'id' can only be used as a field name if the field also sets 'primary_key=True'.
-```
-
-**The target exists.** `RelatedField.check` begins, after the base class's checks, with the names the relation will give the other class, and then asks whether there is another class. `RelatedField._check_relation_model_exists` reports a target that is still a string, or a class the registry does not list among its models, which an abstract class never is; that is `"fields.E300"` for `"chart"`. A target that has been swapped out is reported apart, with a hint naming the setting to point at (`django/db/models/fields/related.py:RelatedField.check`).
-
-This is the mistake `check_lazy_references` reports from the registry's side, and the two do not know of each other: in the project's main registry a field like `"chart"` draws both messages. Dive is in a registry of its own, which the registered function does not read, and so only the field's message was recorded.
-
-**What the relation adds to the target does not collide.** A relation gives the class it points at an accessor, `"dive_set"` for both of Dive's foreign keys to Wreck, and gives queries on that class a name to reach back by, here `"dive"`. `RelatedField._check_clashes` compares the two names with the names of the target's own fields and with the accessors of the other relations that point at the target, and the accessor with the names of the target's managers. Because each field checks itself, a clash between two relations is found twice, once from each side, and Dive has `"fields.E304"` for `"wreck"` and again for `"again"`. A relation whose rel is hidden, having been given a related name that ends in a plus sign, has no accessor to clash (`django/db/models/fields/related.py:RelatedField._check_clashes`).
-
-**The target can be pointed at.** `ForeignObject.check` adds that each field the relation refers to on the target exists, that none of them is a composite primary key, and that together they are unique: one of them declared unique, or some of them making up the whole of one of the target's `Options.unique_together` or of a unique constraint of its that has no condition and no expressions, or all of them being exactly the fields of the target's primary key. A foreign key to a primary key passes at once (`django/db/models/fields/related.py:ForeignObject._check_unique_target`, `django/db/models/options.py:Options.total_unique_constraints`).
-
-**The action fits the field.** `ForeignKey.check` adds a warning for a foreign key declared unique, which has the same effect as a `OneToOneField`; that class overrides the method to return nothing. It also adds `ForeignKey._check_on_delete`, which holds what the field's other arguments must be for its action on deletion, the rel's `ForeignObjectRel.on_delete`, to be possible. `SET_NULL` and `DB_SET_NULL` need `null=True`, which `"wreck"` lacks. `SET_DEFAULT` needs a default, and `DB_SET_DEFAULT` a default of the database's. And each of the database-level actions needs a backend that has it, which is asked of each database given (`django/db/models/fields/related.py:ForeignKey._check_on_delete`).
-
-**The two kinds of action are not mixed.** `ForeignKey._check_on_delete` also holds half of a rule that reaches beyond one field, which its comment states: database and Python variants cannot be mixed in a chain of model references. The two kinds are carried out by different parties. A Python-level action is the `Collector`'s, done as it gathers the rows a deletion reaches, and a database-level one is the database's, on rows the collector of `Model.delete` passes over, and nothing Django does for a collected row is done for them (`django/db/models/deletion.py:Collector.collect`) ([Deleting: the `Collector`](deleting.md)). `DO_NOTHING` counts as neither. A foreign key compares its own action with those of the forward relations of the model it points at, and reports `"fields.E323"` when one is of the other kind. `ManyToManyField._check_on_delete` reports the same id for a relation whose through model Django made: the two foreign keys of that model have Python-level actions, so a database-level relation declared on the model at either end is of the other kind. And `Model._check_related_fields` looks inside one model, for forward relations of both kinds, which is `"models.E050"` (`django/db/models/base.py:Model._check_related_fields`).
-
-Dive has `"chart"`, whose action is the database's, beside `"wreck"` and `"again"`, whose actions are Python's, and the recording has `"models.E050"` for it. It has no `"fields.E323"`. The target of `"chart"` never became a class, and a relation whose target is still a string is not compared; Wreck, which the other two point at, has no forward relations to compare with.
-
-> **Changed in 6.1.** The database-level actions are new.
-
-**A many-to-many relation checks its through model.** A through model has to be an installed model in which the field can tell one foreign key to each end of the relation, and `ManyToManyField.check` counts the through model's foreign keys to the model being checked, which `Model._check_fields` hands it, and to the target. Where the two are different models, none to either is an error, and so is more than one to either unless `ManyToManyRel.through_fields` says which to use; where a model is related to itself, it is more than two that needs `through_fields`. `through_fields`, when given, must name two fields of the through model that are foreign keys to the right models. A through table with the name of another model's table is reported, and arguments that do nothing on such a field, `"null"` and `"validators"` among them, draw warnings (`django/db/models/fields/related.py:ManyToManyField._check_relationship_model`).
-
-The last message of Dive is not about a relation. Its body declares `"id"` without making it the primary key, so `Options._prepare` added an automatic key of the same name, and `Model._check_id_field` reports the pair. Two fields now have the column `"id"`, which `_check_column_name_clashes` would report as well. The recording has no line for that method between `_check_single_primary_key` and `_check_unique_together`: it was not called (`django/db/models/options.py:Options._prepare`).
 
 ## Managers, constraints and indexes
 

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 860 520">
+  <!-- the round trip: down the left from the models through the schema editor to the database's catalog
+       at the foot; up the right from the catalog through introspection to the jobs that ask; the test
+       database beside the way up. In the accent, a statement the editor holds to its exit -->
+
+  <!-- the models, where the way down starts -->
+  <rect class="ground" x="0.5" y="0.5" width="412" height="50" rx="4"/>
+  <text class="strong" x="12" y="21">the models, or a migration's state of them</text>
+  <text x="12" y="39">a model class, or a historical model</text>
+
+  <path class="line" d="M206.5 50.5 V80.5"/>
+  <polygon class="head" points="206.5,90.5 201.5,80.5 211.5,80.5"/>
+
+  <!-- the schema editor, a bracket: entered, its methods, left; time runs down inside it -->
+  <rect class="box" x="0.5" y="90.5" width="412" height="323" rx="4"/>
+  <text x="12" y="112"><tspan class="quiet">down: </tspan><tspan class="strong">the schema editor</tspan>, a bracket</text>
+
+  <text class="strong" x="12" y="142">entered</text>
+  <text x="72" y="142">on SQLite, foreign key checks off;</text>
+  <text x="72" y="160">where the database can roll DDL back,</text>
+  <text x="72" y="178">ordinarily an atomic block</text>
+
+  <text x="72" y="216"><tspan class="name">create_model</tspan>, <tspan class="name">alter_field</tspan> …</text>
+
+  <rect class="ground" x="72.5" y="240.5" width="176" height="32" rx="4"/>
+  <text x="84" y="261">a statement sent at once</text>
+  <rect class="ground" x="72.5" y="284.5" width="176" height="32" rx="4"/>
+  <text x="84" y="305">a statement held in</text>
+
+  <!-- deferred_sql, which holds a statement to the editor's exit -->
+  <rect class="mark-box" x="268.5" y="284.5" width="132" height="88" rx="4"/>
+  <text class="name mark" x="280" y="305">deferred_sql</text>
+  <text class="quiet small" x="280" y="331">ordinarily until</text>
+  <text class="quiet small" x="280" y="347">the editor is left</text>
+  <path class="mark-line" d="M248.5 300.5 H258.5"/>
+  <polygon class="head mark" points="268.5,300.5 258.5,295.5 258.5,305.5"/>
+
+  <text class="strong" x="12" y="345">left</text>
+  <text x="72" y="345">on SQLite, every table checked;</text>
+  <text class="mark" x="72" y="363">the held statements;</text>
+  <text x="72" y="381">the atomic block left;</text>
+  <text x="72" y="399">on SQLite, the checks on again</text>
+
+  <!-- the statements go down to the catalog: one at once, the held one at the exit -->
+  <path class="line" d="M248.5 256.5 H452.5 V431.5"/>
+  <polygon class="head" points="452.5,441.5 447.5,431.5 457.5,431.5"/>
+  <path class="mark-line" d="M400.5 358.5 H432.5 V431.5"/>
+  <polygon class="head mark" points="432.5,441.5 427.5,431.5 437.5,431.5"/>
+
+  <!-- the jobs that ask, where the way up ends -->
+  <rect class="ground" x="472.5" y="0.5" width="387" height="143" rx="4"/>
+  <text x="484" y="21">the schema editor</text>
+  <text class="quiet" x="600" y="21">for a name the database chose,</text>
+  <text class="quiet" x="600" y="39">to drop a constraint</text>
+  <text x="484" y="63">migrate</text>
+  <text class="quiet" x="600" y="63">for the tables that exist</text>
+  <text class="quiet" x="600" y="81">(<tspan class="name">--run-syncdb</tspan>, <tspan class="name">--fake-initial</tspan>)</text>
+  <text x="484" y="105">inspectdb</text>
+  <text class="quiet" x="600" y="105">for a schema Django did not make</text>
+  <text x="484" y="129">the flush</text>
+  <text class="quiet" x="600" y="129">for the tables to empty</text>
+
+  <path class="line" d="M492.5 175.5 V153.5"/>
+  <polygon class="head" points="492.5,143.5 487.5,153.5 497.5,153.5"/>
+  <text class="quiet" x="504" y="164">asked by, among others</text>
+
+  <!-- introspection -->
+  <rect class="box" x="472.5" y="175.5" width="387" height="60" rx="4"/>
+  <text x="484" y="197"><tspan class="quiet">up: </tspan><tspan class="strong">introspection</tspan></text>
+  <text x="484" y="221">the tables, a table's columns, keys, constraints and indexes</text>
+
+  <path class="line" d="M492.5 441.5 V245.5"/>
+  <polygon class="head" points="492.5,235.5 487.5,245.5 497.5,245.5"/>
+
+  <!-- the test database, beside the round trip -->
+  <rect class="ground dashed" x="512.5" y="263.5" width="347" height="150" rx="4"/>
+  <text class="strong" x="524" y="285">for tests</text>
+  <text x="524" y="309">creation makes a database</text>
+  <text x="536" y="327">beside the one the settings name;</text>
+  <text x="524" y="345">migrate builds the models' tables through the editor;</text>
+  <text x="524" y="363">a copy is ordinarily made for each process</text>
+  <text x="536" y="381">of a parallel run;</text>
+  <text x="524" y="399">the flush empties it after some tests</text>
+
+  <!-- the database's catalog, where the way down ends and the way up starts -->
+  <rect class="ground" x="0.5" y="441.5" width="859" height="78" rx="4"/>
+  <text class="strong" x="12" y="463">the database's catalog</text>
+  <text x="12" y="487">SQLite: <tspan class="name">"sqlite_master"</tspan> and <tspan class="name">"PRAGMA"</tspan></text>
+  <text x="484" y="487">PostgreSQL: <tspan class="name">"pg_catalog"</tspan></text>
+  <text x="12" y="505">MySQL: <tspan class="name">"information_schema"</tspan></text>
+  <text x="484" y="505">Oracle: the dictionary views</text>
+</svg>

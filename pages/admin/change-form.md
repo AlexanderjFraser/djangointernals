@@ -10,7 +10,7 @@ An add page and a change page differ in a few places, among them whether there i
 
 ## The transaction
 
-`ModelAdmin.changeform_view` carries the CSRF check itself, as `csrf_protect` made a method decorator, besides the one `AdminSite.admin_view` adds ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](site-urls.md)). For any method but `"GET"`, `"HEAD"`, `"OPTIONS"` and `"TRACE"` it runs `ModelAdmin._changeform_view` inside `atomic`, on the database the router gives for writing the model; the check stands outside the block (`django/contrib/admin/options.py:ModelAdmin.changeform_view`) ([Transactions: autocommit, `atomic` and savepoints](../backends/transactions.md)).
+`ModelAdmin.changeform_view` carries the CSRF check itself, as `csrf_protect` made a method decorator, besides the one `AdminSite.admin_view` adds ([The admin's URLs: `AdminSite.get_urls` and `AdminSite.admin_view`](site-urls.md)). For any method but `"GET"`, `"HEAD"`, `"OPTIONS"` and `"TRACE"` it runs `ModelAdmin._changeform_view` inside `atomic`, on the database the router gives for writing the model; the check stands outside the block (`django/contrib/admin/options.py:ModelAdmin.changeform_view`) ([Transactions: autocommit, `atomic` and savepoints](../connections/atomic.md)).
 
 So a save is one transaction, from the view's first query to the row of the log, and an exception in a later hook, saving the related objects or writing the log, takes the object's save back with it. A form that does not validate leaves the block normally, having written nothing. The page that shows its errors is a `TemplateResponse`, rendered after the view returns ([`SimpleTemplateResponse` and `TemplateResponse`](../templates/responses.md)), so its select widgets query after the commit.
 
@@ -62,7 +62,7 @@ ModelAdmin.changeform_view               BEGIN
 
 *Nora's change of Endeavour's tonnage as a run recorded it: each step of the code, and the SQL it sent, if any. Everything from the ship's SELECT to the log's INSERT is one transaction.*
 
-The session and the user were read before the transaction, when `AdminSite.has_permission` touched the request's user; the permissions once, then cached on the user. Validation checked the check constraint in a savepoint, since a transaction was open (`django/db/models/query_utils.py:Q.check`) ([Validating an instance](../models/validation.md)). The log's content type was cached by the change page's `"GET"`; else `log_change` selects it first (`django/contrib/contenttypes/models.py:ContentTypeManager.get_for_model`).
+The session and the user were read before the transaction, when `AdminSite.has_permission` touched the request's user; the permissions once, then cached on the user. Validation checked the check constraint in a savepoint, since a transaction was open (`django/db/models/query_utils.py:Q.check`) ([Validating an instance](../instance/validation.md)). The log's content type was cached by the change page's `"GET"`; else `log_change` selects it first (`django/contrib/contenttypes/models.py:ContentTypeManager.get_for_model`).
 
 When the form or a formset is not valid, nothing is saved and the form is shown again with its errors ([Validation: `full_clean`, `cleaned_data` and the errors](../forms/validation.md)). Nora's tonnage of 0 got a 200 with "Please correct the error below." and, above the fields, "Constraint “ship_has_tonnage” is violated."; the ship kept its tonnage, and the log got no row.
 

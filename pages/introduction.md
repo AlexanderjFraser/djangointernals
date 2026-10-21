@@ -84,7 +84,7 @@ the request side, left to right:
     handler -> middleware, the way in -> resolver -> view -> middleware, the way out -> response
 
 beneath the view, which uses them:
-    the data side: models, querysets, SQL, backends, migrations
+    the data side: models, querysets, SQL; connections, backends, migrations
     the presentation side: templates, forms
 
 beneath those, the services any part may call on:

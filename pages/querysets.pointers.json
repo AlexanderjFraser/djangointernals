@@ -25,7 +25,7 @@
   {
    "pointer": "django/db/models/sql/query.py:Query",
    "line": 13,
-   "sentence": "There is a `Query`, the description of the statement, which is the subject of [From QuerySet to SQL](sql.md); this chapter calls it **the query**, and says only what the queryset's methods ask of it (`django/db/models/sql/query.py:Query`).",
+   "sentence": "There is a `Query`, the description of the statement, which is the subject of [Building a query](query.md); this chapter calls it **the query**, and says only what the queryset's methods ask of it (`django/db/models/sql/query.py:Query`).",
    "tree": "django",
    "path": "django/db/models/sql/query.py",
    "symbol": "Query",
@@ -38,7 +38,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet._chain",
-   "line": 134,
+   "line": 59,
    "sentence": "The method then makes its change to the copy, most often to the copy's query, and returns it (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -52,7 +52,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet._clone",
-   "line": 134,
+   "line": 59,
    "sentence": "The method then makes its change to the copy, most often to the copy's query, and returns it (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -66,7 +66,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet._fetch_all",
-   "line": 146,
+   "line": 71,
    "sentence": "Each of these calls `QuerySet._fetch_all`, which does not run the statement again when there is a result cache already (`django/db/models/query.py:QuerySet._fetch_all`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -80,7 +80,7 @@
   },
   {
    "pointer": "django/db/models/query.py:ModelIterable.__iter__",
-   "line": 177,
+   "line": 102,
    "sentence": "Its `__iter__` is where one query is run from end to end: it asks the query for a **compiler** for the queryset's database, the object that writes the statement and runs it, has the compiler execute the statement, and turns each row the compiler gives back into an instance by calling `Model.from_db` (`django/db/models/query.py:ModelIterable.__iter__`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -94,7 +94,7 @@
   },
   {
    "pointer": "django/db/models/sql/compiler.py:SQLCompiler.results_iter",
-   "line": 177,
+   "line": 102,
    "sentence": "On the way the compiler applies **converters** to the columns that have them: functions, the backend's or a field's, that turn a value as the database's driver returned it into the one the program is to have (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`).",
    "tree": "django",
    "path": "django/db/models/sql/compiler.py",
@@ -108,7 +108,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.db",
-   "line": 237,
+   "line": 148,
    "sentence": "The methods that write set `QuerySet._for_write`, on the queryset or on the clone they make, and a queryset with no alias of its own then has its database chosen by the router's `ConnectionRouter.db_for_write` and not by `ConnectionRouter.db_for_read` (`django/db/models/query.py:QuerySet.db`); [Clones: how a queryset is built](querysets/chaining.md) lists the methods.",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -123,7 +123,7 @@
   },
   {
    "pointer": "django/db/models/query.py:QuerySet.aget",
-   "line": 245,
+   "line": 156,
    "sentence": "The twin does no asynchronous work with the database: it hands the synchronous method to a thread through `sync_to_async` and waits (`django/db/models/query.py:QuerySet.aget`, `asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
    "tree": "django",
    "path": "django/db/models/query.py",
@@ -137,7 +137,7 @@
   },
   {
    "pointer": "asgiref:asgiref/sync.py:SyncToAsync.__call__",
-   "line": 245,
+   "line": 156,
    "sentence": "The twin does no asynchronous work with the database: it hands the synchronous method to a thread through `sync_to_async` and waits (`django/db/models/query.py:QuerySet.aget`, `asgiref:asgiref/sync.py:SyncToAsync.__call__`).",
    "tree": "asgiref",
    "path": "asgiref/sync.py",

@@ -45,7 +45,7 @@ The hidden field looks the key up again through the default manager, a query for
 
 ## The forms checked against one another
 
-Each form validates its own instance, and that validation's unique checks and constraints ask the database ([Validating an instance](../models/validation.md)). They cannot see the other forms: two forms that each add a Heron at Valletta each find no such row. `BaseModelFormSet.clean` calls `BaseModelFormSet.validate_unique`, which compares the forms with one another (`django/forms/models.py:BaseModelFormSet.validate_unique`).
+Each form validates its own instance, and that validation's unique checks and constraints ask the database ([Validating an instance](../instance/validation.md)). They cannot see the other forms: two forms that each add a Heron at Valletta each find no such row. `BaseModelFormSet.clean` calls `BaseModelFormSet.validate_unique`, which compares the forms with one another (`django/forms/models.py:BaseModelFormSet.validate_unique`).
 
 It asks the instance of each form that is valid and not marked for deletion for its checks, by `Model._get_unique_checks`, excluding what `BaseModelForm._get_validation_exclusions` excludes and with `include_meta_constraints=True`, which adds the unique constraints without a condition or expressions. For each unique check each form gives a tuple of its cleaned values for the check's fields, an object reduced to its key. A tuple holding `None` is passed over; one already seen is a duplicate. A date check compares the field's value and the date, or its year or month.
 

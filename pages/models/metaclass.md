@@ -123,7 +123,7 @@ Officer.DoesNotExist.__bases__ == (Sailor.DoesNotExist,)  ->  True
 
 The module and the qualified name in the second line are set on purpose. `subclass_exception` gives each class the model's module and a qualified name that begins with the model's, and its docstring gives the reason: an instance can then be pickled, the class being found again as an attribute of the model.
 
-> **Changed in 6.0.** `Model.NotUpdated` is new. A save that was told to update and matched no row used to raise a plain `DatabaseError`; it now raises the model's own class, which still has `DatabaseError` among its bases so that code written to catch the old exception goes on working ([Saving an instance](saving.md)).
+> **Changed in 6.0.** `Model.NotUpdated` is new. A save that was told to update and matched no row used to raise a plain `DatabaseError`; it now raises the model's own class, which still has `DatabaseError` among its bases so that code written to catch the old exception goes on working ([Saving an instance](../instance/saving.md)).
 
 At the same point a class that is not abstract takes two settings from the options of the nearest model in its resolution order, if that model is not abstract, where the `Meta` it goes by does not give them: `"ordering"` and `"get_latest_by"`. This is how a child comes by the ordering of a parent that has a table. A child of an abstract base gets it by another route, with the base's `Meta`, as Port gets its ordering from Named.
 
@@ -145,7 +145,7 @@ ModelBase.add_to_class(Sailor, 'objects', a ManagerFromSailorQuerySet)
 ModelBase._prepare(Sailor)
 ```
 
-What each object does with the class is its own affair: the loop that hands them over only calls `add_to_class`, and has no code about columns or descriptors. A field enters itself in the options and sets a descriptor (`django/db/models/fields/__init__.py:Field.contribute_to_class`) ([A field: the base class](fields.md)). A relation on a class that is not abstract also arranges to be told when the class it points at exists ([Relations: a field, its rel and the class at the other end](relations.md)). A manager sets a descriptor under its name and enters itself in the options' list of managers ([Managers](managers.md)). Anything else with a `contribute_to_class` method, of a project's or a library's making, is called in the same way and may do what it likes.
+What each object does with the class is its own affair: the loop that hands them over only calls `add_to_class`, and has no code about columns or descriptors. A field enters itself in the options and sets a descriptor (`django/db/models/fields/__init__.py:Field.contribute_to_class`) ([A field: the base class](fields.md)). A relation on a class that is not abstract also arranges to be told when the class it points at exists ([Relations: a field, its rel and the class at the other end](../relations/fields.md)). A manager sets a descriptor under its name and enters itself in the options' list of managers ([Managers](managers.md)). Anything else with a `contribute_to_class` method, of a project's or a library's making, is called in the same way and may do what it likes.
 
 ## The bases
 

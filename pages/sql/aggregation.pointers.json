@@ -1,0 +1,167 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "aggregation.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_aggregation",
+   "line": 13,
+   "sentence": "`Query.get_aggregation` takes the database alias and a dictionary from aliases to aggregates, and returns a dictionary from the same aliases to values, having sent one statement or none (`django/db/models/sql/query.py:Query.get_aggregation`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_aggregation",
+   "kind": "function",
+   "lines": [
+    458,
+    650
+   ],
+   "fingerprint": "92e28f95e3a4502a"
+  },
+  {
+   "pointer": "django/db/models/sql/subqueries.py:AggregateQuery",
+   "line": 17,
+   "sentence": "The **wrapped case** makes a clone of the query the inner query of an `AggregateQuery`, whose compiler selects the aggregates from the clone's statement in parentheses (`django/db/models/sql/subqueries.py:AggregateQuery`).",
+   "tree": "django",
+   "path": "django/db/models/sql/subqueries.py",
+   "symbol": "AggregateQuery",
+   "kind": "class",
+   "lines": [
+    167,
+    177
+   ],
+   "fingerprint": "af23418697b9b8ed"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query._gen_cols",
+   "line": 48,
+   "sentence": "Where that leaves the inner query selecting nothing, the primary key is selected, for the sake of a count over a slice (`django/db/models/sql/query.py:Query._gen_cols`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query._gen_cols",
+   "kind": "function",
+   "lines": [
+    2047,
+    2063
+   ],
+   "at": 2048,
+   "fingerprint": "2d6c6b6291791370"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql",
+   "line": 69,
+   "sentence": "`SQLAggregateCompiler.as_sql` is the whole of the outer compiler: it compiles each selected annotation of the `AggregateQuery`, has the inner query's compiler write its statement with `with_col_aliases=True`, so that every column has a name the outer statement can use, and writes `\"SELECT\"`, the aggregates, `\"FROM (\"`, the inner statement and `\") subquery\"`; the aggregates are given no aliases, the result being read by position (`django/db/models/sql/compiler.py:SQLAggregateCompiler.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLAggregateCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    2258,
+    2279
+   ],
+   "fingerprint": "f6407600aea64394"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.__init__",
+   "line": 114,
+   "sentence": "The method gathers each selected aggregate's `empty_result_set_value` and sets the compiler's `elide_empty` to whether none of them is `NotImplemented`, the option [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md) tells: with it set, a where tree that can match nothing makes `SQLCompiler.as_sql` raise `EmptyResultSet` and `SQLCompiler.execute_sql` answer with nothing, and the gathered values are the answer; without it, `as_sql` writes `\"0 = 1\"` for the where clause and the statement is sent, so that an expression with no answer of its own, a sum with one added to it, gets the database's (`django/db/models/sql/compiler.py:SQLCompiler.__init__`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.__init__",
+   "kind": "function",
+   "lines": [
+    50,
+    66
+   ],
+   "fingerprint": "72135618b6a5316b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 114,
+   "sentence": "The method gathers each selected aggregate's `empty_result_set_value` and sets the compiler's `elide_empty` to whether none of them is `NotImplemented`, the option [The compiler: `as_sql`, `execute_sql` and `results_iter`](compiler.md) tells: with it set, a where tree that can match nothing makes `SQLCompiler.as_sql` raise `EmptyResultSet` and `SQLCompiler.execute_sql` answer with nothing, and the gathered values are the answer; without it, `as_sql` writes `\"0 = 1\"` for the where clause and the statement is sent, so that an expression with no answer of its own, a sum with one added to it, gets the database's (`django/db/models/sql/compiler.py:SQLCompiler.__init__`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/models/functions/comparison.py:Coalesce.empty_result_set_value",
+   "line": 114,
+   "sentence": "`Count` answers 0, `Aggregate` answers `None`, a `Coalesce` answers with the first of its sources whose answer is not `None`, and has no answer where that source has none, and a `Value` answers with its value, which is how a default reaches the dictionary without a statement (`django/db/models/functions/comparison.py:Coalesce.empty_result_set_value`).",
+   "tree": "django",
+   "path": "django/db/models/functions/comparison.py",
+   "symbol": "Coalesce.empty_result_set_value",
+   "kind": "function",
+   "lines": [
+    80,
+    86
+   ],
+   "at": 81,
+   "fingerprint": "cb4417c3e8b6bd73"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.get_count",
+   "line": 129,
+   "sentence": "`Query.get_count` clones the query and returns `get_aggregation` of `Count(\"*\")` under the alias `\"__count\"`; everything above holds for it, the wrapped case included (`django/db/models/sql/query.py:Query.get_count`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.get_count",
+   "kind": "function",
+   "lines": [
+    652,
+    657
+   ],
+   "fingerprint": "27f170863228f0d5"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.exists",
+   "line": 153,
+   "sentence": "`Query.exists` makes the narrowed query that answers whether any row matches (`django/db/models/sql/query.py:Query.exists`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.exists",
+   "kind": "function",
+   "lines": [
+    662,
+    682
+   ],
+   "fingerprint": "9bf05dfcb121746b"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.has_results",
+   "line": 153,
+   "sentence": "`Query.has_results` makes that query and asks its compiler's `SQLCompiler.has_results`, which is whether `execute_sql` with `SINGLE` returned a row (`django/db/models/sql/query.py:Query.has_results`, `django/db/models/sql/compiler.py:SQLCompiler.has_results`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.has_results",
+   "kind": "function",
+   "lines": [
+    684,
+    687
+   ],
+   "fingerprint": "82e2c9436e15b8e4"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.has_results",
+   "line": 153,
+   "sentence": "`Query.has_results` makes that query and asks its compiler's `SQLCompiler.has_results`, which is whether `execute_sql` with `SINGLE` returned a row (`django/db/models/sql/query.py:Query.has_results`, `django/db/models/sql/compiler.py:SQLCompiler.has_results`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.has_results",
+   "kind": "function",
+   "lines": [
+    1612,
+    1617
+   ],
+   "fingerprint": "0ab4af4bd43bf0b2"
+  }
+ ]
+}

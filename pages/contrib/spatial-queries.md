@@ -10,7 +10,7 @@ Whether a mooring lies in an anchorage or within two kilometres of a point is an
 
 ## The lookups and the backend's operators
 
-Every spatial lookup is a class registered on `BaseSpatialField`, which the geometry fields and `RasterField` share, and it takes precedence over the base field's lookup of the same name: on a geometry field `"exact"` is `SameAsLookup` and `"contains"` is `ContainsLookup` (`django/contrib/gis/db/models/lookups.py:SameAsLookup`). `Query.build_lookup` finds them through `RegisterLookupMixin.get_lookup` ([The lookup registry: `RegisterLookupMixin`](../querysets/lookups.md)).
+Every spatial lookup is a class registered on `BaseSpatialField`, which the geometry fields and `RasterField` share, and it takes precedence over the base field's lookup of the same name: on a geometry field `"exact"` is `SameAsLookup` and `"contains"` is `ContainsLookup` (`django/contrib/gis/db/models/lookups.py:SameAsLookup`). `Query.build_lookup` finds them through `RegisterLookupMixin.get_lookup` ([The lookup registry: `RegisterLookupMixin`](../expressions/registry.md)).
 
 `GISLookup` splits a tuple value into the geometry and parameters, which `GISLookup.process_rhs_params` reads, after the pattern of `"relate"`, as a raster's band index, or refuses as too many. The geometry goes through `BaseSpatialField.get_prep_value`, which reads a string as a geometry and gives one without an SRID the field's ([Spatial fields: the geometry fields and `RasterField`](spatial-fields.md)). At compilation `GISLookup.process_rhs` wraps it in the backend's `Adapter` and asks the backend for a placeholder: on PostGIS `%s`, or `"ST_Transform"` to the field's SRID when the geometry's differs (`django/contrib/gis/db/models/lookups.py:GISLookup.process_rhs`, `django/contrib/gis/db/backends/postgis/operations.py:PostGISOperations.get_geom_placeholder_sql`).
 
@@ -110,7 +110,7 @@ Mooring.objects.annotate(d=Distance("position", point.transform(32633, clone=Tru
 
 ## Aggregates
 
-`GeoAggregate` is an `Aggregate` of spatial fields only, named by the backend's `spatial_aggregate_name` once `check_expression_support` has refused any in its `disallowed_aggregates`, as Oracle refuses `Collect`, `Extent3D` and `MakeLine` (`django/contrib/gis/db/models/aggregates.py:GeoAggregate`). `Collect`, `MakeLine` and `Union` return a geometry; `Extent` and `Extent3D` a box, which `convert_extent` or `convert_extent3d` makes a tuple of four or six numbers ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](../sql/aggregates.md)).
+`GeoAggregate` is an `Aggregate` of spatial fields only, named by the backend's `spatial_aggregate_name` once `check_expression_support` has refused any in its `disallowed_aggregates`, as Oracle refuses `Collect`, `Extent3D` and `MakeLine` (`django/contrib/gis/db/models/aggregates.py:GeoAggregate`). `Collect`, `MakeLine` and `Union` return a geometry; `Extent` and `Extent3D` a box, which `convert_extent` or `convert_extent3d` makes a tuple of four or six numbers ([Aggregates: `Aggregate` and `Count`](../expressions/aggregates.md)).
 
 ## Measures: `D` and `A`
 

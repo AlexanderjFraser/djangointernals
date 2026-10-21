@@ -1,0 +1,443 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "select-related.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/query.py:QuerySet.select_related",
+   "line": 11,
+   "sentence": "It returns what `QuerySet._chain` gives it ([Clones: how a queryset is built](../querysets/chaining.md)), with `Query.select_related` changed on its query (`django/db/models/query.py:QuerySet.select_related`, `django/db/models/sql/query.py:Query.select_related`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.select_related",
+   "kind": "function",
+   "lines": [
+    1832,
+    1862
+   ],
+   "fingerprint": "9458464d1c83ae80"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.select_related",
+   "line": 11,
+   "sentence": "It returns what `QuerySet._chain` gives it ([Clones: how a queryset is built](../querysets/chaining.md)), with `Query.select_related` changed on its query (`django/db/models/query.py:QuerySet.select_related`, `django/db/models/sql/query.py:Query.select_related`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.select_related",
+   "kind": "assignment",
+   "lines": [
+    275,
+    275
+   ],
+   "fingerprint": "2eab8dcb3a94e083"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_select_related",
+   "line": 13,
+   "sentence": "Given names, the method calls `Query.add_select_related`, which splits each name at its double underscores and files the parts in nested dictionaries, so that `\"ship__home\"` and `\"ship__captain\"` share one entry for `\"ship\"` (`django/db/models/sql/query.py:Query.add_select_related`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_select_related",
+   "kind": "function",
+   "lines": [
+    2457,
+    2471
+   ],
+   "fingerprint": "bc8e3a1938ae2c9f"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.clone",
+   "line": 13,
+   "sentence": "A later call with more names adds them to the clone's own deep copy of those dictionaries, and the earlier queryset's are left as they were (`django/db/models/sql/query.py:Query.clone`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.clone",
+   "kind": "function",
+   "lines": [
+    388,
+    431
+   ],
+   "fingerprint": "d19834614eed8eda"
+  },
+  {
+   "pointer": "django/utils/deprecation.py:warn_about_external_use",
+   "line": 19,
+   "sentence": "The warning goes through `warn_about_external_use`, which says nothing when the caller is Django's own code, and the deprecation timeline has the call raising `TypeError` when the deprecation ends (`django/utils/deprecation.py:warn_about_external_use`, `docs/internals/deprecation.txt`).",
+   "tree": "django",
+   "path": "django/utils/deprecation.py",
+   "symbol": "warn_about_external_use",
+   "kind": "function",
+   "lines": [
+    50,
+    126
+   ],
+   "fingerprint": "6b8d6bf8462df763"
+  },
+  {
+   "pointer": "docs/internals/deprecation.txt",
+   "line": 19,
+   "sentence": "The warning goes through `warn_about_external_use`, which says nothing when the caller is Django's own code, and the deprecation timeline has the call raising `TypeError` when the deprecation ends (`django/utils/deprecation.py:warn_about_external_use`, `docs/internals/deprecation.txt`).",
+   "tree": "django",
+   "path": "docs/internals/deprecation.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    1585
+   ],
+   "fingerprint": "f80d8f829f2033b6"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
+   "line": 25,
+   "sentence": "For each relation it follows it adds a join, appends the related model's columns to the select list, makes the dictionary that goes into `SQLCompiler.klass_info`, and calls itself for the related model (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_related_selections",
+   "kind": "function",
+   "lines": [
+    1199,
+    1430
+   ],
+   "fingerprint": "798f338c8c039880"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:select_related_descend",
+   "line": 25,
+   "sentence": "Which relations it follows is decided by `select_related_descend`, a function outside the compiler, which is asked about one candidate at a time (`django/db/models/query_utils.py:select_related_descend`).",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "select_related_descend",
+   "kind": "function",
+   "lines": [
+    431,
+    466
+   ],
+   "fingerprint": "5558eed7ff66ae8d"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_default_columns",
+   "line": 34,
+   "sentence": "Under either form a child's link to its parent is passed over: the parent's fields are the child's as well, and its table is joined to select them without being asked for (`django/db/models/sql/compiler.py:SQLCompiler.get_default_columns`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_default_columns",
+   "kind": "function",
+   "lines": [
+    1003,
+    1052
+   ],
+   "fingerprint": "7fb7629e8c13a914"
+  },
+  {
+   "pointer": "docs/ref/models/querysets.txt",
+   "line": 34,
+   "sentence": "The documentation gives the reason, that joining across a relation to many objects would make a much larger result, and such relations are left to [`prefetch_related`: related objects in a second query](prefetch.md) (`docs/ref/models/querysets.txt`).",
+   "tree": "django",
+   "path": "docs/ref/models/querysets.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    4431
+   ],
+   "fingerprint": "bf35d1556ea01cbe"
+  },
+  {
+   "pointer": "django/db/models/query.py:get_related_populators",
+   "line": 53,
+   "sentence": "`get_related_populators` turns the tree of `SQLCompiler.klass_info` into a tree of objects: one `RelatedPopulator` for each dictionary under `\"related_klass_infos\"`, each of which, as it is made, calls the function again for its own dictionary (`django/db/models/query.py:get_related_populators`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "get_related_populators",
+   "kind": "function",
+   "lines": [
+    3131,
+    3137
+   ],
+   "fingerprint": "a850a647417b5f4c"
+  },
+  {
+   "pointer": "django/db/models/query.py:RelatedPopulator.__init__",
+   "line": 71,
+   "sentence": "It also finds the position, among its own columns, of the first field of its model's primary key, `RelatedPopulator.pk_idx`, and keeps the two functions from its dictionary as `RelatedPopulator.local_setter` and `RelatedPopulator.remote_setter` (`django/db/models/query.py:RelatedPopulator.__init__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "RelatedPopulator.__init__",
+   "kind": "function",
+   "lines": [
+    3041,
+    3106
+   ],
+   "fingerprint": "526cdfb501a71756"
+  },
+  {
+   "pointer": "django/db/models/query.py:RelatedPopulator.populate",
+   "line": 73,
+   "sentence": "Then it calls `local_setter` with the starting instance and what it made, object or `None`; and, where it made an object, `remote_setter` with the same two the other way round (`django/db/models/query.py:RelatedPopulator.populate`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "RelatedPopulator.populate",
+   "kind": "function",
+   "lines": [
+    3108,
+    3128
+   ],
+   "fingerprint": "60d8b37cf4869973"
+  },
+  {
+   "pointer": "django/db/models/fields/mixins.py:FieldCacheMixin",
+   "line": 75,
+   "sentence": "The compiler chooses them as it builds `klass_info`, and for a relation of the model each is either a function that does nothing or `FieldCacheMixin.set_cached_value`, which writes one entry in the cache of related objects that an instance's state holds: the field's, or that of its **rel**, the object that stands for the relation as seen from the other model ([Reading and setting related objects](related-objects.md)) (`django/db/models/fields/mixins.py:FieldCacheMixin`).",
+   "tree": "django",
+   "path": "django/db/models/fields/mixins.py",
+   "symbol": "FieldCacheMixin",
+   "kind": "class",
+   "lines": [
+    7,
+    34
+   ],
+   "fingerprint": "b2ced3b673c44fb4"
+  },
+  {
+   "pointer": "django/db/models/base.py:ModelState.__del__",
+   "line": 75,
+   "sentence": "`ModelState.__del__` empties that cache when the state object is finalized (`django/db/models/base.py:ModelState.__del__`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "ModelState.__del__",
+   "kind": "function",
+   "lines": [
+    504,
+    505
+   ],
+   "fingerprint": "c677050bfb353148"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
+   "line": 83,
+   "sentence": "*The two functions a `RelatedPopulator` is given, by the kind of relation (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).*",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_related_selections",
+   "kind": "function",
+   "lines": [
+    1199,
+    1430
+   ],
+   "fingerprint": "798f338c8c039880"
+  },
+  {
+   "pointer": "django/db/models/base.py:Model.__eq__",
+   "line": 115,
+   "sentence": "The two are equal, as instances of one model with one primary key are, and they are not one object; neither are their two Ports (`django/db/models/base.py:Model.__eq__`).",
+   "tree": "django",
+   "path": "django/db/models/base.py",
+   "symbol": "Model.__eq__",
+   "kind": "function",
+   "lines": [
+    645,
+    652
+   ],
+   "fingerprint": "ea5167859235a3bd"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent",
+   "line": 179,
+   "sentence": "The compiler selects only the child's own two columns after the parent's four, and `SQLCompiler.get_select_from_parent` then puts the parent's positions in front of the child's in the child's `\"select_fields\"` (`django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_select_from_parent",
+   "kind": "function",
+   "lines": [
+    234,
+    239
+   ],
+   "at": 235,
+   "fingerprint": "077fac720933bcd0"
+  },
+  {
+   "pointer": "django/",
+   "line": 196,
+   "sentence": "In `django/` one piece of code puts a dictionary there: the `_apply_rel_filters` of `RelatedManager`, the manager at the other end of a foreign key.",
+   "tree": "django",
+   "path": "django/",
+   "symbol": null,
+   "kind": "directory",
+   "fingerprint": "4842baf7ebf76511"
+  },
+  {
+   "pointer": "django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager._apply_rel_filters",
+   "line": 196,
+   "sentence": "Having asked its queryset for the rows that point at its instance, it sets the attribute, unless the instance's key is null, to a dictionary of one entry, which says that for this foreign key the object with this key is the instance (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager.RelatedManager._apply_rel_filters`).",
+   "tree": "django",
+   "path": "django/db/models/fields/related_descriptors.py",
+   "symbol": "create_reverse_many_to_one_manager.RelatedManager._apply_rel_filters",
+   "kind": "function",
+   "lines": [
+    747,
+    787
+   ],
+   "fingerprint": "e9970db9b839998d"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet._merge_known_related_objects",
+   "line": 196,
+   "sentence": "The operators that merge two querysets pour the second queryset's entries in with the first's (`django/db/models/query.py:QuerySet._merge_known_related_objects`) ([Combining querysets: the operators and `union`](../querysets/combining.md)).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet._merge_known_related_objects",
+   "kind": "function",
+   "lines": [
+    2358,
+    2363
+   ],
+   "fingerprint": "ceb3db72be2f5463"
+  },
+  {
+   "pointer": "django/db/models/query.py:ModelIterable.__iter__",
+   "line": 198,
+   "sentence": "`ModelIterable.__iter__` prepares each entry before its loop: it finds the attnames on the queryset's model that hold the key, one for an ordinary foreign key (`django/db/models/query.py:ModelIterable.__iter__`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "ModelIterable.__iter__",
+   "kind": "function",
+   "lines": [
+    134,
+    209
+   ],
+   "fingerprint": "638fc3056680909a"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.add_select_related",
+   "line": 224,
+   "sentence": "`Query.select_related` is `False`, `True`, or a dictionary of names nested at each `\"__\"`, which `Query.add_select_related` builds from the names given to `QuerySet.select_related` (`django/db/models/sql/query.py:Query.add_select_related`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.add_select_related",
+   "kind": "function",
+   "lines": [
+    2457,
+    2471
+   ],
+   "fingerprint": "bc8e3a1938ae2c9f"
+  },
+  {
+   "pointer": "django/db/models/query.py:QuerySet.select_related",
+   "line": 226,
+   "sentence": "Asking for `True`, by calling `select_related` with no arguments, warns with `RemovedInDjango2028Warning` (`django/db/models/query.py:QuerySet.select_related`).",
+   "tree": "django",
+   "path": "django/db/models/query.py",
+   "symbol": "QuerySet.select_related",
+   "kind": "function",
+   "lines": [
+    1832,
+    1862
+   ],
+   "fingerprint": "9458464d1c83ae80"
+  },
+  {
+   "pointer": "docs/releases/6.1.txt",
+   "line": 226,
+   "sentence": "The release notes of 6.1 say that calling it with no arguments to select all non-nullable related fields is deprecated, and that the related fields should be named, or the `FETCH_PEERS` fetch mode used (`docs/releases/6.1.txt`) ([Deferred fields and the fetch modes](../instance/fetching.md)).",
+   "tree": "django",
+   "path": "docs/releases/6.1.txt",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    760
+   ],
+   "fingerprint": "283b7ce3a441f06c"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
+   "line": 228,
+   "sentence": "`SQLCompiler.get_related_selections` fills in the rest of the select list and returns the `klass_info` of each related model (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_related_selections",
+   "kind": "function",
+   "lines": [
+    1199,
+    1430
+   ],
+   "fingerprint": "798f338c8c039880"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:select_related_descend",
+   "line": 230,
+   "sentence": "`select_related_descend` decides whether to follow a field (`django/db/models/query_utils.py:select_related_descend`): not where it is no relation, nor where it is the link to a parent model, which the comment says is always joined; in an unrestricted walk, where the field cannot be null; in a restricted one, where it was named, and with `FieldError` where the mask has entries but not this field, the error that says a field cannot be both deferred and traversed.",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "select_related_descend",
+   "kind": "function",
+   "lines": [
+    431,
+    466
+   ],
+   "fingerprint": "5558eed7ff66ae8d"
+  },
+  {
+   "pointer": "django/db/models/fields/mixins.py:FieldCacheMixin.set_cached_value",
+   "line": 230,
+   "sentence": "For a field that is followed, the `klass_info` names the related model, the field, `\"reverse\"` as `False` and two setters, the field's `FieldCacheMixin.set_cached_value` and, where the field is unique, the rel's, so that each instance is put in the other's cache (`django/db/models/fields/mixins.py:FieldCacheMixin.set_cached_value`); `Query.setup_joins` joins the related table, `get_default_columns` makes its columns under that alias with the relation's part of the mask, each appended to the list with its position recorded in `\"select_fields\"`, and the method descends.",
+   "tree": "django",
+   "path": "django/db/models/fields/mixins.py",
+   "symbol": "FieldCacheMixin.set_cached_value",
+   "kind": "function",
+   "lines": [
+    30,
+    31
+   ],
+   "fingerprint": "a5218766316f0c4b"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_related_selections",
+   "line": 234,
+   "sentence": "Its entry is made as a reverse relation's, with `\"reverse\"` as `True` and the final field of the joins as its `\"field\"`, and its remote setter sets the related instance on the instance as an attribute under the alias, which no field of the model bears (`django/db/models/sql/compiler.py:SQLCompiler.get_related_selections`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_related_selections",
+   "kind": "function",
+   "lines": [
+    1199,
+    1430
+   ],
+   "fingerprint": "798f338c8c039880"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent",
+   "line": 236,
+   "sentence": "`SQLCompiler.get_select_from_parent` is the one step after the walk, a class method that goes down the tree and, for each `klass_info` reached from a parent, puts the parent's positions in front of its own, so that a child's instance can be built from the parent's columns and its own (`django/db/models/sql/compiler.py:SQLCompiler.get_select_from_parent`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_select_from_parent",
+   "kind": "function",
+   "lines": [
+    234,
+    239
+   ],
+   "at": 235,
+   "fingerprint": "077fac720933bcd0"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments",
+   "line": 276,
+   "sentence": "`SQLCompiler.get_select_for_update_of_arguments` reads the tree too, to find the first selected column of each model a lock's `\"OF\"` names (`django/db/models/sql/compiler.py:SQLCompiler.get_select_for_update_of_arguments`) ([The compiler: `as_sql`, `execute_sql` and `results_iter`](../sql/compiler.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.get_select_for_update_of_arguments",
+   "kind": "function",
+   "lines": [
+    1432,
+    1536
+   ],
+   "fingerprint": "abef0b1b0b2d25ad"
+  }
+ ]
+}

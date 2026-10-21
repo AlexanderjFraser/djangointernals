@@ -10,7 +10,7 @@ A table carries rules that the database enforces on every row, whatever program 
 
 Those objects are descriptions. Each holds the arguments it was made with. None holds a model, a table or a connection: every method that needs one is handed it. And none of the SQL methods sends a statement: each returns a clause or a statement to a schema editor, and the editor decides what is sent. The one method that sends anything itself is a constraint's `validate`.
 
-A **schema editor** is the database backend's object that turns a model, a field, a constraint or an index into statements that change the schema, and sends them. Its statements are sent as its `with` block runs, and those it has put off are sent when the block is left without an error (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor`) ([The schema editor: `BaseDatabaseSchemaEditor`](../backends/schema.md)).
+A **schema editor** is the database backend's object that turns a model, a field, a constraint or an index into statements that change the schema, and sends them. Its statements are sent as its `with` block runs, and those it has put off are sent when the block is left without an error (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor`) ([The schema editor: `BaseDatabaseSchemaEditor`](../schema/editor.md)).
 
 The example is the ship of a shipping line, with one constraint of each kind and one index:
 
@@ -56,7 +56,7 @@ A constraint and an index answer the same few questions, each put by a different
 
 *What a constraint and an index are asked, and by whom. The first three are answered with SQL for one model and one schema editor, both passed in.*
 
-`validate` is how a constraint takes part in `Model.full_clean`: a `CheckConstraint` has the database evaluate its condition against the instance's values, and a `UniqueConstraint` looks for another row with the same ones ([Validating an instance](validation.md)). `check` is called by the system checks, once for each database being checked that the model is migrated on, and reports such things as a field that does not exist or a feature the database lacks ([The model checks](checks.md)).
+`validate` is how a constraint takes part in `Model.full_clean`: a `CheckConstraint` has the database evaluate its condition against the instance's values, and a `UniqueConstraint` looks for another row with the same ones ([Validating an instance](../instance/validation.md)). `check` is called by the system checks, once for each database being checked that the model is migrated on, and reports such things as a field that does not exist or a feature the database lacks ([The model checks](checks.md)).
 
 ## From `Meta` to the class
 
@@ -125,7 +125,7 @@ What a constraint does with a table or an instance is left to the subclass: on `
 
 `CheckConstraint` adds one argument, a condition, which must be a `Q` object or an expression whose value is true or false; anything else is refused with `TypeError` when the constraint is made (`django/db/models/constraints.py:CheckConstraint`).
 
-Its SQL is made the way the `"WHERE"` of a query is made, by the same code ([From QuerySet to SQL](../sql.md)). `CheckConstraint._get_check_sql` builds a `Query` for the model, has it turn the condition into the node a filter would become, and compiles that node with the schema editor's connection. Two things differ from a query. The `Query` is made with `alias_cols=False`, so a column is written by its name alone and not after its table's. And each parameter is turned into a literal by the editor's `quote_value` and written into the text.
+Its SQL is made the way the `"WHERE"` of a query is made, by the same code ([Expressions, lookups and functions](../expressions.md)). `CheckConstraint._get_check_sql` builds a `Query` for the model, has it turn the condition into the node a filter would become, and compiles that node with the schema editor's connection. Two things differ from a query. The `Query` is made with `alias_cols=False`, so a column is written by its name alone and not after its table's. And each parameter is turned into a literal by the editor's `quote_value` and written into the text.
 
 `CheckConstraint.constraint_sql` and `CheckConstraint.create_sql` put that text into the schema editor's templates, and `CheckConstraint.remove_sql` needs only the name (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._check_sql`). Each line here is a method of Ship's check constraint, called with the model and a schema editor of the SQLite backend, and what it returned:
 
@@ -226,9 +226,9 @@ The third constraint is in the new table because it was on the model's list, not
 
 ## `unique_together`
 
-The option `unique_together` of a model's `Meta` is the older way to say what a `UniqueConstraint` over fields says: a sequence of field names, or a sequence of such sequences, with no name and no other argument. `Options.contribute_to_class` normalises it to a tuple of tuples and keeps it as `Options.unique_together` (`django/db/models/options.py:normalize_together`). It makes no object. The schema editor reads the option itself: `table_sql` makes a statement for each entry with `_create_unique_sql`, under a name the editor makes up from the table and the columns, and always puts it off. Validation reads the option too, as a unique check of several fields ([Validating an instance](validation.md)).
+The option `unique_together` of a model's `Meta` is the older way to say what a `UniqueConstraint` over fields says: a sequence of field names, or a sequence of such sequences, with no name and no other argument. `Options.contribute_to_class` normalises it to a tuple of tuples and keeps it as `Options.unique_together` (`django/db/models/options.py:normalize_together`). It makes no object. The schema editor reads the option itself: `table_sql` makes a statement for each entry with `_create_unique_sql`, under a name the editor makes up from the table and the columns, and always puts it off. Validation reads the option too, as a unique check of several fields ([Validating an instance](../instance/validation.md)).
 
-Django uses it for a model it writes itself. A many-to-many field that names no through model has one made for it, and `create_many_to_many_intermediary_model` gives that model a `Meta` whose `unique_together` is its two foreign keys (`django/db/models/fields/related.py:create_many_to_many_intermediary_model`) ([Many-to-many relations](many-to-many.md)). The harbour's Voyage has such a field, `"calls"`. Asked of that field, which the recording has under its own name:
+Django uses it for a model it writes itself. A many-to-many field that names no through model has one made for it, and `create_many_to_many_intermediary_model` gives that model a `Meta` whose `unique_together` is its two foreign keys (`django/db/models/fields/related.py:create_many_to_many_intermediary_model`) ([Many-to-many relations](../relations/many-to-many.md)). The harbour's Voyage has such a field, `"calls"`. Asked of that field, which the recording has under its own name:
 
 ```text recording=models
 calls.remote_field.through._meta.unique_together  ->  (('voyage', 'port'),)

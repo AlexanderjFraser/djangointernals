@@ -6,9 +6,10 @@ the executor, the autodetector, the questioner, the optimizer, the serializer an
 
     python recordings/migrations.py > recordings/migrations.txt
 
-The chapter of the book (pages/migrations.md and the pages under it) is written against this
+The chapters of the book that quote it (pages/migrations.md and pages/makemigrations.md,
+with the pages under them) are written against this
 output. It needs the pinned Django (the project's virtual environment has it), the small project
-beside it, `harbour/`, which chapters 8 to 11 record over too, and for two blocks the drivers of
+beside it, `harbour/`, which the other recordings of the ORM use too, and for two blocks the drivers of
 other backends (`requirements.txt`), whose servers never run: the block on a migration in a
 transaction or not makes connections of PostgreSQL's, MySQL's and Oracle's backends, and the
 block on OperationWriter imports django.contrib.postgres.operations, which imports PostgreSQL's

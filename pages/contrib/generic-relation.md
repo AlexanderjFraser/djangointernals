@@ -10,7 +10,7 @@ A generic foreign key lies wholly on one side: nothing in a lighthouse's table r
 
 ## The field: a `ForeignObject` turned round
 
-`GenericRelation` is a `ForeignObject`, the relation by pairs of fields of which a foreign key is the simplest case ([Relations: a field, its rel and the class at the other end](../models/relations.md)). `GenericRelation.__init__` passes the object id field as `from_fields` and no `to_fields`, and `GenericRelation.resolve_related_fields` adds the model's primary key when the relation's fields are first asked for. A comment calls the construct somewhat of an abuse of `ForeignObject`: the relation runs from the key to the object id, but its join is made the other way, as along a foreign key from the note, so the object id is the from-field (`django/contrib/contenttypes/fields.py:GenericRelation.__init__`).
+`GenericRelation` is a `ForeignObject`, the relation by pairs of fields of which a foreign key is the simplest case ([Relations: a field, its rel and the class at the other end](../relations/fields.md)). `GenericRelation.__init__` passes the object id field as `from_fields` and no `to_fields`, and `GenericRelation.resolve_related_fields` adds the model's primary key when the relation's fields are first asked for. A comment calls the construct somewhat of an abuse of `ForeignObject`: the relation runs from the key to the object id, but its join is made the other way, as along a foreign key from the note, so the object id is the from-field (`django/contrib/contenttypes/fields.py:GenericRelation.__init__`).
 
 The same method forces five options: `null=True` and `blank=True`, since, as its comment says, Django cannot enforce that a key on the other model points here; `editable=False`; `serialize=False`; and `on_delete=CASCADE`. That last is never read. `ForeignObject.__init__` uses its `on_delete` only to make a rel when it is given none, and `GenericRelation` gives it a `GenericRel`, made with `DO_NOTHING`, as the run found (`django/contrib/contenttypes/fields.py:GenericRel`). A delete reaches the notes another way, through `bulk_related_objects`.
 
@@ -39,7 +39,7 @@ The name lighthouse is the `related_query_name`. `GenericRel` takes it for its r
 
 ## The manager of a lighthouse's notes
 
-`ReverseGenericManyToOneDescriptor` is the reverse descriptor of a foreign key with another manager class: `create_generic_related_manager` subclasses the note model's default manager's class (`django/contrib/contenttypes/fields.py:ReverseGenericManyToOneDescriptor.related_manager_cls`). The manager made for one lighthouse looks up its content type, on the lighthouse's database and by `for_concrete_model`, and keeps a filter of the two fields. Its queryset is what `prefetch_related` left on the lighthouse, if anything, and otherwise the default manager's, filtered so, in the lighthouse's fetch mode ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)) (`django/contrib/contenttypes/fields.py:create_generic_related_manager`).
+`ReverseGenericManyToOneDescriptor` is the reverse descriptor of a foreign key with another manager class: `create_generic_related_manager` subclasses the note model's default manager's class (`django/contrib/contenttypes/fields.py:ReverseGenericManyToOneDescriptor.related_manager_cls`). The manager made for one lighthouse looks up its content type, on the lighthouse's database and by `for_concrete_model`, and keeps a filter of the two fields. Its queryset is what `prefetch_related` left on the lighthouse, if anything, and otherwise the default manager's, filtered so, in the lighthouse's fetch mode ([Deferred fields and the fetch modes](../instance/fetching.md)) (`django/contrib/contenttypes/fields.py:create_generic_related_manager`).
 
 Its methods that change the set:
 
@@ -48,7 +48,7 @@ Its methods that change the set:
 - `set`, in one transaction, removes what is not wanted and adds what is missing, or with `clear=True` clears and adds everything.
 - `create`, `get_or_create` and `update_or_create` put the content type and the object id into the arguments and call the method of that name on the manager's queryset, on the database for writes.
 
-The reverse manager of a foreign key does otherwise: its `remove` and `clear` set the key to null, and exist only where the key may be null ([Reading and setting related objects](../models/related-objects.md)). The run sent, for St Elmo, with hull the note on Endeavour:
+The reverse manager of a foreign key does otherwise: its `remove` and `clear` set the key to null, and exist only where the key may be null ([Reading and setting related objects](../relations/related-objects.md)). The run sent, for St Elmo, with hull the note on Endeavour:
 
 ```text
 st_elmo.notes.create(text="Fog signal tested", added=...)
@@ -61,11 +61,11 @@ st_elmo.notes.remove(hull)
     COMMIT
 ```
 
-The hull note was deleted. A `remove` of the note on Valletta sent the same DELETE with that note's key, and the note stayed. For `prefetch_related("notes")` the manager filters by the content type and keys of each group of lighthouses that share a content type, and matches notes to lighthouses by the pair of object id and content type ([`prefetch_related`: related objects in a second query](../querysets/prefetch.md)).
+The hull note was deleted. A `remove` of the note on Valletta sent the same DELETE with that note's key, and the note stayed. For `prefetch_related("notes")` the manager filters by the content type and keys of each group of lighthouses that share a content type, and matches notes to lighthouses by the pair of object id and content type ([`prefetch_related`: related objects in a second query](../relations/prefetch.md)).
 
 ## Deleting
 
-Deleting a lighthouse deletes its notes. `Collector.collect` asks each private field of the model that has a `bulk_related_objects` for more rows, and collects them in turn (`django/db/models/deletion.py:Collector.collect`); the same attribute stops `Collector.can_fast_delete` letting the lighthouses be deleted unseen ([Deleting: the `Collector`](../models/deleting.md)). `GenericRelation.bulk_related_objects` answers with the note model's base manager on the collector's database, filtered by the content type's key and the keys being deleted (`django/contrib/contenttypes/fields.py:GenericRelation.bulk_related_objects`). St Elmo's delete:
+Deleting a lighthouse deletes its notes. `Collector.collect` asks each private field of the model that has a `bulk_related_objects` for more rows, and collects them in turn (`django/db/models/deletion.py:Collector.collect`); the same attribute stops `Collector.can_fast_delete` letting the lighthouses be deleted unseen ([Deleting: the `Collector`](../instance/deleting.md)). `GenericRelation.bulk_related_objects` answers with the note model's base manager on the collector's database, filtered by the content type's key and the keys being deleted (`django/contrib/contenttypes/fields.py:GenericRelation.bulk_related_objects`). St Elmo's delete:
 
 ```text
 st_elmo.delete()  ->  (3, {'notes.Note': 2, 'notes.Lighthouse': 1})

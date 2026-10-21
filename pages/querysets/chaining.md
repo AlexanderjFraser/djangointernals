@@ -15,16 +15,16 @@ A queryset is passed around as a value. A view keeps one as an attribute of its 
 | attribute | what it is | told in |
 |---|---|---|
 | `model` | the model class the queryset is for | |
-| `_query` | the `Query`, read through the property `QuerySet.query`; made new for the model unless one was given | [From QuerySet to SQL](../sql.md) |
+| `_query` | the `Query`, read through the property `QuerySet.query`; made new for the model unless one was given | [Building a query](../query.md) |
 | `_db` | the alias of a database, or `None` to let the router choose | below |
 | `_hints` | what the router is told beside the model | below |
 | `_for_write` | whether the router is asked for a database to write to | below |
 | `_result_cache` | `None`, or the list of what the statement returned | [Evaluation and the result cache](evaluation.md) |
-| `_iterable_class` | the class that makes something of each row | [From rows to instances: `ModelIterable` and `select_related`](iterables.md) |
+| `_iterable_class` | the class that makes something of each row | [From rows to instances: `ModelIterable`](rows.md) |
 | `_fields` | `None`, or the tuple of names that `values` or `values_list` last passed to `QuerySet._values` | [`values` and `values_list`: rows as dictionaries and tuples](values.md) |
-| `_fetch_mode` | the fetch mode given to the instances the queryset makes | [Deferred fields and fetch modes in a queryset](deferred.md) |
-| `_known_related_objects` | for a relation field, objects already in hand, by key, to be set on the instances made | [From rows to instances: `ModelIterable` and `select_related`](iterables.md) |
-| `_prefetch_related_lookups`, `_prefetch_done` | the prefetch lookups, and a flag that is set once they have been followed | [`prefetch_related`: related objects in a second query](prefetch.md) |
+| `_fetch_mode` | the fetch mode given to the instances the queryset makes | [Deferred fields in a queryset: `defer` and `only`](deferred.md) |
+| `_known_related_objects` | for a relation field, objects already in hand, by key, to be set on the instances made | [`select_related`: related objects from the same row](../relations/select-related.md) |
+| `_prefetch_related_lookups`, `_prefetch_done` | the prefetch lookups, and a flag that is set once they have been followed | [`prefetch_related`: related objects in a second query](../relations/prefetch.md) |
 | `_sticky_filter` | a mark a many-to-many manager sets, so that a filter on its queryset shares the joins of the manager's own | below |
 | `_defer_next_filter`, `_deferred_filter` | a mark that the next filter is to wait, and the filter that is waiting | below |
 | `_cloning_enabled` | whether `_chain` makes a clone | below |
@@ -33,7 +33,7 @@ A queryset is passed around as a value. A view keeps one as an attribute of its 
 
 ## `_chain` and `_clone`
 
-A method that returns a refined queryset calls `QuerySet._chain` before it changes anything, and makes its change to what comes back. `_chain` ordinarily calls `QuerySet._clone`, which makes a new object of the queryset's own class from the same model, alias and hints and from a copy of the query that `Query.chain` makes, and then copies a fixed list of attributes across by name (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`). In the recordings on this page, made from a running Django over the models and rows that the chapter's opening page, [QuerySets](../querysets.md), lists, the lines set in are calls, nested as they were made, and `->` is what a call or an expression returned.
+A method that returns a refined queryset calls `QuerySet._chain` before it changes anything, and makes its change to what comes back. `_chain` ordinarily calls `QuerySet._clone`, which makes a new object of the queryset's own class from the same model, alias and hints and from a copy of the query that `Query.chain` makes, and then copies a fixed list of attributes across by name (`django/db/models/query.py:QuerySet._chain`, `django/db/models/query.py:QuerySet._clone`). In the recordings on this page, made from a running Django over the models of [Models and fields](../models.md) and the rows that the chapter's opening page, [QuerySets](../querysets.md), lists, the lines set in are calls, nested as they were made, and `->` is what a call or an expression returned.
 
 ```text recording=querysets
 QuerySet.order_by('name')
@@ -134,7 +134,7 @@ sorted(name for name, method in vars(QuerySet).items() if getattr(method, 'query
 
 `QuerySet._chain` does not always clone. A queryset has a switch, `QuerySet._cloning_enabled`, and while it is off `_chain` returns the queryset it was called on, so that `filter`, `using` and every other method that goes through `_chain` makes its change to that queryset, and one that returns a queryset returns that one (`django/db/models/query.py:QuerySet._disable_cloning`). `QuerySet._avoid_cloning` returns a context manager, `PreventQuerySetCloning`, that turns the switch off on entry and on again on exit (`django/db/models/query.py:PreventQuerySetCloning`).
 
-The switch is used where a queryset has just been made and nothing else can hold it. In `django/db/models/` that is the code of the relations: a related manager applying the filter for its instance to a queryset just made for it, and a descriptor or a related manager building the queryset for a prefetch when the caller supplied none (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_prefetch_querysets`). Here the crew of the Petrel is asked for, through the ship's related manager ([Reading and setting related objects](../models/related-objects.md)):
+The switch is used where a queryset has just been made and nothing else can hold it. In `django/db/models/` that is the code of the relations: a related manager applying the filter for its instance to a queryset just made for it, and a descriptor or a related manager building the queryset for a prefetch when the caller supplied none (`django/db/models/fields/related_descriptors.py:create_reverse_many_to_one_manager`, `django/db/models/fields/related_descriptors.py:ForwardManyToOneDescriptor.get_prefetch_querysets`). Here the crew of the Petrel is asked for, through the ship's related manager ([Reading and setting related objects](../relations/related-objects.md)):
 
 ```text recording=querysets
 crew = petrel.crew.all()
@@ -164,13 +164,13 @@ crew.query
 crew._deferred_filter, bool(crew._query.where)  ->  (None, True)
 ```
 
-Until the read, the queryset holds the three things `_filter_or_exclude` was given, whether to negate, the positional arguments and the keyword arguments, and its query has an empty where clause. `_clone` reads the property to copy the query, and an evaluation reads it to ask for a compiler, so the filter is in place before a clone is made or a row fetched. A related manager's queryset whose query is never read never builds its condition: a prefetch makes one such queryset for each instance it fills and gives it its list ready-made ([`prefetch_related`: related objects in a second query](prefetch.md)). The last value of the recording's first line is the manager's other gift to its queryset, the Petrel itself under its key, to be set as the ship of each sailor the queryset makes ([From rows to instances: `ModelIterable` and `select_related`](iterables.md)).
+Until the read, the queryset holds the three things `_filter_or_exclude` was given, whether to negate, the positional arguments and the keyword arguments, and its query has an empty where clause. `_clone` reads the property to copy the query, and an evaluation reads it to ask for a compiler, so the filter is in place before a clone is made or a row fetched. A related manager's queryset whose query is never read never builds its condition: a prefetch makes one such queryset for each instance it fills and gives it its list ready-made ([`prefetch_related`: related objects in a second query](../relations/prefetch.md)). The last value of the recording's first line is the manager's other gift to its queryset, the Petrel itself under its key, to be set as the ship of each sailor the queryset makes ([`select_related`: related objects from the same row](../relations/select-related.md#known-related-objects)).
 
 `_deferred_filter` is not among the attributes `_clone` copies, and does not need to be: `_clone` reads the property first, which leaves nothing waiting.
 
 ## The sticky filter
 
-A many-to-many manager's queryset carries one more mark, the **sticky filter**, which lets a `filter` called on that queryset share the joins of the manager's own filter. The difference it makes is in the statement. Two conditions in one call of `filter` that cross a relation to many rows are about the same related row, and share a join; conditions in separate calls may each be met by a different related row, and each call joins the relation's table again (`docs/topics/db/queries.txt`). How the query decides which joins to share is told in [From QuerySet to SQL](../sql.md). The many-to-many manager's own filter and a `filter` the program calls on its queryset are two calls, and the mark lets the second share the joins of the first. Four querysets, which from the recording's rows return the same ports, show it. Here spring is the voyage of March 2026, which called at Leith and Lisbon, and its attribute calls is the many-to-many manager of its ports. What to look for in each statement is how often it joins `"fleet_voyage_calls"`, the table between voyages and ports: once, or a second time under the alias `"T4"`.
+A many-to-many manager's queryset carries one more mark, the **sticky filter**, which lets a `filter` called on that queryset share the joins of the manager's own filter. The difference it makes is in the statement. Two conditions in one call of `filter` that cross a relation to many rows are about the same related row, and share a join; conditions in separate calls may each be met by a different related row, and each call joins the relation's table again (`docs/topics/db/queries.txt`). How the query decides which joins to share is told in [Building a query](../query.md). The many-to-many manager's own filter and a `filter` the program calls on its queryset are two calls, and the mark lets the second share the joins of the first. Four querysets, which from the recording's rows return the same ports, show it. Here spring is the voyage of March 2026, which called at Leith and Lisbon, and its attribute calls is the many-to-many manager of its ports. What to look for in each statement is how often it joins `"fleet_voyage_calls"`, the table between voyages and ports: once, or a second time under the alias `"T4"`.
 
 ```text recording=querysets
 What the sticky filter changes: the joins of four querysets that, from these rows, return the same ports

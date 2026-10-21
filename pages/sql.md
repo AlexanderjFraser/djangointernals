@@ -1,81 +1,16 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
 part: The ORM
-contents: query, expressions, names, joins, where, lookups, functions, related-lookups, compiler, select, ordering, grouping, aggregates, subqueries, windows, combining, writing
+contents: compiler, select, ordering, grouping, aggregation, qualify, compound, writing
 ---
 
-# From QuerySet to SQL
+# The SQL compiler
 
-A `Query` describes a statement as a tree of expressions: the tables it joins, the conditions of its where tree, and what it selects, groups and orders by. A `SQLCompiler` turns that description into one string of SQL with its parameters, sends it, and hands the rows back with their converters applied. This chapter is how a filter's name becomes joins and a comparison, what an expression, a lookup, a function and an aggregate write, and how the compiler assembles and runs the statement.
+A `SQLCompiler` turns a query into one string of SQL with its parameters, sends it, and hands the rows back with their converters applied. It settles the clauses in the order they depend on one another and writes them in the order SQL wants, and where one `"SELECT"` cannot say what a queryset asks, it writes more than one, side by side or one inside another.
 
-A queryset's methods do not write SQL. Each leaves something on an object the queryset carries, and nothing is SQL until the queryset is evaluated and asks for the rows. That object is the **query**, an instance of `Query`, and it is the first of the two things this chapter is about (`django/db/models/sql/query.py:Query`). The second is the **compiler**, an instance of `SQLCompiler` or of one of its subclasses, made for one query and one database connection when the rows are wanted, and thrown away with them (`django/db/models/sql/compiler.py:SQLCompiler`). The query is the description; the compiler is the writing and the running. [QuerySets](querysets.md) tells what the queryset's methods ask of the query and when the queryset asks for a compiler; this chapter begins where that one stops.
+A query describes a statement and does not hold its SQL ([Building a query](query.md)). The **compiler** is what writes it: an instance of `SQLCompiler` or of one of its subclasses, made for one query and one database connection (`django/db/models/sql/compiler.py:SQLCompiler`). The query is the description; the compiler is the writing and the running. Writing is more than putting the query's parts into the order of a `"SELECT"`. The parts depend on one another in another order: the ordering and the grouping refer to the selected columns, the ordering may join a table the filter did not, and the `"FROM"` clause can be written only when every step that may join has run. The query keeps the least that must be grouped by, and the compiler widens it to what the statement's other clauses need and narrows it to what the backend accepts ([GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](sql/grouping.md)). And some of what a queryset asks cannot be said in one `"SELECT"` at all: an aggregate over a sliced query, a filter on a window. For both the compiler writes one statement inside another.
 
-What the query holds is not SQL either. It is a set of Python objects that each know how to write their own piece: a `Col` for a column, a `Value` for a parameter, a `Func` for a function call, a `Lookup` for a comparison, a `WhereNode` for the conditions joined by `"AND"`, `"OR"` or `"XOR"`, a `Join` for a table joined to another. Each but the `Join` has the same two methods, and the whole chapter turns on them; the `Join` has only the one that writes. `BaseExpression.resolve_expression` binds an object to a query: a name becomes a column of a table the query has joined, and whatever the object holds is bound in turn, so that a resolved object is a copy and the original is left as it was (`django/db/models/expressions.py:BaseExpression.resolve_expression`). `BaseExpression.as_sql` writes the SQL and parameters of a bound object, a `Func` by compiling its parts and putting them into a template of its own; a backend may supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`). An **expression** in this chapter is any object with those two methods. A query is one itself: `Query` is built on `BaseExpression`, and inside another query it is a subquery.
-
-The project is the shipping line of [Models and fields](models.md), which [QuerySets](querysets.md) records over too: ports, ships and voyages in the application fleet, sailors in crew, and the office's paperwork in office. The models most of this chapter's queries run over:
-
-```python
-# harbour/fleet/models.py
-class Named(models.Model):
-    name = models.CharField(max_length=60)
-
-    class Meta:
-        abstract = True
-        ordering = ["name"]
-
-
-class Port(Named):
-    country = models.CharField(max_length=40)
-
-
-class Ship(Named):
-    tonnage = models.PositiveIntegerField()
-    home = models.ForeignKey(Port, on_delete=models.PROTECT, related_name="ships")
-    captain = models.OneToOneField("crew.Sailor", null=True, blank=True, on_delete=models.SET_NULL, related_name="command")
-
-
-class Voyage(models.Model):
-    ship = models.ForeignKey(Ship, on_delete=models.CASCADE)
-    sailed = models.DateField()
-    calls = models.ManyToManyField(Port)
-
-
-# harbour/crew/models.py
-class Sailor(models.Model):
-    name = models.CharField(max_length=60)
-    ship = models.ForeignKey("fleet.Ship", on_delete=models.CASCADE, related_name="crew")
-    signed_on = models.DateTimeField(auto_now_add=True)
-    pilots_into = models.ManyToManyField("fleet.Port", through="office.Licence", related_name="pilots")
-
-
-class Officer(Sailor):
-    rank = models.CharField(max_length=10, choices=Rank)
-
-
-class VeteranManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(signed_on__year__lt=2020)
-
-
-class Veteran(Sailor):
-    objects = VeteranManager()
-
-    class Meta:
-        proxy = True
-
-
-# harbour/office/models.py
-class Manifest(models.Model):
-    serial = models.CharField(max_length=8, primary_key=True, default=serials.next_serial)
-    voyage = models.ForeignKey("fleet.Voyage", on_delete=models.CASCADE)
-    crates = models.PositiveIntegerField()
-    kilos_each = models.PositiveIntegerField()
-    kilos = models.GeneratedField(expression=F("crates") * F("kilos_each"), output_field=models.PositiveIntegerField(), db_persist=True)
-    stamped = models.BooleanField(db_default=False)
-    scan = models.FileField(upload_to="manifests/", blank=True)
-```
-
-Left out are the docstrings and the `__str__` methods, the constraints and the index of a ship, the manager of a sailor and the choices of a rank, and the rest of the office: the Licence that lets a sailor pilot ships into a port, the Logbook and its LogEntry, and the Berth, whose primary key is two columns, which is shown where a section turns on it. A port and a ship are ordered by name unless a queryset says otherwise, and a sailor has no ordering; a Veteran is a sailor who signed on before 2020, by its manager's filter. The recordings were made in one run, which began with these rows:
+The project is harbour, whose models [Models and fields](models.md) lists: ports, ships and voyages in the application fleet, sailors in crew, and the office's paperwork in office. A port and a ship are ordered by name unless a queryset says otherwise, and a sailor has no ordering; a Veteran is a sailor who signed on before 2020, by its manager's filter. The recordings were made in one run, which began with these rows:
 
 ```text recording=sql
 The rows the recording begins with
@@ -90,80 +25,11 @@ The rows the recording begins with
     Manifest: M-0001 (voyage 1, 40 crates of 25 kg, 1000 kg, stamped False)
 ```
 
-The recordings ran on SQLite. In a recording, a line at the left is a line of Python as it was run; where it is an expression, its value follows `->`, or the word "raises" and the exception. The lines set in under it are the calls it set going, nested as they were made, with only the calls the passage is about written down, and `->` there is what a call returned, put into words as it was returned. A line of three dots stands for lines of the block left out. Some lines ask through helpers of the recording's own: a line beginning sql_of( answers with a queryset's statement and its parameters, tail( with the statement from its FROM on and the parameters after the select list's, where_said( with a queryset's where tree, entry( with a child of a queryset's where tree, and brief( or said( with an object in a few words. A line that begins `SQL` is a statement as Django handed it to its cursor, with Django's `%s` for a parameter. An expression is written as its repr, which for most is the call that would make it; a where tree as `(AND: ...)`; a step of a path through the models as `PathInfo(from Sailor to Ship via Sailor.ship, direct, one)`; and an entry of the query's alias map as `Join(fleet_ship, from crew_sailor via Sailor.ship, INNER JOIN, not nullable)`. What such a line shows of SQL's dialect is this backend's.
+The recordings ran on SQLite. In a recording, a line at the left is a line of Python as it was run, or the title of its block; a line's value, where it is shown, follows `->`, or the word "raises" and the exception. The lines set in under a line of Python are the calls it set going, nested as they were made, with only the calls the passage is about written down, and `->` there is what a call returned, put into words as it was returned. A name in parentheses after a call is the class that declares the method, where the object's own class does not. A line of three dots stands for lines of the block left out. A line that begins `SQL` is a statement as Django handed it to its cursor, with Django's `%s` for a parameter, and what such a line shows of SQL's dialect is this backend's. Some lines of the sections ask through helpers of the recording's own: a line beginning sql_of( answers with a queryset's statement and its parameters, tail( with the statement from its FROM on and the parameters after the select list's, and said( with an object in a few words.
 
-## Building: a filter becomes joins and a comparison
+## What the compiler is given
 
-`QuerySet.filter` reduces its arguments to a `Q`, a tree of pairs of a name and a value, and hands it to `Query.add_q` ([`filter`, `exclude` and `Q` objects](querysets/filters.md)). Everything from there on is the query's. Here is one filter with two conditions, one across two relations and one with a transform and a lookup in its name:
-
-```text recording=sql
-bergen_veterans = Sailor.objects.filter(ship__home__name='Bergen', signed_on__year__lt=2020)
-  QuerySet.filter(ship__home__name='Bergen', signed_on__year__lt=2020)
-    QuerySet._filter_or_exclude_inplace(negate=False, args=(), kwargs={'ship__home__name': 'Bergen', 'signed_on__year__lt': 2020})
-      Query.add_q(q_object=<Q: (AND: ('ship__home__name', 'Bergen'), ('signed_on__year__lt', 2020))>)
-        Query._add_q(<Q: (AND: ('ship__home__name', 'Bergen'), ('signed_on__year__lt', 2020))>, used_aliases=set())
-          JoinPromoter.__init__(connector='AND', num_children=2, negated=False)
-          Query.build_filter(('ship__home__name', 'Bergen'), can_reuse=set())
-            Query.solve_lookup_type(lookup='ship__home__name')
-              Query.names_to_path(names=['ship', 'home', 'name'])  ->  ([PathInfo(from Sailor to Ship via Sailor.ship, direct, one), PathInfo(from Ship to Port via Ship.home, direct, one)], Port.name, (Port.name,), [])
-              -> ([], ['ship', 'home', 'name'], False)
-            Query.join(join=BaseTable(crew_sailor))
-              Query.table_alias(table_name='crew_sailor', create=True)  ->  ('crew_sailor', True)
-              -> 'crew_sailor'
-            Query.setup_joins(names=['ship', 'home', 'name'], alias='crew_sailor', can_reuse=set())
-              Query.names_to_path(names=['ship', 'home', 'name'], fail_on_missing=True)  ->  ([PathInfo(from Sailor to Ship via Sailor.ship, direct, one), PathInfo(from Ship to Port via Ship.home, direct, one)], Port.name, (Port.name,), [])
-              Query.join(join=Join(fleet_ship, from crew_sailor via Sailor.ship, INNER JOIN, not nullable))
-                Query.table_alias(table_name='fleet_ship', create=True)  ->  ('fleet_ship', True)
-                -> 'fleet_ship'
-              Query.join(join=Join(fleet_port, from fleet_ship via Ship.home, INNER JOIN, not nullable))
-                Query.table_alias(table_name='fleet_port', create=True)  ->  ('fleet_port', True)
-                -> 'fleet_port'
-              -> JoinInfo(final_field=Port.name, targets=(Port.name,), opts=the options of Port, joins=['crew_sailor', 'fleet_ship', 'fleet_port'], path=[PathInfo(from Sailor to Ship via Sailor.ship, direct, one), PathInfo(from Ship to Port via Ship.home, direct, one)])
-            Query.check_related_objects(field=Port.name, value='Bergen', opts=the options of Port)
-            Query.trim_joins(targets=(Port.name,), joins=['crew_sailor', 'fleet_ship', 'fleet_port'], path=[PathInfo(from Sailor to Ship via Sailor.ship, direct, one), PathInfo(from Ship to Port via Ship.home, direct, one)])  ->  ((Port.name,), 'fleet_port', ['crew_sailor', 'fleet_ship', 'fleet_port'])
-            Query.build_lookup(lookups=[], lhs=Col(fleet_port, fleet.Port.name), rhs='Bergen')
-              Exact.__init__(lhs=Col(fleet_port, fleet.Port.name), rhs='Bergen')  (Lookup.__init__)
-                Exact.get_prep_lookup  (Lookup.get_prep_lookup)  ->  'Bergen'
-              -> Exact(Col(fleet_port, fleet.Port.name), 'Bergen')
-            -> ((AND: Exact(Col(fleet_port, fleet.Port.name), 'Bergen')), {'crew_sailor', 'fleet_port', 'fleet_ship'})
-...
-          Query.build_filter(('signed_on__year__lt', 2020), can_reuse={'crew_sailor', 'fleet_port', 'fleet_ship'})
-            Query.solve_lookup_type(lookup='signed_on__year__lt')
-              Query.names_to_path(names=['signed_on', 'year', 'lt'])  ->  ([], Sailor.signed_on, (Sailor.signed_on,), ['year', 'lt'])
-              -> (['year', 'lt'], ['signed_on'], False)
-            Query.resolve_lookup_value(value=2020, can_reuse={'crew_sailor', 'fleet_port', 'fleet_ship'}, allow_joins=True)  ->  2020
-            Query.setup_joins(names=['signed_on'], alias='crew_sailor', can_reuse={'crew_sailor', 'fleet_port', 'fleet_ship'})
-              Query.names_to_path(names=['signed_on'], fail_on_missing=True)  ->  ([], Sailor.signed_on, (Sailor.signed_on,), [])
-              -> JoinInfo(final_field=Sailor.signed_on, targets=(Sailor.signed_on,), opts=the options of Sailor, joins=['crew_sailor'], path=[])
-            Query.check_related_objects(field=Sailor.signed_on, value=2020, opts=the options of Sailor)
-            Query.trim_joins(targets=(Sailor.signed_on,), joins=['crew_sailor'], path=[])  ->  ((Sailor.signed_on,), 'crew_sailor', ['crew_sailor'])
-            Query.build_lookup(lookups=['year', 'lt'], lhs=Col(crew_sailor, crew.Sailor.signed_on), rhs=2020)
-              Query.try_transform(lhs=Col(crew_sailor, crew.Sailor.signed_on), name='year', lookups=['year', 'lt'])  ->  ExtractYear(Col(crew_sailor, crew.Sailor.signed_on))
-              YearLt.__init__(lhs=ExtractYear(Col(crew_sailor, crew.Sailor.signed_on)), rhs=2020)  (Lookup.__init__)
-                YearLt.get_prep_lookup  (Lookup.get_prep_lookup)  ->  2020
-              -> YearLt(ExtractYear(Col(crew_sailor, crew.Sailor.signed_on)), 2020)
-            -> ((AND: YearLt(ExtractYear(Col(crew_sailor, crew.Sailor.signed_on)), 2020)), {'crew_sailor'})
-...
-          JoinPromoter.update_join_types(a Query of Sailor)
-            Query.promote_joins(set())
-            Query.demote_joins({'crew_sailor', 'fleet_port', 'fleet_ship'})
-```
-
-`Query.add_q` walks the `Q` with `Query._add_q`, which makes a `WhereNode` for the tree's node and calls `Query.build_filter` for each leaf (`django/db/models/sql/query.py:Query.add_q`, `django/db/models/sql/query.py:Query.build_filter`). For one pair, `build_filter` does three things in turn.
-
-**The name is read against the models.** `Query.solve_lookup_type` splits it at each `"__"` and has `Query.names_to_path` walk the words as fields: `"ship"` is a foreign key of Sailor, `"home"` a foreign key of Ship, `"name"` a field of Port, and the walk stops at the first field that is no relation, or at a word that is no field, leaving `["year", "lt"]` over for `"signed_on"`; the `False` that ends each of those lines says the name was not an annotation's, which would stand there in its place. What the walk returns is a **path**, one `PathInfo` or more for each relation crossed, each saying which models it joins, through which field, in which direction and whether it can reach more than one row (`django/db/models/sql/query.py:Query.names_to_path`, `django/db/models/query_utils.py:PathInfo`). `Query.setup_joins` turns the path into joins, and `Query.trim_joins` takes back any join at the end whose only use is a key the previous table already holds, which is why `filter(ship=petrel)` joins nothing and compares the column `"ship_id"` ([From a name to a column: `names_to_path`, `setup_joins` and `build_lookup`](sql/names.md)).
-
-**The joins go into the alias map.** `Query.join` gives each `Join` an alias, ordinarily the table's own name the first time a table appears and `T` with a number after that, and keeps it in `Query.alias_map` with a count of how many conditions and columns refer to it; a join made for a condition that is later dropped is left in the map with a count of zero and is not written (`django/db/models/sql/query.py:Query.join`, `django/db/models/sql/datastructures.py:Join`). A join starts as `"INNER JOIN"` unless the relation can have no row on the far side, a nullable foreign key or a reverse relation, or the join it hangs from is outer already, in which case it starts as `"LEFT OUTER JOIN"`; and as the conditions are added a `JoinPromoter` counts, for each join, how many of a node's children need a row on the far side, and demotes the join to inner under an `"AND"` or promotes it to outer under an `"OR"` that not every child shares (`django/db/models/sql/query.py:JoinPromoter.update_join_types`). That is the vote the two conditions above took on the joins of the ship and the port, which were inner as they were made and stayed so, and [Tables and joins: the alias map and join promotion](sql/joins.md) has the rules.
-
-**The words left over become a lookup.** `Query.build_lookup` takes every word but the last for a **transform**, an expression made of the column, and the last for a **lookup**, a comparison of the column, or of the transformed column, with the value: `"year"` finds `ExtractYear` in the registry of the datetime field, and `"lt"` finds `YearLt` in the registry of `ExtractYear`; a last word that no lookup answers to is taken for one more transform and compared by `"exact"`, which is also the lookup where no word is left (`django/db/models/sql/query.py:Query.build_lookup`). The registry is told in [The lookup registry: `RegisterLookupMixin`](querysets/lookups.md); the classes it finds are this chapter's. A `Lookup` holds a left side and a right side, prepares the right side through the left side's field, and writes `"column = %s"` from the backend's table of operators ([Lookups: `Lookup`, `BuiltinLookup` and the standard comparisons](sql/lookups.md)); the comparisons registered on a relation and on a composite primary key are a few more ([Lookups on relations and composite keys: `RelatedIn` and the tuple lookups](sql/related-lookups.md)). A transform is a `Func` with one argument that also has a registry of its own, and the database functions of `django.db.models.functions` are built on the same class ([Transforms and database functions: `Transform` and `Func`](sql/functions.md)).
-
-The lookup is wrapped in a `WhereNode` of its own and added to the node of its `Q`. The tree the filter leaves is an `"AND"` of the two lookups, the `Exact` and the `YearLt`, and `Query.where` holds it. A negation is kept on the node, and `build_filter` adds an `"IS NOT NULL"` beside a negated comparison of a column that can be null, in itself or by an outer join so that the SQL agrees with Python's `not`; an exclude across a relation that can reach several rows is turned into a subquery under `"NOT EXISTS"`, since a negated join would exclude a ship for the one sailor whose name matches and keep it for the others ([The where clause: `build_filter`, `add_q` and `WhereNode`](sql/where.md)).
-
-## What else the query is given
-
-The other methods of the queryset leave other things on the query, and most of them are expressions too. An annotation is an expression resolved against the query and kept in `Query.annotations` under its alias; an aggregate among them sets `Query.group_by` ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](sql/aggregates.md), [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](sql/grouping.md)). A queryset given as a value, or a `Subquery` or an `Exists`, carries a query of its own, which is resolved against the outer one, with its aliases renamed so that the two do not collide and the outer query's columns reachable through `OuterRef` ([Subqueries: `Subquery`, `Exists`, `OuterRef` and a query inside another](sql/subqueries.md)). A `Window` is an expression whose function runs over a partition of the rows, and a filter on one cannot stand in a `"WHERE"`, so the compiler wraps the statement in another ([Window expressions: `Window`, `WindowFrame` and the QUALIFY rewrite](sql/windows.md)). The ordering is kept as names and expressions and resolved only when the statement is written; `values` leaves the columns to select and their names; `defer` and `only` leave a set of field names to leave out or to keep. What a `Query` holds, how `Query.clone` copies it for the next method and what `Query.chain` resets, is [The query: what a `Query` holds, and how it is copied](sql/query.md).
-
-An expression can be built without a query and used on several. `F("tonnage") + 1` is a `CombinedExpression` of an `F` and a `Value`; resolving it against a query of ships turns the `F` into a `Col` of the ships' table through `Query.resolve_ref`, and the type of the sum, when it is wanted, is asked of the pair of field types (`django/db/models/sql/query.py:Query.resolve_ref`). Two expressions built the same way are equal and hash alike, which is what lets the compiler notice that an ordering refers to a selected column. [Expressions: `resolve_expression` and `as_sql`](sql/expressions.md) is the protocol in full, with `F`, `Value`, `Col`, `Case` and the rest of `django/db/models/expressions.py`.
+The compiler is given a query that a queryset's methods have written, and here it is the query of the sailors whose ship's home port is Bergen and who signed on before 2020, the filter of [Building a query](query.md), ordered by the date each sailor signed on, latest first, and limited to five rows. The filter's names have been walked through the models into joins, kept in the query's alias map as a tree from the sailors' table through the ships' to the ports', each join an `"INNER JOIN"`, as it was made and as the vote of the two conditions left it; the two conditions have become two lookups, an `Exact` and a `YearLt`, in the query's where tree; and the ordering is still a name, `"-signed_on"`, and the limit two numbers ([Building a query](query.md)). Every node the query holds writes its own SQL, through its `as_sql` or the method for the connection's vendor, so the compiler's work is to decide what goes into each clause and in what order the clauses are made, and to have each node write its piece ([Expressions, lookups and functions](expressions.md)).
 
 ## Compiling: the compiler assembles the statement
 
@@ -233,35 +99,34 @@ compiler.as_sql()
     -> ('SELECT "crew_sailor"."id", "crew_sailor"."name", "crew_sailor"."ship_id", "crew_sailor"."signed_on" FROM "crew_sailor" INNER JOIN "fleet_ship" ON ("crew_sailor"."ship_id" = "fleet_ship"."id") INNER JOIN "fleet_port" ON ("fleet_ship"."home_id" = "fleet_port"."id") WHERE ("fleet_port"."name" = %s AND "crew_sailor"."signed_on" < %s) ORDER BY "crew_sailor"."signed_on" DESC LIMIT 5', ('Bergen', '2020-01-01 00:00:00'))
 ```
 
-The clauses are made in an order that is not the statement's. `SQLCompiler.pre_sql_setup` first has `SQLCompiler.get_select` settle the columns, every concrete field of the model where nothing narrows them, then has `SQLCompiler.get_order_by` resolve the ordering, which may join a table of its own and which `get_group_by` has to see, then splits the where tree into the conditions that go into `"WHERE"`, those that compare an aggregate and go into `"HAVING"`, and those that compare a window function, which are left for a statement wrapped round this one, and then has `SQLCompiler.get_group_by` write the grouping (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`). Only after that does `as_sql` read the alias map for the `"FROM"` clause, since the select and the ordering may have added joins, compile the where tree, and put the pieces together as `"SELECT"`, `"FROM"`, `"WHERE"`, `"GROUP BY"`, `"HAVING"`, `"ORDER BY"` and the limit, gathering the parameters in the same order so that each `%s` meets its value (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`). On the way out it puts back the reference counts of the aliases as they were, since resolving the ordering counts the tables it walks and may join one the query did not have before. [The compiler: `as_sql`, `execute_sql` and `results_iter`](sql/compiler.md) tells the assembly; [The SELECT clause: `get_select`, the select mask and `klass_info`](sql/select.md), [ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](sql/ordering.md) and [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](sql/grouping.md) tell the clauses.
+The clauses are made in an order that is not the statement's. `SQLCompiler.pre_sql_setup` first has `SQLCompiler.get_select` settle the columns, every concrete field of the model where nothing narrows them, then has `SQLCompiler.get_order_by` resolve the ordering, which may join a table of its own and which `get_group_by` has to see, then splits the where tree into the conditions that go into `"WHERE"`, those that compare an aggregate and go into `"HAVING"`, and those that compare a window function, which are left for a statement wrapped round this one ([The QUALIFY rewrite: a filter on a window](sql/qualify.md)), and then has `SQLCompiler.get_group_by` write the grouping (`django/db/models/sql/compiler.py:SQLCompiler.pre_sql_setup`). Only after that does `as_sql` read the alias map for the `"FROM"` clause, since the select and the ordering may have added joins, compile the where tree, and put the pieces together as `"SELECT"`, `"FROM"`, `"WHERE"`, `"GROUP BY"`, `"HAVING"`, `"ORDER BY"` and the limit, gathering the parameters in the same order so that each `%s` meets its value (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`). On the way out it puts back the reference counts of the aliases as they were, since resolving the ordering counts the tables it walks and may join one the query did not have before. [The compiler: `as_sql`, `execute_sql` and `results_iter`](sql/compiler.md) tells the assembly; [The SELECT clause: `get_select`, the select mask and `klass_info`](sql/select.md), [ORDER BY and DISTINCT: `get_order_by`, `find_ordering_name` and `get_distinct`](sql/ordering.md) and [GROUP BY and HAVING: `set_group_by`, `get_group_by` and `split_having_qualify`](sql/grouping.md) tell the clauses.
 
-Each node writes its own SQL. `SQLCompiler.compile` calls a node's `as_sql`, or its method for the connection's vendor where it has one, and a node compiles its children the same way: the where tree compiles each lookup, a lookup compiles its left side and prepares its right, and a `Col` writes its alias and column, quoted by the backend (`django/db/models/sql/where.py:WhereNode.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`). The year comparison is the one surprise in the statement above: `YearLt` compares the column itself with the first day of the year, not the year extracted from it, so that an index on the column can serve (`django/db/models/lookups.py:YearLookup.as_sql`).
+Each node writes its own SQL. `SQLCompiler.compile` calls a node's `as_sql`, or its method for the connection's vendor where it has one, and a node compiles its children the same way: the where tree compiles each lookup, a lookup compiles its left side and prepares its right, and a `Col` writes its alias and column, quoted by the backend (`django/db/models/sql/where.py:WhereNode.as_sql`, `django/db/models/lookups.py:BuiltinLookup.as_sql`). Why `YearLt` wrote the column and a date, and not the year, is told with the lookups in [Expressions, lookups and functions](expressions.md).
 
 ```text figure=from-filter-to-statement
 building, on the Query                                    compiling, in the SQLCompiler
 
 QuerySet.filter(ship__home__name='Bergen')                QuerySet is evaluated
-  Query.add_q                                               Query.get_compiler -> a SQLCompiler
-    Query.build_filter, for each name and value             SQLCompiler.as_sql
-      names_to_path:  ship, home, name -> a path              pre_sql_setup
-      setup_joins:    the path -> Join, Join                    get_select            SELECT ...
-      trim_joins:     a join not needed is unreferenced         get_order_by          ORDER BY ...
-      build_lookup:   the words left -> transforms, a Lookup    split_having_qualify  WHERE from HAVING
-    JoinPromoter:     each join INNER or LEFT OUTER             get_group_by          GROUP BY ...
-                                                              get_from_clause   FROM, the alias map
-the query holds:                                              compile(where)    WHERE, each Lookup.as_sql
-  alias_map  the joins                                    the statement and its parameters:
-  where      the where tree of lookups                      SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, the limit
-  and what the queryset's other methods leave:            SQLCompiler.execute_sql: runs it on a cursor
-  annotations, select, order_by, group_by,                SQLCompiler.results_iter: the rows, converters applied
-  low_mark, high_mark
+  the name, walked through the models -> Join, Join         Query.get_compiler -> a SQLCompiler
+  the name and the value -> a Lookup                        SQLCompiler.as_sql
+                                                              pre_sql_setup
+the query holds:                                                get_select            SELECT ...
+  alias_map  the joins                                          get_order_by          ORDER BY ...
+  where      the where tree of lookups                          split_having_qualify  WHERE from HAVING
+  and what the queryset's other methods leave:                  get_group_by          GROUP BY ...
+  the ordering, still a name; the limit, two numbers          get_from_clause   FROM, the alias map
+                                                              compile(where)    WHERE, each Lookup.as_sql
+                                                          the statement and its parameters:
+                                                            SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, the limit
+                                                          SQLCompiler.execute_sql: runs it on a cursor
+                                                          SQLCompiler.results_iter: the rows, converters applied
 ```
 
-*The two halves of the way from a filter to a statement. On the left, what one call of `filter` leaves on the query; on the right, what the compiler does with it when the queryset is evaluated. The query is carried from one method to the next, a copy at each; the compiler is made when the rows are wanted and reads the query once.*
+*The two halves of the way from a filter to a statement. On the left, what a queryset's methods leave on the query; on the right, what the compiler does with it when the queryset is evaluated.*
 
 ## Running: `execute_sql` and the rows
 
-`SQLCompiler.execute_sql` calls `as_sql`, takes a cursor from the connection, runs the statement, and returns what the caller asked for: the rows a chunk at a time for an iteration, one row for an aggregate, the row count for an update, the cursor itself, or nothing (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`). Where the where tree can match nothing, which a comparison with an empty list makes it, `as_sql` raises `EmptyResultSet`, and `execute_sql` answers with no rows and sends nothing. `SQLCompiler.results_iter` reads the rows and applies to each column its **converters**, the functions the backend and the column's field or expression supply for turning what the driver returned into what the program is to have: a datetime from the text SQLite stores, a `bool` from an integer, a `float` from an expression cast to one (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`, `django/db/models/sql/compiler.py:SQLCompiler.get_converters`). The rows go to the queryset's iterable class, which makes instances of them with the compiler's `klass_info` saying which columns are whose ([From rows to instances: `ModelIterable` and `select_related`](querysets/iterables.md)).
+`SQLCompiler.execute_sql` calls `as_sql`, takes a cursor from the connection, runs the statement, and returns what the caller asked for: the rows a chunk at a time for an iteration, one row for an aggregate, the row count for an update, the cursor itself, or nothing (`django/db/models/sql/compiler.py:SQLCompiler.execute_sql`). Where the where tree can match nothing, which a comparison with an empty list makes it, `as_sql` raises `EmptyResultSet`, and `execute_sql` answers with no rows and sends nothing. `SQLCompiler.results_iter` reads the rows and applies to each column its **converters**, the functions the backend and the column's field or expression supply for turning what the driver returned into what the program is to have: a datetime from the text SQLite stores, a `bool` from an integer, a `float` from an expression cast to one (`django/db/models/sql/compiler.py:SQLCompiler.results_iter`, `django/db/models/sql/compiler.py:SQLCompiler.get_converters`). The rows go to the queryset's iterable class; `ModelIterable` makes instances of them, with the compiler's `klass_info` saying which columns are whose ([From rows to instances: `ModelIterable`](querysets/rows.md)).
 
 ```text recording=sql
 rows = list(compiler.results_iter())
@@ -277,12 +142,12 @@ rows  ->  [[1, 'Ada', 1, datetime.datetime(2011, 6, 1, 8, 0, tzinfo=datetime.tim
 
 ## The other statements
 
-Two queries can be made one. The operators `&` and `|` of a queryset call `Query.combine`, which brings the right side's joins into the left side's alias map, making them afresh under an `"AND"` and reusing them under an `"OR"`, and adds its where tree under the connector; `union` and its relatives keep the queries side by side, and `SQLCompiler.get_combinator_sql` compiles each with a compiler of its own and joins the statements with the operator ([Two queries into one: `combine` and `get_combinator_sql`](sql/combining.md)). An aggregate asked of a queryset goes through `Query.get_aggregation`, which makes the aggregates the query's only selected annotations, or wraps the query as a subquery where it is sliced, distinct, combined or grouped already, and in a few cases more ([Aggregates: `Aggregate`, `Count` and `get_aggregation`](sql/aggregates.md)).
+Where one `"SELECT"` cannot say what the queryset asks, the compiler writes more than one. An aggregate asked of a queryset goes through `Query.get_aggregation`, which makes the aggregates the query's only selected annotations, or wraps the query as a subquery where it is sliced, distinct, combined or grouped already, and in a few cases more ([Aggregating a query: `Query.get_aggregation`](sql/aggregation.md)). A filter on a window is tested in a statement wrapped round the one that computes it ([The QUALIFY rewrite: a filter on a window](sql/qualify.md)). And `union` and its relatives keep the queries side by side, which `SQLCompiler.get_combinator_sql` compiles each with a compiler of its own and joins with the operator ([Compound statements: `get_combinator_sql`](sql/compound.md)); the operators `&` and `|` of a queryset make one query of two before any compiler is made ([Merging two queries: `Query.combine`](query/combine.md)).
 
 An insert, an update and a delete have a `Query` subclass each, `InsertQuery`, `UpdateQuery` and `DeleteQuery`, and a compiler each (`django/db/models/sql/compiler.py:SQLInsertCompiler`, `django/db/models/sql/compiler.py:SQLUpdateCompiler`, `django/db/models/sql/compiler.py:SQLDeleteCompiler`). `SQLInsertCompiler.as_sql` takes each field's value from each instance through the field's `pre_save` and prepares it, writes one `"VALUES"` list for all the rows where the backend can take one, and asks for the columns the database fills in, an automatic key among them, back with `"RETURNING"` where it can. `SQLUpdateCompiler.as_sql` writes a `"SET"` of prepared values and compiled expressions, and where the filter joins another table, moves the joins into a subquery on the primary key first, or, where the backend cannot select from the table it is updating or the update reaches a parent's table too, into a select that is run beforehand and whose keys the update then names. `SQLDeleteCompiler.as_sql` moves a delete's joins into a subquery in the same way ([INSERT, UPDATE and DELETE: the insert, update and delete compilers](sql/writing.md)).
 
 ## The neighbours
 
-The query is built from the model's `_meta`: `names_to_path` asks the options for a field by name, a relation field for its path, and a child model for the path to its parent ([The options: what a model keeps as `_meta`](models/options.md), [Relations: a field, its rel and the class at the other end](models/relations.md), [Inheritance: abstract bases, parents with tables and proxies](models/inheritance.md)). A lookup prepares its value through the field's `get_prep_value` and `get_db_prep_value`, and the field's converters are its own ([A field: the base class](models/fields.md)). The registry a word is looked up in is `RegisterLookupMixin`, which [QuerySets](querysets.md) tells.
+The query the compiler reads is built by a queryset's methods, from the model's `_meta` ([Building a query](query.md), [QuerySets](querysets.md)), and every node in it writes its own SQL ([Expressions, lookups and functions](expressions.md)). The rows the compiler hands back go to the queryset's iterable class, which decides what each row becomes ([QuerySets](querysets.md)); the inserts, updates and deletes that a save and a delete send are written by the insert, update and delete compilers, for [An instance and its row](instance.md).
 
-The compiler leans on the connection at every turn, and that is [Database backends](backends.md): the operations object supplies the compiler class, the quoting of a name, the SQL of a limit, of `"DISTINCT ON"` and of `"FOR UPDATE"`, and the converters of a column's type; the connection itself holds the table of operators a `BuiltinLookup` writes from; the features object says what the backend can do, from a `"RETURNING"` clause to a tuple comparison, and a statement is written one way or another by it; and the cursor the compiler runs the statement on is the connection's. The lookups and transforms of a JSON field are built on the classes here (`django/db/models/fields/json.py:KeyTransform`), as are those of `django.contrib.postgres` and of a geometry, which [Content types, static files and the other contrib apps](contrib.md) has.
+The compiler leans on the connection at every turn. The operations object supplies the compiler class, the quoting of a name, the SQL of a limit, of `"DISTINCT ON"` and of `"FOR UPDATE"`, and the converters of a column's type; the connection itself holds the table of operators a `BuiltinLookup` writes from; and the features object says what the backend can do, from a `"RETURNING"` clause to a tuple comparison, and a statement is written one way or another by it ([Database backends](backends.md)). The cursor the compiler runs the statement on is the connection's ([Connections and transactions](connections.md)).

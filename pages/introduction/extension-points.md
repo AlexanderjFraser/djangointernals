@@ -74,7 +74,7 @@ Other settings name code, each loaded by `import_string` unless the loader says 
 | `AUTH_PASSWORD_VALIDATORS`: dictionaries, a class in each `"NAME"` ([Authentication, sessions and messages](../auth.md)) | once a process | `django/contrib/auth/password_validation.py:get_password_validators` |
 | `AUTHENTICATION_BACKENDS`: each a `BaseBackend` ([Authentication, sessions and messages](../auth.md)) | at each use | `django/contrib/auth/__init__.py:load_backend` |
 | `CSRF_FAILURE_VIEW`: a view ([The CSRF check: `CsrfViewMiddleware.process_view`](../security/csrf-check.md)) | once a process | by `get_callable`: `django/middleware/csrf.py:_get_failure_view` |
-| `DATABASE_ROUTERS`: paths of router classes, or routers; no base class ([Database backends](../backends.md)) | once a process | `django/db/utils.py:ConnectionRouter.routers` |
+| `DATABASE_ROUTERS`: paths of router classes, or routers; no base class ([Connections and transactions](../connections.md)) | once a process | `django/db/utils.py:ConnectionRouter.routers` |
 | `DEFAULT_AUTO_FIELD`: a subclass of `AutoField`, tested ([Models and fields](../models.md)) | once a model without its own primary key | `django/db/models/options.py:Options._get_default_pk_class` |
 | `DEFAULT_EXCEPTION_REPORTER`: an `ExceptionReporter` ([Views](../views.md)) | at each use | `django/views/debug.py:get_exception_reporter_class` |
 | `DEFAULT_EXCEPTION_REPORTER_FILTER`: a `SafeExceptionReporterFilter` ([Views](../views.md)) | once a process | `django/views/debug.py:get_default_exception_reporter_filter` |
@@ -104,7 +104,7 @@ Some extension points are not settings: an object handed to a registry, or a mod
 | registry: what it holds | registered by, or found in | lifetime | chapter |
 |---|---|---|---|
 | template tag libraries: modules with a `Library` | each application's templatetags package | once an engine | [Templates](../templates.md) |
-| lookups and transforms, what follows the fields in a filter: `Lookup` and `Transform` classes, tested on use | `django/db/models/query_utils.py:RegisterLookupMixin.register_lookup` | held by the class, or the field, it is registered on; an instance for each filter | [QuerySets](../querysets.md) |
+| lookups and transforms, what follows the fields in a filter: `Lookup` and `Transform` classes, tested on use | `django/db/models/query_utils.py:RegisterLookupMixin.register_lookup` | held by the class, or the field, it is registered on; an instance for each filter | [Expressions, lookups and functions](../expressions.md) |
 | system checks: functions that return messages | `django/core/checks/registry.py:CheckRegistry.register` | held for the process; called at each run of the checks | [The system checks](../commands/checks.md) |
 | the admin: a `ModelAdmin` for each model, on the site whose class `SimpleAdminConfig.default_site` names | each application's admin module, which calls `django/contrib/admin/sites.py:AdminSite.register` | once a process | [The admin](../admin.md) |
 | management commands: each a `BaseCommand` | each application's management/commands directory | the list once a process; a command at each use | [Management commands](../commands.md) |

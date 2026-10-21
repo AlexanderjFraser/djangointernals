@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `CaptureQueriesContext` records the statements one database connection sends during a block, by turning the connection's query log on and reading what the block added. `TransactionTestCase.assertNumQueries` is that context manager with a number to check; `TransactionTestCase.assertQuerySetEqual` compares a queryset with a list of values.
 
-A page can render the right text and send a query for each row. Counting queries takes a log, which a connection keeps only while `BaseDatabaseWrapper.queries_logged` holds, that is while `settings.DEBUG` is on or `BaseDatabaseWrapper.force_debug_cursor` is set; the test environment turns `settings.DEBUG` off unless the run asks for `--debug-mode` ([Cursors: executing a statement, the query log and execute wrappers](../backends/cursors.md)).
+A page can render the right text and send a query for each row. Counting queries takes a log, which a connection keeps only while `BaseDatabaseWrapper.queries_logged` holds, that is while `settings.DEBUG` is on or `BaseDatabaseWrapper.force_debug_cursor` is set; the test environment turns `settings.DEBUG` off unless the run asks for `--debug-mode` ([Cursors: executing a statement, the query log and execute wrappers](../connections/cursors.md)).
 
 ## `CaptureQueriesContext`: a slice of the query log
 
@@ -54,7 +54,7 @@ class ShipQueryTests(TestCase):
         self.assertQuerySetEqual(ships, ["Endeavour", "Beagle"], transform=str, ordered=False)
 ```
 
-test_names passes, and so does test_list_page: the page took one statement. test_homes reads each ship's home without `select_related`, and under the default fetch mode, `FETCH_ONE`, each read is a query ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)); under `FETCH_PEERS` the loop sent two. test_homes fails at the `with` line, with this message:
+test_names passes, and so does test_list_page: the page took one statement. test_homes reads each ship's home without `select_related`, and under the default fetch mode, `FETCH_ONE`, each read is a query ([Deferred fields and the fetch modes](../instance/fetching.md)); under `FETCH_PEERS` the loop sent two. test_homes fails at the `with` line, with this message:
 
 ```text
 AssertionError: 3 != 1 : 3 queries executed, 1 expected

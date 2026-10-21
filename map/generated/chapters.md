@@ -13,22 +13,29 @@ Which part of Django's source each chapter of the book explains. A chapter's id 
 | 6 | [URL routing](chapters/6-urls.md) | `django/urls`, `django/conf/urls`, `django/utils/regex_helper.py` | 11 | 1,922 | 66,810 | 27,630 |  |  |  |  |
 | 7 | [Views](chapters/7-views.md) | `django/views`, `django/shortcuts.py`, minus `django/views/csrf.py` and `django/views/i18n.py` | 21 | 3,679 | 126,546 | 52,292 |  | 7 |  |  |
 | 8 | [Security](chapters/8-security.md) | `django/middleware/csrf.py`, `django/middleware/security.py`, `django/middleware/clickjacking.py`, `django/middleware/csp.py`, `django/views/csrf.py`, `django/core/signing.py`, `django/utils/crypto.py`, `django/utils/csp.py` | 8 | 1,259 | 46,431 | 19,200 |  |  |  |  |
-| 9 | [Models and fields](chapters/9-models.md) | `django/db/models`, minus `django/db/models/query.py`, `django/db/models/query_utils.py`, `django/db/models/fetch_modes.py`, `django/db/models/constants.py`, `django/db/models/expressions.py`, `django/db/models/lookups.py`, `django/db/models/aggregates.py`, `django/db/models/sql`, `django/db/models/functions`, `django/db/models/fields/related_lookups.py` and `django/db/models/fields/tuple_lookups.py` | 20 | 14,915 | 558,685 | 215,708 |  |  |  |  |
-| 10 | [QuerySets](chapters/10-querysets.md) | `django/db/models/query.py`, `django/db/models/query_utils.py`, `django/db/models/fetch_modes.py`, `django/db/models/constants.py` | 4 | 3,772 | 143,644 | 56,776 |  |  |  |  |
-| 11 | [From QuerySet to SQL](chapters/11-sql.md) | `django/db/models/sql`, `django/db/models/expressions.py`, `django/db/models/lookups.py`, `django/db/models/aggregates.py`, `django/db/models/functions`, `django/db/models/fields/related_lookups.py`, `django/db/models/fields/tuple_lookups.py` | 21 | 11,857 | 446,264 | 176,193 |  |  |  |  |
-| 12 | [Database backends](chapters/12-backends.md) | `django/db` (the files directly in it), `django/db/backends` | 59 | 16,347 | 624,312 | 239,199 |  |  |  |  |
-| 13 | [Migrations](chapters/13-migrations.md) | `django/db/migrations` | 19 | 8,046 | 318,722 | 122,115 |  |  |  |  |
-| 14 | [Templates](chapters/14-templates.md) | `django/template`, `django/templatetags`, `django/utils/safestring.py`, `django/utils/html.py` | 35 | 8,621 | 281,107 | 112,750 |  |  |  |  |
-| 15 | [Forms](chapters/15-forms.md) | `django/forms`, `django/core/validators.py` | 10 | 6,933 | 241,223 | 96,827 |  | 96 |  |  |
-| 16 | [Internationalization and time zones](chapters/16-i18n.md) | `django/utils/translation`, `django/utils/formats.py`, `django/utils/timezone.py`, `django/utils/dateformat.py`, `django/utils/dates.py`, `django/utils/numberformat.py`, `django/utils/timesince.py`, `django/middleware/locale.py`, `django/views/i18n.py`, `django/conf/locale` | 13 | 2,882 | 95,737 | 39,702 |  |  | 367 |  |
-| 17 | [Caching, files, mail, signals and tasks](chapters/17-services.md) | `django/core/cache`, `django/middleware/cache.py`, `django/utils/cache.py`, `django/core/files`, `django/core/mail`, `django/core/serializers`, `django/core/paginator.py`, `django/dispatch`, `django/tasks`, minus `django/core/files/uploadedfile.py` and `django/core/files/uploadhandler.py` | 57 | 9,008 | 314,418 | 130,391 |  | 1 |  |  |
-| 18 | [The utility layer](chapters/18-utils.md) | `django/utils`, `django/core/__init__.py`, `django/core/exceptions.py`, minus `django/utils/log.py`, `django/utils/autoreload.py`, `django/utils/termcolors.py`, `django/utils/http.py`, `django/utils/regex_helper.py`, `django/utils/safestring.py`, `django/utils/html.py`, `django/utils/crypto.py`, `django/utils/csp.py`, `django/utils/translation`, `django/utils/formats.py`, `django/utils/timezone.py`, `django/utils/dateformat.py`, `django/utils/dates.py`, `django/utils/numberformat.py`, `django/utils/timesince.py`, `django/utils/cache.py` and `django/utils/feedgenerator.py` | 28 | 4,538 | 145,519 | 60,368 |  |  |  |  |
-| 19 | [Authentication, sessions and messages](chapters/19-auth.md) | `django/contrib/auth`, `django/contrib/sessions`, `django/contrib/messages` | 73 | 8,545 | 296,211 | 130,490 |  | 3 | 388 |  |
-| 20 | [The admin](chapters/20-admin.md) | `django/contrib/admin`, `django/contrib/admindocs` | 36 | 10,691 | 392,742 | 157,097 |  | 191 | 576 |  |
-| 21 | [Content types, static files and the other contrib apps](chapters/21-contrib.md) | `django/contrib`, `django/utils/feedgenerator.py`, minus `django/contrib/auth`, `django/contrib/sessions`, `django/contrib/messages`, `django/contrib/admin` and `django/contrib/admindocs` | 230 | 25,600 | 876,706 | 385,755 | 249,268 | 17 | 1292 |  |
-| 22 | [Management commands](chapters/22-commands.md) | `django/__main__.py`, `django/core/management`, `django/core/checks`, `django/core/servers`, `django/utils/autoreload.py`, `django/utils/termcolors.py` | 57 | 9,804 | 358,906 | 148,909 |  |  |  |  |
-| 23 | [The test framework](chapters/23-testing.md) | `django/test` | 7 | 6,615 | 223,938 | 92,537 |  |  |  |  |
-| 24 | [What changed](chapters/24-changes.md) | `docs/releases/5.*.txt`, `docs/releases/6.*.txt`, `docs/internals/deprecation.txt` | 0 | 0 | 0 | 0 |  |  |  | 65 (296,231 bytes, ~139,734 tokens) |
+| 9 | [Models and fields](chapters/9-models.md) | `django/db/models`, minus `django/db/models/query.py`, `django/db/models/query_utils.py`, `django/db/models/fetch_modes.py`, `django/db/models/constants.py`, `django/db/models/deletion.py`, `django/db/models/expressions.py`, `django/db/models/lookups.py`, `django/db/models/aggregates.py`, `django/db/models/sql`, `django/db/models/functions`, `django/db/models/fields/related.py`, `django/db/models/fields/related_descriptors.py`, `django/db/models/fields/reverse_related.py`, `django/db/models/fields/mixins.py`, `django/db/models/fields/files.py`, `django/db/models/fields/related_lookups.py` and `django/db/models/fields/tuple_lookups.py` | 14 | 9,424 | 346,069 | 133,618 |  |  |  |  |
+| 10 | [An instance and its row](chapters/10-instance.md) | `django/db/models/deletion.py`, `django/db/models/fetch_modes.py`, `django/db/models/fields/files.py` | 3 | 1,154 | 43,645 | 16,862 |  |  |  |  |
+| 11 | [QuerySets](chapters/11-querysets.md) | `django/db/models/query.py`, `django/db/models/query_utils.py`, `django/db/models/constants.py` | 3 | 3,711 | 142,373 | 56,274 |  |  |  |  |
+| 12 | [Relations](chapters/12-relations.md) | `django/db/models/fields/related.py`, `django/db/models/fields/related_descriptors.py`, `django/db/models/fields/reverse_related.py`, `django/db/models/fields/mixins.py` | 4 | 4,398 | 170,242 | 65,730 |  |  |  |  |
+| 13 | [Expressions, lookups and functions](chapters/13-expressions.md) | `django/db/models/expressions.py`, `django/db/models/lookups.py`, `django/db/models/aggregates.py`, `django/db/models/functions`, `django/db/models/fields/related_lookups.py`, `django/db/models/fields/tuple_lookups.py`, `django/db/models/sql/where.py` | 15 | 6,228 | 210,332 | 82,939 |  |  |  |  |
+| 14 | [Building a query](chapters/14-query.md) | `django/db/models/sql/__init__.py`, `django/db/models/sql/query.py`, `django/db/models/sql/datastructures.py` | 3 | 3,135 | 131,839 | 52,110 |  |  |  |  |
+| 15 | [The SQL compiler](chapters/15-sql.md) | `django/db/models/sql/compiler.py`, `django/db/models/sql/subqueries.py`, `django/db/models/sql/constants.py` | 3 | 2,494 | 104,093 | 41,144 |  |  |  |  |
+| 16 | [Connections and transactions](chapters/16-connections.md) | `django/db` (the files directly in it), `django/db/backends/utils.py`, `django/db/backends/signals.py` | 5 | 1,049 | 35,156 | 13,469 |  |  |  |  |
+| 17 | [Database backends](chapters/17-backends.md) | `django/db/backends`, minus `django/db/backends/utils.py`, `django/db/backends/signals.py`, `django/db/backends/ddl_references.py`, `django/db/backends/base/schema.py`, `django/db/backends/base/creation.py` and `django/db/backends/base/introspection.py` | 50 | 12,255 | 469,507 | 179,886 |  |  |  |  |
+| 18 | [Schemas and test databases](chapters/18-schema.md) | `django/db/backends/base/schema.py`, `django/db/backends/base/creation.py`, `django/db/backends/base/introspection.py`, `django/db/backends/ddl_references.py` | 4 | 3,043 | 119,649 | 45,844 |  |  |  |  |
+| 19 | [Migrations](chapters/19-migrations.md) | `django/db/migrations`, minus `django/db/migrations/autodetector.py`, `django/db/migrations/optimizer.py`, `django/db/migrations/questioner.py`, `django/db/migrations/serializer.py` and `django/db/migrations/writer.py` | 14 | 4,830 | 186,103 | 71,304 |  |  |  |  |
+| 20 | [Making migrations](chapters/20-makemigrations.md) | `django/db/migrations/autodetector.py`, `django/db/migrations/optimizer.py`, `django/db/migrations/questioner.py`, `django/db/migrations/serializer.py`, `django/db/migrations/writer.py` | 5 | 3,216 | 132,619 | 50,811 |  |  |  |  |
+| 21 | [Templates](chapters/21-templates.md) | `django/template`, `django/templatetags`, `django/utils/safestring.py`, `django/utils/html.py` | 35 | 8,621 | 281,107 | 112,750 |  |  |  |  |
+| 22 | [Forms](chapters/22-forms.md) | `django/forms`, `django/core/validators.py` | 10 | 6,933 | 241,223 | 96,827 |  | 96 |  |  |
+| 23 | [Internationalization and time zones](chapters/23-i18n.md) | `django/utils/translation`, `django/utils/formats.py`, `django/utils/timezone.py`, `django/utils/dateformat.py`, `django/utils/dates.py`, `django/utils/numberformat.py`, `django/utils/timesince.py`, `django/middleware/locale.py`, `django/views/i18n.py`, `django/conf/locale` | 13 | 2,882 | 95,737 | 39,702 |  |  | 367 |  |
+| 24 | [Caching, files, mail, signals and tasks](chapters/24-services.md) | `django/core/cache`, `django/middleware/cache.py`, `django/utils/cache.py`, `django/core/files`, `django/core/mail`, `django/core/serializers`, `django/core/paginator.py`, `django/dispatch`, `django/tasks`, minus `django/core/files/uploadedfile.py` and `django/core/files/uploadhandler.py` | 57 | 9,008 | 314,418 | 130,391 |  | 1 |  |  |
+| 25 | [The utility layer](chapters/25-utils.md) | `django/utils`, `django/core/__init__.py`, `django/core/exceptions.py`, minus `django/utils/log.py`, `django/utils/autoreload.py`, `django/utils/termcolors.py`, `django/utils/http.py`, `django/utils/regex_helper.py`, `django/utils/safestring.py`, `django/utils/html.py`, `django/utils/crypto.py`, `django/utils/csp.py`, `django/utils/translation`, `django/utils/formats.py`, `django/utils/timezone.py`, `django/utils/dateformat.py`, `django/utils/dates.py`, `django/utils/numberformat.py`, `django/utils/timesince.py`, `django/utils/cache.py` and `django/utils/feedgenerator.py` | 28 | 4,538 | 145,519 | 60,368 |  |  |  |  |
+| 26 | [Authentication, sessions and messages](chapters/26-auth.md) | `django/contrib/auth`, `django/contrib/sessions`, `django/contrib/messages` | 73 | 8,545 | 296,211 | 130,490 |  | 3 | 388 |  |
+| 27 | [The admin](chapters/27-admin.md) | `django/contrib/admin`, `django/contrib/admindocs` | 36 | 10,691 | 392,742 | 157,097 |  | 191 | 576 |  |
+| 28 | [Content types, static files and the other contrib apps](chapters/28-contrib.md) | `django/contrib`, `django/utils/feedgenerator.py`, minus `django/contrib/auth`, `django/contrib/sessions`, `django/contrib/messages`, `django/contrib/admin` and `django/contrib/admindocs` | 230 | 25,600 | 876,706 | 385,755 | 249,268 | 17 | 1292 |  |
+| 29 | [Management commands](chapters/29-commands.md) | `django/__main__.py`, `django/core/management`, `django/core/checks`, `django/core/servers`, `django/utils/autoreload.py`, `django/utils/termcolors.py` | 57 | 9,804 | 358,906 | 148,909 |  |  |  |  |
+| 30 | [The test framework](chapters/30-testing.md) | `django/test` | 7 | 6,615 | 223,938 | 92,537 |  |  |  |  |
+| 31 | [What changed](chapters/31-changes.md) | `docs/releases/5.*.txt`, `docs/releases/6.*.txt`, `docs/internals/deprecation.txt` | 0 | 0 | 0 | 0 |  |  |  | 65 (296,231 bytes, ~139,734 tokens) |
 
 Python files are those outside locale directories; the other files and the locale data of the same directories belong to the chapter and are listed on its page.
 
@@ -36,26 +43,33 @@ Python files are those outside locale directories; the other files and the local
 
 Import statements: the chapter in the row imports from the chapter in the column, statements inside function bodies included.
 
-| imports → | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 3 |  |  |  | 2 |  |  |  |  |  |  |  |  |  |  | 1 | 13 |  |  |  | 1 |  |
-| 4 | 9 |  | 7 | 7 | 1 |  |  |  |  | 1 |  |  |  |  | 4 | 9 |  |  |  |  |  |
-| 5 | 5 | 1 |  | 4 |  | 2 |  |  |  |  |  |  |  | 1 | 4 | 15 |  |  |  |  |  |
-| 6 | 3 |  | 3 |  | 4 |  |  |  |  |  |  |  |  | 4 |  | 10 |  |  |  | 2 |  |
-| 7 | 5 | 2 | 14 | 4 |  | 1 | 3 |  |  |  |  | 6 | 2 | 9 | 5 | 18 |  |  |  |  |  |
-| 8 | 8 | 4 | 4 | 3 |  |  |  |  |  |  |  | 3 |  | 1 | 1 | 11 |  |  |  |  |  |
-| 9 | 10 | 1 |  |  |  |  |  | 20 | 33 | 16 |  |  | 5 | 8 | 5 | 37 |  |  |  | 10 |  |
-| 10 | 2 |  |  |  |  |  | 7 |  | 9 | 2 |  |  |  | 1 |  | 10 |  |  |  |  |  |
-| 11 | 1 |  |  | 3 |  |  | 18 | 8 |  | 10 |  |  |  | 1 |  | 27 |  |  |  |  |  |
-| 12 | 16 | 1 |  | 6 |  | 1 | 16 | 4 | 13 |  | 1 | 1 |  | 6 | 2 | 53 |  |  |  | 3 |  |
-| 13 | 14 |  |  |  |  |  | 14 |  |  | 6 |  |  |  | 3 |  | 18 |  |  |  | 3 |  |
-| 14 | 11 |  | 3 | 3 |  | 5 |  |  |  | 1 |  |  | 2 | 13 | 4 | 34 |  |  | 1 | 2 |  |
-| 15 | 2 |  | 1 | 3 |  |  | 7 |  | 1 |  |  | 9 |  | 17 |  | 27 |  |  |  |  |  |
-| 16 | 12 | 2 | 3 | 7 | 1 |  |  |  |  |  |  | 5 |  |  | 2 | 3 |  |  |  | 2 |  |
-| 17 | 22 | 5 | 3 | 1 |  | 3 | 6 |  |  | 3 |  |  |  | 11 |  | 59 |  |  |  | 1 |  |
-| 18 | 4 | 1 |  | 4 |  |  | 1 |  |  |  |  | 1 |  | 4 |  |  |  |  |  |  |  |
-| 19 | 29 | 6 | 7 | 3 | 14 | 10 | 18 | 1 |  | 7 | 14 | 7 | 2 | 19 | 7 | 37 |  | 3 | 4 | 7 |  |
-| 20 | 15 | 1 | 10 | 19 | 7 |  | 16 | 5 | 4 | 2 | 3 | 30 | 15 | 29 | 2 | 38 | 17 |  | 4 | 2 |  |
-| 21 | 49 | 7 | 14 | 10 | 3 |  | 64 | 4 | 16 | 55 | 12 | 10 | 15 | 36 | 9 | 86 | 1 | 7 |  | 21 | 1 |
-| 22 | 47 | 3 | 1 | 7 |  | 3 | 5 | 1 |  | 20 | 27 | 2 |  | 5 | 10 | 29 |  |  |  |  | 2 |
-| 23 | 10 | 8 | 5 | 5 | 1 |  | 1 |  |  | 7 |  | 6 | 3 | 6 | 8 | 10 | 15 |  | 4 | 7 |  |
+| imports → | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 3 |  |  |  | 2 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1 | 13 |  |  |  | 1 |  |
+| 4 | 9 |  | 7 | 7 | 1 |  |  |  |  |  |  |  |  | 1 |  |  |  |  |  |  |  | 4 | 9 |  |  |  |  |  |
+| 5 | 5 | 1 |  | 4 |  | 2 |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 1 | 4 | 15 |  |  |  |  |  |
+| 6 | 3 |  | 3 |  | 4 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 4 |  | 10 |  |  |  | 2 |  |
+| 7 | 5 | 2 | 14 | 4 |  | 1 | 3 |  |  |  |  |  |  |  |  |  |  |  | 6 | 2 | 9 | 5 | 18 |  |  |  |  |  |
+| 8 | 8 | 4 | 4 | 3 |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 3 |  | 1 | 1 | 11 |  |  |  |  |  |
+| 9 | 8 | 1 |  |  |  |  |  | 5 | 12 | 3 | 23 | 3 |  | 12 |  |  |  |  |  | 3 | 6 | 1 | 28 |  |  |  | 7 |  |
+| 10 |  |  |  |  |  |  | 5 |  | 2 |  | 1 | 1 |  | 1 |  |  |  |  |  | 1 | 1 | 4 | 2 |  |  |  | 1 |  |
+| 11 | 2 |  |  |  |  |  | 6 | 2 |  |  | 4 | 3 | 2 | 2 |  |  |  |  |  |  | 1 |  | 9 |  |  |  |  |  |
+| 12 | 2 |  |  |  |  |  | 11 | 1 | 4 |  | 5 |  |  | 3 |  |  |  |  |  | 1 | 1 |  | 8 |  |  |  | 2 |  |
+| 13 | 1 |  |  | 1 |  |  | 16 |  | 3 |  |  | 5 |  | 6 | 1 |  |  |  |  |  | 1 |  | 15 |  |  |  |  |  |
+| 14 |  |  |  | 1 |  |  | 1 |  | 3 |  | 5 |  | 4 | 1 |  |  |  |  |  |  |  |  | 6 |  |  |  |  |  |
+| 15 |  |  |  | 1 |  |  | 1 |  | 2 |  | 4 | 2 |  | 2 |  |  |  |  |  |  |  |  | 6 |  |  |  |  |  |
+| 16 | 2 | 1 |  |  |  |  |  |  |  |  |  |  |  |  | 1 |  |  |  |  |  |  | 1 | 9 |  |  |  |  |  |
+| 17 | 10 |  |  | 6 |  | 1 | 13 |  | 4 |  | 6 |  | 5 | 34 |  | 24 |  |  | 1 |  | 5 |  | 41 |  |  |  | 2 |  |
+| 18 | 4 |  |  |  |  |  | 3 |  |  |  | 1 | 1 |  | 5 |  |  | 1 |  |  |  | 1 | 1 | 3 |  |  |  | 1 |  |
+| 19 | 8 |  |  |  |  |  | 8 |  |  | 2 |  |  |  | 6 |  |  |  |  |  |  | 1 |  | 11 |  |  |  | 2 |  |
+| 20 | 6 |  |  |  |  |  | 3 | 1 |  |  |  |  |  |  |  |  | 9 |  |  |  | 2 |  | 7 |  |  |  | 1 |  |
+| 21 | 11 |  | 3 | 3 |  | 5 |  |  |  |  |  |  |  | 1 |  |  |  |  |  | 2 | 13 | 4 | 34 |  |  | 1 | 2 |  |
+| 22 | 2 |  | 1 | 3 |  |  | 7 |  |  |  | 1 |  |  |  |  |  |  |  | 9 |  | 17 |  | 27 |  |  |  |  |  |
+| 23 | 12 | 2 | 3 | 7 | 1 |  |  |  |  |  |  |  |  |  |  |  |  |  | 5 |  |  | 2 | 3 |  |  |  | 2 |  |
+| 24 | 22 | 5 | 3 | 1 |  | 3 | 6 |  |  |  |  |  |  | 3 |  |  |  |  |  |  | 11 |  | 59 |  |  |  | 1 |  |
+| 25 | 4 | 1 |  | 4 |  |  | 1 |  |  |  |  |  |  |  |  |  |  |  | 1 |  | 4 |  |  |  |  |  |  |  |
+| 26 | 29 | 6 | 7 | 3 | 14 | 10 | 18 |  | 1 |  |  |  |  | 7 |  |  | 14 |  | 7 | 2 | 19 | 7 | 37 |  | 3 | 4 | 7 |  |
+| 27 | 15 | 1 | 10 | 19 | 7 |  | 14 | 1 | 5 | 1 | 4 |  |  | 2 |  |  | 3 |  | 30 | 15 | 29 | 2 | 38 | 17 |  | 4 | 2 |  |
+| 28 | 49 | 7 | 14 | 10 | 3 |  | 58 | 2 | 4 | 4 | 12 | 4 |  | 19 | 35 | 1 | 10 | 2 | 10 | 15 | 36 | 9 | 86 | 1 | 7 |  | 21 | 1 |
+| 29 | 47 | 3 | 1 | 7 |  | 3 | 4 | 1 | 1 |  |  |  |  | 20 |  |  | 18 | 9 | 2 |  | 5 | 10 | 29 |  |  |  |  | 2 |
+| 30 | 10 | 8 | 5 | 5 | 1 |  | 1 |  |  |  |  |  |  | 6 | 1 |  |  |  | 6 | 3 | 6 | 8 | 10 | 15 |  | 4 | 7 |  |

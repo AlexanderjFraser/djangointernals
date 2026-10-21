@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 844 538">
+  <!-- the first tree: the filter's where tree, one row to a node; beside each node what it is given on the way
+       down, as the filter is built, and what it writes on the way up, as the statement is compiled -->
+  <text class="strong" x="0" y="14">the where tree of <tspan class="name">filter(ship__home__name='Bergen', signed_on__year__lt=2020)</tspan></text>
+
+  <!-- the two columns' heads -->
+  <text x="190" y="50">bound as the filter is built: <tspan class="strong">down</tspan></text>
+  <text x="562" y="50">written as the statement is compiled: <tspan class="strong">up</tspan></text>
+
+  <!-- the two walks, each over all three rows -->
+  <path class="mark-line" d="M170.5 70.5 V242"/>
+  <polygon class="head mark" points="170.5,252 165.5,242 175.5,242"/>
+  <path class="mark-line" d="M542.5 252 V80.5"/>
+  <polygon class="head mark" points="542.5,70.5 537.5,80.5 547.5,80.5"/>
+
+  <!-- the tree's edges -->
+  <path class="line" d="M12.5 102.5 V206.5 H24.5 M12.5 146.5 H24.5"/>
+
+  <!-- row 1: the AND node -->
+  <rect class="box" x="0.5" y="70.5" width="150" height="32" rx="4"/>
+  <text x="12" y="91"><tspan class="name">AND</tspan>, a <tspan class="name">WhereNode</tspan></text>
+  <text class="name" x="562" y="91">("fleet_port"."name" = %s</text>
+  <text class="name" x="569.8" y="109">AND "crew_sailor"."signed_on" &lt; %s)</text>
+
+  <!-- row 2: Exact -->
+  <rect class="box" x="24.5" y="130.5" width="126" height="32" rx="4"/>
+  <text class="name" x="36" y="151">Exact</text>
+  <text x="190" y="151">the name becomes <tspan class="name">Col(fleet_port, name)</tspan>;</text>
+  <text x="190" y="169"><tspan class="name">'Bergen'</tspan> is prepared through <tspan class="name">Port.name</tspan></text>
+  <text class="name" x="562" y="151">"fleet_port"."name" = %s</text>
+  <text class="name" x="562" y="169">'Bergen'</text>
+
+  <!-- row 3: YearLt -->
+  <rect class="box" x="24.5" y="190.5" width="126" height="32" rx="4"/>
+  <text class="name" x="36" y="211">YearLt</text>
+  <text x="190" y="211">the name becomes <tspan class="name">Col(crew_sailor, signed_on)</tspan>,</text>
+  <text x="190" y="229">wrapped in the transform <tspan class="name">ExtractYear</tspan></text>
+  <text class="name" x="562" y="211">"crew_sailor"."signed_on" &lt; %s</text>
+  <text class="name" x="562" y="229">'2020-01-01 00:00:00'</text>
+  <text class="quiet" x="562" y="247">the column itself, against the year's first day</text>
+
+  <!-- the second tree: a leaf that decides, and its signal counted up to the compiler -->
+  <text class="strong" x="0" y="308">a tree with a leaf that decides</text>
+
+  <!-- the signal's way up, from the leaf through its node to the compiler -->
+  <path class="mark-line" d="M87.5 444.5 V426.5"/>
+  <polygon class="head mark" points="87.5,416.5 82.5,426.5 92.5,426.5"/>
+  <path class="mark-line" d="M87.5 384.5 V366.5"/>
+  <polygon class="head mark" points="87.5,356.5 82.5,366.5 92.5,366.5"/>
+
+  <!-- the tree's edges -->
+  <path class="line" d="M12.5 416.5 V520.5 H24.5 M12.5 460.5 H24.5"/>
+
+  <rect class="box" x="0.5" y="324.5" width="150" height="32" rx="4"/>
+  <text x="12" y="345">the compiler</text>
+  <text x="190" y="345">given an empty tree, ordinarily sends no statement: the queryset has no rows</text>
+
+  <rect class="box" x="0.5" y="384.5" width="150" height="32" rx="4"/>
+  <text x="12" y="405"><tspan class="name">AND</tspan>, a <tspan class="name">WhereNode</tspan></text>
+  <text x="190" y="405">one empty child makes the node empty: it raises <tspan class="name">EmptyResultSet</tspan> in turn</text>
+
+  <rect class="box" x="24.5" y="444.5" width="126" height="32" rx="4"/>
+  <text x="36" y="465"><tspan class="name">In</tspan>, given <tspan class="name">[]</tspan></text>
+  <text x="190" y="465">can match nothing: raises <tspan class="name">EmptyResultSet</tspan> in place of its SQL</text>
+
+  <rect class="box" x="24.5" y="504.5" width="126" height="32" rx="4"/>
+  <text x="36" y="525">any other child</text>
+  <text x="190" y="525">its SQL is not used</text>
+</svg>

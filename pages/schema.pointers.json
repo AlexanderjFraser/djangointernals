@@ -1,0 +1,221 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "schema.md",
+ "pointers": [
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor",
+   "line": 17,
+   "sentence": "`BaseDatabaseSchemaEditor` turns a model created or deleted, a field added or removed, and an index or a constraint added or dropped into statements for one database, and each of the four backends subclasses it; `BaseDatabaseWrapper.schema_editor` makes one (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor`, `django/db/backends/base/base.py:BaseDatabaseWrapper.schema_editor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor",
+   "kind": "class",
+   "lines": [
+    81,
+    2136
+   ],
+   "fingerprint": "3892835cb1f9c8c0"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.schema_editor",
+   "line": 17,
+   "sentence": "`BaseDatabaseSchemaEditor` turns a model created or deleted, a field added or removed, and an index or a constraint added or dropped into statements for one database, and each of the four backends subclasses it; `BaseDatabaseWrapper.schema_editor` makes one (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor`, `django/db/backends/base/base.py:BaseDatabaseWrapper.schema_editor`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.schema_editor",
+   "kind": "function",
+   "lines": [
+    717,
+    725
+   ],
+   "fingerprint": "0232c405403354b1"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__enter__",
+   "line": 17,
+   "sentence": "Entering it sets up an empty list of **deferred statements** and, where the database can roll back DDL, ordinarily enters an atomic block ([Transactions: autocommit, `atomic` and savepoints](connections/atomic.md)); each method sends the statements it writes, or collects them as text where the editor was made to collect, and appends to the list what must wait; leaving it, when no exception is leaving, executes the deferred statements as it executed the others, and then leaves the atomic block (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__enter__`, `django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.__enter__",
+   "kind": "function",
+   "lines": [
+    166,
+    171
+   ],
+   "fingerprint": "6a907560d250b431"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__exit__",
+   "line": 17,
+   "sentence": "Entering it sets up an empty list of **deferred statements** and, where the database can roll back DDL, ordinarily enters an atomic block ([Transactions: autocommit, `atomic` and savepoints](connections/atomic.md)); each method sends the statements it writes, or collects them as text where the editor was made to collect, and appends to the list what must wait; leaving it, when no exception is leaving, executes the deferred statements as it executed the others, and then leaves the atomic block (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__enter__`, `django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.__exit__",
+   "kind": "function",
+   "lines": [
+    173,
+    178
+   ],
+   "fingerprint": "7cd75e1b563e948d"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.create_model",
+   "line": 47,
+   "sentence": "`create_model` handed the table's statement to `execute`, which, in an editor made to collect, sent nothing (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor.create_model`); the two indexes, the foreign key's and Buoy's own, waited in `deferred_sql` until the editor was left, and were executed there, before the commit.",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor.create_model",
+   "kind": "function",
+   "lines": [
+    516,
+    549
+   ],
+   "fingerprint": "ea26fb16db360be4"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__enter__",
+   "line": 47,
+   "sentence": "On SQLite the bracket is wider still: the backend's editor turns the database's checks of foreign keys off as it is entered, and as it is left checks every table before the held statements are sent and turns the checks on again last; it refuses to be entered where the switch does not take, as SQLite ignores it inside a transaction (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__enter__`, `django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.__enter__",
+   "kind": "function",
+   "lines": [
+    28,
+    39
+   ],
+   "fingerprint": "0fd8b75ba0902ccc"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__",
+   "line": 47,
+   "sentence": "On SQLite the bracket is wider still: the backend's editor turns the database's checks of foreign keys off as it is entered, and as it is left checks every table before the held statements are sent and turns the checks on again last; it refuses to be entered where the switch does not take, as SQLite ignores it inside a transaction (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__enter__`, `django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor.__exit__`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor.__exit__",
+   "kind": "function",
+   "lines": [
+    41,
+    44
+   ],
+   "fingerprint": "dd0a1f0f6514bd6c"
+  },
+  {
+   "pointer": "django/db/migrations/executor.py:MigrationExecutor.apply_migration",
+   "line": 47,
+   "sentence": "Migrations are the editor's main user: the operations' database halves call its methods, ordinarily inside an editor that the executor opens for each migration (`django/db/migrations/executor.py:MigrationExecutor.apply_migration`) ([The schema editor: `BaseDatabaseSchemaEditor`](schema/editor.md)).",
+   "tree": "django",
+   "path": "django/db/migrations/executor.py",
+   "symbol": "MigrationExecutor.apply_migration",
+   "kind": "function",
+   "lines": [
+    241,
+    266
+   ],
+   "fingerprint": "4d2361bf6621e0b6"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._alter_field",
+   "line": 49,
+   "sentence": "`BaseDatabaseSchemaEditor.alter_field` is handed a field's old definition and its new one, and takes the column from the first to the second in a fixed order, dropping first what depends on the column and making it again last, with the columns of other tables that must follow it (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._alter_field`) ([Altering a column, and SQLite's table remake](schema/alter-field.md)).",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._alter_field",
+   "kind": "function",
+   "lines": [
+    984,
+    1366
+   ],
+   "fingerprint": "bcfcb0a8b6ac4b8e"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor._remake_table",
+   "line": 49,
+   "sentence": "SQLite, which can rename a column in place but change it in no other way, builds the table again: a new table made from the new definition, the rows copied into it, the old table dropped and the new one renamed (`django/db/backends/sqlite3/schema.py:DatabaseSchemaEditor._remake_table`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/schema.py",
+   "symbol": "DatabaseSchemaEditor._remake_table",
+   "kind": "function",
+   "lines": [
+    80,
+    282
+   ],
+   "fingerprint": "76ec59ae6d6e93a2"
+  },
+  {
+   "pointer": "django/db/backends/base/introspection.py:BaseDatabaseIntrospection",
+   "line": 53,
+   "sentence": "`BaseDatabaseIntrospection` is the class of a connection's **introspection**, the object that asks a database what its schema holds and answers in Django's terms: the tables and views, a table's columns, its foreign keys, primary key, constraints and indexes, and the sequences that number its new rows (`django/db/backends/base/introspection.py:BaseDatabaseIntrospection`).",
+   "tree": "django",
+   "path": "django/db/backends/base/introspection.py",
+   "symbol": "BaseDatabaseIntrospection",
+   "kind": "class",
+   "lines": [
+    16,
+    228
+   ],
+   "fingerprint": "f2bc145c0235ac6e"
+  },
+  {
+   "pointer": "django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._constraint_names",
+   "line": 53,
+   "sentence": "The schema editor, to drop a constraint or an index that a field implies, needs the name the database knows it by, and finds it among the table's constraints by their columns and kinds (`django/db/backends/base/schema.py:BaseDatabaseSchemaEditor._constraint_names`). migrate, given `--run-syncdb`, asks which tables exist, and with `--fake-initial` whether an initial migration's tables and columns are there already. inspectdb writes models for tables Django did not make.",
+   "tree": "django",
+   "path": "django/db/backends/base/schema.py",
+   "symbol": "BaseDatabaseSchemaEditor._constraint_names",
+   "kind": "function",
+   "lines": [
+    2045,
+    2093
+   ],
+   "fingerprint": "87b05a64c41f2016"
+  },
+  {
+   "pointer": "django/core/management/sql.py:sql_flush",
+   "line": 53,
+   "sentence": "And the flush, which empties the models' tables, asks which of them exist before it writes the statements that empty them (`django/core/management/sql.py:sql_flush`) ([Introspection: reading the schema back](schema/introspection.md)).",
+   "tree": "django",
+   "path": "django/core/management/sql.py",
+   "symbol": "sql_flush",
+   "kind": "function",
+   "lines": [
+    7,
+    19
+   ],
+   "fingerprint": "83054a45fde5103b"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation",
+   "line": 88,
+   "sentence": "`BaseDatabaseCreation` is the class of a connection's **creation**, the object that makes the database a test run works in and destroys it afterwards (`django/db/backends/base/creation.py:BaseDatabaseCreation`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation",
+   "kind": "class",
+   "lines": [
+    19,
+    409
+   ],
+   "fingerprint": "2e5cf3cdab4ccb73"
+  },
+  {
+   "pointer": "django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db",
+   "line": 88,
+   "sentence": "`BaseDatabaseCreation.create_test_db` ordinarily makes the database, points the alias's settings at it so that every connection to the alias reaches it, and calls migrate, which builds the models' tables through the schema editor as it would on any database (`django/db/backends/base/creation.py:BaseDatabaseCreation.create_test_db`).",
+   "tree": "django",
+   "path": "django/db/backends/base/creation.py",
+   "symbol": "BaseDatabaseCreation.create_test_db",
+   "kind": "function",
+   "lines": [
+    45,
+    129
+   ],
+   "fingerprint": "dc7cb1465332c24b"
+  }
+ ]
+}

@@ -1,0 +1,237 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "connections.md",
+ "pointers": [
+  {
+   "pointer": "django/db/utils.py:ConnectionHandler",
+   "line": 17,
+   "sentence": "The ORM reaches a database through `django.db.connections`, an instance of `ConnectionHandler`: a mapping from an alias to a **connection**, an instance of the backend's `DatabaseWrapper`, such as SQLite's (`django/db/utils.py:ConnectionHandler`, `django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "ConnectionHandler",
+   "kind": "class",
+   "lines": [
+    141,
+    197
+   ],
+   "fingerprint": "1b274d9d800d59c2"
+  },
+  {
+   "pointer": "django/db/backends/sqlite3/base.py:DatabaseWrapper",
+   "line": 17,
+   "sentence": "The ORM reaches a database through `django.db.connections`, an instance of `ConnectionHandler`: a mapping from an alias to a **connection**, an instance of the backend's `DatabaseWrapper`, such as SQLite's (`django/db/utils.py:ConnectionHandler`, `django/db/backends/sqlite3/base.py:DatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/sqlite3/base.py",
+   "symbol": "DatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    60,
+    334
+   ],
+   "fingerprint": "2c5ad9b88ee5a08a"
+  },
+  {
+   "pointer": "django/utils/connection.py:BaseConnectionHandler.__getitem__",
+   "line": 17,
+   "sentence": "It fills in the defaults of every alias's settings when it first reads `DATABASES`, makes a connection the first time an alias is asked for, and keeps what it made in storage local to the thread, so that two threads asking for `\"default\"` are given two connections (`django/utils/connection.py:BaseConnectionHandler.__getitem__`).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "BaseConnectionHandler.__getitem__",
+   "kind": "function",
+   "lines": [
+    56,
+    64
+   ],
+   "fingerprint": "85dcb79d857fcb0e"
+  },
+  {
+   "pointer": "django/utils/connection.py:ConnectionProxy",
+   "line": 17,
+   "sentence": "`django.db.connection`, the name much code reaches for, is a proxy that looks up `connections[\"default\"]` each time it is used (`django/utils/connection.py:ConnectionProxy`) ([Connections by alias: `DATABASES` and `ConnectionHandler`](connections/aliases.md)).",
+   "tree": "django",
+   "path": "django/utils/connection.py",
+   "symbol": "ConnectionProxy",
+   "kind": "class",
+   "lines": [
+    7,
+    27
+   ],
+   "fingerprint": "608ab426ee5e8883"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper",
+   "line": 19,
+   "sentence": "A connection is a `BaseDatabaseWrapper` underneath, and most of what it does is inherited from that class: it opens the driver's connection when something first needs it, makes cursors, keeps the state of the transaction, commits, rolls back and closes (`django/db/backends/base/base.py:BaseDatabaseWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper",
+   "kind": "class",
+   "lines": [
+    30,
+    789
+   ],
+   "fingerprint": "8fc19fca2556dd9a"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection",
+   "line": 23,
+   "sentence": "| the driver's connection | `connection`, `None` until it is first needed (`django/db/backends/base/base.py:BaseDatabaseWrapper.ensure_connection`); `settings_dict`; `alias` | [Opening and closing a connection](connections/opening.md) |",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.ensure_connection",
+   "kind": "function",
+   "lines": [
+    270,
+    279
+   ],
+   "at": 271,
+   "fingerprint": "11d0697684ee76e0"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.__init__",
+   "line": 32,
+   "sentence": "*The attributes `BaseDatabaseWrapper.__init__` sets, grouped by what they serve (`django/db/backends/base/base.py:BaseDatabaseWrapper.__init__`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.__init__",
+   "kind": "function",
+   "lines": [
+    53,
+    119
+   ],
+   "fingerprint": "274f00b243041080"
+  },
+  {
+   "pointer": "django/db/backends/utils.py:CursorWrapper",
+   "line": 36,
+   "sentence": "A **cursor**, in this chapter, is what `BaseDatabaseWrapper.cursor` returns: Django's `CursorWrapper` around the **driver's cursor** (`django/db/backends/utils.py:CursorWrapper`).",
+   "tree": "django",
+   "path": "django/db/backends/utils.py",
+   "symbol": "CursorWrapper",
+   "kind": "class",
+   "lines": [
+    17,
+    114
+   ],
+   "fingerprint": "e2f37165f49affd0"
+  },
+  {
+   "pointer": "django/db/utils.py:DatabaseErrorWrapper",
+   "line": 36,
+   "sentence": "Django's cursor refuses a statement while the transaction is broken, passes it through any execute wrappers that have been installed, and turns an exception of one of the driver's error classes, or of a subclass of one, into Django's class of that class's name, so that code above the backend catches `IntegrityError` from `django.db` and not the driver's own (`django/db/utils.py:DatabaseErrorWrapper`).",
+   "tree": "django",
+   "path": "django/db/utils.py",
+   "symbol": "DatabaseErrorWrapper",
+   "kind": "class",
+   "lines": [
+    53,
+    103
+   ],
+   "fingerprint": "20e9871627eab2d3"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.connect",
+   "line": 94,
+   "sentence": "Then it sends `connection_created` with the connection, for any receiver that wants to prepare each new connection (`django/db/backends/base/base.py:BaseDatabaseWrapper.connect`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.connect",
+   "kind": "function",
+   "lines": [
+    236,
+    261
+   ],
+   "at": 237,
+   "fingerprint": "c5345148a50b5e4c"
+  },
+  {
+   "pointer": "django/db/__init__.py",
+   "line": 122,
+   "sentence": "On that signal `close_old_connections`, a receiver connected in `django/db/__init__.py`, asked each connection this thread had made whether it should be closed.",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": null,
+   "kind": "file",
+   "lines": [
+    1,
+    63
+   ],
+   "fingerprint": "081b9e8484eb9153"
+  },
+  {
+   "pointer": "django/db/__init__.py:close_old_connections",
+   "line": 122,
+   "sentence": "`\"CONN_MAX_AGE\"` is 0 unless the alias says otherwise, so the time to close came as the connection opened, and `BaseDatabaseWrapper.close_if_unusable_or_obsolete` closed it; it is opened again when it is next needed (`django/db/__init__.py:close_old_connections`, `django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`).",
+   "tree": "django",
+   "path": "django/db/__init__.py",
+   "symbol": "close_old_connections",
+   "kind": "function",
+   "lines": [
+    57,
+    59
+   ],
+   "fingerprint": "f5cf044cab3a61cd"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "line": 122,
+   "sentence": "`\"CONN_MAX_AGE\"` is 0 unless the alias says otherwise, so the time to close came as the connection opened, and `BaseDatabaseWrapper.close_if_unusable_or_obsolete` closed it; it is opened again when it is next needed (`django/db/__init__.py:close_old_connections`, `django/db/backends/base/base.py:BaseDatabaseWrapper.close_if_unusable_or_obsolete`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.close_if_unusable_or_obsolete",
+   "kind": "function",
+   "lines": [
+    591,
+    616
+   ],
+   "fingerprint": "e07cf00828e9e352"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit",
+   "line": 126,
+   "sentence": "A connection is in **autocommit** unless code asks for more: `connect` sets it as the alias's `\"AUTOCOMMIT\"` says, which is on unless the alias says otherwise, so that each statement is a transaction of its own, committed by the database as the statement ends (`django/db/backends/base/base.py:BaseDatabaseWrapper.set_autocommit`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.set_autocommit",
+   "kind": "function",
+   "lines": [
+    457,
+    492
+   ],
+   "fingerprint": "43c78eb71aa8a61b"
+  },
+  {
+   "pointer": "django/db/transaction.py:Atomic",
+   "line": 126,
+   "sentence": "An atomic block inside another can make a **savepoint** instead, and as it is left release the savepoint or roll back to it, so that an inner block that fails can undo its own work and leave the work of the blocks around it (`django/db/transaction.py:Atomic`).",
+   "tree": "django",
+   "path": "django/db/transaction.py",
+   "symbol": "Atomic",
+   "kind": "class",
+   "lines": [
+    155,
+    326
+   ],
+   "fingerprint": "02eff72571d8dbd8"
+  },
+  {
+   "pointer": "django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction",
+   "line": 128,
+   "sentence": "The state lives on the connection, not on the block: whether an atomic block is open, the stack of savepoint names, the stack of open blocks, and `needs_rollback`, which marks a transaction that must be rolled back before the connection runs another statement (`django/db/backends/base/base.py:BaseDatabaseWrapper.validate_no_broken_transaction`).",
+   "tree": "django",
+   "path": "django/db/backends/base/base.py",
+   "symbol": "BaseDatabaseWrapper.validate_no_broken_transaction",
+   "kind": "function",
+   "lines": [
+    519,
+    524
+   ],
+   "fingerprint": "69fd85bfecd66e6f"
+  }
+ ]
+}

@@ -62,16 +62,16 @@ The map sees only import statements. What crosses an edge through a registry, a 
 
 | other chapter | this chapter imports from it | naming most | it imports from this chapter | naming most, of this chapter |
 |---|---|---|---|---|
-| [14 · Templates](14-templates.md) | 6 | `django/template/__init__.py` (3) `django/template/loader.py` (3) `django/template/defaultfilters.py` (1) `django/template/response.py` (1) | 0 |  |
-| [15 · Forms](15-forms.md) | 2 | `django/forms/__init__.py` (1) `django/forms/models.py` (1) | 0 |  |
-| [16 · Internationalization and time zones](16-i18n.md) | 9 | `django/utils/translation/__init__.py` (6) `django/utils/timezone.py` (3) | 1 | `django/views/generic/__init__.py` (1) |
-| [17 · Caching, files, mail, signals and tasks](17-services.md) | 5 | `django/utils/cache.py` (3) `django/core/paginator.py` (1) `django/middleware/cache.py` (1) | 0 |  |
-| [18 · The utility layer](18-utils.md) | 18 | `django/core/exceptions.py` (5) `django/utils/decorators.py` (5) `django/utils/functional.py` (3) `django/utils/_os.py` (1) and 4 more | 0 |  |
-| [19 · Authentication, sessions and messages](19-auth.md) | 0 |  | 14 | `django/views/decorators/debug.py` (5) `django/shortcuts.py` (4) `django/views/decorators/csrf.py` (2) `django/views/decorators/cache.py` (1) and 2 more |
-| [20 · The admin](20-admin.md) | 0 |  | 7 | `django/views/decorators/csrf.py` (2) `django/views/generic/__init__.py` (2) `django/views/decorators/cache.py` (1) `django/views/decorators/common.py` (1) and 1 more |
-| [21 · Content types, static files and the other contrib apps](21-contrib.md) | 0 |  | 3 | `django/shortcuts.py` (1) `django/views/decorators/csrf.py` (1) `django/views/static.py` (1) |
-| [23 · The test framework](23-testing.md) | 0 |  | 1 | `django/views/static.py` (1) |
+| [21 · Templates](21-templates.md) | 6 | `django/template/__init__.py` (3) `django/template/loader.py` (3) `django/template/defaultfilters.py` (1) `django/template/response.py` (1) | 0 |  |
+| [22 · Forms](22-forms.md) | 2 | `django/forms/__init__.py` (1) `django/forms/models.py` (1) | 0 |  |
+| [23 · Internationalization and time zones](23-i18n.md) | 9 | `django/utils/translation/__init__.py` (6) `django/utils/timezone.py` (3) | 1 | `django/views/generic/__init__.py` (1) |
+| [24 · Caching, files, mail, signals and tasks](24-services.md) | 5 | `django/utils/cache.py` (3) `django/core/paginator.py` (1) `django/middleware/cache.py` (1) | 0 |  |
+| [25 · The utility layer](25-utils.md) | 18 | `django/core/exceptions.py` (5) `django/utils/decorators.py` (5) `django/utils/functional.py` (3) `django/utils/_os.py` (1) and 4 more | 0 |  |
+| [26 · Authentication, sessions and messages](26-auth.md) | 0 |  | 14 | `django/views/decorators/debug.py` (5) `django/shortcuts.py` (4) `django/views/decorators/csrf.py` (2) `django/views/decorators/cache.py` (1) and 2 more |
+| [27 · The admin](27-admin.md) | 0 |  | 7 | `django/views/decorators/csrf.py` (2) `django/views/generic/__init__.py` (2) `django/views/decorators/cache.py` (1) `django/views/decorators/common.py` (1) and 1 more |
+| [28 · Content types, static files and the other contrib apps](28-contrib.md) | 0 |  | 3 | `django/shortcuts.py` (1) `django/views/decorators/csrf.py` (1) `django/views/static.py` (1) |
 | [3 · Settings, apps and startup](3-startup.md) | 4+1 | `django/conf/__init__.py` (2) `django/utils/log.py` (2) `django/__init__.py` (1) | 0 |  |
+| [30 · The test framework](30-testing.md) | 0 |  | 1 | `django/views/static.py` (1) |
 | [4 · Handlers and middleware](4-handlers.md) | 2 | `django/middleware/gzip.py` (1) `django/middleware/http.py` (1) | 1 | `django/views/debug.py` (1) |
 | [5 · Requests and responses](5-http.md) | 14 | `django/http/__init__.py` (11) `django/utils/http.py` (3) | 0 |  |
 | [6 · URL routing](6-urls.md) | 4 | `django/urls/__init__.py` (3) `django/utils/regex_helper.py` (1) | 2+2 | `django/views/__init__.py` (2) `django/views/defaults.py` (1) `django/views/static.py` (1) |

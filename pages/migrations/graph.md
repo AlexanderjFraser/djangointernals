@@ -64,7 +64,7 @@ graph.root_nodes()  ->  [('crew', '0001_initial'), ('fleet', '0001_initial'), ('
 graph.leaf_nodes()  ->  [('crew', '0002_initial'), ('fleet', '0001_initial'), ('office', '0001_initial'), ('yard', '0001_initial')]
 ```
 
-Fleet's one migration is fleet's root and its leaf, though it has a parent in crew and children in three applications. A dependency may have `"__first__"` or `"__latest__"` in place of a migration's name; where the loader makes a key of one, the key is the first of the root nodes, or of the leaf nodes, of the application it names (`django/db/migrations/loader.py:MigrationLoader.check_key`; [Finding migrations: `MigrationLoader`](loader.md)). The leaf nodes, each the most current version of its application's schema, are migrate's targets when it is given no migration's name ([The migrate command, showmigrations and sqlmigrate](migrate.md)), and the autodetector has an application's first new migration depend on its first leaf node ([From operations to migrations: dependencies, order and names](dependencies.md)).
+Fleet's one migration is fleet's root and its leaf, though it has a parent in crew and children in three applications. A dependency may have `"__first__"` or `"__latest__"` in place of a migration's name; where the loader makes a key of one, the key is the first of the root nodes, or of the leaf nodes, of the application it names (`django/db/migrations/loader.py:MigrationLoader.check_key`; [Finding migrations: `MigrationLoader`](loader.md)). The leaf nodes, each the most current version of its application's schema, are migrate's targets when it is given no migration's name ([The migrate command, showmigrations and sqlmigrate](migrate.md)), and the autodetector has an application's first new migration depend on its first leaf node ([From operations to migrations: dependencies, order and names](../makemigrations/dependencies.md)).
 
 More than one leaf node in an application is an error, usually the result of a merge in version control, and the graph accepts it. Later in yard's history a migration from a colleague's branch stands beside one that makemigrations wrote, both depending on the same migration of yard:
 
@@ -72,7 +72,7 @@ More than one leaf node in an application is an error, usually the result of a m
 loader.graph.leaf_nodes('yard')  ->  [('yard', '0006_dock_covered'), ('yard', '0006_long_dock')]
 ```
 
-`MigrationLoader.detect_conflicts` reports such an application, and `makemigrations --merge` writes a migration that depends on both leaves ([The makemigrations command](makemigrations.md)).
+`MigrationLoader.detect_conflicts` reports such an application, and `makemigrations --merge` writes a migration that depends on both leaves ([The makemigrations command](../makemigrations/makemigrations.md)).
 
 ## The project state at a node: `make_state`
 
@@ -100,7 +100,7 @@ small.nodes['fleet', '0009_missing']  ->  None
 small.validate_consistency()  ->  raises NodeNotFoundError: Migration yard.0001_initial dependencies reference nonexistent parent node ('fleet', '0009_missing')
 ```
 
-The loader passes `skip_validation=True` with every edge and makes the check once, after the last of them (`django/db/migrations/loader.py:MigrationLoader.build_graph`; [Finding migrations: `MigrationLoader`](loader.md)). By then a dummy node may be gone. A migration that replaces others (a squashed one) may stand in the graph in their place, and where one of them is a dummy node, having no file, the loader then takes that node out and gives its place in the dependency to the replacing migration: a migration can go on naming a replaced migration whose file is deleted. [Squashed migrations: `replaces` and the squashmigrations command](squashing.md) has that.
+The loader passes `skip_validation=True` with every edge and makes the check once, after the last of them (`django/db/migrations/loader.py:MigrationLoader.build_graph`; [Finding migrations: `MigrationLoader`](loader.md)). By then a dummy node may be gone. A migration that replaces others (a squashed one) may stand in the graph in their place, and where one of them is a dummy node, having no file, the loader then takes that node out and gives its place in the dependency to the replacing migration: a migration can go on naming a replaced migration whose file is deleted. [Replacing migrations: `replaces`](replacing.md) has that.
 
 ## A cycle: `ensure_not_cyclic`
 

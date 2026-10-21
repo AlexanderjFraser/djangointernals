@@ -1,0 +1,166 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "combine.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/sql/query.py:Query.combine",
+   "line": 17,
+   "sentence": "`Query.combine` is called on the left side's query, which the queryset has cloned, with the right side's query and a connector, `\"AND\"`, `\"OR\"` or `\"XOR\"`; its docstring promises that the right side is not modified (`django/db/models/sql/query.py:Query.combine`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.combine",
+   "kind": "function",
+   "lines": [
+    701,
+    815
+   ],
+   "fingerprint": "33c485d2faf041da"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.bump_prefix",
+   "line": 27,
+   "sentence": "The comment at this point of `combine` gives that as the reason for what it does first: it clones the right side and has the clone move every alias but the base table's to a prefix the left side does not use, through `Query.bump_prefix`, so that no alias of the two queries can coincide (`django/db/models/sql/query.py:Query.bump_prefix`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.bump_prefix",
+   "kind": "function",
+   "lines": [
+    1058,
+    1111
+   ],
+   "fingerprint": "779a52e95c3f2ba7"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:JoinPromoter.add_votes",
+   "line": 33,
+   "sentence": "The promoter is made for two children under the connector, and the aliases of the left side's inner joins are voted in first (`django/db/models/sql/query.py:JoinPromoter.add_votes`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "JoinPromoter.add_votes",
+   "kind": "function",
+   "lines": [
+    2845,
+    2850
+   ],
+   "fingerprint": "7c39e241bd952a93"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join.relabeled_clone",
+   "line": 33,
+   "sentence": "Then each entry of the right side's alias map after the first, its base table, is relabelled with the renamings made so far, so that a join whose parent was renamed hangs from the new name, and handed to `Query.join` with the set of aliases that may be reused; `join` returns an existing alias where a join equal to this one is among those and a new one otherwise, and gives a new join its type (`django/db/models/sql/datastructures.py:Join.relabeled_clone`, `django/db/models/sql/query.py:Query.join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join.relabeled_clone",
+   "kind": "function",
+   "lines": [
+    135,
+    150
+   ],
+   "fingerprint": "bdc4e1be157ff3ee"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.join",
+   "line": 33,
+   "sentence": "Then each entry of the right side's alias map after the first, its base table, is relabelled with the renamings made so far, so that a join whose parent was renamed hangs from the new name, and handed to `Query.join` with the set of aliases that may be reused; `join` returns an existing alias where a join equal to this one is among those and a new one otherwise, and gives a new join its type (`django/db/models/sql/datastructures.py:Join.relabeled_clone`, `django/db/models/sql/query.py:Query.join`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.join",
+   "kind": "function",
+   "lines": [
+    1135,
+    1187
+   ],
+   "fingerprint": "393249a14721bc0e"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:JoinPromoter.update_join_types",
+   "line": 33,
+   "sentence": "The right side's votes go in last, and `JoinPromoter.update_join_types` settles the voted joins under `\"AND\"` and `\"OR\"`: under `\"AND\"` each is demoted to inner; under `\"OR\"` a join voted for by fewer than both sides is promoted to outer and one voted for by both is demoted; under `\"XOR\"` it promotes and demotes nothing, so each join keeps its type (`django/db/models/sql/query.py:JoinPromoter.update_join_types`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "JoinPromoter.update_join_types",
+   "kind": "function",
+   "lines": [
+    2852,
+    2907
+   ],
+   "fingerprint": "164ca9f3f8dd6ea1"
+  },
+  {
+   "pointer": "django/db/models/sql/datastructures.py:Join.identity",
+   "line": 77,
+   "sentence": "`Query.join` found, for each of the right side's joins, an equal join already in the map, two joins being equal by their class, table, parent alias, field and filtered relation (`django/db/models/sql/datastructures.py:Join.identity`), and returned its alias without touching the join's type, so both voted.",
+   "tree": "django",
+   "path": "django/db/models/sql/datastructures.py",
+   "symbol": "Join.identity",
+   "kind": "function",
+   "lines": [
+    152,
+    160
+   ],
+   "at": 153,
+   "fingerprint": "960e9aa92e91ad36"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.relabel_aliases",
+   "line": 111,
+   "sentence": "Then it clones the right side's where tree, relabels the clone with the renamings, and adds it to its own tree under the connector (`django/db/models/sql/where.py:WhereNode.relabel_aliases`, `django/utils/tree.py:Node.add`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.relabel_aliases",
+   "kind": "function",
+   "lines": [
+    203,
+    215
+   ],
+   "fingerprint": "dcd12e30beb65517"
+  },
+  {
+   "pointer": "django/utils/tree.py:Node.add",
+   "line": 111,
+   "sentence": "Then it clones the right side's where tree, relabels the clone with the renamings, and adds it to its own tree under the connector (`django/db/models/sql/where.py:WhereNode.relabel_aliases`, `django/utils/tree.py:Node.add`).",
+   "tree": "django",
+   "path": "django/utils/tree.py",
+   "symbol": "Node.add",
+   "kind": "function",
+   "lines": [
+    89,
+    122
+   ],
+   "fingerprint": "8045244c417bb21c"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_select",
+   "line": 113,
+   "sentence": "The masks of the two are unioned, and the right side's extra tables are appended (`django/db/models/sql/query.py:Query.set_select`, `django/db/models/sql/query.py:Query.set_extra_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_select",
+   "kind": "function",
+   "lines": [
+    2264,
+    2266
+   ],
+   "fingerprint": "f24cb0f06c497602"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.set_extra_mask",
+   "line": 113,
+   "sentence": "The masks of the two are unioned, and the right side's extra tables are appended (`django/db/models/sql/query.py:Query.set_select`, `django/db/models/sql/query.py:Query.set_extra_mask`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.set_extra_mask",
+   "kind": "function",
+   "lines": [
+    2582,
+    2591
+   ],
+   "fingerprint": "f4c87efb2caf1cfe"
+  }
+ ]
+}

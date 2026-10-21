@@ -22,7 +22,7 @@ Note.content_object.ct_field: the generic foreign key read on its model's class
     this commit  AttributeError: 'GenericForeignKeyDescriptor' object has no attribute 'ct_field'
 ```
 
-`GenericForeignKeyDescriptor.__get__` hands the fetching of an object not yet loaded to the instance's fetch mode, as a foreign key's descriptor does since 6.1 (`django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__`; [What changed in querysets](querysets.md)). A **fetch mode** is 6.1's choice of what reading an unloaded field or relation does: fetch it for that instance, for the instances loaded with it, or raise ([Deferred fields and fetch modes in a queryset](../querysets/deferred.md)).
+`GenericForeignKeyDescriptor.__get__` hands the fetching of an object not yet loaded to the instance's fetch mode, as a foreign key's descriptor does since 6.1 (`django/contrib/contenttypes/fields.py:GenericForeignKeyDescriptor.__get__`; [What changed in querysets](querysets.md)). A **fetch mode** is 6.1's choice of what reading an unloaded field or relation does: fetch it for that instance, for the instances loaded with it, or raise ([Deferred fields and the fetch modes](../instance/fetching.md)).
 
 Since 5.0 `GenericPrefetch` gives `prefetch_related` a queryset for each model a generic key reaches, where a `Prefetch` holds one (`django/contrib/contenttypes/prefetch.py:GenericPrefetch`; [Generic foreign keys: `GenericForeignKey`](../contrib/generic-foreign-key.md)).
 

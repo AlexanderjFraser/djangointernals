@@ -1,7 +1,7 @@
 ---
 django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its way to 6.2
-part: The ORM
-contents: migration, operations, state, historical-models, model-operations, field-operations, special-operations, recorder, graph, loader, executor, migrate, autodetector, autodetector-fields, dependencies, questioner, optimizer, serializer, writer, makemigrations, squashing
+part: The database
+contents: "A migration and its operations: migration, operations, state, historical-models, model-operations, field-operations, special-operations; Applying migrations: recorder, graph, loader, executor, migrate, replacing"
 ---
 
 # Migrations
@@ -30,6 +30,8 @@ class Repair(models.Model):
     started = models.DateField()
     notes = models.TextField(blank=True)
 ```
+
+In a recording the lines are what a running Django did, and every recording of this chapter ran on SQLite. Where an order is the point the lines are calls, nested as they were made; only the calls the passage is about are written, and everything between them ran and is left out. A method is written by the class that declares it; where it was called on an object of a subclass, the line gives the object's class first and the declaring class after it in parentheses. An arrow is followed by what a call returned. Square brackets after a call name the migration or the operation it was called on. A parenthesis at the end of a line says what was left out of it, and a line of three dots stands for lines of the block left out. A line beginning `SQL` is a statement as Django handed it to its cursor.
 
 ## A migration is a list of operations
 
@@ -74,9 +76,9 @@ The first makemigrations on this project that was given the labels of its four a
 
 A migration file is a module that defines one class, named `Migration`, a subclass of the class of that name in `django.db.migrations` (`django/db/migrations/migration.py:Migration`). In a file that Django writes the class has no methods, only attributes, and two of them carry nearly everything: `dependencies`, the migrations that must be applied before this one, and `operations`, what this one does (`initial` marks a migration that begins an application's history, which matters to `migrate --fake-initial`). When Django loads the file it makes one instance of the class, giving it the module's name and the application's label (`django/db/migrations/loader.py:MigrationLoader.load_disk`). That instance is a **migration**. This one is written yard.0001_initial, and the pair `("yard", "0001_initial")` is its **key**: what a dependency names, what the graph files it under, and what its row in the database holds. The dependency here is the key of fleet's first migration: yard's cannot run until fleet's has, because both of its tables point at tables of fleet.
 
-Each entry of `operations` is an **operation**, an instance of a subclass of `Operation` (`django/db/migrations/operations/base.py:Operation`): here two of `CreateModel`, each holding a model's name and its fields. An operation is one change, and it can make that change in two places. Its **state half**, `Operation.state_forwards`, changes Django's own description of the models, in memory: after a `CreateModel` the description has one model more. Its **database half**, `Operation.database_forwards`, changes a database, which a `CreateModel` does by calling the schema editor of [Database backends](backends.md); `Operation.database_backwards` is what runs when the migration is unapplied. The halves are separate because they are needed separately. To know what the models were at some point of the history takes state halves only and touches no database.
+Each entry of `operations` is an **operation**, an instance of a subclass of `Operation` (`django/db/migrations/operations/base.py:Operation`): here two of `CreateModel`, each holding a model's name and its fields. An operation is one change, and it can make that change in two places. Its **state half**, `Operation.state_forwards`, changes Django's own description of the models, in memory: after a `CreateModel` the description has one model more. Its **database half**, `Operation.database_forwards`, changes a database, which a `CreateModel` does by calling the schema editor of [Schemas and test databases](schema.md); `Operation.database_backwards` is what runs when the migration is unapplied. The halves are separate because they are needed separately. To know what the models were at some point of the history takes state halves only and touches no database.
 
-An application for which Django finds no package of migrations is **unmigrated**. Harbour's four began so: makemigrations with no application named made nothing, and made their first migrations when it was given their labels. migrate makes such an application's tables only when asked to with `--run-syncdb`, straight from the models and with nothing recorded.
+An application for which Django finds no package of migrations is **unmigrated**, as harbour's four were until makemigrations was first given their labels. migrate makes such an application's tables only when asked to with `--run-syncdb`, straight from the models and with nothing recorded.
 
 [A migration: its operations, its dependencies and how it is applied](migrations/migration.md) is about the class and what it does with its operations, and [Operations: the base class and its two halves](migrations/operations.md) about what every operation shares. The operations of `django.db.migrations.operations` are in three sections: [The model operations: `CreateModel`, `DeleteModel`, `RenameModel` and the option operations](migrations/model-operations.md), [The field operations, and those on indexes and constraints](migrations/field-operations.md), and [`RunPython`, `RunSQL` and `SeparateDatabaseAndState`](migrations/special-operations.md), three that makemigrations never chooses for itself.
 
@@ -113,51 +115,11 @@ migrate: from the migration files and one table, a changed database
 
 ## Making migrations
 
-makemigrations builds the two states, has them compared, and writes what the comparison finds. Here is the first one, recorded. In a recording the lines are what a running Django did. Where an order is the point, as here, the lines are calls, nested as they were made; only the calls the passage is about are written, and everything between them ran and is left out. A method is written by the class that declares it; where it was called on an object of a subclass, the line gives the object's class first and the declaring class after it in parentheses. An arrow is followed by what a call returned. Square brackets after a call name the migration or the operation it was called on or, after the writer's `as_string`, the migration being written. A line beginning `SQL` is a statement as Django handed it to its cursor; `stdout |` begins a line a command printed; and a line beginning `python manage.py` is a command line, run as a process of its own. Every recording of this chapter ran on SQLite.
-
-```text recording=migrations
-makemigrations.Command.handle('fleet', 'crew', 'office', 'yard')
-  MigrationLoader.__init__(connection=None, ignore_no_migrations=True)
-    MigrationLoader.build_graph
-  MigrationLoader.check_consistent_history(the connection "default")
-  InteractiveMigrationQuestioner.__init__(specified_apps={'crew', 'fleet', 'office', 'yard'}, dry_run=False)
-  MigrationLoader.project_state  ->  a ProjectState of 0 model states, its registry not rendered
-  ProjectState.from_apps(the main registry)  ->  a ProjectState of 13 model states, its registry not rendered
-  MigrationAutodetector.__init__(from_state=a ProjectState of 0 model states, its registry not rendered, to_state=a ProjectState of 13 model states, its registry not rendered, questioner=an InteractiveMigrationQuestioner)
-  MigrationAutodetector.changes(graph=the graph (0 nodes), trim_to_apps={'crew', 'fleet', 'office', 'yard'}, convert_apps={'crew', 'fleet', 'office', 'yard'})
-    MigrationAutodetector._detect_changes(convert_apps={'crew', 'fleet', 'office', 'yard'}, graph=the graph (0 nodes))  ->  {'crew': [crew.auto_1, crew.auto_2], 'fleet': [fleet.auto_1], 'office': [office.auto_1], 'yard': [yard.auto_1]}
-    MigrationAutodetector.arrange_for_graph(graph=the graph (0 nodes))
-      -> {'crew': [crew.0001_initial, crew.0002_initial], 'fleet': [fleet.0001_initial], 'office': [office.0001_initial], 'yard': [yard.0001_initial]}
-  makemigrations.Command.write_migration_files(changes={'crew': [crew.0001_initial, crew.0002_initial], 'fleet': [fleet.0001_initial], 'office': [office.0001_initial], 'yard': [yard.0001_initial]})
-    MigrationWriter.as_string  [crew.0001_initial]
-```
-
-The **loader** finds the migration files and builds from them the **graph** that orders them, a **node** for each migration and edges for their dependencies. There are no files yet, so the graph has no nodes and the from-state is empty. This loader is made with no connection: it does not ask which migrations a database has had. The check that follows it is a separate matter, that the history recorded in the database is not out of order (`django/core/management/commands/makemigrations.py:Command.handle`). The to-state, read off the models of the four applications, has thirteen model states.
-
-The **autodetector** is given the two and finds operations that turn the first into the second (`django/db/migrations/autodetector.py:MigrationAutodetector._detect_changes`). It matches models by name and compares fields by the arguments they would be made again with. Where two states cannot settle a question it asks the **questioner**: the one this makemigrations was given puts the question to whoever ran the command, and the one it is given under `--noinput` answers from a default or stops the command. What the autodetector produces first is a list of operations for each application. It then has to order each list so that it can run, cut the lists into migrations, and give the migrations dependencies on each other.
-
-Harbour shows why the cutting is needed. Among the fields of its models that point from one application into another, these make a circle:
-
-```python
-# harbour/fleet/models.py, in Ship
-captain = models.OneToOneField("crew.Sailor", null=True, blank=True, on_delete=models.SET_NULL, related_name="command")
-
-# harbour/crew/models.py, in Sailor
-ship = models.ForeignKey("fleet.Ship", on_delete=models.CASCADE, related_name="crew")
-pilots_into = models.ManyToManyField("fleet.Port", through="office.Licence", related_name="pilots")
-
-# harbour/office/models.py, in Licence
-sailor = models.ForeignKey("crew.Sailor", on_delete=models.CASCADE)
-port = models.ForeignKey("fleet.Port", on_delete=models.CASCADE)
-```
-
-A ship names a sailor and a sailor names a ship, so neither application can be created whole before the other. What `_detect_changes` returned in the recording, under names not yet final, is the way out: crew has two migrations. The first creates Sailor, and Officer with it, without the two fields that point out of crew; fleet's migration and office's can then run; crew's second adds the two fields, and the proxy Veteran. `MigrationAutodetector.arrange_for_graph` then gives each migration its number and its name. The whole of this is in [The autodetector: comparing two project states](migrations/autodetector.md), [The autodetector: fields, indexes and constraints](migrations/autodetector-fields.md), [From operations to migrations: dependencies, order and names](migrations/dependencies.md) and [The questioner: `MigrationQuestioner`](migrations/questioner.md). Before a migration leaves the autodetector its operations go through the **optimizer**, which merges operations that can be said as one ([The optimizer: `MigrationOptimizer` and `reduce`](migrations/optimizer.md)).
-
-The **writer** turns each migration into the text of a module, once for each file; the quote stops at the first (`django/db/migrations/writer.py:MigrationWriter.as_string`). That means turning every value inside every operation, each field with its arguments, into Python source that makes the value again when the file is imported; a value that Django cannot write in that way cannot go into a migration file ([Serializing values: `serializer_factory` and `deconstruct`](migrations/serializer.md), [Writing a migration file: `MigrationWriter`](migrations/writer.md)). The command around all of it is in [The makemigrations command](migrations/makemigrations.md).
+makemigrations builds the two states, the from-state from the files and the to-state from the models, and has a `MigrationAutodetector` find the operations that turn the one into the other, asking a questioner where the two states cannot settle a question. It orders the operations and cuts them into migrations that depend on one another, and a `MigrationWriter` writes each as a file; it sends a database nothing that changes it (`django/core/management/commands/makemigrations.py:Command.handle`) ([Making migrations](makemigrations.md)). Its first run given the labels of harbour's four applications wrote a migration for each and a second for crew, because crew's models and fleet's point at each other: crew's first migration creates Sailor and Officer without the fields that point out of crew, and its second adds them once fleet's and office's have run.
 
 ## The graph
 
-The five migrations and their dependencies make the graph, in which an edge runs from a node to each of its **parents**, the migrations it depends on (`django/db/migrations/graph.py:MigrationGraph`). The numbers in the files' names make no migration depend on another; the graph's edges do. `MigrationGraph.forwards_plan` gives, for a node, everything that must be applied before it, in an order that can be followed, ending with the node:
+The five migrations and their dependencies make the **graph**, a **node** for each migration, in which an edge runs from a node to each of its **parents**, the migrations it depends on (`django/db/migrations/graph.py:MigrationGraph`). The numbers in the files' names make no migration depend on another; the graph's edges do. `MigrationGraph.forwards_plan` gives, for a node, everything that must be applied before it, in an order that can be followed, ending with the node:
 
 ```text recording=migrations
 graph.forwards_plan(('crew', '0002_initial'))  ->  [('crew', '0001_initial'), ('fleet', '0001_initial'), ('office', '0001_initial'), ('crew', '0002_initial')]
@@ -234,7 +196,7 @@ MigrationExecutor._migrate_all_forwards(state=a ProjectState of 0 model states, 
     migrate.Command.migration_progress_callback(action='apply_success', migration=yard.0001_initial)
 ```
 
-One project state is carried along the plan: each `MigrationExecutor.apply_migration` is given the state as the migrations before it left it and returns it with its own migration's models in. For each migration the executor opens a schema editor, and `Migration.apply` goes through the operations in order (`django/db/migrations/migration.py:Migration.apply`). An operation's state half runs first, here adding a model state to the project state. Its database half is then given the state before and the state after, takes the historical model from the state after, and hands it to `BaseDatabaseSchemaEditor.create_model`, which sends `"CREATE TABLE"`. Here, on SQLite, which can roll back changes to its schema, the editor's block was a transaction, begun as the editor was entered and committed as it was left (a migration that sets `atomic = False` gets none); the three indexes on yard's foreign keys are statements the editor held back until then ([The schema editor: `BaseDatabaseSchemaEditor`](backends/schema.md)). The executor has the recorder write the migration's row: here after the block, because the editor still held statements as the operations ended, and inside it where the editor holds none, so that the change and its row are committed together.
+One project state is carried along the plan: each `MigrationExecutor.apply_migration` is given the state as the migrations before it left it and returns it with its own migration's models in. For each migration the executor opens a schema editor, and `Migration.apply` goes through the operations in order (`django/db/migrations/migration.py:Migration.apply`). An operation's state half runs first, here adding a model state to the project state. Its database half is then given the state before and the state after, takes the historical model from the state after, and hands it to `BaseDatabaseSchemaEditor.create_model`, which sends `"CREATE TABLE"`. Here, on SQLite, which can roll back changes to its schema, the editor's block was a transaction, begun as the editor was entered and committed as it was left (a migration that sets `atomic = False` gets none); the three indexes on yard's foreign keys are statements the editor held back until then ([The schema editor: `BaseDatabaseSchemaEditor`](schema/editor.md)). The executor has the recorder write the migration's row: here after the block, because the editor still held statements as the operations ended, and inside it where the editor holds none, so that the change and its row are committed together.
 
 [Applying a plan: `MigrationExecutor`](migrations/executor.md) has the plan, the two directions and what `--fake` does; [The migrate command, showmigrations and sqlmigrate](migrations/migrate.md) has the command's options, the two signals, and the two commands that record nothing.
 
@@ -252,59 +214,14 @@ django_migrations: id 5, app 'yard', name '0001_initial', applied (the date and 
 
 A migration is **applied** on a database when the table there has its row, and beside its id a row holds a label, a name and a time, no more (`django/db/migrations/recorder.py:MigrationRecorder`). The rest follows from that. Each database has its own table, so each is migrated on its own. To unapply a migration is to run the database halves of its operations backwards, last operation first, and delete the row; `migrate yard zero` plans that for every applied migration of yard and for whatever depends on one. And `migrate --fake` writes or deletes rows and leaves the schema alone, which is how a database whose schema was changed by other means is brought back into step. [What has been applied: `MigrationRecorder` and the table `"django_migrations"`](migrations/recorder.md) is about the table and its one class.
 
-## A change to the models
-
-Yard's models are now edited.
-
-```text recording=migrations
-The models of yard, second version: harbour/yard/models.py, each line put in marked + and each line taken out marked -; four changes at once: Dock.name made longer, Dock.metres added, Repair.started renamed begun, and an index on Repair
-    |   from django.db import models
-    |
-    |
-    |   class Dock(models.Model):
-    |       """A dry dock of the repair yard, in one of the fleet's ports."""
-    |
-    | -     name = models.CharField(max_length=40)
-    | +     name = models.CharField(max_length=80)
-    |       port = models.ForeignKey("fleet.Port", on_delete=models.CASCADE)
-    | +     metres = models.PositiveSmallIntegerField(default=120)
-    |
-    |
-    |   class Repair(models.Model):
-    |       """A ship in a dock, under repair."""
-    |
-    |       ship = models.ForeignKey("fleet.Ship", on_delete=models.CASCADE)
-    |       dock = models.ForeignKey(Dock, on_delete=models.PROTECT)
-    | -     started = models.DateField()
-    | +     begun = models.DateField()
-    |       notes = models.TextField(blank=True)
-    | +
-    | +     class Meta:
-    | +         indexes = [models.Index(fields=["dock", "begun"], name="repair_by_dock")]
-```
-
-```text recording=migrations
-python manage.py makemigrations yard
-  stdout | Was repair.started renamed to repair.begun (a DateField)? [y/N]
-  stdin  | y
-  stdout | Migrations for 'yard':
-  stdout |   harbour/yard/migrations/0002_rename_started_repair_begun_dock_metres_and_more.py
-  stdout |     ~ Rename field started on repair to begun
-  stdout |     + Add field metres to dock
-  stdout |     ~ Alter field name on dock
-  stdout |     + Create index repair_by_dock on field(s) dock, begun of model repair
-```
-
-This time the from-state is not empty. The loader's graph has five nodes, and running their state halves gives the thirteen models as they were; the to-state has yard's as they are now. The four changes come out as four operations. One of them needed the question: the two states show that Repair has lost a date field called started and gained a date field called begun, and whether that is one column renamed or one dropped and another made is something only a person knows. The new migration depends on yard's leaf node, takes the next number, and is named from its operations. A migrate would now find one migration with no row, and apply it.
-
 ## Yard's migrations
 
-Yard's history goes on from there.
+Yard's models are edited again and again in the course of the chapter's recording, and its history grows with them.
 
 | number | how it came to be |
 |---|---|
-| 0001 | yard.0001_initial: the first makemigrations, Dock and Repair |
-| 0002 | makemigrations after the edit shown here, which named it from its four operations |
+| 0001 | yard.0001_initial: the first makemigrations given yard's label, Dock and Repair |
+| 0002 | makemigrations after four changes at once, one of them a rename it asked about ([Making migrations](makemigrations.md)), which named it from its four operations |
 | 0003 | yard.0003_repair_foreman: makemigrations after Repair gained a column that is not null and has no default; the default for the rows there were was typed at the prompt |
 | 0004 | yard.0004_name_the_foremen: made empty by `makemigrations --empty` and filled in by hand with a `RunPython` and a `RunSQL` |
 | 0005 | yard.0005_repair_by_foreman: written by hand, a second index in a `SeparateDatabaseAndState` |
@@ -318,8 +235,8 @@ Yard's history goes on from there.
 
 ## Long histories
 
-Two things happen to a history as it grows, and each has its machinery. When two branches of a project each add a migration to one application, the application has two leaf nodes; migrate refuses to go on, and so does makemigrations for that application, until `makemigrations --merge` has written a migration with no operations that depends on both ([The makemigrations command](migrations/makemigrations.md)). And when the files have become many, squashmigrations writes one **replacing migration** that does what a run of them did, with their operations put through the optimizer unless told otherwise; the loader then uses the replacing migration or the ones it replaces, according to which of their rows each database has, and counts the replacing one applied where it has them all ([Squashed migrations: `replaces` and the squashmigrations command](migrations/squashing.md)).
+Two things happen to a history as it grows, and each has its machinery. When two branches of a project each add a migration to one application, the application has two leaf nodes; migrate refuses to go on, and so does makemigrations for that application, until `makemigrations --merge` has written a migration with no operations that depends on both ([The makemigrations command](makemigrations/makemigrations.md)). And when the files have become many, squashmigrations writes one **replacing migration** that does what a run of them did, with their operations put through the optimizer unless told otherwise ([Rewriting migrations: `--update`, squashmigrations and optimizemigration](makemigrations/rewriting.md)); the loader then uses the replacing migration or the ones it replaces, according to which of their rows each database has, and counts the replacing one applied where it has them all ([Replacing migrations: `replaces`](migrations/replacing.md)).
 
 ## The neighbours
 
-Migrations decide what is to change and in what order, and leave the changing to the schema editor, which writes the statements, and to the connection's transactions ([Database backends](backends.md)). The operations on models, fields, indexes and constraints ask the router, before they touch a table, whether that database is to have the model ([Routing between databases: `ConnectionRouter`](backends/routers.md)). They lean on what every field, index and constraint provides, `deconstruct` and `clone`, and on a manager's `deconstruct`: the arguments an object would be made again with are what makes it comparable between two states and writable into a file ([Models and fields](models.md)). The state's registry is an `Apps` like the main one ([The registry and its models](startup/registry.md)). How a command is found and run, and the system checks that run before migrate, are in [Management commands](commands.md). A test run gives its databases their tables by calling migrate ([Test databases: `BaseDatabaseCreation`](backends/creation.md)). And applications of `django.contrib` listen for `post_migrate`, to create permissions ([Making the permissions: `create_permissions`](auth/creating-permissions.md)) and content types ([Making content types: `create_contenttypes` and `RenameContentType`](contrib/making-content-types.md)).
+Migrations decide what is to change and in what order, and leave the changing to the schema editor, which writes the statements ([Schemas and test databases](schema.md)), inside the connection's transactions ([Connections and transactions](connections.md)). How makemigrations writes migration files is [Making migrations](makemigrations.md)'s. The operations on models, fields, indexes and constraints ask the router, before they touch a table, whether that database is to have the model ([Routing between databases: `ConnectionRouter`](connections/routers.md)). They lean on what every field, index and constraint provides, `deconstruct` and `clone`, and on a manager's `deconstruct`: the arguments an object would be made again with are what makes it comparable between two states and writable into a file ([Models and fields](models.md)). The state's registry is an `Apps` like the main one ([The registry and its models](startup/registry.md)). How a command is found and run, and the system checks that run before migrate, are in [Management commands](commands.md). A test run gives its databases their tables by calling migrate ([Test databases: `BaseDatabaseCreation`](schema/test-databases.md)). And applications of `django.contrib` listen for `post_migrate`, to create permissions ([Making the permissions: `create_permissions`](auth/creating-permissions.md)) and content types ([Making content types: `create_contenttypes` and `RenameContentType`](contrib/making-content-types.md)).

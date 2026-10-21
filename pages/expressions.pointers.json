@@ -1,0 +1,207 @@
+{
+ "generated": {
+  "tool": "tools/pointers.py",
+  "trees": {
+   "django": "4fab678a0739d54401ccee7eb587553657c9f76e"
+  }
+ },
+ "document": "expressions.md",
+ "pointers": [
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.resolve_expression",
+   "line": 17,
+   "sentence": "`BaseExpression.resolve_expression` binds it to a query: a name becomes a column of a table the query has joined, and whatever the object holds is bound in turn, so that a resolved object is a copy and the original is left as it was (`django/db/models/expressions.py:BaseExpression.resolve_expression`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.resolve_expression",
+   "kind": "function",
+   "lines": [
+    279,
+    315
+   ],
+   "fingerprint": "f0c477de56cd8d0d"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:BaseExpression.as_sql",
+   "line": 17,
+   "sentence": "A class may also supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "BaseExpression.as_sql",
+   "kind": "function",
+   "lines": [
+    225,
+    251
+   ],
+   "fingerprint": "17e138762dccc480"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.compile",
+   "line": 17,
+   "sentence": "A class may also supply an `as_sqlite`, an `as_postgresql` or the like, and `SQLCompiler.compile` prefers the one for its connection's vendor (`django/db/models/expressions.py:BaseExpression.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.compile`).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.compile",
+   "kind": "function",
+   "lines": [
+    593,
+    599
+   ],
+   "fingerprint": "85666502e93b2a91"
+  },
+  {
+   "pointer": "django/db/models/sql/query.py:Query.resolve_ref",
+   "line": 19,
+   "sentence": "`F(\"tonnage\") + 1` is a `CombinedExpression` of an `F` and a `Value`; resolving it against a query of ships turns the `F` into a `Col` of the ships' table through `Query.resolve_ref`, and the type of the sum, when it is wanted, is asked of the pair of field types (`django/db/models/sql/query.py:Query.resolve_ref`).",
+   "tree": "django",
+   "path": "django/db/models/sql/query.py",
+   "symbol": "Query.resolve_ref",
+   "kind": "function",
+   "lines": [
+    2069,
+    2118
+   ],
+   "fingerprint": "e2b6625b4c73decb"
+  },
+  {
+   "pointer": "django/db/models/query_utils.py:RegisterLookupMixin.get_lookup",
+   "line": 23,
+   "sentence": "It is found by its name in a **registry**: a field class, and a transform class, carries a dictionary from words to lookup and transform classes, merged down its classes' bases, to which a project may add its own (`django/db/models/query_utils.py:RegisterLookupMixin.get_lookup`) ([The lookup registry: `RegisterLookupMixin`](expressions/registry.md)).",
+   "tree": "django",
+   "path": "django/db/models/query_utils.py",
+   "symbol": "RegisterLookupMixin.get_lookup",
+   "kind": "function",
+   "lines": [
+    347,
+    355
+   ],
+   "fingerprint": "36f7bc68f64b62c6"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:Lookup.get_prep_lookup",
+   "line": 23,
+   "sentence": "When the filter is built `Exact` prepares the value through the field of its left side, so that `'Bergen'` has passed through the port's name field before any SQL exists (`django/db/models/lookups.py:Lookup.get_prep_lookup`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "Lookup.get_prep_lookup",
+   "kind": "function",
+   "lines": [
+    89,
+    97
+   ],
+   "fingerprint": "f43231450bb3afc7"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:BuiltinLookup.as_sql",
+   "line": 23,
+   "sentence": "When the statement is written it writes its two halves, the left by compiling it and the right as a placeholder with its parameter, and joins them with the operator the connection's table gives for its name (`django/db/models/lookups.py:BuiltinLookup.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "BuiltinLookup.as_sql",
+   "kind": "function",
+   "lines": [
+    243,
+    248
+   ],
+   "fingerprint": "2662705868a646e8"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:YearLookup.as_sql",
+   "line": 49,
+   "sentence": "`YearLt` held `ExtractYear` of the column as its left side, and wrote the column itself, compared with the first day of the year, not the year extracted from it, so that an index on the column can serve (`django/db/models/lookups.py:YearLookup.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "YearLookup.as_sql",
+   "kind": "function",
+   "lines": [
+    730,
+    742
+   ],
+   "fingerprint": "61c8d1d2b82f10d0"
+  },
+  {
+   "pointer": "django/db/models/expressions.py:Func.as_sql",
+   "line": 53,
+   "sentence": "It is a `Func`, as are the database functions of `django.db.models.functions`: a `Func` writes its SQL by compiling its arguments and putting them into a template, `\"%(function)s(%(expressions)s)\"` unless the class says otherwise, with the function's name; a vendor's method most often calls the same `as_sql` with another template or another name (`django/db/models/expressions.py:Func.as_sql`) ([Transforms and database functions: `Transform` and `Func`](expressions/functions.md)).",
+   "tree": "django",
+   "path": "django/db/models/expressions.py",
+   "symbol": "Func.as_sql",
+   "kind": "function",
+   "lines": [
+    1097,
+    1134
+   ],
+   "fingerprint": "3501d809464270fc"
+  },
+  {
+   "pointer": "django/db/models/lookups.py:In.process_rhs",
+   "line": 57,
+   "sentence": "It may then raise instead of writing: `EmptyResultSet` where it can match nothing, as `In` does for an empty list, and `FullResultSet` where it matches everything (`django/db/models/lookups.py:In.process_rhs`).",
+   "tree": "django",
+   "path": "django/db/models/lookups.py",
+   "symbol": "In.process_rhs",
+   "kind": "function",
+   "lines": [
+    522,
+    546
+   ],
+   "fingerprint": "dfd7c49912fbc025"
+  },
+  {
+   "pointer": "django/db/models/sql/where.py:WhereNode.as_sql",
+   "line": 57,
+   "sentence": "When either count is reached the node raises the same exception for itself, the other way round if it is negated, so the news travels up the tree node by node (`django/db/models/sql/where.py:WhereNode.as_sql`).",
+   "tree": "django",
+   "path": "django/db/models/sql/where.py",
+   "symbol": "WhereNode.as_sql",
+   "kind": "function",
+   "lines": [
+    116,
+    188
+   ],
+   "fingerprint": "3277e292e6bb60f6"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.as_sql",
+   "line": 57,
+   "sentence": "At the top the compiler acts on it: a full tree writes no `\"WHERE\"`, and a query run on its own whose tree is empty is ordinarily answered with no rows and without a statement being sent (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`) ([What the where tree writes: `WhereNode`](expressions/where-node.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.as_sql",
+   "kind": "function",
+   "lines": [
+    776,
+    1001
+   ],
+   "fingerprint": "ce816411ac549927"
+  },
+  {
+   "pointer": "django/db/models/sql/compiler.py:SQLCompiler.execute_sql",
+   "line": 57,
+   "sentence": "At the top the compiler acts on it: a full tree writes no `\"WHERE\"`, and a query run on its own whose tree is empty is ordinarily answered with no rows and without a statement being sent (`django/db/models/sql/compiler.py:SQLCompiler.as_sql`, `django/db/models/sql/compiler.py:SQLCompiler.execute_sql`) ([What the where tree writes: `WhereNode`](expressions/where-node.md)).",
+   "tree": "django",
+   "path": "django/db/models/sql/compiler.py",
+   "symbol": "SQLCompiler.execute_sql",
+   "kind": "function",
+   "lines": [
+    1619,
+    1691
+   ],
+   "fingerprint": "3742a7c6d74846c9"
+  },
+  {
+   "pointer": "django/db/models/fields/json.py:KeyTransform",
+   "line": 82,
+   "sentence": "The lookups and transforms of a JSON field are built on the classes here (`django/db/models/fields/json.py:KeyTransform`), as are those of `django.contrib.postgres` and of a geometry ([Content types, static files and the other contrib apps](contrib.md)).",
+   "tree": "django",
+   "path": "django/db/models/fields/json.py",
+   "symbol": "KeyTransform",
+   "kind": "class",
+   "lines": [
+    475,
+    516
+   ],
+   "fingerprint": "1cbc28bedb1f53c2"
+  }
+ ]
+}

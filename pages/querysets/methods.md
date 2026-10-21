@@ -6,7 +6,7 @@ django: main at 4fab678a0739d54401ccee7eb587553657c9f76e (2026-09-26), on its wa
 
 `QuerySet.annotate`, `QuerySet.alias`, `QuerySet.order_by`, `QuerySet.reverse`, `QuerySet.distinct`, `QuerySet.extra`, `QuerySet.select_for_update` and `QuerySet.none` each return a queryset with something left on its query, and send nothing to the database. The properties `QuerySet.ordered` and `QuerySet.totally_ordered` report on a queryset's ordering, and `EmptyQuerySet` is how code asks whether a queryset has been made empty.
 
-Most of what a queryset is asked to do, it does not do. It writes the request down. Each method here takes what `QuerySet._chain` gives it, leaves something on that queryset's query, and returns it ([Clones: how a queryset is built](chaining.md)). The query is a description: an ordering is a tuple of names and expressions, a lock is a flag with its options, a distinct clause is a flag and a tuple of names (`django/db/models/sql/query.py:Query`). The compiler reads them when the queryset is evaluated and writes the statement, which is the subject of [From QuerySet to SQL](../sql.md).
+Most of what a queryset is asked to do, it does not do. It writes the request down. Each method here takes what `QuerySet._chain` gives it, leaves something on that queryset's query, and returns it ([Clones: how a queryset is built](chaining.md)). The query is a description: an ordering is a tuple of names and expressions, a lock is a flag with its options, a distinct clause is a flag and a tuple of names (`django/db/models/sql/query.py:Query`). The compiler reads them when the queryset is evaluated and writes the statement, which is the subject of [The SQL compiler](../sql.md).
 
 So the questions to put to each method are small ones: what it is for, what it leaves, where, and what it checks at the moment it is called. Some look at the names they are given at once, and some leave a mistake for the compiler to find. Some refuse a queryset that has been sliced, some a **combined queryset**, one made by `QuerySet.union`, `QuerySet.intersection` or `QuerySet.difference`, and some both: the table in the last section says which.
 
@@ -24,7 +24,7 @@ Then the names are checked against the model. `_annotate` gathers the name of ev
 
 After `QuerySet.values` or `QuerySet.values_list` the names it checks against are the queryset's `QuerySet._fields` instead, the names that call was given ([`values` and `values_list`: rows as dictionaries and tuples](values.md)).
 
-What follows was recorded from a running Django, on SQLite, over the models and rows that the chapter's opening page, [QuerySets](../querysets.md), lists: a Ship there has a name, a tonnage and a foreign key to its home Port, and a Sailor has a foreign key to its Ship, whose other end is the ship's `"crew"`. Each line is an expression that was evaluated, with its value after `->`, or the exception it raised; a line that begins `SQL` under it is a statement it sent, as Django handed it to its cursor.
+What follows was recorded from a running Django, on SQLite, over the models of [Models and fields](../models.md) and the rows that the chapter's opening page, [QuerySets](../querysets.md), lists: a Ship has a name, a tonnage and a foreign key to its home Port, and a Sailor has a foreign key to its Ship, whose other end is the ship's `"crew"`. Each line is an expression that was evaluated, with its value after `->`, or the exception it raised; a line that begins `SQL` under it is a statement it sent, as Django handed it to its cursor.
 
 ```text recording=querysets
 Ship.objects.annotate(Count('crew'))[0].crew__count  ->  2
@@ -39,7 +39,7 @@ The count given by position came back on the instance under its default alias. A
 
 Each annotation then goes to the query. A `FilteredRelation` goes to `Query.add_filtered_relation`, which is told in [`filter`, `exclude` and `Q` objects](filters.md). Anything else goes to `Query.add_annotation`, with the flag that says whether it is selected (`django/db/models/sql/query.py:Query.add_annotation`). That method resolves the expression against the query, which is when the names inside it are looked up and the joins it needs are added, and stores the result in `Query.annotations` under the name.
 
-Whether an annotation is selected is kept apart from the annotation, in `Query.annotation_select_mask`. The mask is `None`, which means that every annotation is selected, or it is the set of the names that are. Where there is a mask, `annotate` adds its name to it. `alias` makes the mask the names selected so far, without the new one. What the compiler selects is `Query.annotation_select`, the annotations that pass the mask. A selected annotation becomes an attribute of each instance the queryset makes, or a key of each dictionary after `values` ([From rows to instances: `ModelIterable` and `select_related`](iterables.md)).
+Whether an annotation is selected is kept apart from the annotation, in `Query.annotation_select_mask`. The mask is `None`, which means that every annotation is selected, or it is the set of the names that are. Where there is a mask, `annotate` adds its name to it. `alias` makes the mask the names selected so far, without the new one. What the compiler selects is `Query.annotation_select`, the annotations that pass the mask. A selected annotation becomes an attribute of each instance the queryset makes, or a key of each dictionary after `values` ([From rows to instances: `ModelIterable`](rows.md)).
 
 ### Grouping
 
@@ -111,7 +111,7 @@ list(Ship.objects.distinct('name'))  ->  raises NotSupportedError: DISTINCT ON f
 - `tables=...` is added to `Query.extra_tables`, for the `"FROM"` clause.
 - `order_by=...` becomes `Query.extra_order_by`, in place of what was there, and the compiler takes it before any other ordering.
 
-The comment over these attributes in `Query` says that their contents are appended more or less verbatim to the appropriate clause. A column selected this way reaches an instance as an annotation does, as an attribute ([From rows to instances: `ModelIterable` and `select_related`](iterables.md)).
+The comment over these attributes in `Query` says that their contents are appended more or less verbatim to the appropriate clause. A column selected this way reaches an instance as an annotation does, as an attribute ([From rows to instances: `ModelIterable`](rows.md)).
 
 ```text recording=querysets
 list(Ship.objects.extra(select={'heavy': 'tonnage > 1000'}, order_by=['tonnage']).values_list('name', 'heavy'))  ->  [('Petrel', 0), ('Gannet', 1)]
@@ -179,16 +179,16 @@ Three tests recur in the methods of `QuerySet` that return a queryset, which the
 | `QuerySet.complex_filter`, which is there for a relation's `ForeignObjectRel.limit_choices_to` ([`filter`, `exclude` and `Q` objects](filters.md)) | from a `Q`, a condition in the where clause; from a dictionary, what `filter` leaves | | refused, for a dictionary that is not empty | |
 | `QuerySet.union`, `QuerySet.intersection`, `QuerySet.difference` | `Query.combinator`, `Query.combinator_all` and `Query.combined_queries`; the clone's own ordering and limits cleared, and `Query.default_ordering` set to `True`; with nothing to combine with, or with an empty operand, one of the querysets it was given may be returned unchanged ([Combining querysets: the operators and `union`](combining.md)) | | | |
 | `QuerySet.select_for_update` | `Query.select_for_update` and its four companions; `QuerySet._for_write` on the queryset | | | |
-| `QuerySet.select_related` | `Query.select_related` ([From rows to instances: `ModelIterable` and `select_related`](iterables.md)) | refused | | refused |
-| `QuerySet.prefetch_related` | `QuerySet._prefetch_related_lookups`, on the queryset and not on the query ([`prefetch_related`: related objects in a second query](prefetch.md)) | refused | | |
+| `QuerySet.select_related` | `Query.select_related` ([`select_related`: related objects from the same row](../relations/select-related.md)) | refused | | refused |
+| `QuerySet.prefetch_related` | `QuerySet._prefetch_related_lookups`, on the queryset and not on the query ([`prefetch_related`: related objects in a second query](../relations/prefetch.md)) | refused | | |
 | `QuerySet.annotate`, `QuerySet.alias` | `Query.annotations` and the mask of those selected, or for a `FilteredRelation` an entry among the query's filtered relations; `Query.group_by`, for an aggregate | refused | | |
 | `QuerySet.order_by` | `Query.order_by`, with `Query.extra_order_by` emptied; `Query.default_ordering`, when called with nothing | | refused | |
 | `QuerySet.distinct` | `Query.distinct` and `Query.distinct_fields` | refused | refused | |
 | `QuerySet.extra` | `Query.extra`, an `ExtraWhere` in the where clause, `Query.extra_tables`, `Query.extra_order_by` | refused | refused | |
 | `QuerySet.reverse` | `Query.standard_ordering` | | refused | |
-| `QuerySet.defer`, `QuerySet.only` | `Query.deferred_loading` ([Deferred fields and fetch modes in a queryset](deferred.md)) | refused | | refused |
+| `QuerySet.defer`, `QuerySet.only` | `Query.deferred_loading` ([Deferred fields in a queryset: `defer` and `only`](deferred.md)) | refused | | refused |
 | `QuerySet.using` | `QuerySet._db`, on the queryset ([Clones: how a queryset is built](chaining.md)) | | | |
-| `QuerySet.fetch_mode` | `QuerySet._fetch_mode`, on the queryset ([Deferred fields and fetch modes in a queryset](deferred.md)) | | | |
+| `QuerySet.fetch_mode` | `QuerySet._fetch_mode`, on the queryset ([Deferred fields in a queryset: `defer` and `only`](deferred.md)) | | | |
 
 *The public methods of `QuerySet` that return a `QuerySet`, in the order the class defines them: what each leaves on the queryset it returns, and which querysets it refuses as it is called.*
 

@@ -8,7 +8,7 @@ The classes built on `django.db.models.fields.Field`, from `IntegerField` and `C
 
 A field class is a short list of overrides. The base class does the general work ([A field: the base class](fields.md)), and a subclass says what is particular to one kind of value, which for the common kinds comes to the same few methods: `get_internal_type` for the column, `to_python` for a value from outside, `get_prep_value` and `get_db_prep_value` for a value on its way into a statement, and `formfield`. A class with arguments of its own adds them to `deconstruct`, and one with mistakes of its own to catch adds to `check` ([The model checks](checks.md)).
 
-A few of the classes differ in kind and not in detail. `GeneratedField` has a column that Django never writes, and `CompositePrimaryKey` has no column at all. The fields for files and for relations have pages of their own ([File fields](files.md), [Relations: a field, its rel and the class at the other end](relations.md)).
+A few of the classes differ in kind and not in detail. `GeneratedField` has a column that Django never writes, and `CompositePrimaryKey` has no column at all. The fields for files and for relations have pages of their own ([File fields](../instance/files.md), [Relations: a field, its rel and the class at the other end](../relations/fields.md)).
 
 ## The classes, to look up
 
@@ -83,7 +83,7 @@ The three positive classes share `PositiveIntegerRelDbTypeMixin`, which answers 
 
 An automatic key is an integer field with `AutoFieldMixin` in front of it: `AutoField` is the mixin and `IntegerField`, `BigAutoField` the mixin and `BigIntegerField`, `SmallAutoField` the mixin and `SmallIntegerField` (`django/db/models/fields/__init__.py:AutoFieldMixin`). The database produces the number. What the mixin does is let a field have no value until the row is inserted, and get the number back afterwards.
 
-So `AutoFieldMixin.__init__` makes the field blank, and `Model.clean_fields` passes over a blank field whose value is empty, which is how an instance with no key yet passes validation. `AutoFieldMixin.validate` does nothing. `AutoFieldMixin.formfield` returns `None` in place of a form field. `AutoFieldMixin.contribute_to_class` records the field as `Options.auto_field`, refusing a second on one model, and a save reads that to leave the column out of an insert when the key is not set (`django/db/models/fields/__init__.py:AutoFieldMixin.contribute_to_class`, `django/db/models/base.py:Model._save_table`). `AutoFieldMixin.db_returning` is true, so the number the database chose is asked back from the insert ([Saving an instance](saving.md)). And where a value is written, `AutoFieldMixin.get_db_prep_save` passes it through the backend's `validate_autopk_value`, whose docstring says that certain backends do not accept some values for such a field, and gives zero in MySQL as the example.
+So `AutoFieldMixin.__init__` makes the field blank, and `Model.clean_fields` passes over a blank field whose value is empty, which is how an instance with no key yet passes validation. `AutoFieldMixin.validate` does nothing. `AutoFieldMixin.formfield` returns `None` in place of a form field. `AutoFieldMixin.contribute_to_class` records the field as `Options.auto_field`, refusing a second on one model, and a save reads that to leave the column out of an insert when the key is not set (`django/db/models/fields/__init__.py:AutoFieldMixin.contribute_to_class`, `django/db/models/base.py:Model._save_table`). `AutoFieldMixin.db_returning` is true, so the number the database chose is asked back from the insert ([Saving an instance](../instance/saving.md)). And where a value is written, `AutoFieldMixin.get_db_prep_save` passes it through the backend's `validate_autopk_value`, whose docstring says that certain backends do not accept some values for such a field, and gives zero in MySQL as the example.
 
 A model that declares no primary key, and has no parent with a table to take one from, is given an automatic one by `Options._prepare`, of the class that `Options._get_default_pk_class` returns ([The options: what a model keeps as `_meta`](options.md)).
 
@@ -113,7 +113,7 @@ The length may be left out, on some databases. Nothing in `__init__` requires it
 
 `TextField` converts values in the same way and has no validator of length: a `max_length` given to it reaches the form field and not the column. Its form field is drawn as a `Textarea`, unless the field has choices.
 
-Three classes are a `CharField` with a validator and a length of their own: `SlugField` has `validate_slug`, or `validate_unicode_slug` when made with `allow_unicode=True`, and an index unless told otherwise, `EmailField` has `validate_email`, and `URLField` has a `URLValidator`. `SlugField` declares an internal type of its own. The other two declare none, inherit `CharField`'s answer, and are to the database a `CharField` and nothing more. The validator is all that makes the value of an `EmailField` an address, and a validator runs when an instance is cleaned, not when it is saved ([Validating an instance](validation.md)).
+Three classes are a `CharField` with a validator and a length of their own: `SlugField` has `validate_slug`, or `validate_unicode_slug` when made with `allow_unicode=True`, and an index unless told otherwise, `EmailField` has `validate_email`, and `URLField` has a `URLValidator`. `SlugField` declares an internal type of its own. The other two declare none, inherit `CharField`'s answer, and are to the database a `CharField` and nothing more. The validator is all that makes the value of an `EmailField` an address, and a validator runs when an instance is cleaned, not when it is saved ([Validating an instance](../instance/validation.md)).
 
 ## Dates and times
 
@@ -130,7 +130,7 @@ Model.save()  (a Sailor)
     -> datetime(2026, 4, 10, 9, 0, tzinfo=UTC)
 ```
 
-This insert called `pre_save` twice for the field ([Saving an instance](saving.md)). Each call takes the time afresh and sets the instance's attribute, and the second supplies the value that is written, so the instance and the row agree. When the same sailor is saved again the row is updated, the argument is false, and the field does nothing of its own: the call falls through to the base class's, which returns what the instance holds.
+This insert called `pre_save` twice for the field ([Saving an instance](../instance/saving.md)). Each call takes the time afresh and sets the instance's attribute, and the second supplies the value that is written, so the instance and the row agree. When the same sailor is saved again the row is updated, the argument is false, and the field does nothing of its own: the call falls through to the base class's, which returns what the instance holds.
 
 ```text recording=models
 DateTimeField.pre_save(add=False)  (Sailor.signed_on)
@@ -176,7 +176,7 @@ For `DurationField` and `UUIDField` the stored form depends on the backend, and 
 
 > **Changed in 6.2.** `GenericIPAddressField` validates IPv6 input strictly when saving and querying. An address that is not valid raises `ValidationError` where it used to be accepted, and surrounding white space is stripped.
 
-`FilePathField` is a column of text that holds a path, and it knows nothing about files. What it is made with, a `path` to look in, a `match`, and whether to go into subdirectories and to offer files or folders, is passed whole to the form field, which is what lists the directory, and a `path` that is callable is called at that moment (`django/db/models/fields/__init__.py:FilePathField.formfield`). Of the value itself the model field does one thing: `FilePathField.get_prep_value` passes anything but `None` to `str`. It is not one of the file fields, which keep a file in a storage ([File fields](files.md)).
+`FilePathField` is a column of text that holds a path, and it knows nothing about files. What it is made with, a `path` to look in, a `match`, and whether to go into subdirectories and to offer files or folders, is passed whole to the form field, which is what lists the directory, and a `path` that is callable is called at that moment (`django/db/models/fields/__init__.py:FilePathField.formfield`). Of the value itself the model field does one thing: `FilePathField.get_prep_value` passes anything but `None` to `str`. It is not one of the file fields, which keep a file in a storage ([File fields](../instance/files.md)).
 
 ## JSON
 
@@ -186,7 +186,7 @@ On the way in, `JSONField.get_db_prep_value` hands the value and the encoder to 
 
 On the way out the class does what no other class in `django/db/models/fields/` does: it declares `JSONField.from_db_value`, which the base class's `get_db_converters` finds and returns. It passes the column's value to `json.loads` with the decoder, and returns as it stands a value that is not valid JSON. It also returns as it stands the result of a key transform that is not a string, its comment being that some backends, SQLite at least, extract such values as their own SQL types.
 
-The class has a query side too. `JSONField.get_transform` answers for any name it does not know with a transform that looks the name up as a key, which is what lets a filter reach inside the stored value, and the module holds the lookups and transforms for that ([From QuerySet to SQL](../sql.md)). It also inherits `CheckFieldDefaultMixin`, whose check warns of a default that is one object shared by every instance and not a callable (`django/db/models/fields/mixins.py:CheckFieldDefaultMixin`).
+The class has a query side too. `JSONField.get_transform` answers for any name it does not know with a transform that looks the name up as a key, which is what lets a filter reach inside the stored value, and the module holds the lookups and transforms for that ([Expressions, lookups and functions](../expressions.md)). It also inherits `CheckFieldDefaultMixin`, whose check warns of a default that is one object shared by every instance and not a callable (`django/db/models/fields/mixins.py:CheckFieldDefaultMixin`).
 
 ## Values the database supplies: `GeneratedField` and `db_default`
 
@@ -234,7 +234,7 @@ The class has no column type of its own. `GeneratedField.get_internal_type` and 
 
 The field joins the class as any field with a column does, and `GeneratedField.contribute_to_class` then does two things more. It makes the query that the expression is resolved against, one over the field's own model, and joins are refused when the expression is resolved, so the expression can name only columns of that table. And it registers on this one field object the lookups of the output field's class, so that a filter on `"kilos"` has the lookups of an integer (`django/db/models/fields/generated.py:GeneratedField.contribute_to_class`).
 
-Whatever writes values passes the field over. The class sets `GeneratedField.generated`, which `Field` declares as false, and the flag is read by `Model.__init__`, which sets no attribute for the field when it fills an instance from keyword arguments and defaults; by `Model._save_table`, which leaves it out of an insert and of an update alike; and by `Model.clean_fields`, which does not clean it (`django/db/models/base.py:Model._save_table`). The field's own `__init__` refuses the arguments that would contradict this: a default, a database default, `editable=True` and `blank=False`. So a new Manifest has nothing at all under `"kilos"`, which is the state of a deferred field ([An instance and its state](instances.md)).
+Whatever writes values passes the field over. The class sets `GeneratedField.generated`, which `Field` declares as false, and the flag is read by `Model.__init__`, which sets no attribute for the field when it fills an instance from keyword arguments and defaults; by `Model._save_table`, which leaves it out of an insert and of an update alike; and by `Model.clean_fields`, which does not clean it (`django/db/models/base.py:Model._save_table`). The field's own `__init__` refuses the arguments that would contradict this: a default, a database default, `editable=True` and `blank=False`. So a new Manifest has nothing at all under `"kilos"`, which is the state of a deferred field ([Deferred fields and the fetch modes](../instance/fetching.md)).
 
 The value arrives with the save. The class sets `GeneratedField.db_returning`, which puts the field among `Options.db_returning_fields`, the columns an insert is asked to hand back. An update asks for a generated field too, when its expression refers to a field that is being written, which `_save_table` works out from `GeneratedField.referenced_fields`. Here the Manifest's `"crates"` is set to 20 and it is saved again:
 
@@ -245,7 +245,7 @@ Model._do_update(pk_val='M-0001', values for [voyage, crates, kilos_each, stampe
 Model._assign_returned_values((800,), [kilos])
 ```
 
-On a backend that cannot return columns from a statement the attribute stays absent, or is taken away, and the next read of it fetches the value ([Saving an instance](saving.md)).
+On a backend that cannot return columns from a statement the attribute stays absent, or is taken away, and the next read of it fetches the value ([Saving an instance](../instance/saving.md)).
 
 > **Changed in 6.0.** Generated fields, and fields that were assigned an expression, are refreshed from the database after a save: from the statement's `"RETURNING"` clause where the backend has one, and by being left deferred where it has not.
 
@@ -295,13 +295,13 @@ editor.create_model(Berth)
   SQL CREATE TABLE "office_berth" ("port_id" bigint NOT NULL REFERENCES "fleet_port" ("id") DEFERRABLE INITIALLY DEFERRED, "number" smallint unsigned NOT NULL CHECK ("number" >= 0), "metres" smallint unsigned NOT NULL CHECK ("metres" >= 0), PRIMARY KEY ("port_id", "number"))
 ```
 
-A filter on `"pk"` compares the columns together with a tuple, through lookups registered on the class ([From QuerySet to SQL](../sql.md)). This is a Berth fetched with `pk=(1, 2)`:
+A filter on `"pk"` compares the columns together with a tuple, through lookups registered on the class ([Expressions, lookups and functions](../expressions.md)). This is a Berth fetched with `pk=(1, 2)`:
 
 ```text recording=models
 SQL SELECT "office_berth"."port_id", "office_berth"."number", "office_berth"."metres" FROM "office_berth" WHERE ("office_berth"."port_id", "office_berth"."number") = (%s, %s) LIMIT 21 with params (1, 2)
 ```
 
-A save's update has the same condition ([Saving an instance](saving.md)). A key in several parts is set when every part is: `Model._is_pk_set` looks inside the tuple, and one part that is `None` makes the whole key unset.
+A save's update has the same condition ([Saving an instance](../instance/saving.md)). A key in several parts is set when every part is: `Model._is_pk_set` looks inside the tuple, and one part that is `None` makes the whole key unset.
 
 ```text recording=models
 berth.pk, Berth._meta.pk.attname, berth._is_pk_set()  ->  ((1, 2), 'pk', True)
@@ -312,7 +312,7 @@ Berth(port=leith, number=None, metres=60).pk, Berth(port=leith, number=None, met
 
 ## `OrderWrt`
 
-`OrderWrt` is a field that Django adds to a model itself: an `IntegerField` that names itself `"_order"` and is not editable (`django/db/models/fields/proxy.py:OrderWrt`, `django/db/models/fields/__init__.py:IntegerField`). `Options._prepare` adds one to a model whose `Meta` sets `order_with_respect_to` (`django/db/models/options.py:Options._prepare`) ([The options: what a model keeps as `_meta`](options.md)), and a save fills it on an insert ([Saving an instance](saving.md)).
+`OrderWrt` is a field that Django adds to a model itself: an `IntegerField` that names itself `"_order"` and is not editable (`django/db/models/fields/proxy.py:OrderWrt`, `django/db/models/fields/__init__.py:IntegerField`). `Options._prepare` adds one to a model whose `Meta` sets `order_with_respect_to` (`django/db/models/options.py:Options._prepare`) ([The options: what a model keeps as `_meta`](options.md)), and a save fills it on an insert ([Saving an instance](../instance/saving.md)).
 
 ## Classes kept so that old migrations load
 

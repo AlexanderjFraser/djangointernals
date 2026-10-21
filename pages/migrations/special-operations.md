@@ -44,7 +44,7 @@ Migration.apply  [yard.0004_name_the_foremen]
 
 `RunPython.state_forwards` does nothing; a state change is added by combining the operation with `SeparateDatabaseAndState`. Forwards, the database half begins with `ProjectState.clear_delayed_apps_cache`: a schema operation before it may have rendered again only the models nearest its change and marked the state delayed, and the function may ask for any model (`django/db/migrations/state.py:ProjectState.clear_delayed_apps_cache`; [Historical models: `StateApps` and rendering](historical-models.md)).
 
-Then the router is asked. Where an operation on a model asks it, it asks about that model, and a router is handed the model and its name (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`, `django/db/utils.py:ConnectionRouter.allow_migrate_model`). `RunPython` has no model: it calls `ConnectionRouter.allow_migrate` with the alias, the migration's application label and its own `hints` as keyword arguments, so a router's `allow_migrate` gets no model's name unless `hints` holds one ([Routing between databases: `ConnectionRouter`](../backends/routers.md)). A false answer skips the function and raises nothing.
+Then the router is asked. Where an operation on a model asks it, it asks about that model, and a router is handed the model and its name (`django/db/migrations/operations/base.py:Operation.allow_migrate_model`, `django/db/utils.py:ConnectionRouter.allow_migrate_model`). `RunPython` has no model: it calls `ConnectionRouter.allow_migrate` with the alias, the migration's application label and its own `hints` as keyword arguments, so a router's `allow_migrate` gets no model's name unless `hints` holds one ([Routing between databases: `ConnectionRouter`](../connections/routers.md)). A false answer skips the function and raises nothing.
 
 ### Backwards: `reverse_code` and `noop`
 
@@ -74,7 +74,7 @@ python manage.py sqlmigrate yard 0004
 
 ### `elidable`
 
-`elidable=True`, which `RunSQL` takes too, sets `Operation.elidable`. Of two operations one of which is elidable, `Operation.reduce` answers with the other alone, and that is how squashing drops one (`django/db/migrations/operations/base.py:Operation.reduce`; [Squashed migrations: `replaces` and the squashmigrations command](squashing.md)).
+`elidable=True`, which `RunSQL` takes too, sets `Operation.elidable`. Of two operations one of which is elidable, `Operation.reduce` answers with the other alone, and that is how squashing drops one (`django/db/migrations/operations/base.py:Operation.reduce`; [Replacing migrations: `replaces`](replacing.md)).
 
 ## `RunSQL`: statements of the author's own
 
